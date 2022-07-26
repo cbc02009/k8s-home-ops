@@ -1,0 +1,21 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: k8s-home-ops
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/cbc02009/k8s-home-ops
+  ignore: |
+    # exclude all
+    /*
+    # include gitops dirs
+    !/k8s/global
+    !/k8s/clusters/kokoro
+    !/k8s/manifests
+    # exclude files from gitops dirs
+    /k8s/**/*.md
+    /k8s/**/*.tmpl

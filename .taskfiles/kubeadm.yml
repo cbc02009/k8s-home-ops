@@ -1,0 +1,25 @@
+---
+version: "3"
+
+tasks:
+  init:
+      desc: Bring up cluster
+      cmds:
+        - sudo kubeadm init --config kubeadm-config.yaml
+        - mkdir -p $HOME/.kube
+        - sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        - sudo chown $(id -u):$(id -g) $HOME/.kube/config
+        # - kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
+      silent: false
+
+  reset:
+    desc: Teardown cluster
+    cmds:
+      # - kubectl drain asuna --delete-emptydir-data --force --ignore-daemonsets
+      # - kubectl drain uiharu --delete-emptydir-data --force --ignore-daemonsets
+      - sudo kubeadm reset
+
+  join-token:
+    desc: create join token
+    cmds:
+      - sudo kubeadm token create --print-join-command

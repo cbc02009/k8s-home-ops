@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apply-cluster-repositories
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./k8s/clusters/kokoro/flux/repositories
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
