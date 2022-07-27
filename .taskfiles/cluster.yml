@@ -158,6 +158,12 @@ tasks:
     cmds:
       - kubectl run tmp-shell --rm -i --tty --image ghcr.io/nicolaka/netshoot:latest {{.CLI_ARGS}}
 
+  reconcile:
+    desc: Force update Flux to pull in changes from your Git repository
+    cmds:
+      - flux reconcile -n flux-system source git k8s-home-ops
+      - flux reconcile -n flux-system kustomization k8s-home-ops
+
   nodes:
     desc: List all the nodes in your cluster
     cmds:
