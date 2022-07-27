@@ -14,5 +14,5 @@ data:
 
   TZ: America/New_York
 
-  LB_RANGE: "10.10.0.0/24"
+  LB_RANGE: 10.0.10.0/24
 
