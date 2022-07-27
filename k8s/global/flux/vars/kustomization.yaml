@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - global-config.yaml
   - global-secrets.sops.yaml
-  - github-deploy-key.yaml
+  - github-deploy-key.sops.yaml
