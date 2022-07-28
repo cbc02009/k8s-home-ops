@@ -7,3 +7,4 @@ resources:
   - ./cilium-charts.yaml
   - ./k8s-at-home-charts.yaml
   - ./metallb-charts.yaml
+  - ./democratic-csi-charts.yaml
