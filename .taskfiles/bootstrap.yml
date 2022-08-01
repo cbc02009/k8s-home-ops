@@ -5,6 +5,7 @@ tasks:
   update-cilium:
     desc: Update Cilium quick-install
     cmds:
+      - helm repo add cilium https://helm.cilium.io/
       - helm template -f ./k8s/clusters/kokoro/integrations/cilium-quick-install/values.yaml cilium/cilium > ./k8s/clusters/kokoro/integrations/cilium-quick-install/quick-install.yaml -n kube-system
     silent: false
 
