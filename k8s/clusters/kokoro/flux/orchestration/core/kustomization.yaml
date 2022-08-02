@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./kube-system.yaml
   - ./network-system.yaml
+  - ./storage-system.yaml
