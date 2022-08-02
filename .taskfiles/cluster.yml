@@ -162,7 +162,7 @@ tasks:
     desc: Force update Flux to pull in changes from your Git repository
     cmds:
       - flux reconcile -n flux-system source git k8s-home-ops
-      - flux reconcile -n flux-system kustomization k8s-home-ops
+      - flux reconcile -n flux-system kustomization apply-cluster-deployment
 
   nodes:
     desc: List all the nodes in your cluster
@@ -213,6 +213,6 @@ tasks:
       - task: helmreleases
       - task: helmrepositories
       - task: gitrepositories
-      - task: certificates
-      - task: ingresses
+      # - task: certificates
+      # - task: ingresses
       - task: pods

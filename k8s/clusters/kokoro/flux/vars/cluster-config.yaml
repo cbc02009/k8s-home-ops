@@ -16,3 +16,5 @@ data:
 
   LB_RANGE: 10.0.10.0/24
 
+  #Pre-defined IP addresses
+  LB_MARIADB: 10.0.10.5
