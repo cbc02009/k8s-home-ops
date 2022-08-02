@@ -18,3 +18,4 @@ data:
 
   #Pre-defined IP addresses
   LB_MARIADB: 10.0.10.5
+  LB_BABYBUDDY: 10.0.10.6
