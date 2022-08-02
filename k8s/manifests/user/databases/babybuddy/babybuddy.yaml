@@ -50,15 +50,15 @@ spec:
         - name: DB_ENGINE
           value: "django.db.backends.mysql"
         - name: DB_HOST
-          value: ${LB_MARIADB}
+          value: "${LB_MARIADB}"
         - name: DB_NAME
           value: babybuddy
         - name: DB_PASSWORD
-          value: ${SECRET_MARIADB_ROOT_PASSWORD}
+          value: "${SECRET_MARIADB_ROOT_PASSWORD}"
         - name: DB_USER
           value: root
         - name: DB_PORT
-          value: 3306
+          value: "3306"
         ports:
         - name: babybuddy-tcp
           containerPort: 5055
