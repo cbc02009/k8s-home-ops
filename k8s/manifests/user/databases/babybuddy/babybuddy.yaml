@@ -16,9 +16,13 @@ spec:
     name: babybuddy
   selector:
     app: babybuddy
+status:
+  loadBalancer:
+    ingress:
+    - ip: ${LB_BABYBUDDY}
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployement
 metadata:
   name: babybuddy
   namespace: databases
