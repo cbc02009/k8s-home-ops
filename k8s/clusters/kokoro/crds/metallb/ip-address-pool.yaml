@@ -6,4 +6,4 @@ metadata:
   namespace: network-system
 spec:
   addresses:
-  - ${LB_RANGE} 
+  - ${LB_RANGE}

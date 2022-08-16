@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+data:
+    .dockerconfigjson: ENC[AES256_GCM,data:MDxnEK5x776SkKXVZub6F4fGd3EC6V8JKhZ9KefqX+tJuWXocDddOPoCcSCOvSM+XZaYo6DFslmxz/NecJ9RqAOttmazZk3i1/nu3dtIbB+c3RFfgMVCX3SihJIMCqPcXxfECXxeDyXQADaxhn0tnSAKJilx2gZb8ZzCgEqtRpQ1lVhXI0tmXUoO3B4=,iv:AsTe+sT9K08O7lnIw+dEkRCES4ApMVrD/iZk76qcKCk=,tag:tOxPDZ9FlqoMc7dpTxNmFQ==,type:str]
+metadata:
+    name: docker-login
+    namespace: flux-system
+type: kubernetes.io/dockerconfigjson
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPSEZlZmNBRGIyY1VxZlRI
+            QW9VZFJmUUtPdS84MzlRY3JqWGJXNFl0andrCjJUTWNJQUhnQ3pDTnV2MGI3Z01I
+            a1hWVXhDRGFJQW1zVnI4SVhldjVrSGcKLS0tIFZlN2lQRERycDJ4YVcrWDdIZFlW
+            L2tXYnFYR2JIcXJvdThKb3htYXZ6QmMKiQr7r7lZEZW2YkKvcD4T132PICqbx0vp
+            9k/1suGXZCPabYhY3hpEASEYVIV7A5QDN0ac7jElwae9ilUHMcv5VA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2022-08-16T01:30:23Z"
+    mac: ENC[AES256_GCM,data:54J/Euw1HyBxsH39jd1mdShgQeKayGyQtfKKWqRNlJ3fCg4Wk+NsSbZgmPBTn6x6cxhEorqQhsrEEkd/bewGFwSSojBVD+vPCFjJmxIVJ3sQ7acnx8GtaZG4zvElpvP+YV/Ugw66+VeAXBxUR7gwJtTiFa/JxQqqTlx66ruoWNo=,iv:26ckybSUW5Z3uRv6YSLBV0rwp6QIvHiU+FTw3/bGC5w=,tag:P6u92bIn53aYOuamhgTbrQ==,type:str]
+    pgp: []
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.7.3

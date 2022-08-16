@@ -2,11 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: core-network-system-metallb
+  name: core-storage-system-csi-nfs
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./k8s/manifests/core/network-system/metallb"
+  path: "./k8s/manifests/core/storage-system/democratic-csi-nfs"
   prune: true
   wait: true
   sourceRef:
@@ -16,11 +16,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: core-network-system-multus
+  name: core-storage-system-csi-iscsi
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./k8s/manifests/core/network-system/multus"
+  path: "./k8s/manifests/core/storage-system/democratic-csi-iscsi"
   prune: true
   wait: true
   sourceRef:

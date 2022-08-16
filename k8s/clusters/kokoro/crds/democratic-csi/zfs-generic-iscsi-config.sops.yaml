@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: zfs-generic-iscsi-config
+    namespace: storage-system
+stringData:
+    driver-config-file.yaml: ENC[AES256_GCM,data:yWsE/dwR2CUFL4zjPU0vuvikYl0AkpTdhEu1p1nXXcu2swkaJttzIiLTlt0bc4nycQRODMXjmJtI/dE9tF9QNoUhWmm/8cb56z4acsvRtM8H63BTBB/Z006mWtnf8XYoS26gITpm8dzu9GdtgKH6mgSYvNkKhTGR1xcb+G3b+RgMyBOEQAiAZmZeVJvTrpAgxz4nJFG88jxP3VLtz8rOZhE9cwdsYheBJdwDZrvx+P29Mj3FAq18v86C3KbvMkHb4mcWTvBR1Ls7AvHc3EU/i28KOGpQfFAud4tPjJGNdUFiWlNrXgbETxQYQYBPO0LGvNH4ZwCeU2mPf3aBqCbC/w8baMFhoLfuaJgIKZoU6wJqpO10y0wrMX/tfiCyOr03k76wKEfzz0AQ3nmOCOiKiKcEfH7zJWZSV0RY5A/07StiTHUdb3VaI+1QPMLvYMv1xI87NI2nRtjl25ZrFHaGnmZ2T3xZtaClg70LY0MKToX87qXq4ruXlHI0XzzSI1IgdgaQpAF/1NLJn59d/xCdpzZ2cfdw3ZZoUP2TMx+ak/zpL5AQDJ6YmfMm7VWKH/FKutEFaIkpO5oF1mnwA/isRRxatKe0tk4IiKLVGRq9DOxMXx/9HjniaM8vNFcKEHAo2/MvsWtvJt8YcffoJbAVPrxM/uDiCaWIJsZ+RJByXQwOKB5GzjvdD6DlK1fwjipR3Wx0a6E2Bmjdlv5qWUXzJaycNIaFtY1fkZsoZ7taFEwHgtDV6UoCr6oQ06YmzT8U8O0fLFgwne8Spay9W5XB2+SH/luIZFnjM+dOXM16lJM9BNgEvEmL6Omyp1P7hODN878RNzMFtUk+DhR+fPRYcPtgPCu2+wSw7fAU+aw1wAyNnuGyvP1v36ANtHJ34PFBNCrJ1nvL43sC0XmehHTxBbwb9sbYve9TTyFyylsIjL43y1Z8oP/ywzfMuyz69+OU+eLGBWu3FDBXVOF54ZLdvLhC4xrg5t7lcu2SfZ0WCwn/34eMJF3D7yGCoEkNFhNoE9Bp5UQ0EadFJ78ni90aqCNn4BLgM1MGJ7iX8JY1wuB5ypJDkGMpLYRSt5NnEjZuH2uljEHzSF6dH6DEaycO2AO5vJVYLf3s6SHbRDJa5WNM4Ucb+BdlX93fM8z9Wua8j1Z99bYS3J6n+VvZtEP9dylYgiO0H46/MaYp9miEVwLkJrVsqHiGR/YGE6Z/LKD1JShApjDp1RugIwUFsDa4KR5EASa6ZmYctRIQbMoOkhHgBAmrHsYUzSvPCSWx2MVdX81b0mnxOb9qthSxhYHR34lBWV0V+Q1K1VnDPuYEoqZNvFZmyk6LKyhEFT3QmUlj037qZNNx+DhbA2ch,iv:B0GfQj2LpSdS3aniZBp/9v6hZs0gMFuLpBeH3X6MWss=,tag:I8pUz/UlkreM/RADxdE4Sw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBkSGhSY0RZenp0K3VjSWsw
+            QUN4aG9HNXR2SHZhK0dZb29mOEdJM01UQkNRCkRZOTZRYjU3ZW9BR1d1YUVYQkZI
+            Z2ZkWFFKOGlBVTU2ZWo3dENmOGVCcGMKLS0tIEFJZ0pRTXV6VVZOWmNaVTdkWE1a
+            MzRGNS9JeE5lbDlPTzJ3K3c3QWRZZGsKNx2hwjqMf5gbFepgJjLxkwaCpzGXSMS0
+            xCSlXeWO9k/DZzMaLi9R7Bap56uA+iH0Gz8hRCBKyiG1UtSZxGQ6xA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2022-08-16T22:06:35Z"
+    mac: ENC[AES256_GCM,data:8Om36L4JIlohbzdxQlZhNJ78aFc4dxLQhnXb1Yqh0S0b88S/k6dDQsql7bRbA/z4t5XWpBjFZ+/BW7CuTPVSrTSuPRhXVPp/OxG9EGBKpkGT3tqCSwmJXo2/xKDZnJvmaPR4dT/0Lt7XRCpWHFVXYkpSTjaIC0VJUq1svaU3fM0=,iv:vTlE3+kCbS9pFCr2zmK+yVXjCxnQGOwpenF2HChRb5U=,tag:0F4TYcMP7N5idCtkl0sGUA==,type:str]
+    pgp: []
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.7.3

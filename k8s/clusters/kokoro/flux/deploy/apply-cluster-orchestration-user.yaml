@@ -2,15 +2,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apply-cluster-crds
+  name: apply-cluster-orchestration-user
   namespace: flux-system
 spec:
   interval: 10m0s
   dependsOn:
-    - name: apply-cluster-config
-    - name: apply-cluster-repositories
-    - name: apply-manage-flux
-  path: ./k8s/clusters/kokoro/crds/
+    - name: apply-cluster-orchestration-core
+  path: ./k8s/clusters/kokoro/flux/orchestration/user
   prune: true
   wait: true
   sourceRef:

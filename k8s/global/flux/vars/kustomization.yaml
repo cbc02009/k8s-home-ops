@@ -5,3 +5,4 @@ resources:
   - global-config.yaml
   - global-secrets.sops.yaml
   - github-deploy-key.sops.yaml
+  - docker-login.sops.yaml

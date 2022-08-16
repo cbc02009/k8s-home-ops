@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: babybuddy
+  namespace: databases
+  labels:
+    app: babybuddy
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: babybuddy
+  selector:
+    app: babybuddy
+status:
+  loadBalancer:
+    ingress:
+    - ip: ${LB_BABYBUDDY}
+---
+apiVersion: apps/v1
+kind: Deployement
+metadata:
+  name: babybuddy
+  namespace: databases
+  labels:
+    app: babybuddy
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  serviceName: babybuddy
+  selector:
+    matchLabels:
+      app: babybuddy
+  template:
+    metadata:
+      labels:
+        app: babybuddy
+    spec:
+      containers:
+      - name: babybuddy
+        image: "lscr.io/linuxserver/babybuddy:latest"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PUID
+          value: "1000"
+        - name: GUID
+          value: "1000"
+        - name: TZ
+          value: 'America/New_York'
+        - name: DB_ENGINE
+          value: "django.db.backends.mysql"
+        - name: DB_HOST
+          value: "${LB_MARIADB}"
+        - name: DB_NAME
+          value: babybuddy
+        - name: DB_PASSWORD
+          value: "${SECRET_MARIADB_ROOT_PASSWORD}"
+        - name: DB_USER
+          value: root
+        - name: DB_PORT
+          value: "3306"
+        ports:
+        - name: babybuddy-tcp
+          containerPort: 5055
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: babybuddy-config-v1
+        resources: {}
