@@ -15,12 +15,3 @@ spec:
         name: traefik-charts
         namespace: flux-system
       interval: 5m
-  values:
-    ports:
-      web:
-        port: 80
-      websecure:
-        port: 443
-  ingressRoute:
-    dashboard:
-      enabled: false
