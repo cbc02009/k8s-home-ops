@@ -17,7 +17,7 @@ resources:
   # - organizarrs.yaml
   # - rook-ceph.yaml
   # - security.yaml
-  # - services.yaml
+  - services.yaml
   # - system-monitoring.yaml
   # - testing.yaml
   # - vpn.yaml
