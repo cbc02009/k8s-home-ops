@@ -26,18 +26,15 @@
   // Set up Renovate Managers
   "helm-values": {
     fileMatch: [
-      "k8s/manifests/.+/helmrelease\\.ya?ml$",
-      "k8s/global/.+/helmrelease\\.ya?ml$",
+      "cluster/manifests/.+/helmrelease\\.ya?ml$",
     ],
   },
   kubernetes: {
-    fileMatch: ["k8s/manifests/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+    fileMatch: ["cluster/manifests/.+\\.ya?ml$"],
   },
   flux: {
     fileMatch: [
-      "k8s/manifests/.+\\.ya?ml$",
-      "k8s/global/.+\\.ya?ml$",
-      "k8s/clusters/.+\\.ya?ml$",
+      "cluster/manifests/.+\\.ya?ml$",
     ],
   },
   regexManagers: [
@@ -54,7 +51,7 @@
     },
     // Generic Regex Manager
     {
-      fileMatch: ["k8s/clusters/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+      fileMatch: ["cluster/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
       matchStrings: [
         "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( registryUrl=(?<registryUrl>.*?))?( versioning=(?<versioning>.*=?))?\n .*: (?<currentValue>.*=?)",
       ],
@@ -64,9 +61,7 @@
     // Generic Docker image Regex manager
     {
       fileMatch: [
-        "k8s/clusters/.+\\.ya?ml$",
-        "k8s/global/.+\\.ya?ml$",
-        "k8s/talos/.+\\.ya?ml$",
+        "cluster/.+\\.ya?ml$",
       ],
       matchStrings: [
         "# renovate: docker-image( registryUrl=(?<registryUrl>.*?))?( versioning=(?<versioning>.*=?))?\n .*: (?<depName>.*?):(?<currentValue>.*=?)",

@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apply-manage-flux
+    - name: apply-flux
   interval: 10m0s
   path: ./cluster/config
   prune: true

@@ -5,4 +5,4 @@
 .DS_Store
 Thumbs.db
 
-k8s/tools/cilium-quick-install/charts
+tools/cilium-quick-install/charts

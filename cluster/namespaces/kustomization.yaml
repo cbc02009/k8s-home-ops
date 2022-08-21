@@ -11,7 +11,7 @@ resources:
   # - home-automation.yaml
   # - kasten-io.yaml
   - kube-system.yaml
-  # - media.yaml
+  - media.yaml
   - network.yaml
   - storage.yaml
   # - organizarrs.yaml

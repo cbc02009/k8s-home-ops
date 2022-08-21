@@ -22,11 +22,7 @@ spec:
     substitute: {}
     substituteFrom:
       - kind: ConfigMap
-        name: global-config
-      - kind: Secret
-        name: global-secrets
-      - kind: ConfigMap
-        name: apply-cluster-config
+        name: cluster-config
       - kind: Secret
         name: cluster-secrets
   patches:
@@ -45,11 +41,7 @@ spec:
             substitute: {}
             substituteFrom:
               - kind: ConfigMap
-                name: global-config
-              - kind: Secret
-                name: global-secrets
-              - kind: ConfigMap
-                name:  apply-cluster-config
+                name:  cluster-config
               - kind: Secret
                 name: cluster-secrets
       target:
