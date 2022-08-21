@@ -21,6 +21,7 @@ data:
   RENA_IP: 10.0.0.16
 
   #Pre-defined IP addresses
+  LB_NGINX_INGRESS: 10.0.10.1
   LB_MARIADB: 10.0.10.5
   LB_BABYBUDDY: 10.0.10.6
   LB_FLEXO: 10.0.10.7

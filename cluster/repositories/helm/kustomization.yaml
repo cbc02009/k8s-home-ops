@@ -10,3 +10,4 @@ resources:
   - ./bitnami-charts.yaml
   - ./hajimari.yaml
   - ./traefik-charts.yaml
+  - ./ingress-nginx-charts.yaml
