@@ -1,0 +1,45 @@
+---
+version: "3"
+
+tasks:
+  update-cilium:
+    desc: Update Cilium quick-install
+    cmds:
+      - helm repo add cilium https://helm.cilium.io/
+      - kustomize build --enable-helm ./k8s/tools/cilium-quick-install > ./k8s/tools/cilium-quick-install/quick-install.yaml
+    silent: false
+
+  cilium:
+    desc: 2. Bootstrap cilium
+    cmds:
+      - kubectl apply -f ./k8s/tools/cilium-quick-install/quick-install.yaml
+
+  sops:
+    desc: 1. Bootstrap sops
+    cmds:
+      - kubectl create ns flux-system
+      - cat ~/.config/sops/age/keys.txt | kubectl -n flux-system create secret generic sops-age --from-file=age.agekey=/dev/stdin
+
+  github:
+    desc: 3. decrypt and load github ssh key
+    cmds:
+      - sops --decrypt k8s/global/flux/vars/github-deploy-key.sops.yaml | kubectl apply -f -
+
+  flux:
+    desc: 4. Bootstrap flux (as per version in manifest)
+    cmds:
+      - yq '.spec.ref.tag' k8s/global/flux/repositories/git/flux.yaml | xargs -I{} flux install --version={} --export | kubectl apply -f -
+
+  cluster:
+    desc: 5. Bootstrap Cluster
+    cmds:
+      - kubectl apply -k k8s/clusters/kokoro/
+
+  all:
+    desc: run all bootstrap commands in order
+    cmds:
+      - go-task bootstrap:sops
+      - go-task bootstrap:github
+      - go-task bootstrap:cilium
+      - go-task bootstrap:flux
+      - go-task bootstrap:cluster
