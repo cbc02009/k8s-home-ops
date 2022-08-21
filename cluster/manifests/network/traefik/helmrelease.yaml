@@ -15,3 +15,7 @@ spec:
         name: traefik-charts
         namespace: flux-system
       interval: 5m
+      valuesFrom:
+        - kind: ConfigMap
+          name: traefik-values
+          valuesKey: values.yaml # This is the default, but best to be explicit for clarity
