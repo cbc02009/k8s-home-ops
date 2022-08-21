@@ -9,3 +9,4 @@ resources:
   - ./democratic-csi-charts.yaml
   - ./bitnami-charts.yaml
   - ./hajimari.yaml
+  - ./traefik-charts.yaml

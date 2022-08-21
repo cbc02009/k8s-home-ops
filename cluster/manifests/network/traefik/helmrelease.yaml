@@ -1,0 +1,26 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: network
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: 0.13.4
+      sourceRef:
+        kind: HelmRepository
+        name: traefik-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    ports:
+      web:
+        port: 80
+      websecure:
+        port: 443
+  ingressRoute:
+    dashboard:
+      enabled: false
