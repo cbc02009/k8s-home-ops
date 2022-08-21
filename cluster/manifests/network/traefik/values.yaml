@@ -434,12 +434,12 @@ data:
     # - "--certificatesresolvers.le.acme.storage=/data/acme.json"
     # It will persist TLS certificates.
     persistence:
-      enabled: false
+      enabled: true
       name: data
     #  existingClaim: ""
       accessMode: ReadWriteOnce
       size: 128Mi
-      # storageClass: ""
+      storageClass: tank-iscsi-csi
       path: /data
       annotations: {}
       # subPath: "" # only mount a subpath of the Volume into the pod
