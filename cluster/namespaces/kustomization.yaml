@@ -14,7 +14,7 @@ resources:
   - media.yaml
   - network.yaml
   - storage.yaml
-  # - organizarrs.yaml
+  - organizarrs.yaml
   # - rook-ceph.yaml
   # - security.yaml
   - services.yaml

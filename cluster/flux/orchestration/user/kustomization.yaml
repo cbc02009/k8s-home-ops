@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - ./databases.yaml
   - ./kube-system.yaml
+  - ./organizarrs.yaml
   # - ./media.yaml
   - ./services.yaml
