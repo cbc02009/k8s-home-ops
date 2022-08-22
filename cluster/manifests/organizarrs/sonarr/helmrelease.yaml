@@ -34,9 +34,9 @@ spec:
       TZ: "${TZ}"
 
     service:
-    main:
-      type: LoadBalancer
-      loadBalancerIP: ${LB_SONARR}
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_SONARR}
 
     # ingress:
     #   main:
