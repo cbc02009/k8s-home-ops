@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: porkbun-key
+    namespace: cert-manager
+type: Opaque
+data:
+    api-key: ENC[AES256_GCM,data:YHrunvb0Ii1j0CKPBJYQ7Jd7C5i/RR52UzTcUSknnV3caP7Fxa/Lv/5K+jJoM6CAtZsLzbuS/eyqycrvOuyEH51Hsio=,iv:vV0mjlM/hGKUPKkMakyHMMDjlRN6cShw5mpoCVn+xXc=,tag:5V8ZOYpkHAhAcr2dFzNNHg==,type:str]
+    secret-key: ENC[AES256_GCM,data:FOfQAvY6puzYhpcSIrhjanM4Vu/Zgui94WppebuLGgAtm8Hio8leLS4/R+BuXh9lc0qYMSGusX/1aieiuJh7J25wVY0=,iv:/QPgqPCfpHHXpASNdPFLUAnMs/B2kN7k4aSClAfN1JE=,tag:fFLP4Ck2iBrnOJfbzYNztg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvaHVQTjQ0TjQwa0x3MHNu
+            Yll2eHdHdkx5dWsxNFQxNUdyUm9VM0kzc3dRCm9FSWUwT2FEK0Q1VFZCOXU1N1Fk
+            dHVYVjdzRS9XRmd6KzV5S0FqV084Tk0KLS0tIHlIRnMzVFhPTjYxQjZ4K3pyZUto
+            cTV1cDF6eXJpbWE3bU9oM3ljSDlqa1EKDUC81dXjdgZ8jJ+hQlM/0hBE8j8kzNs+
+            AhDMQ6+J39fTJmyl1wRDwDv1gxhiMWCZi1XZO33wv17Qrru4HybuRQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2022-08-22T10:02:18Z"
+    mac: ENC[AES256_GCM,data:N3zFmHgEvSixn/SFnd3H0hIYWAqrSUmlWwjoHaGgorhOYnODZkogiNk2Ptrbw2lAOAHbG0wOwQsxnhWjpchL6GQR7iuvA8KCwtGzdYszBykqTnnBApHFXW9QI9r4DfyWKCcmR8N/l0wN+CigB3c7qDNy3aUqHhiuD32tDptd13Y=,iv:9ktpXmUUEuoYfXudy3z1stYW4uIGcmtKtI+X/nOuU+Y=,tag:V9ps/QWgcq8EErnI2+Cbhg==,type:str]
+    pgp: []
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.7.3
