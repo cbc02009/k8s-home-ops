@@ -7,7 +7,7 @@ spec:
   interval: 10m
   url: https://github.com/mdonoughe/porkbun-webhook
   ref:
-    branch: master
+    branch: main
   ignore: |
     # exclude all
     /*
