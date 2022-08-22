@@ -12,19 +12,19 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: databases-babybuddy
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: databases-mariadb
-  interval: 10m
-  path: "./cluster/manifests/databases/babybuddy"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: databases-babybuddy
+#   namespace: flux-system
+# spec:
+#   dependsOn:
+#     - name: databases-mariadb
+#   interval: 10m
+#   path: "./cluster/manifests/databases/babybuddy"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
