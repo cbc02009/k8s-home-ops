@@ -10,6 +10,7 @@ resources:
   - ./kubernetes-sigs-descheduler-charts.yaml
   - ./k8s-at-home-charts.yaml
   - ./metallb-charts.yaml
+  - ./prometheus-community-charts.yaml
   - ./democratic-csi-charts.yaml
   - ./bitnami-charts.yaml
   - ./hajimari-charts.yaml
