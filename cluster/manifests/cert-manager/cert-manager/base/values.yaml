@@ -20,7 +20,7 @@ data:
       priorityClassName: ""
       rbac:
         create: true
-        # Aggregate ClusterRoles to Kubernetes default user-facing roles. Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles
+        # Aggregate ClusterRoles to Kubernetes default facing roles. Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#facing-roles
         aggregateClusterRoles: true
 
       podSecurityPolicy:
