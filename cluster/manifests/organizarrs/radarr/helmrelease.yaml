@@ -32,6 +32,11 @@ spec:
     env:
       TZ: ${TZ}
 
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_RADARR}
+
     # ingress:
     #   main:
     #     enabled: true
