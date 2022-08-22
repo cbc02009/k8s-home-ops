@@ -5,3 +5,4 @@ resources:
   - ./github-deploy-key.sops.yaml
   - ./cluster-secrets.sops.yaml
   - ./cluster-config.yaml
+  - ./porkbun-key.yaml
