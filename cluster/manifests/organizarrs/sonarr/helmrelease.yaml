@@ -33,10 +33,10 @@ spec:
     env:
       TZ: "${TZ}"
 
-      service:
-      main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_SONARR}
+    service:
+    main:
+      type: LoadBalancer
+      loadBalancerIP: ${LB_SONARR}
 
     # ingress:
     #   main:
