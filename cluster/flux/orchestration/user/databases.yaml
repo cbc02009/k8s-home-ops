@@ -21,7 +21,7 @@ metadata:
 spec:
   dependsOn:
     - name: databases-mariadb
-  interval: 5m
+  interval: 10m
   path: "./cluster/manifests/databases/babybuddy"
   prune: true
   wait: true
