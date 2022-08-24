@@ -1,0 +1,36 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: csi-iscsi
+  namespace: storage
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: democratic-csi
+      version: 0.13.4
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi-charts
+        namespace: flux-system
+      interval: 15m
+  values:
+    csiDriver:
+      name: "org.democratic-csi.iscsi"
+
+    storageClasses:
+    - name: tank-iscsi-csi
+      defaultClass: true
+      reclaimPolicy: Retain
+      ## For testing
+      # reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      allowVolumeExpansion: true
+      parameters:
+        fsType: ext4
+
+    driver:
+      config:
+        driver: zfs-generic-iscsi
+      existingConfigSecret: zfs-generic-iscsi-config

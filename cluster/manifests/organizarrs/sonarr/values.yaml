@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonarr-values
+  namespace: organizarrs
+data:
+  values.yaml: |-
+
+    controllerType: deployment
+    image:
+      repository: ghcr.io/k8s-at-home/sonarr
+      tag: v3.0.9.1549
+
+    env:
+      TZ: "${TZ}"
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_SONARR}
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+    #       nginx.ingress.kubernetes.io/configuration-snippet: |
+    #         proxy_set_header Accept-Encoding "";
+    #         sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/plex.css"></head>';
+    #         sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "television-box"
+          hajimari.io/appName: sonarr
+        hosts:
+          - host: &host "sonarr.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: &tls tls.sonarr
+
+      api:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          external-dns.home.arpa/enabled: "true"
+          external-dns.alpha.kubernetes.io/target: ipv4.${EXTERNAL_DOMAIN}
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+        hosts:
+          - host: *host
+            paths:
+              - path: /api
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: *tls
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: sonarr-config-v1
+
+      nfs-nas-media:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /tank/media
+        mountPath: /media
+        readOnly: false
+
+      nfs-nas-bittorrent:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /smoltank/bittorrent
+        mountPath: /bittorrent
+        readOnly: false
+
+      nfs-nas-backup:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /tank/backup/kubernetes/sonarr
+        mountPath: /config/Backups
+        readOnly: false

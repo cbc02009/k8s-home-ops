@@ -1,0 +1,15 @@
+---
+version: "3"
+
+vars:
+  PROJECT_ROOT:
+    sh: git rev-parse --show-toplevel
+
+includes:
+  flux: .taskfiles/flux.yml
+  cluster: .taskfiles/cluster.yml
+  format: .taskfiles/format.yml
+  bootstrap: .taskfiles/bootstrap.yml
+  precommit: .taskfiles/pre-commit.yml
+  kubeadm: .taskfiles/kubeadm.yml
+  sops: .taskfiles/sops.yml
