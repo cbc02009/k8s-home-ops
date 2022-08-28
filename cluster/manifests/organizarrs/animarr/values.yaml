@@ -26,7 +26,7 @@ data:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: animarr
 
     service:
       main:

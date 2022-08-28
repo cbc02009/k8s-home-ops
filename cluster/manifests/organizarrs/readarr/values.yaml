@@ -18,7 +18,7 @@ data:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: readarr
 
     service:
       main:

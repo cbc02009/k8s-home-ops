@@ -19,7 +19,7 @@ data:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: prowlarr
 
     service:
       main:

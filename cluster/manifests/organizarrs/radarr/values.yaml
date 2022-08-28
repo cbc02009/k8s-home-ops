@@ -24,7 +24,7 @@ data:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: radarr
 
     service:
       main:
