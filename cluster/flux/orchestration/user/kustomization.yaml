@@ -9,4 +9,4 @@ resources:
   - ./media.yaml
   - ./services.yaml
   - ./system-monitoring.yaml
-  - ./vpn.yaml
+  # - ./vpn.yaml
