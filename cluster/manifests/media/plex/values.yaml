@@ -91,9 +91,10 @@ data:
 
     resources:
       requests:
-        cpu: 2
+        cpu: 6
         memory: 2000M
         # gpu.intel.com/i915: 1
-      # limits:
-      #   memory: 10000M
+      limits:
+        cpu: 12
+        memory: 10000M
       #   # gpu.intel.com/i915: 1
