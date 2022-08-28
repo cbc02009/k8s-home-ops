@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - ./databases.yaml
   - ./kube-system.yaml
+  - ./home-automation.yaml
   - ./organizarrs.yaml
-  # - ./media.yaml
+  - ./media.yaml
   - ./services.yaml
+  - ./system-monitoring.yaml
+  # - ./vpn.yaml

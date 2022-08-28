@@ -340,7 +340,7 @@ data:
   bpf-policy-map-max: "16384"
   bpf-root: /sys/fs/bpf
   cgroup-root: /run/cilium/cgroupv2
-  cilium-endpoint-gc-interval: 15m0s
+  cilium-endpoint-gc-interval: 5m0s
   cluster-id: "0"
   cluster-name: default
   custom-cni-conf: "false"
@@ -377,7 +377,7 @@ data:
   monitor-aggregation-flags: all
   monitor-aggregation-interval: 5s
   node-port-bind-protection: "true"
-  nodes-gc-interval: 15m0s
+  nodes-gc-interval: 5m0s
   operator-api-serve-addr: 127.0.0.1:9234
   preallocate-bpf-maps: "false"
   procfs: /host/proc

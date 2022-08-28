@@ -5,7 +5,7 @@ metadata:
   name: cert-manager-certmanager
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/cert-manager/base"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: cert-manager-certmanager-config
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/cert-manager/config"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: cert-manager-porkbun-webhook
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/porkbun-webhook"
   prune: true
   wait: true
