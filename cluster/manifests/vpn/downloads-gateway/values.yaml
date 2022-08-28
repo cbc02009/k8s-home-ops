@@ -58,7 +58,7 @@ data:
 
     addons:
       netshoot:
-        enabled: false
+        enabled: true
 
       vpn:
         enabled: true
