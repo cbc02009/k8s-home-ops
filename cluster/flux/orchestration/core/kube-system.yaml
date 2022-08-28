@@ -5,7 +5,7 @@ metadata:
   name: kube-system-cilium
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/kube-system/cilium"
   prune: true
   wait: true
