@@ -40,7 +40,7 @@
   regexManagers: [
     // regexManager to read and process GitHub release artifacts
     {
-      fileMatch: ["k8s/clusters/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+      fileMatch: ["cluster/.+\\.ya?ml$"],
       matchStrings: [
         "datasource=(?<datasource>.*?)\n *url: https://github\\.com/(?<depName>.*?)\\.git\n *ref:\n *tag: (?<currentValue>.*)\n",
         'datasource=(?<datasource>.*?) depName=(?<depName>.*?)\n.*?_version: "(?<currentValue>.*)"\n',
@@ -51,7 +51,7 @@
     },
     // Generic Regex Manager
     {
-      fileMatch: ["cluster/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+      fileMatch: ["cluster/.+\\.ya?ml$"],
       matchStrings: [
         "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( registryUrl=(?<registryUrl>.*?))?( versioning=(?<versioning>.*=?))?\n .*: (?<currentValue>.*=?)",
       ],
