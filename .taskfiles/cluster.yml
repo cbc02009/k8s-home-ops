@@ -218,6 +218,6 @@ tasks:
       - task: helmreleases
       - task: helmrepositories
       - task: gitrepositories
-      # - task: certificates
-      # - task: ingresses
+      - task: certificates
+      - task: ingresses
       - task: pods

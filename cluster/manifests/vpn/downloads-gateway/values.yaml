@@ -14,7 +14,7 @@ data:
 
     routed_namespaces:
       - downloads
-      - organizarrs
+      # - organizarrs
 
     # publicPorts:
     #   - hostname: qbittorrent # hostname assigned to the pod
