@@ -13,8 +13,8 @@ data:
     controllerType: deployment
 
     image:
-      repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 3.0.9.1555
+      repository: ghcr.io/onedr0p/sonarr-widowmaker
+      tag: 4.0.0.2177
 
     env:
       TZ: "${TZ}"
