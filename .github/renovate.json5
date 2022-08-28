@@ -27,6 +27,7 @@
   "helm-values": {
     fileMatch: [
       "cluster/manifests/.+/helmrelease\\.ya?ml$",
+      "cluster/manifests/.+/values\\.ya?ml$"
     ],
   },
   kubernetes: {
