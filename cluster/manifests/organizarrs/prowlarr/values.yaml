@@ -9,12 +9,17 @@ data:
     image:
       repository: ghcr.io/onedr0p/prowlarr-develop
       tag: 0.4.4.1947
+
     env:
       TZ: "${TZ}"
       PROWLARR__INSTANCE_NAME: Prowlarr
       PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       PROWLARR__PORT: &port 9696
       PROWLARR__LOG_LEVEL: info
+
+    envFrom:
+      - secretRef:
+          name: *app
 
     service:
       main:

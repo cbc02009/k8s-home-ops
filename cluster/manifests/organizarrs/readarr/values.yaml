@@ -16,6 +16,10 @@ data:
       READARR__PORT: &port 8787
       READARR__LOG_LEVEL: info
 
+    envFrom:
+      - secretRef:
+          name: *app
+
     service:
       main:
         type: LoadBalancer

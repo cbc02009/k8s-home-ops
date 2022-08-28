@@ -24,6 +24,10 @@ data:
       SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       SONARR__LOG_LEVEL: info
 
+    envFrom:
+      - secretRef:
+          name: *app
+
     service:
       main:
         type: LoadBalancer

@@ -22,6 +22,10 @@ data:
       RADARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       RADARR__LOG_LEVEL: info
 
+    envFrom:
+      - secretRef:
+          name: *app
+
     service:
       main:
         type: LoadBalancer
