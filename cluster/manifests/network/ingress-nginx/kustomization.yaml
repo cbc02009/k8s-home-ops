@@ -5,3 +5,4 @@ namespace: network
 resources:
   # - dashboard
   - helmrelease.yaml
+  - values.yaml

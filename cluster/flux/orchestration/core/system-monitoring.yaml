@@ -5,7 +5,7 @@ metadata:
   name: system-monitoring-kube-prom-stack
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/system-monitoring/kube-prometheus-stack"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ spec:
 #   name: system-monitoring-thanos
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./k8s/manifests/core/system-monitoring/thanos"
 #   prune: true
 #   wait: true
@@ -33,7 +33,7 @@ spec:
 #   name: system-monitoring-grafana
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./cluster/manifests/system-monitoring/grafana"
 #   prune: true
 #   wait: true
@@ -47,7 +47,7 @@ spec:
 #   name: system-monitoring-vector-aggregator
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./k8s/manifests/core/system-monitoring/vector/aggregator"
 #   prune: true
 #   wait: true
@@ -61,7 +61,7 @@ spec:
 #   name: system-monitoring-vector-agent
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./k8s/manifests/core/system-monitoring/vector/agent"
 #   prune: true
 #   wait: true
@@ -75,7 +75,7 @@ spec:
 #   name: system-monitoring-loki
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./cluster/manifests/system-monitoring/loki"
 #   prune: true
 #   wait: true
@@ -91,7 +91,7 @@ spec:
 # spec:
 #   dependsOn:
 #     - name: system-monitoring-kube-prom-stack
-#   interval: 15m
+#   interval: 5m
 #   path: "./k8s/manifests/core/system-monitoring/prometheus-rules"
 #   prune: true
 #   wait: true

@@ -5,7 +5,7 @@
 #   name: storage-csi-nfs
 #   namespace: flux-system
 # spec:
-#   interval: 15m
+#   interval: 5m
 #   path: "./cluster/manifests/storage/democratic-csi-nfs"
 #   prune: true
 #   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: storage-csi-iscsi
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/storage/democratic-csi-iscsi"
   prune: true
   wait: true

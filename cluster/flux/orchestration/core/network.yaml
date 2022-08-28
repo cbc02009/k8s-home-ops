@@ -5,7 +5,7 @@ metadata:
   name: network-metallb
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/network/metallb"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: network-multus
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/network/multus"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: network-ingress-nginx
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 5m
   path: "./cluster/manifests/network/ingress-nginx"
   prune: true
   wait: true

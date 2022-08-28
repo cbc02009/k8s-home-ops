@@ -3,15 +3,20 @@ version: "3"
 
 tasks:
 
+  delete-pv:
+    desc: delete all released PVs
+    cmds:
+      - kubectl get pv | grep Released | awk '$1 {print$1}' | while read vol; do kubectl delete pv/${vol}; done
+
   git-check-yaml:
     desc: Check yaml for kustomize/kube errors
     cmds:
       - git diff --name-only origin/main.. | grep --color kustomization.yaml | sed 's/kustomization.yaml//' | xargs -I{} kustomize build {}
       - git diff --name-only origin/main.. | grep --color .yaml | xargs cat | kubectl apply -f - --dry-run=server
 
-  # nfs-deps-pause:
-  #   desc: Pause all Helm Releases that rely on NFS storage
-  #   cmds:
+  nfs-deps-pause:
+    desc: Pause all Helm Releases that rely on NFS storage
+    cmds:
   #     - flux suspend hr -n media plex
   #     - kubectl scale -n media deploy/plex --replicas 0
   #     - flux suspend hr -n downloads qbittorrent
@@ -20,12 +25,12 @@ tasks:
   #     - kubectl scale -n downloads deploy/sabnzbd --replicas 0
   #     - flux suspend hr -n downloads nzbget
   #     - kubectl scale -n downloads deploy/nzbget --replicas 0
-  #     - flux suspend hr -n organizarrs radarr
-  #     - kubectl scale -n organizarrs deploy/radarr --replicas 0
+      - flux suspend hr -n organizarrs radarr
+      - kubectl scale -n organizarrs deploy/radarr --replicas 0
   #     - flux suspend hr -n organizarrs readarr
   #     - kubectl scale -n organizarrs deploy/readarr --replicas 0
-  #     - flux suspend hr -n organizarrs sonarr
-  #     - kubectl scale -n organizarrs deploy/sonarr --replicas 0
+      - flux suspend hr -n organizarrs sonarr
+      - kubectl scale -n organizarrs deploy/sonarr --replicas 0
   #     - flux suspend hr -n organizarrs lidarr
   #     - kubectl scale -n organizarrs deploy/lidarr --replicas 0
   #     - flux suspend hr -n organizarrs calibre

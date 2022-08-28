@@ -4,11 +4,11 @@ kind: Kustomization
 resources:
   - cert-manager.yaml
   - databases.yaml
-  # - downloads.yaml
+  - downloads.yaml
   # - dev.yaml
   - flux-system.yaml
   # - games.yaml
-  # - home-automation.yaml
+  - home-automation.yaml
   # - kasten-io.yaml
   - kube-system.yaml
   - media.yaml
@@ -16,8 +16,8 @@ resources:
   - storage.yaml
   - organizarrs.yaml
   # - rook-ceph.yaml
-  # - security.yaml
+  - security.yaml
   - services.yaml
   - system-monitoring.yaml
   # - testing.yaml
-  # - vpn.yaml
+  - vpn.yaml

@@ -5,5 +5,6 @@ resources:
   - ./cert-manager.yaml
   - ./kube-system.yaml
   - ./network.yaml
+  - ./security.yaml
   - ./system-monitoring.yaml
   - ./storage.yaml

@@ -174,16 +174,10 @@ data:
       # defaultIssuerGroup: ""
 
     prometheus:
-      enabled: false
+      enabled: true
       servicemonitor:
-        enabled: false
-        prometheusInstance: default
-        targetPort: 9402
-        path: /metrics
-        interval: 60s
-        scrapeTimeout: 30s
-        labels: {}
-        honorLabels: false
+        enabled: true
+        prometheusInstance: monitoring
 
     # Use these variables to configure the HTTP_PROXY environment variables
     # http_proxy: "http://proxy:8080"

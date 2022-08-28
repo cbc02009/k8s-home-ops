@@ -6,17 +6,29 @@ metadata:
 data:
   values.yaml: |-
 
+
+    podAnnotations:
+        configmap.reloader.stakater.com/reload: "radarr-values"
+
     image:
-      repository: ghcr.io/k8s-at-home/radarr
-      tag: v4.1.0.6175
+      repository: ghcr.io/onedr0p/radarr-develop
+      tag: 4.2.2.6503
 
     env:
       TZ: ${TZ}
+      RADARR__INSTANCE_NAME: Radarr
+      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      RADARR__PORT: &port 7878
+      RADARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      RADARR__LOG_LEVEL: info
 
     service:
       main:
         type: LoadBalancer
         loadBalancerIP: ${LB_RADARR}
+        ports:
+          http:
+            port: *port
 
     ingress:
       main:
@@ -26,12 +38,12 @@ data:
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/radarr/plex.css"></head>';
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/radarr/overseerr.css"></head>';
             sub_filter_once on;
           hajimari.io/enable: "true"
           hajimari.io/icon: "filmstrip"
         hosts:
-          - host: &host "radarr.${EXTERNAL_DOMAIN}"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
@@ -40,22 +52,19 @@ data:
               - *host
             secretName: &tls tls.radarr
 
-      api:
-        enabled: true
-        ingressClassName: "nginx"
-        annotations:
-          external-dns.home.arpa/enabled: "true"
-          external-dns.alpha.kubernetes.io/target: ipv4.${EXTERNAL_DOMAIN}
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
-        hosts:
-          - host: *host
-            paths:
-              - path: /api
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-            secretName: *tls
+      # api:
+      #   enabled: true
+      #   ingressClassName: "nginx"
+      #   annotations:
+      #     external-dns.home.arpa/enabled: "true"
+      #   hosts:
+      #     - host: *host
+      #       paths:
+      #         - path: /api
+      #           pathType: Prefix
+      #   tls:
+      #     - hosts:
+      #         - *host
 
     persistence:
       config:
@@ -78,7 +87,7 @@ data:
         volumeSpec:
           nfs:
             server: ${UIHARU_IP}
-            path: /tank/backup/kubernetes/radarr
+            path: /tank/backup/kubernetes/apps/radarr
         mountPath: /config/Backups
         readOnly: false
 
@@ -93,12 +102,12 @@ data:
         readOnly: false
 
     podSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
-      fsGroupChangePolicy: OnRootMismatch
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
-        - 5600
+        - 100
 
     resources:
       requests:
