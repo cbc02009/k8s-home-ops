@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: radarr
+  name: &app radarr
   namespace: organizarrs
 spec:
   interval: 15m
@@ -22,6 +22,100 @@ spec:
     remediation:
       retries: 5
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: radarr-values
+  values:
+
+    image:
+      repository: ghcr.io/onedr0p/radarr-develop
+      tag: 4.2.2.6503
+
+    env:
+      TZ: ${TZ}
+      RADARR__INSTANCE_NAME: Radarr
+      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      RADARR__PORT: &port 7878
+      RADARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      RADARR__LOG_LEVEL: info
+
+    envFrom:
+      - secretRef:
+          name: *app
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_RADARR}
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/radarr/overseerr.css"></head>';
+            sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "filmstrip"
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: &tls tls.radarr
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: radarr-config-v1
+
+      nfs-nas-media:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /tank/media
+        mountPath: /media
+        readOnly: false
+
+      nfs-nas-backup:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /tank/backup/kubernetes/apps/radarr
+        mountPath: /config/Backups
+        readOnly: false
+
+      nfs-nas-bittorrent:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${UIHARU_IP}
+            path: /smoltank/bittorrent
+        mountPath: /bittorrent
+        readOnly: false
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 512M
+      limits:
+        memory: 974M
