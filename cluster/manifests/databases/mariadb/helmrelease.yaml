@@ -25,6 +25,33 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   # Values link: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
-  valuesFrom:
-    - kind: ConfigMap
-      name: mariadb-values
+  values:
+
+    auth:
+      rootPassword: ${SECRET_MARIADB_ROOT_PASSWORD}
+    primary:
+      persistence:
+        enabled: true
+        existingClaim: mariadb-config-v1
+      service:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerIP: ${LB_MARIADB}
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32M
+        limits:
+          memory: 32M
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 183M
+      limits:
+        memory: 237M
