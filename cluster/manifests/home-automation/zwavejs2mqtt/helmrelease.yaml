@@ -32,7 +32,7 @@ spec:
       # -- image repository
       repository: zwavejs/zwavejs2mqtt
       # -- image tag
-      tag: 5.0.2
+      tag: 5.0.4
       # -- image pull policy
       pullPolicy: IfNotPresent
 
