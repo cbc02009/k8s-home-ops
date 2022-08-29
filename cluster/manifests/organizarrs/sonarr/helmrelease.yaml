@@ -27,8 +27,8 @@ spec:
     controllerType: deployment
 
     image:
-      repository: ghcr.io/onedr0p/sonarr-widowmaker
-      tag: 4.0.0.2177@sha256:49d088c781591e30d62ce3cd3a3b271ce7a6cfa73253a61d91b6f53fdabccfc6
+      repository: ghcr.io/onedr0p/sonarr-develop
+      tag: 3.0.9.1555@sha256:14d330d2ebac0a446d7f6f3308fbc5f36316075d6549b5c3803a4b76ed3894ce
 
     env:
       TZ: "${TZ}"
