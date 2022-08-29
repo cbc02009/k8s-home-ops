@@ -24,9 +24,6 @@ spec:
 
   values:
 
-    podAnnotations:
-        configmap.reloader.stakater.com/reload: "animarr-values"
-
     controllerType: deployment
 
     image:

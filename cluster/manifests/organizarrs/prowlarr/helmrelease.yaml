@@ -85,9 +85,6 @@ spec:
         path: /tank/backup/kubernetes/apps/prowlarr
         mountPath: /config/Backups
 
-    podAnnotations:
-        configmap.reloader.stakater.com/reload: "prowlarr-values"
-
     resources:
       requests:
         cpu: 10m
