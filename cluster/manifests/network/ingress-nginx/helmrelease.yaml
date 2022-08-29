@@ -28,7 +28,7 @@ spec:
     - name: kube-prometheus-stack
       namespace: system-monitoring
   values:
-      controller:
+    controller:
       replicaCount: 3
       extraEnvs:
         - name: TZ
