@@ -17,8 +17,8 @@ tasks:
   nfs-deps-pause:
     desc: Pause all Helm Releases that rely on NFS storage
     cmds:
-  #     - flux suspend hr -n media plex
-  #     - kubectl scale -n media deploy/plex --replicas 0
+      - flux suspend hr -n media plex
+      - kubectl scale -n media deploy/plex --replicas 0
   #     - flux suspend hr -n downloads qbittorrent
   #     - kubectl scale -n downloads deploy/qbittorrent --replicas 0
   #     - flux suspend hr -n downloads sabnzbd
@@ -27,46 +27,50 @@ tasks:
   #     - kubectl scale -n downloads deploy/nzbget --replicas 0
       - flux suspend hr -n organizarrs radarr
       - kubectl scale -n organizarrs deploy/radarr --replicas 0
-  #     - flux suspend hr -n organizarrs readarr
-  #     - kubectl scale -n organizarrs deploy/readarr --replicas 0
+      - flux suspend hr -n organizarrs readarr
+      - kubectl scale -n organizarrs deploy/readarr --replicas 0
       - flux suspend hr -n organizarrs sonarr
       - kubectl scale -n organizarrs deploy/sonarr --replicas 0
-  #     - flux suspend hr -n organizarrs lidarr
-  #     - kubectl scale -n organizarrs deploy/lidarr --replicas 0
-  #     - flux suspend hr -n organizarrs calibre
-  #     - kubectl scale -n organizarrs deploy/calibre --replicas 0
-  #     - flux suspend hr -n organizarrs calibre-web
-  #     - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
-  #     - flux suspend hr -n organizarrs calibre-web
-  #     - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
+      - flux suspend hr -n organizarrs animarr
+      - kubectl scale -n organizarrs deploy/animarr --replicas 0
+      - flux suspend hr -n organizarrs lidarr
+      - kubectl scale -n organizarrs deploy/lidarr --replicas 0
+      - flux suspend hr -n organizarrs calibre
+      - kubectl scale -n organizarrs deploy/calibre --replicas 0
+      - flux suspend hr -n organizarrs calibre-web
+      - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
+      - flux suspend hr -n organizarrs calibre-web
+      - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
   #     - flux suspend hr -n system-monitoring thanos-compactor
   #     - kubectl scale -n system-monitoring deploy/thanos-compactor --replicas 0
   #     - flux suspend hr -n system-monitoring loki
   #     - kubectl scale -n system-monitoring deploy/loki --replicas 0
 
-  # nfs-deps-resume:
-  #   desc: Resume all Helm Releases that rely on NFS storage
-  #   cmds:
-  #     - flux resume hr -n media plex
-  #     - kubectl scale -n media deploy/plex --replicas 1
+  nfs-deps-resume:
+    desc: Resume all Helm Releases that rely on NFS storage
+    cmds:
+      - flux resume hr -n media plex
+      - kubectl scale -n media deploy/plex --replicas 1
   #     - flux resume hr -n downloads qbittorrent
   #     - kubectl scale -n downloads deploy/qbittorrent --replicas 1
   #     - flux resume hr -n downloads sabnzbd
   #     - kubectl scale -n downloads deploy/sabnzbd --replicas 1
   #     - flux resume hr -n downloads nzbget
   #     - kubectl scale -n downloads deploy/nzbget --replicas 1
-  #     - flux resume hr -n organizarrs radarr
-  #     - kubectl scale -n organizarrs deploy/radarr --replicas 1
-  #     - flux resume hr -n organizarrs readarr
-  #     - kubectl scale -n organizarrs deploy/readarr --replicas 1
-  #     - flux resume hr -n organizarrs sonarr
-  #     - kubectl scale -n organizarrs deploy/sonarr --replicas 1
-  #     - flux resume hr -n organizarrs lidarr
-  #     - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-  #     - flux resume hr -n organizarrs calibre
-  #     - kubectl scale -n organizarrs deploy/calibre --replicas 1
-  #     - flux resume hr -n organizarrs calibre-web
-  #     - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
+      - flux resume hr -n organizarrs radarr
+      - kubectl scale -n organizarrs deploy/radarr --replicas 1
+      - flux resume hr -n organizarrs readarr
+      - kubectl scale -n organizarrs deploy/readarr --replicas 1
+      - flux resume hr -n organizarrs sonarr
+      - kubectl scale -n organizarrs deploy/sonarr --replicas 1
+      - flux resume hr -n organizarrs animarr
+      - kubectl scale -n organizarrs deploy/animarr --replicas 1
+      - flux resume hr -n organizarrs lidarr
+      - kubectl scale -n organizarrs deploy/lidarr --replicas 1
+      - flux resume hr -n organizarrs calibre
+      - kubectl scale -n organizarrs deploy/calibre --replicas 1
+      - flux resume hr -n organizarrs calibre-web
+      - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
   #     - flux resume hr -n system-monitoring thanos-compactor
   #     - kubectl scale -n system-monitoring deploy/thanos-compactor --replicas 1
   #     - flux resume hr -n system-monitoring loki
