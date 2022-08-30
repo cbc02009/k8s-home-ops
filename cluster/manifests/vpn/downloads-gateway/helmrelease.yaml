@@ -32,9 +32,9 @@ spec:
 
     DNS: 172.16.1.1
 
-    # routed_namespaces:
+    routed_namespaces:
       # - downloads
-      # - organizarrs
+      - organizarrs
 
     # publicPorts:
     #   - hostname: qbittorrent # hostname assigned to the pod
