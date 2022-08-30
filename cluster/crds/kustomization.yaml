@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./metallb
   - ./democratic-csi
+  - ./cloudnative-pg
