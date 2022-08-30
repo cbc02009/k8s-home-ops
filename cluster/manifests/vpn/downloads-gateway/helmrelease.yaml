@@ -32,7 +32,7 @@ spec:
 
     DNS: 172.16.1.1
 
-    routed_namespaces:
+    # routed_namespaces:
       # - downloads
       # - organizarrs
 
