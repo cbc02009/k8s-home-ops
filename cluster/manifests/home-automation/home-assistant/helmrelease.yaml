@@ -94,15 +94,13 @@ spec:
       config:
         enabled: true
         existingClaim: home-assistant-config-v1
-      nfs-nas-backup:
+
+      backup:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /tank/backup/kubernetes/apps/homeassistant
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /tank/backup/kubernetes/apps/homeassistant
         mountPath: /data/backups
-        readOnly: false
 
     mariadb:
       enabled: true

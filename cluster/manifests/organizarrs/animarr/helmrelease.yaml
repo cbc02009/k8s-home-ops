@@ -76,35 +76,26 @@ spec:
         enabled: true
         existingClaim: animarr-config-v1
 
-      nfs-nas-media:
+      media:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /tank/media
+        type: nfs
+        server: "${UIHARU_IP}"
+        path: /tank/media
         mountPath: /media
-        readOnly: false
 
-      nfs-nas-bittorrent:
+      bittorrent:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /smoltank/bittorrent
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /smoltank/bittorrent
         mountPath: /bittorrent
-        readOnly: false
 
-      nfs-nas-backup:
+      backup:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /tank/backup/kubernetes/apps/animarr
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /tank/backup/kubernetes/apps/animarr
         mountPath: /config/Backups
-        readOnly: false
 
     podSecurityContext:
       runAsUser: 568

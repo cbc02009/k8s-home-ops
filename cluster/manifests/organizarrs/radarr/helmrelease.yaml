@@ -75,35 +75,26 @@ spec:
         enabled: true
         existingClaim: radarr-config-v1
 
-      nfs-nas-media:
+      media:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /tank/media
+        type: nfs
+        server: "${UIHARU_IP}"
+        path: /tank/media
         mountPath: /media
-        readOnly: false
 
-      nfs-nas-backup:
+      bittorrent:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /tank/backup/kubernetes/apps/radarr
-        mountPath: /config/Backups
-        readOnly: false
-
-      nfs-nas-bittorrent:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${UIHARU_IP}
-            path: /smoltank/bittorrent
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /smoltank/bittorrent
         mountPath: /bittorrent
-        readOnly: false
+
+      backup:
+        enabled: true
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /tank/backup/kubernetes/apps/radarr
+        mountPath: /config/Backups
 
     podSecurityContext:
       runAsUser: 568
