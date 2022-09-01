@@ -15,7 +15,7 @@ tasks:
   drain:
     desc: drain all nodes
     cmds:
-      - kubectl get nodes | awk '{if (NR!=1) {print $1}}' | xargs -l bash -c 'kubectl drain $0 --ignore-daemonsets --delete-emptydir-data'
+      - kubectl get nodes | awk '{if (NR!=1) {print $1}}' | xargs -l bash -c 'kubectl drain $0 --ignore-daemonsets --delete-emptydir-data --force'
 
   uncordon:
     desc: uncordon all nodes
