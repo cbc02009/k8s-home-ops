@@ -50,7 +50,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
         hosts:
-          - host: *host
+          - host: &host flexo.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
