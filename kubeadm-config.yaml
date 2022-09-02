@@ -10,18 +10,18 @@ nodeRegistration:
 skipPhases:
   - addon/kube-proxy
 ---
+kind: ClusterConfiguration
 apiServer:
   timeoutForControlPlane: 4m0s
 apiVersion: kubeadm.k8s.io/v1beta3
 certificatesDir: /etc/kubernetes/pki
-clusterName: kubernetes
+clusterName: kokoro
 controllerManager: {}
 dns: {}
 etcd:
   local:
     dataDir: /var/lib/etcd
 imageRepository: k8s.gcr.io
-kind: ClusterConfiguration
 networking:
   dnsDomain: cluster.local
   serviceSubnet: 10.10.0.0/16
