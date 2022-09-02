@@ -31,7 +31,6 @@ spec:
     env:
       TZ: "${TZ}"
       FLEXO_CACHE_DIRECTORY: "/data"
-      FLEXO_LISTEN_IP_ADDRESS: ${LB_FLEXO}
       FLEXO_PORT: &port 7878
 
 
