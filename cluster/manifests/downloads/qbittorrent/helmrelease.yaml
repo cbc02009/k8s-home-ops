@@ -36,6 +36,8 @@ spec:
 
     service:
       main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_QBT_GUI}
         ports:
           http:
             port: *port
