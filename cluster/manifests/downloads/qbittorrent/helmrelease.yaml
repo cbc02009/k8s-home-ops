@@ -31,7 +31,7 @@ spec:
 
     env:
       TZ: "${TZ}"
-      QBITTORRENT__PORT: &port 80
+      QBITTORRENT__PORT: &port 8080
       QBITTORRENT__BT_PORT: &port-bt 50413
 
     service:
