@@ -17,41 +17,41 @@ spec:
       storage: 5Gi
 
   storageClassName: tank-iscsi-csi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: home-assistant-mariadb-v1
-  namespace: home-automation
-  labels:
-    app.kubernetes.io/name: &name home-assistant-mariadb
-    app.kubernetes.io/instance: *name
-    snapshot.home.arpa/enabled: "true"
-spec:
-  accessModes:
-    - ReadWriteOnce
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: home-assistant-mariadb-v1
+#   namespace: home-automation
+#   labels:
+#     app.kubernetes.io/name: &name home-assistant-mariadb
+#     app.kubernetes.io/instance: *name
+#     snapshot.home.arpa/enabled: "true"
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
 
-  resources:
-    requests:
-      storage: 8Gi
+#   resources:
+#     requests:
+#       storage: 8Gi
 
-  storageClassName: tank-iscsi-csi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: home-assistant-influxdb-v1
-  namespace: home-automation
-  labels:
-    app.kubernetes.io/name: &name home-assistant-influxdb
-    app.kubernetes.io/instance: *name
-    snapshot.home.arpa/enabled: "true"
-spec:
-  accessModes:
-    - ReadWriteOnce
+#   storageClassName: tank-iscsi-csi
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: home-assistant-influxdb-v1
+#   namespace: home-automation
+#   labels:
+#     app.kubernetes.io/name: &name home-assistant-influxdb
+#     app.kubernetes.io/instance: *name
+#     snapshot.home.arpa/enabled: "true"
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
 
-  resources:
-    requests:
-      storage: 10Gi
+#   resources:
+#     requests:
+#       storage: 10Gi
 
-  storageClassName: tank-iscsi-csi
+#   storageClassName: tank-iscsi-csi
