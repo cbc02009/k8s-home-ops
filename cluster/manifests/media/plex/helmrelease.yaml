@@ -25,7 +25,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/plex-beta
-      tag: 1.28.2.6106-44a5bbd28
+      tag: 1.28.2.6151-914ddd2b3
 
     env:
       TZ: "${TZ}"
