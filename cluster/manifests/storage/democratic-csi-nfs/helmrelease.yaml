@@ -34,6 +34,8 @@ spec:
       - nfsvers=4
 
     driver:
+      image: docker.io/democraticcsi/democratic-csi:v1.7.6
+      imagePullPolicy: IfNotPresent
       config:
         driver: zfs-generic-nfs
       existingConfigSecret: zfs-generic-nfs-config

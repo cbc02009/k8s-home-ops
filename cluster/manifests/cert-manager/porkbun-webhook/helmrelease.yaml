@@ -65,6 +65,9 @@ spec:
      cpu: 100m
      memory: 128Mi
 
+    podAnnotations:
+      secret.reloader.stakater.com/reload: porkbun-key
+
     nodeSelector: {}
 
     tolerations: []

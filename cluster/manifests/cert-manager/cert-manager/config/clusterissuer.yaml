@@ -1,7 +1,8 @@
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt
+  name: letsencrypt-production
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -27,19 +28,25 @@ spec:
 # apiVersion: cert-manager.io/v1
 # kind: ClusterIssuer
 # metadata:
-#   name: letsencrypt-production
+#   name: letsencrypt-staging
 # spec:
 #   acme:
-#     email: acme@${EXTERNAL_DOMAIN}
-#     preferredChain: ""
+#     server: https://acme-staging-v02.api.letsencrypt.org/directory
+#     email: ${ACME_EMAIL}
 #     privateKeySecretRef:
-#       name: letsencrypt-production
-#     server: https://acme-v02.api.letsencrypt.org/directory
+#       name: letsencrypt-key
 #     solvers:
-#       - selector: {}
+#       - selector:
+#           dnsZones:
+#             - ${EXTERNAL_DOMAIN}
 #         dns01:
-#           cloudflare:
-#             apiTokenSecretRef:
-#               key: api-token
-#               name: cloudflare-api-token-secret
-#             email: acme@${EXTERNAL_DOMAIN}
+#           webhook:
+#             groupName: acme.${EXTERNAL_DOMAIN}
+#             solverName: porkbun
+#             config:
+#               apiKeySecretRef:
+#                 name: porkbun-key
+#                 key: api-key
+#               secretKeySecretRef:
+#                 name: porkbun-key
+#                 key: secret-key

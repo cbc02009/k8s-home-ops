@@ -3,10 +3,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./databases.yaml
+  - ./downloads.yaml
   - ./kube-system.yaml
   - ./home-automation.yaml
   - ./organizarrs.yaml
   - ./media.yaml
   - ./services.yaml
   - ./system-monitoring.yaml
-  # - ./vpn.yaml
+  - ./vpn.yaml
