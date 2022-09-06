@@ -28,15 +28,15 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
 
-  # valuesFrom:
+  valuesFrom:
   #   # - kind: Secret
   #   #   name: kube-prometheus-stack
   #   #   valuesKey: discord-webhook
   #   #   targetPath: alertmanager.config.global.slack_api_url
   #   #   optional: false
-  #   - kind: ConfigMap
-  #     name: kps-generic-values
-  #   - kind: ConfigMap
-  #     name: kps-prometheus-values
+    - kind: ConfigMap
+      name: kps-generic-values
+    - kind: ConfigMap
+      name: kps-prometheus-values
   #   - kind: ConfigMap
   #     name: kps-alertmanager-values

@@ -18,7 +18,7 @@
   ],
   repositories: ["cbc02009/k8s-home-ops"],
   onboarding: false,
-  requireConfig: false,
+  requireConfig: "optional",
   timezone: "America/New_York",
   dependencyDashboardTitle: "Renovate Dashboard 🤖",
   suppressNotifications: ["prIgnoreNotification"],
@@ -27,6 +27,7 @@
   "helm-values": {
     fileMatch: [
       "cluster/manifests/.+/helmrelease\\.ya?ml$",
+      "cluster/manifests/.+/values\\.ya?ml$"
     ],
   },
   kubernetes: {
@@ -40,7 +41,7 @@
   regexManagers: [
     // regexManager to read and process GitHub release artifacts
     {
-      fileMatch: ["k8s/clusters/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+      fileMatch: ["cluster/.+\\.ya?ml$"],
       matchStrings: [
         "datasource=(?<datasource>.*?)\n *url: https://github\\.com/(?<depName>.*?)\\.git\n *ref:\n *tag: (?<currentValue>.*)\n",
         'datasource=(?<datasource>.*?) depName=(?<depName>.*?)\n.*?_version: "(?<currentValue>.*)"\n',
@@ -51,7 +52,7 @@
     },
     // Generic Regex Manager
     {
-      fileMatch: ["cluster/.+\\.ya?ml$", "k8s/global/.+\\.ya?ml$"],
+      fileMatch: ["cluster/.+\\.ya?ml$"],
       matchStrings: [
         "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( registryUrl=(?<registryUrl>.*?))?( versioning=(?<versioning>.*=?))?\n .*: (?<currentValue>.*=?)",
       ],

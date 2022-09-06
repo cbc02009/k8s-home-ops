@@ -22,15 +22,17 @@ spec:
     storageClasses:
     - name: tank-iscsi-csi
       defaultClass: true
-      reclaimPolicy: Retain
+      reclaimPolicy: Delete
       ## For testing
-      # reclaimPolicy: Delete
+      # reclaimPolicy: Retain
       volumeBindingMode: Immediate
       allowVolumeExpansion: true
       parameters:
         fsType: ext4
 
     driver:
+      image: docker.io/democraticcsi/democratic-csi:v1.7.6
+      imagePullPolicy: IfNotPresent
       config:
         driver: zfs-generic-iscsi
       existingConfigSecret: zfs-generic-iscsi-config

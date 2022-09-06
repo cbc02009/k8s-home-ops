@@ -4,12 +4,14 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - ./bjw-s-charts.yaml
+  - ./cloudnative-pg.yaml
   - ./cilium-charts.yaml
   - ./external-dns-charts.yaml
   - ./fairwinds-charts.yaml
   - ./grafana-charts.yaml
   - ./kyverno-charts.yaml
   - ./jetstack-charts.yaml
+  - ./kured-charts.yaml
   - ./kubernetes-sigs-descheduler-charts.yaml
   - ./kubernetes-sigs-metrics-server-charts.yaml
   - ./kubernetes-sigs-nfd-charts.yaml

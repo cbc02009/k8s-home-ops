@@ -12,10 +12,16 @@ tasks:
         # - kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
       silent: false
 
+  cordon:
+    desc: drain all nodes
+    cmds:
+      - kubectl get nodes | awk '{if (NR!=1) {print $1}}' | xargs -l bash -c 'kubectl cordon $0'
+
   drain:
     desc: drain all nodes
     cmds:
-      - kubectl get nodes | awk '{if (NR!=1) {print $1}}' | xargs -l bash -c 'kubectl drain $0 --ignore-daemonsets --delete-emptydir-data'
+      - go-task kubeadm:cordon
+      - kubectl get nodes | awk '{if (NR!=1) {print $1}}' | xargs -l bash -c 'kubectl drain $0 --ignore-daemonsets --delete-emptydir-data --force'
 
   uncordon:
     desc: uncordon all nodes

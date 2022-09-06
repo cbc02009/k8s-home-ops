@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: animarr
+  name: &app animarr
   namespace: organizarrs
 spec:
   interval: 15m
@@ -22,6 +22,92 @@ spec:
     remediation:
       retries: 5
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: animarr-values
+  values:
+
+    image:
+      repository: ghcr.io/onedr0p/sonarr-develop
+      tag: 3.0.9.1555@sha256:cb31fa05a06454f2fa32348d9653ed53e20e5ed0c38e8f68adceef4117eea78d
+
+    env:
+      TZ: "${TZ}"
+      SONARR__INSTANCE_NAME: Animarr
+      SONARR__PORT: &port 8989
+      SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      SONARR__LOG_LEVEL: info
+      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+
+    envFrom:
+      - secretRef:
+          name: *app
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_ANIMARR}
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/dracula.css"></head>';
+            sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "television-box"
+          hajimari.io/appName: animarr
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: &tls tls.animarr
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: animarr-config-v1
+
+      media:
+        enabled: true
+        type: nfs
+        server: "${UIHARU_IP}"
+        path: /tank/media
+        mountPath: /media
+
+      bittorrent:
+        enabled: true
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /smoltank/bittorrent
+        mountPath: /bittorrent
+
+      backup:
+        enabled: true
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /tank/backup/kubernetes/apps/animarr
+        mountPath: /config/Backups
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 477M
+      limits:
+        memory: 1300M

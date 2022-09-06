@@ -38,9 +38,9 @@ spec:
       extraArgs:
         pod-recommendation-min-cpu-millicores: 15
         pod-recommendation-min-memory-mb: 61
-        # storage: prometheus
-        # prometheus-address: |-
-        #   http://thanos-query.system-monitoring.svc.cluster.local:9090
+        storage: prometheus
+        prometheus-address: |-
+          http://prometheus.${EXTERNAL_DOMAIN}
 
     updater:
       enabled: false
