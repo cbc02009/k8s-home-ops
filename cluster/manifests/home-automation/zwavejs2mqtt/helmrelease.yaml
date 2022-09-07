@@ -24,8 +24,8 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   dependsOn:
-    - name: mariadb
-      namespace: databases
+    - name: node-feature-discovery
+      namespace: kube-system
   values:
 
     image:
@@ -40,7 +40,7 @@ spec:
     # @default -- See below
     env:
       # -- Set the container timezone
-      TZ: UTC
+      TZ: ${TZ}
       # -- Zwave Network key
       NETWORK_KEY:
 
@@ -50,10 +50,28 @@ spec:
       main:
         ports:
           http:
-            port: 8091
+            port: &port 8091
           websocket:
             enabled: false
             port: 3000
+
+    probes:
+      liveness: &probes
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /health
+            port: *port
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness: *probes
+      startup:
+        enabled: false
+
+
 
     ingress:
       main:
@@ -64,7 +82,7 @@ spec:
           hajimari.io/enable: "false"
           hajimari.io/icon: "router-wireless-settings"
         hosts:
-          - host: &host "zwavejs2mqtt.${EXTERNAL_DOMAIN}"
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
@@ -97,9 +115,19 @@ spec:
       limits:
         memory: 262M
 
+
+
     # -- Affinity constraint rules to place the Pod on a specific node.
     # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-    affinity: {}
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/custom-zwave
+                  operator: In
+                  values:
+                    - "true"
     #   nodeAffinity:
     #     requiredDuringSchedulingIgnoredDuringExecution:
     #       nodeSelectorTerms:
