@@ -2,11 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-kube-prom-stack-promrules
+  name: monitoring-kube-prom-stack-promrules
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/prometheus-rules"
+  path: "./cluster/manifests/monitoring/prometheus-rules"
   prune: true
   wait: true
   sourceRef:
@@ -16,11 +16,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-botkube
+#   name: monitoring-botkube
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/botkube"
+#   path: "./cluster/manifests/monitoring/botkube"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -30,11 +30,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-blackbox-exporter
+#   name: monitoring-blackbox-exporter
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/blackbox-exporter"
+#   path: "./cluster/manifests/monitoring/blackbox-exporter"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -44,11 +44,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-prometheus-smartctl
+#   name: monitoring-prometheus-smartctl
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/prometheus-smartctl"
+#   path: "./cluster/manifests/monitoring/prometheus-smartctl"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -58,11 +58,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-goldilocks
+  name: monitoring-goldilocks
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/goldilocks"
+  path: "./cluster/manifests/monitoring/goldilocks"
   prune: true
   wait: true
   sourceRef:
@@ -72,11 +72,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-vpa
+  name: monitoring-vpa
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/vpa"
+  path: "./cluster/manifests/monitoring/vpa"
   prune: true
   wait: true
   sourceRef:
@@ -86,11 +86,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-hs110-exporter-prusa
+#   name: monitoring-hs110-exporter-prusa
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/hs110-exporter-prusa"
+#   path: "./cluster/manifests/monitoring/hs110-exporter-prusa"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -100,11 +100,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-hs110-exporter-rack
+#   name: monitoring-hs110-exporter-rack
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/hs110-exporter-rack"
+#   path: "./cluster/manifests/monitoring/hs110-exporter-rack"
 #   prune: true
 #   wait: true
 #   sourceRef:

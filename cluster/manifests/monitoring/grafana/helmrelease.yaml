@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: grafana
-  namespace: system-monitoring
+  namespace: monitoring
 spec:
   interval: 5m
   chart:
@@ -26,9 +26,9 @@ spec:
     cleanupOnFail: true
   dependsOn:
     - name: kube-prometheus-stack
-      namespace: system-monitoring
+      namespace: monitoring
     # - name: thanos
-    #   namespace: system-monitoring
+    #   namespace: monitoring
   values:
     replicas: 1
     env:
@@ -77,11 +77,11 @@ spec:
           # - name: Loki
           #   type: loki
           #   access: proxy
-          #   url: http://loki.system-monitoring:3100
+          #   url: http://loki.monitoring:3100
           # - name: AlertManager
           #   type: alertmanager
           #   access: proxy
-          #   url: http://alertmanager-operated.system-monitoring:9093
+          #   url: http://alertmanager-operated.monitoring:9093
           #   jsonData:
           #     implementation: "prometheus"
 

@@ -2,11 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-kube-prom-stack
+  name: monitoring-kube-prom-stack
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/kube-prometheus-stack"
+  path: "./cluster/manifests/monitoring/kube-prometheus-stack"
   prune: true
   wait: true
   sourceRef:
@@ -16,11 +16,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-thanos
+#   name: monitoring-thanos
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./k8s/manifests/core/system-monitoring/thanos"
+#   path: "./k8s/manifests/core/monitoring/thanos"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -30,11 +30,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-grafana
+  name: monitoring-grafana
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/grafana"
+  path: "./cluster/manifests/monitoring/grafana"
   prune: true
   wait: true
   sourceRef:
@@ -44,11 +44,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-vector-aggregator
+#   name: monitoring-vector-aggregator
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./k8s/manifests/core/system-monitoring/vector/aggregator"
+#   path: "./k8s/manifests/core/monitoring/vector/aggregator"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -58,11 +58,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-vector-agent
+#   name: monitoring-vector-agent
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./k8s/manifests/core/system-monitoring/vector/agent"
+#   path: "./k8s/manifests/core/monitoring/vector/agent"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -72,11 +72,11 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: system-monitoring-loki
+#   name: monitoring-loki
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/system-monitoring/loki"
+#   path: "./cluster/manifests/monitoring/loki"
 #   prune: true
 #   wait: true
 #   sourceRef:
@@ -86,13 +86,13 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: system-monitoring-prometheus-rules
+  name: monitoring-prometheus-rules
   namespace: flux-system
 spec:
   dependsOn:
-    - name: system-monitoring-kube-prom-stack
+    - name: monitoring-kube-prom-stack
   interval: 5m
-  path: "./cluster/manifests/system-monitoring/prometheus-rules"
+  path: "./cluster/manifests/monitoring/prometheus-rules"
   prune: true
   wait: true
   sourceRef:
