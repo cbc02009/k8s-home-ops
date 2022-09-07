@@ -1,28 +1,26 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: zwavejs2mqtt
-  namespace: home-automation
+  name: &app zwavejs2mqtt
+  namespace: default
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      chart: zwavejs2mqtt
-      version: 9.4.2
+      chart: app-template
+      version: 0.1.1
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-charts
         namespace: flux-system
-      interval: 5m
   install:
     createNamespace: true
-    remediation: # perform remediation when helm install fails
-      retries: 3
+    remediation:
+      retries: 5
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
-    cleanupOnFail: true
+    remediation:
+      retries: 5
   dependsOn:
     - name: node-feature-discovery
       namespace: kube-system
@@ -30,7 +28,7 @@ spec:
 
     image:
       # -- image repository
-      repository: zwavejs/zwavejs2mqtt
+      repository: ghcr.io/zwave-js/zwavejs2mqtt
       # -- image tag
       tag: 7.1.0
       # -- image pull policy
