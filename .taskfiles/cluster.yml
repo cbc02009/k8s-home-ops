@@ -37,10 +37,10 @@ tasks:
       - kubectl scale -n organizarrs deploy/lidarr --replicas 0
       - flux suspend hr -n organizarrs calibre
       - kubectl scale -n organizarrs deploy/calibre --replicas 0
-      - flux suspend hr -n organizarrs calibre-web
-      - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
-      - flux suspend hr -n organizarrs calibre-web
-      - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
+      # - flux suspend hr -n organizarrs calibre-web
+      # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
+      # - flux suspend hr -n organizarrs calibre-web
+      # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
   #     - flux suspend hr -n monitoring thanos-compactor
   #     - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
   #     - flux suspend hr -n monitoring loki
@@ -67,10 +67,10 @@ tasks:
       - kubectl scale -n organizarrs deploy/animarr --replicas 1
       - flux resume hr -n organizarrs lidarr
       - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-      - flux resume hr -n organizarrs calibre
-      - kubectl scale -n organizarrs deploy/calibre --replicas 1
-      - flux resume hr -n organizarrs calibre-web
-      - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
+      # - flux resume hr -n organizarrs calibre
+      # - kubectl scale -n organizarrs deploy/calibre --replicas 1
+      # - flux resume hr -n organizarrs calibre-web
+      # - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
   #     - flux resume hr -n monitoring thanos-compactor
   #     - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
   #     - flux resume hr -n monitoring loki
