@@ -24,7 +24,7 @@ data:
 
   #Pre-defined IP addresses
   LB_NGINX_INGRESS: 10.0.2.1
-  LB_MARIADB: 10.0.2.5
+  LB_HASS: 10.0.2.5
   LB_BABYBUDDY: 10.0.2.6
   LB_FLEXO: 10.0.2.7
   LB_SONARR: 10.0.2.8

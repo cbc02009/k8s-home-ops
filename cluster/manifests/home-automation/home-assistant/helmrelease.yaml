@@ -34,12 +34,14 @@ spec:
     env:
       TZ: "${TZ}"
 
-    envFrom:
-      - secretRef:
-          name: *app
+    # envFrom:
+    #   - secretRef:
+    #       name: *app
 
     service:
       main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_HASS}
         ports:
           http:
             port: 8123
@@ -59,16 +61,16 @@ spec:
           - hosts:
               - *host
 
-    # initContainers:
-    #   wait-for-pg:
-    #     image: busybox:latest
-    #     imagePullPolicy: IfNotPresent
-    #     command:
-    #       [
-    #         "sh",
-    #         "-c",
-    #         'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
-    #       ]
+    initContainers:
+      wait-for-pg:
+        image: busybox:latest
+        imagePullPolicy: IfNotPresent
+        command:
+          [
+            "sh",
+            "-c",
+            'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
+          ]
 
     podSecurityContext:
       runAsUser: 568
@@ -80,37 +82,6 @@ spec:
       config:
         enabled: true
         existingClaim: home-assistant-config-v1
-
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.6.1
-        env:
-          TZ: "${TZ}"
-        workingDir: "/config"
-        args:
-          - --auth
-          - "none"
-          - --user-data-dir
-          - "/config/.vscode"
-          - --extensions-dir
-          - "/config/.vscode"
-        ingress:
-          enabled: true
-          ingressClassName: "nginx"
-          hosts:
-            - host: &host "hass-code.${EXTERNAL_DOMAIN}"
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - *host
-        volumeMounts:
-          - name: config
-            mountPath: /config
 
     probes:
       liveness:
