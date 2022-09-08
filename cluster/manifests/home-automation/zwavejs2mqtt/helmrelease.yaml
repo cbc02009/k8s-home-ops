@@ -43,11 +43,6 @@ spec:
     env:
       # -- Set the container timezone
       TZ: ${TZ}
-      # -- Zwave Network key
-      KEY_S0_Legacy:
-      KEY_S2_Unauthenticated:
-      KEY_S2_Authenticated:
-      KEY_S2_AccessControl:
 
     # -- Configures service settings for the chart.
     # @default -- See values.yaml
