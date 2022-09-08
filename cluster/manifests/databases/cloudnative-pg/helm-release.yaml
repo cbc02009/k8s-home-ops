@@ -21,6 +21,9 @@ spec:
   upgrade:
     remediation:
       retries: 5
+  values:
+    crds:
+      create: true
   # postRenderers:
   #   - kustomize:
   #       patches:
