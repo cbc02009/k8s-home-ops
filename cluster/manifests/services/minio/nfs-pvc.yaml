@@ -13,7 +13,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: "${UIHARU_IP}"
-    path: /tank/k8s/apps/minio
+    path: /smoltank/k8s/apps/minio
   mountOptions:
     - nfsvers=4.2
     - nconnect=8
