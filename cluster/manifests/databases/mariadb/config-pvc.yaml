@@ -9,7 +9,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: tank-iscsi-csi
+  storageClassName: csi-nfs-smoltank
   resources:
     requests:
       storage: 10Gi

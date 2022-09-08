@@ -16,5 +16,5 @@ spec:
     requests:
       storage: 120Gi
 
-  storageClassName: tank-iscsi-csi
+  storageClassName: csi-nfs-smoltank
   # storageClassName: tank-nfs-csi

@@ -34,7 +34,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: tank-iscsi-csi
+          storageClassName: csi-nfs-smoltank
           resources:
             requests:
               storage: 10Gi

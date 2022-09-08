@@ -87,7 +87,7 @@ spec:
         enabled: true
         type: nfs
         server: "${UIHARU_IP}"
-        path: /tank/k8s/apps/plex
+        path: /smoltank/k8s/apps/plex
 
       transcode:
         enabled: true
