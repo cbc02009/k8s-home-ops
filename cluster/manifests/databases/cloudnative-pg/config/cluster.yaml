@@ -5,14 +5,14 @@ metadata:
   name: postgres
   namespace: databases
 spec:
-  instances: 2
+  instances: 1
   primaryUpdateStrategy: unsupervised
   storage:
     size: 30Gi
     storageClass: csi-nfs-smoltank
   superuserSecret:
     name: postgres-superuser
-  backup: {}
+  # backup: {}
     # retentionPolicy: 30d
     # barmanObjectStore:
     #   wal:
