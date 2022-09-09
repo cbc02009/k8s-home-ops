@@ -34,9 +34,9 @@ spec:
     env:
       TZ: "${TZ}"
 
-    # envFrom:
-    #   - secretRef:
-    #       name: *app
+    envFrom:
+      - secretRef:
+          name: *app
 
     service:
       main:
