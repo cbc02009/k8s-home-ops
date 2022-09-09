@@ -21,7 +21,7 @@ spec:
 
     storageClasses:
     - name: csi-nfs-smoltank
-      defaultClass: false
+      defaultClass: true
       # reclaimPolicy: Retain
       ## For testing
       reclaimPolicy: Delete
