@@ -16,7 +16,7 @@ spec:
     requests:
       storage: 5Gi
 
-  storageClassName: csi-nfs-smoltank
+  storageClassName: csi-iscsi-smoltank
 # ---
 # apiVersion: v1
 # kind: PersistentVolumeClaim
