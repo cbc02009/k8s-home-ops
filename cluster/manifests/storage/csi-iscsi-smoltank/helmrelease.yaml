@@ -21,7 +21,7 @@ spec:
 
     storageClasses:
     - name: tank-iscsi-csi
-      defaultClass: true
+      defaultClass: false
       reclaimPolicy: Delete
       ## For testing
       # reclaimPolicy: Retain

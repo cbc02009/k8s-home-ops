@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 15Gi
 
-  storageClassName: csi-nfs-smoltank
+  storageClassName: csi-iscsi-smoltank
