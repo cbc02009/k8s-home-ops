@@ -52,7 +52,7 @@ spec:
           http:
             port: &port 8091
           websocket:
-            enabled: false
+            enabled: true
             port: 3000
 
     probes:
