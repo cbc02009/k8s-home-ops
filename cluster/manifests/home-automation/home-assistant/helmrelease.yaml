@@ -91,6 +91,10 @@ spec:
             - hosts:
                 - *host
 
+        volumeMounts:
+          - name: config
+            mountPath: /config
+
         podSecurityContext:
           runAsUser: 568
           runAsGroup: 568
@@ -99,9 +103,7 @@ spec:
           supplementalGroups:
             - 100
 
-        volumeMounts:
-          - name: config
-            mountPath: /config
+
 
 
     initContainers:
