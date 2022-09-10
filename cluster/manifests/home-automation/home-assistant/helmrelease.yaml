@@ -119,6 +119,13 @@ spec:
         enabled: true
         existingClaim: home-assistant-config-v1
 
+      backup:
+        enabled: true
+        type: nfs
+        server: ${UIHARU_IP}
+        path: /tank/backup/kubernetes/apps/hass
+        mountPath: /config/backups
+
     probes:
       liveness:
         enabled: false
