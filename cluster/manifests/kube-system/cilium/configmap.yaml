@@ -16,8 +16,3 @@ data:
         addresses:
           - ${LB_RANGE}
         avoid-buggy-ips: true
-      - name: dynamic
-        protocol: bgp
-        addresses:
-          - ${LB_DYN_RANGE}
-        avoid-buggy-ips: true
