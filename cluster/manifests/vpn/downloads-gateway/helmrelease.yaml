@@ -27,7 +27,7 @@ spec:
   values:
 
     image:
-      repository: ghcr.io/k8s-at-home/pod-gateway
+      repository: ghcr.io/angelnu/pod-gateway
       tag: v1.7.0
 
     DNS: 172.16.1.1
@@ -36,12 +36,12 @@ spec:
       - downloads
       - organizarrs
 
-    securityContext:
-      capabilities:
-        add:
-        - NET_ADMIN
-        - SYS_MODULE
-        - NET_RAW
+    # securityContext:
+    #   capabilities:
+    #     add:
+    #     - NET_ADMIN
+    #     - SYS_MODULE
+    #     - NET_RAW
 
     publicPorts:
       - hostname: qbittorrent # hostname assigned to the pod
