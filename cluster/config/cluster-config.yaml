@@ -17,6 +17,7 @@ data:
   TZ: America/New_York
 
   LB_RANGE: 10.0.3.0/24
+  LB_DYN_RANGE: 10.0.4.0/24
 
   ANYA_IP: 10.0.0.15
   UIHARU_IP: 10.0.0.10

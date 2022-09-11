@@ -11,9 +11,14 @@ data:
         peer-asn: 65000
         my-asn: 65001
     address-pools:
-      - name: default
+      - name: static
         protocol: bgp
         addresses:
           - ${LB_RANGE}
         avoid-buggy-ips: true
         autoAssign: false
+      - name: dynamic
+        protocol: bgp
+        addresses:
+          - ${LB_DYN_RANGE}
+        avoid-buggy-ips: true
