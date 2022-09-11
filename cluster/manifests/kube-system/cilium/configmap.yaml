@@ -16,7 +16,6 @@ data:
         addresses:
           - ${LB_RANGE}
         avoid-buggy-ips: true
-        autoAssign: false
       - name: dynamic
         protocol: bgp
         addresses:
