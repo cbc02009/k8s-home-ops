@@ -36,12 +36,12 @@ spec:
       - downloads
       - organizarrs
 
-    # securityContext:
-    #   capabilities:
-    #     add:
-    #     - NET_ADMIN
-    #     - SYS_MODULE
-    #     - NET_RAW
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+        - SYS_MODULE
+        - NET_RAW
 
     publicPorts:
       - hostname: qbittorrent # hostname assigned to the pod
