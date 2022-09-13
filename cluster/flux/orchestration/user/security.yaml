@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: user-security-vaultwarden
+  name: security-vaultwarden
   namespace: flux-system
 spec:
   interval: 5m
@@ -16,7 +16,7 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: user-security-glauth
+#   name: security-glauth
 #   namespace: flux-system
 # spec:
 #   interval: 5m
@@ -30,7 +30,7 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: user-security-authelia
+#   name: security-authelia
 #   namespace: flux-system
 # spec:
 #   interval: 5m
