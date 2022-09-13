@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: postgres
+  namespace: databases
+  labels:
+    name: postgres
+
+spec:
+  ingressClassName: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+  rules:
+  - host: &host postgres.${EXTERNAL_DOMAIN}
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: postgres-rw
+            port:
+              number: 5432
+  tls:
+    - hosts:
+      - *host
