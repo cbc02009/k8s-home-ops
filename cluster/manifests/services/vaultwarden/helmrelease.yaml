@@ -37,7 +37,7 @@ spec:
       main:
         ports:
           http:
-            port: &port 80
+            port: &port 8080
           websocket:
             enabled: true
             port: &websocket-port 3012
