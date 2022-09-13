@@ -5,11 +5,11 @@ metadata:
   namespace: databases
   labels:
     name: postgres
+annotations:
+    cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
 
 spec:
   ingressClassName: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
   rules:
   - host: &host postgres.${EXTERNAL_DOMAIN}
     http:
