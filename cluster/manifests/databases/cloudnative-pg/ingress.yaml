@@ -23,4 +23,5 @@ spec:
               number: 5432
   tls:
     - hosts:
-      - *host
+        - *host
+      secretName: &tls tls.postgres
