@@ -37,7 +37,7 @@ spec:
       main:
         ports:
           http:
-            port: &port 8080
+            port: &port 80
           websocket:
             enabled: true
             port: &websocket-port 3012
@@ -67,11 +67,11 @@ spec:
           - hosts:
               - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
+    # podSecurityContext:
+    #   runAsUser: 568
+    #   runAsGroup: 568
+    #   fsGroup: 568
+    #   fsGroupChangePolicy: "OnRootMismatch"
 
     persistence:
       config:
