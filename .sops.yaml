@@ -4,3 +4,6 @@ creation_rules:
     encrypted_regex: "((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))"
     age: >-
       age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  - path_regex: cluster/.*\.sops\.toml
+    age: >-
+      age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
