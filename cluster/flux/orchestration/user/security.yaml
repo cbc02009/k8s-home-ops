@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./k8s/manifests/user/security/glauth"
+  path: "./cluster/manifests/security/glauth"
   prune: true
   wait: true
   sourceRef:
@@ -20,7 +20,7 @@ spec:
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./k8s/manifests/user/security/authelia"
+#   path: "./cluster/manifests/security/authelia"
 #   prune: true
 #   wait: true
 #   sourceRef:
