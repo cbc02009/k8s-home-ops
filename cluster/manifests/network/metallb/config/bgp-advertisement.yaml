@@ -6,3 +6,13 @@ metadata:
 spec:
   ipAddressPools:
   - default
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: router
+  namespace: network
+spec:
+  myASN: 65000
+  peerASN: 65000
+  peerAddress: ${ROUTER_IP}
