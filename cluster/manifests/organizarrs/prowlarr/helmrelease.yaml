@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.1.1
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -25,7 +25,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/prowlarr-develop
-      tag: 0.4.4.1947
+      tag: 0.4.5.1960
 
     env:
       TZ: "${TZ}"
@@ -81,7 +81,7 @@ spec:
       backup:
         enabled: true
         type: nfs
-        server: ${UIHARU_IP}
+        server: ${SAN_HOST}
         path: /tank/backup/kubernetes/apps/prowlarr
         mountPath: /config/Backups
 

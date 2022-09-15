@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.1.1
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -56,7 +56,7 @@ spec:
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/dracula.css"></head>';
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/organizr.css"></head>';
             sub_filter_once on;
           hajimari.io/enable: "true"
           hajimari.io/icon: "television-box"
@@ -79,21 +79,21 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "${UIHARU_IP}"
+        server: "${SAN_HOST}"
         path: /tank/media
         mountPath: /media
 
       bittorrent:
         enabled: true
         type: nfs
-        server: ${UIHARU_IP}
+        server: ${SAN_HOST}
         path: /smoltank/bittorrent
         mountPath: /bittorrent
 
       backup:
         enabled: true
         type: nfs
-        server: ${UIHARU_IP}
+        server: ${SAN_HOST}
         path: /tank/backup/kubernetes/apps/animarr
         mountPath: /config/Backups
 

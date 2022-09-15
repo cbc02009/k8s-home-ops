@@ -16,7 +16,7 @@ spec:
     requests:
       storage: 5Gi
 
-  storageClassName: tank-iscsi-csi
+  storageClassName: csi-nfs-smoltank
 # ---
 # apiVersion: v1
 # kind: PersistentVolumeClaim
@@ -35,7 +35,7 @@ spec:
 #     requests:
 #       storage: 8Gi
 
-#   storageClassName: tank-iscsi-csi
+#   storageClassName: csi-nfs-smoltank
 # ---
 # apiVersion: v1
 # kind: PersistentVolumeClaim
@@ -54,4 +54,4 @@ spec:
 #     requests:
 #       storage: 10Gi
 
-#   storageClassName: tank-iscsi-csi
+#   storageClassName: csi-nfs-smoltank

@@ -5,6 +5,8 @@ metadata:
   name: cert-manager-certmanager
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: monitoring-kube-prom-stack
   interval: 5m
   path: "./cluster/manifests/cert-manager/cert-manager/base"
   prune: true
@@ -35,9 +37,6 @@ metadata:
   name: cert-manager-porkbun-webhook
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: cert-manager-certmanager
-    - name: cert-manager-certmanager-config
   interval: 5m
   path: "./cluster/manifests/cert-manager/porkbun-webhook"
   prune: true

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.1.1
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -26,7 +26,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/radarr-develop
-      tag: 4.2.2.6503
+      tag: 4.2.3.6575
 
     env:
       TZ: ${TZ}
@@ -78,21 +78,21 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "${UIHARU_IP}"
+        server: "${SAN_HOST}"
         path: /tank/media
         mountPath: /media
 
       bittorrent:
         enabled: true
         type: nfs
-        server: ${UIHARU_IP}
+        server: ${SAN_HOST}
         path: /smoltank/bittorrent
         mountPath: /bittorrent
 
       backup:
         enabled: true
         type: nfs
-        server: ${UIHARU_IP}
+        server: ${SAN_HOST}
         path: /tank/backup/kubernetes/apps/radarr
         mountPath: /config/Backups
 

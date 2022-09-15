@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-config-v1
+  namespace: services
+  labels:
+    app.kubernetes.io/name: &name minio
+    app.kubernetes.io/instance: *name
+    snapshot.home.arpa/enabled: "true"
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 30Gi
+
+  storageClassName: csi-nfs-smoltank

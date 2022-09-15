@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 10m0s
   dependsOn:
-    # - name: apply-cluster-config
+    - name: apply-cluster-config
     - name: apply-cluster-repositories
     - name: apply-cluster-namespaces
     - name: apply-flux
@@ -21,33 +21,3 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  postBuild:
-    substitute: {}
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-config
-      - kind: Secret
-        name: cluster-secrets
-  patches:
-    - patch: |-
-        apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-        kind: Kustomization
-        metadata:
-          name: not-used
-          namespace: not-used
-        spec:
-          decryption:
-            provider: sops
-            secretRef:
-              name: sops-age
-          postBuild:
-            substitute: {}
-            substituteFrom:
-              - kind: ConfigMap
-                name: cluster-config
-              - kind: Secret
-                name: cluster-secrets
-      target:
-        kind: Kustomization
-        group: kustomize.toolkit.fluxcd.io
-        version: v1beta2

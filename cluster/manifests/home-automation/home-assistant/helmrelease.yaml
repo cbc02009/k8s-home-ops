@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.1.1
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -21,15 +21,17 @@ spec:
   upgrade:
     remediation:
       retries: 5
-  # dependsOn:
-  #   - name: postgres
-  #     namespace: databases
+  dependsOn:
+    - name: postgres
+      namespace: databases
+    - name: zwavejs2mqtt
+      namespace: home-automation
   #   - name: emqx
   #     namespace: home-automation
   values:
     image:
       repository: ghcr.io/onedr0p/home-assistant
-      tag: 2022.8.7@sha256:0bacc45203340df0a2ef000261ace0d788c4dc906ace33e7cea7d764a1186c23
+      tag: 2022.9.4@sha256:fb5ddff05e523de61708c19209dfbac4e283f4f5d72004abb269cc516474a6b4
 
     env:
       TZ: "${TZ}"
@@ -40,6 +42,8 @@ spec:
 
     service:
       main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_HASS}
         ports:
           http:
             port: 8123
@@ -59,34 +63,12 @@ spec:
           - hosts:
               - *host
 
-    # initContainers:
-    #   wait-for-pg:
-    #     image: busybox:latest
-    #     imagePullPolicy: IfNotPresent
-    #     command:
-    #       [
-    #         "sh",
-    #         "-c",
-    #         'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
-    #       ]
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: home-assistant-config-v1
-
     addons:
       codeserver:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.6.1
+          tag: 4.7.0
         env:
           TZ: "${TZ}"
         workingDir: "/config"
@@ -108,9 +90,52 @@ spec:
           tls:
             - hosts:
                 - *host
+
         volumeMounts:
           - name: config
             mountPath: /config
+
+        podSecurityContext:
+          runAsUser: 568
+          runAsGroup: 568
+          fsGroup: 568
+          fsGroupChangePolicy: "OnRootMismatch"
+          supplementalGroups:
+            - 100
+
+
+
+
+    initContainers:
+      wait-for-pg:
+        image: busybox:latest
+        imagePullPolicy: IfNotPresent
+        command:
+          [
+            "sh",
+            "-c",
+            'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
+          ]
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: home-assistant-config-v1
+
+      backup:
+        enabled: true
+        type: nfs
+        server: ${SAN_HOST}
+        path: /tank/backup/kubernetes/apps/hass
+        mountPath: /config/backups
 
     probes:
       liveness:

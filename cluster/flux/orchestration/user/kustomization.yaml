@@ -9,5 +9,6 @@ resources:
   - ./organizarrs.yaml
   - ./media.yaml
   - ./services.yaml
-  - ./system-monitoring.yaml
+  - ./security.yaml
+  - ./monitoring.yaml
   - ./vpn.yaml

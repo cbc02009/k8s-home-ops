@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 10Gi
 
-  storageClassName: tank-iscsi-csi
+  storageClassName: csi-nfs-smoltank
