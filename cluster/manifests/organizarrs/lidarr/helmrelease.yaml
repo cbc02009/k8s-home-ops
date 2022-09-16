@@ -80,6 +80,13 @@ spec:
         path: /tank/media
         mountPath: /media
 
+      bittorrent:
+        enabled: true
+        type: nfs
+        server: ${SAN_HOST}
+        path: /smoltank/bittorrent
+        mountPath: /bittorrent
+
       backup:
         enabled: true
         type: nfs
