@@ -30,19 +30,16 @@
     "fileMatch":[
       "cluster/manifests/.+/helmrelease\\.ya?ml$",
       "cluster/manifests/.+/values\\.ya?ml$"
-    ],
-    "aliases": {
-      "descheduler-charts": "https://kubernetes-sigs.github.io/descheduler"
-    }
+    ]
   },
   "kubernetes":{
     "fileMatch":[
-      "cluster/manifests/.+\\.ya?ml$"
+      "cluster/.+\\.ya?ml$"
     ]
   },
   "flux":{
     "fileMatch":[
-      "cluster/manifests/.+\\.ya?ml$"
+      "cluster/.+\\.ya?ml$"
     ]
   },
   "regexManagers":[
