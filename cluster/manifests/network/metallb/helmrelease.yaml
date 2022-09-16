@@ -24,7 +24,7 @@ spec:
         - effect: "NoSchedule"
           operator: "Exists"
       frr:
-        enabled: true
+        enabled: false
 
     crds:
       enabled: true

@@ -2,7 +2,7 @@
 # kubeProxyReplacement enables kube-proxy replacement in Cilium BPF datapath
 kubeProxyReplacement: "strict"
 
-k8sServiceHost: 10.0.3.9
+k8sServiceHost: 10.0.0.9
 k8sServicePort: 6443
 
 ipam:
