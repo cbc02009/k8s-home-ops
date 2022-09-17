@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ./notifications
   # - ./webhook
-  # - ./dashboard
+  - ./dashboard
