@@ -323,8 +323,8 @@ spec:
           DB_TYPE: postgres
           HOST: postgres-rw.databases.svc.cluster.local
           NAME: gitea
-          USER: ${POSTGRES_USER}
-          PASSWD: ${POSTGRES_PASS}
+          USER: ${SECRET_GITEA_POSTGRES_USER}
+          PASSWD: ${SECRET_GITEA_POSTGRES_PASS}
           SCHEMA: gitea
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
