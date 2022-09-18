@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: databases-cloudnative-pg-config
+    - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/services/gitea"
   prune: true
@@ -50,7 +50,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: databases-cloudnative-pg-config
+    - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/services/vaultwarden"
   prune: true
