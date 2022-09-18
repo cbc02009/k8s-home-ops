@@ -33,6 +33,8 @@ metadata:
   name: monitoring-grafana
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: storage-csi-nfs-smoltank
   interval: 5m
   path: "./cluster/manifests/monitoring/grafana"
   prune: true
