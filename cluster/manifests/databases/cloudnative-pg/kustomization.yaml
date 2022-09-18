@@ -5,4 +5,5 @@ resources:
   - dashboard
   - secret.sops.yaml
   - helm-release.yaml
+  - scheduled-backup.yaml
   # - service.yaml
