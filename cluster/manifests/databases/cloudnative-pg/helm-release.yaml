@@ -25,7 +25,3 @@ spec:
 
     crds:
       create: true
-
-    service:
-      type: LoadBalancer
-      loadBalancerIP: ${LB_POSTGRES}
