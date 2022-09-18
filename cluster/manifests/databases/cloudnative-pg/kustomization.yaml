@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - dashboard
   - ./secret.sops.yaml
-  # - ./ingress.yaml
   - ./helm-release.yaml
