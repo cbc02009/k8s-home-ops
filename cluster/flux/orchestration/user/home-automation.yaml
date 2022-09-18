@@ -5,6 +5,8 @@ metadata:
   name: home-automation-home-assistant
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: databases-cloudnative-pg-config
   interval: 5m
   path: "./cluster/manifests/home-automation/home-assistant"
   prune: true
