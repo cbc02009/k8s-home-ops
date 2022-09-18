@@ -48,7 +48,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cloudnative-pg
+    - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/organizarrs/radarr"
   prune: true
