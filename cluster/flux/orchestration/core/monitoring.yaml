@@ -21,6 +21,8 @@ metadata:
   name: monitoring-thanos
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: monitoring-kube-prom-stack
   interval: 5m
   path: "./cluster/manifests/monitoring/thanos"
   prune: true
