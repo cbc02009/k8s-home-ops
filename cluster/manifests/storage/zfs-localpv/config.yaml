@@ -5,7 +5,7 @@ metadata:
   name: openebs-zfspv
 parameters:
   recordsize: "4k"
-  compression: "off"
+  compression: "zstd"
   dedup: "off"
   fstype: "zfs"
   poolname: "rpool/zfs-localpv"
