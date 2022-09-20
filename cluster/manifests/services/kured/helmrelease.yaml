@@ -12,7 +12,7 @@ spec:
       version: 4.0.1
       sourceRef:
         kind: HelmRepository
-        name: kured-charts
+        name: kubereboot-charts
         namespace: flux-system
   install:
     createNamespace: true
@@ -24,7 +24,7 @@ spec:
 
   values:
     image:
-      repository: weaveworks/kured
+      repository: ghcr.io/kubereboot/kured
       tag: ""  # will default to the appVersion in Chart.yaml
       pullPolicy: IfNotPresent
       pullSecrets: []
