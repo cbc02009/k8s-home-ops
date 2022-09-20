@@ -9,7 +9,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 30Gi
-    storageClass: csi-nfs-smoltank
+    storageClass: csi-iscsi-smoltank
   superuserSecret:
     name: postgres-superuser
   backup: {}
