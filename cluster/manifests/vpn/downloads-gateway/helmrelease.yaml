@@ -56,7 +56,9 @@ spec:
         securityContext:
           capabilities:
             add:
-              - NET_ADMIN
+            - NET_ADMIN
+            - SYS_MODULE
+            - NET_RAW
 
     addons:
       netshoot:
