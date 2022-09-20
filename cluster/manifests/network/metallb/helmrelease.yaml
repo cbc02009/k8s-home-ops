@@ -18,13 +18,7 @@ spec:
   values:
 
     speaker:
-      tolerations:
-        - effect: "NoExecute"
-          operator: "Exists"
-        - effect: "NoSchedule"
-          operator: "Exists"
-      frr:
-        enabled: false
+      tolerateMaster: true
 
     crds:
       enabled: true
@@ -36,12 +30,3 @@ spec:
         enabled: true
       prometheusRule:
         enabled: true
-
-  postRenderers:
-    - kustomize:
-        patchesStrategicMerge:
-          - $patch: delete
-            apiVersion: admissionregistration.k8s.io/v1
-            kind: ValidatingWebhookConfiguration
-            metadata:
-              name: metallb-webhook-configuration

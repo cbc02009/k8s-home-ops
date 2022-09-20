@@ -12,7 +12,7 @@ spec:
     storageClass: csi-nfs-smoltank
   superuserSecret:
     name: postgres-superuser
-  # backup:
+  backup: {}
   #   retentionPolicy: 30d
   #   barmanObjectStore:
   #     wal:
