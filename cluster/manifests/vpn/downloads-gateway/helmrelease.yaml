@@ -68,8 +68,6 @@ spec:
       configmap.reloader.stakater.com/reload: downloads-gateway-pod-gateway
       secret.reloader.stakater.com/reload: downloads-gateway-vpnconfig
 
-
-
     publicPorts:
       - hostname: qbittorrent # hostname assigned to the pod
         IP: 10 # must be an integer between 2 and VXLAN_GATEWAY_FIRST_DYNAMIC_IP (20 by default)
