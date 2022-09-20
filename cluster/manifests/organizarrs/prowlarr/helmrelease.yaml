@@ -46,6 +46,13 @@ spec:
           http:
             port: *port
 
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+        - SYS_MODULE
+        - NET_RAW
+
     ingress:
       main:
         enabled: true
