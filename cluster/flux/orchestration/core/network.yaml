@@ -5,6 +5,8 @@ metadata:
   name: network-metallb
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: monitoring-kube-prom-stack
   interval: 5m
   path: "./cluster/manifests/network/metallb"
   prune: true
