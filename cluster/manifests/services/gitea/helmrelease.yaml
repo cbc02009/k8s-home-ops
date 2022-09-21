@@ -30,11 +30,10 @@ spec:
   postRenderers:
   - kustomize:
       patchesStrategicMerge:
-      - kind: statefulset
+      - kind: StatefulSet
         apiVersion: apps/v1
         metadata:
           name: gitea
-          namespace: services
         spec:
           initContainers:
             init-db:
