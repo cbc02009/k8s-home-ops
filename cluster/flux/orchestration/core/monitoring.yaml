@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: storage-csi-nfs-smoltank
-  interval: 5m
+  interval: 15m
   path: "./cluster/manifests/monitoring/kube-prometheus-stack"
   prune: true
   # wait: true
