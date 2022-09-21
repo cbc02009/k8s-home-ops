@@ -26,31 +26,31 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: media-kavita
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/media/kavita"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: media-mango
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/media/mango"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: media-kavita
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/media/kavita"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: media-mango
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/media/mango"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
