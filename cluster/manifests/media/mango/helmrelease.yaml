@@ -67,7 +67,7 @@ spec:
         type: nfs
         server: "${SAN_HOST}"
         path: /tank/media/manga
-        mountPath: /media
+        mountPath: /root/mango/library
 
     resources:
       requests:
