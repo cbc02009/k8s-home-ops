@@ -30,7 +30,7 @@ spec:
   postRenderers:
   - kustomize:
       patchesStrategicMerge:
-      - kind: StatefulSet
+      - kind: statefulset
         apiVersion: apps/v1
         metadata:
           name: gitea
