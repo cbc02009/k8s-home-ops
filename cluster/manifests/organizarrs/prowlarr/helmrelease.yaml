@@ -21,6 +21,10 @@ spec:
   upgrade:
     remediation:
       retries: 5
+  dependsOn:
+    - name: postgres
+      namespace: databases
+
   values:
 
     image:
@@ -33,6 +37,9 @@ spec:
       PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       PROWLARR__PORT: &port 9696
       PROWLARR__LOG_LEVEL: info
+      PROWLARR__POSTGRES_MAIN_DB: prowlarr_main
+      PROWLARR__POSTGRES_LOG_DB: prowlarr_log
+      PROWLARR__POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
 
     envFrom:
       - secretRef:
