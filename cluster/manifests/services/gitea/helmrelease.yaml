@@ -34,7 +34,7 @@ spec:
         apiVersion: apps/v1
         metadata:
           name: gitea
-          namespace: services
+          namespace: doesNotMatter
         spec:
           initContainers:
             init-db:
