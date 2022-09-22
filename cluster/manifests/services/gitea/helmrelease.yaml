@@ -354,7 +354,6 @@ spec:
           NAME: gitea
           USER: ${SECRET_GITEA_POSTGRES_USER}
           PASSWD: ${SECRET_GITEA_POSTGRES_PASS}
-          SCHEMA: gitea
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
       additionalConfigSources: []
