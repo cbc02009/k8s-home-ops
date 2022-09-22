@@ -143,6 +143,8 @@ spec:
       http:
         type: LoadBalancer
         port: 3000
+        annotations:
+          metallb.universe.tf/allow-shared-ip: gitea
         loadBalancerIP: ${LB_GITEA}
       ## @param service.ssh.type Kubernetes service type for ssh traffic
       ## @param service.ssh.port Port number for ssh traffic
@@ -159,9 +161,9 @@ spec:
       ssh:
         type: LoadBalancer
         port: 22
-        loadBalancerIP: ${LB_GITEA_SSH}
-        # externalTrafficPolicy: Local
-
+        annotations:
+          metallb.universe.tf/allow-shared-ip: gitea
+        loadBalancerIP: ${LB_GITEA}
 
     ## @section Ingress
     ## @param ingress.enabled Enable ingress
