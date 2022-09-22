@@ -16,7 +16,7 @@ spec:
       match:
         all:
           - resources:
-              kinds: [StatefulSet]
+              kinds: [Pod]
               name: gitea
       mutate:
         patchStrategicMerge:
