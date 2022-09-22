@@ -22,7 +22,8 @@ spec:
         patchStrategicMerge:
           spec:
             initContainers:
-              - image: ghcr.io/onedr0p/postgres-initdb:14.5
+              - name: init-postgres
+                image: ghcr.io/onedr0p/postgres-initdb:14.5
                 env:
                   - name: POSTGRES_HOST
                     value: postgres-rw.databases.svc.cluster.local
