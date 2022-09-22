@@ -21,8 +21,8 @@ spec:
       mutate:
         patchStrategicMerge:
           spec:
-            - initContainers:
-              init-db:
+            initContainers:
+              - init-db:
                 image: ghcr.io/onedr0p/postgres-initdb:14.5
                 env:
                   - name: POSTGRES_HOST
