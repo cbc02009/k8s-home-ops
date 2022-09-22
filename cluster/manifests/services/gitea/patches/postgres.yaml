@@ -1,24 +1,25 @@
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
+kind: StatefulSet
 metadata:
-  name: &app gitea
+  name: gitea
   namespace: services
 spec:
-  values:
-    initContainers:
-      init-db:
-        image: ghcr.io/onedr0p/postgres-initdb:14.5
-        env:
-          - name: POSTGRES_HOST
-            value: postgres-rw.databases.svc.cluster.local
-          - name: POSTGRES_DB
-            value: gitea
-          - name: POSTGRES_SUPER_PASS
-            valueFrom:
-              secretKeyRef:
-                name: postgres-superuser
-                key: password
-        envFrom:
-          - secretRef:
-              name: gitea-postgres
+  template:
+    spec:
+      initContainers:
+        - init-db:
+          image: ghcr.io/onedr0p/postgres-initdb:14.5
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-rw.databases.svc.cluster.local
+            - name: POSTGRES_DB
+              value: gitea
+            - name: POSTGRES_SUPER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-superuser
+                  key: password
+          envFrom:
+            - secretRef:
+                name: gitea-postgres
