@@ -23,7 +23,7 @@ spec:
           spec:
             template:
               spec:
-                initContainers:
+                - initContainers:
                   init-db:
                     image: ghcr.io/onedr0p/postgres-initdb:14.5
                     env:
