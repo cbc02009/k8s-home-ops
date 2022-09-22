@@ -101,7 +101,9 @@ spec:
       fsGroup: 1000
 
     ## @param containerSecurityContext Security context
-    containerSecurityContext: {}
+    containerSecurityContext:
+      capabilities:
+        add: ["SYS_CHROOT"]
     #   allowPrivilegeEscalation: false
     #   capabilities:
     #     drop:
@@ -118,14 +120,6 @@ spec:
     #   runAsGroup: 1000
     #   runAsNonRoot: true
     #   runAsUser: 1000
-
-    ## @depracated The securityContext variable has been split two:
-    ## - containerSecurityContext
-    ## - podSecurityContext.
-    ## @param securityContext Run init and Gitea containers as a specific securityContext
-    securityContext:
-      capabilities:
-        add: ["SYS_CHROOT"]
 
     ## @section Service
     service:
