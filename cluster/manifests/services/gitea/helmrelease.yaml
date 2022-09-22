@@ -157,18 +157,10 @@ spec:
       ## @param service.ssh.loadBalancerSourceRanges Source range filter for ssh loadbalancer
       ## @param service.ssh.annotations SSH service annotations
       ssh:
-        type: ClusterIP
+        type: LoadBalancer
         port: 22
-        clusterIP: None
-        loadBalancerIP:
-        nodePort:
-        externalTrafficPolicy:
-        externalIPs:
-        ipFamilyPolicy:
-        ipFamilies:
-        hostPort:
-        loadBalancerSourceRanges: []
-        annotations: {}
+        loadBalancerIP: ${LB_GITEA_SSH}
+        externalTrafficPolicy: local
 
 
     ## @section Ingress
