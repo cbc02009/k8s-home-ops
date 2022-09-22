@@ -17,7 +17,7 @@ spec:
         all:
           - resources:
               kinds: [Pod]
-              name: "gitea-0"
+              name: "gitea*"
       mutate:
         patchStrategicMerge:
           spec:
