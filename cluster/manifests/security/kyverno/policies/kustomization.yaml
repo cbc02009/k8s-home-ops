@@ -5,5 +5,5 @@ resources:
   - remove-cpu-limit.yaml
   - set-internal-ingress-annotations.yaml
   - sync-postgres-secret.yaml
-  # - gitea-init.yaml
+  - gitea-init.yaml
   # - ./snapshot-cronjob-controller.yaml
