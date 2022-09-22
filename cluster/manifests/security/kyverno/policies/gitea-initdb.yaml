@@ -17,7 +17,7 @@ spec:
         all:
           - resources:
               kinds: [StateflSet]
-              name: "gitea-*"
+              name: "gitea"
       mutate:
         patchStrategicMerge:
           spec:
