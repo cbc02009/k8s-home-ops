@@ -24,6 +24,11 @@ spec:
             initContainers:
               - name: init-postgres
                 image: ghcr.io/onedr0p/postgres-initdb:14.5
+                imagePullPolicy: IfNotPresent
+                resources:
+                  requests:
+                    cpu: 10m
+                    memory: 100Mi
                 env:
                   - name: POSTGRES_HOST
                     value: postgres-rw.databases.svc.cluster.local
