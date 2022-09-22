@@ -160,7 +160,7 @@ spec:
         type: LoadBalancer
         port: 22
         loadBalancerIP: ${LB_GITEA_SSH}
-        externalTrafficPolicy: local
+        externalTrafficPolicy: Local
 
 
     ## @section Ingress
