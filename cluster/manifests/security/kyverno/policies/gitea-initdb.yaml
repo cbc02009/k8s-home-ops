@@ -16,24 +16,26 @@ spec:
       match:
         all:
           - resources:
-              kinds: [Pod]
-              name: "gitea-*"
+              kinds: [StatefulSet]
+              name: "gitea"
       mutate:
         patchStrategicMerge:
           spec:
-            initContainers:
-              - init-db:
-                image: ghcr.io/onedr0p/postgres-initdb:14.5
-                env:
-                  - name: POSTGRES_HOST
-                    value: postgres-rw.databases.svc.cluster.local
-                  - name: POSTGRES_DB
-                    value: gitea
-                  - name: POSTGRES_SUPER_PASS
-                    valueFrom:
-                      secretKeyRef:
-                        name: postgres-superuser
-                        key: password
-                envFrom:
-                  - secretRef:
-                      name: gitea-postgres
+            template:
+              spec:
+                initContainers:
+                  - init-db:
+                    image: ghcr.io/onedr0p/postgres-initdb:14.5
+                    env:
+                      - name: POSTGRES_HOST
+                        value: postgres-rw.databases.svc.cluster.local
+                      - name: POSTGRES_DB
+                        value: gitea
+                      - name: POSTGRES_SUPER_PASS
+                        valueFrom:
+                          secretKeyRef:
+                            name: postgres-superuser
+                            key: password
+                    envFrom:
+                      - secretRef:
+                          name: gitea-postgres
