@@ -5,7 +5,7 @@ metadata:
   name: gitea-postgres-init
   annotations:
     policies.kyverno.io/title: Init database for gitea
-    policies.kyverno.io/subject: StatefulSet
+    policies.kyverno.io/subject: Pod
     policies.kyverno.io/description: >-
       This policy updates the postgres database for gitea
 spec:
@@ -14,28 +14,26 @@ spec:
   rules:
     - name: add-initdb-container
       match:
-        any:
+        all:
           - resources:
-              kinds: [StatefulSet]
-              name: "gitea"
+              kinds: [Pod]
+              name: "gitea-*"
       mutate:
         patchStrategicMerge:
           spec:
-            template:
-              spec:
-                initContainers:
-                  - init-db:
-                    image: ghcr.io/onedr0p/postgres-initdb:14.5
-                    env:
-                      - name: POSTGRES_HOST
-                        value: postgres-rw.databases.svc.cluster.local
-                      - name: POSTGRES_DB
-                        value: gitea
-                      - name: POSTGRES_SUPER_PASS
-                        valueFrom:
-                          secretKeyRef:
-                            name: postgres-superuser
-                            key: password
-                    envFrom:
-                      - secretRef:
-                          name: gitea-postgres
+            initContainers:
+              - init-db:
+                image: ghcr.io/onedr0p/postgres-initdb:14.5
+                env:
+                  - name: POSTGRES_HOST
+                    value: postgres-rw.databases.svc.cluster.local
+                  - name: POSTGRES_DB
+                    value: gitea
+                  - name: POSTGRES_SUPER_PASS
+                    valueFrom:
+                      secretKeyRef:
+                        name: postgres-superuser
+                        key: password
+                envFrom:
+                  - secretRef:
+                      name: gitea-postgres
