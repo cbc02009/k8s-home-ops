@@ -3,23 +3,25 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-  - ./bjw-s-charts.yaml
-  - ./cloudnative-pg.yaml
-  - ./cilium-charts.yaml
-  - ./external-dns-charts.yaml
-  - ./fairwinds-charts.yaml
-  - ./grafana-charts.yaml
-  - ./kyverno-charts.yaml
-  - ./jetstack-charts.yaml
-  - ./kured-charts.yaml
-  - ./kubernetes-sigs-descheduler-charts.yaml
-  - ./kubernetes-sigs-metrics-server-charts.yaml
-  - ./kubernetes-sigs-nfd-charts.yaml
-  - ./k8s-at-home-charts.yaml
-  - ./metallb-charts.yaml
-  - ./prometheus-community-charts.yaml
-  - ./democratic-csi-charts.yaml
-  - ./bitnami-charts.yaml
-  - ./hajimari-charts.yaml
-  - ./ingress-nginx-charts.yaml
-  - ./stakater-charts.yaml
+  - bjw-s-charts.yaml
+  - cloudnative-pg.yaml
+  - cilium-charts.yaml
+  - external-dns-charts.yaml
+  - fairwinds-charts.yaml
+  - gitea-charts.yaml
+  - grafana-charts.yaml
+  - kyverno-charts.yaml
+  - jetstack-charts.yaml
+  - kured-charts.yaml
+  - kubernetes-sigs-descheduler-charts.yaml
+  - kubernetes-sigs-metrics-server-charts.yaml
+  - kubernetes-sigs-nfd-charts.yaml
+  - k8s-at-home-charts.yaml
+  - metallb-charts.yaml
+  - openebs-charts.yaml
+  - prometheus-community-charts.yaml
+  - democratic-csi-charts.yaml
+  - bitnami-charts.yaml
+  - hajimari-charts.yaml
+  - ingress-nginx-charts.yaml
+  - stakater-charts.yaml

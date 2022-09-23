@@ -4,3 +4,5 @@ kind: Kustomization
 resources:
   - ./clusterissuer.yaml
   - ./certificate.yaml
+  # - ./clusterissuer-staging.yaml
+  # - ./certificate-staging.yaml

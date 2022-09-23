@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ip-address-pool.yaml
   - l2-advertisement.yaml
+  # - bgp-advertisement.yaml

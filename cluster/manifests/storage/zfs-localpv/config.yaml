@@ -1,0 +1,12 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: openebs-zfspv
+parameters:
+  recordsize: "4k"
+  compression: "zstd"
+  dedup: "off"
+  fstype: "zfs"
+  poolname: "rpool/zfs-localpv"
+provisioner: zfs.csi.openebs.io

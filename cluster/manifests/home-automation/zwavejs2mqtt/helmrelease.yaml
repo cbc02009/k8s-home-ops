@@ -1,48 +1,48 @@
+---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: zwavejs2mqtt
+  name: &app zwavejs2mqtt
   namespace: home-automation
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      chart: zwavejs2mqtt
-      version: 9.4.2
+      chart: app-template
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-charts
         namespace: flux-system
-      interval: 5m
   install:
     createNamespace: true
-    remediation: # perform remediation when helm install fails
-      retries: 3
+    remediation:
+      retries: 5
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
-    cleanupOnFail: true
+    remediation:
+      retries: 5
   dependsOn:
-    - name: mariadb
-      namespace: databases
+    - name: node-feature-discovery
+      namespace: kube-system
   values:
 
     image:
       # -- image repository
-      repository: zwavejs/zwavejs2mqtt
+      repository: ghcr.io/zwave-js/zwavejs2mqtt
       # -- image tag
-      tag: 7.0.0
+      tag: 7.2.0
       # -- image pull policy
       pullPolicy: IfNotPresent
+
+    envFrom:
+      - secretRef:
+          name: *app
 
     # -- environment variables. See [image docs](https://zwave-js.github.io/zwavejs2mqtt/#/guide/env-vars) for more details.
     # @default -- See below
     env:
       # -- Set the container timezone
-      TZ: UTC
-      # -- Zwave Network key
-      NETWORK_KEY:
+      TZ: ${TZ}
 
     # -- Configures service settings for the chart.
     # @default -- See values.yaml
@@ -50,10 +50,26 @@ spec:
       main:
         ports:
           http:
-            port: 8091
+            port: &port 8091
           websocket:
-            enabled: false
+            enabled: true
             port: 3000
+
+    probes:
+      liveness: &probes
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /health
+            port: *port
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness: *probes
+      startup:
+        enabled: false
 
     ingress:
       main:
@@ -64,7 +80,7 @@ spec:
           hajimari.io/enable: "false"
           hajimari.io/icon: "router-wireless-settings"
         hosts:
-          - host: &host "zwavejs2mqtt.${EXTERNAL_DOMAIN}"
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
@@ -97,14 +113,17 @@ spec:
       limits:
         memory: 262M
 
+    podAnnotations:
+      secret.reloader.stakater.com/reload: *app
+
     # -- Affinity constraint rules to place the Pod on a specific node.
     # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-    affinity: {}
-    #   nodeAffinity:
-    #     requiredDuringSchedulingIgnoredDuringExecution:
-    #       nodeSelectorTerms:
-    #       - matchExpressions:
-    #         - key: app
-    #           operator: In
-    #           values:
-    #           - zwave-controller
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/custom-zwave
+                  operator: In
+                  values:
+                    - "true"

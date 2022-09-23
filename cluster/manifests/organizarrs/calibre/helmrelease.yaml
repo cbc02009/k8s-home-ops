@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.1.1
+      version: 0.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -24,7 +24,7 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/calibre
-      tag: version-v6.4.0
+      tag: version-v6.5.0
 
     env:
       TZ: "${TZ}"
@@ -70,7 +70,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "${UIHARU_IP}"
+        server: "${SAN_HOST}"
         path: /tank/media
         mountPath: /media
 
