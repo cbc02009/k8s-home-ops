@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 512Mi
 
-  storageClassName: tank-iscsi-csi
+  storageClassName: csi-nfs-smoltank
