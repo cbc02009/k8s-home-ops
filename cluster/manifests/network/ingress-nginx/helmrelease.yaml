@@ -44,6 +44,9 @@ spec:
       ingressClassResource:
         default: true
 
+      tcp:
+        2222: "services/gitea-ssh:2222"
+
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
 
