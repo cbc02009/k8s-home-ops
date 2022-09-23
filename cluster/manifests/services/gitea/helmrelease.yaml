@@ -154,7 +154,8 @@ spec:
       ## @param service.ssh.annotations SSH service annotations
       ssh:
         type: LoadBalancer
-        port: 22
+        port: 2222
+        hostPort: 22
         annotations:
           metallb.universe.tf/allow-shared-ip: gitea
         loadBalancerIP: ${LB_GITEA}
