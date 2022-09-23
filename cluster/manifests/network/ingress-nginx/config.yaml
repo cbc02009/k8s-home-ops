@@ -4,4 +4,4 @@ metadata:
   name: tcp-services
   namespace: network
 data:
-  2222: "services/gitea-ssh:2222"
+  "2222": "services/gitea-ssh:2222"
