@@ -155,7 +155,6 @@ spec:
       ssh:
         type: LoadBalancer
         port: 2222
-        hostPort: 22
         annotations:
           metallb.universe.tf/allow-shared-ip: gitea
         loadBalancerIP: ${LB_GITEA}
