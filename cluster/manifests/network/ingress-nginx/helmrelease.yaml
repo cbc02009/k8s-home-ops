@@ -46,7 +46,10 @@ spec:
 
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
-        tcp-services-configmap: "tcp-services"
+        # tcp-services-configmap: "tcp-services"
+
+      tcp:
+        "2222": "services/gitea-ssh:2222"
 
       config:
         client-header-timeout: 120
