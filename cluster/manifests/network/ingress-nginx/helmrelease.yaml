@@ -44,6 +44,9 @@ spec:
       ingressClassResource:
         default: true
 
+      tcp:
+        22: "services/gitea-ssh:22"
+
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
 
@@ -66,18 +69,15 @@ spec:
         # Ref: https://xclacksoverhead.org/home/about
         location-snippet: |
           add_header X-Clacks-Overhead "GNU Terry Pratchett" always;
-      # metrics:
-      #   enabled: true
-      #   serviceMonitor:
-      #     enabled: true
-      #     namespace: network
-      #     namespaceSelector:
-      #       any: true
-      #   prometheusRule:
-      #     enabled: false
-
-      # extraArgs:
-      #   default-ssl-certificate: "network/${CLUSTER_DOMAIN/./-}-tls"
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: network
+          namespaceSelector:
+            any: true
+        prometheusRule:
+          enabled: false
 
       topologySpreadConstraints:
         - maxSkew: 1
