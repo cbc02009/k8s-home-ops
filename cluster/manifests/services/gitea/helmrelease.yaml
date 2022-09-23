@@ -88,7 +88,7 @@ spec:
       repository: gitea/gitea
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       rootless: false # only possible when running 1.14 or later
 
     ## @param imagePullSecrets Secret to use for pulling the image
