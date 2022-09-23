@@ -9,8 +9,8 @@ resources:
   - flux-system.yaml
   # - games.yaml
   - home-automation.yaml
-  # - kasten-io.yaml
   - kube-system.yaml
+  - kyverno.yaml
   - media.yaml
   - network.yaml
   - storage.yaml
