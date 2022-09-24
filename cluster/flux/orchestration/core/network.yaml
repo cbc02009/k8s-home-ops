@@ -51,8 +51,6 @@ metadata:
   name: network-ingress-nginx
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: network-metallb-config
   interval: 5m
   path: "./cluster/manifests/network/ingress-nginx"
   prune: true
