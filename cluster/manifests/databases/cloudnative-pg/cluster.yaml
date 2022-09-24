@@ -5,7 +5,7 @@ metadata:
   name: postgres
   namespace: databases
 spec:
-  instances: 2
+  instances: 1
   primaryUpdateStrategy: unsupervised
   storage:
     size: 30Gi
@@ -15,7 +15,7 @@ spec:
   affinity:
     enablePodAntiAffinity: true #default value
     topologyKey: kubernetes.io/hostname #defaul value
-    podAntiAffinityType: preferred #default value
+    podAntiAffinityType: required #default value
   backup:
     retentionPolicy: 30d
     barmanObjectStore:
