@@ -13,6 +13,7 @@ resources:
   - grafana-charts.yaml
   - kyverno-charts.yaml
   - jetstack-charts.yaml
+  - k8s-gateway-charts.yaml
   - kured-charts.yaml
   - kubernetes-sigs-descheduler-charts.yaml
   - kubernetes-sigs-metrics-server-charts.yaml
