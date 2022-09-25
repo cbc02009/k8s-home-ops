@@ -15,7 +15,7 @@ spec:
   affinity:
     enablePodAntiAffinity: true #default value
     topologyKey: kubernetes.io/hostname #defaul value
-    podAntiAffinityType: required #default value
+    podAntiAffinityType: required
   backup:
     retentionPolicy: 30d
     barmanObjectStore:
