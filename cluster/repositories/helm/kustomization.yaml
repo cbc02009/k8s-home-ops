@@ -27,3 +27,4 @@ resources:
   - hajimari-charts.yaml
   - ingress-nginx-charts.yaml
   - stakater-charts.yaml
+  - rancher-charts.yaml
