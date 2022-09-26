@@ -26,7 +26,6 @@ spec:
       namespace: databases
 
   values:
-
     image:
       repository: ghcr.io/onedr0p/radarr-develop
       tag: 4.2.3.6575

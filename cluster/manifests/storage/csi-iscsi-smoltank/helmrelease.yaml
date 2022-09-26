@@ -20,15 +20,15 @@ spec:
       name: "org.democratic-csi.iscsi"
 
     storageClasses:
-    - name: csi-iscsi-smoltank
-      defaultClass: false
-      reclaimPolicy: Delete
-      ## For testing
-      # reclaimPolicy: Retain
-      volumeBindingMode: Immediate
-      allowVolumeExpansion: true
-      parameters:
-        fsType: ext4
+      - name: csi-iscsi-smoltank
+        defaultClass: false
+        reclaimPolicy: Delete
+        ## For testing
+        # reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        allowVolumeExpansion: true
+        parameters:
+          fsType: ext4
 
     driver:
       image: docker.io/democraticcsi/democratic-csi:v1.7.6

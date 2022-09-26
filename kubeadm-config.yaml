@@ -4,7 +4,7 @@ localAPIEndpoint:
   advertiseAddress: 10.0.0.9
   bindPort: 6443
 nodeRegistration:
-  criSocket: 'unix:///run/crio/crio.sock'
+  criSocket: "unix:///run/crio/crio.sock"
   imagePullPolicy: IfNotPresent
   name: anya
 skipPhases:

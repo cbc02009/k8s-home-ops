@@ -23,7 +23,6 @@ spec:
       retries: 5
 
   values:
-
     image:
       repository: ghcr.io/onedr0p/sonarr-develop
       tag: 3.0.9.1555@sha256:cb31fa05a06454f2fa32348d9653ed53e20e5ed0c38e8f68adceef4117eea78d

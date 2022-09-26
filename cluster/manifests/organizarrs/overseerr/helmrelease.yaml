@@ -22,7 +22,6 @@ spec:
     remediation:
       retries: 5
   values:
-
     image:
       repository: ghcr.io/sct/overseerr
       tag: 1.30.0

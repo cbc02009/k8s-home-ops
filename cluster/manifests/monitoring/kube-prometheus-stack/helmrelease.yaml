@@ -29,11 +29,11 @@ spec:
     cleanupOnFail: true
 
   valuesFrom:
-  #   # - kind: Secret
-  #   #   name: kube-prometheus-stack
-  #   #   valuesKey: discord-webhook
-  #   #   targetPath: alertmanager.config.global.slack_api_url
-  #   #   optional: false
+    #   # - kind: Secret
+    #   #   name: kube-prometheus-stack
+    #   #   valuesKey: discord-webhook
+    #   #   targetPath: alertmanager.config.global.slack_api_url
+    #   #   optional: false
     - kind: ConfigMap
       name: kps-generic-values
     - kind: ConfigMap

@@ -25,7 +25,6 @@ spec:
     - name: node-feature-discovery
       namespace: kube-system
   values:
-
     image:
       # -- image repository
       repository: ghcr.io/zwave-js/zwavejs2mqtt

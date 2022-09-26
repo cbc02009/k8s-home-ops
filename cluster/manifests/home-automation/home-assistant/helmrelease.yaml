@@ -103,9 +103,6 @@ spec:
           supplementalGroups:
             - 100
 
-
-
-
     initContainers:
       wait-for-pg:
         image: busybox:latest

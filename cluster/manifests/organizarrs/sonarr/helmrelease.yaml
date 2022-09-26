@@ -23,7 +23,6 @@ spec:
       retries: 5
 
   values:
-
     controllerType: deployment
 
     image:

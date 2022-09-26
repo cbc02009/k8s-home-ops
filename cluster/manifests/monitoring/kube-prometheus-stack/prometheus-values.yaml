@@ -13,7 +13,7 @@ prometheus:
       - &host prometheus.${EXTERNAL_DOMAIN}
     tls:
       - hosts:
-        - *host
+          - *host
 
   # thanosService:
   #   enabled: true
@@ -201,7 +201,7 @@ prometheus:
           - source_labels: [__address__]
             target_label: __param_target
           # - target_label: __address__
-            # replacement: blackbox-exporter-prometheus-blackbox-exporter:9115
+          # replacement: blackbox-exporter-prometheus-blackbox-exporter:9115
           - source_labels: [__param_target]
             target_label: instance
           - action: labelmap

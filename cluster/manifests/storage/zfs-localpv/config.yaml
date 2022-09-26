@@ -10,3 +10,9 @@ parameters:
   fstype: "zfs"
   poolname: "rpool/zfs-localpv"
 provisioner: zfs.csi.openebs.io
+allowedTopologies:
+  - matchLabelExpressions:
+      - key: kubernetes.io/hostname
+        values:
+          - sakura
+          - uiharu

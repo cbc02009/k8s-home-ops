@@ -8,9 +8,9 @@ namespace: monitoring
 configurations:
   - kustomize-config.yaml
 configMapGenerator:
-#   # - name: kps-alertmanager-values
-#   #   files:
-#   #     - values.yaml=alertmanager-values.yaml
+  #   # - name: kps-alertmanager-values
+  #   #   files:
+  #   #     - values.yaml=alertmanager-values.yaml
   - name: kps-prometheus-values
     files:
       - values.yaml=prometheus-values.yaml

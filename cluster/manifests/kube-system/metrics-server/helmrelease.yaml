@@ -26,7 +26,6 @@ spec:
     cleanupOnFail: true
 
   values:
-
     image:
       repository: k8s.gcr.io/metrics-server/metrics-server
       tag: v0.6.1

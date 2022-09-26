@@ -62,4 +62,4 @@ spec:
 
         tls:
           - hosts:
-            - *host
+              - *host
