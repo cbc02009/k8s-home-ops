@@ -27,4 +27,4 @@ spec:
   wait: true
   sourceRef:
     kind: GitRepository
-    name: cloudnative-pg-source
+    name: metallb-source
