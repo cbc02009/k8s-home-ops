@@ -40,3 +40,6 @@ spec:
       name: kps-prometheus-values
   #   - kind: ConfigMap
   #     name: kps-alertmanager-values
+
+  values:
+    fullnameOverride: prometheus

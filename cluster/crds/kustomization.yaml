@@ -5,3 +5,4 @@ resources:
   - ./cloudnative-pg
   - ./zfs-localpv
   - ./metallb
+  - ./kube-prometheus-stack
