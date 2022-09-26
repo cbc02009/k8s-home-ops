@@ -1,9 +1,8 @@
----
 apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
+kind: L2Advertisement
 metadata:
   name: default
   namespace: network
 spec:
-  addresses:
-  - ${LB_RANGE}
+  ipAddressPools:
+    - default
