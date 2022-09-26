@@ -40,7 +40,8 @@ spec:
   externalClusters:
     - name: clusterBackup
       barmanObjectStore:
-        destinationPath: https://s3.${EXTERNAL_DOMAIN}/postgres
+        destinationPath: s3://postgresql/
+        endpointURL: https://s3.${EXTERNAL_DOMAIN}
         s3Credentials:
           accessKeyId:
             name: postgres-minio
