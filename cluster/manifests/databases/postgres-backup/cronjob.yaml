@@ -40,7 +40,7 @@ spec:
                       name: postgres-superuser
                       key: password
                 - name: POSTGRES_DB
-                  value: "home_assistant, vaultwarden"
+                  value: "home_assistant, vaultwarden, gitea, radarr_main, prowlarr_main"
               volumeMounts:
                 - name: nas-backups
                   mountPath: /backups
