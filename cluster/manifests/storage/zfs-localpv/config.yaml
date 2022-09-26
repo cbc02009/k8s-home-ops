@@ -9,6 +9,7 @@ parameters:
   dedup: "off"
   fstype: "zfs"
   poolname: "rpool/zfs-localpv"
+  scheduler: "VolumeWeighted"
 provisioner: zfs.csi.openebs.io
 allowedTopologies:
   - matchLabelExpressions:
