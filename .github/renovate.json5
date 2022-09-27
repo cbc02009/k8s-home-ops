@@ -9,7 +9,7 @@
     "docker:enableMajor",
     ":enablePreCommit",
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage",
-    "github>cbc02009/k8s-home-ops//.github/renovate/labels",
+    "github>cbc02009/k8s-home-ops//.github/renovate/labels"
     // "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits",
     // "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions",
     // "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge",
