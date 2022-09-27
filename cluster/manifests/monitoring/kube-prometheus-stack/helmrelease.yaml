@@ -194,6 +194,16 @@ spec:
         #   secret.reloader.stakater.com/reload: *secret
 
         additionalScrapeConfigs:
+          - job_name: minio
+            scrape_interval: 1m
+            scrape_timeout: 10s
+            honor_timestamps: true
+            metrics_path: /minio/v2/metrics/cluster
+            scheme: http
+            static_configs:
+              - targets:
+                  - "s3.${EXTERNAL_DOMAIN}"
+
           - job_name: "kubernetes-ingresses-http-2xx"
             metrics_path: /probe
             scrape_interval: 2m
