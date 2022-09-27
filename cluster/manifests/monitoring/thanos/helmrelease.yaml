@@ -33,7 +33,7 @@ spec:
 
       dnsDiscovery:
         sidecarsService: prometheus-thanos-discovery
-        sidecarsNamespace: system-monitoring
+        sidecarsNamespace: monitoring
 
       resources:
         requests:
