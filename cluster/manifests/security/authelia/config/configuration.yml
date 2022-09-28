@@ -12,11 +12,6 @@ session:
         - host: redis-node-2.redis-headless.databases.svc.cluster.local
           port: 26379
 
-notifier:
-  disable_startup_check: false
-  filesystem:
-    filename: /config/notification.txt
-
 access_control:
   default_policy: two_factor
   networks:
