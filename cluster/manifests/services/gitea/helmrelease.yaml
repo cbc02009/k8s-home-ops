@@ -367,7 +367,7 @@ spec:
       config:
         APP_NAME: Tea, Git, Hot
         server:
-          # DISABLE_SSH: true
+          DISABLE_SSH: false
           DOMAIN: "gitea.${EXTERNAL_DOMAIN}"
           ROOT_URL: "https://gitea.${EXTERNAL_DOMAIN}"
           ENABLE_GZIP: true
