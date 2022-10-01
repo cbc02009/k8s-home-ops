@@ -48,6 +48,10 @@ spec:
             value: "off"
           - name: DOT
             value: "off"
+          - name: HEALTH_TARGET_ADDRESS
+            value: "1.1.1.1"
+          - name: HEALTH_VPN_DURATION_INITIAL
+            value: 30s
         envFrom:
           - secretRef:
               name: downloads-gateway-vpnconfig
@@ -56,7 +60,6 @@ spec:
           capabilities:
             add:
               - NET_ADMIN
-              - NET_RAW
 
     securityContext:
       capabilities:
