@@ -20,6 +20,7 @@ resources:
   - kubernetes-sigs-metrics-server-charts.yaml
   - kubernetes-sigs-nfd-charts.yaml
   - k8s-at-home-charts.yaml
+  - mailu-charts.yaml
   - metallb-charts.yaml
   - openebs-charts.yaml
   - prometheus-community-charts.yaml
