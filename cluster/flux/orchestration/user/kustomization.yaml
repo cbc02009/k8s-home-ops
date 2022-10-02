@@ -11,4 +11,5 @@ resources:
   - ./services.yaml
   - ./security.yaml
   - ./monitoring.yaml
+  # - ./dev.yaml
   - ./vpn.yaml

@@ -5,7 +5,7 @@ resources:
   - cert-manager.yaml
   - databases.yaml
   - downloads.yaml
-  # - dev.yaml
+  - dev.yaml
   - flux-system.yaml
   # - games.yaml
   - home-automation.yaml
@@ -15,7 +15,6 @@ resources:
   - network.yaml
   - storage.yaml
   - organizarrs.yaml
-  # - rook-ceph.yaml
   - security.yaml
   - services.yaml
   - monitoring.yaml

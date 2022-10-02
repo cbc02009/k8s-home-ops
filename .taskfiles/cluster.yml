@@ -16,8 +16,8 @@ tasks:
   nfs-deps-pause:
     desc: Pause all Helm Releases that rely on NFS storage
     cmds:
-      - flux suspend hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 0
+      # - flux suspend hr -n media plex
+      # - kubectl scale -n media deploy/plex --replicas 0
       - flux suspend hr -n downloads qbittorrent
       - kubectl scale -n downloads deploy/qbittorrent --replicas 0
       #     - flux suspend hr -n downloads sabnzbd
@@ -34,22 +34,22 @@ tasks:
       - kubectl scale -n organizarrs deploy/animarr --replicas 0
       - flux suspend hr -n organizarrs lidarr
       - kubectl scale -n organizarrs deploy/lidarr --replicas 0
-      - flux suspend hr -n organizarrs calibre
-      - kubectl scale -n organizarrs deploy/calibre --replicas 0
+      # - flux suspend hr -n organizarrs calibre
+      # - kubectl scale -n organizarrs deploy/calibre --replicas 0
       # - flux suspend hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
       # - flux suspend hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
-  #     - flux suspend hr -n monitoring thanos-compactor
-  #     - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
-  #     - flux suspend hr -n monitoring loki
-  #     - kubectl scale -n monitoring deploy/loki --replicas 0
+      - flux suspend hr -n monitoring thanos-compactor
+      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
+      # - flux suspend hr -n monitoring loki
+      # - kubectl scale -n monitoring deploy/loki --replicas 0
 
   nfs-deps-resume:
     desc: Resume all Helm Releases that rely on NFS storage
     cmds:
-      - flux resume hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 1
+      # - flux resume hr -n media plex
+      # - kubectl scale -n media deploy/plex --replicas 1
       - flux resume hr -n downloads qbittorrent
       - kubectl scale -n downloads deploy/qbittorrent --replicas 1
       #     - flux resume hr -n downloads sabnzbd
@@ -70,8 +70,8 @@ tasks:
       # - kubectl scale -n organizarrs deploy/calibre --replicas 1
       # - flux resume hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
-  #     - flux resume hr -n monitoring thanos-compactor
-  #     - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
+      - flux resume hr -n monitoring thanos-compactor
+      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
   #     - flux resume hr -n monitoring loki
   #     - kubectl scale -n monitoring deploy/loki --replicas 1
 
