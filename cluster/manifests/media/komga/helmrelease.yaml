@@ -29,10 +29,8 @@ spec:
       tag: 0.157.2@sha256:65da6640a911c445836887456d23d6bb668abc58e54ae50789c651665d7592d6
 
     env:
-      - name: KOMGA_CONFIGDIR
-        value: "/config"
-      - name: SERVER_PORT
-        value: &port 8443
+      KOMGA_CONFIGDIR: "/config"
+      SERVER_PORT: &port 8443
 
     service:
       main:
