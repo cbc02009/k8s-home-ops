@@ -31,6 +31,10 @@ spec:
 
     DNS: 172.16.1.1
 
+    env:
+      - name: IPTABLES_NFT
+        value: "yes"
+
     additionalContainers:
       gluetun:
         image: qmcgaw/gluetun:v3.31.1@sha256:dabf4efdadafd6acce67bf89b11396e5c87dd1e25705b36fc9211730c943db47
