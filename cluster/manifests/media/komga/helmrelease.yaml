@@ -25,7 +25,7 @@ spec:
   values:
 
     image:
-      repository: dockerhub.io/gotson/komga
+      repository: gotson/komga
       tag: 0.157.2@sha256:65da6640a911c445836887456d23d6bb668abc58e54ae50789c651665d7592d6
 
     env:
