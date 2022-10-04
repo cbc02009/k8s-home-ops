@@ -24,17 +24,28 @@ spec:
       retries: 3
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - kind: Deployement
+            apiVersion: apps/v1
+            metadata:
+              name: downloads-gateway-pod-gateway
+            spec:
+              template:
+                spec:
+                  initContainers:
+                    - name: routes
+                      securityContext:
+                        capabilities:
+                          add:
+                            - NET_RAW
+                            - NET_ADMIN
+
   values:
     image:
       repository: ghcr.io/angelnu/pod-gateway
       tag: v1.8.0@sha256:91a51d0cfcec00834ba3878e07fca2d7c3ce72ac259e2a2787600d0222dbdd9b
-      env:
-        - name: IPTABLES_NFT
-          value: "yes"
-      securityContext:
-        capabilities:
-          add:
-            - NET_RAW
 
     DNS: 172.16.1.1
 
@@ -63,13 +74,6 @@ spec:
           capabilities:
             add:
               - NET_ADMIN
-
-    securityContext:
-      capabilities:
-        add:
-          - NET_ADMIN
-          - SYS_MODULE
-          - NET_RAW
 
     addons:
       netshoot:
