@@ -61,7 +61,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: animarr-config-v1
+        existingClaim: komga-config-v1
 
       media:
         enabled: true
