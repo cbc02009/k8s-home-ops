@@ -31,6 +31,7 @@ spec:
             apiVersion: apps/v1
             metadata:
               name: downloads-gateway-pod-gateway
+              namespace: vpn
             spec:
               template:
                 spec:
