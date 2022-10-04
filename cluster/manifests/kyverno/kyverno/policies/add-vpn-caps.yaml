@@ -30,3 +30,6 @@ spec:
                         add:
                           - NET_RAW
                           - NET_ADMIN
+                    env:
+                      - name: IPTABLES_NFT
+                        value: yes
