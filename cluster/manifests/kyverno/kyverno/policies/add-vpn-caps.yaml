@@ -26,6 +26,7 @@ spec:
                 initContainers:
                   - (name): "*"
                     securityContext:
-                      add:
-                        - NET_RAW
-                        - NET_ADMIN
+                      capabilities:
+                        add:
+                          - NET_RAW
+                          - NET_ADMIN
