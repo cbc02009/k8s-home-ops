@@ -23,6 +23,16 @@ spec:
           spec:
             template:
               spec:
+                containers:
+                  - (name): "*"
+                    securityContext:
+                      capabilities:
+                        add:
+                          - NET_RAW
+                          - NET_ADMIN
+                    env:
+                      - name: IPTABLES_NFT
+                        value: yes
                 initContainers:
                   - (name): "*"
                     securityContext:
