@@ -1,0 +1,31 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-vpn-caps
+  annotations:
+    policies.kyverno.io/title: Add net capabilities to vpn pods
+    policies.kyverno.io/subject: Deployment
+    policies.kyverno.io/description: >-
+      This policy adds NET_RAW and NET_ADMIN to vpn pods
+spec:
+  mutateExistingOnPolicyUpdate: true
+  generateExistingOnPolicyUpdate: true
+  rules:
+    - name: add_net_raw
+      match:
+        any:
+          - resources:
+              kinds: ["Deployment"]
+              name: downloads-gateway-pod-gateway
+      mutate:
+        patchStrategicMerge:
+          spec:
+            template:
+              spec:
+                initContainers:
+                  - (name): "*"
+                    securityContext:
+                      add:
+                        - NET_RAW
+                        - NET_ADMIN
