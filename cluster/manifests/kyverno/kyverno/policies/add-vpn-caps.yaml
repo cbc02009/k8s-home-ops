@@ -5,7 +5,7 @@ metadata:
   name: add-vpn-caps
   annotations:
     policies.kyverno.io/title: Add net capabilities to vpn pods
-    policies.kyverno.io/subject: Deployment
+    policies.kyverno.io/subject: Pod
     policies.kyverno.io/description: >-
       This policy adds NET_RAW and NET_ADMIN to vpn pods
 spec:
@@ -33,19 +33,19 @@ spec:
                     env:
                       - name: IPTABLES_NFT
                         value: yes
-    - name: add_iptables_nft
-      match:
-        any:
-          - resources:
-              kinds: ["Deployment"]
-              name: downloads-gateway-pod-gateway
-      mutate:
-        patchStrategicMerge:
-          spec:
-            template:
-              spec:
-                initContainers:
-                  - (name): "*"
-                    env:
-                      - name: IPTABLES_NFT
-                        value: yes
+    # - name: add_iptables_nft
+    #   match:
+    #     any:
+    #       - resources:
+    #           kinds: ["Deployment"]
+    #           name: downloads-gateway-pod-gateway
+    #   mutate:
+    #     patchStrategicMerge:
+    #       spec:
+    #         template:
+    #           spec:
+    #             initContainers:
+    #               - (name): "*"
+    #                 env:
+    #                   - name: IPTABLES_NFT
+    #                     value: yes
