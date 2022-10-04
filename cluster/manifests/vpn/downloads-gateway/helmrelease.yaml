@@ -31,6 +31,10 @@ spec:
       env:
         - name: IPTABLES_NFT
           value: "yes"
+      securityContext:
+        capabilities:
+          add:
+            - NET_RAW
 
     DNS: 172.16.1.1
 
