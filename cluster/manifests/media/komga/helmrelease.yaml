@@ -25,8 +25,8 @@ spec:
   values:
 
     image:
-      repository: gotson/komga
-      tag: 0.157.2@sha256:65da6640a911c445836887456d23d6bb668abc58e54ae50789c651665d7592d6
+      repository: ghcr.io/cbc02009/komga
+      tag: 0.157.2@sha256:1e448445ca6cd76b1408e3ee22100c27e37d9d3d5cc86dfce0f9b73c612a7199
 
     env:
       KOMGA_CONFIGDIR: "/config"
