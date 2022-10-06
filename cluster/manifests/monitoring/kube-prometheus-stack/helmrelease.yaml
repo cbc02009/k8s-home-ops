@@ -190,8 +190,8 @@ spec:
             name: &secret thanos-objstore-secret
             key: objstore.yml
 
-        # podAnnotations:
-        #   secret.reloader.stakater.com/reload: *secret
+        podAnnotations:
+          secret.reloader.stakater.com/reload: *secret
 
         additionalScrapeConfigs:
           - job_name: minio
