@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: gitea-config-v1
+  name: gitea-nfs
   namespace: services
 spec:
   accessModes:
