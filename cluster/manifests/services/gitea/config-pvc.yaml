@@ -9,7 +9,7 @@ spec:
     storage: 1Mi
   accessModes:
     - ReadWriteMany
-  storageClassName: minio-nfs
+  storageClassName: gitea-nfs
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: "${SAN_HOST}"
