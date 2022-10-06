@@ -1,34 +1,19 @@
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: gitea-nfs
-  namespace: services
-spec:
-  capacity:
-    storage: 1Mi
-  accessModes:
-    - ReadWriteMany
-  storageClassName: gitea-nfs
-  persistentVolumeReclaimPolicy: Retain
-  nfs:
-    server: "${SAN_HOST}"
-    path: /smoltank/k8s/apps/gitea
-  mountOptions:
-    - nfsvers=4.2
-    - nconnect=8
-    - hard
-    - noatime
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: gitea-nfs
+  name: gitea-config-v1
   namespace: services
+  labels:
+    app.kubernetes.io/name: &name gitea
+    app.kubernetes.io/instance: *name
+    snapshot.home.arpa/enabled: "true"
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: gitea-nfs
+    - ReadWriteOnce
+
   resources:
     requests:
-      storage: 1Mi
+      storage: 10Gi
+
+  storageClassName: csi-nfs-smoltank
