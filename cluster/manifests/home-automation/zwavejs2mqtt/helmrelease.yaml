@@ -102,6 +102,7 @@ spec:
         enabled: false
         type: hostPath
         hostPath: /dev/serial/by-id/usb-0658_0200-if00
+        hostPathType: CharDevice
 
     resources:
       requests:
