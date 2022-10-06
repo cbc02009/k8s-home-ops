@@ -202,7 +202,7 @@ spec:
             scheme: http
             static_configs:
               - targets:
-                  - "s3.${EXTERNAL_DOMAIN}"
+                  - "${SAN_HOST}:9000"
 
           - job_name: "kubernetes-ingresses-http-2xx"
             metrics_path: /probe
