@@ -49,6 +49,13 @@ spec:
       # Mail setup
       MAILER_ENABLED: 0
 
+    service:
+      main:
+        ports:
+          http:
+            enabled: true
+            port: 22300
+
     ingress:
       main:
         enabled: true
