@@ -10,6 +10,7 @@ resources:
   - ./media.yaml
   - ./services.yaml
   - ./security.yaml
+  - ./translation.yaml
   - ./monitoring.yaml
   # - ./dev.yaml
   - ./vpn.yaml
