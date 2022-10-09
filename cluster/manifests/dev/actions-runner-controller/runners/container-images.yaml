@@ -2,7 +2,7 @@
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
-  name: runner-container-images
+  name: runner-vno-local-cpu
   namespace: dev
 spec:
   template:
@@ -11,7 +11,7 @@ spec:
       imagePullPolicy: Always
       dockerdWithinRunnerContainer: true
       ephemeral: true
-      repository: cbc02009/container-images
+      repository: cbc02009/vno-local-cpu
       securityContext:
         supplementalGroups:
           - 65542
@@ -31,11 +31,11 @@ spec:
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: HorizontalRunnerAutoscaler
 metadata:
-  name: container-images-autoscaler
+  name: vno-local-cpu-autoscaler
   namespace: dev
 spec:
   scaleTargetRef:
-    name: runner-container-images
+    name: runner-vno-local-cpu
   scaleUpTriggers:
     - githubEvent:
         checkRun:
@@ -48,4 +48,4 @@ spec:
   metrics:
     - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
       repositoryNames:
-        - cbc02009/container-images
+        - cbc02009/vno-local-cpu
