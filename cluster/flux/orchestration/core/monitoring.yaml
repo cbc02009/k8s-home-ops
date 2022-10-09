@@ -54,7 +54,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./k8s/manifests/core/monitoring/vector/aggregator"
+  path: "./cluster/manifests/monitoring/vector/aggregator"
   prune: true
   wait: true
   sourceRef:
@@ -68,7 +68,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./k8s/manifests/core/monitoring/vector/agent"
+  path: "./cluster/manifests/monitoring/vector/agent"
   prune: true
   wait: true
   sourceRef:
