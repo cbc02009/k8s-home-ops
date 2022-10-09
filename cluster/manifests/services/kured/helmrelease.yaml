@@ -95,7 +95,13 @@ spec:
       privileged: true # Give permission to nsenter /proc/1/ns/mnt
     #  allowPrivilegeEscalation: true # Needed when using defaultAllowPrivilegedEscalation: false in psp
 
-    resources: {}
+    resources:
+      requests:
+        cpu: 15m
+        memory: 64M
+      limits:
+        cpu: 17m
+        memory: 64M
 
     metrics:
       create: false
