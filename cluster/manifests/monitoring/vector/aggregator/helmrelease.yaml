@@ -138,43 +138,6 @@ spec:
             app: >-
               {{`"{{ appname }}"`}}
 
-        talos_kernel:
-          type: loki
-          inputs:
-            - talos_kernel_logs_xform
-          endpoint: http://loki-gateway:80
-          encoding:
-            codec: json
-            except_fields:
-              - __host
-          batch:
-            max_bytes: 1048576
-          out_of_order_action: rewrite_timestamp
-          labels:
-            hostname: >-
-              {{`{{ __host }}`}}
-            app: >-
-              {{`{{ facility }}`}}
-
-        talos_service:
-          type: loki
-          inputs:
-            - talos_service_logs_xform
-          endpoint: http://loki-gateway:80
-          encoding:
-            codec: json
-            except_fields:
-              - __host
-          batch:
-            max_bytes: 524288
-          out_of_order_action: rewrite_timestamp
-          labels:
-            hostname: >-
-              {{`{{ __host }}`}}
-            app: >-
-              {{`{{ "talos-service" }}`}}
-            namespace: "talos:service"
-
     podAnnotations:
       configmap.reloader.stakater.com/reload: vector-aggregator
 
