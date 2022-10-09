@@ -122,5 +122,5 @@ spec:
         cpu: 15m
         memory: 164M
       limits:
-        cpu: 17m
+        cpu: 100m
         memory: 778M
