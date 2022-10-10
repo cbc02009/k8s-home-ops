@@ -2,20 +2,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - translation.yaml
   - cert-manager.yaml
   - databases.yaml
   - downloads.yaml
-  # - dev.yaml
+  - dev.yaml
   - flux-system.yaml
   # - games.yaml
   - home-automation.yaml
-  # - kasten-io.yaml
   - kube-system.yaml
+  - kyverno.yaml
   - media.yaml
   - network.yaml
   - storage.yaml
   - organizarrs.yaml
-  # - rook-ceph.yaml
   - security.yaml
   - services.yaml
   - monitoring.yaml
