@@ -24,7 +24,7 @@ spec:
   values:
     image:
       repository: kizaing/kavita
-      tag: nightly@sha256:8d5de10baff73b623cfeebfebbec956e3953b31613106f48a5ae70a02b27e1b4
+      tag: nightly@sha256:1e00da086dd2dab33c96d165858ed9f3f23fc4babf7cba0ce6c089534adff805
     env:
       TZ: "${TZ}"
 
