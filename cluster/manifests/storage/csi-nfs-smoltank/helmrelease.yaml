@@ -27,18 +27,18 @@ spec:
       name: "org.democratic-csi.nfs"
 
     storageClasses:
-    - name: csi-nfs-smoltank
-      defaultClass: true
-      # reclaimPolicy: Retain
-      ## For testing
-      reclaimPolicy: Delete
-      volumeBindingMode: Immediate
-      allowVolumeExpansion: true
-      parameters:
-        fsType: nfs
-      mountOptions:
-      - noatime
-      - nfsvers=4
+      - name: csi-nfs-smoltank
+        defaultClass: true
+        # reclaimPolicy: Retain
+        ## For testing
+        reclaimPolicy: Delete
+        volumeBindingMode: Immediate
+        allowVolumeExpansion: true
+        parameters:
+          fsType: nfs
+        mountOptions:
+          - noatime
+          - nfsvers=4
 
     driver:
       image: docker.io/democraticcsi/democratic-csi:v1.7.6

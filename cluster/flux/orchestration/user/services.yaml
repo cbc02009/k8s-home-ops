@@ -46,13 +46,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: services-vaultwarden
+  name: services-language-tools
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: databases-cloudnative-pg
   interval: 5m
-  path: "./cluster/manifests/services/vaultwarden"
+  path: "./cluster/manifests/services/language-tools"
   prune: true
   wait: true
   sourceRef:

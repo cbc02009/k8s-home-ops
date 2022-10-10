@@ -67,7 +67,7 @@ spec:
 
     containerRuntime:
       integration: crio
-      socketPath: 'unix:///run/crio/crio.sock'
+      socketPath: "unix:///run/crio/crio.sock"
 
     hubble:
       enabled: true
@@ -99,8 +99,7 @@ spec:
             - &host "hubble.${EXTERNAL_DOMAIN}"
           tls:
             - hosts:
-              - *host
-
+                - *host
 
     # -- Configure BGP
     bgp:

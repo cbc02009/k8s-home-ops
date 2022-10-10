@@ -6,3 +6,4 @@
 Thumbs.db
 
 tools/cilium-quick-install/charts
+tools/nginx-test

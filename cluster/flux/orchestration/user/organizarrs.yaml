@@ -84,20 +84,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: organizarrs-gaps
-#   namespace: flux-system
-# spec:
-#   interval: 5m
-#   path: "./cluster/manifests/organizarrs/gaps"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -121,20 +107,6 @@ spec:
 # spec:
 #   interval: 5m
 #   path: "./cluster/manifests/organizarrs/calibre"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: organizarrs-calibre-web
-#   namespace: flux-system
-# spec:
-#   interval: 5m
-#   path: "./cluster/manifests/organizarrs/calibre-web"
 #   prune: true
 #   wait: true
 #   sourceRef:

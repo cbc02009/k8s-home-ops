@@ -28,31 +28,48 @@ spec:
     - name: postgres
       namespace: databases
   postRenderers:
-  - kustomize:
-      patchesStrategicMerge:
-      - kind: StatefulSet
-        apiVersion: apps/v1
-        metadata:
-          name: gitea
-        spec:
-          template:
+    - kustomize:
+        patchesStrategicMerge:
+          - kind: StatefulSet
+            apiVersion: apps/v1
+            metadata:
+              name: gitea
             spec:
-              initContainers:
-                - name: init-db
-                  image: ghcr.io/onedr0p/postgres-initdb:14.5
-                  env:
-                    - name: POSTGRES_HOST
-                      value: postgres-rw.databases.svc.cluster.local
-                    - name: POSTGRES_DB
-                      value: gitea
-                    - name: POSTGRES_SUPER_PASS
-                      valueFrom:
-                        secretKeyRef:
-                          name: postgres-superuser
-                          key: password
-                  envFrom:
-                    - secretRef:
-                        name: gitea-postgres
+              template:
+                spec:
+                  initContainers:
+                    - name: init-db
+                      image: ghcr.io/onedr0p/postgres-initdb:14.5
+                      env:
+                        - name: POSTGRES_HOST
+                          value: postgres-rw.databases.svc.cluster.local
+                        - name: POSTGRES_DB
+                          value: gitea
+                        - name: POSTGRES_SUPER_PASS
+                          valueFrom:
+                            secretKeyRef:
+                              name: postgres-superuser
+                              key: password
+                      envFrom:
+                        - secretRef:
+                            name: gitea-postgres
+  valuesFrom:
+    - targetPath: gitea.config.attachment.MINIO_ACCESS_KEY_ID
+      kind: Secret
+      name: gitea-config
+      valuesKey: minioAccessKeyId
+    - targetPath: gitea.config.attachment.MINIO_SECRET_ACCESS_KEY
+      kind: Secret
+      name: gitea-config
+      valuesKey: minioSecretAccessKey
+    - targetPath: gitea.config.storage.MINIO_ACCESS_KEY_ID
+      kind: Secret
+      name: gitea-config
+      valuesKey: minioAccessKeyId
+    - targetPath: gitea.config.storage.MINIO_SECRET_ACCESS_KEY
+      kind: Secret
+      name: gitea-config
+      valuesKey: minioSecretAccessKey
   values:
     # Default values for gitea.
     # This is a YAML-formatted file.
@@ -88,8 +105,8 @@ spec:
       repository: gitea/gitea
       # Overrides the image tag whose default is the chart appVersion.
       tag: ""
-      pullPolicy: Always
-      rootless: false # only possible when running 1.14 or later
+      pullPolicy: IfNotPresent
+      rootless: true # only possible when running 1.14 or later
 
     ## @param imagePullSecrets Secret to use for pulling the image
     imagePullSecrets: []
@@ -154,7 +171,7 @@ spec:
       ## @param service.ssh.annotations SSH service annotations
       ssh:
         type: LoadBalancer
-        port: 22
+        port: 2222
         annotations:
           metallb.universe.tf/allow-shared-ip: gitea
         loadBalancerIP: ${LB_GITEA}
@@ -171,7 +188,8 @@ spec:
     ingress:
       enabled: true
       className: nginx
-      annotations: {}
+      annotations:
+        {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       hosts:
@@ -187,7 +205,13 @@ spec:
     ## @section StatefulSet
     #
     ## @param resources Kubernetes resources
-    resources: {}
+    resources:
+      requests:
+        cpu: 15m
+        memory: 203M
+      limits:
+        cpu: 32m
+        memory: 608M
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
       # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -222,7 +246,8 @@ spec:
     ## @param statefulset.labels Labels for the statefulset
     ## @param statefulset.annotations Annotations for the Gitea StatefulSet to be created
     statefulset:
-      env: []
+      env:
+        []
         # - name: VARIABLE
         #   value: my-value
       terminationGracePeriodSeconds: 60
@@ -304,7 +329,8 @@ spec:
           #    prometheus-release: prom1
 
       ## @param gitea.ldap LDAP configuration
-      ldap: []
+      ldap:
+        []
         # - name: "LDAP 1"
         #  existingSecret:
         #  securityProtocol:
@@ -321,7 +347,15 @@ spec:
 
       # Either specify inline `key` and `secret` or refer to them via `existingSecret`
       ## @param gitea.oauth OAuth configuration
-      oauth: []
+      oauth:
+        - name: authelia
+          provider: openidConnect
+          key: gitea
+          secret: "${SECRET_GITEA_OAUTH_CLIENT_SECRET}"
+          autoDiscoverUrl: "https://auth.${EXTERNAL_DOMAIN}/.well-known/openid-configuration"
+          groupClaimName: groups
+          adminGroup: admins
+          restrictedGroup: people
         # - name: 'OAuth 1'
         #   provider:
         #   key:
@@ -336,6 +370,21 @@ spec:
 
       ## @param gitea.config  Configuration for the Gitea server,ref: [config-cheat-sheet](https://docs.gitea.io/en-us/config-cheat-sheet/)
       config:
+        APP_NAME: Tea, Git, Hot
+        server:
+          DISABLE_SSH: false
+          DOMAIN: "gitea.${EXTERNAL_DOMAIN}"
+          ROOT_URL: "https://gitea.${EXTERNAL_DOMAIN}"
+          ENABLE_GZIP: true
+          LANDING_PAGE: login
+          LFS_START_SERVER: true
+        admin:
+          DISABLE_REGULAR_ORG_CREATION: true
+        ui:
+          DEFAULT_THEME: arc-green
+        repository:
+          DEFAULT_BRANCH: main
+          DEFAULT_PRIVATE: true
         database:
           DB_TYPE: postgres
           HOST: postgres-rw.databases.svc.cluster.local
@@ -343,6 +392,28 @@ spec:
           USER: ${SECRET_GITEA_POSTGRES_USER}
           PASSWD: ${SECRET_GITEA_POSTGRES_PASS}
           SCHEMA: public
+        service:
+          DISABLE_REGISTRATION: false
+          ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+          SHOW_REGISTRATION_BUTTON: false
+          REQUIRE_SIGNIN_VIEW: false
+          DEFAULT_KEEP_EMAIL_PRIVATE: true
+          DEFAULT_ALLOW_CREATE_ORGANIZATION: false
+          DEFAULT_USER_IS_RESTRICTED: true
+        cron:
+          ENABLED: true
+        attachment:
+          STORAGE_TYPE: minio
+          MINIO_ENDPOINT: ${SAN_HOST}:9000
+          MINIO_BUCKET: gitea
+        storage:
+          STORAGE_TYPE: minio
+          MINIO_ENDPOINT: ${SAN_HOST}:9000
+          MINIO_BUCKET: gitea
+        openid:
+          ENABLE_OPENID_SIGNIN: false
+          ENABLE_OPENID_SIGNUP: true
+          WHITELISTED_URIS: "auth.${EXTERNAL_DOMAIN}"
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
       additionalConfigSources: []
@@ -355,7 +426,8 @@ spec:
       additionalConfigFromEnvs: []
 
       ## @param gitea.podAnnotations Annotations for the Gitea pod
-      podAnnotations: {}
+      podAnnotations:
+        secret.reloader.stakater.com/reload: gitea-config
 
       ## @section LivenessProbe
       #
@@ -422,7 +494,7 @@ spec:
     ## @param memcached.enabled Memcached is loaded as a dependency from [Bitnami](https://github.com/bitnami/charts/tree/master/bitnami/memcached) if enabled in the values. Complete Configuration can be taken from their website.
     ## @param memcached.service.port Port for Memcached
     memcached:
-      enabled: true
+      enabled: false
       service:
         port: 11211
 

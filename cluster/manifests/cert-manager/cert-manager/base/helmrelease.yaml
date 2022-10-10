@@ -28,7 +28,6 @@ spec:
     - name: kube-prometheus-stack
       namespace: monitoring
   values:
-
     # Default values for cert-manager.
     # This is a YAML-formatted file.
     # Declare variables to be passed into your templates.
@@ -76,7 +75,8 @@ spec:
 
     replicaCount: 1
 
-    strategy: {}
+    strategy:
+      {}
       # type: RollingUpdate
       # rollingUpdate:
       #   maxSurge: 0
@@ -128,7 +128,8 @@ spec:
 
     # Additional command line flags to pass to cert-manager controller binary.
     # To see all available flags run docker run quay.io/jetstack/cert-manager-controller:<version> --help
-    extraArgs: []
+    extraArgs:
+      []
       # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted
       # - --enable-certificate-owner-ref=true
       # Use this flag to enabled or disable arbitrary controllers, for example, disable the CertificiateRequests approver
@@ -138,7 +139,8 @@ spec:
     # - name: SOME_VAR
     #   value: 'some value'
 
-    resources: {}
+    resources:
+      {}
       # requests:
       #   cpu: 10m
       #   memory: 32Mi
@@ -157,7 +159,6 @@ spec:
       #   - ALL
       # readOnlyRootFilesystem: true
       # runAsNonRoot: true
-
 
     volumes: []
 
@@ -191,7 +192,8 @@ spec:
     nodeSelector:
       kubernetes.io/os: linux
 
-    ingressShim: {}
+    ingressShim:
+      {}
       # defaultIssuerName: ""
       # defaultIssuerKind: ""
       # defaultIssuerGroup: ""
@@ -250,7 +252,8 @@ spec:
         # the apiVersion of WebhookConfiguration past v1alpha1.
         # securePort: 10250
 
-      strategy: {}
+      strategy:
+        {}
         # type: RollingUpdate
         # rollingUpdate:
         #   maxSurge: 0
@@ -385,14 +388,16 @@ spec:
 
       # Overrides the mutating webhook and validating webhook so they reach the webhook
       # service using the `url` field instead of a service.
-      url: {}
+      url:
+        {}
         # host:
 
     cainjector:
       enabled: true
       replicaCount: 1
 
-      strategy: {}
+      strategy:
+        {}
         # type: RollingUpdate
         # rollingUpdate:
         #   maxSurge: 0
@@ -413,7 +418,6 @@ spec:
         # readOnlyRootFilesystem: true
         # runAsNonRoot: true
 
-
       # Optional additional annotations to add to the cainjector Deployment
       # deploymentAnnotations: {}
 
@@ -426,7 +430,8 @@ spec:
       # Enable profiling for cainjector
       # - --enable-profiling=true
 
-      resources: {}
+      resources:
+        {}
         # requests:
         #   cpu: 10m
         #   memory: 32Mi
@@ -516,7 +521,8 @@ spec:
       # To see all available flags run docker run quay.io/jetstack/cert-manager-ctl:<version> --help
       extraArgs: []
 
-      resources: {}
+      resources:
+        {}
         # requests:
         #   cpu: 10m
         #   memory: 32Mi

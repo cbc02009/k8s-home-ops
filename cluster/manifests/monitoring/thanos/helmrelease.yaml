@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: thanos
-      version: 11.5.0
+      version: 11.5.5
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
@@ -25,33 +25,76 @@ spec:
     - name: kube-prometheus-stack
       namespace: monitoring
   values:
+    existingObjstoreSecret: &secret thanos-objstore-secret
     query:
       enabled: true
-      replicaCount: 2
-      podAntiAffinityPreset: hard
-      replicaLabel:
-        - __replica__
+      replicaLabels:
+        - replica
+
       dnsDiscovery:
-        sidecarsService: kube-prometheus-stack-thanos-discovery
+        sidecarsService: prometheus-thanos-discovery
         sidecarsNamespace: monitoring
+
+      resources:
+        requests:
+          cpu: 15m
+          memory: 204M
+        limits:
+          memory: 247M
+
       ingress:
         enabled: true
-        hostname: &host "thanos-query.${EXTERNAL_DOMAIN}"
+        hostname: "thanos-cluster.${EXTERNAL_DOMAIN}"
         ingressClassName: "nginx"
+        annotations:
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "archive-clock"
         tls: true
-        extraTls:
-          - hosts:
-              - *host
+
     queryFrontend:
       enabled: false
+
     bucketweb:
-      enabled: false
+      enabled: true
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
+      resources:
+        requests:
+          cpu: 15m
+          memory: 64M
+        limits:
+          memory: 83M
+
     compactor:
-      enabled: false
+      enabled: true
+      persistence:
+        enabled: false
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
+      resources:
+        requests:
+          cpu: 15m
+          memory: 183M
+        limits:
+          memory: 11G
+
     storegateway:
-      enabled: false
+      enabled: true
+      persistence:
+        enabled: true
+        size: 5Gi
+      podAnnotations:
+        configmap.reloader.stakater.com/reload: *secret
+      resources:
+        requests:
+          cpu: 15m
+          memory: 183M
+        limits:
+          memory: 11G
+
     ruler:
       enabled: false
+
     metrics:
       enabled: true
       serviceMonitor:

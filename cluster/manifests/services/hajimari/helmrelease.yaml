@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: hajimari
-      version: 1.2.0
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: hajimari-charts
@@ -25,16 +25,14 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   values:
-
     service:
       main:
         type: LoadBalancer
         loadBalancerIP: ${LB_HAJIMARI}
 
-
     image:
       repository: ghcr.io/toboshii/hajimari
-      tag: v0.2.0
+      tag: v0.3.1
 
     env:
       TZ: "${TZ}"
@@ -50,8 +48,8 @@ spec:
           links:
             - name: k8s-home-ops
               url: https://github.com/cbc02009/k8s-home-ops
-        #     - name: Trux Home Assistant
-        #       url: https://github.com/Truxnell/hass-config
+            #     - name: Trux Home Assistant
+            #       url: https://github.com/Truxnell/hass-config
             - name: k@h charts
               url: https://github.com/k8s-at-home/charts/tree/master/charts
 
@@ -83,4 +81,5 @@ spec:
         cpu: 15m
         memory: 64M
       limits:
+        cpu: 17m
         memory: 64M
