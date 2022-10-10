@@ -10,6 +10,7 @@
     ":enablePreCommit",
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage",
     "github>cbc02009/k8s-home-ops//.github/renovate/labels",
+    "github>cbc02009/k8s-home-ops//.github/renovate/disabledDatasources.json5",
     // "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits",
     // "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions",
     // "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge",
@@ -89,6 +90,12 @@
     }
   ],
   "packageRules":[
+    {
+      "description": "Use custom versioning for Minio",
+      "matchDatasources": ["docker"],
+      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$",
+      "matchPackageNames": ["quay.io/minio/minio"]
+    },
     {
       "matchDatasources":[
         "helm"

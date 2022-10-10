@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: ingress-nginx
-      version: 4.2.5
+      version: 4.3.0
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx-charts
@@ -46,6 +46,7 @@ spec:
 
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
+        # tcp-services-configmap: network/tcp-services
 
       config:
         client-header-timeout: 120
@@ -66,18 +67,15 @@ spec:
         # Ref: https://xclacksoverhead.org/home/about
         location-snippet: |
           add_header X-Clacks-Overhead "GNU Terry Pratchett" always;
-      # metrics:
-      #   enabled: true
-      #   serviceMonitor:
-      #     enabled: true
-      #     namespace: network
-      #     namespaceSelector:
-      #       any: true
-      #   prometheusRule:
-      #     enabled: false
-
-      # extraArgs:
-      #   default-ssl-certificate: "network/${CLUSTER_DOMAIN/./-}-tls"
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: network
+          namespaceSelector:
+            any: true
+        prometheusRule:
+          enabled: false
 
       topologySpreadConstraints:
         - maxSkew: 1

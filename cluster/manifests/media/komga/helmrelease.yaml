@@ -1,0 +1,69 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app komga
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 0.2.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+
+  values:
+
+    image:
+      repository: ghcr.io/cbc02009/komga
+      tag: 0.157.2@sha256:1e448445ca6cd76b1408e3ee22100c27e37d9d3d5cc86dfce0f9b73c612a7199
+
+    env:
+      KOMGA_CONFIGDIR: "/config"
+      SERVER_PORT: &port 8443
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "television-box"
+          hajimari.io/appName: komga
+        hosts:
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: komga-config-v1
+
+      media:
+        enabled: true
+        type: nfs
+        server: "${SAN_HOST}"
+        path: /tank/media/manga
+        mountPath: /media

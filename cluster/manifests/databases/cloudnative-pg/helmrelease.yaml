@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cloudnative-pg
-      version: 0.15.0
+      version: 0.15.1
       sourceRef:
         kind: HelmRepository
         name: cloudnative-pg-charts
@@ -34,3 +34,10 @@ spec:
               kind: CustomResourceDefinition
               metadata:
                 name: not-used
+  values:
+
+    image:
+      repository: ghcr.io/cloudnative-pg/cloudnative-pg-testing
+      pullPolicy: IfNotPresent
+      # -- Overrides the image tag whose default is the chart appVersion.
+      tag: main@sha256:4c3126349ad935dbb0deefe61d97f8b465e985a0241b190016e989a896c3ba4d

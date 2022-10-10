@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.1
+      version: 0.2.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -23,12 +23,11 @@ spec:
       retries: 5
 
   values:
-
     controllerType: deployment
 
     image:
       repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 3.0.9.1555@sha256:cb31fa05a06454f2fa32348d9653ed53e20e5ed0c38e8f68adceef4117eea78d
+      tag: 4.0.0.133@sha256:78fc0f5bff0162c3085cc14e53d5f81a30d2e85518b207a5a98a4364128d2c75
 
     env:
       TZ: "${TZ}"
@@ -75,8 +74,8 @@ spec:
       api:
         enabled: true
         ingressClassName: "nginx"
-        annotations:
-          external-dns.home.arpa/enabled: "true"
+        # annotations:
+        #   external-dns.home.arpa/enabled: "true"
         hosts:
           - host: *host
             paths:

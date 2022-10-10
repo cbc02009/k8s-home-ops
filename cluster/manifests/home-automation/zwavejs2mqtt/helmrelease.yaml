@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.1
+      version: 0.2.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -25,12 +25,9 @@ spec:
     - name: node-feature-discovery
       namespace: kube-system
   values:
-
     image:
-      # -- image repository
-      repository: ghcr.io/zwave-js/zwavejs2mqtt
-      # -- image tag
-      tag: 7.2.0
+      repository: ghcr.io/zwave-js/zwave-js-ui
+      tag: 8.1.0
       # -- image pull policy
       pullPolicy: IfNotPresent
 
@@ -105,6 +102,7 @@ spec:
         enabled: false
         type: hostPath
         hostPath: /dev/serial/by-id/usb-0658_0200-if00
+        hostPathType: CharDevice
 
     resources:
       requests:

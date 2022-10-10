@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.1
+      version: 0.2.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -24,7 +24,7 @@ spec:
   values:
     image:
       repository: kizaing/kavita
-      tag: nightly@sha256:1855767534c24f943aded75ec54d76bc2e05dfc74a2047ea65b75c28c33146c7
+      tag: nightly@sha256:1e00da086dd2dab33c96d165858ed9f3f23fc4babf7cba0ce6c089534adff805
     env:
       TZ: "${TZ}"
 
@@ -38,9 +38,9 @@ spec:
       main:
         enabled: true
         ingressClassName: "nginx"
-#          annotations:
-#            external-dns.home.arpa/enabled: "true"
-#            auth.home.arpa/enabled: "true"
+        #          annotations:
+        #            external-dns.home.arpa/enabled: "true"
+        #            auth.home.arpa/enabled: "true"
         hosts:
           - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:
@@ -81,4 +81,4 @@ spec:
         cpu: 20m
         memory: 100Mi
       # limits:
-        # memory: 200Mi
+      # memory: 200Mi
