@@ -31,8 +31,7 @@ spec:
           fsType: ext4
 
     driver:
-      image: ghcr.io/cbc02009/democratic-csi
-      tag: v1.7.6
+      image: ghcr.io/cbc02009/democratic-csi:v1.7.6
       imagePullPolicy: IfNotPresent
       config:
         driver: zfs-generic-iscsi
