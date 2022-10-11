@@ -46,3 +46,9 @@ spec:
       config:
         driver: zfs-generic-nfs
       existingConfigSecret: zfs-generic-nfs-config
+
+    node:
+      image: ghcr.io/cbc02009/democratic-csi:v1.7.6
+
+    csiProxy:
+      image: ghcr.io/cbc02009/csi-grpc-proxy:v0.5.3
