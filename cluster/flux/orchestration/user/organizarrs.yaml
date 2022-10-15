@@ -56,34 +56,34 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: organizarrs-lidarr
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/organizarrs/lidarr"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: organizarrs-readarr
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/organizarrs/readarr"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: organizarrs-lidarr
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/organizarrs/lidarr"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: organizarrs-readarr
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/organizarrs/readarr"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
