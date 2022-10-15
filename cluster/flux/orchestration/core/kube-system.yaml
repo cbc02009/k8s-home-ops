@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: "./cluster/manifests/services/kured"
+  path: "./cluster/manifests/kube-system/kured"
   prune: true
   wait: true
   sourceRef:
