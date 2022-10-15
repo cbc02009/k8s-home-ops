@@ -6,7 +6,6 @@ resources:
   - kyverno.yaml
   - ./storage.yaml
   - ./monitoring.yaml
-  - ./services.yaml
   - ./kube-system.yaml
   - ./network.yaml
   - ./cert-manager.yaml
