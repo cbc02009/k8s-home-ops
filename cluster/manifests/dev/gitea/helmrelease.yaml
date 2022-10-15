@@ -89,7 +89,7 @@ spec:
       storageClass: ""
 
     ## @param replicaCount number of replicas for the statefulset
-    replicaCount: 3
+    replicaCount: 2
 
     ## @param clusterDomain cluster domain
     clusterDomain: cluster.local
