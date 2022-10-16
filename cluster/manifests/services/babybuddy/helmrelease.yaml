@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: ghcr.io/cbc02009/babybuddy
-      tag: v1.13.1
+      tag: v1.13.2
 
     env:
       TIME_ZONE: ${TZ}
