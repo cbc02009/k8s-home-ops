@@ -104,7 +104,7 @@ spec:
       registry: ghcr.io
       repository: cbc02009/gitea
       # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
+      tag: "1.17.3"
       pullPolicy: IfNotPresent
       rootless: true # only possible when running 1.14 or later
 
