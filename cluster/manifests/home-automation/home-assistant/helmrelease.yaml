@@ -105,7 +105,7 @@ spec:
 
     initContainers:
       wait-for-pg:
-        image: busybox:latest
+        image: gcr.io/google-containers/busybox:latest
         imagePullPolicy: IfNotPresent
         command:
           [
