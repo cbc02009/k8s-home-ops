@@ -1,0 +1,7 @@
+---
+address-pools:
+  - name: default
+    protocol: layer2
+    avoid-buggy-ips: false
+    addresses:
+      - "${LB_RANGE}"
