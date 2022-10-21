@@ -3,6 +3,3 @@ kind: L2Advertisement
 metadata:
   name: default
   namespace: network
-spec:
-  ipAddressPools:
-    - default
