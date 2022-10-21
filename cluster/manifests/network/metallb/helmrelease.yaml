@@ -20,7 +20,7 @@ spec:
       tolerateMaster: true
 
     crds:
-      enabled: true
+      enabled: false
 
     prometheus:
       namespace: monitoring
