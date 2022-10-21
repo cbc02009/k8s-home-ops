@@ -159,7 +159,7 @@ spec:
         enabled: true
 
       prometheusSpec:
-        replicas: 3
+        replicas: 1
         replicaExternalLabelName: __replica__
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
@@ -435,7 +435,7 @@ spec:
               - *host
 
       alertmanagerSpec:
-        replicas: 3
+        replicas: 1
         podAntiAffinity: hard
         storage:
           volumeClaimTemplate:
