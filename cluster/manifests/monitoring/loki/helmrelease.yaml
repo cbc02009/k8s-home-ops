@@ -63,7 +63,7 @@ spec:
                 period: 24h
         common:
           path_prefix: /var/loki
-          replication_factor: 3
+          replication_factor: 1
           storage:
             s3:
               s3: null
@@ -105,7 +105,7 @@ spec:
           reporting_enabled: false
     gateway:
       enabled: true
-      replicas: 3
+      replicas: 1
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -127,7 +127,7 @@ spec:
           - hosts:
               - *host
     write:
-      replicas: 3
+      replicas: 1
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -142,7 +142,7 @@ spec:
         storageClass: csi-nfs-smoltank
 
     read:
-      replicas: 3
+      replicas: 1
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
