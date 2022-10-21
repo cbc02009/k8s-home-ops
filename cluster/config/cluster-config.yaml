@@ -18,11 +18,7 @@ data:
 
   LB_RANGE: 10.0.1.0/25
 
-  ANYA_IP: 10.0.0.9
-  UIHARU_IP: 10.0.0.10
-  SAKURA_IP: 10.0.0.12
-
-  SAN_HOST: 10.0.4.10
+  SAN_HOST: shana.lan
 
   #Pre-defined IP addresses
   LB_NGINX_INGRESS: 10.0.1.1
