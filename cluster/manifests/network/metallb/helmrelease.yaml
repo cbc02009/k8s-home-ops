@@ -19,8 +19,6 @@ spec:
     speaker:
       tolerateMaster: true
 
-    # existingConfigMap: "metallb-config"
-
     crds:
       enabled: true
 
