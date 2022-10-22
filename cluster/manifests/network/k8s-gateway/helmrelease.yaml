@@ -35,5 +35,3 @@ spec:
       annotations:
         metallb.universe.tf/loadBalancerIPs: "${LB_K8S_GATEWAY}"
       externalTrafficPolicy: Local
-    nodeSelector:
-      kubernetes.io/hostname: sakura
