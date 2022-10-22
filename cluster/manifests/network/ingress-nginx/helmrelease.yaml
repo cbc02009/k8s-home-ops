@@ -29,7 +29,7 @@ spec:
       namespace: monitoring
   values:
     controller:
-      replicaCount: 3
+      replicaCount: 1
       extraEnvs:
         - name: TZ
           value: "${TZ}"
