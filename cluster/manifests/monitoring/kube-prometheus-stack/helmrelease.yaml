@@ -218,9 +218,9 @@ spec:
             honor_timestamps: true
             static_configs:
               - targets:
-                  - "sakura.lan:9100"
+                  # - "sakura.lan:9100"
                   - "anya.lan:9100"
-                  - "yue.lan:9100"
+                  # - "yue.lan:9100"
                   - "uiharu.lan:9100"
 
           - job_name: "kubernetes-ingresses-http-2xx"
