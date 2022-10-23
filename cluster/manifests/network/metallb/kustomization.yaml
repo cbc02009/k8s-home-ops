@@ -4,11 +4,3 @@ kind: Kustomization
 namespace: network
 resources:
   - helmrelease.yaml
-  # - ip-address-pool.yaml
-  # - l2-advertisement.yaml
-# generatorOptions:
-#   disableNameSuffixHash: true
-# configMapGenerator:
-#   - name: metallb-config
-#     files:
-#       - config=metallb-config.yaml
