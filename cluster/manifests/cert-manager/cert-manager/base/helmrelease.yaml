@@ -24,9 +24,6 @@ spec:
       retries: 5
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: monitoring
   values:
     # Default values for cert-manager.
     # This is a YAML-formatted file.
