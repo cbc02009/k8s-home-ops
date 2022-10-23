@@ -10,7 +10,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/network/metallb"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -26,7 +26,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/network/metallb/config"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -40,7 +40,7 @@ spec:
 #   interval: 5m
 #   path: "./cluster/manifests/network/multus"
 #   prune: true
-#   wait: true
+#   # wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
@@ -54,7 +54,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/network/ingress-nginx"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -68,7 +68,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/network/k8s-gateway"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops

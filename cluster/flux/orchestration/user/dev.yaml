@@ -8,7 +8,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/dev/actions-runner-controller/base"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -24,7 +24,7 @@ spec:
   dependsOn:
     - name: dev-arc-base
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -40,7 +40,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/dev/gitea"
   prune: true
-  wait: true
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
