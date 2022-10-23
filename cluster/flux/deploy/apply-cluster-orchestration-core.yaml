@@ -8,6 +8,7 @@ spec:
   interval: 10m0s
   dependsOn:
     - name: apply-cluster-config
+    - name: apply-cluster-crds
     - name: apply-cluster-repositories
     - name: apply-cluster-namespaces
     - name: apply-flux
