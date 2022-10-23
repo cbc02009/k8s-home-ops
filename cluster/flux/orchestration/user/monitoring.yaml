@@ -10,7 +10,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/monitoring/prometheus-rules-user"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -24,7 +24,7 @@ spec:
 #   interval: 5m
 #   path: "./cluster/manifests/monitoring/botkube"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
@@ -38,7 +38,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/monitoring/blackbox-exporter"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -52,7 +52,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/monitoring/prometheus-smartctl"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -66,7 +66,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/monitoring/goldilocks"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -80,7 +80,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/monitoring/vpa"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -94,7 +94,7 @@ spec:
 #   interval: 5m
 #   path: "./cluster/manifests/monitoring/hs110-exporter-prusa"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
@@ -108,7 +108,7 @@ spec:
 #   interval: 5m
 #   path: "./cluster/manifests/monitoring/hs110-exporter-rack"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops

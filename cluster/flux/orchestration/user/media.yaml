@@ -8,7 +8,7 @@
 #   interval: 5m
 #   path: "./cluster/manifests/media/plex"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
@@ -22,7 +22,7 @@
 #   interval: 5m
 #   path: "./cluster/manifests/media/tautulli"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
@@ -36,7 +36,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/media/kavita"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -50,7 +50,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/media/komga"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops

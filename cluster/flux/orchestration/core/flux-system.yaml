@@ -11,7 +11,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/flux-system/add-ons"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops

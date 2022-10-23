@@ -8,7 +8,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/kube-system/reloader"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -22,7 +22,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/kube-system/metrics-server"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -36,7 +36,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/kube-system/descheduler"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -50,7 +50,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/kube-system/node-feature-discovery"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -64,7 +64,7 @@ spec:
 #   interval: 5m
 #   path: "./k8s/manifests/user/kube-system/intel-gpu-plugin"
 #   prune: true
-#   # wait: true
+#   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops

@@ -8,7 +8,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/databases/redis"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -22,7 +22,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/databases/cloudnative-pg"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -36,7 +36,7 @@ spec:
   interval: 5m
   path: "./cluster/manifests/databases/postgres-backup"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
