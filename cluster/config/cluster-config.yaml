@@ -16,9 +16,11 @@ data:
 
   TZ: America/New_York
 
-  LB_RANGE: 10.0.1.0/25
+  CONTROL_IP: 10.0.0.9
 
   SAN_HOST: shana.lan
+
+  LB_RANGE: 10.0.1.0/25
 
   #Pre-defined IP addresses
   LB_NGINX_INGRESS: 10.0.1.1
