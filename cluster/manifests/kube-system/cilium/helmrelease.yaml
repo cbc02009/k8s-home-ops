@@ -69,6 +69,9 @@ spec:
       integration: crio
       socketPath: "unix:///run/crio/crio.sock"
 
+    bpf:
+      masquerade: true
+
     hubble:
       enabled: true
       serviceMonitor:
