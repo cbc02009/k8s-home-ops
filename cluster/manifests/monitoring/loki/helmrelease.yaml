@@ -172,7 +172,7 @@ spec:
         storageClass: csi-nfs-smoltank
     monitoring:
       selfMonitoring:
-        enabled: false
+        enabled: true
         grafanaAgent:
           installOperator: false
 
