@@ -105,7 +105,7 @@ spec:
 
     initContainers:
       wait-for-pg:
-        image: gquay/busybox:latest@sha256:ee780d08a5b4de5192a526d422987f451d9a065e6da42aefe8c3b20023a250c7
+        image: quay/busybox:latest@sha256:ee780d08a5b4de5192a526d422987f451d9a065e6da42aefe8c3b20023a250c7
         imagePullPolicy: IfNotPresent
         command:
           [
