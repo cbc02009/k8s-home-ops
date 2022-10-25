@@ -43,11 +43,11 @@ spec:
 
     controller:
       driver:
-        image: ghcr.io/cbc02009/democratic-csi:v1.7.6
+        image: ghcr.io/cbc02009/democratic-csi:v1.7.7
         imagePullPolicy: IfNotPresent
 
     driver:
-      image: ghcr.io/cbc02009/democratic-csi:v1.7.6
+      image: ghcr.io/cbc02009/democratic-csi:v1.7.7
       imagePullPolicy: IfNotPresent
       config:
         driver: zfs-generic-nfs
@@ -55,7 +55,7 @@ spec:
 
     node:
       driver:
-        image: ghcr.io/cbc02009/democratic-csi:v1.7.6
+        image: ghcr.io/cbc02009/democratic-csi:v1.7.7
         imagePullPolicy: IfNotPresent
 
     csiProxy:
