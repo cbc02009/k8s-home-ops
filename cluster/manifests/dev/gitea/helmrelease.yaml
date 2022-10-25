@@ -101,10 +101,10 @@ spec:
     ## @param image.pullPolicy Image pull policy
     ## @param image.rootless Wether or not to pull the rootless version of Gitea, only works on Gitea 1.14.x or higher
     image:
-      registry: ghcr.io
-      repository: cbc02009/gitea
+      # registry: ghcr.io
+      # repository: cbc02009/gitea
       # Overrides the image tag whose default is the chart appVersion.
-      tag: "1.17.3"
+      tag: ""
       pullPolicy: IfNotPresent
       rootless: true # only possible when running 1.14 or later
 
