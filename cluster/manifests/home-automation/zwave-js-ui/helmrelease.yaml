@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app zwavejs2mqtt
+  name: &app zwave-js-ui
   namespace: home-automation
 spec:
   interval: 15m
@@ -35,8 +35,7 @@ spec:
       - secretRef:
           name: *app
 
-    # -- environment variables. See [image docs](https://zwave-js.github.io/zwavejs2mqtt/#/guide/env-vars) for more details.
-    # @default -- See below
+   # @default -- See below
     env:
       # -- Set the container timezone
       TZ: ${TZ}
@@ -77,14 +76,14 @@ spec:
           hajimari.io/enable: "false"
           hajimari.io/icon: "router-wireless-settings"
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host "zwave.${EXTERNAL_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
               - *host
-            secretName: tls.zwavejs2mqtt
+            secretName: tls.zwave-js-ui
 
     securityContext:
       # -- (bool) Privileged securityContext may be required if USB devices are accessed directly through the host machine
@@ -93,7 +92,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: zwavejs2mqtt-config-v1
+        existingClaim: zwave-js-ui-config-v1
         mountPath: /usr/src/app/store
 
       # -- Configure a hostPathMount to mount a USB device in the container.

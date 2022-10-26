@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: zwavejs2mqtt-config-v1
+  name: zwave-js-ui-config-v1
   namespace: home-automation
   labels:
-    app.kubernetes.io/name: &name zwavejs2mqtt
+    app.kubernetes.io/name: &name zwave-js-ui
     app.kubernetes.io/instance: *name
     snapshot.home.arpa/enabled: "true"
 spec:

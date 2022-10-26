@@ -24,7 +24,7 @@ spec:
   dependsOn:
     - name: postgres
       namespace: databases
-    - name: zwavejs2mqtt
+    - name: zwave-js-ui
       namespace: home-automation
   #   - name: emqx
   #     namespace: home-automation

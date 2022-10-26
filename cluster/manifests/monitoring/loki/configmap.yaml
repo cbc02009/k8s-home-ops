@@ -22,19 +22,19 @@ data:
       #       annotations:
       #         summary: "SMART has reported failures on host {{ $labels.hostname }}"
       #
-      # zwavejs2mqtt
+      # zwave-js-ui
       #
-      - name: zwavejs2mqtt
+      - name: zwave-js-ui
         rules:
           - alert: ZwaveUnableToReachMQTT
             expr: |
-              sum(count_over_time({app="zwavejs2mqtt"} |~ "(?i)error while connecting mqtt"[2m])) > 0
+              sum(count_over_time({app="zwave-js-ui"} |~ "(?i)error while connecting mqtt"[2m])) > 0
             for: 2m
             labels:
               severity: critical
               category: logs
             annotations:
-              summary: "Zwavejs2mqtt is unable to reach MQTT"
+              summary: "zwave-js-ui is unable to reach MQTT"
       #
       # *arr
       #
