@@ -95,6 +95,13 @@ spec:
         existingClaim: zwave-js-ui-config-v1
         mountPath: /usr/src/app/store
 
+      backup:
+        enabled: true
+        type: nfs
+        server: ${SAN_HOST}
+        path: /tank/backup/kubernetes/apps/zwave
+        mountPath: /usr/src/app/store/backups
+
       # -- Configure a hostPathMount to mount a USB device in the container.
       # @default -- See values.yaml
       usb:
