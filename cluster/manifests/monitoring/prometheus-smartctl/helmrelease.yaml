@@ -28,18 +28,7 @@ spec:
     #   tag: 0.7-2
     config:
       devices:
-        - /dev/sda
-        - /dev/sdb
-        - /dev/sdc
-        - /dev/sdd
-        - /dev/sde
-        - /dev/sdf
-        - /dev/sdg
-        - /dev/sdh
-        - /dev/sdi
-        - /dev/sdj
         - /dev/nvme0n1
-        - /dev/nvme1n1
     serviceMonitor:
       enabled: true
     prometheusRules:
