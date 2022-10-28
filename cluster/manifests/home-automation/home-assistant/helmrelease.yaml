@@ -102,6 +102,7 @@ spec:
           fsGroupChangePolicy: "OnRootMismatch"
           supplementalGroups:
             - 100
+            - 1010
 
     initContainers:
       wait-for-pg:
@@ -121,6 +122,7 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
         - 100
+        - 1010
 
     persistence:
       config:
