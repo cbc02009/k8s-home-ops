@@ -52,9 +52,9 @@ spec:
       alertFilterRegexp: "" # alert names to ignore when checking for active alerts
       alertFiringOnly: false # only consider firing alerts when checking for active alerts
       blockingPodSelector: [] # label selector identifying pods whose presence should prevent reboots
-      endTime: "" # only reboot before this time of day (default "23:59")
+      endTime: "3:00" # only reboot before this time of day (default "23:59")
       lockAnnotation: "" # annotation in which to record locking node (default "weave.works/kured-node-lock")
-      period: "15m0s" # reboot check period (default 1h0m0s)
+      period: "1h0m0s" # reboot check period (default 1h0m0s)
       forceReboot: false # force a reboot even if the drain fails or times out (default: false)
       drainGracePeriod: "" # time in seconds given to each pod to terminate gracefully, if negative, the default value specified in the pod will be used (default: -1)
       drainTimeout: "" # timeout after which the drain is aborted (default: 0, infinite time)
@@ -72,7 +72,7 @@ spec:
       messageTemplateDrain: "" # slack message template when notifying about a node being drained (default "Draining node %s")
       messageTemplateReboot: "" # slack message template when notifying about a node being rebooted (default "Rebooted node %s")
       messageTemplateUncordon: "" # slack message template when notifying about a node being uncordoned (default "Node %s rebooted & uncordoned successfully!")
-      startTime: "" # only reboot after this time of day (default "0:00")
+      startTime: "1:00" # only reboot after this time of day (default "0:00")
       timeZone: "${TZ}" # time-zone to use (valid zones from "time" golang package)
       annotateNodes: true # enable 'weave.works/kured-reboot-in-progress' and 'weave.works/kured-most-recent-reboot-needed' node annotations to signify kured reboot operations
       lockReleaseDelay: 0 # hold lock after reboot by this amount of time (default 0, disabled)
