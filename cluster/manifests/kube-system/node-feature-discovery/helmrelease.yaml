@@ -60,7 +60,7 @@ spec:
       config:
         core:
           klog:
-            v: 3
+            v: 2
           labelSources:
             - "all"
             - "-cpu"
