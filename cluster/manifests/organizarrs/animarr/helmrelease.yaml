@@ -124,6 +124,7 @@ spec:
       limits:
         cpu: 100m
         memory: 778M
+
     # -- Affinity constraint rules to place the Pod on a specific node.
     # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
     affinity:
