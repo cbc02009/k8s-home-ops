@@ -59,10 +59,8 @@ spec:
 
       config:
         core:
-          # sources:
-          #   - custom
-          #   - pci
-          #   - usb
+          labelSources:
+            - "all"
         sources:
           usb:
             deviceClassWhitelist:
