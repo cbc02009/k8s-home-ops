@@ -59,10 +59,10 @@ spec:
 
       config:
         core:
-          sources:
-            - custom
-            - pci
-            - usb
+          # sources:
+          #   - custom
+          #   - pci
+          #   - usb
         sources:
           usb:
             deviceClassWhitelist:
@@ -86,12 +86,6 @@ spec:
               matchOn:
                 - usbId:
                     vendor: ["1a6e", "18d1"]
-            - name: "10gb-network"
-              matchFeatures:
-                - feature: network.device
-                  matchExpressions:
-                    operstate: {op: In, value: ["up"]}
-                    speed: {op: Gt, value: ["10000"]}
 
       annotations:
         configmap.reloader.stakater.com/reload: "nfd-worker-conf"
