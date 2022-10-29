@@ -101,7 +101,7 @@ spec:
                 - feature: network.device
                   matchExpressions:
                     operstate: {op: In, value: ["up"]}
-                    speed: {op: Gte, value: ["10000"]}
+                    speed: {op: Gt, value: ["9999"]}
 
       annotations:
         configmap.reloader.stakater.com/reload: "nfd-worker-conf"
