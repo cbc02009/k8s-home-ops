@@ -61,6 +61,7 @@ spec:
         core:
           labelSources:
             - "all"
+            - "-cpu"
         sources:
           usb:
             deviceClassWhitelist:
