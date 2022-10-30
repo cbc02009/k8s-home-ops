@@ -84,31 +84,17 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: monitoring-hs110-exporter-prusa
-#   namespace: flux-system
-# spec:
-#   interval: 5m
-#   path: "./cluster/manifests/monitoring/hs110-exporter-prusa"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: monitoring-hs110-exporter-rack
-#   namespace: flux-system
-# spec:
-#   interval: 5m
-#   path: "./cluster/manifests/monitoring/hs110-exporter-rack"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: monitoring-speedtest-exporter
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./cluster/manifests/monitoring/speedtest-exporter"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
