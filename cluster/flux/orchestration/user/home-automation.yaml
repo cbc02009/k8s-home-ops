@@ -32,11 +32,11 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: home-automation-eqmx
+  name: home-automation-emqx
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/home-automation/eqmx"
+  path: "./cluster/manifests/home-automation/emqx"
   prune: true
   wait: true
   sourceRef:
