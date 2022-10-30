@@ -23,11 +23,7 @@ spec:
       retries: 5
   dependsOn:
     - name: emqx
-      namespace: default
-    - name: node-feature-discovery
-      namespace: default
-    - name: intel-gpu-plugin
-      namespace: default
+      namespace: home-automation
   values:
     image:
       repository: docker.io/blakeblackshear/frigate
