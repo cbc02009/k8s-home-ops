@@ -64,7 +64,7 @@ objects:
       max_area: 100000
       threshold: 0.7
 
-# cameras:
+cameras: {}
 #   frigate_porch:
 #     ffmpeg:
 #       inputs:
