@@ -13,4 +13,4 @@ resources:
   - ./translation.yaml
   - ./monitoring.yaml
   - ./dev.yaml
-  - ./vpn.yaml
+  # - ./vpn.yaml
