@@ -25,7 +25,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/plex-beta
-      tag: 1.29.2.6364-6d72b0cf6@sha256:c6d1f9a5f7a92041a426068dc5b201933406c59ba712f85d02b4886eb381ec99
+      tag: 1.29.2.6364-6d72b0cf6@sha256:a3b0ec8a6c9df8a8de7e0a1208e0b55d602359cc62343cedafb8708cdf37e8f4
 
     # controller:
     #   # -- enable the controller.
