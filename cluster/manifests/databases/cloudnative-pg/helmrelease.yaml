@@ -40,4 +40,4 @@ spec:
       repository: ghcr.io/cloudnative-pg/cloudnative-pg-testing
       pullPolicy: IfNotPresent
       # -- Overrides the image tag whose default is the chart appVersion.
-      tag: main@sha256:bdf8b2ad3162684d5e8b2d97b44c0b98ed8966fe0f8b5c5cd309968db8df4799
+      tag: main@sha256:5ad11542b2d78b1f71134364240476bd4924e44e90566b6c7f2d3ba851359c93
