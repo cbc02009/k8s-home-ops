@@ -29,23 +29,10 @@ spec:
       namespace: monitoring
   values:
     # TODO: change this to "mode: ha" when the new version gets released
-    replicaCount: 1
-
-    # updateStrategy:
-    #   type: RollingUpdate
-    #   rollingUpdate:
-    #     maxSurge: 1
-
-    # topologySpreadConstraints:
-    #   - maxSkew: 1
-    #     topologyKey: kubernetes.io/hostname
-    #     whenUnsatisfiable: DoNotSchedule
-    #     labelSelector:
-    #       matchLabels:
-    #         app.kubernetes.io/instance: kyverno
+    # replicaCount: 1
 
     extraArgs:
-      - --autogenInternals=false
+      # - --autogenInternals=false
       - --clientRateLimitQPS=30
       - --clientRateLimitBurst=60
 
