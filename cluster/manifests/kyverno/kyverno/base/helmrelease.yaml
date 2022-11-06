@@ -28,6 +28,9 @@ spec:
     - name: kube-prometheus-stack
       namespace: monitoring
   values:
+
+    image:
+      tag: v1.8.0
     # TODO: change this to "mode: ha" when the new version gets released
     replicaCount: 3
 
