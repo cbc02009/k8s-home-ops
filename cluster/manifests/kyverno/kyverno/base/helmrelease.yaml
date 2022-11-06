@@ -31,10 +31,10 @@ spec:
     # TODO: change this to "mode: ha" when the new version gets released
     replicaCount: 1
 
-    updateStrategy:
-      type: RollingUpdate
-      rollingUpdate:
-        maxSurge: 1
+    # updateStrategy:
+    #   type: RollingUpdate
+    #   rollingUpdate:
+    #     maxSurge: 1
 
     # topologySpreadConstraints:
     #   - maxSkew: 1
