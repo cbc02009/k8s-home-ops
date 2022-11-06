@@ -112,7 +112,7 @@ spec:
           [
             "sh",
             "-c",
-            'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
+            'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
           ]
 
     podSecurityContext:
