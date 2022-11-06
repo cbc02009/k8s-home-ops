@@ -30,7 +30,7 @@ spec:
   values:
 
     image:
-      tag: v1.7.3
+      tag: v1.8.1-19-g4ba192711
 
     # TODO: change this to "mode: ha" when the new version gets released
     replicaCount: 3
