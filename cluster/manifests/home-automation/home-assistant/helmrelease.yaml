@@ -63,46 +63,46 @@ spec:
           - hosts:
               - *host
 
-    # addons:
-    #   codeserver:
-    #     enabled: true
-    #     image:
-    #       repository: ghcr.io/coder/code-server
-    #       tag: 4.8.2
-    #     env:
-    #       TZ: "${TZ}"
-    #     workingDir: "/config"
-    #     args:
-    #       - --auth
-    #       - "none"
-    #       - --user-data-dir
-    #       - "/config/.vscode"
-    #       - --extensions-dir
-    #       - "/config/.vscode"
-    #     ingress:
-    #       enabled: true
-    #       ingressClassName: "nginx"
-    #       hosts:
-    #         - host: &host "hass-code.${EXTERNAL_DOMAIN}"
-    #           paths:
-    #             - path: /
-    #               pathType: Prefix
-    #       tls:
-    #         - hosts:
-    #             - *host
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: ghcr.io/coder/code-server
+          tag: 4.8.2
+        env:
+          TZ: "${TZ}"
+        workingDir: "/config"
+        args:
+          - --auth
+          - "none"
+          - --user-data-dir
+          - "/config/.vscode"
+          - --extensions-dir
+          - "/config/.vscode"
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          hosts:
+            - host: &host "hass-code.${EXTERNAL_DOMAIN}"
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - *host
 
-    #     volumeMounts:
-    #       - name: config
-    #         mountPath: /config
+        volumeMounts:
+          - name: config
+            mountPath: /config
 
-    #     podSecurityContext:
-    #       runAsUser: 568
-    #       runAsGroup: 568
-    #       fsGroup: 568
-    #       fsGroupChangePolicy: "OnRootMismatch"
-    #       supplementalGroups:
-    #         - 100
-    #         - 1010
+        podSecurityContext:
+          runAsUser: 568
+          runAsGroup: 568
+          fsGroup: 568
+          fsGroupChangePolicy: "OnRootMismatch"
+          supplementalGroups:
+            - 100
+            - 1010
 
     initContainers:
       wait-for-pg:
