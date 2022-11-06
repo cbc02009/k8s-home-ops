@@ -32,7 +32,7 @@ spec:
 
     env:
       TIME_ZONE: ${TZ}
-      DB_HOST: postgres-rw.databases.svc.cluster.local
+      DB_HOST: ${POSTGRES_HOST}
       DB_NAME: babybuddy
       DB_ENGINE: django.db.backends.postgresql
 

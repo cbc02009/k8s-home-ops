@@ -42,7 +42,7 @@ spec:
                       image: ghcr.io/onedr0p/postgres-initdb:14.5
                       env:
                         - name: POSTGRES_HOST
-                          value: postgres-rw.databases.svc.cluster.local
+                          value: ${POSTGRES_HOST}
                         - name: POSTGRES_DB
                           value: gitea
                         - name: POSTGRES_SUPER_PASS
@@ -387,7 +387,7 @@ spec:
           DEFAULT_PRIVATE: true
         database:
           DB_TYPE: postgres
-          HOST: postgres-rw.databases.svc.cluster.local
+          HOST: ${POSTGRES_HOST}
           NAME: gitea
           USER: ${SECRET_GITEA_POSTGRES_USER}
           PASSWD: ${SECRET_GITEA_POSTGRES_PASS}

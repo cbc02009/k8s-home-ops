@@ -39,7 +39,7 @@ spec:
       RADARR__LOG_LEVEL: info
       RADARR__POSTGRES_MAIN_DB: radarr_main
       RADARR__POSTGRES_LOG_DB: radarr_log
-      RADARR__POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
+      RADARR__POSTGRES_HOST: ${POSTGRES_HOST}
 
     envFrom:
       - secretRef:

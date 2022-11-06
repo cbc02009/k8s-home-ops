@@ -19,6 +19,7 @@ data:
   CONTROL_IP: 10.0.0.9
 
   SAN_HOST: shana.lan
+  POSTGRES_HOST: 10.0.0.96
 
   LB_RANGE: 10.0.1.0/25
 
