@@ -22,12 +22,12 @@ spec:
     remediation:
       retries: 5
   dependsOn:
-    - name: postgres
-      namespace: databases
+    # - name: postgres
+    #   namespace: databases
     - name: zwave-js-ui
       namespace: home-automation
-  #   - name: emqx
-  #     namespace: home-automation
+    - name: emqx
+      namespace: home-automation
   values:
     image:
       repository: ghcr.io/onedr0p/home-assistant
