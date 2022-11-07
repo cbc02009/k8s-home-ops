@@ -22,8 +22,6 @@ spec:
     remediation:
       retries: 5
   dependsOn:
-    # - name: postgres
-    #   namespace: databases
     - name: zwave-js-ui
       namespace: home-automation
     - name: emqx
@@ -114,7 +112,7 @@ spec:
           [
             "sh",
             "-c",
-            'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
+            'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
           ]
 
     podSecurityContext:

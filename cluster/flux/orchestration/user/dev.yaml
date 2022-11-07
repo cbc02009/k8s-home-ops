@@ -35,8 +35,6 @@ metadata:
   name: dev-gitea
   namespace: flux-system
 spec:
-  # dependsOn:
-  #   - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/dev/gitea"
   prune: true
