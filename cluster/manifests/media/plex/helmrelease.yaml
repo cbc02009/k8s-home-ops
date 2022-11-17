@@ -86,15 +86,15 @@ spec:
         - 100
 
     persistence:
-      # config:
-      #   enabled: true
-      #   existingClaim: plex-config-v1
-
       config:
         enabled: true
-        type: nfs
-        server: "${SAN_HOST}"
-        path: /smoltank/k8s/apps/plex
+        existingClaim: plex-config-v1
+
+      # config:
+      #   enabled: true
+      #   type: nfs
+      #   server: "${SAN_HOST}"
+      #   path: /smoltank/k8s/apps/plex
 
       transcode:
         enabled: true
