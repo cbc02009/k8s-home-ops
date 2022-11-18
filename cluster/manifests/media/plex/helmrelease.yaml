@@ -36,7 +36,7 @@ spec:
 
     env:
       TZ: "${TZ}"
-      PLEX_CLAIM: ${SECRET_PLEX_TOKEN}
+      # PLEX_CLAIM: ${SECRET_PLEX_TOKEN}
 
     service:
       main:
