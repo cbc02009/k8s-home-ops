@@ -24,7 +24,7 @@ spec:
   values:
     global:
       imageRegistry: public.ecr.aws
-      storageClass: csi-nfs-smoltank
+      storageClass: zfs-localpv
     auth:
       enabled: false
       sentinel: false
