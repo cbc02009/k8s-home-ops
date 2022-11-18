@@ -23,7 +23,7 @@ spec:
       retries: 5
   values:
     image:
-      repository: kizaing/kavita
+      repository: docker.io/kizaing/kavita
       tag: nightly@sha256:93ba7ebf5ce2170222367e2a167d4d7707bb33a8d68751a8c68eb5f085922b12
     env:
       TZ: "${TZ}"
