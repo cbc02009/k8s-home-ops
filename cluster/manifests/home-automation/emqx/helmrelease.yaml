@@ -76,7 +76,7 @@ spec:
 
     persistence:
       enabled: true
-      storageClass: csi-nfs-smoltank
+      storageClass: zfs-localpv
       size: 100Mi
 
     affinity:
