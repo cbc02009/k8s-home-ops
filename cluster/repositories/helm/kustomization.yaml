@@ -22,6 +22,7 @@ resources:
   - k8s-at-home-charts.yaml
   - lwolf-charts.yaml
   - metallb-charts.yaml
+  - nextcloud-charts.yaml
   - openebs-charts.yaml
   - prometheus-community-charts.yaml
   - democratic-csi-charts.yaml
