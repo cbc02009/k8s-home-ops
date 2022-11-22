@@ -47,7 +47,7 @@ spec:
       enabled: true
       className: nginx
       annotations:
-        - cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+        cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
       tls:
         - secretName: nextcloud-tls
           hosts:
