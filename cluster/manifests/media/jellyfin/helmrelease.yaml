@@ -24,7 +24,7 @@ spec:
   values:
     image:
       repository: ghcr.io/onedr0p/jellyfin
-      tag: 10.8.7@sha256:9a6c2d0168a17a59494c11d6800c4baebf26f2d9eed807751b4fcc44bed46c0e
+      tag: 10.8.7@sha256:ce8a2212ea76cfdc8bc2765b2b1e5959b490145e10ffb03cb7dfe1e3a34c8c38
     env:
       TZ: "${TZ}"
     service:
