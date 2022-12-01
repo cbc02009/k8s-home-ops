@@ -11,9 +11,9 @@ spec:
       persistentVolumeClaim:
         claimName: <CLAIM NAME GOES HERE>
     - name: backups
-      type: nfs
-      server: 10.0.0.4
-      path: /tank/backup/kubernetes/apps
+      nfs:
+        server: 10.0.0.4
+        path: /tank/backup/kubernetes/apps
   containers:
     - name: volume-debugger
       image: ubuntu
