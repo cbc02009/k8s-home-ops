@@ -28,8 +28,11 @@ spec:
     - name: kube-prometheus-stack
       namespace: monitoring
   values:
+    # -- Use a `DaemonSet` or `Deployment`
+    kind: Daemonset
+
     controller:
-      replicaCount: 3
+      replicaCount: 1
       extraEnvs:
         - name: TZ
           value: "${TZ}"
