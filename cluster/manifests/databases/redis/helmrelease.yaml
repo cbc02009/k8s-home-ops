@@ -25,6 +25,8 @@ spec:
     global:
       imageRegistry: public.ecr.aws
       storageClass: zfs-localpv
+    replica:
+      replicaCount: 1
     auth:
       enabled: false
       sentinel: false
