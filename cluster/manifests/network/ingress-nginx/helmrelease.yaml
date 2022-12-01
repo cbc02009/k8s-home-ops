@@ -29,7 +29,7 @@ spec:
       namespace: monitoring
   values:
     controller:
-      kind: Daemonset
+      kind: DaemonSet
       replicaCount: 1
       extraEnvs:
         - name: TZ
