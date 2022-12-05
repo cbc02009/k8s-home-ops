@@ -25,7 +25,7 @@ spec:
     image:
       repository: public.ecr.aws/emqx/emqx
 
-    replicaCount: 3
+    replicaCount: 1
     recreatePods: true
 
     emqxConfig:
