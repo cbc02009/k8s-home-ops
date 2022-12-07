@@ -130,8 +130,8 @@ spec:
             'objectstore' => array(
               'class' => '\\OC\\Files\\ObjectStore\\S3',
               'arguments' => array(
-                'hostname'   => '${SAN_HOST}'
-                'port'       => 9000
+                'hostname'   => '${SAN_HOST}',
+                'port'       => 9000,
                 'bucket'     => 'nextcloud',
                 'autocreate' => true,
                 'key'        => '${NC_MINIO_KEY}',
