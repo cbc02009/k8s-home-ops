@@ -8,4 +8,4 @@ resources:
   - set-internal-ingress-annotations.yaml
   - sync-postgres-secret.yaml
   # - ./snapshot-cronjob-controller.yaml
-  - add-vpn-caps.yaml
+  # - add-vpn-caps.yaml
