@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: plex
+  name: &app plex
   namespace: media
 spec:
   interval: 15m
@@ -36,7 +36,10 @@ spec:
 
     env:
       TZ: "${TZ}"
-      PLEX_CLAIM: ${SECRET_PLEX_TOKEN}
+
+    envFrom:
+      - secretRef:
+          name: *app
 
     service:
       main:
