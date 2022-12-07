@@ -137,7 +137,8 @@ spec:
                 'key'        => '${NC_MINIO_KEY}',
                 'secret'     => '${NC_MINIO_SECRET}',
                 'region'     => 'optional',
-                'use_ssl'    => false
+                'use_ssl'    => false,
+                'use_path_style'=> true
               )
             )
           );
