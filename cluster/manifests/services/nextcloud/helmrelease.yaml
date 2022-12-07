@@ -139,8 +139,8 @@ spec:
                 'region'     => 'optional',
                 'use_ssl'    => false,
                 'use_path_style'=> true
-              )
-            )
+              ),
+            ),
           );
 
       ## Strategy used to replace old pods
