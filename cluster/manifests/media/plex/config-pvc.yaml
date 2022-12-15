@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 120Gi
 
-  storageClassName: csi-iscsi-smoltank
+  storageClassName: ceph-block

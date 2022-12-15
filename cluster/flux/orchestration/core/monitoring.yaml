@@ -5,8 +5,8 @@ metadata:
   name: monitoring-kube-prom-stack
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: storage-csi-nfs-smoltank
+  # dependsOn:
+  #   - name: storage-csi-nfs-smoltank
   interval: 15m
   path: "./cluster/manifests/monitoring/kube-prometheus-stack"
   prune: true
