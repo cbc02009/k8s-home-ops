@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: ceph-block
+    - name: storage-rook-ceph-cluster
   interval: 15m
   path: "./cluster/manifests/monitoring/kube-prometheus-stack"
   prune: true
