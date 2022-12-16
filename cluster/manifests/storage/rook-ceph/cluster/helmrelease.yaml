@@ -110,6 +110,9 @@ spec:
           - name: "sakura"
             devices:
               - name: "/dev/disk/by-id/ata-SPCC_Solid_State_Disk_AAAA0000000000019076"
+          - name: "uiharu"
+            devices:
+              - name: "/dev/disk/by-id/nvme-INTEL_SSDPEKNU010TZ_PHKA222301PY1P0B"
 
     ingress:
       dashboard:
@@ -135,7 +138,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 3
+            size: 1
         storageClass:
           enabled: true
           name: ceph-block
@@ -158,7 +161,7 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 3
+              size: 1
           dataPools:
             - failureDomain: host
               replicated:
