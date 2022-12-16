@@ -198,7 +198,7 @@ spec:
     prometheus:
       enabled: false
       servicemonitor:
-        enabled: true
+        enabled: false
         prometheusInstance: monitoring
 
     # Use these variables to configure the HTTP_PROXY environment variables
