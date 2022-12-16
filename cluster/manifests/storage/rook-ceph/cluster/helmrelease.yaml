@@ -97,6 +97,9 @@ spec:
       crashCollector:
         disable: false
 
+      mon:
+        count: 2
+
       dashboard:
         enabled: true
         urlPrefix: /
