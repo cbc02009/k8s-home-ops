@@ -27,6 +27,8 @@ spec:
     - name: rook-ceph
       namespace: storage
   values:
+    operatorNamespace: storage
+
     toolbox:
       enabled: false
 
