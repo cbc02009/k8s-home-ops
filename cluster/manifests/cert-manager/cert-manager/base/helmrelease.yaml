@@ -196,7 +196,7 @@ spec:
       # defaultIssuerGroup: ""
 
     prometheus:
-      enabled: true
+      enabled: false
       servicemonitor:
         enabled: true
         prometheusInstance: monitoring
