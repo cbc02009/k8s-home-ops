@@ -130,7 +130,7 @@ spec:
             'objectstore' => array(
               'class' => '\\OC\\Files\\ObjectStore\\S3',
               'arguments' => array(
-                'hostname'   => '10.0.0.4',
+                'hostname'   => '${SAN_HOST}',
                 'port'       => 9000,
                 'bucket'     => 'nextcloud',
                 'autocreate' => true,
@@ -261,7 +261,7 @@ spec:
     ##
     persistence:
       # Nextcloud Data (/var/www/html)
-      enabled: false
+      enabled: true
       annotations: {}
       ## nextcloud data Persistent Volume Storage Class
       ## If defined, storageClassName: <storageClass>
