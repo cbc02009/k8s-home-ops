@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cert-manager
-      version: v1.9.1
+      version: v1.10.1
       sourceRef:
         kind: HelmRepository
         name: jetstack-charts
@@ -24,9 +24,6 @@ spec:
       retries: 5
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: monitoring
   values:
     # Default values for cert-manager.
     # This is a YAML-formatted file.
@@ -199,9 +196,9 @@ spec:
       # defaultIssuerGroup: ""
 
     prometheus:
-      enabled: true
+      enabled: false
       servicemonitor:
-        enabled: true
+        enabled: false
         prometheusInstance: monitoring
 
     # Use these variables to configure the HTTP_PROXY environment variables

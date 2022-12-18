@@ -1,17 +1,17 @@
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: storage-csi-nfs-smoltank
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/storage/csi-nfs-smoltank"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: storage-csi-nfs-smoltank
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/storage/csi-nfs-smoltank"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
 # ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
@@ -26,15 +26,43 @@ spec:
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: storage-zfs-localpv
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/storage/zfs-localpv"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: storage-zfs-localpv
+  name: storage-rook-ceph-operator
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/storage/zfs-localpv"
+  path: "./cluster/manifests/storage/rook-ceph/operator"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: storage-rook-ceph-cluster
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./cluster/manifests/storage/rook-ceph/cluster"
   prune: true
   wait: true
   sourceRef:

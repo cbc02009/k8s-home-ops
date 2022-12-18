@@ -9,7 +9,7 @@ data:
     peers:
       - peer-address: ${ROUTER_IP}
         peer-asn: 65000
-        my-asn: 65000
+        my-asn: 65001
     address-pools:
       - name: default
         protocol: bgp

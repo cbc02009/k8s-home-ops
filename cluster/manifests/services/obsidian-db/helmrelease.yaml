@@ -1,0 +1,96 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app obsidian-db
+  namespace: services
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    image:
+      repository: docker.io/library/couchdb
+      tag: latest@sha256:08c8be9a9c54a3fcbf7b689830194cb86bd55e7a59a815fbf2d49e35e76b05d9
+
+    env:
+      TZ: "${TZ}"
+
+    envFrom:
+      - secretRef:
+          name: *app
+
+    service:
+      main:
+        ports:
+          http:
+            port: 5984
+
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "obsidian-db-config"
+      secret.reloader.stakater.com/reload: "obsidian-db"
+
+    initContainers:
+      init-config:
+        image: quay/busybox:latest
+        command:
+          - "sh"
+          - "-c"
+          - "cp /tmp/config/*.ini /default.d/; ls -lrt /default.d;"
+        volumeMounts:
+          - name: config
+            mountPath: /tmp/config
+          - name: config-storage
+            mountPath: /default.d
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          external-dns.home.arpa/enabled: "true"
+        hosts:
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: obsidian-db-config
+        mountPath: "-"
+
+      config-storage:
+        enabled: true
+        type: emptyDir
+        mountPath: /opt/couchdb/etc/default.d
+
+      data:
+        enabled: true
+        existingClaim: couchdb-data
+        mountPath: /opt/couchdb/data
+
+    resources:
+      requests:
+        cpu: 23m
+        memory: 79Mi
+      limits:
+        memory: 100Mi

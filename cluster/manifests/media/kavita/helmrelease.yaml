@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.2
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -23,8 +23,8 @@ spec:
       retries: 5
   values:
     image:
-      repository: kizaing/kavita
-      tag: nightly@sha256:1e00da086dd2dab33c96d165858ed9f3f23fc4babf7cba0ce6c089534adff805
+      repository: docker.io/kizaing/kavita
+      tag: nightly@sha256:0dd9dd2e057a20e60b652dd84e4799bcd046c6a5dd47c0cfdc6596737d988cfa
     env:
       TZ: "${TZ}"
 
@@ -66,7 +66,7 @@ spec:
         enabled: true
         type: nfs
         server: "${SAN_HOST}"
-        path: /tank/media/manga
+        path: /tank/media
         mountPath: /media
 
       backups:

@@ -2,11 +2,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./flux-system.yaml
+  - flux-system.yaml
   - kyverno.yaml
-  - ./storage.yaml
-  - ./monitoring.yaml
-  - ./services.yaml
-  - ./kube-system.yaml
-  - ./network.yaml
-  - ./cert-manager.yaml
+  - storage.yaml
+  - monitoring.yaml
+  - kube-system.yaml
+  - network.yaml
+  - cert-manager.yaml
