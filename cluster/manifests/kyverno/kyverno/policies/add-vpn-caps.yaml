@@ -43,19 +43,3 @@ spec:
                     env:
                       - name: IPTABLES_NFT
                         value: yes
-    # - name: add_iptables_nft
-    #   match:
-    #     any:
-    #       - resources:
-    #           kinds: ["Deployment"]
-    #           name: downloads-gateway-pod-gateway
-    #   mutate:
-    #     patchStrategicMerge:
-    #       spec:
-    #         template:
-    #           spec:
-    #             initContainers:
-    #               - (name): "*"
-    #                 env:
-    #                   - name: IPTABLES_NFT
-    #                     value: yes

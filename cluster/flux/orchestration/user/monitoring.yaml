@@ -28,34 +28,34 @@ spec:
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-blackbox-exporter
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/monitoring/blackbox-exporter"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-prometheus-smartctl
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/monitoring/prometheus-smartctl"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-blackbox-exporter
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/blackbox-exporter"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-prometheus-smartctl
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/prometheus-smartctl"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -88,27 +88,27 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: monitoring-hs110-exporter-prusa
+#   name: monitoring-speedtest-exporter
 #   namespace: flux-system
 # spec:
 #   interval: 5m
-#   path: "./cluster/manifests/monitoring/hs110-exporter-prusa"
+#   path: "./cluster/manifests/monitoring/speedtest-exporter"
 #   prune: true
 #   wait: true
 #   sourceRef:
 #     kind: GitRepository
 #     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: monitoring-hs110-exporter-rack
-#   namespace: flux-system
-# spec:
-#   interval: 5m
-#   path: "./cluster/manifests/monitoring/hs110-exporter-rack"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: monitoring-kube-cleanup-operator
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./cluster/manifests/monitoring/kube-cleanup-operator"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops

@@ -35,7 +35,7 @@ spec:
       context:
         - name: appName
           variable:
-            jmesPath: 'request.object.metadata.labels."app.kubernetes.io/name"'
+            jmesPath: "request.object.metadata.labels.\"app.kubernetes.io/name\""
         - name: claimName
           variable:
             jmesPath: "request.object.metadata.name"
@@ -45,16 +45,16 @@ spec:
         - name: nodeAffinity
           variable:
             value:
-              ignored: '{{ (request.object.metadata.labels."snapshot.home.arpa/ignoreAffinity" || ''false'') == ''false'' }}'
+              ignored: "{{ (request.object.metadata.labels.\"snapshot.home.arpa/ignoreAffinity\" || 'false') == 'false' }}"
               labels:
                 - key: app.kubernetes.io/name
                   operator: "In"
                   values:
-                    - '{{ request.object.metadata.labels."app.kubernetes.io/name" }}'
+                    - "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
                 - key: app.kubernetes.io/instance
                   operator: "In"
                   values:
-                    - '{{ request.object.metadata.labels."app.kubernetes.io/instance" }}'
+                    - "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
       generate:
         synchronize: true
         apiVersion: batch/v1
@@ -64,8 +64,8 @@ spec:
         data:
           metadata:
             labels:
-              app.kubernetes.io/name: '{{ request.object.metadata.labels."app.kubernetes.io/name" }}'
-              app.kubernetes.io/instance: '{{ request.object.metadata.labels."app.kubernetes.io/instance" }}'
+              app.kubernetes.io/name: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
+              app.kubernetes.io/instance: "{{ request.object.metadata.labels.\"app.kubernetes.io/instance\" }}"
             ownerReferences:
               - apiVersion: "{{ request.object.apiVersion }}"
                 kind: "{{ request.object.kind }}"
@@ -88,12 +88,12 @@ spec:
                     # Stagger jobs to run randomly within X seconds to avoid bringing down all apps at once
                     initContainers:
                       - name: wait
-                        image: ghcr.io/onedr0p/kopia:0.11.3@sha256:72406602c99357951cb7284abbf88699081d60f6cffd22baddd8a6a2afe919f5
+                        image: ghcr.io/onedr0p/kopia:0.12.1@sha256:b4f2b49fbb0477afa575e5e806ab21b6ab008ae18e0be3915072acea46c6712a
                         command: ["/scripts/sleep.sh"]
                         args: ["1", "900"]
                     containers:
                       - name: snapshot
-                        image: ghcr.io/onedr0p/kopia:0.11.3@sha256:72406602c99357951cb7284abbf88699081d60f6cffd22baddd8a6a2afe919f5
+                        image: ghcr.io/onedr0p/kopia:0.12.1@sha256:b4f2b49fbb0477afa575e5e806ab21b6ab008ae18e0be3915072acea46c6712a
                         env:
                           - name: KOPIA_CACHE_DIRECTORY
                             value: /snapshots/{{ namespace }}/{{ appName }}/{{ claimName }}/cache
@@ -128,8 +128,8 @@ spec:
                           claimName: "{{ claimName }}"
                       - name: snapshots
                         nfs:
-                          server: "george.${INTERNAL_DOMAIN}"
-                          path: /tank/backup/kubernetes/kopia
+                          server: "${SAN_HOST"
+                          path: /tank/backup/kubernetes/apps/kopia
                     affinity:
                       podAffinity:
                         requiredDuringSchedulingIgnoredDuringExecution:

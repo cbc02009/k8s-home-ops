@@ -23,6 +23,7 @@ spec:
     remediation:
       retries: 5
   values:
+
     csiDriver:
       name: "org.democratic-csi.nfs"
 
@@ -40,9 +41,23 @@ spec:
           - noatime
           - nfsvers=4
 
+    controller:
+      driver:
+        image: ghcr.io/cbc02009/democratic-csi:v1.7.7
+        imagePullPolicy: IfNotPresent
+
     driver:
-      image: docker.io/democraticcsi/democratic-csi:v1.7.6
+      image: ghcr.io/cbc02009/democratic-csi:v1.7.7
       imagePullPolicy: IfNotPresent
       config:
         driver: zfs-generic-nfs
       existingConfigSecret: zfs-generic-nfs-config
+
+    node:
+      driver:
+        image: ghcr.io/cbc02009/democratic-csi:v1.7.7
+        imagePullPolicy: IfNotPresent
+
+    csiProxy:
+      image: ghcr.io/cbc02009/csi-grpc-proxy:v0.5.3
+      imagePullPolicy: IfNotPresent

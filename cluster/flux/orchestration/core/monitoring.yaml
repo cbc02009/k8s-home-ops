@@ -6,11 +6,11 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: storage-csi-nfs-smoltank
+    - name: storage-rook-ceph-cluster
   interval: 15m
   path: "./cluster/manifests/monitoring/kube-prometheus-stack"
   prune: true
-  # wait: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
@@ -30,64 +30,64 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-grafana
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: storage-csi-nfs-smoltank
-  interval: 5m
-  path: "./cluster/manifests/monitoring/grafana"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-vector-aggregator
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/monitoring/vector/aggregator"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-vector-agent
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/monitoring/vector/agent"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: monitoring-loki
-  namespace: flux-system
-spec:
-  interval: 5m
-  path: "./cluster/manifests/monitoring/loki"
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-grafana
+#   namespace: flux-system
+# spec:
+#   dependsOn:
+#     - name: storage-csi-nfs-smoltank
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/grafana"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-vector-aggregator
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/vector/aggregator"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-vector-agent
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/vector/agent"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: monitoring-loki
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/monitoring/loki"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization

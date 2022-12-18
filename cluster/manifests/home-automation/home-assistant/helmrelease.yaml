@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.2
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -22,16 +22,18 @@ spec:
     remediation:
       retries: 5
   dependsOn:
-    - name: postgres
-      namespace: databases
-    - name: zwavejs2mqtt
+    # - name: zwave-js-ui
+    #   namespace: home-automation
+    - name: emqx
       namespace: home-automation
-  #   - name: emqx
-  #     namespace: home-automation
   values:
+
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/onedr0p/home-assistant
-      tag: 2022.10.2@sha256:9d881745502d2a48d4d140bd39ba4cb0aafd05af25e591599379e5949ed556c3
+      tag: 2022.12.6@sha256:085e10eb0351d02eca3e0169289f8cbde068f15bfc5a043b12732155db131c23
 
     env:
       TZ: "${TZ}"
@@ -63,55 +65,15 @@ spec:
           - hosts:
               - *host
 
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.7.1
-        env:
-          TZ: "${TZ}"
-        workingDir: "/config"
-        args:
-          - --auth
-          - "none"
-          - --user-data-dir
-          - "/config/.vscode"
-          - --extensions-dir
-          - "/config/.vscode"
-        ingress:
-          enabled: true
-          ingressClassName: "nginx"
-          hosts:
-            - host: &host "hass-code.${EXTERNAL_DOMAIN}"
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - *host
-
-        volumeMounts:
-          - name: config
-            mountPath: /config
-
-        podSecurityContext:
-          runAsUser: 568
-          runAsGroup: 568
-          fsGroup: 568
-          fsGroupChangePolicy: "OnRootMismatch"
-          supplementalGroups:
-            - 100
-
     initContainers:
       wait-for-pg:
-        image: busybox:latest
+        image: quay.io/prometheus/busybox
         imagePullPolicy: IfNotPresent
         command:
           [
             "sh",
             "-c",
-            'until nc -vz postgres-any.databases 5432; do echo "Waiting for cloudnative-pg..."; sleep 3; done;',
+            'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
           ]
 
     podSecurityContext:
@@ -121,6 +83,7 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
         - 100
+        - 1010
 
     persistence:
       config:

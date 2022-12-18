@@ -1,0 +1,25 @@
+# my-pvc-debugger.yaml
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: volume-debugger
+  namespace: <NAMESPACE>
+spec:
+  volumes:
+    - name: debug-volume
+      persistentVolumeClaim:
+        claimName: <CLAIM NAME GOES HERE>
+    - name: backups
+      nfs:
+        server: 10.0.0.4
+        path: /tank/backup/kubernetes/apps
+  containers:
+    - name: volume-debugger
+      image: ubuntu
+      command: ['sleep', '3600']
+      volumeMounts:
+        - mountPath: "/mnt/volume"
+          name: debug-volume
+        - mountPath: "/mnt/backups"
+          name: backups

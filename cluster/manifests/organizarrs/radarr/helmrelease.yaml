@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.2
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -21,14 +21,11 @@ spec:
   upgrade:
     remediation:
       retries: 5
-  dependsOn:
-    - name: postgres
-      namespace: databases
 
   values:
     image:
       repository: ghcr.io/onedr0p/radarr-develop
-      tag: 4.2.4.6635
+      tag: 4.3.1.6822
 
     env:
       TZ: ${TZ}
@@ -39,7 +36,7 @@ spec:
       RADARR__LOG_LEVEL: info
       RADARR__POSTGRES_MAIN_DB: radarr_main
       RADARR__POSTGRES_LOG_DB: radarr_log
-      RADARR__POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
+      RADARR__POSTGRES_HOST: ${POSTGRES_HOST}
 
     envFrom:
       - secretRef:
@@ -129,3 +126,15 @@ spec:
       limits:
         cpu: 100m
         memory: 670M
+
+    # -- Affinity constraint rules to place the Pod on a specific node.
+    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/10gb-network
+                  operator: In
+                  values:
+                    - "true"

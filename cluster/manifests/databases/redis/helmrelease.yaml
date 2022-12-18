@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: redis
-      version: 17.3.4
+      version: 17.3.17
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
@@ -24,7 +24,9 @@ spec:
   values:
     global:
       imageRegistry: public.ecr.aws
-      storageClass: csi-nfs-smoltank
+      storageClass: ceph-block
+    replica:
+      replicaCount: 1
     auth:
       enabled: false
       sentinel: false

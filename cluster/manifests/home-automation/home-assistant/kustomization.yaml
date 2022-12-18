@@ -7,3 +7,4 @@ resources:
   - secret.sops.yaml
 patchesStrategicMerge:
   - patches/postgres.yaml
+  - patches/addons.yaml
