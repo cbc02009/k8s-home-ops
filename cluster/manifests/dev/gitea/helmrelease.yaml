@@ -344,15 +344,15 @@ spec:
 
       # Either specify inline `key` and `secret` or refer to them via `existingSecret`
       ## @param gitea.oauth OAuth configuration
-      # oauth:
-      #   - name: authelia
-      #     provider: openidConnect
-      #     key: gitea
-      #     secret: "${SECRET_GITEA_OAUTH_CLIENT_SECRET}"
-      #     autoDiscoverUrl: "https://auth.${EXTERNAL_DOMAIN}/.well-known/openid-configuration"
-      #     groupClaimName: groups
-      #     adminGroup: admins
-      #     restrictedGroup: people
+      oauth:
+        - name: authelia
+          provider: openidConnect
+          key: gitea
+          secret: "${SECRET_GITEA_OAUTH_CLIENT_SECRET}"
+          autoDiscoverUrl: "https://auth.${EXTERNAL_DOMAIN}/.well-known/openid-configuration"
+          groupClaimName: groups
+          adminGroup: admins
+          restrictedGroup: people
         # - name: 'OAuth 1'
         #   provider:
         #   key:
