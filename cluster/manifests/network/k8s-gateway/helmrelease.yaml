@@ -22,9 +22,9 @@ spec:
   upgrade:
     remediation:
       retries: 5
-  dependsOn:
-    - name: metallb
-      namespace: network
+  # dependsOn:
+  #   - name: metallb
+  #     namespace: network
   values:
     fullnameOverride: k8s-gateway
     domain: ${EXTERNAL_DOMAIN}
@@ -35,5 +35,4 @@ spec:
       annotations:
         metallb.universe.tf/loadBalancerIPs: "${LB_K8S_GATEWAY}"
       externalTrafficPolicy: Local
-    nodeSelector:
-      kubernetes.io/hostname: sakura
+      loadbalancerIP: ${LB_K8S_GATEWAY}

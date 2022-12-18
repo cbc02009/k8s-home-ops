@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.2
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -24,12 +24,12 @@ spec:
   values:
     image:
       repository: ghcr.io/linuxserver/calibre
-      tag: version-v6.6.1
+      tag: version-v6.9.0
 
     env:
       TZ: "${TZ}"
       PUID: "568"
-      PGID: "568"
+      PGID: "1000"
 
     service:
       main:
@@ -80,3 +80,9 @@ spec:
         memory: 249M
       limits:
         memory: 299M
+
+    probes:
+      startup:
+        spec:
+          initialDelaySeconds: 60
+          failureThreshold: 160

@@ -11,10 +11,8 @@
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage",
     "github>cbc02009/k8s-home-ops//.github/renovate/labels",
     "github>cbc02009/k8s-home-ops//.github/renovate/disabledDatasources.json5",
-    // "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits",
-    // "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions",
-    // "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge",
-    // "github>cbc02009/k8s-home-ops//.github/renovate/updateSchedule"
+    "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits",
+    "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge",
   ],
   "repositories":[
     "cbc02009/k8s-home-ops"
@@ -170,6 +168,11 @@
         "ghcr.io/linuxserver/calibre-web"
       ],
       "versioning":"regex:^version-v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
-    }
+    },
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: ["blakeblackshear/frigate"],
+      versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
+    },
   ]
 }

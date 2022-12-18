@@ -5,8 +5,6 @@ metadata:
   name: home-automation-home-assistant
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/home-automation/home-assistant"
   prune: true
@@ -18,13 +16,41 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: home-automation-zwavejs2mqtt
+  name: home-automation-zwave-js-ui
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./cluster/manifests/home-automation/zwavejs2mqtt"
+  path: "./cluster/manifests/home-automation/zwave-js-ui"
   prune: true
   wait: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: home-automation-emqx
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./cluster/manifests/home-automation/emqx"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: home-automation-frigate
+#   namespace: flux-system
+# spec:
+#   interval: 5m
+#   path: "./cluster/manifests/home-automation/frigate"
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops

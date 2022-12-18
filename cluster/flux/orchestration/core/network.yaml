@@ -14,22 +14,22 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: network-metallb-config
-#   namespace: flux-system
-# spec:
-#   dependsOn:
-#     - name: network-metallb
-#   interval: 5m
-#   path: "./cluster/manifests/network/metallb/config"
-#   prune: true
-#   wait: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: network-metallb-config
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: network-metallb
+  interval: 5m
+  path: "./cluster/manifests/network/metallb/config"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
 # ---
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
@@ -67,6 +67,20 @@ metadata:
 spec:
   interval: 5m
   path: "./cluster/manifests/network/k8s-gateway"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: network-static-routes
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: "./cluster/manifests/network/static-routes"
   prune: true
   wait: true
   sourceRef:

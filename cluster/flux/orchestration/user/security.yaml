@@ -19,8 +19,6 @@ metadata:
   name: security-vaultwarden
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: databases-cloudnative-pg
   interval: 5m
   path: "./cluster/manifests/security/vaultwarden"
   prune: true

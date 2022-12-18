@@ -14,7 +14,7 @@ spec:
   chart:
     spec:
       chart: cilium
-      version: 1.12.2
+      version: 1.12.4
       sourceRef:
         kind: HelmRepository
         name: cilium-charts
@@ -41,9 +41,9 @@ spec:
     kubeProxyReplacement: "strict"
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 
-    # ipv4NativeRoutingCIDR: ${NETWORK_K8S_POD_CIDR}
+    ipv4NativeRoutingCIDR: ${NETWORK_K8S_POD_CIDR}
 
-    k8sServiceHost: ${ANYA_IP}
+    k8sServiceHost: ${CONTROL_IP}
     k8sServicePort: 6443
 
     loadBalancer:
@@ -51,9 +51,9 @@ spec:
       mode: "dsr"
 
     # change these for host routing
-    tunnel: "vxlan"
+    tunnel: "disabled"
 
-    autoDirectNodeRoutes: false
+    autoDirectNodeRoutes: true
 
     endpointRoutes:
       enabled: false
@@ -68,6 +68,9 @@ spec:
     containerRuntime:
       integration: crio
       socketPath: "unix:///run/crio/crio.sock"
+
+    bpf:
+      masquerade: true
 
     hubble:
       enabled: true
@@ -114,3 +117,6 @@ spec:
 
     externalIPs:
       enabled: false
+
+    securityContext:
+      privileged: true

@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 20Gi
 
-  storageClassName: csi-nfs-smoltank
+  storageClassName: ceph-block

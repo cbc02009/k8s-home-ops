@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 0.2.2
+      version: 1.2.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -27,7 +27,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 4.0.0.133@sha256:78fc0f5bff0162c3085cc14e53d5f81a30d2e85518b207a5a98a4364128d2c75
+      tag: 4.0.0.292@sha256:33538e1651e60fe24ac362a0c28f58c1a27e845bd8658b5feede3235c21357d7
 
     env:
       TZ: "${TZ}"
@@ -126,3 +126,15 @@ spec:
       limits:
         cpu: 66m
         memory: 411M
+
+    # -- Affinity constraint rules to place the Pod on a specific node.
+    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/10gb-network
+                  operator: In
+                  values:
+                    - "true"
