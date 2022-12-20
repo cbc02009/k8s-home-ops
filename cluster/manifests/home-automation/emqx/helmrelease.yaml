@@ -76,7 +76,7 @@ spec:
 
     persistence:
       enabled: true
-      storageClass: zfs-localpv
+      storageClass: ceph-block
       size: 100Mi
 
     affinity:
