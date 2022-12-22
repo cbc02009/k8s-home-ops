@@ -5,6 +5,7 @@ namespace: flux-system
 resources:
   - actions-runner-controller-charts.yaml
   - authelia-charts.yaml
+  - backube-charts.yaml
   - bjw-s-charts.yaml
   - cilium-charts.yaml
   - emqx-charts.yaml
