@@ -15,6 +15,7 @@ resources:
   - media.yaml
   - network.yaml
   - storage.yaml
+  - trivy.yaml
   - organizarrs.yaml
   - security.yaml
   - services.yaml

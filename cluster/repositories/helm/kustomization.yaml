@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - actions-runner-controller-charts.yaml
+  - aqua-charts.yaml
   - authelia-charts.yaml
   - backube-charts.yaml
   - bjw-s-charts.yaml

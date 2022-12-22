@@ -12,6 +12,7 @@ resources:
   - ./security.yaml
   - ./storage.yaml
   - ./translation.yaml
+  - ./trivy.yaml
   - ./monitoring.yaml
   - ./dev.yaml
   # - ./vpn.yaml
