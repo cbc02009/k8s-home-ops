@@ -202,7 +202,7 @@ spec:
             scheme: http
             static_configs:
               - targets:
-                  - "${SAN_HOST}:9000"
+                  - "${MINIO_HOST}:9000"
 
           - job_name: smartctl-exporter
             scrape_interval: 10m

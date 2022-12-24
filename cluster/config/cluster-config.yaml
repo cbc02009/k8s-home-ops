@@ -20,6 +20,7 @@ data:
 
   SAN_HOST: shana.lan
   POSTGRES_HOST: 10.0.0.96
+  MINIO_HOST: 10.0.0.97
 
   LB_RANGE: 10.0.1.0/25
 
