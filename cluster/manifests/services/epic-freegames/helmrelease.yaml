@@ -54,3 +54,7 @@ spec:
         subPath: config.json
         mountPath: /usr/app/config/config.json
         readOnly: true
+      data:
+        enabled: true
+        existingClaim: babybuddy-config-v1
+        mountPath: /usr/app/config
