@@ -58,3 +58,11 @@ spec:
         enabled: true
         existingClaim: epic-freegames-config-v1
         mountPath: /usr/app/config
+
+    resources:
+      requests:
+        cpu: 15m
+        memory: 380M
+      limits:
+        cpu: 100m
+        memory: 2000m
