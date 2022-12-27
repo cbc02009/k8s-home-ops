@@ -25,6 +25,7 @@ resources:
   - lwolf-charts.yaml
   - metallb-charts.yaml
   - nextcloud-charts.yaml
+  - piraeus-charts.yaml
   - prometheus-community-charts.yaml
   - rook-ceph-charts.yaml
   - bitnami-charts.yaml
