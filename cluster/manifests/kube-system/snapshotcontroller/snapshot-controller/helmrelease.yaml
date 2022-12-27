@@ -28,7 +28,7 @@ spec:
     replicaCount: 3
     volumeSnapshotClasses:
       - name: csi-ceph-blockpool
-        driver: rook-ceph.rbd.csi.ceph.com
+        driver: storage.rbd.csi.ceph.com
         annotations:
           snapshot.storage.kubernetes.io/is-default-class: "true"
         parameters:
