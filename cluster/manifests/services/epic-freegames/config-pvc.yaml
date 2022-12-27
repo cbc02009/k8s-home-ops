@@ -7,7 +7,6 @@ metadata:
   labels:
     app.kubernetes.io/name: &name epic-freegames
     app.kubernetes.io/instance: *name
-    snapshot.home.arpa/enabled: "true"
 spec:
   accessModes:
     - ReadWriteOnce
