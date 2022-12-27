@@ -38,8 +38,8 @@ spec:
         - effect: "NoSchedule"
           operator: "Exists"
 
-    # monitoring:
-    #   enabled: true
+    monitoring:
+      enabled: true
 
     resources:
       requests:
