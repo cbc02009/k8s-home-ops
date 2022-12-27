@@ -32,9 +32,9 @@ spec:
     toolbox:
       enabled: false
 
-    # monitoring:
-    #   enabled: true
-    #   createPrometheusRules: true
+    monitoring:
+      enabled: true
+      createPrometheusRules: true
 
     configOverride: |
       [global]
