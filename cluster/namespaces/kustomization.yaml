@@ -8,17 +8,16 @@ resources:
   - downloads.yaml
   - dev.yaml
   - flux-system.yaml
-  # - games.yaml
   - home-automation.yaml
   - kube-system.yaml
   - kyverno.yaml
   - media.yaml
   - network.yaml
-  - storage.yaml
+  - rook-ceph.yaml
   - trivy.yaml
   - organizarrs.yaml
   - security.yaml
   - services.yaml
   - monitoring.yaml
-  # - testing.yaml
+  - volsync.yaml
   - vpn.yaml

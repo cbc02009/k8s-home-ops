@@ -3,7 +3,7 @@ apiVersion: snapscheduler.backube/v1
 kind: SnapshotSchedule
 metadata:
   name: main
-  namespace: storage
+  namespace: rook-ceph
 spec:
   disabled: false
   claimSelector:

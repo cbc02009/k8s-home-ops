@@ -28,13 +28,13 @@ spec:
     replicaCount: 3
     volumeSnapshotClasses:
       - name: csi-ceph-blockpool
-        driver: storage.rbd.csi.ceph.com
+        driver: rook-ceph.rbd.csi.ceph.com
         annotations:
           snapshot.storage.kubernetes.io/is-default-class: "true"
         parameters:
           clusterID: rook-ceph
           csi.storage.k8s.io/snapshotter-secret-name: rook-csi-rbd-provisioner
-          csi.storage.k8s.io/snapshotter-secret-namespace: storage
+          csi.storage.k8s.io/snapshotter-secret-namespace: rook-ceph
         deletionPolicy: Delete
     serviceMonitor:
       create: true

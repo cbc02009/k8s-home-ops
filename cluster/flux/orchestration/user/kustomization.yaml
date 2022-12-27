@@ -2,17 +2,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./databases.yaml
-  # - ./downloads.yaml
-  - ./kube-system.yaml
-  - ./home-automation.yaml
-  - ./organizarrs.yaml
-  - ./media.yaml
-  - ./services.yaml
-  - ./security.yaml
-  - ./storage.yaml
-  - ./translation.yaml
-  - ./trivy.yaml
-  - ./monitoring.yaml
-  - ./dev.yaml
-  # - ./vpn.yaml
+  - databases.yaml
+  # - downloads.yaml
+  - kube-system.yaml
+  - home-automation.yaml
+  - organizarrs.yaml
+  - media.yaml
+  - services.yaml
+  - security.yaml
+  - translation.yaml
+  - trivy.yaml
+  - volsync.yaml
+  - monitoring.yaml
+  - dev.yaml
+  # - vpn.yaml
