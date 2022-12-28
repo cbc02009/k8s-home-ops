@@ -81,6 +81,8 @@ metadata:
   name: network-static-routes
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: cert-manager-certmanager-config
   interval: 5m
   path: "./cluster/manifests/network/static-routes"
   prune: true
