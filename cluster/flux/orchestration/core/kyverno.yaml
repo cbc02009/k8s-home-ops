@@ -5,6 +5,8 @@ metadata:
   name: kyverno-kyverno-base
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: monitoring-kube-prom-stack
   interval: 5m
   path: "./cluster/manifests/kyverno/kyverno/base"
   prune: true
