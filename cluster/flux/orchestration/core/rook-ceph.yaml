@@ -19,6 +19,8 @@ metadata:
   name: rook-ceph-cluster
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: rook-ceph-operator
   interval: 5m
   path: "./cluster/manifests/rook-ceph/cluster"
   prune: true

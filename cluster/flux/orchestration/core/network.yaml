@@ -51,6 +51,8 @@ metadata:
   name: network-ingress-nginx
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: cert-manager-certmanager-config
   interval: 5m
   path: "./cluster/manifests/network/ingress-nginx"
   prune: true
