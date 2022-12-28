@@ -37,8 +37,8 @@ metadata:
   name: cert-manager-porkbun-webhook
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: cert-manager-certmanager
+  # dependsOn:
+  #   - name: cert-manager-certmanager
   interval: 5m
   path: "./cluster/manifests/cert-manager/porkbun-webhook"
   prune: true
