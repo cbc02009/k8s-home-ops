@@ -97,7 +97,7 @@ spec:
         disable: false
 
       mon:
-        count: 2
+        count: 1
 
       dashboard:
         enabled: true
