@@ -27,7 +27,6 @@ spec:
     - name: rook-ceph
       namespace: rook-ceph
   values:
-
     toolbox:
       enabled: false
 
@@ -140,7 +139,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 2
+            size: 1
         storageClass:
           enabled: true
           name: ceph-block
@@ -163,11 +162,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 2
+              size: 1
           dataPools:
             - failureDomain: host
               replicated:
-                size: 2
+                size: 1
           metadataServer:
             activeCount: 1
             activeStandby: true
