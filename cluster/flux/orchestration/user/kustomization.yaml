@@ -11,7 +11,7 @@ resources:
   - services.yaml
   - security.yaml
   - translation.yaml
-  - trivy.yaml
+  # - trivy.yaml
   - volsync.yaml
   - monitoring.yaml
   - dev.yaml
