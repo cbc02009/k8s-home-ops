@@ -53,3 +53,19 @@ spec:
         kind: NetworkPolicy
         metadata:
           name: not-used
+    - patch: |
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --concurrent=20
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --kube-api-qps=100
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --kube-api-burst=200
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --requeue-dependency=5s
+      target:
+        kind: Deployment
+        name: "(kustomize-controller|helm-controller|source-controller)"
