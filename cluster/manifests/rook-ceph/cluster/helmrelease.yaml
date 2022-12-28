@@ -95,8 +95,8 @@ spec:
       crashCollector:
         disable: false
 
-      mon:
-        count: 1
+      # mon:
+      #   count: 1
 
       dashboard:
         enabled: true
