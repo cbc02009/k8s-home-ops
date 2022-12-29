@@ -266,13 +266,17 @@ spec:
       existingClaim: gitea-config-v1
 
     ## @param extraVolumes Additional volumes to mount to the Gitea statefulset
-    extraVolumes: []
-    # - name: postgres-ssl-vol
-    #   secret:
-    #     secretName: gitea-postgres-ssl
+    extraVolumes:
+      - name: repo-vol
+        nfs:
+          server: ${SAN_HOST}
+          path: /smoltank/k8s/apps/gitea
+          readOnly: false
 
     ## @param extraContainerVolumeMounts Mounts that are only mapped into the Gitea runtime/main container, to e.g. override custom templates.
-    extraContainerVolumeMounts: []
+    extraContainerVolumeMounts:
+      - mountPath: /data/git/gitea-repositories
+        name: repo-vol
 
     ## @param extraInitVolumeMounts Mounts that are only mapped into the init-containers. Can be used for additional preconfiguration.
     extraInitVolumeMounts: []
