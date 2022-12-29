@@ -10,7 +10,7 @@ resources:
   - media.yaml
   - services.yaml
   - security.yaml
-  - translation.yaml
+  # - translation.yaml
   # - trivy.yaml
   - volsync.yaml
   - monitoring.yaml
