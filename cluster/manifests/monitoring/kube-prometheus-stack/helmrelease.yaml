@@ -204,13 +204,13 @@ spec:
               - targets:
                   - "${MINIO_HOST}:9000"
 
-          - job_name: smartctl-exporter
-            scrape_interval: 10m
-            scrape_timeout: 10s
-            honor_timestamps: true
-            static_configs:
-              - targets:
-                  - "${SAN_HOST}:9633"
+          # - job_name: smartctl-exporter
+          #   scrape_interval: 10m
+          #   scrape_timeout: 10s
+          #   honor_timestamps: true
+          #   static_configs:
+          #     - targets:
+          #         - "${SAN_HOST}:9633"
 
           - job_name: node-exporter
             scrape_interval: 1m
