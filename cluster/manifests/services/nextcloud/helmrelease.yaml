@@ -64,7 +64,7 @@ spec:
       # preStopCommand: []
 
     phpClientHttpsFix:
-      enabled: false
+      enabled: true
       protocol: https
 
     nextcloud:
@@ -415,7 +415,7 @@ spec:
       serviceMonitor:
         ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
         ##
-        enabled: false
+        enabled: true
 
         ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
         ##
