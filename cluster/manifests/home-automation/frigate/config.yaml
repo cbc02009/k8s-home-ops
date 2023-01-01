@@ -5,7 +5,7 @@ logger:
     frigate.record: debug
 
 mqtt:
-  host: emqx.default.svc.cluster.local
+  host: emqx.home-automation.svc.cluster.local
   topic_prefix: frigate
   user: mqtt
   password: "{FRIGATE_MQTT_PASSWORD}"
@@ -23,13 +23,13 @@ ffmpeg:
     - -hide_banner
     - -loglevel
     - warning
-  hwaccel_args:
-    - -hwaccel
-    - vaapi
-    - -hwaccel_device
-    - /dev/dri/renderD128
-    - -hwaccel_output_format
-    - yuv420p
+  # hwaccel_args:
+  #   - -hwaccel
+  #   - vaapi
+  #   - -hwaccel_device
+  #   - /dev/dri/renderD128
+  #   - -hwaccel_output_format
+  #   - yuv420p
   # https://github.com/blakeblackshear/frigate/issues/3296
   output_args:
     record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -ar 44100 -c:a aac
@@ -64,7 +64,36 @@ objects:
       max_area: 100000
       threshold: 0.7
 
-cameras: {}
+cameras:
+  frigate_doorbell:
+    ffmpeg:
+      input_args:
+        - -avoid_negative_ts
+        - make_zero
+        - -fflags
+        - +genpts+discardcorrupt
+        - -flags
+        - low_delay
+        - -strict
+        - experimental
+        - -analyzeduration
+        - 1000M
+        - -probesize
+        - 1000M
+        - -rw_timeout
+        - "5000000"
+      inputs:
+        - path: ${DOORBELL_ADDRESS_1}
+          roles:
+            - rtmp
+            - record
+        - path: ${DOORBELL_ADDRESS_2}
+          roles:
+            - detect
+      detect:
+        width: 896
+        height: 672
+        fps: 7
 #   frigate_porch:
 #     ffmpeg:
 #       inputs:
