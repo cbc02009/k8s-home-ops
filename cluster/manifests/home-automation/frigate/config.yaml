@@ -83,11 +83,11 @@ cameras:
         - -rw_timeout
         - "5000000"
       inputs:
-        - path: https://10.0.0.110/flv?token=${DOORBELL_TOKEN}&port=1935&app=bcs&stream=channel0_main.bcs
+        - path: http://10.0.0.110/flv?token=${DOORBELL_TOKEN}&port=1935&app=bcs&stream=channel0_main.bcs
           roles:
             - rtmp
             - record
-        - path: https://10.0.0.110/flv?token=${DOORBELL_TOKEN}&port=1935&app=bcs&stream=channel0_sub.bcs
+        - path: http://10.0.0.110/flv?token=${DOORBELL_TOKEN}&port=1935&app=bcs&stream=channel0_sub.bcs
           roles:
             - detect
     detect:
