@@ -90,6 +90,7 @@ cameras:
         - path: rtsp://${DOORBELL_USER}:${DOORBELL_PASS}@10.0.0.110:554/h264Preview_01_sub
           roles:
             - detect
+          global_args: -analyzeduration 1000M -probesize 1000M
     detect:
       width: 640
       height: 480
