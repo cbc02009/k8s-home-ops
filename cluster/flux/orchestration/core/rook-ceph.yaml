@@ -5,7 +5,7 @@ metadata:
   name: rook-ceph-operator
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/rook-ceph/operator"
   prune: true
   wait: true
@@ -21,7 +21,7 @@ metadata:
 spec:
   dependsOn:
     - name: rook-ceph-operator
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/rook-ceph/cluster"
   prune: true
   wait: true

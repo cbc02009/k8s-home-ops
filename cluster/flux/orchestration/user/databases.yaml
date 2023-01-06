@@ -5,7 +5,7 @@ metadata:
   name: databases-redis
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/databases/redis"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: databases-postgres-backup
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/databases/postgres-backup"
   prune: true
   wait: true

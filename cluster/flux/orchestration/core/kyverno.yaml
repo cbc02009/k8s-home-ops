@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/kyverno/kyverno/base"
   prune: true
   wait: true
@@ -23,7 +23,7 @@ metadata:
 spec:
   dependsOn:
     - name: kyverno-kyverno-base
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/kyverno/kyverno/policies"
   prune: true
   wait: true

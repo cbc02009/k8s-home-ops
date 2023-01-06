@@ -5,7 +5,7 @@ metadata:
   name: security-glauth
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/security/glauth"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: security-vaultwarden
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/security/vaultwarden"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: security-authelia
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/security/authelia"
   prune: true
   wait: true

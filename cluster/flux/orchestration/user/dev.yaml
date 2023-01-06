@@ -5,7 +5,7 @@
 #   name: dev-arc-base
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/dev/actions-runner-controller/base"
 #   prune: true
 #   wait: true
@@ -19,7 +19,7 @@
 #   name: dev-arc-runners
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/dev/actions-runner-controller/runners"
 #   dependsOn:
 #     - name: dev-arc-base
@@ -35,7 +35,7 @@ metadata:
   name: dev-gitea
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/dev/gitea"
   prune: true
   wait: true

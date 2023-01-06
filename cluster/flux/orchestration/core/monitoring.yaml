@@ -24,7 +24,7 @@ spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
     - name: network-ingress-nginx
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/thanos"
   prune: true
   wait: true
@@ -40,7 +40,7 @@ metadata:
 spec:
   dependsOn:
     - name: rook-ceph-cluster
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/grafana"
   prune: true
   wait: true
@@ -54,7 +54,7 @@ metadata:
   name: monitoring-vector-aggregator
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/vector/aggregator"
   prune: true
   wait: true
@@ -68,7 +68,7 @@ metadata:
   name: monitoring-vector-agent
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/vector/agent"
   prune: true
   wait: true
@@ -82,7 +82,7 @@ metadata:
   name: monitoring-loki
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/loki"
   prune: true
   wait: true
@@ -98,7 +98,7 @@ metadata:
 spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/monitoring/prometheus-rules-core"
   prune: true
   wait: true

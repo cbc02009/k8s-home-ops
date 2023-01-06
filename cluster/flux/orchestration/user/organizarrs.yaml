@@ -5,7 +5,7 @@ metadata:
   name: organizarrs-prowlarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/prowlarr"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: organizarrs-animarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/animarr"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: organizarrs-sonarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/sonarr"
   prune: true
   wait: true
@@ -47,7 +47,7 @@ metadata:
   name: organizarrs-radarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/radarr"
   prune: true
   wait: true
@@ -61,7 +61,7 @@ metadata:
   name: organizarrs-lidarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/lidarr"
   prune: true
   wait: true
@@ -75,7 +75,7 @@ metadata:
   name: organizarrs-readarr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/readarr"
   prune: true
   wait: true
@@ -89,7 +89,7 @@ metadata:
   name: organizarrs-overseerr
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/organizarrs/overseerr"
   prune: true
   wait: true
@@ -103,7 +103,7 @@ spec:
 #   name: organizarrs-calibre
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/organizarrs/calibre"
 #   prune: true
 #   wait: true
@@ -117,7 +117,7 @@ spec:
 #   name: organizarrs-recyclarr
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/organizarrs/recyclarr"
 #   prune: true
 #   wait: true
@@ -131,7 +131,7 @@ spec:
 #   name: organizarrs-openbooks
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/organizarrs/openbooks"
 #   prune: true
 #   wait: true

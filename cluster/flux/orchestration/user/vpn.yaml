@@ -5,7 +5,7 @@ metadata:
   name: vpn-downloads-gateway
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/vpn/downloads-gateway"
   prune: true
   wait: true

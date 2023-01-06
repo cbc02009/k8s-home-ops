@@ -5,7 +5,7 @@
 #   name: downloads-sabnzbd
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./k8s/manifests/user/downloads/sabnzbd"
 #   prune: true
 #   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: downloads-qbittorrent
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/downloads/qbittorrent"
   prune: true
   wait: true

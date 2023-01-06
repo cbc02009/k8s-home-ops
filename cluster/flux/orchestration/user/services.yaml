@@ -5,7 +5,7 @@ metadata:
   name: services-hajimari
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/services/hajimari"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: services-theme-park
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 30m
   path: "./cluster/manifests/services/theme-park"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ spec:
 #   name: services-language-tools
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/services/language-tools"
 #   prune: true
 #   wait: true
@@ -47,7 +47,7 @@ spec:
 #   name: services-obsidian-db
 #   namespace: flux-system
 # spec:
-#   interval: 5m
+#   interval: 30m
 #   path: "./cluster/manifests/services/obsidian-db"
 #   prune: true
 #   wait: true
