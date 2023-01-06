@@ -36,7 +36,7 @@ ffmpeg:
     rtmp: -c:v copy -f flv -ar 44100 -c:a aac
 
 rtmp:
-  enabled: true
+  enabled: false
 
 snapshots:
   enabled: true
@@ -85,7 +85,7 @@ cameras:
       inputs:
         - path: rtsp://${DOORBELL_USER}:${DOORBELL_PASS}@10.0.0.110:554/h264Preview_01_main
           roles:
-            - rtmp
+            # - rtmp
             - record
         - path: rtsp://${DOORBELL_USER}:${DOORBELL_PASS}@10.0.0.110:554/h264Preview_01_sub
           roles:
