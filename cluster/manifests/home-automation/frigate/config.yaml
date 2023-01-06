@@ -36,7 +36,7 @@ ffmpeg:
     rtmp: -c:v copy -f flv -ar 44100 -c:a aac
 
 rtmp:
-  enabled: false
+  enabled: true
 
 snapshots:
   enabled: true
@@ -80,12 +80,12 @@ cameras:
         - 1000M
         - -probesize
         - 1000M
-        # - -rw_timeout
-        # - "5000000"
+        - -rw_timeout
+        - "5000000"
       inputs:
         - path: http://10.0.0.110/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
-            # - rtmp
+            - rtmp
             - record
         - path: http://10.0.0.110/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
