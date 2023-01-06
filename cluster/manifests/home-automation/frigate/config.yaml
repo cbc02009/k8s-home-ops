@@ -83,11 +83,11 @@ cameras:
         # - -rw_timeout
         # - "5000000"
       inputs:
-        - path: rtsp://${DOORBELL_USER}:${DOORBELL_PASS}@10.0.0.110:554/h264Preview_01_main
+        - path: http://reolink_ip/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
             # - rtmp
             - record
-        - path: rtsp://${DOORBELL_USER}:${DOORBELL_PASS}@10.0.0.110:554/h264Preview_01_sub
+        - path: http://reolink_ip/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
             - detect
           global_args: -analyzeduration 1000M -probesize 1000M
