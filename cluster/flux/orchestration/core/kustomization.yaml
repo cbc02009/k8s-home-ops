@@ -9,4 +9,3 @@ resources:
   - kube-system.yaml
   - network.yaml
   - cert-manager.yaml
-  - security.yaml
