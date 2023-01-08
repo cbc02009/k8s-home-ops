@@ -44,10 +44,10 @@ tasks:
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
       # - flux suspend hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
-      - flux suspend hr -n monitoring thanos-compactor
-      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
-      # - flux suspend hr -n monitoring loki
-      # - kubectl scale -n monitoring deploy/loki --replicas 0
+      - flux suspend hr -n home-automation frigate
+      - kubectl scale -n home-automation deploy/frigate --replicas 0
+      - flux suspend hr -n monitoring loki
+      - kubectl scale -n monitoring deploy/loki --replicas 0
 
   nas-deps-resume:
     desc: Resume all Helm Releases that rely on NAS storage
@@ -78,10 +78,10 @@ tasks:
       # - kubectl scale -n organizarrs deploy/calibre --replicas 1
       # - flux resume hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
-      - flux resume hr -n monitoring thanos-compactor
-      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
-  #     - flux resume hr -n monitoring loki
-  #     - kubectl scale -n monitoring deploy/loki --replicas 1
+      - flux resume hr -n home-automation frigate
+      - kubectl scale -n home-automation deploy/frigate --replicas 1
+      - flux resume hr -n monitoring loki
+      - kubectl scale -n monitoring deploy/loki --replicas 1
 
   delete-failed-pods:
     desc: Deletes failed pods
