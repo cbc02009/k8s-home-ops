@@ -48,6 +48,12 @@ spec:
       className: nginx
       annotations:
         cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+        nginx.ingress.kubernetes.io/proxy-body-size: "10G"
+        nginx.ingress.kubernetes.io/proxy-buffering: "off"
+        nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+        nginx.ingress.kubernetes.io/server-snippet: |-
+          server_tokens off;
+          proxy_hide_header X-Powered-By;
       tls:
         - secretName: nextcloud-tls
           hosts:
