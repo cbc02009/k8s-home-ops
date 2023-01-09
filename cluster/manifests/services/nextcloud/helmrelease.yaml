@@ -130,7 +130,7 @@ spec:
       # ref: https://docs.nextcloud.com/server/13/admin_manual/configuration_files/primary_storage.html#simple-storage-service-s3
       #
       configs:
-        https.config.php: |-
+        proxy.config.php: |-
           <?php
           $CONFIG = array (
             'overwrite.cli.url' => https://nextcloud.${EXTERNAL_DOMAIN},
