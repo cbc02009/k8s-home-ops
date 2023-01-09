@@ -133,7 +133,7 @@ spec:
         proxy.config.php: |-
           <?php
           $CONFIG = array (
-            'overwrite.cli.url' => https://nextcloud.${EXTERNAL_DOMAIN},
+            'overwrite.cli.url' => 'https://nextcloud.${EXTERNAL_DOMAIN}',
           );
 
         s3.config.php: |-
