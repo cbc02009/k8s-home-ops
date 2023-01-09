@@ -130,12 +130,6 @@ spec:
       # ref: https://docs.nextcloud.com/server/13/admin_manual/configuration_files/primary_storage.html#simple-storage-service-s3
       #
       configs:
-        proxy.config.php: |-
-          <?php
-          $CONFIG = array (
-            'overwrite.cli.url' => 'https://nextcloud.${EXTERNAL_DOMAIN}',
-          );
-
         s3.config.php: |-
           <?php
           $CONFIG = array (
@@ -280,7 +274,7 @@ spec:
     ## ref: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/background_jobs_configuration.html#cron
     ##
     cronjob:
-      enabled: false
+      enabled: true
 
       # Allow configuration of lifecycle hooks
       # ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
