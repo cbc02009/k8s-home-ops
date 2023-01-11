@@ -4,6 +4,7 @@ version: "3"
 vars:
   PROJECT_ROOT:
     sh: git rev-parse --show-toplevel
+  CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
 
 includes:
   flux: .taskfiles/flux.yml
@@ -13,3 +14,5 @@ includes:
   precommit: .taskfiles/pre-commit.yml
   kubeadm: .taskfiles/kubeadm.yml
   sops: .taskfiles/sops.yml
+  es: .taskfiles/ExternalSecrets/Tasks.yml
+  vs: .taskfiles/VolSync/Tasks.yml
