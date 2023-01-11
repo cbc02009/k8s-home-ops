@@ -340,7 +340,7 @@ data:
   bpf-policy-map-max: "16384"
   bpf-root: /sys/fs/bpf
   cgroup-root: /run/cilium/cgroupv2
-  cilium-endpoint-gc-interval: 30m0s
+  cilium-endpoint-gc-interval: 5m0s
   cluster-id: "0"
   cluster-name: default
   custom-cni-conf: "false"
@@ -377,7 +377,7 @@ data:
   monitor-aggregation-flags: all
   monitor-aggregation-interval: 5s
   node-port-bind-protection: "true"
-  nodes-gc-interval: 30m0s
+  nodes-gc-interval: 5m0s
   operator-api-serve-addr: 127.0.0.1:9234
   preallocate-bpf-maps: "false"
   procfs: /host/proc
@@ -474,7 +474,7 @@ spec:
               name: cilium-config
               optional: true
         - name: KUBERNETES_SERVICE_HOST
-          value: 10.0.0.9
+          value: 10.0.0.1
         - name: KUBERNETES_SERVICE_PORT
           value: "6443"
         image: quay.io/cilium/operator-generic:v1.12.3@sha256:816ec1da586139b595eeb31932c61a7c13b07fb4a0255341c0e0f18608e84eff
@@ -575,7 +575,7 @@ spec:
               name: cilium-config
               optional: true
         - name: KUBERNETES_SERVICE_HOST
-          value: 10.0.0.9
+          value: 10.0.0.1
         - name: KUBERNETES_SERVICE_PORT
           value: "6443"
         image: quay.io/cilium/cilium:v1.12.3@sha256:30de50c4dc0a1e1077e9e7917a54d5cab253058b3f779822aec00f5c817ca826
@@ -773,7 +773,7 @@ spec:
               name: cilium-config
               optional: true
         - name: KUBERNETES_SERVICE_HOST
-          value: 10.0.0.9
+          value: 10.0.0.1
         - name: KUBERNETES_SERVICE_PORT
           value: "6443"
         image: quay.io/cilium/cilium:v1.12.3@sha256:30de50c4dc0a1e1077e9e7917a54d5cab253058b3f779822aec00f5c817ca826
