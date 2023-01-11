@@ -1,5 +1,6 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
+controlPlaneEndpoint: "10.0.0.1:6443"
 localAPIEndpoint:
   advertiseAddress: 10.0.0.1
   bindPort: 6443
