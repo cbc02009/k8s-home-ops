@@ -5,7 +5,7 @@ tasks:
   init:
     desc: Bring up cluster
     cmds:
-      - sudo kubeadm init --config kubeadm-config.yaml
+      - sudo kubeadm init --config kubeadm-config.yaml --upload-certs
       - mkdir -p $HOME/.kube
       - sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
       - sudo chown $(id -u):$(id -g) $HOME/.kube/config
