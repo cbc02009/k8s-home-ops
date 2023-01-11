@@ -1,7 +1,7 @@
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: 10.0.0.9
+  advertiseAddress: 10.0.0.1
   bindPort: 6443
 nodeRegistration:
   criSocket: "unix:///run/crio/crio.sock"
