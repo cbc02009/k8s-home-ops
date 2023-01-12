@@ -30,7 +30,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-initdb:14.6
         envFrom:
           - secretRef:
-              name: vaultwarden-postgres
+              name: vaultwarden
 
     controller:
       replicas: 3
