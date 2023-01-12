@@ -23,6 +23,14 @@ spec:
       retries: 5
 
   values:
+
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        envFrom:
+          - secretRef:
+              name: *app
+
     image:
       repository: ghcr.io/onedr0p/radarr-develop
       tag: 4.3.2.6857
