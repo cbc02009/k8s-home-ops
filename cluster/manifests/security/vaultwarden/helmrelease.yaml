@@ -32,11 +32,6 @@ spec:
           - secretRef:
               name: vaultwarden
 
-    controller:
-      type: statefulset
-      replicas: 3
-      strategy: RollingUpdate
-
     envFrom:
       - secretRef:
           name: *app
