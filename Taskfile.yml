@@ -4,6 +4,8 @@ version: "3"
 vars:
   PROJECT_ROOT:
     sh: git rev-parse --show-toplevel
+  PROJECT_DIR:
+    sh: git rev-parse --show-toplevel
   CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
 
 includes:
