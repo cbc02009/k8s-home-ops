@@ -5,7 +5,7 @@ metadata:
   name: trivy-trivy
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/trivy/trivy"
   prune: true
   wait: true

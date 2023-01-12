@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/network/metallb"
   prune: true
   wait: true
@@ -23,7 +23,7 @@ metadata:
 spec:
   dependsOn:
     - name: network-metallb
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/network/metallb/config"
   prune: true
   wait: true
@@ -37,7 +37,7 @@ spec:
 #   name: network-multus
 #   namespace: flux-system
 # spec:
-#   interval: 30m
+#   interval: 5m
 #   path: "./cluster/manifests/network/multus"
 #   prune: true
 #   wait: true
@@ -53,7 +53,7 @@ metadata:
 spec:
   dependsOn:
     - name: cert-manager-certmanager-config
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/network/ingress-nginx"
   prune: true
   wait: true
@@ -67,7 +67,7 @@ metadata:
   name: network-k8s-gateway
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/network/k8s-gateway"
   prune: true
   wait: true
@@ -83,7 +83,7 @@ metadata:
 spec:
   dependsOn:
     - name: cert-manager-certmanager-config
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/network/static-routes"
   prune: true
   wait: true

@@ -5,7 +5,7 @@ metadata:
   name: media-plex
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/media/plex"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: media-tautulli
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/media/tautulli"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: media-kavita
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/media/kavita"
   prune: true
   wait: true
@@ -47,7 +47,7 @@ metadata:
   name: media-komga
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/media/komga"
   prune: true
   wait: true
@@ -61,7 +61,7 @@ metadata:
   name: media-jellyfin
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/media/jellyfin"
   prune: true
   wait: true

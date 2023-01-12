@@ -5,7 +5,7 @@ metadata:
   name: home-automation-home-assistant
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/home-automation/home-assistant"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: home-automation-zwave-js-ui
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/home-automation/zwave-js-ui"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: home-automation-emqx
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/home-automation/emqx"
   prune: true
   wait: true
@@ -47,7 +47,7 @@ metadata:
   name: home-automation-frigate
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/home-automation/frigate"
   prune: true
   wait: true

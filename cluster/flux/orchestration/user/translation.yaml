@@ -5,7 +5,7 @@ metadata:
   name: translation-vno-local-cpu
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/translation/vno-local-cpu"
   prune: true
   wait: true

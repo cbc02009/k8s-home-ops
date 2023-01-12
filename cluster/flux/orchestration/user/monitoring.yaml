@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/monitoring/prometheus-rules-user"
   prune: true
   wait: true
@@ -21,7 +21,7 @@ spec:
 #   name: monitoring-botkube
 #   namespace: flux-system
 # spec:
-#   interval: 30m
+#   interval: 5m
 #   path: "./cluster/manifests/monitoring/botkube"
 #   prune: true
 #   wait: true
@@ -35,7 +35,7 @@ metadata:
   name: monitoring-blackbox-exporter
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/monitoring/blackbox-exporter"
   prune: true
   wait: true
@@ -49,7 +49,7 @@ spec:
 #   name: monitoring-prometheus-smartctl
 #   namespace: flux-system
 # spec:
-#   interval: 30m
+#   interval: 5m
 #   path: "./cluster/manifests/monitoring/prometheus-smartctl"
 #   prune: true
 #   wait: true
@@ -63,7 +63,7 @@ metadata:
   name: monitoring-goldilocks
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/monitoring/goldilocks"
   prune: true
   wait: true
@@ -77,7 +77,7 @@ metadata:
   name: monitoring-vpa
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/monitoring/vpa"
   prune: true
   wait: true
@@ -91,7 +91,7 @@ spec:
 #   name: monitoring-speedtest-exporter
 #   namespace: flux-system
 # spec:
-#   interval: 30m
+#   interval: 5m
 #   path: "./cluster/manifests/monitoring/speedtest-exporter"
 #   prune: true
 #   wait: true
@@ -105,7 +105,7 @@ metadata:
   name: monitoring-kube-cleanup-operator
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/monitoring/kube-cleanup-operator"
   prune: true
   wait: true

@@ -5,7 +5,7 @@ metadata:
   name: kube-system-reloader
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/reloader"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: kube-system-metrics-server
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/metrics-server"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: kube-system-descheduler
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/descheduler"
   prune: true
   wait: true
@@ -47,7 +47,7 @@ metadata:
   name: kube-system-node-feature-discovery
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/node-feature-discovery"
   prune: true
   wait: true
@@ -61,7 +61,7 @@ metadata:
   name: kube-system-intel-gpu-plugin
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/intel-gpu-plugin"
   prune: true
   wait: true
@@ -75,7 +75,7 @@ metadata:
   name: kube-system-snapshot-controller
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/snapshotcontroller/snapshot-controller"
   prune: true
   wait: true
@@ -89,7 +89,7 @@ metadata:
   name: kube-system-snapshot-webhook
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/kube-system/snapshotcontroller/snapshot-validation-webhook"
   prune: true
   wait: true

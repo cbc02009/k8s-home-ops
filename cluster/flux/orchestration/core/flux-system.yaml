@@ -8,7 +8,7 @@ spec:
   dependsOn:
     - name: monitoring-kube-prom-stack
     - name: network-ingress-nginx
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/flux-system/add-ons"
   prune: true
   wait: true

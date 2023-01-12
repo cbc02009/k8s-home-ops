@@ -5,7 +5,7 @@ metadata:
   name: porkbun-webhook
   namespace: cert-manager
 spec:
-  interval: 30m
+  interval: 5m
   chart:
     spec:
       chart: ./deploy/porkbun-webhook
@@ -14,7 +14,7 @@ spec:
         kind: GitRepository
         name: porkbun-webhook
         namespace: flux-system
-      interval: 30m
+      interval: 5m
   install:
     createNamespace: true
     remediation: # perform remediation when helm install fails

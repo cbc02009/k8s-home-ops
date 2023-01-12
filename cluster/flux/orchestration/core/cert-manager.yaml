@@ -7,7 +7,7 @@ metadata:
 spec:
 #   dependsOn:
 #     - name: monitoring-kube-prom-stack
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/cert-manager/base"
   prune: true
   wait: true
@@ -23,7 +23,7 @@ metadata:
 spec:
   dependsOn:
     - name: cert-manager-certmanager
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/cert-manager/config"
   prune: true
   wait: true
@@ -39,7 +39,7 @@ metadata:
 spec:
   # dependsOn:
   #   - name: cert-manager-certmanager
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/cert-manager/porkbun-webhook"
   prune: true
   wait: true

@@ -5,7 +5,7 @@ metadata:
   name: volsync-volsync
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/volsync/volsync"
   prune: true
   wait: true
@@ -19,7 +19,7 @@ metadata:
   name: volsync-snapscheduler
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/volsync/snapscheduler/app"
   prune: true
   wait: true
@@ -33,7 +33,7 @@ metadata:
   name: volsync-snapscheduler-schedules
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 5m
   path: "./cluster/manifests/volsync/snapscheduler/schedules"
   prune: true
   wait: true
