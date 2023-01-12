@@ -24,6 +24,9 @@ spec:
 
   values:
 
+    controller:
+      type: statefulset
+
     initContainers:
       init-db:
         image: ghcr.io/onedr0p/postgres-initdb:14.6
