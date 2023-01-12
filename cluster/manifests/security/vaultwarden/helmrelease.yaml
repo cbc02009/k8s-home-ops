@@ -33,6 +33,7 @@ spec:
               name: vaultwarden
 
     controller:
+      type: statefulset
       replicas: 3
       strategy: RollingUpdate
 
