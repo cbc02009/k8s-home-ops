@@ -27,8 +27,15 @@ spec:
       namespace: databases
   values:
 
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        envFrom:
+          - secretRef:
+              name: *app
+
     controller:
-      replicas: 2
+      replicas: 3
       strategy: RollingUpdate
 
     image:
