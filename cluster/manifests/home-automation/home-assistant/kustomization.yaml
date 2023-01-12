@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - config-pvc.yaml
   # - helmrelease.yaml
-  - replicationsource.yaml
+  # - replicationsource.yaml
 #   - secret.sops.yaml
 # patchesStrategicMerge:
 #   - patches/postgres.yaml
