@@ -5,4 +5,4 @@ resources:
   # - helmrelease.yaml
   - secret.sops.yaml
   - config-pvc.yaml
-  # - replicationsource.yaml
+  - replicationsource.yaml
