@@ -41,7 +41,7 @@ spec:
         type: gluetun
         image:
           # TODO: Replace with ghcr.io/qdm12/gluetun when a versioned tag is available
-          repository: docker.io/qmcgaw/gluetun
+          repository: ghcr.io/cbc02009/gluetun
           tag: v3.32.0
         env:
           - name: VPN_SERVICE_PROVIDER
