@@ -6,7 +6,7 @@ tasks:
     desc: Pause all Helm Releases that rely on NAS storage
     cmds:
       - flux suspend hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 0
+      - kubectl scale -n media statefulset/plex --replicas 0
       # - flux suspend hr -n downloads qbittorrent
       # - kubectl scale -n downloads deploy/qbittorrent --replicas 0
       #     - flux suspend hr -n downloads sabnzbd
@@ -14,17 +14,13 @@ tasks:
       #     - flux suspend hr -n downloads nzbget
       #     - kubectl scale -n downloads deploy/nzbget --replicas 0
       - flux suspend hr -n organizarrs radarr
-      - kubectl scale -n organizarrs deploy/radarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/radarr --replicas 0
       - flux suspend hr -n organizarrs readarr
       - kubectl scale -n organizarrs deploy/readarr --replicas 0
       - flux suspend hr -n organizarrs sonarr
-      - kubectl scale -n organizarrs deploy/sonarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/sonarr --replicas 0
       - flux suspend hr -n organizarrs animarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
-      - flux suspend hr -n organizarrs overseerr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
-      - flux suspend hr -n organizarrs prowlarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/animarr --replicas 0
       # - flux suspend hr -n organizarrs lidarr
       # - kubectl scale -n organizarrs deploy/lidarr --replicas 0
       # - flux suspend hr -n organizarrs calibre
@@ -42,7 +38,7 @@ tasks:
     desc: Resume all Helm Releases that rely on NAS storage
     cmds:
       - flux resume hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 1
+      - kubectl scale -n media statefulset/plex --replicas 1
       # - flux resume hr -n downloads qbittorrent
       # - kubectl scale -n downloads deploy/qbittorrent --replicas 1
       #     - flux resume hr -n downloads sabnzbd
@@ -50,18 +46,14 @@ tasks:
       #     - flux resume hr -n downloads nzbget
       #     - kubectl scale -n downloads deploy/nzbget --replicas 1
       - flux resume hr -n organizarrs radarr
-      - kubectl scale -n organizarrs deploy/radarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/radarr --replicas 1
       - flux resume hr -n organizarrs readarr
       - kubectl scale -n organizarrs deploy/readarr --replicas 1
       - flux resume hr -n organizarrs sonarr
-      - kubectl scale -n organizarrs deploy/sonarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/sonarr --replicas 1
       - flux resume hr -n organizarrs animarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/animarr --replicas 1
       - flux resume hr -n organizarrs lidarr
-      - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-      - flux resume hr -n organizarrs overseerr
-      - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-      - flux resume hr -n organizarrs prowlarr
       - kubectl scale -n organizarrs deploy/lidarr --replicas 1
       # - flux resume hr -n organizarrs calibre
       # - kubectl scale -n organizarrs deploy/calibre --replicas 1
