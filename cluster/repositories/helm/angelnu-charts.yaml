@@ -2,9 +2,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: kubereboot-charts
+  name: angelnu-charts
   namespace: flux-system
 spec:
   interval: 2h
-  url: https://kubereboot.github.io/charts
-  timeout: 3m
+  url: https://angelnu.github.io/helm-charts
