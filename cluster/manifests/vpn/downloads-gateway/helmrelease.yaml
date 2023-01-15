@@ -69,6 +69,10 @@ spec:
               name: mullvad
         securityContext:
           privileged: true
+          capabilities:
+            add:
+              - NET_ADMIN
+              - SYS_MODULE
         networkPolicy:
           enabled: true
           egress:
