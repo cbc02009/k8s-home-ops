@@ -64,8 +64,7 @@ spec:
           - secretRef:
               name: mullvad
         securityContext:
-          capabilities:
-            add: ["NET_ADMIN"]
+          privileged: true
         networkPolicy:
           enabled: true
           egress:
