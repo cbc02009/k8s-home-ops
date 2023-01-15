@@ -39,10 +39,14 @@ spec:
       vpn:
         enabled: true
         type: gluetun
-        image:
-          # TODO: Replace with ghcr.io/qdm12/gluetun when a versioned tag is available
-          repository: ghcr.io/cbc02009/gluetun
-          tag: v3.32.0
+        gluetun:
+          image:
+            # -- Specify the Gluetun image
+            repository: ghcr.io/cbc02009/gluetun
+            # -- Specify the Gluetun image tag
+            tag: v3.32.0
+            # -- Specify the Gluetun image pull policy
+            pullPolicy: IfNotPresent
         env:
           - name: VPN_SERVICE_PROVIDER
             value: mullvad
