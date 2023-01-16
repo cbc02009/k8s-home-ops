@@ -58,10 +58,6 @@ spec:
             value: "off"
           - name: DOT
             value: "off"
-          - name: SERVER_CITIES
-            value: New York NY
-          - name: SERVER_HOSTNAMES
-            value: us117-wireguard
           - name: LOG_LEVEL
             value: debug
           - name: IPTABLES_NFT
@@ -87,14 +83,14 @@ spec:
                   protocol: UDP
             - to:
                 - namespaceSelector: {}
-    # publicPorts:
-    #   - IP: 10
-    #     hostname: qbittorrent-vpn-0
-    #     ports:
-    #       - port: 55787
-    #         type: udp
-    #       - port: 55787
-    #         type: tcp
+    publicPorts:
+      - IP: 10
+        hostname: qbittorrent-0
+        ports:
+          - port: 55787
+            type: udp
+          - port: 55787
+            type: tcp
     routed_namespaces: ["downloads"]
     settings:
       VPN_INTERFACE: "wg0"
