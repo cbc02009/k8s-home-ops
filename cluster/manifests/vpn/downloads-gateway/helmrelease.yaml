@@ -83,14 +83,14 @@ spec:
                   protocol: UDP
             - to:
                 - namespaceSelector: {}
-    publicPorts:
-      - IP: 10
-        hostname: qbittorrent-0
-        ports:
-          - port: 58698
-            type: udp
-          - port: 58698
-            type: tcp
+    # publicPorts:
+    #   - IP: 10
+    #     hostname: qbittorrent-0
+    #     ports:
+    #       - port: 58698
+    #         type: udp
+    #       - port: 58698
+    #         type: tcp
     routed_namespaces: ["downloads"]
     settings:
       VPN_INTERFACE: "wg0"
