@@ -87,9 +87,9 @@ spec:
       - IP: 10
         hostname: qbittorrent-0
         ports:
-          - port: 55787
+          - port: 58698
             type: udp
-          - port: 55787
+          - port: 58698
             type: tcp
     routed_namespaces: ["downloads"]
     settings:
