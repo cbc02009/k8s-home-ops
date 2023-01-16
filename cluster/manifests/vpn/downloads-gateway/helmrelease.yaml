@@ -70,7 +70,7 @@ spec:
           - secretRef:
               name: mullvad
         securityContext:
-          # privileged: true
+          privileged: true
           capabilities:
             add:
               - NET_ADMIN
