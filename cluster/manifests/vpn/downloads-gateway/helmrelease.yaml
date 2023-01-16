@@ -70,7 +70,7 @@ spec:
           - secretRef:
               name: mullvad
         securityContext:
-          privileged: true
+          # privileged: true
           capabilities:
             add:
               - NET_ADMIN
@@ -87,14 +87,14 @@ spec:
                   protocol: UDP
             - to:
                 - namespaceSelector: {}
-    publicPorts:
-      - IP: 10
-        hostname: qbittorrent-vpn-0
-        ports:
-          - port: 55787
-            type: udp
-          - port: 55787
-            type: tcp
+    # publicPorts:
+    #   - IP: 10
+    #     hostname: qbittorrent-vpn-0
+    #     ports:
+    #       - port: 55787
+    #         type: udp
+    #       - port: 55787
+    #         type: tcp
     routed_namespaces: ["downloads"]
     settings:
       VPN_INTERFACE: "wg0"
