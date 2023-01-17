@@ -1,5 +1,6 @@
+---
 clusterName: kokoro
-talosVersion: v1.3.1
+talosVersion: v1.3.2
 kubernetesVersion: v1.26.0
 endpoint: https://10.0.0.15:6443
 domain: cluster.local
@@ -15,9 +16,11 @@ clusterSvcNets:
 cniConfig:
   name: none
 nodes:
+
   - hostname: Anya
     ipAddress: 10.0.0.9
-    installDisk: /dev/disk/by-id/ata-KingFast_01232222K0760
+    installDiskSelector:
+      model: KingFast
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -27,7 +30,7 @@ nodes:
     nameservers:
       - 10.0.0.90
     networkInterfaces:
-      - interface: eno1
+      - interface: eth0
         addresses:
           - 10.0.0.9/23
         mtu: 1500
@@ -36,9 +39,11 @@ nodes:
             gateway: 10.0.0.1
         vip:
           ip: 10.0.0.15
+
   - hostname: Rem
     ipAddress: 10.0.0.13
-    installDisk: /dev/disk/by-id/ata-FPT310M8SSD256G_221101A01407
+    installDiskSelector:
+      model: FPT310M8SSD256G
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -48,7 +53,7 @@ nodes:
     nameservers:
       - 10.0.0.90
     networkInterfaces:
-      - interface: enp1s0
+      - interface: eth0
         addresses:
           - 10.0.0.13/23
         mtu: 1500
@@ -60,7 +65,8 @@ nodes:
 
   - hostname: Ram
     ipAddress: 10.0.0.14
-    installDisk: /dev/disk/by-id/ata-FPT310M8SSD256G_221101A01361
+    installDiskSelector:
+      model: FPT310M8SSD256G
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -70,7 +76,7 @@ nodes:
     nameservers:
       - 10.0.0.90
     networkInterfaces:
-      - interface: enp1s0
+      - interface: eth0
         addresses:
           - 10.0.0.14/23
         mtu: 1500
@@ -79,10 +85,11 @@ nodes:
             gateway: 10.0.0.1
         vip:
           ip: 10.0.0.15
-  
+
   - hostname: Sakura
     ipAddress: 10.0.0.12
-    installDisk: /dev/disk/by-id/nvme-INTEL_SSDPEKNW512G8_BTNH21361ME8512A
+    installDiskSelector:
+      model: INTEL SSDPEKNW512G8
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -92,7 +99,7 @@ nodes:
     nameservers:
       - 10.0.0.90
     networkInterfaces:
-      - interface: enp9s0
+      - interface: eth0
         addresses:
           - 10.0.0.12/23
         mtu: 1500
@@ -104,7 +111,8 @@ nodes:
 
   - hostname: Uiharu
     ipAddress: 10.0.0.10
-    installDisk: /dev/disk/by-id/nvme-eui.0000000001000000e4d25c59f7645301
+    installDiskSelector:
+      serial: PHKA1261000X1P0B
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -114,7 +122,7 @@ nodes:
     nameservers:
       - 10.0.0.90
     networkInterfaces:
-      - interface: enp43s0
+      - interface: eth0
         addresses:
           - 10.0.0.10/23
         mtu: 1500
@@ -152,6 +160,11 @@ controlPlane:
         sysctls:
           fs.inotify.max_user_watches: "1048576"
           fs.inotify.max_user_instances: "8192"
+        time:
+          disabled: false
+          servers:
+            - time.cloudflare.com
+          bootTimeout: 2m0s
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl

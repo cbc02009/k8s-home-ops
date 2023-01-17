@@ -66,8 +66,7 @@ spec:
       rollOutPods: true
 
     containerRuntime:
-      integration: crio
-      socketPath: "unix:///run/crio/crio.sock"
+      integration: containerd
 
     bpf:
       masquerade: true
