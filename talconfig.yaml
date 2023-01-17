@@ -1,0 +1,157 @@
+clusterName: kokoro
+talosVersion: v1.3.1
+kubernetesVersion: v1.26.0
+endpoint: https://10.0.0.15:6443
+domain: cluster.local
+allowSchedulingOnMasters: true
+additionalMachineCertSans:
+  - 10.0.0.15
+additionalApiServerCertSans:
+  - cluster.local
+clusterPodNets:
+  - 10.11.0.0/16
+clusterSvcNets:
+  - 10.10.0.0/16
+cniConfig:
+  name: none
+nodes:
+  - hostname: Anya
+    ipAddress: 10.0.0.9
+    installDisk: /dev/disk/by-id/ata-KingFast_01232222K0760
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: eno1
+        addresses:
+          - 10.0.0.9/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+  - hostname: Rem
+    ipAddress: 10.0.0.13
+    installDisk: /dev/disk/by-id/ata-FPT310M8SSD256G_221101A01407
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: enp1s0
+        addresses:
+          - 10.0.0.13/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+
+  - hostname: Ram
+    ipAddress: 10.0.0.14
+    installDisk: /dev/disk/by-id/ata-FPT310M8SSD256G_221101A01361
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: enp1s0
+        addresses:
+          - 10.0.0.14/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+  
+  - hostname: Sakura
+    ipAddress: 10.0.0.12
+    installDisk: /dev/disk/by-id/nvme-INTEL_SSDPEKNW512G8_BTNH21361ME8512A
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: enp9s0
+        addresses:
+          - 10.0.0.12/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+
+  - hostname: Uiharu
+    ipAddress: 10.0.0.10
+    installDisk: /dev/disk/by-id/nvme-eui.0000000001000000e4d25c59f7645301
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: enp43s0
+        addresses:
+          - 10.0.0.10/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+
+
+controlPlane:
+  patches:
+    - |-
+      cluster:
+        allowSchedulingOnMasters: true
+        controllerManager:
+          extraArgs:
+            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+        discovery:
+          registries:
+            service:
+              disabled: true
+        proxy:
+          disabled: true
+          extraArgs:
+            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+        scheduler:
+          extraArgs:
+            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      machine:
+        kubelet:
+          extraArgs:
+            feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+            rotate-server-certificates: "true"
+        sysctls:
+          fs.inotify.max_user_watches: "1048576"
+          fs.inotify.max_user_instances: "8192"
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl
