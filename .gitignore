@@ -1,10 +1,7 @@
 # Editors
 .vscode/
 .idea/
+
 # Trash
 .DS_Store
 Thumbs.db
-
-clusterconfig/
-tools/cilium-quick-install/charts
-tools/nginx-test
