@@ -229,22 +229,6 @@ spec:
               value: ${POSTGRES_HOST}
             - name: POSTGRES_DB
               value: "nextcloud"
-            - name: POSTGRES_SUPER_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: password
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: NC_POSTGRES_USER
-            - name: POSTGRES_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: NC_POSTGRES_PASS
-
           envFrom:
             - secretRef:
                 name: *app
@@ -316,8 +300,8 @@ spec:
       existingSecret:
         enabled: true
         secretName: *app
-        usernameKey: NC_POSTGRES_USER
-        passwordKey: NC_POSTGRES_PASS
+        usernameKey: POSTGRES_USER
+        passwordKey: POSTGRES_PASS
 
     ## Cronjob to execute Nextcloud background tasks
     ## ref: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/background_jobs_configuration.html#cron
