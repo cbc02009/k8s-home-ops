@@ -26,21 +26,16 @@ spec:
               imagePullPolicy: IfNotPresent
               command:
                 - "/backup.sh"
+
+              envFrom:
+                - secretRef:
+                    name: postgres-backup
+
               env:
                 - name: POSTGRES_HOST
-                  value: postgres-ro.databases.svc.cluster.local
-                - name: POSTGRES_USER
-                  valueFrom:
-                    secretKeyRef:
-                      name: postgres-superuser
-                      key: username
-                - name: POSTGRES_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: postgres-superuser
-                      key: password
+                  value: ${POSTGRES_HOST}
                 - name: POSTGRES_DB
-                  value: "authelia, gitea, grafana, home_assistant, postgres, prowlarr_log, prowlarr_main, radarr_log, radarr_main, vaultwarden, babybuddy"
+                  value: "authelia, gitea, grafana, home_assistant, postgres, prowlarr_main, radarr_main, vaultwarden, babybuddy"
               volumeMounts:
                 - name: nas-backups
                   mountPath: /backups
