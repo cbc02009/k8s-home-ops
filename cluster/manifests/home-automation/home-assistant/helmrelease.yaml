@@ -75,6 +75,16 @@ spec:
             "-c",
             'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
           ]
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        env:
+          - name: POSTGRES_HOST
+            value: ${POSTGRES_HOST}
+          - name: POSTGRES_DB
+            value: home_assistant
+        envFrom:
+          - secretRef:
+              name: *app
 
     podSecurityContext:
       runAsUser: 568
