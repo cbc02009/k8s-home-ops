@@ -135,7 +135,7 @@ spec:
         smtp:
           host: smtp-relay.services.svc.cluster.local
           secure: none
-          port: 465
+          port: 587
           authtype: LOGIN
       # PHP Configuration files
       # Will be injected in /usr/local/etc/php/conf.d for apache image and in /usr/local/etc/php-fpm.d when nginx.enabled: true
