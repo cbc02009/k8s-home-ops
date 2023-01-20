@@ -120,8 +120,8 @@ spec:
         usernameKey: username
         passwordKey: password
         # tokenKey: serverinfo_token
-        # smtpUsernameKey: smtp_username
-        # smtpPasswordKey: smtp_password
+        smtpUsernameKey: SMTP_USERNAME
+        smtpPasswordKey: SMTP_PASSWORD
       update: 0
       # If web server is not binding default port, you can define it
       # containerPort: 8080
@@ -129,16 +129,14 @@ spec:
       persistence:
         subPath:
       mail:
-        enabled: false
-        fromAddress: user
-        domain: domain.com
+        enabled: true
+        fromAddress: admin
+        domain: ${EXTERNAL_DOMAIN}
         smtp:
-          host: domain.com
-          secure: ssl
+          host: smtp-relay.services.svc.cluster.local
+          secure: none
           port: 465
           authtype: LOGIN
-          name: user
-          password: pass
       # PHP Configuration files
       # Will be injected in /usr/local/etc/php/conf.d for apache image and in /usr/local/etc/php-fpm.d when nginx.enabled: true
       phpConfigs: {}
