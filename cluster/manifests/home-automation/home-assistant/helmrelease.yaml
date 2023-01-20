@@ -95,6 +95,9 @@ spec:
         - 100
         - 1010
 
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: *app
+
     persistence:
       config:
         enabled: true
