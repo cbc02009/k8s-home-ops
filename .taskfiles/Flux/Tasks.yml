@@ -47,7 +47,7 @@ tasks:
       - |
         flux get helmrelease --all-namespaces --no-header | awk '{print $1, $2}' \
           | xargs -l bash -c 'flux -n $0 resume helmrelease $1'
-  hr-restart:
+  hr-fix:
     desc: Restart all failed Helm Releases
     cmds:
       - kubectl get hr --all-namespaces | grep False | awk '{print $2, $1}' | xargs -l bash -c 'flux suspend hr $0 -n $1'
