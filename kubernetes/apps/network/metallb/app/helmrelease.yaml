@@ -18,14 +18,18 @@ spec:
   values:
     speaker:
       tolerateMaster: false
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
 
     crds:
       enabled: true
 
-    prometheus:
-      namespace: monitoring
-      serviceAccount: prometheus-prometheus
-      podMonitor:
+    prometheusRule:
+      enabled: true
+    controller:
+      metrics:
         enabled: true
-      prometheusRule:
-        enabled: true
+        serviceMonitor:
+          enabled: true
