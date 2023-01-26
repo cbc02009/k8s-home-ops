@@ -22,4 +22,4 @@ spec:
       name: qbittorrentvpn
       namespace: downloads
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores

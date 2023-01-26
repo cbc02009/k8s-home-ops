@@ -22,4 +22,4 @@ spec:
       name: home-assistant
       namespace: home-automation
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores

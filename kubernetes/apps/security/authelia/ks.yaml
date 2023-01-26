@@ -22,4 +22,4 @@ spec:
       name: authelia
       namespace: security
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores

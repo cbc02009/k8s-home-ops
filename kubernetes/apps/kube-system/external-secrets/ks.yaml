@@ -31,7 +31,7 @@ metadata:
     substitution.flux.home.arpa/enabled: "true"
 spec:
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores
   path: ./kubernetes/apps/kube-system/external-secrets/stores
   prune: true
   sourceRef:

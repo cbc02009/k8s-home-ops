@@ -22,4 +22,4 @@ spec:
       name: animarr
       namespace: organizarrs
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores

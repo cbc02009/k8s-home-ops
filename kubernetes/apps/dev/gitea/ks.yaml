@@ -22,4 +22,5 @@ spec:
       name: gitea
       namespace: dev
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores
+    - name: apps-rook-ceph-cluster

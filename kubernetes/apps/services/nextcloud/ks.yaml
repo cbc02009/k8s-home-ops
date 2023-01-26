@@ -22,4 +22,4 @@ spec:
       name: nextcloud
       namespace: services
   dependsOn:
-    - name: apps-external-secrets
+    - name: apps-external-secrets-stores
