@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: porkbun-webhook
       namespace: cert-manager
+  dependsOn:
+    - name: cluster-apps-external-secrets-operator

@@ -28,6 +28,7 @@ tasks:
     cmds:
       - kubectl apply -n flux-system --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/flux
       - kubectl apply -f {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
+      - sops --decrypt {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl apply -f -
 
   cluster:
     desc: 7. Bootstrap Cluster

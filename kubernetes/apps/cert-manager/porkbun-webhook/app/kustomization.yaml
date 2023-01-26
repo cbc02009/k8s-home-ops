@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - ./rbac.yaml
   - ./helmrelease.yaml
+  - ./externalsecret.yaml
 metadata:
   namespace: cert-manager
