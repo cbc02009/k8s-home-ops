@@ -6,7 +6,7 @@ vars:
     sh: git rev-parse --show-toplevel
   PROJECT_DIR:
     sh: git rev-parse --show-toplevel
-  CLUSTER_DIR: "{{.PROJECT_DIR}}/cluster"
+  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
 
 includes:
   fx: .taskfiles/Flux/Tasks.yml

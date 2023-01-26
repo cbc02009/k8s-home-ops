@@ -1,0 +1,54 @@
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cluster-apps-add-ons-dashboard
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  path: './kubernetes/apps/flux-system/add-ons/dashboard/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-cluster-kubernetes
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cluster-apps-add-ons-notifications
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  path: './kubernetes/apps/flux-system/add-ons/notifications/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-cluster-kubernetes
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cluster-apps-add-ons-webhook
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  path: './kubernetes/apps/flux-system/add-ons/webhook/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-cluster-kubernetes
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m

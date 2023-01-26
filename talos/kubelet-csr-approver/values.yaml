@@ -1,5 +1,6 @@
 ---
-providerRegex: ^k(uiharu|anya|rem|ram|sakura)$
+providerRegex: |
+  ^(uiharu|anya|rem|ram|sakura)$
 
 namespace: kube-system
 

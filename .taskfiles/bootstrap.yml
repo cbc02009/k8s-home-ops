@@ -21,17 +21,22 @@ tasks:
   github:
     desc: 5. decrypt and load github ssh key
     cmds:
-      - sops --decrypt cluster/config/github-deploy-key.sops.yaml | kubectl apply -f -
+      - sops --decrypt kubernetes/bootstrap/github-deploy-key.sops.yaml | kubectl apply -f -
 
   flux:
     desc: 3. Bootstrap flux (as per version in manifest)
     cmds:
-      - yq '.spec.ref.tag' cluster/repositories/git/flux.yaml | xargs -I{} flux install --version={} --export | kubectl apply -f -
+      - kubectl apply -n flux-system --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/flux
 
   cluster:
-    desc: 6. Bootstrap Cluster
+    desc: 7. Bootstrap Cluster
     cmds:
       - kubectl apply -k cluster
+  
+  crds:
+    desc: 6. Bootstrap CRDs
+    cmds:
+      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/crds/
 
   all:
     desc: run all bootstrap commands in order
@@ -41,4 +46,5 @@ tasks:
       - go-task bootstrap:flux
       - go-task bootstrap:sops
       - go-task bootstrap:github
+      - go-task bootstrap:crds
       - go-task bootstrap:cluster
