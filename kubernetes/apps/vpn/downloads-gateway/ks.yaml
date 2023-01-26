@@ -22,4 +22,4 @@ spec:
       name: downloads-gateway
       namespace: vpn
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets

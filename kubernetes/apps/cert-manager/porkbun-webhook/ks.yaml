@@ -22,4 +22,4 @@ spec:
       name: porkbun-webhook
       namespace: cert-manager
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets

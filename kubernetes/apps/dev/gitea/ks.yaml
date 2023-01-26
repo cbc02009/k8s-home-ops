@@ -22,4 +22,4 @@ spec:
       name: gitea
       namespace: dev
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets

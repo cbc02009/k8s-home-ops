@@ -22,4 +22,4 @@ spec:
       name: smtp-relay
       namespace: services
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets

@@ -22,4 +22,4 @@ spec:
       name: authelia
       namespace: security
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets

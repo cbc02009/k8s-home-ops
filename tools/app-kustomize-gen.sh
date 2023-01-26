@@ -2,7 +2,7 @@
 shopt -s extglob
 shopt -s nullglob
 
-EXT_SECRET_NAME="cluster-apps-external-secrets-operator"
+EXT_SECRET_NAME="cluster-apps-external-secrets"
 ROOK_CEPH_NAME="cluster-apps-rook-ceph-cluster"
 
 ROOT=$(git rev-parse --show-toplevel)

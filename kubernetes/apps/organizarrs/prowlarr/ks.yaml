@@ -22,4 +22,4 @@ spec:
       name: prowlarr
       namespace: organizarrs
   dependsOn:
-    - name: cluster-apps-external-secrets-operator
+    - name: cluster-apps-external-secrets
