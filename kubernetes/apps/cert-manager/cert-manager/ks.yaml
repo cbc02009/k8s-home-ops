@@ -41,4 +41,3 @@ spec:
   timeout: 3m
   dependsOn:
     - name: apps-cert-manager
-    - name: apps-external-secrets-stores
