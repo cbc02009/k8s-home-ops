@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: flux-system
-  name: cluster-config
+  name: cluster-settings
 data:
   CLUSTER_NAME: kokoro
   CLUSTER_ID: "0"

@@ -11,7 +11,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-cluster-kubernetes
+    name: k8s-home-ops
   postBuild:
     substituteFrom:
       - kind: ConfigMap

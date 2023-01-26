@@ -12,7 +12,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-cluster-kubernetes
+    name: k8s-home-ops
   interval: 30m
   retryInterval: 1m
   timeout: 3m
@@ -30,7 +30,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-cluster-kubernetes
+    name: k8s-home-ops
   interval: 30m
   retryInterval: 1m
   timeout: 3m
@@ -48,7 +48,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-cluster-kubernetes
+    name: k8s-home-ops
   interval: 30m
   retryInterval: 1m
   timeout: 3m
