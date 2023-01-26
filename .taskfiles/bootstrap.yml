@@ -36,7 +36,7 @@ tasks:
   crds:
     desc: 6. Bootstrap CRDs
     cmds:
-      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/crds/
+      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/crds/
 
   all:
     desc: run all bootstrap commands in order
