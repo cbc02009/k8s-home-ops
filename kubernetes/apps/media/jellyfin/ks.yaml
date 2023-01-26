@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: jellyfin
       namespace: media
+  dependsOn:
+    - name: apps-rook-ceph-cluster

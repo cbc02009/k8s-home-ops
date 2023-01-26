@@ -8,9 +8,6 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  dependsOn:
-    - name: apps-rook-ceph-cluster
-    - name: apps-volsync
   path: './kubernetes/apps/organizarrs/overseerr/app/'
   prune: true
   sourceRef:
@@ -24,3 +21,6 @@ spec:
       kind: HelmRelease
       name: overseerr
       namespace: organizarrs
+  dependsOn:
+    - name: apps-rook-ceph-cluster
+    - name: apps-volsync

@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: qbittorrent
       namespace: downloads
+  dependsOn:
+    - name: apps-rook-ceph-cluster

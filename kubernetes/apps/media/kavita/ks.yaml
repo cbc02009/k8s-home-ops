@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: kavita
       namespace: media
+  dependsOn:
+    - name: apps-rook-ceph-cluster

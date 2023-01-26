@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: zwave-js-ui
       namespace: home-automation
+  dependsOn:
+    - name: apps-rook-ceph-cluster

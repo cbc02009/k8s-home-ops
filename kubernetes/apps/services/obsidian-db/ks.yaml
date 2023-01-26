@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: obsidian-db
       namespace: services
+  dependsOn:
+    - name: apps-rook-ceph-cluster

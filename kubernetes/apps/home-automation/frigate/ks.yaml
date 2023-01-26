@@ -21,3 +21,6 @@ spec:
       kind: HelmRelease
       name: frigate
       namespace: home-automation
+  dependsOn:
+    - name: apps-rook-ceph-cluster
+    - name: apps-external-secrets-stores

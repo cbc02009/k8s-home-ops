@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: calibre
       namespace: organizarrs
+  dependsOn:
+    - name: apps-rook-ceph-cluster

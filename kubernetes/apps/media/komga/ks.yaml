@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: komga
       namespace: media
+  dependsOn:
+    - name: apps-rook-ceph-cluster
