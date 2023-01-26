@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-porkbun-webhook
+  name: apps-porkbun-webhook
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -22,4 +22,4 @@ spec:
       name: porkbun-webhook
       namespace: cert-manager
   dependsOn:
-    - name: cluster-apps-external-secrets
+    - name: apps-external-secrets

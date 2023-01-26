@@ -3,16 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-plex
+  name: apps-plex
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   dependsOn:
-    - name: cluster-apps-external-secrets-stores
-    - name: cluster-apps-rook-ceph-cluster
-    - name: cluster-apps-volsync
-    - name: cluster-apps-intel-device-plugin-gpu
+    - name: apps-external-secrets-stores
+    - name: apps-rook-ceph-cluster
+    - name: apps-volsync
+    - name: apps-intel-device-plugin-gpu
   path: './kubernetes/apps/media/plex/app/'
   prune: true
   sourceRef:

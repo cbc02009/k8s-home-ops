@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-cluster
+  name: apps-cluster
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   dependsOn:
-    - name: cluster-apps-rook-ceph
+    - name: apps-rook-ceph
   path: './kubernetes/apps/rook-ceph/cluster/app/'
   prune: true
   sourceRef:

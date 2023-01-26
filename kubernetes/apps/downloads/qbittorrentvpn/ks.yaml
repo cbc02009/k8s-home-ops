@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-qbittorrentvpn
+  name: apps-qbittorrentvpn
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -22,4 +22,4 @@ spec:
       name: qbittorrentvpn
       namespace: downloads
   dependsOn:
-    - name: cluster-apps-external-secrets
+    - name: apps-external-secrets

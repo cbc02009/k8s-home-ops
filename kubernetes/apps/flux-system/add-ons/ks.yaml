@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-add-ons-dashboard
+  name: apps-add-ons-dashboard
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -21,7 +21,7 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 # kind: Kustomization
 # metadata:
-#   name: cluster-apps-add-ons-notifications
+#   name: apps-add-ons-notifications
 #   namespace: flux-system
 #   labels:
 #     substitution.flux.home.arpa/enabled: 'true'
@@ -39,7 +39,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-add-ons-webhook
+  name: apps-add-ons-webhook
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'

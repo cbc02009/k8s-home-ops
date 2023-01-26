@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: cluster-apps-zwave-js-ui
+  name: apps-zwave-js-ui
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
