@@ -25,7 +25,7 @@ spec:
     cleanupOnFail: true
   dependsOn:
     - name: rook-ceph
-      namespace: rook-ceph
+      namespace: rook-ceph-operator
   values:
     toolbox:
       enabled: false
