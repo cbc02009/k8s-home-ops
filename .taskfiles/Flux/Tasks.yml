@@ -57,7 +57,8 @@ tasks:
     desc: Restart a particular hr
     cmds:
       - echo {{.APP}}
-      - flux -n flux-system suspend helmrelease {{.APP}}
-      - flux -n flux-system resume helmrelease {{.APP}}
+      - flux -n {{.NAMESPACE}} suspend helmrelease {{.APP}}
+      - flux -n {{.NAMESPACE}} resume helmrelease {{.APP}}
     env:
       APP: '{{.APP}}'
+      NAMESPACE: '{{.NAMESPACE}}'
