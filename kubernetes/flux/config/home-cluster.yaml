@@ -15,10 +15,10 @@ spec:
     # exclude all
     /*
     # include gitops dirs
-    !/cluster
+    !/kubernetes
     # exclude files from gitops dirs
-    /cluster/**/*.md
-    /cluster/**/*.tmpl
+    /kubernetes/**/*.md
+    /kubernetes/**/*.tmpl
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/kustomization_v1beta2.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
