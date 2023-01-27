@@ -30,6 +30,8 @@ spec:
     fullnameOverride: reloader
 
     reloader:
+      reloadStrategy: annotations
+      reloadOnCreate: false
       deployment:
         image:
           name: ghcr.io/cbc02009/reloader
