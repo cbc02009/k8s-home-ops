@@ -26,14 +26,22 @@ spec:
     cleanupOnFail: true
   values:
 
+    extraInitContainers:
+      - name: init-db
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: *app
     replicas: 3
-
-    admin:
-      existingSecret: grafana-admin
-
+    rbac:
+      pspEnabled: false
+    testFramework:
+      enabled: false
+    # admin:
+    #   existingSecret: *app
     envFromSecrets:
       - name: *app
-
     grafana.ini:
       auth:
         signout_redirect_url: "https://auth.${EXTERNAL_DOMAIN}/logout"
@@ -41,13 +49,13 @@ spec:
       auth.generic_oauth:
         enabled: true
         name: Authelia
-        client_id: grafana
-        client_secret: "${SECRET_GRAFANA_OAUTH_CLIENT_SECRET}"
+        client_id: # Set by env vars
+        client_secret: # Set by env vars secret
+        auth_url: # Set by env vars
+        token_url: # Set by env vars
+        api_url: # Set by env vars
         scopes: "openid profile email groups"
         empty_scopes: false
-        auth_url: "https://auth.${EXTERNAL_DOMAIN}/api/oidc/authorization"
-        token_url: "https://auth.${EXTERNAL_DOMAIN}/api/oidc/token"
-        api_url: "https://auth.${EXTERNAL_DOMAIN}/api/oidc/userinfo"
         login_attribute_path: preferred_username
         groups_attribute_path: groups
         name_attribute_path: name
@@ -84,16 +92,24 @@ spec:
         deleteDatasources:
           - name: Loki
             orgId: 1
+          - name: Alertmanager
+            orgId: 1
         datasources:
           - name: Prometheus
             type: prometheus
             access: proxy
-            url: http://thanos-query:9090/
+            url: http://thanos-query.monitoring.svc.cluster.local:9090/
             isDefault: true
           - name: Loki
             type: loki
             access: proxy
-            url: http://loki-gateway:80
+            url: http://loki-gateway.monitoring.svc.cluster.local:80
+          - name: Alertmanager
+            type: alertmanager
+            access: proxy
+            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
 
     dashboards:
       default:
@@ -153,3 +169,15 @@ spec:
       tls:
         - hosts:
             - *host
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values: ["grafana"]
+              topologyKey: kubernetes.io/hostname
