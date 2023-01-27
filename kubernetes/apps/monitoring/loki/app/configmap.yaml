@@ -21,20 +21,48 @@ data:
               category: logs
             annotations:
               summary: "SMART has reported failures on host {{ $labels.hostname }}"
-
-      zwave-js-ui
-
-      - name: zwave-js-ui
+      #
+      # zigbee2mqtt
+      #
+      - name: zigbee2mqtt
         rules:
-          - alert: ZwaveUnableToReachMQTT
+          - alert: ZigbeeUnableToReachMQTT
             expr: |
-              sum(count_over_time({app="zwave-js-ui"} |~ "(?i)error while connecting mqtt"[2m])) > 0
+              sum(count_over_time({app="zigbee2mqtt"} |~ "(?i)not connected to mqtt server"[2m])) > 0
             for: 2m
             labels:
               severity: critical
               category: logs
             annotations:
-              summary: "zwave-js-ui is unable to reach MQTT"
+              summary: "Zigbee2mqtt is unable to reach MQTT"
+      #
+      # zwavejs2mqtt
+      #
+      - name: zwavejs2mqtt
+        rules:
+          - alert: ZwaveUnableToReachMQTT
+            expr: |
+              sum(count_over_time({app="zwavejs2mqtt"} |~ "(?i)error while connecting mqtt"[2m])) > 0
+            for: 2m
+            labels:
+              severity: critical
+              category: logs
+            annotations:
+              summary: "Zwavejs2mqtt is unable to reach MQTT"
+      #
+      # frigate
+      #
+      - name: frigate
+        rules:
+          - alert: FrigateUnableToReachMQTT
+            expr: |
+              sum(count_over_time({app="frigate"} |~ "(?i)unable to connect to mqtt server"[2m])) > 0
+            for: 2m
+            labels:
+              severity: critical
+              category: logs
+            annotations:
+              summary: "Frigate is unable to reach MQTT"
       #
       # *arr
       #
