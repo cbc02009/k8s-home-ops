@@ -118,7 +118,7 @@ spec:
               name: immich-secret
       immich-redis:
         name: immich-redis
-        image: public.ecr.aws/docker/library/redis:7.0.7
+        image: public.ecr.aws/docker/library/redis:7.0.8
         env:
           - name: NODE_ENV
             value: 'production'
