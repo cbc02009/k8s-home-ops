@@ -1,0 +1,88 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app babybuddy
+  namespace: services
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+
+  values:
+    image:
+      repository: ghcr.io/cbc02009/babybuddy
+      tag: v1.13.2
+
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        env:
+          - name: POSTGRES_HOST
+            value: ${POSTGRES_HOST}
+          - name: POSTGRES_DB
+            value: "babybuddy"
+        envFrom:
+          - secretRef:
+              name: babybuddy-secret
+
+    env:
+      TIME_ZONE: ${TZ}
+      DB_HOST: ${POSTGRES_HOST}
+      DB_NAME: babybuddy
+      DB_ENGINE: django.db.backends.postgresql
+      AWS_S3_ENDPOINT_URL: http://${MINIO_HOST}:9000
+      AWS_STORAGE_BUCKET_NAME: babybuddy
+
+    envFrom:
+      - secretRef:
+          name: babybuddy-secret
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8000
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "filmstrip"
+        hosts:
+          - host: &host babybuddy.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: babybuddy-config-v1
+
+    resources:
+      requests:
+        cpu: 15m
+        memory: 380M
+      limits:
+        cpu: 100m
+        memory: 670M

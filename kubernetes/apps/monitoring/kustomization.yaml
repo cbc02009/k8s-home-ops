@@ -1,0 +1,21 @@
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./blackbox-exporter/ks.yaml
+  - ./goldilocks/ks.yaml
+  - ./grafana/ks.yaml
+  - ./kube-cleanup-operator/ks.yaml
+  - ./kube-prometheus-stack/ks.yaml
+  - ./loki/ks.yaml
+  - ./prometheus-rules-core/ks.yaml
+  - ./prometheus-rules-user/ks.yaml
+  # - ./prometheus-smartctl/ks.yaml
+  # - ./speedtest-exporter/ks.yaml
+  - ./thanos/ks.yaml
+  - ./vector/ks.yaml
+  - ./vpa/ks.yaml

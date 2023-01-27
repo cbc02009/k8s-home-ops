@@ -1,0 +1,141 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app plex
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    controller:
+      type: statefulset
+
+    image:
+      repository: ghcr.io/onedr0p/plex-beta
+      tag: 1.30.2.6563-3d4dc0cce@sha256:7a66b095ca592dbe7ea086f055c6e84caf9916ffb7b7d3f004929b397d8cf44e
+
+    # controller:
+    #   # -- enable the controller.
+    #   enabled: true
+    #   # -- Set the controller type.
+    #   # Valid options are deployment, daemonset or statefulset
+    #   type: statefulset
+
+    env:
+      TZ: "${TZ}"
+
+    envFrom:
+      - secretRef:
+          name: plex-secret
+
+    service:
+      main:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: "${LB_PLEX}"
+        ports:
+          http:
+            port: 32400
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          external-dns.home.arpa/enabled: "true"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: plex
+          hajimari.io/appName: plex
+          hajimari.io/url: "https://plex.${EXTERNAL_DOMAIN}/web/"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            location = / {
+              if ($http_x_plex_device = ""){
+                return 301 $scheme://$host/web/index.html;
+              }
+            }
+        hosts:
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: tls.plex
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 44
+        - 109
+        - 100
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: plex-config-v1
+
+      # config:
+      #   enabled: true
+      #   type: nfs
+      #   server: "${SAN_HOST}"
+      #   path: /smoltank/k8s/apps/plex
+
+      transcode:
+        enabled: true
+        type: emptyDir
+
+      media:
+        enabled: true
+        type: nfs
+        server: &nas ${SAN_HOST}
+        path: /tank/media
+        mountPath: /media
+
+      backup:
+        enabled: true
+        type: nfs
+        server: *nas
+        path: /tank/backup/kubernetes/apps/plex
+        mountPath: /config/backup
+
+    # -- Affinity constraint rules to place the Pod on a specific node.
+    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/10gb-network
+                  operator: In
+                  values:
+                    - "true"
+
+    resources:
+      requests:
+        cpu: 4
+        memory: 2000M
+        # gpu.intel.com/i915: 1
+      limits:
+        cpu: 12
+        memory: 10000M
+      #   # gpu.intel.com/i915: 1
