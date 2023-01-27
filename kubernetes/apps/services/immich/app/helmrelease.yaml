@@ -83,7 +83,7 @@ spec:
             value: localhost
         envFrom:
           - secretRef:
-            name: immich-secret
+              name: immich-secret
       immich-microservices:
         name: immich-microservices
         image: ghcr.io/immich-app/immich-server:v1.42.0_65-dev
@@ -106,7 +106,7 @@ spec:
             value: localhost
         envFrom:
           - secretRef:
-            name: immich-secret
+              name: immich-secret
       immich-redis:
         name: immich-redis
         image: public.ecr.aws/docker/library/redis:7.0.7
@@ -125,7 +125,7 @@ spec:
             value: master
         envFrom:
           - secretRef:
-            name: immich-secret
+              name: immich-secret
         command: ['redis-server']
       immich-web:
         name: immich-web
@@ -172,7 +172,7 @@ spec:
             value: localhost
         envFrom:
           - secretRef:
-            name: immich-secret
+              name: immich-secret
         args:
           - ./entrypoint.sh
 
