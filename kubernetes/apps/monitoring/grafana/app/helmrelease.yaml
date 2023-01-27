@@ -32,16 +32,16 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
-              name: *app
+              name: grafana-secret
     replicas: 3
     rbac:
       pspEnabled: false
     testFramework:
       enabled: false
     # admin:
-    #   existingSecret: *app
+    #   existingSecret: grafana-secret
     envFromSecrets:
-      - name: *app
+      - name: grafana-secret
     grafana.ini:
       auth:
         signout_redirect_url: "https://auth.${EXTERNAL_DOMAIN}/logout"

@@ -5,12 +5,10 @@ namespace: security
 resources:
   - helmrelease.yaml
 secretGenerator:
-  - name: glauth
+  - name: glauth-secret
     files:
       - server.toml=config/server.sops.toml
       - groups.toml=config/groups.sops.toml
       - users.toml=config/users.sops.toml
 generatorOptions:
   disableNameSuffixHash: true
-metadata:
-  namespace: security

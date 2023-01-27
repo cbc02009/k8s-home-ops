@@ -32,7 +32,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-initdb:14.6
         envFrom:
           - secretRef:
-              name: *app
+              name: radarr-secret
 
     image:
       repository: ghcr.io/onedr0p/radarr-develop
@@ -51,7 +51,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: radarr-secret
 
     service:
       main:
@@ -124,7 +124,6 @@ spec:
         - 100
 
     podAnnotations:
-      secret.reloader.stakater.com/reload: *app
       setGateway: "true"
 
     resources:

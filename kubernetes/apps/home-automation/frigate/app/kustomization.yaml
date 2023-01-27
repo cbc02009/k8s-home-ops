@@ -5,7 +5,6 @@ resources:
   - config-pvc.yaml
   - nfs-pvc.yaml
   - helmrelease.yaml
-  - secret.sops.yaml
 namespace: home-automation
 configMapGenerator:
   - name: frigate

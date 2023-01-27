@@ -41,7 +41,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: animarr-secret
 
     service:
       main:

@@ -23,4 +23,3 @@ spec:
       namespace: home-automation
   dependsOn:
     - name: apps-rook-ceph-cluster
-    - name: apps-external-secrets-stores

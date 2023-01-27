@@ -116,7 +116,7 @@ spec:
       ## Use an existing secret
       existingSecret:
         enabled: true
-        secretName: *app
+        secretName: nextcloud-secret
         usernameKey: username
         passwordKey: password
         # tokenKey: serverinfo_token
@@ -231,7 +231,7 @@ spec:
               value: "nextcloud"
           envFrom:
             - secretRef:
-                name: *app
+                name: nextcloud-secret
 
       # Extra sidecar containers.
       extraSidecarContainers: []
@@ -299,7 +299,7 @@ spec:
       ## Use a existing secret
       existingSecret:
         enabled: true
-        secretName: *app
+        secretName: nextcloud-secret
         usernameKey: POSTGRES_USER
         passwordKey: POSTGRES_PASS
 

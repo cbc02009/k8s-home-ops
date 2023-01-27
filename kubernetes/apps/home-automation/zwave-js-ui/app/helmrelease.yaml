@@ -33,7 +33,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: zwave-js-ui-secret
 
    # @default -- See below
     env:
@@ -120,9 +120,6 @@ spec:
         memory: 164M
       limits:
         memory: 262M
-
-    podAnnotations:
-      secret.reloader.stakater.com/reload: *app
 
     # -- Affinity constraint rules to place the Pod on a specific node.
     # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
