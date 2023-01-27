@@ -63,7 +63,7 @@ spec:
                 period: 24h
         common:
           path_prefix: /var/loki
-          replication_factor: 1
+          replication_factor: 3
           storage:
             s3:
               bucketnames: loki
@@ -154,24 +154,33 @@ spec:
                   matchLabels:
                     {{- include "loki.readSelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
-      extraVolumeMounts:
-        - name: loki-rules
-          mountPath: /rules
-        - name: loki-rules-tmp
-          mountPath: /var/loki/rules
-        - name: loki-tmp
-          mountPath: /tmp/loki-tmp
-      extraVolumes:
-        - name: loki-rules
-          configMap:
-            name: loki-alerting-rules
-        - name: loki-rules-tmp
-          emptyDir: {}
-        - name: loki-tmp
-          emptyDir: {}
-      persistence:
+
+    backend:
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.readSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
+      replicas: 3
+      persistance:
         size: 10Gi
         storageClass: ceph-block
+      extraVolumeMounts:
+        - name: rules
+          mountPath: /rules/fake
+        - name: scratch
+          mountPath: /tmp/scratch
+      extraVolumes:
+        - name: rules
+          configMap:
+            name: loki-alerting-rules
+        - name: scratch
+          emptyDir: {}
+
     monitoring:
       selfMonitoring:
         enabled: false
