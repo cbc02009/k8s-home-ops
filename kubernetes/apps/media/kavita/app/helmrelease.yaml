@@ -1,0 +1,84 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app kavita
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    image:
+      repository: docker.io/kizaing/kavita
+      tag: nightly@sha256:ab85dce48552425d454fc1a3aee74b0d112e4516bd64c2ca8398b20863b8c95b
+    env:
+      TZ: "${TZ}"
+
+    service:
+      main:
+        ports:
+          http:
+            port: 5000
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        #          annotations:
+        #            external-dns.home.arpa/enabled: "true"
+        #            auth.home.arpa/enabled: "true"
+        hosts:
+          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    # podSecurityContext:
+    #   runAsUser: 568
+    #   runAsGroup: 568
+    #   fsGroup: 568
+    #   fsGroupChangePolicy: "OnRootMismatch"
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: kavita-config-v1
+        mountPath: /kavita/config
+
+      media:
+        enabled: true
+        type: nfs
+        server: "${SAN_HOST}"
+        path: /tank/media
+        mountPath: /media
+
+      backups:
+        enabled: true
+        type: nfs
+        server: "${SAN_HOST}"
+        path: /tank/backup/kubernetes/apps/kavita
+        mountPath: /kavita/config/backups
+
+    resources:
+      requests:
+        cpu: 20m
+        memory: 100Mi
+      # limits:
+      # memory: 200Mi

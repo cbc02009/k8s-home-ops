@@ -1,0 +1,125 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app sonarr
+  namespace: organizarrs
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+
+  values:
+
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
+
+    image:
+      repository: ghcr.io/onedr0p/sonarr-develop
+      tag: 4.0.0.362@sha256:d4e52af4fa1e0b31a8c7cb1244d31c85a382c7133402e2d5dc904b6852255d0d
+
+    env:
+      TZ: "${TZ}"
+      SONARR__INSTANCE_NAME: Sonarr
+      SONARR__PORT: &port 8989
+      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      SONARR__LOG_LEVEL: info
+
+    envFrom:
+      - secretRef:
+          name: sonarr-secret
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${LB_SONARR}
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/organizr.css"></head>';
+            sub_filter_once on;
+          hajimari.io/enable: "true"
+          hajimari.io/icon: "television-box"
+          hajimari.io/appName: sonarr
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: &tls tls.sonarr
+      api:
+        enabled: true
+        ingressClassName: "nginx"
+        # annotations:
+        #   external-dns.home.arpa/enabled: "true"
+        hosts:
+          - host: *host
+            paths:
+              - path: /api
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: sonarr-config-v1
+
+      media:
+        enabled: true
+        type: nfs
+        server: "${SAN_HOST}"
+        path: /tank/media
+        mountPath: /media
+
+      backup:
+        enabled: true
+        type: nfs
+        server: ${SAN_HOST}
+        path: /tank/backup/kubernetes/apps/sonarr
+        mountPath: /config/Backups
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
+
+    resources:
+      requests:
+        cpu: 15m
+        memory: 411M
+      limits:
+        cpu: 66m
+        memory: 411M

@@ -2,22 +2,11 @@
 version: "3"
 
 tasks:
-  delete-pv:
-    desc: delete all released PVs
-    cmds:
-      - kubectl get pv | grep Released | awk '$1 {print$1}' | while read vol; do kubectl delete pv/${vol}; done
-
-  git-check-yaml:
-    desc: Check yaml for kustomize/kube errors
-    cmds:
-      - git diff --name-only origin/main.. | grep --color kustomization.yaml | sed 's/kustomization.yaml//' | xargs -I{} kustomize build {}
-      - git diff --name-only origin/main.. | grep --color .yaml | xargs cat | kubectl apply -f - --dry-run=server
-
   nas-deps-pause:
     desc: Pause all Helm Releases that rely on NAS storage
     cmds:
       - flux suspend hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 0
+      - kubectl scale -n media statefulset/plex --replicas 0
       # - flux suspend hr -n downloads qbittorrent
       # - kubectl scale -n downloads deploy/qbittorrent --replicas 0
       #     - flux suspend hr -n downloads sabnzbd
@@ -25,17 +14,13 @@ tasks:
       #     - flux suspend hr -n downloads nzbget
       #     - kubectl scale -n downloads deploy/nzbget --replicas 0
       - flux suspend hr -n organizarrs radarr
-      - kubectl scale -n organizarrs deploy/radarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/radarr --replicas 0
       - flux suspend hr -n organizarrs readarr
       - kubectl scale -n organizarrs deploy/readarr --replicas 0
       - flux suspend hr -n organizarrs sonarr
-      - kubectl scale -n organizarrs deploy/sonarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/sonarr --replicas 0
       - flux suspend hr -n organizarrs animarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
-      - flux suspend hr -n organizarrs overseerr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
-      - flux suspend hr -n organizarrs prowlarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 0
+      - kubectl scale -n organizarrs statefulset/animarr --replicas 0
       # - flux suspend hr -n organizarrs lidarr
       # - kubectl scale -n organizarrs deploy/lidarr --replicas 0
       # - flux suspend hr -n organizarrs calibre
@@ -44,16 +29,16 @@ tasks:
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
       # - flux suspend hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 0
-      - flux suspend hr -n monitoring thanos-compactor
-      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 0
-      # - flux suspend hr -n monitoring loki
-      # - kubectl scale -n monitoring deploy/loki --replicas 0
+      - flux suspend hr -n home-automation frigate
+      - kubectl scale -n home-automation deploy/frigate --replicas 0
+      - flux suspend hr -n monitoring loki
+      - kubectl scale -n monitoring deploy/loki --replicas 0
 
   nas-deps-resume:
     desc: Resume all Helm Releases that rely on NAS storage
     cmds:
       - flux resume hr -n media plex
-      - kubectl scale -n media deploy/plex --replicas 1
+      - kubectl scale -n media statefulset/plex --replicas 1
       # - flux resume hr -n downloads qbittorrent
       # - kubectl scale -n downloads deploy/qbittorrent --replicas 1
       #     - flux resume hr -n downloads sabnzbd
@@ -61,113 +46,23 @@ tasks:
       #     - flux resume hr -n downloads nzbget
       #     - kubectl scale -n downloads deploy/nzbget --replicas 1
       - flux resume hr -n organizarrs radarr
-      - kubectl scale -n organizarrs deploy/radarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/radarr --replicas 1
       - flux resume hr -n organizarrs readarr
       - kubectl scale -n organizarrs deploy/readarr --replicas 1
       - flux resume hr -n organizarrs sonarr
-      - kubectl scale -n organizarrs deploy/sonarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/sonarr --replicas 1
       - flux resume hr -n organizarrs animarr
-      - kubectl scale -n organizarrs deploy/animarr --replicas 1
+      - kubectl scale -n organizarrs statefulset/animarr --replicas 1
       - flux resume hr -n organizarrs lidarr
-      - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-      - flux resume hr -n organizarrs overseerr
-      - kubectl scale -n organizarrs deploy/lidarr --replicas 1
-      - flux resume hr -n organizarrs prowlarr
       - kubectl scale -n organizarrs deploy/lidarr --replicas 1
       # - flux resume hr -n organizarrs calibre
       # - kubectl scale -n organizarrs deploy/calibre --replicas 1
       # - flux resume hr -n organizarrs calibre-web
       # - kubectl scale -n organizarrs deploy/calibre-web --replicas 1
-      - flux resume hr -n monitoring thanos-compactor
-      - kubectl scale -n monitoring deploy/thanos-compactor --replicas 1
-  #     - flux resume hr -n monitoring loki
-  #     - kubectl scale -n monitoring deploy/loki --replicas 1
-
-  delete-failed-pods:
-    desc: Deletes failed pods
-    cmds:
-      - kubectl delete pods --field-selector status.phase=Failed -A --ignore-not-found=true
-
-  debug-volume:
-    desc: Attach a volume to a container for debugging, ex. VOLUME=zigbee2mqtt-config-v1 NAMESPACE=home task debug-volume
-    interactive: true
-    silent: true
-    cmds:
-      - |
-        kubectl run debug-{{.VOLUME}} -n {{.NAMESPACE}} -i --tty --rm --image=null --overrides='
-          {
-            "spec": {
-              "containers": [
-                {
-                  "name": "debug",
-                  "image": "docker.io/library/alpine:3.15",
-                  "command": [
-                    "/bin/sh"
-                  ],
-                  "stdin": true,
-                  "stdinOnce": true,
-                  "tty": true,
-                  "lifecycle": {
-                    "postStart": {
-                      "exec": {
-                        "command": [
-                          "/bin/sh",
-                          "-c",
-                          "apk add --no-cache curl vim"
-                        ]
-                      }
-                    }
-                  },
-                  "volumeMounts": [
-                    {
-                      "name": "backups",
-                      "mountPath": "/mnt/backups/"
-                    },
-                    {
-                      "name": "debug-volume",
-                      "mountPath": "/mnt/volume/"
-                    }
-                  ]
-                }
-              ],
-              "volumes": [
-                {
-                  "name": "backups",
-                  "nfs": {
-                    "server": '{{.NAS_ADDRESS | default "10.0.0.4"}}',
-                    "path": '{{.NAS_PATH | default "/tank/backups/"}}'
-                  }
-                },
-                {
-                  "name": "debug-volume",
-                  "persistentVolumeClaim": {
-                    "claimName": "{{.VOLUME}}"
-                  }
-                }
-              ],
-              "restartPolicy": "Never"
-            }
-          }'
-
-  debug-node:
-    desc: Create a privileged container on a node for debugging, ex. NODE=anvil task debug-node
-    interactive: true
-    cmds:
-      - |
-        kubectl run debug-{{.NODE}} -i --tty --rm --image="docker.io/library/alpine:3.15" --privileged --overrides='
-          {
-            "spec": {
-              "nodeSelector": {
-                "kubernetes.io/hostname": "{{.NODE}}"
-              },
-              "restartPolicy": "Never"
-            }
-          }'
-
-  list-dockerhub:
-    desc: What dockerhub images are running in my cluster
-    cmds:
-      - kubectl get pods --all-namespaces -o=jsonpath="{range .items[*]}{'\n'}{range .spec.containers[*]}{.image}{'\n'}{end}{end}" | sort | uniq | grep -Ev 'quay|gcr|ghcr|ecr|us-docker' | grep -Ev 'bitnami|rook|intel|grafana' |  sed -e 's/docker\.io\///g' | sort | uniq
+      - flux resume hr -n home-automation frigate
+      - kubectl scale -n home-automation deploy/frigate --replicas 1
+      - flux resume hr -n monitoring loki
+      - kubectl scale -n monitoring deploy/loki --replicas 1
 
   netshoot:
     desc: Create a netshoot container for debugging
@@ -180,47 +75,6 @@ tasks:
       - flux reconcile -n flux-system source git k8s-home-ops
       - flux reconcile -n flux-system kustomization apply-cluster-deployment
 
-  nodes:
-    desc: List all the nodes in your cluster
-    cmds:
-      - kubectl get nodes {{.CLI_ARGS | default "-o wide"}}
-
-  pods:
-    desc: List all the pods in your cluster
-    cmds:
-      - kubectl get pods {{.CLI_ARGS | default "-A"}}
-
-  kustomizations:
-    desc: List all the kustomizations in your cluster
-    cmds:
-      - kubectl get kustomizations {{.CLI_ARGS | default "-A"}}
-
-  helmreleases:
-    desc: List all the helmreleases in your cluster
-    cmds:
-      - kubectl get helmreleases {{.CLI_ARGS | default "-A"}}
-
-  helmrepositories:
-    desc: List all the helmrepositories in your cluster
-    cmds:
-      - kubectl get helmrepositories {{.CLI_ARGS | default "-A"}}
-
-  gitrepositories:
-    desc: List all the gitrepositories in your cluster
-    cmds:
-      - kubectl get gitrepositories {{.CLI_ARGS | default "-A"}}
-
-  certificates:
-    desc: List all the certificates in your cluster
-    cmds:
-      - kubectl get certificates {{.CLI_ARGS | default "-A"}}
-      - kubectl get certificaterequests {{.CLI_ARGS | default "-A"}}
-
-  ingresses:
-    desc: List all the ingresses in your cluster
-    cmds:
-      - kubectl get ingress {{.CLI_ARGS | default "-A"}}
-
   resources:
     desc: Gather common resources in your cluster, useful when asking for support
     cmds:
@@ -232,3 +86,47 @@ tasks:
       - task: certificates
       - task: ingresses
       - task: pods
+
+  mount:
+    desc: Mount a PersistantVolumeClaim to a pod temporarily
+    interactive: true
+    vars:
+      claim: '{{ or .claim (fail "PersistentVolumeClaim `claim` is required") }}'
+      namespace: '{{.namespace | default "default"}}'
+    cmds:
+      - |
+        kubectl run -n {{.namespace}} debug-{{.claim}} -i --tty --rm --image=null --privileged --overrides='
+          {
+            "apiVersion": "v1",
+            "spec": {
+              "containers": [
+                {
+                  "name": "debug",
+                  "image": "ghcr.io/onedr0p/alpine:rolling",
+                  "command": [
+                    "/bin/bash"
+                  ],
+                  "stdin": true,
+                  "stdinOnce": true,
+                  "tty": true,
+                  "volumeMounts": [
+                    {
+                      "name": "config",
+                      "mountPath": "/data/config"
+                    }
+                  ]
+                }
+              ],
+              "volumes": [
+                {
+                  "name": "config",
+                  "persistentVolumeClaim": {
+                    "claimName": "{{.claim}}"
+                  }
+                }
+              ],
+              "restartPolicy": "Never"
+            }
+          }'
+    preconditions:
+      - kubectl -n {{.namespace}} get pvc {{.claim}}
