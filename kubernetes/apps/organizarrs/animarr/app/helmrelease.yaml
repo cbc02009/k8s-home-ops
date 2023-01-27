@@ -26,6 +26,8 @@ spec:
 
     controller:
       type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
 
     image:
       repository: ghcr.io/onedr0p/sonarr-develop

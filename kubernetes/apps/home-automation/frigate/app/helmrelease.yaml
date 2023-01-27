@@ -25,6 +25,10 @@ spec:
     - name: emqx
       namespace: home-automation
   values:
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
     image:
       repository: docker.io/blakeblackshear/frigate
       tag: 0.11.1

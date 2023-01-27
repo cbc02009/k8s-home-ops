@@ -25,6 +25,8 @@ spec:
     controller:
       replicas: 3
       strategy: RollingUpdate
+      annotations:
+        reloader.stakater.com/auto: "true"
     image:
       repository: docker.io/glauth/glauth
       tag: v2.1.0
