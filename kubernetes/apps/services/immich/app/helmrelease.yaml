@@ -16,6 +16,7 @@ spec:
         name: bjw-s-charts
         namespace: flux-system
   values:
+
     image:
       repository: ghcr.io/immich-app/immich-proxy
       tag: v1.42.0_65-dev
@@ -60,6 +61,14 @@ spec:
         memory: 250Mi
       limits:
         memory: 2000Mi
+
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.6
+        envFrom:
+          - secretRef:
+              name: immich-secret
+
     additionalContainers:
       immich-server:
         name: immich-server
