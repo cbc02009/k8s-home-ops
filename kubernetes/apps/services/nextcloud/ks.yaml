@@ -16,11 +16,11 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: nextcloud
-      namespace: services
+  # healthChecks:
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     name: nextcloud
+  #     namespace: services
   dependsOn:
     - name: apps-external-secrets-stores
     - name: apps-rook-ceph-cluster
