@@ -157,7 +157,7 @@ spec:
       enabled: true
 
     podAnnotations:
-      configmap.reloader.stakater.com/reload: grafana,grafana-admin
+      reloader.stakater.com/auto: "true"
 
     ingress:
       enabled: true
