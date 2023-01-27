@@ -9,7 +9,7 @@ resources:
   - ./babybuddy/ks.yaml
   - ./epic-freegames/ks.yaml
   - ./hajimari/ks.yaml
-  # - ./immich/ks.yaml
+  - ./immich/ks.yaml
   - ./language-tools/ks.yaml
   - ./nextcloud/ks.yaml
   # - ./obsidian-db/ks.yaml
