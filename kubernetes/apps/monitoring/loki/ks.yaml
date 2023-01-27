@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: loki
       namespace: monitoring
+  dependsOn:
+    - name: apps-rook-ceph-cluster

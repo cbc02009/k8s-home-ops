@@ -10,20 +10,20 @@ data:
       #
       # SMART Failures
       #
-      # - name: smart-failure
-      #   rules:
-      #     - alert: SmartFailures
-      #       expr: |
-      #         sum by (hostname) (count_over_time({hostname=~".+"} | json | _SYSTEMD_UNIT = "smartmontools.service" !~ "(?i)previous self-test completed without error" !~ "(?i)Prefailure" |~ "(?i)(error|fail)"[2m])) > 0
-      #       for: 2m
-      #       labels:
-      #         severity: critical
-      #         category: logs
-      #       annotations:
-      #         summary: "SMART has reported failures on host {{ $labels.hostname }}"
-      #
-      # zwave-js-ui
-      #
+      - name: smart-failure
+        rules:
+          - alert: SmartFailures
+            expr: |
+              sum by (hostname) (count_over_time({hostname=~".+"} | json | _SYSTEMD_UNIT = "smartmontools.service" !~ "(?i)previous self-test completed without error" !~ "(?i)Prefailure" |~ "(?i)(error|fail)"[2m])) > 0
+            for: 2m
+            labels:
+              severity: critical
+              category: logs
+            annotations:
+              summary: "SMART has reported failures on host {{ $labels.hostname }}"
+
+      zwave-js-ui
+
       - name: zwave-js-ui
         rules:
           - alert: ZwaveUnableToReachMQTT
