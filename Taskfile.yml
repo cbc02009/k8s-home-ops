@@ -4,12 +4,21 @@ version: "3"
 vars:
   PROJECT_ROOT:
     sh: git rev-parse --show-toplevel
+  PROJECT_DIR:
+    sh: git rev-parse --show-toplevel
+  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
 
 includes:
-  flux: .taskfiles/flux.yml
-  cluster: .taskfiles/cluster.yml
-  format: .taskfiles/format.yml
+  fx: .taskfiles/Flux/Tasks.yml
   bootstrap: .taskfiles/bootstrap.yml
-  precommit: .taskfiles/pre-commit.yml
-  kubeadm: .taskfiles/kubeadm.yml
-  sops: .taskfiles/sops.yml
+  pr: .taskfiles/PreCommit/Tasks.yml
+  so: .taskfiles/sops.yml
+  ro: .taskfiles/Rook/Tasks.yaml
+  ta: .taskfiles/Talos/Tasks.yml
+  es: .taskfiles/ExternalSecrets/Tasks.yml
+  vs: .taskfiles/VolSync/Tasks.yml
+
+tasks:
+  default:
+    silent: true
+    cmds: ['task -l']

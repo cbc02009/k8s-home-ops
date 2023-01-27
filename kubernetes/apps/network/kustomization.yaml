@@ -1,0 +1,13 @@
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./ingress-nginx/ks.yaml
+  - ./k8s-gateway/ks.yaml
+  - ./metallb/ks.yaml
+  # - ./multus/ks.yaml
+  - ./static-routes/ks.yaml

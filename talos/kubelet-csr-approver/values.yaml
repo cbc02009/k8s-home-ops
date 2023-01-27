@@ -1,0 +1,7 @@
+---
+providerRegex: |
+  ^(uiharu|anya|rem|ram|sakura)$
+
+namespace: kube-system
+
+tolerations: {}

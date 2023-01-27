@@ -1,0 +1,17 @@
+---
+# yaml-language-server stuff goes here
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./babybuddy/ks.yaml
+  - ./epic-freegames/ks.yaml
+  - ./hajimari/ks.yaml
+  # - ./immich/ks.yaml
+  - ./language-tools/ks.yaml
+  - ./nextcloud/ks.yaml
+  # - ./obsidian-db/ks.yaml
+  - ./smtp-relay/ks.yaml
+  - ./theme-park/ks.yaml
