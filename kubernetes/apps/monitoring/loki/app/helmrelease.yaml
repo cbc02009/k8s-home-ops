@@ -156,9 +156,9 @@ spec:
                 topologyKey: kubernetes.io/hostname
       extraVolumeMounts:
         - name: loki-rules
-          mountPath: /rules/fake
+          mountPath: /rules
         - name: loki-rules-tmp
-          mountPath: /tmp/scratch
+          mountPath: /var/loki/rules
         - name: loki-tmp
           mountPath: /tmp/loki-tmp
       extraVolumes:
