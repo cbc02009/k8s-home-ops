@@ -148,7 +148,7 @@ spec:
             value: http://localhost:3001
         envFrom:
           - secretRef:
-            name: immich-secret
+              name: immich-secret
         command: ['/bin/sh']
         args:
           - ./entrypoint.sh
