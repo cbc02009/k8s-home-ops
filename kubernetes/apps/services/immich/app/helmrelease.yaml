@@ -138,7 +138,7 @@ spec:
         command: ['redis-server']
       immich-web:
         name: immich-web
-        image: ghcr.io/immich-app/immich-web:v1.43.0
+        image: ghcr.io/immich-app/immich-web:v1.43.1
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
