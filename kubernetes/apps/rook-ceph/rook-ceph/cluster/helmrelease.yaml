@@ -30,9 +30,9 @@ spec:
     toolbox:
       enabled: false
 
-    # monitoring:
-    #   enabled: true
-    #   createPrometheusRules: true
+    monitoring:
+      enabled: true
+      createPrometheusRules: true
 
     configOverride: |
       [global]
@@ -55,13 +55,13 @@ spec:
             memory: "2Gi"
           requests:
             cpu: "1000m"
-            memory: "1Gi"
+            # memory: "1Gi"
         osd:
           limits:
             memory: "4Gi"
           requests:
             cpu: "1000m"
-            # memory: "4Gi"
+            memory: "4Gi"
         prepareosd:
           limits:
             memory: "900Mi"
