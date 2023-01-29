@@ -163,7 +163,7 @@ spec:
           - ./entrypoint.sh
       immich-machinelearning:
         name: immich-machinelearning
-        image: ghcr.io/immich-app/immich-machine-learning:v1.43.0
+        image: ghcr.io/immich-app/immich-machine-learning:v1.43.1
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
