@@ -7,6 +7,7 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./babybuddy/ks.yaml
+  - ./cyberchef/ks.yaml
   - ./epic-freegames/ks.yaml
   - ./hajimari/ks.yaml
   - ./immich/ks.yaml
