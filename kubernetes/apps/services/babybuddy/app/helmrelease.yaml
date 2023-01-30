@@ -25,7 +25,7 @@ spec:
   values:
     image:
       repository: ghcr.io/cbc02009/babybuddy
-      tag: v1.13.2
+      tag: v1.14.0
 
     initContainers:
       init-db:
