@@ -38,7 +38,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/prowlarr-develop
-      tag: 1.1.1.2377
+      tag: 1.1.2.2453
 
     env:
       TZ: "${TZ}"
