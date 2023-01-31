@@ -69,7 +69,7 @@ spec:
           - secretRef:
               name: immich-secret
 
-    additionalContainers:
+    sidecars:
       immich-server:
         name: immich-server
         image: ghcr.io/immich-app/immich-server:1372

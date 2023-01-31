@@ -7,7 +7,7 @@ metadata:
   namespace: kube-system
 spec:
   values:
-    additionalContainers:
+    sidecars:
       sync:
         name: sync
         # https://github.com/1Password/connect/issues/56
