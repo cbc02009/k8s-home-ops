@@ -57,7 +57,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
-          external-dns.home.arpa/enabled: "true"
+          # external-dns.home.arpa/enabled: "true"
         hosts:
           - host: &host "hass.${EXTERNAL_DOMAIN}"
             paths:
