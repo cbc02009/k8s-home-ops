@@ -3,7 +3,7 @@
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
-  name: vno-local-cpu
+  name: k8s-home-ops
   namespace: dev
 spec:
   template:
@@ -12,7 +12,7 @@ spec:
       imagePullPolicy: IfNotPresent
       dockerdWithinRunnerContainer: true
       ephemeral: true
-      repository: cbc02009/vno-local-cpu
+      repository: cbc02009/k8s-home-ops
       labels: ["self-hosted"]
       volumeMounts:
         - name: cache-volume
@@ -26,11 +26,11 @@ spec:
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: HorizontalRunnerAutoscaler
 metadata:
-  name: vno-local-cpu
+  name: k8s-home-ops
   namespace: dev
 spec:
   scaleTargetRef:
-    name: vno-local-cpu
+    name: k8s-home-ops
   scaleUpTriggers:
     - githubEvent:
         workflowJob: {}
@@ -40,4 +40,4 @@ spec:
   maxReplicas: 3
   metrics:
     - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
-      repositoryNames: ["vno-local-cpu"]
+      repositoryNames: ["k8s-home-ops"]
