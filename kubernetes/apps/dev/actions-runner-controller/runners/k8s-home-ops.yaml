@@ -10,7 +10,7 @@ spec:
     spec:
       image: ghcr.io/actions/actions-runner-controller/actions-runner-dind:v2.299.1-ubuntu-22.04
       imagePullPolicy: IfNotPresent
-      dockerdWithinRunnerContainer: true
+      dockerdWithinRunnerContainer: false
       ephemeral: true
       repository: cbc02009/k8s-home-ops
       labels: ["self-hosted"]
