@@ -13,7 +13,7 @@ env:
 jobs:
   changed-files:
     name: Detect File Changes
-    # runs-on: ubuntu-latest
+    # runs-on: ubuntu-20.04
     runs-on: [self-hosted, linux]
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -43,8 +43,8 @@ jobs:
 
   diff:
     name: Diff on Helm Releases
-    # runs-on: ubuntu-latest
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-20.04
+    # runs-on: [self-hosted, linux]
     needs: [changed-files]
     strategy:
       matrix: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
