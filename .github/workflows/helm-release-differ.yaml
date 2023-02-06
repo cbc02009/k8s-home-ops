@@ -6,7 +6,7 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
     paths:
-      - "k8s/manifests/**.yaml"
+      - "kubernetes/**/helmrelease.yaml"
 
 env:
   # Currently no way to detect automatically
@@ -45,8 +45,8 @@ jobs:
         uses: tibdex/github-app-token@v1
         id: generate-token
         with:
-          app_id: ${{ secrets.TRUXNELL_APP_ID }}
-          private_key: ${{ secrets.TRUXNELL_APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
 
       - name: Checkout default branch
         uses: actions/checkout@v3
@@ -74,7 +74,7 @@ jobs:
         id: find-comment
         with:
           issue-number: "${{ github.event.pull_request.number }}"
-          comment-author: "Tuxnell [bot]"
+          comment-author: "mahoro-bot [bot]"
           body-includes: helmrelease.yaml
 
       - name: Create or update comment
