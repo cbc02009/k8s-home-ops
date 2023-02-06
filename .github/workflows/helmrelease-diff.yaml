@@ -13,8 +13,8 @@ env:
 jobs:
   changed-files:
     name: Detect File Changes
-    # runs-on: ubuntu-20.04
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-20.04
+    # runs-on: [self-hosted, linux]
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
