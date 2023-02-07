@@ -23,3 +23,5 @@ spec:
       namespace: security
   dependsOn:
     - name: apps-external-secrets-stores
+    - name: apps-glauth
+    - name: apps-redis
