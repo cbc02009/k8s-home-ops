@@ -86,11 +86,10 @@ tasks:
       controller:
         sh: |
           app=$(kubectl -n {{.namespace}} get persistentvolumeclaim {{.claim}} -o jsonpath="{.metadata.labels.app\.kubernetes\.io/name}")
-          if [[ -z $(kubectl -n {{.namespace}} get persistentvolumeclaim {{.claim}} -o jsonpath="{.metadata.annotations.volume\.kubernetes\.io/storage-provisioner}") ]]; then
+          if [[ -n $(kubectl -n {{.namespace}} get deployment --no-headers -l "app.kubernetes.io/name=$app") ]]; then
             echo "deployments.apps/$app" && exit 0
           fi
           echo "statefulsets.apps/$app"
-          # echo "deployments.apps/$app"
     env: *task-vars
     preconditions:
       - sh: test -f {{.wipeJobTemplate}}
