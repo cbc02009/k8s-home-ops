@@ -31,8 +31,8 @@ spec:
       replicas: 3
       strategy: RollingUpdate
     image:
-      repository: ghcr.io/onedr0p/kubernetes-schemas-web
-      tag: latest@sha256:c630277b440681acbae5791ec9193c19e1a84efcdbd05679ecd7bd8367bec590
+      repository: ghcr.io/cbc02009/kubernetes-schemas-web
+      tag: latest@sha256:f178608fd1687df7e8aa8d934baab57565076f759196b699b0c2ef113564b465
     service:
       main:
         ports:
