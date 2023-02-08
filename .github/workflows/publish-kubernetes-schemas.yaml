@@ -15,8 +15,8 @@ env:
 jobs:
   publish-kubernetes-schemas:
     name: Publish Kubernetes Schemas
-    # runs-on: ["self-hosted"]
-    runs-on: ubuntu-latest
+    runs-on: ["self-hosted"]
+    # runs-on: ubuntu-latest
     steps:
       - name: Setup Kube Tools
         uses: yokawasa/action-setup-kube-tools@b91bb02bc122bd84ac7bbea5f25ed6b0f2ec6275 # renovate: tag=v0.9.2
