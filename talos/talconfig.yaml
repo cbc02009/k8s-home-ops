@@ -1,7 +1,7 @@
 ---
 clusterName: kokoro
-talosVersion: v1.3.2
-kubernetesVersion: v1.26.0
+talosVersion: v1.3.4
+kubernetesVersion: v1.26.1
 endpoint: https://10.0.0.15:6443
 domain: cluster.local
 allowSchedulingOnMasters: true
