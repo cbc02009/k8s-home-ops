@@ -33,6 +33,7 @@ spec:
     env:
       LIBREDDIT_DEFAULT_SHOW_NSFW: true
       LIBREDDIT_DEFAULT_WIDE: true
+      LIBREDDIT_USE_HLS: true
     service:
       main:
         ports:
