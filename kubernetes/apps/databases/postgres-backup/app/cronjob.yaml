@@ -13,12 +13,12 @@ spec:
         spec:
           automountServiceAccountToken: false
           enableServiceLinks: false
-          securityContext:
-            runAsUser: 1031
-            runAsGroup: 1031
-            fsGroup: 1031
-            supplementalGroups:
-              - 65541
+          # securityContext:
+          #   # runAsUser: 1031
+          #   # runAsGroup: 1010
+          #   # fsGroup: 1031
+          #   # supplementalGroups:
+          #   #   - 65541
 
           containers:
             - name: postgres-backup
@@ -27,15 +27,21 @@ spec:
               command:
                 - "/backup.sh"
 
-              envFrom:
-                - secretRef:
-                    name: postgres-backup
-
               env:
                 - name: POSTGRES_HOST
                   value: ${POSTGRES_HOST}
                 - name: POSTGRES_DB
                   value: "authelia, gitea, grafana, home_assistant, postgres, prowlarr_main, radarr_main, vaultwarden, babybuddy"
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres
+                      key: username
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres
+                      key: password
               volumeMounts:
                 - name: nas-backups
                   mountPath: /backups
