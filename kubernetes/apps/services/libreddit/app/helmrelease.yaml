@@ -24,8 +24,9 @@ spec:
       retries: 5
   values:
     controller:
-      replicas: 3
-      strategy: RollingUpdate
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
     fullNameOverride: *app
     image:
       repository: ghcr.io/auricom/libreddit
