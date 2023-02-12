@@ -35,8 +35,9 @@ spec:
       tag: latest@sha256:99ad3e5d377675dc7a5d92527f7738a3097ebbf25b83ecbc6f3f6d4c32e40277
 
     env:
-      domain: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-      redis_host: redis.databases.svc.cluster.local
+      DOMAIN: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      REDIS_HOST: redis.databases.svc.cluster.local
+
     service:
       main:
         ports:
