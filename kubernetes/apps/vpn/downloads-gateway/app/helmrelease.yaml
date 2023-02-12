@@ -96,7 +96,10 @@ spec:
     #         type: udp
     #       - port: 58698
     #         type: tcp
-    # routed_namespaces: ["downloads"]
+    routed_namespaces:
+      - downloads
+      - organizarrs
+      - services
     settings:
       VPN_INTERFACE: "wg0"
       VXLAN_ID: "43"
