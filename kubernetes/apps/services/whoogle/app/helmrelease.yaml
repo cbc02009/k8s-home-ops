@@ -69,6 +69,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
@@ -76,9 +77,11 @@ spec:
         labelSelector:
           matchLabels:
             app.kubernetes.io/name: *app
+
     podAnnotations:
       reloader.stakater.com/auto: "true"
       # setGateway: "true"
+
     resources:
       requests:
         cpu: 5m

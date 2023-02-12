@@ -126,8 +126,8 @@ spec:
       supplementalGroups:
         - 100
 
-    podAnnotations:
-      setGateway: "true"
+    # podAnnotations:
+    #   setGateway: "true"
 
     resources:
       requests:
