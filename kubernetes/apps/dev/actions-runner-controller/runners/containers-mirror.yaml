@@ -3,7 +3,7 @@
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
-  name: container-images
+  name: containers-mirror
   namespace: dev
 spec:
   template:
@@ -12,7 +12,7 @@ spec:
       imagePullPolicy: IfNotPresent
       dockerdWithinRunnerContainer: false
       ephemeral: true
-      repository: cbc02009/container-images
+      repository: cbc02009/containers-mirror
       labels: ["self-hosted"]
       volumeMounts:
         - name: cache-volume
@@ -26,11 +26,11 @@ spec:
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: HorizontalRunnerAutoscaler
 metadata:
-  name: container-images
+  name: containers-mirror
   namespace: dev
 spec:
   scaleTargetRef:
-    name: container-images
+    name: containers-mirror
   scaleUpTriggers:
     - githubEvent:
         workflowJob: {}
@@ -40,4 +40,4 @@ spec:
   maxReplicas: 3
   metrics:
     - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
-      repositoryNames: ["container-images"]
+      repositoryNames: ["containers-mirror"]
