@@ -31,8 +31,8 @@ spec:
     fullNameOverride: *app
 
     image:
-      repository: docker.io/teddit/teddit
-      tag: latest@sha256:99ad3e5d377675dc7a5d92527f7738a3097ebbf25b83ecbc6f3f6d4c32e40277
+      repository: ghcr.io/cbc02009/teddit
+      tag: 0.161.0@sha256:d59c1b5d9aa4a13b65ce2073f2a64121e44430de2ef21b9e54e226a643ad5517
 
     env:
       DOMAIN: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
