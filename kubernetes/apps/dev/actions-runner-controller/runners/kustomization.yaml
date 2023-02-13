@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   - ./container-images.yaml
   - ./k8s-home-ops.yaml
-  - ./vno-local-cpu.yaml
+  # - ./vno-local-cpu.yaml
 metadata:
   namespace: dev
