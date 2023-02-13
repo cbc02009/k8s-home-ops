@@ -29,7 +29,7 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
     image:
-      repository: docker.io/glauth/glauth
+      repository: ghcr.io/cbc02009/glauth
       tag: v2.1.0
     command: ["/app/glauth", "-c", "/config"]
     service:
