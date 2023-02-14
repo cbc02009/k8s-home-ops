@@ -11,7 +11,7 @@ spec:
   type: ExternalName
 
   ports:
-    - name: http
+    - name: https
       port: 8080
 
   externalName: 10.0.0.94

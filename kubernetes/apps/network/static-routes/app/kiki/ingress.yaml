@@ -19,7 +19,7 @@ spec:
               service:
                 name: *app
                 port:
-                  name: console
+                  name: https
   tls:
     - hosts:
         - *host
