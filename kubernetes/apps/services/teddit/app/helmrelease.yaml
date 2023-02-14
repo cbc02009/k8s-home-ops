@@ -37,6 +37,9 @@ spec:
     env:
       DOMAIN: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       REDIS_HOST: redis.databases.svc.cluster.local
+      USE_HELMET: true
+      USE_HELMET_HSTS: true
+      TRUST_PROXY: true
 
     service:
       main:
