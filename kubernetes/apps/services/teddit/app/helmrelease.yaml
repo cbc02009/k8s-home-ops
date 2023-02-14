@@ -32,7 +32,7 @@ spec:
 
     image:
       repository: ghcr.io/cbc02009/teddit
-      tag: 0.161.0
+      tag: latest@sha256:9a825311531cd65f8305e778e54de5726403f6092eb7b62915a28363a0ab6ba0
 
     env:
       DOMAIN: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
@@ -75,11 +75,6 @@ spec:
       readiness: *probes
       startup:
         enabled: false
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: teddit-config-v1
 
     topologySpreadConstraints:
       - maxSkew: 1
