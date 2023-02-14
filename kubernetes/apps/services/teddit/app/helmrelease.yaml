@@ -79,7 +79,7 @@ spec:
     persistence:
       config:
         enabled: true
-        type: emptyDir
+        existingClaim: teddit-config-v1
 
     topologySpreadConstraints:
       - maxSkew: 1
