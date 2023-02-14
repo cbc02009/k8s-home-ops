@@ -24,7 +24,7 @@ spec:
   values:
 
     controller:
-      # type: statefulset
+      type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
 
