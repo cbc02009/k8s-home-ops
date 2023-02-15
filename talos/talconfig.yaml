@@ -15,8 +15,8 @@ clusterSvcNets:
   - 10.10.0.0/16
 cniConfig:
   name: none
-nodes:
 
+nodes:
   - hostname: Anya
     ipAddress: 10.0.0.9
     installDiskSelector:
@@ -44,7 +44,7 @@ nodes:
     ipAddress: 10.0.0.13
     installDiskSelector:
       model: FPT310M8SSD256G
-    controlPlane: true
+    controlPlane: false
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -60,14 +60,12 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.15
 
   - hostname: Ram
     ipAddress: 10.0.0.14
     installDiskSelector:
       model: FPT310M8SSD256G
-    controlPlane: true
+    controlPlane: false
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -83,8 +81,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.15
 
   - hostname: Sakura
     ipAddress: 10.0.0.12
@@ -134,37 +130,84 @@ nodes:
 
 
 controlPlane:
-  patches:
-    - |-
-      cluster:
-        allowSchedulingOnMasters: true
-        controllerManager:
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
-        discovery:
-          registries:
-            service:
-              disabled: true
-        proxy:
-          disabled: true
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
-        scheduler:
-          extraArgs:
-            feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
-      machine:
-        kubelet:
-          extraArgs:
-            feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
-            rotate-server-certificates: "true"
-        sysctls:
-          fs.inotify.max_user_watches: "1048576"
-          fs.inotify.max_user_instances: "8192"
-        time:
-          disabled: false
-          servers:
-            - time.cloudflare.com
-          bootTimeout: 2m0s
-    - |-
-      - op: remove
-        path: /cluster/apiServer/admissionControl
+  inlinePatch:
+    cluster:
+      apiServer:
+        admissionControl: []
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      allowSchedulingOnMasters: true
+      controllerManager:
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      discovery:
+        registries:
+          service:
+            disabled: true
+      proxy:
+        disabled: true
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+      scheduler:
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+    machine:
+      files:
+        - content: |
+            [plugins."io.containerd.grpc.v1.cri"]
+              enable_unprivileged_ports = true
+              enable_unprivileged_icmp = true
+          op: create
+          path: /etc/cri/conf.d/20-customization.part
+      install:
+        extraKernelArgs:
+          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+          rotate-server-certificates: 'true'
+      logging:
+        destinations:
+          - endpoint: udp://vector.kokoro.wtf:6051/
+            format: json_lines
+      sysctls:
+        fs.inotify.max_user_instances: '8192'
+        fs.inotify.max_user_watches: '1048576'
+      time:
+        disabled: false
+        servers:
+          - time.cloudflare.com
+
+worker:
+  inlinePatch:
+    cluster:
+      discovery:
+        registries:
+          service:
+            disabled: true
+    machine:
+      files:
+        - content: |
+            [plugins."io.containerd.grpc.v1.cri"]
+              enable_unprivileged_ports = true
+              enable_unprivileged_icmp = true
+          op: create
+          path: /etc/cri/conf.d/20-customization.part
+      install:
+        extraKernelArgs:
+          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      kubelet:
+        extraArgs:
+          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          rotate-server-certificates: 'true'
+      logging:
+        destinations:
+          - endpoint: udp://vector.kokoro.wtf:6051/
+            format: json_lines
+      sysctls:
+        fs.inotify.max_user_instances: '8192'
+        fs.inotify.max_user_watches: '1048576'
+      time:
+        disabled: false
+        servers:
+          - time.cloudflare.com
