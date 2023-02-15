@@ -23,21 +23,29 @@ spec:
     remediation:
       retries: 5
   values:
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/onedr0p/sabnzbd
       tag: 3.7.2@sha256:666a2affaaef70fa6b15c3b833db984c419a9cf8c3d994ad55d19e45ec9e3ad4
+
     env:
       TZ: "${TZ}"
       SABNZBD__HOST_WHITELIST_ENTRIES: >-
         sabnzbd, sabnzbd.media, sabnzbd.default.svc, sabnzbd.default.svc.cluster, sabnzbd.default.svc.cluster.local, sabnzbd.${EXTERNAL_DOMAIN}
     envFrom:
       - secretRef:
-          name: *app
+          name: sabnzbd-secret
+
     service:
       main:
         ports:
           http:
             port: 8080
+
     ingress:
       main:
         enabled: true
@@ -56,6 +64,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
