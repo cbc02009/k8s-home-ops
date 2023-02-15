@@ -6,5 +6,5 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  # - ./qbittorrent/ks.yaml
+  - ./qbittorrent/ks.yaml
   # - ./qbittorrentvpn/ks.yaml
