@@ -18,8 +18,9 @@ spec:
         namespace: flux-system
   values:
     controller:
-      replicas: 3
-      strategy: RollingUpdate
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
     image:
       repository: docker.io/mpepping/cyberchef
       tag: v9.55.0
