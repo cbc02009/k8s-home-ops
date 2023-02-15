@@ -14,4 +14,4 @@ spec:
     - name: https
       port: 8080
 
-  externalName: 10.0.0.94
+  externalName: kiki.lan
