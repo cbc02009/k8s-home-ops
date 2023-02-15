@@ -30,9 +30,9 @@ spec:
       TZ: "${TZ}"
       SABNZBD__HOST_WHITELIST_ENTRIES: >-
         sabnzbd, sabnzbd.media, sabnzbd.default.svc, sabnzbd.default.svc.cluster, sabnzbd.default.svc.cluster.local, sabnzbd.${EXTERNAL_DOMAIN}
-    # envFrom:
-    #   - secretRef:
-    #       name: *app
+    envFrom:
+      - secretRef:
+          name: *app
     service:
       main:
         ports:
@@ -63,6 +63,10 @@ spec:
       fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
         - 100
+
+    podAnnotations:
+      setGateway: "true"
+
     persistence:
       config:
         enabled: true
