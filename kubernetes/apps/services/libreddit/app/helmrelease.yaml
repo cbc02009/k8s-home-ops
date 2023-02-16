@@ -79,6 +79,11 @@ spec:
       readiness: *probes
       startup:
         enabled: false
+
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+      setGateway: "true"
+
     resources:
       requests:
         cpu: 5m
