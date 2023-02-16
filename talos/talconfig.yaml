@@ -159,17 +159,17 @@ controlPlane:
               enable_unprivileged_icmp = true
           op: create
           path: /etc/cri/conf.d/20-customization.part
-      install:
-        extraKernelArgs:
-          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      # install:
+      #   extraKernelArgs:
+      #     - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
           feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
           rotate-server-certificates: 'true'
-      logging:
-        destinations:
-          - endpoint: udp://vector.kokoro.wtf:6051/
-            format: json_lines
+      # logging:
+      #   destinations:
+      #     - endpoint: udp://vector.kokoro.wtf:6051/
+      #       format: json_lines
       sysctls:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
@@ -193,17 +193,17 @@ worker:
               enable_unprivileged_icmp = true
           op: create
           path: /etc/cri/conf.d/20-customization.part
-      install:
-        extraKernelArgs:
-          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      # install:
+      #   extraKernelArgs:
+      #     - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
           feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
           rotate-server-certificates: 'true'
-      logging:
-        destinations:
-          - endpoint: udp://vector.kokoro.wtf:6051/
-            format: json_lines
+      # logging:
+      #   destinations:
+      #     - endpoint: udp://vector.kokoro.wtf:6051/
+      #       format: json_lines
       sysctls:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
