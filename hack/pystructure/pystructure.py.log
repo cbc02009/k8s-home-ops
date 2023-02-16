@@ -1,0 +1,524 @@
+Load template environment
+Get volsync template
+Get volsync template
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vector/app
+Creating Kustomization file in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vector/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-core/app
+Creating Kustomization file in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-core/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/snapshotcontroller/app
+Creating Kustomization file in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/snapshotcontroller/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/stores
+Creating Kustomization file in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/stores
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Overwriting Volsync file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Creating volsync file in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Overwriting Volsync file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
+Load template environment
+Get volsync template
+Get volsync template
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/volsync/volsync/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/cloudflare-ddns/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/multus/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/k8s-gateway/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/static-routes/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/metallb/config
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/ingress-nginx/certificates
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/network/external-dns/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/weave-gitops/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/dashboard
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/notifications
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/flux-system/add-ons/webhook
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/sonarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/overseerr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/lidarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/readarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/animarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/calibre/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/radarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/organizarrs/prowlarr/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/cluster
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/rook-ceph/rook-ceph/operator
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vector/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vector/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vector/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-cleanup-operator/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/kube-prometheus-stack/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-user/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/vpa/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-smartctl/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-core/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-core/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/prometheus-rules-core/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/speedtest-exporter/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/thanos/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/goldilocks/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/grafana/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/blackbox-exporter/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/monitoring/loki/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/intel-gpu-plugin/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/metrics-server/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/reloader/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/snapshotcontroller/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/snapshotcontroller/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/snapshotcontroller/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/node-feature-discovery/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/stores
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/stores
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/stores
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/external-secrets/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/cilium/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/descheduler/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kube-system/csr-approver/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/vpn/downloads-gateway/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/authelia/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/glauth/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Overwriting Volsync file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/security/vaultwarden/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/translation/vno-local-cpu/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/redis/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-secret/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/databases/postgres-backup/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/frigate/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/emqx/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/home-assistant/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/home-automation/zwave-js-ui/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/libreddit/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/language-tools/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/whoogle/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/babybuddy/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/teddit/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/smtp-relay/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/epic-freegames/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/theme-park/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/immich/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/nextcloud/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/cyberchef/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/services/hajimari/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/komga/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/plex/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/kavita/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/jellyfin/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/media/tautulli/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/cert-manager/cert-manager/issuers
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/policies
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/kyverno/kyverno/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/gitea/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/kubernetes-schemas/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/runners
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Overwriting Volsync file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/dev/actions-runner-controller/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Overwriting Volsync file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/sabnzbd/app
+Found level 3 app path /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
+Loading Kustomization file to ensure resources align to files /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
+Overwriting Kustomization file already exists in /home/chris/k8s-home-ops/kubernetes/apps/downloads/qbittorrent/app
