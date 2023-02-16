@@ -3,7 +3,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: vaultwarden-restic
-  namespace: organizarrs
+  namespace: security
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -26,7 +26,7 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: vaultwarden
-  namespace: organizarrs
+  namespace: security
 spec:
   sourcePVC: vaultwarden-config-v1
   trigger:
