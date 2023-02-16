@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - ./volsync.yaml
   - ./helmrelease.yaml
-  - ./pvc.yaml
   - ./externalsecret.yaml
+  - ./pvc.yaml
 patchesStrategicMerge:
   - patches/addons.yaml
 metadata:

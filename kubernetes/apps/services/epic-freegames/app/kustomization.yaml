@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./secret.sops.yaml
+  - ./volsync.yaml
   - ./helmrelease.yaml
 metadata:
   namespace: services

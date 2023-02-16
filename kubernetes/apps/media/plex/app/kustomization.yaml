@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./volsync.yaml
   - ./externalsecret.yaml
-  - ./pvc.yaml
   - ./helmrelease.yaml
+  - ./pvc.yaml
 metadata:
   namespace: media

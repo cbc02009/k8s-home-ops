@@ -3,19 +3,19 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: plex-restic
-  namespace: media
+  name: animarr-restic
+  namespace: organizarrs
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: plex-restic-secret
+    name: animarr-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/plex'
+        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/animarr'
         RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
         AWS_ACCESS_KEY_ID: '{{ .AWS_ACCESS_KEY_ID }}'
         AWS_SECRET_ACCESS_KEY: '{{ .AWS_SECRET_ACCESS_KEY }}'
@@ -27,16 +27,16 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: plex
-  namespace: media
+  name: animarr
+  namespace: organizarrs
 spec:
-  sourcePVC: plex-config-v1
+  sourcePVC: animarr-config-v1
   trigger:
     schedule: '0 0 * * *'
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: plex-restic-secret
+    repository: animarr-restic-secret
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
