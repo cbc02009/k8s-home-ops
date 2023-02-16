@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./config-pvc.yaml
+  - ./pvc.yaml
 metadata:
   namespace: dev
