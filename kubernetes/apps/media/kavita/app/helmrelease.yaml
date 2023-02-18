@@ -25,7 +25,7 @@ spec:
   values:
     image:
       repository: docker.io/kizaing/kavita
-      tag: nightly@sha256:9315537dba2a0837a47518d5042014d72959f6c7f2df2307f934691755b4abda
+      tag: nightly@sha256:49f1756f48b6cc70bbf6d65da3a1a54cc075b20ffaafbe549b04d427c1834011
     env:
       TZ: "${TZ}"
 
