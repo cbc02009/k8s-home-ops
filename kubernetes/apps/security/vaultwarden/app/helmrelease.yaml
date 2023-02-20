@@ -37,7 +37,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-initdb:14.7
         envFrom:
           - secretRef:
-              name: vaultwarden
+              name: vaultwarden-secret
 
     env:
       TZ: "${TZ}"
