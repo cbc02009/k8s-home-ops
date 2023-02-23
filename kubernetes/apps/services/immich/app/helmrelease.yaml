@@ -56,6 +56,11 @@ spec:
         type: nfs
         server: '${SAN_HOST}'
         path: /tank/k8s/apps/immich
+      cache:
+        enabled: true
+        mountPath: /cache
+        existingClaim: immich-cache-v1
+
     resources:
       requests:
         cpu: 100m
@@ -168,7 +173,9 @@ spec:
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
-        command: ['/bin/sh']
+          - name: cache
+            mountPath: /cache
+        command: ["python", "src/main.py"]
         env:
           - name: NODE_ENV
             value: 'production'
