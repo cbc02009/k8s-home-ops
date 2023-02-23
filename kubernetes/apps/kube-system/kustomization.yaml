@@ -8,7 +8,6 @@ resources:
   # Flux-Kustomizations
   - ./cilium/ks.yaml
   - ./csr-approver/ks.yaml
-  - ./descheduler/ks.yaml
   - ./external-secrets/ks.yaml
   - ./intel-gpu-plugin/ks.yaml
   - ./metrics-server/ks.yaml
