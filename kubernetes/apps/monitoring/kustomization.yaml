@@ -6,7 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  # - ./blackbox-exporter/ks.yaml
+  - ./blackbox-exporter/ks.yaml
   - ./goldilocks/ks.yaml
   - ./grafana/ks.yaml
   - ./kube-cleanup-operator/ks.yaml
