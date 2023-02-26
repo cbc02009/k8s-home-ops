@@ -155,6 +155,15 @@ spec:
                   matchLabels:
                     {{- include "loki.readSelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
+      persistance:
+        size: 10Gi
+        storageClass: ceph-block
+      extraVolumeMounts:
+        - name: rules
+          mountPath: /rules
+      extraVolumes:
+        - name: rules
+          emptyDir: {}
 
     backend:
       affinity: |
