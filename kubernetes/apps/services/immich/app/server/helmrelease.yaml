@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
-              name: immich
+              name: immich-secret
     controller:
       replicas: 2
       strategy: RollingUpdate
