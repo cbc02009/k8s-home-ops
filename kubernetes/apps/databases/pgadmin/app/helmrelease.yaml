@@ -26,9 +26,8 @@ spec:
     image:
       repository: dpage/pgadmin4
       tag: "6.20"
-    # controller:
-    #   replicas: 3
-    #   strategy: RollingUpdate
+    controller:
+      type: statefulset
     envFrom:
       - secretRef:
           name: *app
