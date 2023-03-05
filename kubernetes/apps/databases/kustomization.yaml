@@ -8,5 +8,6 @@ resources:
   # Flux-Kustomizations
   - ./cloudnative-pg/ks.yaml
   # - ./postgres-backup/ks.yaml
+  - ./pgadmin/ks.yaml
   - ./postgres-secret/ks.yaml
   - ./redis/ks.yaml
