@@ -57,7 +57,7 @@ spec:
         mountPath: /usr/src/app/upload
       cache:
         enabled: true
-        existingClaim: immich-cache-v1
+        existingClaim: immich-cache-v2
         mountPath: /cache
     topologySpreadConstraints:
       - maxSkew: 1
