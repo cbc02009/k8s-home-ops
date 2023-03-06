@@ -22,6 +22,16 @@
       "separateMinorPatch": true
     },
     {
+      "description": "Obico images",
+      "groupName": "Obico",
+      "matchPackagePatterns": ["obico"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "separateMinorPatch": true
+    },
+    {
       "description": "Rook-Ceph image and chart",
       "groupName": "Rook-Ceph",
       "matchPackagePatterns": ["rook.ceph"],
