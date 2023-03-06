@@ -45,3 +45,8 @@ spec:
     args:
       - -c
       - "gunicorn --bind 0.0.0.0:3333 --workers 1 wsgi"
+    service:
+      main:
+        ports:
+          http:
+            port: 3333
