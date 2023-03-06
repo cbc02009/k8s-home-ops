@@ -52,12 +52,12 @@ spec:
               - *host
 
     persistence:
-      # storage:
-      #   enabled: true
-      #   mountPath: /usr/src/app/upload
-      #   type: nfs
-      #   server: '${SAN_HOST}'
-      #   path: /tank/k8s/apps/obico
+      storage:
+        enabled: true
+        mountPath: /app/static_build/media/tsd-timelapses/private/
+        type: nfs
+        server: '${SAN_HOST}'
+        path: /tank/k8s/apps/obico
       config:
         enabled: true
         mountPath: /app
@@ -103,18 +103,12 @@ spec:
               name: obico-configmap
         command: sh
         args:
-          - -c
-          - celery
-          - -A
-          - config
-          - worker
+          - -c celery
+          - -A config worker
           - --beat
-          - -l
-          - info
-          - -c
-          - '2'
-          - -Q
-          - realtime,celery
+          - -l info
+          - -c 2
+          - -Q realtime,celery
         volumeMounts:
           - name: config
             mountPath: /app
