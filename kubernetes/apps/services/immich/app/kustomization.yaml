@@ -7,7 +7,6 @@ resources:
   - ./externalsecret.yaml
   - ./configmap.yaml
   - ./nfs-pvc.yaml
-  - ./pvc.yaml
   - ./server
   - ./microservices
   - ./machine-learning

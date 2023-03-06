@@ -55,10 +55,6 @@ spec:
         enabled: true
         existingClaim: immich-nfs
         mountPath: /usr/src/app/upload
-      cache:
-        enabled: true
-        existingClaim: immich-cache-v2
-        mountPath: /cache
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
