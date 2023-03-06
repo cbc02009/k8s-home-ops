@@ -82,7 +82,7 @@ spec:
           - -c
           - gunicorn
           - --bind 0.0.0.0:3333
-          - --workers 1 wsgi"
+          - --workers 1 wsgi
         service:
           main:
             ports:
