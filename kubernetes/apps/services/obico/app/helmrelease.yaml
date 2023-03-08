@@ -30,7 +30,7 @@ spec:
 
     image:
       repository: ghcr.io/gabe565/obico/web
-      tag: latest@sha256:887b19305043d46694cb59271834b6469397db00e5b65687a94b6c00d291c9e6
+      tag: latest@sha256:072f3b84736bdfe777cabb4278cd7a60c7fe4dbf43c638cf4f0f5cb15c156884
 
     service:
       main:
@@ -70,7 +70,7 @@ spec:
         name: ml-api
         image:
           repository: ghcr.io/gabe565/obico/ml-api
-          tag: latest@sha256:24714a735a21511cd52ae7ae2698fb5f059bedc07992c7e3838f4130c4eb0c0e
+          tag: latest@sha256:f19a518567e1f62d5d50c910a6904861f57e40ee2fb3082e709b0e4120e8b97d
         env:
           - name: FLASK_APP
             value: 'server.py'
@@ -97,7 +97,7 @@ spec:
         name: tasks
         image:
           repository: ghcr.io/gabe565/obico/ml-api
-          tag: latest@sha256:24714a735a21511cd52ae7ae2698fb5f059bedc07992c7e3838f4130c4eb0c0e
+          tag: latest@sha256:f19a518567e1f62d5d50c910a6904861f57e40ee2fb3082e709b0e4120e8b97d
         envFrom:
           # - secretRef:
           #     name: obico-secret
