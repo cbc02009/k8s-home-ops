@@ -79,6 +79,8 @@ spec:
 
     ingress:
       main:
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         enabled: true
         ingressClassName: "nginx"
         hosts:
