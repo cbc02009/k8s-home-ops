@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: obico-cache-v1
+  name: obico-config-v1
   namespace: services
   labels:
     app.kubernetes.io/name: &name obico
