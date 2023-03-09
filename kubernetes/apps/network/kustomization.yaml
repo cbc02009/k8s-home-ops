@@ -11,4 +11,4 @@ resources:
   - ./k8s-gateway/ks.yaml
   - ./metallb/ks.yaml
   - ./static-routes/ks.yaml
-  - ./unifi-controller/ks.yaml
+  # - ./unifi-controller/ks.yaml
