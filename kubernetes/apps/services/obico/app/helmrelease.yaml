@@ -56,9 +56,7 @@ spec:
     persistence:
       media:
         enabled: true
-        type: nfs
-        server: '${SAN_HOST}'
-        path: /tank/k8s/apps/obico
+        existingClaim: obico-nfs
       data:
         enabled: true
         existingClaim: obico-config-v1
