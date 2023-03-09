@@ -8,7 +8,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/services/unifi-controller/app/'
+  path: './kubernetes/apps/network/unifi-controller/app/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,6 +20,6 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: unifi-controller
-      namespace: services
+      namespace: network
   dependsOn:
     - name: apps-rook-ceph-cluster
