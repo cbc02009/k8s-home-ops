@@ -35,8 +35,8 @@ spec:
       main:
         ports:
           https:
-            protocol: HTTPS
             port: 8443
+            protocol: HTTPS
           discovery:
             port: 10001
             protocol: UDP
