@@ -28,13 +28,16 @@ spec:
       type: statefulset
 
     image:
-      repository: docker.io/linuxserver/unifi-controller
+      repository: docker.io/jacobalberty/unifi
       tag: 7.3.83
 
     env:
-      PUID: 911
-      GUID: 911
-      TZ: ${TZ}
+      RUNAS_UID0: "false"
+      UNIFI_UID: "999"
+      UNIFI_GID: "999"
+      UNIFI_STDOUT: "true"
+      JVM_INIT_HEAP_SIZE:
+      JVM_MAX_HEAP_SIZE: 1024M
 
     service:
       main:
@@ -91,10 +94,4 @@ spec:
       config:
         enabled: true
         existingClaim: unifi-controller-config-v1
-
-
-    podSecurityContext:
-      runAsUser: 911
-      runAsGroup: 911
-      fsGroup: 911
-      fsGroupChangePolicy: "OnRootMismatch"
+        mountPath: /unifi
