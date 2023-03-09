@@ -34,7 +34,7 @@ spec:
     service:
       main:
         ports:
-          http:
+          https:
             port: 8443
             protocol: HTTPS
           discovery:
