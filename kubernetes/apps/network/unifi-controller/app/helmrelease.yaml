@@ -92,8 +92,9 @@ spec:
         enabled: true
         existingClaim: unifi-controller-config-v1
 
+
     podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
+      runAsUser: 911
+      runAsGroup: 911
+      fsGroup: 911
       fsGroupChangePolicy: "OnRootMismatch"
