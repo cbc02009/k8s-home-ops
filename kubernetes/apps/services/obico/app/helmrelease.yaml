@@ -28,14 +28,16 @@ spec:
     keepHistory: false
   values:
 
+    server:
+      image:
+        repository: ghcr.io/gabe565/obico/web
+        tag: sha-72b26dfa6f35800388816c621870664e5501dd19
+
     envFrom:
       - configMapRef: obico-configmap
 
-    service:
-      main:
-        ports:
-          http:
-            port: 3334
+    env:
+      OCTOPRINT_TUNNEL_PORT_RANGE: "0-0"
 
     ingress:
       main:
@@ -54,10 +56,20 @@ spec:
     persistence:
       media:
         enabled: true
-        mountPath: /app/static_build/media
         type: nfs
         server: '${SAN_HOST}'
         path: /tank/k8s/apps/obico
       data:
         enabled: true
         existingClaim: obico-config-v1
+
+    ml-api:
+      image:
+        repository: ghcr.io/gabe565/obico/ml-api
+        tag: sha-72b26dfa6f35800388816c621870664e5501dd19
+      env:
+        DEBUG: "False"
+
+    resources:
+      requests:
+        memory: 4096M
