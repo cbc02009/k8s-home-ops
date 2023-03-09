@@ -34,7 +34,8 @@ spec:
     service:
       main:
         ports:
-          http:
+          https:
+            protocol: HTTPS
             port: 8443
           discovery:
             port: 10001
