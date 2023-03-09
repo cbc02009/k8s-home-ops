@@ -24,6 +24,9 @@ spec:
       retries: 5
 
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: docker.io/linuxserver/unifi-controller
       tag: 7.3.83
