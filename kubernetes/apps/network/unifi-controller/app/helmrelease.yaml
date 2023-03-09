@@ -35,6 +35,9 @@ spec:
       main:
         ports:
           http:
+            enabled: false
+            port: 8000
+          https:
             port: 8443
             protocol: HTTPS
           discovery:
