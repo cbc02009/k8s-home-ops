@@ -31,6 +31,11 @@ spec:
       repository: docker.io/linuxserver/unifi-controller
       tag: 7.3.83
 
+    env:
+      PUID: 911
+      GUID: 911
+      TZ: ${TZ}
+
     service:
       main:
         type: LoadBalancer
