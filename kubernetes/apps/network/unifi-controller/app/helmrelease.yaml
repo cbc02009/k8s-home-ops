@@ -51,6 +51,9 @@ spec:
             port: 3478
             protocol: UDP
             primary: false
+          device:
+            port: 8080
+            primary: false
 
     ingress:
       main:
