@@ -16,10 +16,5 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: unifi-controller
-      namespace: network
   dependsOn:
     - name: apps-rook-ceph-cluster
