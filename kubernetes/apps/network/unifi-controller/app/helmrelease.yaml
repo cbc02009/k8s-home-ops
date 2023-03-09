@@ -33,6 +33,9 @@ spec:
 
     service:
       main:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        loadBalancerIP: "${LB_UNIFI}"
         ports:
           http:
             enabled: false
