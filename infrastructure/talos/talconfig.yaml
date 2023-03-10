@@ -17,95 +17,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: Anya
-    ipAddress: 10.0.0.9
-    installDiskSelector:
-      model: KingFast
-    controlPlane: true
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.0.0.90
-    networkInterfaces:
-      - interface: eth0
-        addresses:
-          - 10.0.0.9/23
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.15
-
-  - hostname: Rem
-    ipAddress: 10.0.0.13
-    installDiskSelector:
-      model: FPT310M8SSD256G
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.0.0.90
-    networkInterfaces:
-      - interface: eth0
-        addresses:
-          - 10.0.0.13/23
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-
-  - hostname: Ram
-    ipAddress: 10.0.0.14
-    installDiskSelector:
-      model: FPT310M8SSD256G
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.0.0.90
-    networkInterfaces:
-      - interface: eth0
-        addresses:
-          - 10.0.0.14/23
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-
-  - hostname: Sakura
-    ipAddress: 10.0.0.12
-    installDiskSelector:
-      model: INTEL SSDPEKNW512G8
-    controlPlane: true
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.0.0.90
-    networkInterfaces:
-      - interface: eth0
-        addresses:
-          - 10.0.0.12/23
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.15
-
-  - hostname: Uiharu
+  - hostname: uiharu.ctec.run
     ipAddress: 10.0.0.10
     installDiskSelector:
       serial: PHKA1261000X1P0B
@@ -128,6 +40,93 @@ nodes:
         vip:
           ip: 10.0.0.15
 
+  - hostname: anya.ctec.run
+    ipAddress: 10.0.0.111
+    installDiskSelector:
+      model: KingFast
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.0.11/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+
+  - hostname: sakura.ctec.run
+    ipAddress: 10.0.0.12
+    installDiskSelector:
+      model: INTEL SSDPEKNW512G8
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.0.12/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+        vip:
+          ip: 10.0.0.15
+
+  - hostname: rem.ctec.run
+    ipAddress: 10.0.0.13
+    installDiskSelector:
+      model: FPT310M8SSD256G
+    controlPlane: false
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.0.13/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
+
+  - hostname: ram.ctec.run
+    ipAddress: 10.0.0.14
+    installDiskSelector:
+      model: FPT310M8SSD256G
+    controlPlane: false
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.0.0.90
+    networkInterfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.0.14/23
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.0.1
 
 controlPlane:
   inlinePatch:
