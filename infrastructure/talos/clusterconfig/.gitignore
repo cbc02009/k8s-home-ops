@@ -4,3 +4,8 @@ kokoro-Ram.yaml
 kokoro-Sakura.yaml
 kokoro-Uiharu.yaml
 talosconfig
+kokoro-uiharu.ctec.run.yaml
+kokoro-anya.ctec.run.yaml
+kokoro-sakura.ctec.run.yaml
+kokoro-rem.ctec.run.yaml
+kokoro-ram.ctec.run.yaml
