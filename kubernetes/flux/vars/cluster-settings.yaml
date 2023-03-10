@@ -16,11 +16,11 @@ data:
 
   TZ: America/New_York
 
-  CONTROL_IP: 10.0.0.9
+  CONTROL_IP: 10.0.0.15
 
-  SAN_HOST: shana.lan
+  SAN_HOST: shana.ctec.run
   POSTGRES_HOST: 10.0.0.96
-  MINIO_HOST: minio.lan
+  MINIO_HOST: minio.ctec.run
 
   LB_RANGE: 10.0.1.0/25
 
