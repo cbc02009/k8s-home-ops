@@ -46,7 +46,7 @@ nodes:
           ip: 10.0.0.9
 
   - hostname: anya.ctec.run
-    ipAddress: 10.0.0.111
+    ipAddress: 10.0.0.11
     installDiskSelector:
       model: KingFast
     controlPlane: true
