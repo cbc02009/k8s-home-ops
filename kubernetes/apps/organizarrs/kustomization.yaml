@@ -7,7 +7,6 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./animarr/ks.yaml
-  - ./calibre/ks.yaml
   - ./lidarr/ks.yaml
   - ./overseerr/ks.yaml
   - ./prowlarr/ks.yaml
