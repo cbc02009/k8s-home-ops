@@ -16,7 +16,7 @@ data:
 
   TZ: America/New_York
 
-  CONTROL_IP: 10.0.0.15
+  CONTROL_IP: 10.0.0.9
 
   SAN_HOST: shana.ctec.run
   POSTGRES_HOST: 10.0.0.96

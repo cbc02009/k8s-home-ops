@@ -1,14 +1,19 @@
 ---
 clusterName: kokoro
+
 talosVersion: v1.3.5
 kubernetesVersion: v1.26.1
-endpoint: https://10.0.0.15:6443
-domain: cluster.local
+endpoint: https://cluster.ctec.run:6443
+
 allowSchedulingOnMasters: true
-additionalMachineCertSans:
-  - 10.0.0.15
+
 additionalApiServerCertSans:
+  - 10.0.0.9
+
+additionalMachineCertSans:
+  - 10.0.0.9
   - cluster.local
+  - cluster.ctec.run
 clusterPodNets:
   - 10.11.0.0/16
 clusterSvcNets:
@@ -38,7 +43,7 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.0.1
         vip:
-          ip: 10.0.0.15
+          ip: 10.0.0.9
 
   - hostname: anya.ctec.run
     ipAddress: 10.0.0.111
@@ -61,7 +66,7 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.0.1
         vip:
-          ip: 10.0.0.15
+          ip: 10.0.0.9
 
   - hostname: sakura.ctec.run
     ipAddress: 10.0.0.12
@@ -84,7 +89,7 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.0.1
         vip:
-          ip: 10.0.0.15
+          ip: 10.0.0.9
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.0.13
