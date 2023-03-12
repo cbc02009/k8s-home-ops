@@ -2,11 +2,11 @@
 version: "3"
 
 vars:
-  PROJECT_ROOT:
-    sh: git rev-parse --show-toplevel
   PROJECT_DIR:
     sh: git rev-parse --show-toplevel
   CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
+  TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
+
 
 includes:
   fx: .taskfiles/Flux/Tasks.yml
@@ -17,6 +17,7 @@ includes:
   ta: .taskfiles/Talos/Tasks.yml
   es: .taskfiles/ExternalSecrets/Tasks.yml
   vs: .taskfiles/VolSync/Tasks.yml
+  tf: .taskfiles/Terraform/Tasks.yml
 
 tasks:
   default:

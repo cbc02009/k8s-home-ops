@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/clusterpolicy_v1.json
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -27,7 +28,7 @@ spec:
             annotations:
               +(nginx.ingress.kubernetes.io/auth-method): GET
               +(nginx.ingress.kubernetes.io/auth-url): |-
-                http://authelia.security.svc.cluster.local/api/verify
+                http://authelia.security.svc.cluster.local:9091/api/verify
               +(nginx.ingress.kubernetes.io/auth-signin): |-
                 https://auth.${EXTERNAL_DOMAIN}?rm=$request_method
               +(nginx.ingress.kubernetes.io/auth-response-headers): |-
@@ -35,19 +36,19 @@ spec:
               +(nginx.ingress.kubernetes.io/auth-snippet): |
                 proxy_set_header X-Forwarded-Method $request_method;
 
-    # - name: external-dns
-    #   match:
-    #     any:
-    #       - resources:
-    #           kinds: ["Ingress"]
-    #           annotations:
-    #             external-dns.home.arpa/enabled: "true"
-    #   mutate:
-    #     patchStrategicMerge:
-    #       metadata:
-    #         annotations:
-    #           +(external-dns.alpha.kubernetes.io/target): |-
-    #             ipv4.${EXTERNAL_DOMAIN}
+    - name: external-dns
+      match:
+        any:
+          - resources:
+              kinds: ["Ingress"]
+              annotations:
+                external-dns.home.arpa/enabled: "true"
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            annotations:
+              +(external-dns.alpha.kubernetes.io/target): |-
+                ipv4.${EXTERNAL_DOMAIN}
 
     - name: whitelist-source-range
       match:

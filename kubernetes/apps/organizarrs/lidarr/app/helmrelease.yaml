@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -30,7 +31,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/lidarr-develop
-      tag: 1.1.2.2935@sha256:a8a29571129d60e2c948c07d01e5be5dedbf99cd130c625d3af6fa48dbf83cc9
+      tag: 1.1.3.2982@sha256:37dff1e762b8c7cb17dc212db95923f8969897f3f401b5f426afdb14ea069dee
 
     env:
       TZ: "${TZ}"

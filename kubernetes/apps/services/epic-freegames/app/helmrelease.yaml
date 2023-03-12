@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -25,7 +26,7 @@ spec:
   values:
     image:
       repository: ghcr.io/claabs/epicgames-freegames-node
-      tag: latest@sha256:0f24f2bbb4bbdbb39fa0f4a094321440c304af10f5c06e616998f61e2b398252
+      tag: latest@sha256:78a5550a50884eaa2d5d80e46ad663069b4d1df0fae967e368b46c0537b0a86c
 
     service:
       main:

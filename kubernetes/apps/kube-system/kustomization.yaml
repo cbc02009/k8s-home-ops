@@ -1,5 +1,5 @@
 ---
-# yaml-language-server stuff goes here
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -7,11 +7,9 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./cilium/ks.yaml
-  # - ./csr-approver/ks.yaml
-  - ./descheduler/ks.yaml
+  - ./csr-approver/ks.yaml
   - ./external-secrets/ks.yaml
   - ./intel-gpu-plugin/ks.yaml
-  - ./kured/ks.yaml
   - ./metrics-server/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml

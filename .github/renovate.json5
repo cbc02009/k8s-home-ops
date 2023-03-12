@@ -1,21 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends":[
-    ":enableRenovate",
+  "extends": [
     "config:base",
+    "docker:enableMajor",
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":separatePatchReleases",
-    "docker:enableMajor",
     ":enablePreCommit",
     ":automergeDigest",
     ":automergeBranch",
-    "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage",
-    "github>cbc02009/k8s-home-ops//.github/renovate/labels",
-    "github>cbc02009/k8s-home-ops//.github/renovate/disabledDatasources.json5",
-    "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits",
-    "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge",
+    "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions.json5",
+    "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge.json5",
+    "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage.json5",
+    "github>cbc02009/k8s-home-ops//.github/renovate/groups.json5",
+    "github>cbc02009/k8s-home-ops//.github/renovate/labels.json5",
+    "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits.json5",
+    "helpers:pinGitHubActionDigests"
   ],
   "repositories":[
     "cbc02009/k8s-home-ops"

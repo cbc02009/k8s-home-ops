@@ -6,12 +6,12 @@ tasks:
   cilium:
     desc: 2. Bootstrap cilium
     cmds:
-      - kustomize build talos/cni --enable-helm | kubectl apply -f -
+      - kustomize build infrastructure/talos/cni --enable-helm | kubectl apply -f -
 
   csr-approver:
     desc: 1. Bootstrap the CSR Approver
     cmds:
-      - kustomize build talos/kubelet-csr-approver --enable-helm | kubectl apply -f -
+      - kustomize build infrastructure/talos/kubelet-csr-approver --enable-helm | kubectl apply -f -
 
   sops:
     desc: 4. Bootstrap sops

@@ -18,9 +18,9 @@ data:
 
   CONTROL_IP: 10.0.0.9
 
-  SAN_HOST: shana.lan
+  SAN_HOST: shana.ctec.run
   POSTGRES_HOST: 10.0.0.96
-  MINIO_HOST: minio.lan
+  MINIO_HOST: minio.ctec.run
 
   LB_RANGE: 10.0.1.0/25
 
@@ -34,7 +34,7 @@ data:
   LB_JELLYFIN: 10.0.1.7
   LB_SONARR: 10.0.1.8
   LB_RADARR: 10.0.1.9
-
+  LB_UNIFI: 10.0.1.10
   LB_POSTGRES: 10.0.1.11
   LB_PLEX: 10.0.1.12
   LB_HAJIMARI: 10.0.1.13

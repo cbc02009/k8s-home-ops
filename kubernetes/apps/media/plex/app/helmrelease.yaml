@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -26,7 +27,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/plex-beta
-      tag: 1.30.2.6563-3d4dc0cce@sha256:7a66b095ca592dbe7ea086f055c6e84caf9916ffb7b7d3f004929b397d8cf44e
+      tag: 1.31.2.6783-9209b39b4@sha256:04c4bf057b4fd777ccd92fd2dea1db9eddd559d3caa986dc1d8666b1ba42b4d1
 
     # controller:
     #   # -- enable the controller.

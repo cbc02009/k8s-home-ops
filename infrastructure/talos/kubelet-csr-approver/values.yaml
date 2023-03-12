@@ -1,0 +1,12 @@
+---
+providerRegex: |
+  ^(uiharu|anya|rem|ram|sakura)$
+
+namespace: kube-system
+
+bypassDnsResolution: true
+
+providerIpPrefixes:
+  - 10.0.0.0/23
+
+tolerations: {}

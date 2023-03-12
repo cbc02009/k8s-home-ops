@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: 3.4.4
+      version: 3.5.1
       sourceRef:
         kind: HelmRepository
         name: nextcloud-charts
@@ -47,6 +48,8 @@ spec:
       enabled: true
       className: nginx
       annotations:
+        # external-dns.home.arpa/enabled: "true"
+        # auth.home.arpa/enabled: "true"
         cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
         nginx.ingress.kubernetes.io/proxy-body-size: "10G"
         nginx.ingress.kubernetes.io/proxy-buffering: "off"
@@ -223,7 +226,7 @@ spec:
       #    image: busybox
       #    command: ['do', 'something']
         - name: init-db
-          image: ghcr.io/onedr0p/postgres-initdb:14.6
+          image: ghcr.io/onedr0p/postgres-initdb:14.7
           env:
             - name: POSTGRES_HOST
               value: ${POSTGRES_HOST}

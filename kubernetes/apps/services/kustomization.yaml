@@ -1,5 +1,5 @@
 ---
-# yaml-language-server stuff goes here
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -7,11 +7,15 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./babybuddy/ks.yaml
-  - ./epic-freegames/ks.yaml
+  - ./cyberchef/ks.yaml
+  # - ./epic-freegames/ks.yaml
   - ./hajimari/ks.yaml
-  # - ./immich/ks.yaml
+  - ./immich/ks.yaml
   - ./language-tools/ks.yaml
+  - ./libreddit/ks.yaml
   - ./nextcloud/ks.yaml
-  # - ./obsidian-db/ks.yaml
+  - ./obico/ks.yaml
   - ./smtp-relay/ks.yaml
+  - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
+  - ./whoogle/ks.yaml

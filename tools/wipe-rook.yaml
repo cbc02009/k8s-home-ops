@@ -14,7 +14,7 @@ spec:
       command: ['/bin/sh', '-c']
       args:
         [
-          'apt update; apt install fdisk gdisk parted udev -y; wipefs -af /dev/nvme1n1; blkdiscard /dev/nvme1n1; partprobe /dev/nvme1n1',
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/nvme1n1; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/nvme1n1; wipefs -af /dev/nvme1n1; blkdiscard /dev/nvme1n1; partprobe /dev/nvme1n1',
         ]
 ---
 apiVersion: v1
@@ -32,7 +32,7 @@ spec:
       command: ['/bin/sh', '-c']
       args:
         [
-          'apt update; apt install fdisk gdisk parted udev -y; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
         ]
 ---
 apiVersion: v1
@@ -50,7 +50,7 @@ spec:
       command: ['/bin/sh', '-c']
       args:
         [
-          'apt update; apt install fdisk gdisk parted udev -y; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
         ]
 ---
 apiVersion: v1
@@ -68,5 +68,110 @@ spec:
       command: ['/bin/sh', '-c']
       args:
         [
-          'apt update; apt install fdisk gdisk parted udev -y; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
         ]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-uiharu
+spec:
+  restartPolicy: Never
+  nodeName: uiharu
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-sakura
+spec:
+  restartPolicy: Never
+  nodeName: sakura
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-rem
+spec:
+  restartPolicy: Never
+  nodeName: rem
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-ram
+spec:
+  restartPolicy: Never
+  nodeName: ram
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-anya
+spec:
+  restartPolicy: Never
+  nodeName: anya
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
