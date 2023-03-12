@@ -1,11 +1,10 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: security
 resources:
-  - helmrelease.yaml
-  - externalsecret.yaml
-patchesStrategicMerge:
-  - patches/env.yaml
-metadata:
-  namespace: security
+  - ./externalsecret.yaml
+  - ./helmrelease.yaml
+  - ./volsync.yaml
+  - ./pvc.yaml

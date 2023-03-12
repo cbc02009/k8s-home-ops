@@ -1,11 +1,12 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: ingress-nginx
   namespace: network
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
       chart: ingress-nginx
@@ -24,19 +25,17 @@ spec:
       retries: 3
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: monitoring
   values:
     controller:
-      kind: DaemonSet
-      replicaCount: 1
+      replicaCount: 3
       extraEnvs:
         - name: TZ
           value: "${TZ}"
 
       service:
-        loadBalancerIP: "${LB_NGINX_INGRESS}"
+        annotations:
+          metallb.universe.tf/loadBalancerIPs: |-
+            ${LB_NGINX_INGRESS}
         externalTrafficPolicy: Local
 
       publishService:
@@ -47,7 +46,6 @@ spec:
 
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
-        # tcp-services-configmap: network/tcp-services
 
       config:
         client-header-timeout: 120
@@ -92,8 +90,8 @@ spec:
         - effect: NoExecute
           operator: Exists
 
-      # podAnnotations:
-      #   configmap.reloader.stakater.com/reload: "cloudflare-proxied-networks"
+      podAnnotations:
+        configmap.reloader.stakater.com/reload: "cloudflare-proxied-networks"
 
       resources:
         requests:
@@ -101,3 +99,10 @@ spec:
           cpu: 20m
         limits:
           memory: 1000Mi
+  valuesFrom:
+    # Cloudflare Networks
+    # https://www.cloudflare.com/ips/
+    - targetPath: controller.config.proxy-real-ip-cidr
+      kind: ConfigMap
+      name: cloudflare-networks
+      valuesKey: cloudflare-networks.txt

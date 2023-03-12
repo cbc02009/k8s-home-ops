@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.2.1
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s-charts
@@ -31,8 +31,8 @@ spec:
       replicas: 3
       strategy: RollingUpdate
     image:
-      repository: ghcr.io/truxnell/kubernetes-schemas-web
-      tag: latest@sha256:e464f914ea934b50bd49ca02b0cd60ba7e4642951f99c4f2fdab68c9894aa705
+      repository: ghcr.io/cbc02009/kubernetes-schemas-web
+      tag: latest@sha256:e975ff89e6174a0405553cb8a521d8696b18a5db37c96da4f071ec6c2cff0c77
     service:
       main:
         ports:

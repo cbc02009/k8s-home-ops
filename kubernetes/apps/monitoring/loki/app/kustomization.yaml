@@ -1,10 +1,11 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./helmrelease.yaml
-  - ./prometheusrule.yaml
   - ./externalsecret.yaml
+  - ./prometheusrule.yaml
   - ./configmap.yaml
 metadata:
   namespace: monitoring

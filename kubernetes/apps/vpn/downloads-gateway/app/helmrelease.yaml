@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 6.0.0
+      version: 6.5.0
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
@@ -32,7 +33,7 @@ spec:
     image:
       repository: ghcr.io/angelnu/pod-gateway
       tag: v1.8.1
-    DNS: 172.16.1.1
+    # DNS: 172.16.1.1
     addons:
       netshoot:
         enabled: true
@@ -60,18 +61,22 @@ spec:
             value: "off"
           - name: LOG_LEVEL
             value: debug
-          - name: IPTABLES_NFT
-            value: true
+          - name: HEALTH_TARGET_ADDRESS
+            value: '1.1.1.1'
+          - name: HEALTH_VPN_DURATION_INITIAL
+            value: 30s
+          # - name: IPTABLES_NFT
+          #   value: true
         envFrom:
           - secretRef:
               name: mullvad
         securityContext:
-          privileged: true
+          # privileged: true
           capabilities:
             add:
               - NET_ADMIN
-              - SYS_MODULE
-              - NET_RAW
+              # - SYS_MODULE
+              # - NET_RAW
         networkPolicy:
           enabled: true
           egress:
@@ -91,19 +96,22 @@ spec:
     #         type: udp
     #       - port: 58698
     #         type: tcp
-    routed_namespaces: ["downloads"]
+    routed_namespaces:
+      - downloads
+      - organizarrs
+      - services
     settings:
       VPN_INTERFACE: "wg0"
-      VXLAN_ID: "43"
-      VXLAN_IP_NETWORK: "172.16.1"
+      # VXLAN_ID: "43"
+      # VXLAN_IP_NETWORK: "172.16.1"
       VPN_BLOCK_OTHER_TRAFFIC: "true"
       VPN_TRAFFIC_PORT: "51820"
-      DNS_LOCAL_CIDRS: "local"
+      # DNS_LOCAL_CIDRS: "local"
       NOT_ROUTED_TO_GATEWAY_CIDRS: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
-      VPN_LOCAL_CIDRS: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
-      IPTABLES_NFT: "yes"
+      # VPN_LOCAL_CIDRS: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
+      # IPTABLES_NFT: "yes"
     webhook:
       gatewayDefault: false
       image:
         repository: ghcr.io/angelnu/gateway-admision-controller
-        tag: v3.7.0
+        tag: v3.8.0
