@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: kubelet-csr-approver
-      version: 0.2.4
+      version: 0.2.8
       sourceRef:
         kind: HelmRepository
         name: postfinance-charts
@@ -24,8 +25,14 @@ spec:
 
   values:
 
-    providerRegex: ^(uiharu|anya|rem|ram|sakura)$
+    providerRegex: |
+      ^(uiharu|anya|rem|ram|sakura)$
 
     namespace: kube-system
+
+    bypassDnsResolution: true
+
+    providerIpPrefixes:
+      - 10.0.0.0/23
 
     tolerations: {}
