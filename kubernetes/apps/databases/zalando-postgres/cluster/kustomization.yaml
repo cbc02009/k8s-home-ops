@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   - ./cluster.yaml
   - ./service.yaml
-  # - ./externalsecret.yaml
+  - ./externalsecret.yaml
 metadata:
   namespace: databases
