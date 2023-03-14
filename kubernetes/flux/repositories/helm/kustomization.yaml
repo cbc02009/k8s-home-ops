@@ -41,3 +41,4 @@ resources:
   - ./stakater-charts.yaml
   - ./vector-charts.yaml
   - ./weave-gitops.yaml
+  - ./zalando-postgres-operator.yaml
