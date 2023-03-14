@@ -10,3 +10,4 @@ resources:
   - ./pgadmin/ks.yaml
   - ./postgres-secret/ks.yaml
   - ./redis/ks.yaml
+  - ./zalando-postgres/ks.yaml
