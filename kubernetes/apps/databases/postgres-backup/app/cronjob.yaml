@@ -5,7 +5,7 @@ metadata:
   name: postgres-backup
   namespace: databases
 spec:
-  schedule: "0 17 * * *"
+  schedule: "0 * * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -13,12 +13,12 @@ spec:
         spec:
           automountServiceAccountToken: false
           enableServiceLinks: false
-          # securityContext:
-          #   # runAsUser: 1031
-          #   # runAsGroup: 1010
-          #   # fsGroup: 1031
-          #   # supplementalGroups:
-          #   #   - 65541
+          securityContext:
+            # runAsUser: 1031
+            runAsGroup: 1010
+            fsGroup: 1010
+            supplementalGroups:
+              - 65541
 
           containers:
             - name: postgres-backup
@@ -31,16 +31,16 @@ spec:
                 - name: POSTGRES_HOST
                   value: ${POSTGRES_HOST}
                 - name: POSTGRES_DB
-                  value: "authelia, gitea, grafana, home_assistant, postgres, prowlarr_main, radarr_main, vaultwarden, babybuddy"
+                  value: "authelia, gitea, grafana, home_assistant, immich, nextcloud, postgres, prowlarr_main, radarr_main, vaultwarden"
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: postgres
+                      name: postgres-secret
                       key: username
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: postgres
+                      name: postgres-secret
                       key: password
               volumeMounts:
                 - name: nas-backups
