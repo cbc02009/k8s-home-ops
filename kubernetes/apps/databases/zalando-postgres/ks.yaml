@@ -21,30 +21,30 @@ spec:
       kind: HelmRelease
       name: zalando-postgres
       namespace: databases
-# ---
-# # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomization_v1beta2.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-# kind: Kustomization
-# metadata:
-#   name: apps-zalando-postgres-cluster
-#   namespace: flux-system
-#   labels:
-#     substitution.flux.home.arpa/enabled: 'true'
-# spec:
-#   path: './kubernetes/apps/databases/zalando-postgres/cluster/'
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
-#   interval: 30m
-#   retryInterval: 1m
-#   timeout: 3m
-#   healthChecks:
-#     - apiVersion: acid.zalan.do/v1
-#       kind: postgresql
-#       name: postgres
-#       namespace: databases
-#   dependsOn:
-#     - name: apps-zalando-postgres
-#     - name: apps-kyverno
-#     - name: apps-rook-ceph-cluster
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomization_v1beta2.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: apps-zalando-postgres-cluster
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  path: './kubernetes/apps/databases/zalando-postgres/cluster/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+  healthChecks:
+    - apiVersion: acid.zalan.do/v1
+      kind: postgresql
+      name: postgres
+      namespace: databases
+  dependsOn:
+    - name: apps-zalando-postgres
+    - name: apps-kyverno
+    - name: apps-rook-ceph-cluster
