@@ -28,6 +28,7 @@
     "prIgnoreNotification"
   ],
   "rebaseWhen":"conflicted",
+  "ignorePaths": ["kubernetes/**/volsync.yaml"]
   "flux": {
     "fileMatch": ["kubernetes/.+\\.ya?ml$"]
   },
