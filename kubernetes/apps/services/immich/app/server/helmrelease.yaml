@@ -35,8 +35,8 @@ spec:
           - secretRef:
               name: immich-secret
     controller:
-      replicas: 2
-      strategy: RollingUpdate
+            # replicas: 2
+      # strategy: RollingUpdate
       annotations:
         reloader.stakater.com/auto: "true"
     image:
