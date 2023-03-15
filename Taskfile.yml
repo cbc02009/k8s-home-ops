@@ -6,6 +6,7 @@ vars:
     sh: git rev-parse --show-toplevel
   CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
+  POSTGRES_IP: '10.0.1.11'
 
 
 includes:
@@ -18,6 +19,7 @@ includes:
   es: .taskfiles/ExternalSecrets/Tasks.yml
   vs: .taskfiles/VolSync/Tasks.yml
   tf: .taskfiles/Terraform/Tasks.yml
+  pg: .taskfiles/Postgres/Tasks.yml
 
 tasks:
   default:
