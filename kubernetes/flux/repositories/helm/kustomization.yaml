@@ -26,7 +26,6 @@ resources:
   - ./kubernetes-sigs-descheduler-charts.yaml
   - ./kubernetes-sigs-metrics-server-charts.yaml
   - ./kubernetes-sigs-nfd-charts.yaml
-  - ./kubernetes-dashboard.yaml
   - ./k8s-at-home-charts.yaml
   - ./lwolf-charts.yaml
   - ./metallb-charts.yaml
