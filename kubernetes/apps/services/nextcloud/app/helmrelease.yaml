@@ -123,8 +123,8 @@ spec:
         usernameKey: username
         passwordKey: password
         # tokenKey: serverinfo_token
-        smtpUsernameKey: SMTP_USERNAME
-        smtpPasswordKey: SMTP_PASSWORD
+        # smtpUsernameKey: SMTP_USERNAME
+        # smtpPasswordKey: SMTP_PASSWORD
       update: 0
       # If web server is not binding default port, you can define it
       # containerPort: 8080
