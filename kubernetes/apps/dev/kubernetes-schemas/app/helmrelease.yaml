@@ -28,7 +28,7 @@ spec:
     keepHistory: false
   values:
     controller:
-      replicas: 3
+      replicas: 2
       strategy: RollingUpdate
     image:
       repository: ghcr.io/cbc02009/kubernetes-schemas-web
@@ -62,7 +62,7 @@ spec:
             app.kubernetes.io/name: *app
     resources:
       requests:
-        cpu: 5m
+        cpu: 10m
         memory: 50Mi
       limits:
         memory: 100Mi
