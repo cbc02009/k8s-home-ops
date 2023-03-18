@@ -41,5 +41,5 @@ spec:
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
     retain:
-      daily: 10
+      daily: 20
       within: 3d
