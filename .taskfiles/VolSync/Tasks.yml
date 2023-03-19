@@ -14,7 +14,7 @@ vars:
   wipeJobTemplate: "{{.PROJECT_DIR}}/.taskfiles/VolSync/WipeJob.tmpl.yaml"
   waitForJobScript: "{{.PROJECT_DIR}}/.taskfiles/VolSync/wait-for-job.sh"
   listJobTemplate: "{{.PROJECT_DIR}}/.taskfiles/VolSync/ListJob.tmpl.yaml"
-  unlockJobTemplate: "{{.PROJECT_DIR}}/.taskfiles/volsync/UnlockJob.tmpl.yaml"
+  unlockJobTemplate: "{{.PROJECT_DIR}}/.taskfiles/VolSync/UnlockJob.tmpl.yaml"
   ts: '{{now | date "150405"}}'
 
 tasks:
