@@ -30,8 +30,7 @@ spec:
     - name: immich-server
   values:
     controller:
-            # replicas: 2
-      # strategy: RollingUpdate
+      type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
     image:
