@@ -26,6 +26,12 @@ spec:
     - name: kube-prometheus-stack
       namespace: monitoring
   values:
+
+    image:
+      registry: quay.io
+      repository: thanos/thanos
+      tag: v0.30.2
+
     existingObjstoreSecret: &secret thanos-objstore-secret
     query:
       enabled: true

@@ -26,10 +26,11 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  dependsOn:
+    - name: immich-typesense
   values:
     controller:
-            # replicas: 2
-      # strategy: RollingUpdate
+      type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
     image:
