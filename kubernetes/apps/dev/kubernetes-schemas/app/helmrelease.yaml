@@ -28,8 +28,7 @@ spec:
     keepHistory: false
   values:
     controller:
-      replicas: 2
-      strategy: RollingUpdate
+      type: statefulset
     image:
       repository: ghcr.io/cbc02009/kubernetes-schemas-web
       tag: latest@sha256:7d431a96423c786ce3fd970415698b11c1317a04f2973f1f266793f69f00ebec
