@@ -26,6 +26,7 @@ spec:
     - name: external-secrets
   values:
     controller:
+      type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
     image:
