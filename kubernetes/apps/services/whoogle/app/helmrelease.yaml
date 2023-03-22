@@ -23,9 +23,10 @@ spec:
     remediation:
       retries: 5
   values:
-    # controller:
-    #   replicas: 3
-    #   strategy: RollingUpdate
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
     fullNameOverride: *app
     image:
       repository: docker.io/benbusby/whoogle-search
