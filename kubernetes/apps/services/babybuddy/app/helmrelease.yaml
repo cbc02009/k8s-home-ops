@@ -24,6 +24,11 @@ spec:
       retries: 5
 
   values:
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/cbc02009/babybuddy
       tag: 1.15.1
