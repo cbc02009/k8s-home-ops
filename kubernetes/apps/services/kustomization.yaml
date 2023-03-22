@@ -11,6 +11,7 @@ resources:
   # - ./epic-freegames/ks.yaml
   - ./hajimari/ks.yaml
   - ./immich/ks.yaml
+  - ./invidious-server/ks.yaml
   - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
   - ./nextcloud/ks.yaml
