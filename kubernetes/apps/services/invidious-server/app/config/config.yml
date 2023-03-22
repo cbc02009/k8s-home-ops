@@ -9,12 +9,12 @@
 ## Database configuration with separate parameters.
 ## This setting is MANDATORY, unless 'database_url' is used.
 ##
-# db:
-#   user: ${SECRET_INVIDIOUS_DB_USER}
-#   password: ${SECRET_INVIDIOUS_DB_PASSWORD}
-#   host: postgres.default.svc.cluster.local
-#   port: 5432
-#   dbname: invidious
+db:
+  user: invidious-user
+  password: ${INVIDIOUS_DB_PASSWORD}
+  host: postgres.default.svc.cluster.local
+  port: 5432
+  dbname: invidious
 
 ##
 ## Database configuration using a single URI. This is an
@@ -30,7 +30,7 @@
 ## Accepted values: a postgres:// URI
 ## Default: postgres://kemal:kemal@localhost:5432/invidious
 ##
-database_url: postgres://${DB_USER}:${DB_PASSWORD}@postgres.databases.svc.cluster.local.:5432/invidious
+# database_url: postgres://${DB_USER}:${DB_PASSWORD}@postgres.databases.svc.cluster.local.:5432/invidious
 
 ##
 ## Enable automatic table integrity check. This will create
