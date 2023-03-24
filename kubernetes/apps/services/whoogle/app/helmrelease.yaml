@@ -33,7 +33,7 @@ spec:
       tag: 0.8.1
     env:
       # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
-      WHOOGLE_ALT_YT: invidious.${EXTERNAL_DOMAIN}
+      # WHOOGLE_ALT_YT: invidious.${EXTERNAL_DOMAIN}
       # WHOOGLE_ALT_IG: imginn.com
       WHOOGLE_ALT_RD: libreddit.${EXTERNAL_DOMAIN}
       # WHOOGLE_ALT_MD: scribe.${EXTERNAL_DOMAIN}
@@ -59,8 +59,8 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
-          external-dns.home.arpa/enabled: "true"
-          auth.home.arpa/enabled: "true"
+          # external-dns.home.arpa/enabled: "true"
+          # auth.home.arpa/enabled: "true"
           hajimari.io/icon: mdi:google
         hosts:
           - host: &host "search.${EXTERNAL_DOMAIN}"
