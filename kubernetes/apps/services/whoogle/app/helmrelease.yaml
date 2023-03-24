@@ -81,7 +81,7 @@ spec:
 
     podAnnotations:
       reloader.stakater.com/auto: "true"
-      setGateway: "true"
+      # setGateway: "true"
 
     resources:
       requests:
