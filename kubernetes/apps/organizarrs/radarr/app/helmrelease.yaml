@@ -58,8 +58,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_RADARR}
         ports:
           http:
             port: *port

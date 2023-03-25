@@ -57,8 +57,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_PROWLARR}
         ports:
           http:
             port: *port

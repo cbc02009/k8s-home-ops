@@ -48,8 +48,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_ANIMARR}
         ports:
           http:
             port: *port
