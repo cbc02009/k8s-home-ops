@@ -6,7 +6,7 @@ metadata:
   name: blackbox-exporter
   namespace: monitoring
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
       chart: prometheus-blackbox-exporter
@@ -15,7 +15,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community-charts
         namespace: flux-system
-      interval: 5m
+      interval: 15m
   install:
     createNamespace: true
     remediation: # perform remediation when helm install fails
@@ -26,6 +26,7 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   values:
+    pspEnabled: false
     fullnameOverride: blackbox-exporter
 
     image:
@@ -35,8 +36,7 @@ spec:
       enabled: true
       ingressClassName: "nginx"
       annotations:
-        hajimari.io/enable: "false"
-
+        hajimari.io/icon: mdi:solid
       hosts:
         - host: blackbox-exporter.${EXTERNAL_DOMAIN}
           paths:
@@ -48,40 +48,52 @@ spec:
             - blackbox-exporter.${EXTERNAL_DOMAIN}
 
     podAnnotations:
-      configmap.reloader.stakater.com/reload: "blackbox-exporter"
-
+      configmap.reloader.stakater.com/reload: 'blackbox-exporter'
     allowIcmp: true
 
     securityContext:
       readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
-        add: ["NET_RAW"]
-
+        add: ['NET_RAW']
     config:
       modules:
         http_2xx:
           prober: http
           timeout: 5s
           http:
-            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            valid_http_versions: ['HTTP/1.1', 'HTTP/2.0']
             follow_redirects: true
-            preferred_ip_protocol: "ip4"
-
+            preferred_ip_protocol: 'ip4'
         http_403:
           prober: http
           timeout: 5s
           http:
-            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            valid_http_versions: ['HTTP/1.1', 'HTTP/2.0']
             follow_redirects: true
-            preferred_ip_protocol: "ip4"
+            preferred_ip_protocol: 'ip4'
             valid_status_codes: [403]
-
+        http_401:
+          prober: http
+          timeout: 5s
+          http:
+            valid_http_versions: ['HTTP/1.1', 'HTTP/2.0']
+            follow_redirects: true
+            preferred_ip_protocol: 'ip4'
+            valid_status_codes: [401]
+        http_400:
+          prober: http
+          timeout: 5s
+          http:
+            valid_http_versions: ['HTTP/1.1', 'HTTP/2.0']
+            follow_redirects: true
+            preferred_ip_protocol: 'ip4'
+            valid_status_codes: [400]
         icmp:
           prober: icmp
           timeout: 30s
           icmp:
-            preferred_ip_protocol: "ip4"
+            preferred_ip_protocol: 'ip4'
 
     serviceMonitor:
       enabled: true
@@ -164,10 +176,12 @@ spec:
           for: 15m
           labels:
             severity: warning
-        - alert: BlackboxProbeHttpFailure
-          expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
-          for: 5m
-          labels:
-            severity: error
-          annotations:
-            message: The HTTP response for {{"{{ $labels.target }}"}} was not a HTTP status code is not 200-399
+        # Not useful for my setup as i have some probes returing other erorr codes (like 401) that is acctually successful
+        # letting the success probe being source of truth
+        # - alert: BlackboxProbeHttpFailure
+        #   expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
+        #   for: 5m
+        #   labels:
+        #     severity: error
+        #   annotations:
+        #     message: The HTTP response for {{"{{ $labels.target }}"}} was not a HTTP status code is not 200-399
