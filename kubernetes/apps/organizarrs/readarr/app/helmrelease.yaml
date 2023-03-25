@@ -45,8 +45,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_READARR}
         ports:
           http:
             port: *port

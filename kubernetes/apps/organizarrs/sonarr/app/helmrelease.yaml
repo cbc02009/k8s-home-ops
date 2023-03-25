@@ -48,8 +48,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_SONARR}
         ports:
           http:
             port: *port
