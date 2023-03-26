@@ -7,7 +7,6 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   # - ./jellyfin/ks.yaml
-  - ./kavita/ks.yaml
   - ./komga/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
