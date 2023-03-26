@@ -4,7 +4,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: pgadmin-restic
-  namespace: organizarrs
+  namespace: databases
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -28,7 +28,7 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: pgadmin
-  namespace: organizarrs
+  namespace: databases
 spec:
   sourcePVC: pgadmin-config-v1
   trigger:
