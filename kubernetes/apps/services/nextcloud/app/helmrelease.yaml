@@ -175,7 +175,7 @@ spec:
             'objectstore' => array(
               'class' => '\\OC\\Files\\ObjectStore\\S3',
               'arguments' => array(
-                'hostname'   => 'minio.lan',
+                'hostname'   => 'minio.ctec.run',
                 'port'       => 9000,
                 'bucket'     => 'nextcloud',
                 'autocreate' => true,
