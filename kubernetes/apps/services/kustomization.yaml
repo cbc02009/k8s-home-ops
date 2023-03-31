@@ -9,7 +9,6 @@ resources:
   - ./babybuddy/ks.yaml
   - ./cyberchef/ks.yaml
   # - ./epic-freegames/ks.yaml
-  - ./hajimari/ks.yaml
   - ./immich/ks.yaml
   - ./invidious-server/ks.yaml
   - ./language-tools/ks.yaml

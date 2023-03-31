@@ -8,10 +8,10 @@ endpoint: https://cluster.ctec.run:6443
 allowSchedulingOnMasters: true
 
 additionalApiServerCertSans:
-  - 10.0.0.9
+  - 10.5.0.2
 
 additionalMachineCertSans:
-  - 10.0.0.9
+  - 10.5.0.2
   - cluster.local
   - cluster.ctec.run
 clusterPodNets:
@@ -23,7 +23,7 @@ cniConfig:
 
 nodes:
   - hostname: uiharu.ctec.run
-    ipAddress: 10.0.0.10
+    ipAddress: 10.0.2.10
     installDiskSelector:
       serial: PHKA1261000X1P0B
     controlPlane: true
@@ -37,16 +37,14 @@ nodes:
     networkInterfaces:
       - interface: eth0
         addresses:
-          - 10.0.0.10/23
+          - 10.0.2.10/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.9
+            gateway: 10.0.2.1
 
   - hostname: anya.ctec.run
-    ipAddress: 10.0.0.11
+    ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
     controlPlane: true
@@ -60,16 +58,14 @@ nodes:
     networkInterfaces:
       - interface: eth0
         addresses:
-          - 10.0.0.11/23
+          - 10.0.2.11/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.9
+            gateway: 10.0.2.1
 
   - hostname: sakura.ctec.run
-    ipAddress: 10.0.0.12
+    ipAddress: 10.0.2.12
     installDiskSelector:
       model: INTEL SSDPEKNW512G8
     controlPlane: true
@@ -83,16 +79,14 @@ nodes:
     networkInterfaces:
       - interface: eth0
         addresses:
-          - 10.0.0.12/23
+          - 10.0.2.12/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.0.1
-        vip:
-          ip: 10.0.0.9
+            gateway: 10.0.2.1
 
   - hostname: rem.ctec.run
-    ipAddress: 10.0.0.13
+    ipAddress: 10.0.2.13
     installDiskSelector:
       model: FPT310M8SSD256G
     controlPlane: false
@@ -106,14 +100,14 @@ nodes:
     networkInterfaces:
       - interface: eth0
         addresses:
-          - 10.0.0.13/23
+          - 10.0.2.13/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.0.1
+            gateway: 10.0.2.1
 
   - hostname: ram.ctec.run
-    ipAddress: 10.0.0.14
+    ipAddress: 10.0.2.14
     installDiskSelector:
       model: FPT310M8SSD256G
     controlPlane: false
@@ -127,11 +121,11 @@ nodes:
     networkInterfaces:
       - interface: eth0
         addresses:
-          - 10.0.0.14/23
+          - 10.0.2.14/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.0.1
+            gateway: 10.0.2.1
 
 controlPlane:
   inlinePatch:
