@@ -33,6 +33,6 @@ spec:
     bypassDnsResolution: true
 
     providerIpPrefixes:
-      - 10.0.0.0/23
+      - 10.0.2.0/24
 
     tolerations: {}
