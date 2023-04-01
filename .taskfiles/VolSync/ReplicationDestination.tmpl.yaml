@@ -12,6 +12,10 @@ spec:
     destinationPVC: "${claim}"
     copyMethod: Direct
     storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
     # IMPORTANT NOTE:
     #   Set to the last X number of snapshots to restore from
     # previous: 2
