@@ -28,6 +28,10 @@ spec:
                 - "/backup.sh"
 
               env:
+                - name: POSTGRES_CLUSTER
+                  value: "true"
+                - name: POSTGRES_EXTRA_OPTS
+                  value: ""
                 - name: POSTGRES_HOST
                   value: ${POSTGRES_HOST}
                 - name: POSTGRES_DB
