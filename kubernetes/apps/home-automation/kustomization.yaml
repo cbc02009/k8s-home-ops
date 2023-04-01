@@ -6,7 +6,5 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./emqx/ks.yaml
   - ./frigate/ks.yaml
   - ./home-assistant/ks.yaml
-  # - ./zwave-js-ui/ks.yaml
