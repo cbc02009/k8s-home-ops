@@ -8,7 +8,7 @@ metadata:
     substitution.flux.home.arpa/enabled: "true"
 spec:
   interval: 10m
-  path: "./kubernetes/cluster-0/apps/database/ext-postgres-operator/app"
+  path: "./kubernetes/apps/databases/ext-postgres-operator/app"
   prune: true
   sourceRef:
     kind: GitRepository
