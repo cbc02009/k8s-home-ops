@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: postgres-ext
   namespace: databases
+  annotations:
+    coredns.io/hostname: "postgres-zalando.kokoro.wtf"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local

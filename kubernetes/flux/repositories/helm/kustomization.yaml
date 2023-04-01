@@ -15,6 +15,7 @@ resources:
   - ./emqx-charts.yaml
   - ./external-dns-charts.yaml
   - ./external-secrets-charts.yaml
+  - ./external-postgres-operator.yaml
   - ./fairwinds-charts.yaml
   - ./gabe565-charts.yaml
   - ./gitea-charts.yaml

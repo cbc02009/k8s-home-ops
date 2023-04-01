@@ -5,10 +5,7 @@ metadata:
   name: postgres
   namespace: databases
 spec:
-  env:
-    - name: ALLOW_NOSSL
-      value: "true"
-  teamId: "acid"
+  teamId: "ctec"
   volume:
     size: 30Gi
   numberOfInstances: 3
