@@ -33,6 +33,7 @@ spec:
           value: "${TZ}"
 
       service:
+        loadBalancerIP: ${LB_NGINX_INGRESS}
         annotations:
           metallb.universe.tf/loadBalancerIPs: |-
             ${LB_NGINX_INGRESS}
