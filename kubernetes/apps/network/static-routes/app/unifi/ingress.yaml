@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: &app kiki
+  name: &app unifi
   namespace: network
   labels:
     app.kubernetes.io/name: *app
@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: "nginx"
   rules:
-    - host: &host kiki.${EXTERNAL_DOMAIN}
+    - host: &host unifi.${EXTERNAL_DOMAIN}
       http:
         paths:
           - path: /
