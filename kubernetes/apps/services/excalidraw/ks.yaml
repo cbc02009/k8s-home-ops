@@ -6,7 +6,7 @@ metadata:
   name: apps-excalidraw
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/default/excalidraw/app
+  path: ./kubernetes/apps/services/excalidraw/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -15,7 +15,7 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: excalidraw
-      namespace: default
+      namespace: services
   interval: 30m
   retryInterval: 1m
   timeout: 3m
