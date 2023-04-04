@@ -130,7 +130,7 @@ spec:
           - hosts:
               - *host
     write:
-      replicas: 3
+      replicas: 1
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -145,7 +145,7 @@ spec:
         storageClass: ceph-block
 
     read:
-      replicas: 3
+      replicas: 1
       affinity: |
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -175,7 +175,7 @@ spec:
                   matchLabels:
                     {{- include "loki.readSelectorLabels" . | nindent 12 }}
                 topologyKey: kubernetes.io/hostname
-      replicas: 3
+      replicas: 1
       persistance:
         size: 10Gi
         storageClass: ceph-block
