@@ -39,7 +39,7 @@ spec:
             key: api-key
     extraArgs:
       - --cloudflare-proxied
-      - --annotation-filter=external-dns.home.arpa/enabled in (true)
+      - --annotation-filter=ingress.home.arpa/type in (external, external-auth)
     policy: sync
     sources:
       - ingress

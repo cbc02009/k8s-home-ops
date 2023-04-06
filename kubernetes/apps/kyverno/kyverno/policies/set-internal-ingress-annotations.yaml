@@ -29,16 +29,16 @@ spec:
             annotations:
               ingress.home.arpa/type: "internal|external|external-auth"
 
-    # - name: websecure
-    #   match:
-    #     any:
-    #       - resources:
-    #           kinds: ["Ingress"]
-    #   mutate:
-    #     patchStrategicMerge:
-    #       metadata:
-    #         annotations:
-    #           +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
+    - name: websecure
+      match:
+        any:
+          - resources:
+              kinds: ["Ingress"]
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            annotations:
+              +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
 
     - name: internal
       match:
