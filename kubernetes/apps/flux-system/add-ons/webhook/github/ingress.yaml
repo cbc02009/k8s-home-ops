@@ -5,7 +5,7 @@ metadata:
   name: webhook-receiver
   namespace: flux-system
   annotations:
-    external-dns.home.arpa/enabled: "true"
+    ingress.home.arpa/type: "external"
     hajimari.io/enable: "false"
 spec:
   ingressClassName: "nginx"

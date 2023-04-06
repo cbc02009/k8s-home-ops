@@ -51,7 +51,7 @@ spec:
         ingressClassName: "nginx"
         annotations:
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
-          external-dns.home.arpa/enabled: "true"
+          ingress.home.arpa/type: "external"
           hajimari.io/enable: "true"
           hajimari.io/icon: plex
           hajimari.io/appName: plex

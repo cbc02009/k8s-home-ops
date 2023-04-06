@@ -67,6 +67,7 @@ spec:
         # Ref: https://xclacksoverhead.org/home/about
         location-snippet: |
           add_header X-Clacks-Overhead "GNU Terry Pratchett" always;
+
       metrics:
         enabled: true
         serviceMonitor:
