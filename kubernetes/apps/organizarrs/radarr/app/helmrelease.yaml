@@ -83,19 +83,6 @@ spec:
           - hosts:
               - *host
             secretName: &tls tls.radarr
-      api:
-        enabled: true
-        ingressClassName: "nginx"
-        # annotations:
-        #   ingress.home.arpa/type: "external"
-        hosts:
-          - host: *host
-            paths:
-              - path: /api
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
 
     persistence:
       config:
