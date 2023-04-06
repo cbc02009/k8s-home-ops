@@ -44,6 +44,7 @@ spec:
           enabled: true
           ingressClassName: "nginx"
           annotations:
+            ingress.home.arpa/type: "external-auth"
             nginx.ingress.kubernetes.io/proxy-body-size: 64m
           hosts:
             - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"

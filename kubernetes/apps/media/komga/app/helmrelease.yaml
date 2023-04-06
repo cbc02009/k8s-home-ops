@@ -47,7 +47,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
-          cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: "television-box"
           hajimari.io/appName: komga
