@@ -5,6 +5,7 @@ metadata:
   name: &app minio
   namespace: network
   annotations:
+    ingress.home.arpa/type: "internal"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-body-size: 5000m
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
