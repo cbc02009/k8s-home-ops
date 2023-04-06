@@ -28,8 +28,7 @@ spec:
     keepHistory: false
   values:
     controller:
-      replicas: 2
-      strategy: RollingUpdate
+      type: statefulset
     image:
       repository: quay.io/oriedge/k8s_gateway
       tag: v0.3.4
