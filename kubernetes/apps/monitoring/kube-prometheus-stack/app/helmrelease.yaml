@@ -144,6 +144,7 @@ spec:
         pathType: Prefix
         ingressClassName: "nginx"
         annotations:
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: database-clock
           hajimari.io/appName: Prometheus
@@ -425,6 +426,7 @@ spec:
         pathType: Prefix
         ingressClassName: "nginx"
         annotations:
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: bell-alert
           hajimari.io/appName: Alertmanager

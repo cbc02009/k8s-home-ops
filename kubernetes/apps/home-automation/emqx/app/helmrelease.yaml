@@ -64,6 +64,8 @@ spec:
       dashboard:
         enabled: true
         ingressClassName: nginx
+        annotations:
+          ingress.home.arpa/type: "internal"
         path: /
         pathType: Prefix
         hosts:

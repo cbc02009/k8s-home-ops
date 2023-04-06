@@ -54,6 +54,7 @@ spec:
         hostname: "thanos-cluster.${EXTERNAL_DOMAIN}"
         ingressClassName: "nginx"
         annotations:
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: "archive-clock"
         tls: true

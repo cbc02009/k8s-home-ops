@@ -177,9 +177,7 @@ spec:
       enabled: true
       className: nginx
       annotations:
-        {}
-        # kubernetes.io/ingress.class: nginx
-        # kubernetes.io/tls-acme: "true"
+        ingress.home.arpa/type: "external-auth"
       hosts:
         - host: &host gitea.${EXTERNAL_DOMAIN}
           paths:

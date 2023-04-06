@@ -124,6 +124,7 @@ spec:
       dashboard:
         ingressClassName: "nginx"
         annotations:
+          ingress.home.arpa/type: "internal"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hajimari.io/enable: "true"
           hajimari.io/icon: content-save
