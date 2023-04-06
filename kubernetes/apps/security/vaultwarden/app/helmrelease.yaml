@@ -73,7 +73,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
-          external-dns.home.arpa/enabled: "true"
+          ingress.home.arpa/type: "external"
         hosts:
           - host: &host "vault.${EXTERNAL_DOMAIN}"
             paths:
