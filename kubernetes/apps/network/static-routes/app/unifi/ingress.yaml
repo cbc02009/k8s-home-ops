@@ -4,6 +4,8 @@ kind: Ingress
 metadata:
   name: &app unifi
   namespace: network
+  annotations:
+    ingress.home.arpa/type: "internal"
   labels:
     app.kubernetes.io/name: *app
     app.kubernetes.io/instance: *app
