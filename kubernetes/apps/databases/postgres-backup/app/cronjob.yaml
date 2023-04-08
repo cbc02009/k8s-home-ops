@@ -39,12 +39,12 @@ spec:
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: postgres-secret
+                      name: postgres-backup-secret
                       key: username
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: postgres-secret
+                      name: postgres-backup-secret
                       key: password
               volumeMounts:
                 - name: nas-backups
