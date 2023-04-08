@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://frigate.kokoro.wtf/api/config/schema
 logger:
   default: info
   logs:
