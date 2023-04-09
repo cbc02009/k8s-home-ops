@@ -45,6 +45,7 @@ spec:
       TIMEZONE: ${TZ}
       DB_ENGINE: django.db.backends.postgresql
       TANDOOR_PORT: 8080
+      EMAIL_USE_TLS: true
 
     envFrom:
       - secretRef:
