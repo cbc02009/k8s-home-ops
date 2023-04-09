@@ -71,7 +71,11 @@ spec:
               - *host
 
     persistence:
-      config:
-        mountPath: /opt/recipes
+      static:
+        mountPath: /opt/recipes/staticfiles
         enabled: true
-        existingClaim: tandoor-config-v1
+        existingClaim: tandoor-static-v1
+      media:
+        mountPath: /opt/recipes/mediafiles
+        enabled: true
+        existingClaim: tandoor-media-v1
