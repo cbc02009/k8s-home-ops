@@ -24,14 +24,16 @@ spec:
       retries: 5
   values:
     controller:
-      replicas: 3
-      strategy: RollingUpdate
+      type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/cbc02009/glauth
       tag: v2.2.0-rc1
+
     command: ["/app/glauth", "-c", "/config"]
+
     service:
       main:
         ports:
@@ -40,11 +42,13 @@ spec:
           ldap:
             enabled: true
             port: 389
-    # podSecurityContext:
-    #   runAsUser: 1000
-    #   runAsGroup: 1000
-    #   fsGroup: 1000
-    #   fsGroupChangePolicy: "OnRootMismatch"
+
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+
     persistence:
       config:
         enabled: true
@@ -57,6 +61,7 @@ spec:
             path: groups.toml
           - key: users.toml
             path: users.toml
+
     resources:
       requests:
         cpu: 5m
