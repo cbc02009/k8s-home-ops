@@ -84,11 +84,11 @@ cameras:
         - -rw_timeout
         - "5000000"
       inputs:
-        - path: http://10.0.3.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
+        - path: http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
             - rtmp
             - record
-        - path: http://10.0.3.10/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
+        - path: http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=${DOORBELL_USER}&password=${DOORBELL_PASS}
           roles:
             - detect
           global_args: -analyzeduration 1000M -probesize 1000M
