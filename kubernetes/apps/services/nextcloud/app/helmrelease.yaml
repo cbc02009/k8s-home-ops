@@ -48,8 +48,7 @@ spec:
       enabled: true
       className: nginx
       annotations:
-        ingress.home.arpa/type: "external-auth"
-        cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
+        ingress.home.arpa/type: "internal"
         nginx.ingress.kubernetes.io/proxy-body-size: "10G"
         nginx.ingress.kubernetes.io/proxy-buffering: "off"
         nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
