@@ -35,12 +35,7 @@ spec:
       tag: 0.12.0
     env:
       TZ: "${TZ}"
-      # LIBVA_DRIVER_NAME: i965
-      FRIGATE_MQTT_PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: emqx-config
-            key: user_1_password
+      LIBVA_DRIVER_NAME: i965
     # envFrom:
     #   - secretRef:
     #       name: frigate-secret
