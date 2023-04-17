@@ -21,7 +21,7 @@ access_control:
     - domain: ["grafana.${EXTERNAL_DOMAIN}"]
       policy: bypass
 
-identity_providers: {}
+# identity_providers: {}
   # oidc:
   #   cors:
   #     endpoints: ["authorization", "token", "revocation", "introspection"]
