@@ -61,13 +61,11 @@ spec:
       runAsGroup: 568
       fsGroup: 568
       fsGroupChangePolicy: OnRootMismatch
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /data
-        accessMode: ReadWriteOnce
-        size: 512Mi
-        storageClass: ceph-block
     persistence:
+      config:
+        enabled: true
+        existingClaim: mosquitto-config-v1
+        mountPath: /data
       config-file:
         enabled: true
         type: configMap
