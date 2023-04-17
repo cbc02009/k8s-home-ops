@@ -27,7 +27,7 @@ data:
   #Pre-defined IP addresses
   LB_NGINX_INGRESS: 10.6.0.200
   LB_GITEA: 10.6.0.2
-  LB_MOSQUITTO: 10.6.0.3
+  LB_EMQX: 10.6.0.3
   LB_K8S_GATEWAY: 10.6.0.4
   LB_HASS: 10.6.0.5
   LB_JELLYFIN: 10.6.0.6
