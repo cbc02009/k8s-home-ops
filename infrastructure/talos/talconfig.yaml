@@ -1,8 +1,11 @@
 ---
 clusterName: kokoro
 
-talosVersion: v1.3.6
-kubernetesVersion: v1.26.2
+# renovate: image depName=ghcr.io/siderolabs/installer
+talosVersion: v1.3.7
+# renovate: image depName=registry.k8s.io/kube-apiserver
+kubernetesVersion: v1.26.4
+
 endpoint: https://cluster.ctec.run:6443
 
 allowSchedulingOnMasters: true
