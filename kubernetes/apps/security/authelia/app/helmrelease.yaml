@@ -69,7 +69,7 @@ spec:
             add_header X-Frame-Options "SAMEORIGIN";
             add_header X-XSS-Protection "1; mode=block";
         hosts:
-          - host: &host "auth.kokoro.wtf"
+          - host: &host "auth.${EXTERNAL_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
