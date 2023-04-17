@@ -39,8 +39,8 @@ spec:
       FRIGATE_MQTT_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: mosquitto-secret
-            key: FRIGATE_PASSWORD
+            name: emqx-secret
+            key: user_1_password
 
     service:
       main:
