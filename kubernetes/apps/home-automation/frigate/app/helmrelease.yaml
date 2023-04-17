@@ -42,6 +42,10 @@ spec:
             name: emqx-secret
             key: user_1_password
 
+    envFrom:
+      - secretRef:
+        name: frigate-secret
+
     service:
       main:
         ports:
