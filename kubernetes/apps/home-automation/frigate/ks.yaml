@@ -23,4 +23,4 @@ spec:
       namespace: home-automation
   dependsOn:
     - name: apps-rook-ceph-cluster
-    - name: apps-mosquitto
+    - name: apps-emqx
