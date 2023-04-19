@@ -38,42 +38,6 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: disk-wipe-ram
-spec:
-  restartPolicy: Never
-  nodeName: ram
-  containers:
-    - name: disk-wipe
-      image: ubuntu
-      securityContext:
-        privileged: true
-      command: ['/bin/sh', '-c']
-      args:
-        [
-          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
-        ]
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: disk-wipe-rem
-spec:
-  restartPolicy: Never
-  nodeName: rem
-  containers:
-    - name: disk-wipe
-      image: ubuntu
-      securityContext:
-        privileged: true
-      command: ['/bin/sh', '-c']
-      args:
-        [
-          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
-        ]
----
-apiVersion: v1
-kind: Pod
-metadata:
   name: disk-clean-uiharu
 spec:
   restartPolicy: Never

@@ -4,7 +4,7 @@ clusterName: kokoro
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.4.0
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.26.3
+kubernetesVersion: v1.27.1
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -140,11 +140,11 @@ controlPlane:
       apiServer:
         admissionControl: []
         extraArgs:
-          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          feature-gates: MixedProtocolLBService=true
       allowSchedulingOnMasters: true
       controllerManager:
         extraArgs:
-          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          feature-gates: MixedProtocolLBService=true
       discovery:
         registries:
           service:
@@ -152,10 +152,10 @@ controlPlane:
       proxy:
         disabled: true
         extraArgs:
-          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          feature-gates: MixedProtocolLBService=true
       scheduler:
         extraArgs:
-          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          feature-gates: MixedProtocolLBService=true
     machine:
       files:
         - content: |
@@ -203,7 +203,7 @@ worker:
       #     - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
-          feature-gates: MixedProtocolLBService=true,EphemeralContainers=True
+          feature-gates: MixedProtocolLBService=true
           rotate-server-certificates: 'true'
       # logging:
       #   destinations:
