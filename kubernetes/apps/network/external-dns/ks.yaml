@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: external-dns
       namespace: network
+  dependsOn:
+    - name: apps-external-secrets-stores
