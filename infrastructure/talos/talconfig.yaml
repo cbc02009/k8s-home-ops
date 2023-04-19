@@ -4,7 +4,7 @@ clusterName: kokoro
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.4.0
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.27.1
+kubernetesVersion: v1.26.3
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -35,10 +35,12 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
+      - name: mlx4_en
     nameservers:
       - 10.5.0.4
     networkInterfaces:
-      - interface: eth0
+      - deviceSelector:
+          hardwareAddr: e4:1d:2d:12:4b:60
         addresses:
           - 10.0.2.10/24
         mtu: 1500
@@ -77,10 +79,12 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
+      - name: mlx4_en
     nameservers:
       - 10.5.0.4
     networkInterfaces:
-      - interface: eth0
+      - deviceSelector:
+          hardwareAddr: e4:1d:2d:dd:7c:60
         addresses:
           - 10.0.2.12/24
         mtu: 1500
