@@ -380,8 +380,6 @@ spec:
           DB_TYPE: postgres
           HOST: ${POSTGRES_HOST}
           NAME: gitea
-          USER: ${SECRET_GITEA_POSTGRES_USER}
-          PASSWD: ${SECRET_GITEA_POSTGRES_PASS}
           SCHEMA: public
         service:
           DISABLE_REGISTRATION: false
