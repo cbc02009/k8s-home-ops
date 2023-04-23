@@ -377,11 +377,11 @@ spec:
           ENABLED: true
         attachment:
           STORAGE_TYPE: minio
-          MINIO_ENDPOINT: ${MINIO_HOST}:9000
+          MINIO_ENDPOINT: garage.ctec.run:3910
           MINIO_BUCKET: gitea
         storage:
           STORAGE_TYPE: minio
-          MINIO_ENDPOINT: ${MINIO_HOST}:9000
+          MINIO_ENDPOINT: garage.ctec.run:3910
           MINIO_BUCKET: gitea
         openid:
           ENABLE_OPENID_SIGNIN: false
