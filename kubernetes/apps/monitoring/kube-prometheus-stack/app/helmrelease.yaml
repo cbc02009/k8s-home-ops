@@ -100,44 +100,11 @@ spec:
               targetLabel: kubernetes_node
 
     nodeExporter:
-      enabled: true
-      serviceMonitor:
-        relabelings:
-          - action: replace
-            regex: (.*)
-            replacement: $1
-            sourceLabels:
-              - __meta_kubernetes_pod_node_name
-            targetLabel: kubernetes_node
+      enabled: false
 
-    prometheus-node-exporter:
-      fullnameOverride: node-exporter
-      extraArgs:
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var)($|/)
-        - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs|tmpfs)$
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels:
-                - __meta_kubernetes_pod_node_name
-              targetLabel: kubernetes_node
-
-      resources:
-        requests:
-          cpu: 23m
-          memory: 64M
-        # limits:
-        #   memory: 64M
-      tolerations:
-        - effect: "NoExecute"
-          operator: "Exists"
-        - effect: "NoSchedule"
-          operator: "Exists"
-
+    ###
+    ### Prometheus instance values
+    ###
     prometheus:
       ingress:
         enabled: true
@@ -196,6 +163,31 @@ spec:
           secret.reloader.stakater.com/reload: *secret
 
         additionalScrapeConfigs:
+          - job_name: coredns
+            scrape_interval: 1m
+            scrape_timeout: 10s
+            honor_timestamps: true
+            static_configs:
+              - targets:
+                  - 10.5.0.3:9153@gateway.${INTERNAL_DOMAIN}:9153
+            relabel_configs:
+              - source_labels: [__address__]
+                regex: "(.*)@.*"
+                replacement: $1
+                target_label: __param_target
+              - source_labels: [__address__]
+                regex: "(.*)@.*"
+                replacement: $1
+                target_label: app_ip
+              - source_labels: [__address__]
+                regex: ".*@(.*)"
+                replacement: $1
+                target_label: instance
+              - source_labels: [app_ip]
+                regex: "(.*)"
+                target_label: __address__
+                replacement: $1
+
           - job_name: minio
             scrape_interval: 1m
             scrape_timeout: 10s
@@ -206,13 +198,21 @@ spec:
               - targets:
                   - "${MINIO_HOST}:9000"
 
-          # - job_name: smartctl-exporter
-          #   scrape_interval: 10m
-          #   scrape_timeout: 10s
-          #   honor_timestamps: true
-          #   static_configs:
-          #     - targets:
-          #         - "${SAN_HOST}:9633"
+          - job_name: speedtest-exporter
+            scrape_interval: 60m
+            scrape_timeout: 60s
+            honor_timestamps: true
+            static_configs:
+              - targets:
+                  - gateway.${INTERNAL_DOMAIN}:9798
+
+          - job_name: smartctl-exporter
+            scrape_interval: 10m
+            scrape_timeout: 10s
+            honor_timestamps: true
+            static_configs:
+              - targets:
+                  - "${SAN_HOST}:9633"
 
           - job_name: node-exporter
             scrape_interval: 1m
@@ -223,65 +223,13 @@ spec:
                   - "sakura.ctec.run:9100"
                   - "anya.ctec.run:9100"
                   - "uiharu.ctec.run:9100"
+                  - "rem.ctec.run:9100"
+                  - "ram.ctec.run:9100"
 
     alertmanager:
       config:
         global:
           resolve_timeout: 5m
-
-        # receivers:
-        #   - name: "null"
-        #   - name: "pushover"
-        #     pushover_configs:
-        #       - user_key: ${SECRET_ALERTMANAGER_PUSHOVER_USER_KEY}
-        #         token: ${SECRET_ALERTMANAGER_PUSHOVER_TOKEN}
-        #         send_resolved: true
-        #         html: true
-        #         priority: |-
-        #           {{ if eq .Status "firing" }}1{{ else }}-1{{ end }}
-        #         url_title: View in Alert Manager
-        #         title: |-
-        #           [{{ .Status | toUpper -}}
-        #           {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
-        #           ] {{ .CommonLabels.alertname }}
-        #         message: |-
-        #           {{- range .Alerts }}
-        #             {{- if ne .Labels.severity "" }}
-        #               <b>Severity:</b> <i>{{ .Labels.severity }}</i>
-        #             {{- else }}
-        #               <b>Severity:</b> <i>N/A</i>
-        #             {{- end }}
-        #             {{- if ne .Annotations.description "" }}
-        #               <b>Description:</b> <i>{{ .Annotations.description }}</i>
-        #             {{- else if ne .Annotations.summary "" }}
-        #               <b>Summary:</b> <i>{{ .Annotations.summary }}</i>
-        #             {{- else if ne .Annotations.message "" }}
-        #               <b>Message:</b> <i>{{ .Annotations.message }}</i>
-        #             {{- else }}
-        #               <b>Description:</b> <i>N/A</i>
-        #             {{- end }}
-        #             {{- if gt (len .Labels.SortedPairs) 0 }}
-        #               <b>Details:</b>
-        #               {{- range .Labels.SortedPairs }}
-        #                 • <b>{{ .Name }}:</b> <i>{{ .Value }}</i>
-        #               {{- end }}
-        #             {{- end }}
-        #           {{- end }}
-
-        # route:
-        #   group_by: ["alertname", "job"]
-        #   group_wait: 30s
-        #   group_interval: 5m
-        #   repeat_interval: 6h
-        #   receiver: "pushover"
-        #   routes:
-        #     - receiver: "null"
-        #       matchers:
-        #         - alertname =~ "InfoInhibitor|Watchdog"
-        #     - receiver: "pushover"
-        #       matchers:
-        #         - severity = "critical"
-        #       continue: true
 
         inhibit_rules:
           - source_matchers:
