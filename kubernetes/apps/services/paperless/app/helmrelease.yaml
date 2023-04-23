@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app paperless
+  namespace: services
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.4.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+  values:
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.7@sha256:4c6a27bc6de60ffaad7ce0f41931a2746a52c1c3b728d8135c0198eb69a93f97
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: *app
+    image:
+      repository: ghcr.io/paperless-ngx/paperless-ngx
+      tag: 1.13.0
+    env:
+      COMPOSE_PROJECT_NAME: paperless
+      PAPERLESS_OCR_LANGUAGE: eng
+      PAPERLESS_CONSUMER_POLLING: '60'
+      PAPERLESS_CONSUMER_RECURSIVE: 'true'
+      PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: 'true'
+      PAPERLESS_PORT: &port 8000
+      PAPERLESS_REDIS: redis://localhost:6379
+      PAPERLESS_TASK_WORKERS: 2
+      PAPERLESS_TIME_ZONE: '${TZ}'
+      PAPERLESS_URL: https://paperless.${EXTERNAL_DOMAIN}
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
+      PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
+      USERMAP_GID: 65543
+    envFrom:
+      - secretRef:
+          name: *app
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: 'nginx'
+        annotations:
+          hajimari.io/icon: file-multiple
+          nginx.ingress.kubernetes.io/proxy-body-size: 4G
+        hosts:
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+            paths:
+              - path: /
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        mountPath: /usr/src/paperless/data
+        type: nfs
+        server: 'george.${INTERNAL_DOMAIN}'
+        path: /tank/documents/paperless/data
+      media:
+        enabled: true
+        mountPath: /usr/src/paperless/media
+        type: nfs
+        server: 'george.${INTERNAL_DOMAIN}'
+        path: /tank/documents/paperless/media
+      consume:
+        enabled: true
+        mountPath: /usr/src/paperless/consume
+        type: nfs
+        server: 'george.${INTERNAL_DOMAIN}'
+        path: /tank/documents/paperless/consume
+      export:
+        enabled: true
+        mountPath: /usr/src/paperless/export
+        type: nfs
+        server: 'george.${INTERNAL_DOMAIN}'
+        path: /tank/documents/paperless/export
+    sidecars:
+      redis:
+        name: redis
+        image: public.ecr.aws/docker/library/redis:7.0.10@sha256:92b8b307ee28ed74da17578064c73307ad41e43f422f0b7e4e91498b406c59e3
+        imagePullPolicy: IfNotPresent
+      gotenburg:
+        name: gotenburg
+        image: thecodingmachine/gotenberg:7.8.2@sha256:a7c52dc264026a64c6affab687819a2101dd5973a9280a6c7c2a451de8f4461b
+        env:
+          - name: DISABLE_GOOGLE_CHROME
+            value: '1'
+      tika:
+        image: ghcr.io/paperless-ngx/tika:2.7.0-full@sha256:b1f47cdf66079a77092e07b34013e57c12e9f0fbe284a2ef7cb35c203b894cd5
+        name: tika
+        imagePullPolicy: Always
+# resources:
+#   requests:
+#     cpu: 23m
+#     memory: 2975M
+#   limits:
+#     memory: 6572M
