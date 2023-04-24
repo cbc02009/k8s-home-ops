@@ -372,6 +372,11 @@ spec:
       ## @param gitea.config  Configuration for the Gitea server,ref: [config-cheat-sheet](https://docs.gitea.io/en-us/config-cheat-sheet/)
       config:
         APP_NAME: Tea, Git, Hot
+        cache:
+          ENABLED: true
+          ADAPTER: memory
+          INTERVAL: 60
+          HOST: 127.0.0.1:9090
         server:
           DISABLE_SSH: false
           DOMAIN: "gitea.${EXTERNAL_DOMAIN}"
