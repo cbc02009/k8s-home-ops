@@ -42,6 +42,32 @@ spec:
                         - secretRef:
                             name: gitea-pg-secret
 
+  valuesFrom:
+    - targetPath: gitea.config.attachment.MINIO_ACCESS_KEY_ID
+      kind: Secret
+      name: gitea-config-secret
+      valuesKey: MINIO_ACCESS_KEY_ID
+    - targetPath: gitea.config.attachment.MINIO_SECRET_ACCESS_KEY
+      kind: Secret
+      name: gitea-config-secret
+      valuesKey: MINIO_SECRET_ACCESS_KEY
+    - targetPath: gitea.config.storage.MINIO_ACCESS_KEY_ID
+      kind: Secret
+      name: gitea-cconfig-secret
+      valuesKey: MINIO_ACCESS_KEY_ID
+    - targetPath: gitea.config.storage.MINIO_SECRET_ACCESS_KEY
+      kind: Secret
+      name: gitea-config-secret
+      valuesKey: MINIO_SECRET_ACCESS_KEY
+    - targetPath: gitea.config.database.USER
+      kind: Secret
+      name: gitea-config-secret
+      valuesKey: DB_USER
+    - targetPath: gitea.config.database.PASSWD
+      kind: Secret
+      name: gitea-config-secret
+      valuesKey: DB_PASS
+
   values:
     # Default values for gitea.
     # This is a YAML-formatted file.
@@ -389,9 +415,9 @@ spec:
           WHITELISTED_URIS: "auth.${EXTERNAL_DOMAIN}"
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
-      additionalConfigSources:
-        - secret:
-            secretName: gitea-config-secret
+      # additionalConfigSources:
+      #   - secret:
+      #       secretName: gitea-config-secret
 
       ## @param gitea.additionalConfigFromEnvs Additional configuration sources from environment variables
       additionalConfigFromEnvs: []
