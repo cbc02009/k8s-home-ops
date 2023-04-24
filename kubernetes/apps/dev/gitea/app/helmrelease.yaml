@@ -53,7 +53,7 @@ spec:
       valuesKey: MINIO_SECRET_ACCESS_KEY
     - targetPath: gitea.config.storage.MINIO_ACCESS_KEY_ID
       kind: Secret
-      name: gitea-cconfig-secret
+      name: gitea-config-secret
       valuesKey: MINIO_ACCESS_KEY_ID
     - targetPath: gitea.config.storage.MINIO_SECRET_ACCESS_KEY
       kind: Secret
