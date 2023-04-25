@@ -194,11 +194,6 @@ spec:
       #    command: ['do', 'something']
         - name: init-db
           image: ghcr.io/onedr0p/postgres-initdb:14.7
-          env:
-            - name: POSTGRES_HOST
-              value: ${POSTGRES_HOST}
-            - name: POSTGRES_DB
-              value: "nextcloud"
           envFrom:
             - secretRef:
                 name: nextcloud-secret
