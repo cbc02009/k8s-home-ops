@@ -35,5 +35,6 @@ resources:
   - ./hajimari-charts.yaml
   - ./ingress-nginx-charts.yaml
   - ./stakater-charts.yaml
+  - ./tf-controller.yaml
   - ./vector-charts.yaml
   - ./weave-gitops.yaml
