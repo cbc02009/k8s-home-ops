@@ -349,14 +349,15 @@ spec:
       # Either specify inline `key` and `secret` or refer to them via `existingSecret`
       ## @param gitea.oauth OAuth configuration
       oauth:
-        - name: authelia
-          provider: openidConnect
-          key: gitea
-          secret: "${SECRET_GITEA_OAUTH_CLIENT_SECRET}"
-          autoDiscoverUrl: "https://auth.${EXTERNAL_DOMAIN}/.well-known/openid-configuration"
-          groupClaimName: groups
-          adminGroup: admins
-          restrictedGroup: people
+        []
+        # - name: authelia
+        #   provider: openidConnect
+        #   key: gitea
+        #   secret: "${SECRET_GITEA_OAUTH_CLIENT_SECRET}"
+        #   autoDiscoverUrl: "https://auth.${EXTERNAL_DOMAIN}/.well-known/openid-configuration"
+        #   groupClaimName: groups
+        #   adminGroup: admins
+        #   restrictedGroup: people
         # - name: 'OAuth 1'
         #   provider:
         #   key:
@@ -416,7 +417,7 @@ spec:
           MINIO_BUCKET: gitea
         openid:
           ENABLE_OPENID_SIGNIN: false
-          ENABLE_OPENID_SIGNUP: true
+          ENABLE_OPENID_SIGNUP: false
           WHITELISTED_URIS: "auth.${EXTERNAL_DOMAIN}"
 
       ## @param gitea.additionalConfigSources Additional configuration from secret or configmap
