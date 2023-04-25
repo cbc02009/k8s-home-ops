@@ -12,6 +12,6 @@ spec:
   externalName: unifi.
   ports:
     - name: http
-      port: &port 8080
+      port: &port 8443
       protocol: TCP
       targetPort: *port
