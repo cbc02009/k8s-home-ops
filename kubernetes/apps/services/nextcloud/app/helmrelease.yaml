@@ -118,8 +118,8 @@ spec:
       existingSecret:
         enabled: true
         secretName: nextcloud-secret
-        usernameKey: username
-        passwordKey: password
+        usernameKey: ADMIN_USER
+        passwordKey: ADMIN_PASS
         # tokenKey: serverinfo_token
         # smtpUsernameKey: SMTP_USERNAME
         # smtpPasswordKey: SMTP_PASSWORD
@@ -166,38 +166,7 @@ spec:
       # For example, to use S3 as primary storage
       # ref: https://docs.nextcloud.com/server/13/admin_manual/configuration_files/primary_storage.html#simple-storage-service-s3
       #
-      configs:
-        s3.config.php: |-
-          <?php
-          $CONFIG = array (
-            'objectstore' => array(
-              'class' => '\\OC\\Files\\ObjectStore\\S3',
-              'arguments' => array(
-                'hostname'   => 'minio.ctec.run',
-                'port'       => 9000,
-                'bucket'     => 'nextcloud',
-                'autocreate' => true,
-                'key'        => '${NC_MINIO_KEY}',
-                'secret'     => '${NC_MINIO_SECRET}',
-                'region'     => 'optional',
-                'use_ssl'    => false,
-                'use_path_style'=> true
-              ),
-            ),
-          );
-
-        proxy.config.php: |-
-          <?php
-          $CONFIG = array (
-            'trusted_proxies' =>
-            array(
-               0 => '10.0.0.0/8',
-            ),
-            'forwarded_for_headers' =>
-            array (
-              0 => 'HTTP_X_FORWARDED_FOR',
-            ),
-          );
+      configs: {}
 
       ## Strategy used to replace old pods
       ## IMPORTANT: use with care, it is suggested to leave as that for upgrade purposes
@@ -486,3 +455,9 @@ spec:
         create: true
         name: nextcloud-serviceaccount
         annotations: {}
+
+  valuesFrom:
+    - kind: Secret
+      name: nextcloud-secret
+      valuesKey: NEXTCLOUD_CONFIGS
+      targetPath: nextcloud.configs

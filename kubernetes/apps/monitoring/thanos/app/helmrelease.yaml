@@ -32,7 +32,11 @@ spec:
       repository: thanos/thanos
       tag: v0.31.0
 
-    existingObjstoreSecret: &secret thanos-objstore-secret
+    objstoreConfig:
+      type: s3
+      config:
+        insecure: true
+
     query:
       enabled: true
       replicaLabels:
@@ -64,8 +68,6 @@ spec:
 
     bucketweb:
       enabled: true
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
       resources:
         requests:
           cpu: 15m
@@ -75,35 +77,79 @@ spec:
 
     compactor:
       enabled: true
-      persistence:
-        enabled: false
-      podAnnotations:
-        secret.reloader.stakater.com/reload: *secret
+      extraFlags:
+        - "--compact.concurrency"
+        - "4"
+      retentionResolutionRaw: 14d
+      retentionResolution5m: 14d
+      retentionResolution1h: 30d
       resources:
         requests:
           cpu: 15m
-          memory: 183M
-        limits:
-          memory: 11G
+          memory: 204M
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 15Gi
 
     storegateway:
       enabled: true
-      persistence:
-        enabled: true
-        size: 5Gi
-      podAnnotations:
-        configmap.reloader.stakater.com/reload: *secret
       resources:
         requests:
-          cpu: 15m
-          memory: 183M
-        limits:
-          memory: 11G
+          cpu: 23m
+          memory: 204M
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 1Gi
 
     ruler:
-      enabled: false
+      enabled: true
+      alertmanagers:
+        - http://alertmanager.monitoring.svc.cluster.local:9093
+      clusterName: kokoro # must match with kube-prometheus-stack value `.prometheus.prometheusSpec.externalLabels.cluster`
+      config: |-
+        groups:
+          - name: "PrometheusWatcher"
+            rules:
+              - alert: "PrometheusDown"
+                expr: absent(up{job="kube-prometheus-stack-prometheus"})
+      dnsDiscovery:
+        enabled: true
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 512Mi
+      resources:
+        requests:
+          cpu: 23m
+          memory: 94M
+        limits:
+          memory: 113M
 
     metrics:
       enabled: true
       serviceMonitor:
         enabled: true
+
+  valuesFrom:
+    - kind: Secret
+      name: thanos-secret
+      valuesKey: S3_BUCKET_NAME
+      targetPath: objstoreConfig.config.bucket
+    - kind: Secret
+      name: thanos-secret
+      valuesKey: S3_BUCKET_HOST
+      targetPath: objstoreConfig.config.endpoint
+    - kind: Secret
+      name: thanos-secret
+      valuesKey: S3_BUCKET_REGION
+      targetPath: objstoreConfig.config.region
+    - kind: Secret
+      name: thanos-secret
+      valuesKey: S3_ACCESS_KEY
+      targetPath: objstoreConfig.config.access_key
+    - kind: Secret
+      name: thanos-secret
+      valuesKey: S3_SECRET_KEY
+      targetPath: objstoreConfig.config.secret_key
