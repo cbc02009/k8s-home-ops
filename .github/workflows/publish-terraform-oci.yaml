@@ -93,7 +93,7 @@ jobs:
 
       - name: Publish OCI
         run: |
-          flux push artifact oci://ghcr.io/bjw-s/terraform-$(basename ${{ matrix.project }}):$(git rev-parse --short HEAD) \
+          flux push artifact oci://ghcr.io/cbc02009/terraform-$(basename ${{ matrix.project }}):$(git rev-parse --short HEAD) \
             --path="./${{ matrix.project }}" \
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
