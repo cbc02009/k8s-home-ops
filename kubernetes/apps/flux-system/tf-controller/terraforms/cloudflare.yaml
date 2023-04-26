@@ -37,7 +37,7 @@ spec:
         - name: OP_CONNECT_TOKEN
           valueFrom:
             secretKeyRef:
-              name: tf-controller-secrets
+              name: tf-controller-op-secret
               key: OP_CONNECT_TOKEN
       volumeMounts:
         - name: tf-controller-sops-key
@@ -46,4 +46,4 @@ spec:
       volumes:
         - name: tf-controller-sops-key
           secret:
-            secretName: tf-controller-sops-key
+            secretName: tf-controller-sops-secret
