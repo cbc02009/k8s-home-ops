@@ -39,7 +39,7 @@ spec:
 
     image:
       repository: docker.io/vabene1111/recipes
-      tag: 1.4.8
+      tag: 1.4.9
 
     env:
       TIMEZONE: ${TZ}
