@@ -1,16 +1,18 @@
 ---
-name: "Publish Terraform as OCI"
+name: "Terraform: Build OCI artifacts"
 
-on:
+on: # yamllint disable-line rule:truthy
   workflow_dispatch:
   push:
-    branches: ["main"]
-    paths: ["infrastructure/terraform/**"]
+    branches:
+      - main
+    paths:
+      - "infrastructure/terraform/**"
 
 jobs:
   changed-files:
-    name: Generate Build Matrix
-    runs-on: ubuntu-latest
+    name: Generate matrix for building images
+    runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -25,14 +27,20 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
         with:
           token: "${{ steps.generate-token.outputs.token }}"
-          fetch-depth: 0
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Setup Tools
+        run: |
+          brew install jo
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@ce810b29b28abf274afebdcd8fe47b8fba0f28bd # v35.9.0
+        uses: tj-actions/changed-files@v35.9.0
         with:
           dir_names: true
-          dir_names_max_depth: 2
+          dir_names_max_depth: 3
           json: true
           files: |
             infrastructure/terraform/**
@@ -41,16 +49,19 @@ jobs:
         run: |
           echo '${{ steps.changed-files.outputs.all_changed_files }}'
 
-      - id: set-matrix
-        run: echo "matrix={\"project\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
+      - name: Store changed projects
+        id: set-matrix
+        run: |
+          if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == "[]" ]]; then
+            echo "matrix={\"project\":$(find infrastructure/terraform -type d -mindepth 1 -maxdepth 1 | jo -a)}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "matrix={\"project\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
+          fi
 
-  publish-terraform:
-    name: Publish OCI
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      id-token: write
-    needs: [changed-files]
+  publish:
+    runs-on: ubuntu-22.04
+    needs:
+      - changed-files
     strategy:
       matrix: ${{ fromJSON(needs.changed-files.outputs.matrix) }}
     steps:
@@ -66,41 +77,28 @@ jobs:
         with:
           token: "${{ steps.generate-token.outputs.token }}"
 
-      - name: Setup Homebrew
+      - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
       - name: Setup Tools
         run: |
-          brew install cosign fluxcd/tap/flux
+          brew install fluxcd/tap/flux
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # renovate: tag=v2.1.0
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate OCI tag
-        id: generate-tag
-        run: echo "tag=ghcr.io/${{ github.repository_owner }}/provision-$(basename ${{ matrix.project }})-oci:$(git rev-parse --short HEAD)" >> "${GITHUB_OUTPUT}"
-
       - name: Publish OCI
         run: |
-          flux push artifact oci://${{ steps.generate-tag.outputs.tag }} \
-              --path="./${{ matrix.project }}" \
-              --source="$(git config --get remote.origin.url)" \
-              --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
+          flux push artifact oci://ghcr.io/bjw-s/terraform-$(basename ${{ matrix.project }}):$(git rev-parse --short HEAD) \
+            --path="./${{ matrix.project }}" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
 
       - name: Tag OCI
-        run: flux tag artifact oci://${{ steps.generate-tag.outputs.tag }} --tag main
-
-      # Note: This is not ready for primetime
-      # - name: Sign the OCI artifact
-      #   run: cosign sign ${{ steps.generate-tag.outputs.tag }}
-      #   env:
-      #     COSIGN_EXPERIMENTAL: 1
-
-      # - name: Verify the pushed tags
-      #   run: cosign verify ${{ steps.generate-tag.outputs.tag }}
-      #   env:
-      #     COSIGN_EXPERIMENTAL: 1
+        run: |
+          flux tag artifact oci://ghcr.io/cbc02009/terraform-$(basename ${{ matrix.project }}):$(git rev-parse --short HEAD) \
+            --tag main
