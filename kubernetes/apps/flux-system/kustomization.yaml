@@ -8,5 +8,5 @@ resources:
   # Flux-Kustomizations
   - ./add-ons/ks.yaml
   - ./external-secrets/ks.yaml
-  - ./tf-controller/ks.yaml
+  # - ./tf-controller/ks.yaml
   - ./weave-gitops/ks.yaml
