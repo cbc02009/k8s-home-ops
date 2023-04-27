@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    hostname     = "app.terraform.io"
+    organization = "kokoro-wtf"
+    workspaces {
+      name = "arpa-home-cloudflare"
+    }
+  }
 
   required_providers {
     cloudflare = {
