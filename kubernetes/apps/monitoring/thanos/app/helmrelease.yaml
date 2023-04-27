@@ -106,14 +106,14 @@ spec:
     ruler:
       enabled: true
       alertmanagers:
-        - http://alertmanager.monitoring.svc.cluster.local:9093
+        - http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
       clusterName: kokoro # must match with kube-prometheus-stack value `.prometheus.prometheusSpec.externalLabels.cluster`
       config: |-
         groups:
           - name: "PrometheusWatcher"
             rules:
               - alert: "PrometheusDown"
-                expr: absent(up{job="kube-prometheus-stack-prometheus"})
+                expr: absent(up{job="prometheus-prometheus"})
       dnsDiscovery:
         enabled: true
       persistence:
