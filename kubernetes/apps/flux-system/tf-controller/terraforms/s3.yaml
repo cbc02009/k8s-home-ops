@@ -20,8 +20,8 @@ spec:
   approvePlan: "auto"
   backendConfig:
     disable: true
-  cliConfigSecretRef:
-    name: tf-controller-tfrc-secret
+  # cliConfigSecretRef:
+  #   name: tf-controller-tfrc-secret
   path: "./"
   sourceRef:
     kind: OCIRepository
