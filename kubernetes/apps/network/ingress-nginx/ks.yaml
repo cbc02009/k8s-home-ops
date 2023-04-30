@@ -23,7 +23,6 @@ spec:
       namespace: network
   dependsOn:
     - name: apps-ingress-nginx-certificates
-    - name: apps-kyverno-policies
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
