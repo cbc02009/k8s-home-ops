@@ -67,6 +67,15 @@ spec:
         # Ref: https://xclacksoverhead.org/home/about
         location-snippet: |
           add_header X-Clacks-Overhead "GNU Terry Pratchett" always;
+        log-format-escape-json: "true"
+        log-format-upstream: >
+          {"time": "$time_iso8601", "remote_addr": "$proxy_protocol_addr",
+          "x_forwarded_for": "$proxy_add_x_forwarded_for", "request_id": "$req_id",
+          "remote_user": "$remote_user", "bytes_sent": $bytes_sent, "request_time": $request_time,
+          "status": $status, "vhost": "$host", "request_proto": "$server_protocol",
+          "path": "$uri", "request_query": "$args", "request_length": $request_length,
+          "duration": $request_time,"method": "$request_method", "http_referrer": "$http_referer",
+          "http_user_agent": "$http_user_agent"}
 
       metrics:
         enabled: true
@@ -97,10 +106,10 @@ spec:
 
       resources:
         requests:
-          memory: 250Mi
-          cpu: 20m
+          cpu: 23m
+          memory: 381M
         limits:
-          memory: 1000Mi
+          memory: 463M
   valuesFrom:
     # Cloudflare Networks
     # https://www.cloudflare.com/ips/
