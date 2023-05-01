@@ -35,10 +35,6 @@ spec:
 
     kubeControllerManager:
       enabled: true
-      endpoints: &cp
-        - 10.0.2.10
-        - 10.0.2.11
-        - 10.0.2.12
 
     kubeEtcd:
       enabled: true
@@ -54,7 +50,6 @@ spec:
 
     kubeApiServer:
       enabled: true
-      endpoints: *cp
 
     kubeProxy:
       enabled: false # FIXME
