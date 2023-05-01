@@ -42,7 +42,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: epic-free-games-secret
+          name: epic-freegames-secret
 
     service:
       main:
