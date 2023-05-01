@@ -34,13 +34,11 @@ spec:
         envFrom:
           - secretRef:
               name: grafana-secret
-    replicas: 3
+    replicas: 1
     rbac:
       pspEnabled: false
     testFramework:
       enabled: false
-    # admin:
-    #   existingSecret: grafana-secret
     envFromSecrets:
       - name: grafana-secret
     grafana.ini:
@@ -130,10 +128,6 @@ spec:
           gnedId: 13646
           revision: 2
           datasource: Prometheus
-        # blackbox-exporter:
-        #   gnedId: 13587
-        #   revision: 1
-        #   datasource: Prometheus
 
     sidecar:
       dashboards:
