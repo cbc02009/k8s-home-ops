@@ -243,7 +243,7 @@ spec:
           routes:
             - receiver: "null"
               matchers:
-                - alertname =~ "InfoInhibitor|Watchdog|CPUThrottlingHigh"
+                - alertname =~ "InfoInhibitor|Watchdog|CPUThrottlingHigh|KubeCPUOvercommit"
               continue: false
             - receiver: "discord"
 
