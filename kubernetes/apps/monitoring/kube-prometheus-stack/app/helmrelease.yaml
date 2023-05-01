@@ -239,6 +239,12 @@ spec:
         global:
           resolve_timeout: 5m
 
+        receivers:
+          - name: "null"
+          - name: "discord"
+            webhook_configs:
+              - url: "http://alertmanager-discord.monitoring.svc.cluster.local:9094"
+
         inhibit_rules:
           - source_matchers:
               - severity = "critical"
@@ -262,11 +268,6 @@ spec:
           - hosts:
               - *host
 
-        receivers:
-          - name: "null"
-          - name: "discord"
-            webhook_configs:
-              - url: "http://alertmanager-discord.monitoring.svc.cluster.local:9094"
 
       alertmanagerSpec:
         replicas: 1
