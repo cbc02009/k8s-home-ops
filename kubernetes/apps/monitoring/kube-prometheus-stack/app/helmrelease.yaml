@@ -34,7 +34,7 @@ spec:
       enabled: true
 
     kubeControllerManager:
-      enabled: true
+      enabled: false
 
     kubeEtcd:
       enabled: true
@@ -68,13 +68,13 @@ spec:
         # limits:
         # memory: 326M
 
-      prometheusConfigReloader:
-        resources:
-          requests:
-            cpu: 11m
-            memory: 24M
-          # limits:
-          # memory: 32M
+    prometheusConfigReloader:
+      resources:
+        requests:
+          cpu: 11m
+          memory: 24M
+        # limits:
+        # memory: 32M
 
     grafana:
       enabled: false
