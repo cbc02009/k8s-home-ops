@@ -130,7 +130,7 @@ spec:
       prometheusSpec:
         externalLabels:
           cluster: kokoro
-        replicas: 1
+        replicas: 2
         replicaExternalLabelName: __replica__
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
