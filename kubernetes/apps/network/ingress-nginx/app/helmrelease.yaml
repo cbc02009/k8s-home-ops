@@ -88,7 +88,7 @@ spec:
           enabled: false
 
       topologySpreadConstraints:
-        - maxSkew: 1
+        - maxSkew: 2
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
@@ -109,7 +109,8 @@ spec:
           cpu: 23m
           memory: 381M
         limits:
-          memory: 463M
+          memory: 1000M
+
   valuesFrom:
     # Cloudflare Networks
     # https://www.cloudflare.com/ips/
