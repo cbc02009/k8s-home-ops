@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./etcd.yaml
   - ./coredns.yaml
+  - ./oomkilled.yaml
