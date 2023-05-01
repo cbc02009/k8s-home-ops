@@ -208,13 +208,13 @@ spec:
               - targets:
                   - gateway.${INTERNAL_DOMAIN}:9798
 
-          - job_name: smartctl-exporter
-            scrape_interval: 10m
-            scrape_timeout: 10s
-            honor_timestamps: true
-            static_configs:
-              - targets:
-                  - "${SAN_HOST}:9633"
+          # - job_name: smartctl-exporter
+          #   scrape_interval: 10m
+          #   scrape_timeout: 10s
+          #   honor_timestamps: true
+          #   static_configs:
+          #     - targets:
+          #         - "${SAN_HOST}:9633"
 
           - job_name: node-exporter
             scrape_interval: 1m
@@ -227,6 +227,7 @@ spec:
                   - "uiharu.ctec.run:9100"
                   - "rem.ctec.run:9100"
                   - "ram.ctec.run:9100"
+                  - "gateway.ctec.run:9100"
 
     alertmanager:
       config:
