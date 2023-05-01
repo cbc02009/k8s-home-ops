@@ -276,7 +276,7 @@ spec:
           memory: 99M
   valuesFrom:
     - kind: Secret
-      name: kube-prometheus-stack
+      name: kube-prometheus-stack-secret
       valuesKey: discord-webhook
       targetPath: alertmanager.config.global.slack_api_url
       optional: false
