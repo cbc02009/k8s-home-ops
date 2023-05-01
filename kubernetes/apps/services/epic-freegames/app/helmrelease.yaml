@@ -24,9 +24,25 @@ spec:
       retries: 5
 
   values:
+
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/claabs/epicgames-freegames-node
       tag: latest@sha256:9ea4969a3a638f3ab4eeb256fc6e7a39631270f3476f9d2d427615f58e9b39c2
+
+    env:
+      CRON_SCHEDULE: "15 17 * * *"
+      RUN_ON_STARTUP: "true"
+      BASE_URL: "https://epic.${EXTERNAL_DOMAIN}"
+      TZ: ${TZ}
+
+    envFrom:
+      - secretRef:
+          name: epic-free-games-secret
 
     service:
       main:
@@ -48,19 +64,20 @@ spec:
         tls:
           - hosts:
               - *host
+    probes:
+      startup:
+        enabled: false
+      readiness:
+        enabled: false
+      liveness:
+        enabled: false
 
-    persistence:
-      config:
-        enabled: true
-        type: secret
-        name: epic-freegames-secret
-        subPath: config.json
-        mountPath: /usr/app/config/config.json
-        readOnly: true
-      data:
-        enabled: true
-        existingClaim: epic-freegames-config-v1
+    volumeClaimTemplates:
+      - name: config
         mountPath: /usr/app/config
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: ceph-block
 
     resources:
       limits:
