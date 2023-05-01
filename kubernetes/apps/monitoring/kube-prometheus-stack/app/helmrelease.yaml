@@ -33,11 +33,12 @@ spec:
     coreDns:
       enabled: true
 
-    kubeApiServer:
-      enabled: true
-
     kubeControllerManager:
-      enabled: false # FIXME
+      enabled: true
+      endpoints: &cp
+        - 10.0.2.10
+        - 10.0.2.11
+        - 10.0.2.12
 
     kubeEtcd:
       enabled: true
@@ -50,6 +51,10 @@ spec:
             sourceLabels:
               - node
             targetLabel: instance
+
+    kubeApiServer:
+      enabled: true
+      endpoints: *cp
 
     kubeProxy:
       enabled: false # FIXME
@@ -257,6 +262,12 @@ spec:
           - hosts:
               - *host
 
+        receivers:
+          - name: "null"
+          - name: "discord"
+            webhook_configs:
+              - url: "http://alertmanager-discord.monitoring.cluster.local:9094"
+
       alertmanagerSpec:
         replicas: 1
         podAntiAffinity: hard
@@ -274,9 +285,3 @@ spec:
           memory: 50M
         limits:
           memory: 99M
-  valuesFrom:
-    - kind: Secret
-      name: kube-prometheus-stack-secret
-      valuesKey: discord-webhook
-      targetPath: alertmanager.config.global.slack_api_url
-      optional: false
