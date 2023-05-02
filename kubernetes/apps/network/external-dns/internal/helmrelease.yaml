@@ -36,16 +36,16 @@ spec:
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
         valueFrom:
           secretKeyRef:
-            name: external-dns-internal-secrets
+            name: external-dns-internal-secret
             key: bind_rndc_algorithm
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
         valueFrom:
           secretKeyRef:
-            name: external-dns-internal-secrets
+            name: external-dns-internal-secret
             key: bind_rndc_secret
 
     podAnnotations:
-      secret.reloader.stakater.com/reload: external-dns-internal-secrets
+      secret.reloader.stakater.com/reload: external-dns-internal-secret
 
     policy: sync
     provider: rfc2136
