@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: external-dns
+  name: external-dns-external
   namespace: network
 spec:
   interval: 15m
@@ -23,6 +23,9 @@ spec:
     remediation:
       retries: 5
   values:
+
+    fullnameOverride: external-dns-external
+
     interval: 2m
     # logLevel: debug
     provider: cloudflare
@@ -30,12 +33,12 @@ spec:
       - name: CF_API_EMAIL
         valueFrom:
           secretKeyRef:
-            name: external-dns-secret
+            name: external-dns-external-secret
             key: email
       - name: CF_API_KEY
         valueFrom:
           secretKeyRef:
-            name: external-dns-secret
+            name: external-dns-external-secret
             key: api-key
     extraArgs:
       - --cloudflare-proxied
