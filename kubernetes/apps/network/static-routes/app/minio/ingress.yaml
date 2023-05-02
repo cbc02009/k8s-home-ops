@@ -2,56 +2,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: &app minio
+  name: minio
   namespace: network
   annotations:
-    ingress.home.arpa/type: "internal"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-body-size: 5000m
-    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      chunked_transfer_encoding off;
-    # hajimari.io/icon: ""
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
   labels:
-    app.kubernetes.io/name: *app
-    app.kubernetes.io/instance: *app
+    app.kubernetes.io/name: minio
+    app.kubernetes.io/instance: minio
 spec:
-  ingressClassName: "nginx"
+  ingressClassName: nginx
   rules:
-    - host: &host minio.${EXTERNAL_DOMAIN}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: *app
-                port:
-                  name: console
-  tls:
-    - hosts:
-        - *host
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: &app s3
-  namespace: network
-  annotations:
-    ingress.home.arpa/type: "internal"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-body-size: 5000m
-    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      chunked_transfer_encoding off;
-    # hajimari.io/icon: ""
-  labels:
-    app.kubernetes.io/name: *app
-    app.kubernetes.io/instance: *app
-spec:
-  ingressClassName: "nginx"
-  rules:
-    - host: &host s3.${EXTERNAL_DOMAIN}
+    - host: &host minio.kokoro.wtf
       http:
         paths:
           - path: /
@@ -60,7 +21,7 @@ spec:
               service:
                 name: minio
                 port:
-                  name: s3
+                  name: ui
   tls:
     - hosts:
         - *host
