@@ -68,10 +68,13 @@ spec:
       main:
         enabled: false
     persistence:
-      backups:
+      backup:
         enabled: true
-        existingClaim: postgres-backups
+        type: nfs
+        server: "${SAN_HOST}"
+        path: /tank/backup/kubernetes/apps/plex
         mountPath: /backups
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
