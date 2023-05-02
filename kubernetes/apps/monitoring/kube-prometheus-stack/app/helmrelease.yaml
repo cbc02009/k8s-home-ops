@@ -225,8 +225,8 @@ spec:
                   - "sakura.ctec.run:9100"
                   - "anya.ctec.run:9100"
                   - "uiharu.ctec.run:9100"
-                  # - "rem.ctec.run:9100"
-                  # - "ram.ctec.run:9100"
+                  - "rem.ctec.run:9100"
+                  - "ram.ctec.run:9100"
                   - "gateway.ctec.run:9100"
 
     alertmanager:
