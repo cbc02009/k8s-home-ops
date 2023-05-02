@@ -35,6 +35,7 @@ spec:
       service:
         loadBalancerIP: ${LB_NGINX_INGRESS}
         annotations:
+          external-dns.alpha.kubernetes.io/hostname: "ipv4.kokoro.wtf"
           metallb.universe.tf/loadBalancerIPs: |-
             ${LB_NGINX_INGRESS}
         externalTrafficPolicy: Local
