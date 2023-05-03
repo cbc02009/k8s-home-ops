@@ -108,8 +108,21 @@ spec:
           reporting_enabled: false
 
     gateway:
+      replicas: 3
       enabled: true
-      replicas: 1
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.gatewaySelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
+      image:
+        registry: ghcr.io
+        repository: nginxinc/nginx-unprivileged
+        tag: 1.24-alpine
       ingress:
         enabled: true
         ingressClassName: "nginx"
