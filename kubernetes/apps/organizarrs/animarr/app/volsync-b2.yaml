@@ -17,8 +17,8 @@ spec:
       data:
         RESTIC_REPOSITORY: '{{ .b2_repository_template }}/animarr'
         RESTIC_PASSWORD: '{{ .b2_restic_password }}'
-        AWS_ACCESS_KEY_ID: '{{ .b2_username }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .b2_password }}'
+        AWS_ACCESS_KEY_ID: '{{ .b2_access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .b2_secret_key }}'
   dataFrom:
     - extract:
         key: volsync-restic-template-b2
