@@ -26,28 +26,28 @@ spec:
         - regexp:
             source: "(.*)"
             target: "b2_$1"
-# ---
-# # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
-# apiVersion: volsync.backube/v1alpha1
-# kind: ReplicationSource
-# metadata:
-#   name: animarr
-#   namespace: organizarrs
-# spec:
-#   sourcePVC: animarr-config-v1
-#   trigger:
-#     schedule: '0 0 1 * *'
-#   restic:
-#     copyMethod: Snapshot
-#     pruneIntervalDays: 10
-#     repository: animarr-b2-secret
-#     cacheCapacity: 2Gi
-#     volumeSnapshotClassName: csi-ceph-blockpool
-#     storageClassName: ceph-block
-#     moverSecurityContext:
-#       runAsUser: 568
-#       runAsGroup: 568
-#       fsGroup: 568
-#     retain:
-#       daily: 10
-#       within: 3d
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: animarr-b2
+  namespace: organizarrs
+spec:
+  sourcePVC: animarr-config-v1
+  trigger:
+    schedule: '0 0 1 * *'
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: animarr-b2-secret
+    cacheCapacity: 2Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+    retain:
+      monthly: 12
+      within: 3d
