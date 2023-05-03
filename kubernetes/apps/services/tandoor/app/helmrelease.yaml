@@ -46,6 +46,8 @@ spec:
       DB_ENGINE: django.db.backends.postgresql
       TANDOOR_PORT: 8080
       EMAIL_USE_TLS: 1
+      ENABLE_METRICS: 1
+      ENABLE_SIGNUP: 1
 
     envFrom:
       - secretRef:
