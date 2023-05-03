@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: minio
 spec:
   type: ExternalName
-  externalName: nas.ctec.run.
+  externalName: minio.ctec.run.
   ports:
     - name: s3
       port: &s3_port 9000
