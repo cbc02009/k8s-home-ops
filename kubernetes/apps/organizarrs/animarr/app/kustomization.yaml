@@ -7,6 +7,6 @@ resources:
   - ./externalsecret.yaml
   - ./volsync.yaml
   - ./pvc.yaml
-  - ./volsync-b2.yaml
+  # - ./volsync-b2.yaml
 metadata:
   namespace: organizarrs
