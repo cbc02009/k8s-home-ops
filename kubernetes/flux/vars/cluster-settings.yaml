@@ -21,7 +21,7 @@ data:
 
   CONTROL_IP: cluster.ctec.run
 
-  SAN_HOST: shana.ctec.run
+  NAS_HOST: shana.ctec.run
   POSTGRES_HOST: postgres.ctec.run
   MINIO_HOST: minio.ctec.run
 

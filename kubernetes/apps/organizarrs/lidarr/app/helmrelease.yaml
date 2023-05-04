@@ -80,7 +80,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: &nas "${SAN_HOST}"
+        server: &nas "nas.ctec.run"
         path: /tank/media
         mountPath: /media
 

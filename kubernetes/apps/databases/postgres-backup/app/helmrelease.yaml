@@ -71,7 +71,7 @@ spec:
       backup:
         enabled: true
         type: nfs
-        server: "${SAN_HOST}"
+        server: "nas.ctec.run"
         path: /tank/backup/kubernetes/apps/plex
         mountPath: /backups
 
