@@ -122,7 +122,7 @@ spec:
       image:
         registry: ghcr.io
         repository: nginxinc/nginx-unprivileged
-        tag: 1.24-alpine
+        tag: 1.24-alpiner
       ingress:
         enabled: true
         ingressClassName: "nginx"
@@ -173,12 +173,16 @@ spec:
           emptyDir: {}
 
     monitoring:
+      serviceMonitor:
+        enabled: false
+      rules:
+        enabled: false
       selfMonitoring:
         enabled: false
         grafanaAgent:
           installOperator: false
-        lokiCanary:
-          enabled: false
+      lokiCanary:
+        enabled: false
 
     test:
       enabled: false
