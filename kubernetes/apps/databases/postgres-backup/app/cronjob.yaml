@@ -61,5 +61,5 @@ spec:
           volumes:
             - name: nas-backups
               nfs:
-                server: "${SAN_HOST}"
+                server: "nas.ctec.run"
                 path: /tank/backup/kubernetes/apps/postgres

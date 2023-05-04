@@ -190,7 +190,7 @@ spec:
           #   honor_timestamps: true
           #   static_configs:
           #     - targets:
-          #         - "${SAN_HOST}:9633"
+          #         - "nas.ctec.run:9633"
 
           - job_name: node-exporter
             scrape_interval: 1m

@@ -268,7 +268,7 @@ spec:
     extraVolumes:
       - name: repo-vol
         nfs:
-          server: ${SAN_HOST}
+          server: nas.ctec.run
           path: /smoltank/k8s/apps/gitea
           readOnly: false
 

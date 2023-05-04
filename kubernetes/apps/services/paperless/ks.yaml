@@ -1,23 +1,23 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: apps-paperless
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/services/paperless/app/'
+  dependsOn:
+    - name: apps-external-secrets-stores
+  path: ./kubernetes/apps/services/paperless/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-  interval: 30m
-  retryInterval: 1m
-  timeout: 3m
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: paperless
       namespace: services
+  interval: 15m
+  retryInterval: 1m
+  timeout: 5m
