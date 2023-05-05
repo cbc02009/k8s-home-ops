@@ -12,8 +12,8 @@ resources:
   - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
   - ./nextcloud/ks.yaml
-  - ./obico/ks.yaml
-  # - ./paperless/ks.yaml
+  # - ./obico/ks.yaml
+  - ./paperless/ks.yaml
   - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
