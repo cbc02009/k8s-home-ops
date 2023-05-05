@@ -6,7 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./alertmanager-discord/ks.yaml
+  # - ./alertmanager-discord/ks.yaml
   # - ./grafana/ks.yaml
   - ./kube-cleanup-operator/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
