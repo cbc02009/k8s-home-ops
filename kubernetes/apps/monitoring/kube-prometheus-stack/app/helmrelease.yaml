@@ -223,11 +223,11 @@ spec:
               continue: false
             - receiver: "discord"
 
-        receivers:
-          - name: "null"
-          - name: "discord"
-            webhook_configs:
-              - url: "http://alertmanager-discord.monitoring.svc.cluster.local:9094"
+        # receivers:
+        #   - name: "null"
+        #   - name: "discord"
+        #     webhook_configs:
+        #       - url: "http://alertmanager-discord.monitoring.svc.cluster.local:9094"
 
         inhibit_rules:
           - source_matchers:
