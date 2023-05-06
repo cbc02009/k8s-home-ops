@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: downloads
 resources:
   - ./volsync.yaml
+  - ./volsync-b2.yaml
   - ./pvc.yaml
   - ./helmrelease.yaml
 metadata:
