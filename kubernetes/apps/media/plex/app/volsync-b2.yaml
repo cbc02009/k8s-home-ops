@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: plex-b2
+  namespace: media
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: plex-b2-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .b2_repository_template }}/plex'
+        RESTIC_PASSWORD: '{{ .b2_restic_password }}'
+        AWS_ACCESS_KEY_ID: '{{ .b2_access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .b2_secret_key }}'
+  dataFrom:
+    - extract:
+        key: volsync-restic-template-b2
+      rewrite:
+        - regexp:
+            source: "(.*)"
+            target: "b2_$1"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: plex-b2
+  namespace: media
+spec:
+  sourcePVC: plex-config-v1
+  trigger:
+    schedule: '0 0 1 * *'
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: plex-b2-secret
+    cacheCapacity: 2Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+    retain:
+      monthly: 12
+      within: 3d
