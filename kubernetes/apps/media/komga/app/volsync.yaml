@@ -46,4 +46,5 @@ spec:
       fsGroup: 0
     retain:
       daily: 10
+      monthly: 3
       within: 3d
