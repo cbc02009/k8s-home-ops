@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: *app
 spec:
   type: ExternalName
-  externalName: unifi.${INTERNAL_DOMAIN}
+  externalName: unifi.ctec.run.
   ports:
     - name: http
       port: &port 8443
