@@ -17,4 +17,4 @@ spec:
   wait: true
   dependsOn:
     - name: apps-external-secrets-stores
-    - name: apps-externaldns-shared
+    - name: apps-external-dns-shared
