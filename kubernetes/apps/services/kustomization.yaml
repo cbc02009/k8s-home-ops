@@ -8,7 +8,7 @@ resources:
   # Flux-Kustomizations
   - ./cyberchef/ks.yaml
   # - ./epic-freegames/ks.yaml
-  - ./immich/ks.yaml
+  # - ./immich/ks.yaml
   - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
   - ./nextcloud/ks.yaml
