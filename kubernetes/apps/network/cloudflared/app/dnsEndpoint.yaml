@@ -10,4 +10,4 @@ spec:
   endpoints:
     - dnsName: ipv4.kokoro.wtf
       recordType: CNAME
-      targets: ["7235a04d-8ef9-419f-91a3-f54e243c27e4.cfargotunnel.com"]
+      targets: ["8764aa66-2500-45b7-a3db-9c098e02d23c.cfargotunnel.com"]
