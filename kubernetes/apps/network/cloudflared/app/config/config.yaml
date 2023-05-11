@@ -1,0 +1,7 @@
+---
+ingress:
+  - hostname: "*.kokoro.wtf"
+    service: https://ingress-nginx-controller.network.svc.cluster.local:443
+    originRequest:
+      originServerName: ipv4.kokoro.wtf
+  - service: http_status:404
