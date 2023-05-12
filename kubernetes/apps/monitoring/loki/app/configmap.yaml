@@ -8,48 +8,6 @@ data:
   loki-alerting-rules.yaml: |-
     groups:
       #
-      # SMART Failures
-      #
-      - name: smart-failure
-        rules:
-          - alert: SmartFailures
-            expr: |
-              sum by (hostname) (count_over_time({hostname=~".+"} | json | _SYSTEMD_UNIT = "smartmontools.service" !~ "(?i)previous self-test completed without error" !~ "(?i)Prefailure" |~ "(?i)(error|fail)"[2m])) > 0
-            for: 2m
-            labels:
-              severity: critical
-              category: logs
-            annotations:
-              summary: "SMART has reported failures on host {{ $labels.hostname }}"
-      #
-      # zigbee2mqtt
-      #
-      - name: zigbee2mqtt
-        rules:
-          - alert: ZigbeeUnableToReachMQTT
-            expr: |
-              sum(count_over_time({app="zigbee2mqtt"} |~ "(?i)not connected to mqtt server"[2m])) > 0
-            for: 2m
-            labels:
-              severity: critical
-              category: logs
-            annotations:
-              summary: "Zigbee2mqtt is unable to reach MQTT"
-      #
-      # zwavejs2mqtt
-      #
-      - name: zwavejs2mqtt
-        rules:
-          - alert: ZwaveUnableToReachMQTT
-            expr: |
-              sum(count_over_time({app="zwavejs2mqtt"} |~ "(?i)error while connecting mqtt"[2m])) > 0
-            for: 2m
-            labels:
-              severity: critical
-              category: logs
-            annotations:
-              summary: "Zwavejs2mqtt is unable to reach MQTT"
-      #
       # frigate
       #
       - name: frigate
