@@ -128,17 +128,28 @@ spec:
           gnedId: 13646
           revision: 2
           datasource: Prometheus
+        speedtest-exporter-hub:
+          gnetId: 13665
+          revision: 4
+          datasource:
+            - name: "DS_PROMETHEUS"
+              value: Prometheus
 
     sidecar:
       dashboards:
         enabled: true
+        labelValue: ""
+        label: grafana_dashboard
+        folderAnnotation: grafana_folder
         searchNamespace: ALL
-        # folderAnnotation: grafana_folder
-        # provider:
-        #   foldersFromFilesStructure: true
+        provider:
+          disableDelete: true
+          foldersFromFilesStructure: true
       datasources:
         enabled: true
+        labelValue: ""
         searchNamespace: ALL
+      logLevel: INFO
 
     plugins:
       - natel-discrete-panel
@@ -153,6 +164,9 @@ spec:
 
     podAnnotations:
       reloader.stakater.com/auto: "true"
+
+    imageRenderer:
+      enabled: true
 
     ingress:
       enabled: true
