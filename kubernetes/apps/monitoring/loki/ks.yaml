@@ -22,4 +22,6 @@ spec:
       name: loki
       namespace: monitoring
   dependsOn:
+    - name: apps-kube-prometheus-stack
+    - name: apps-external-secrets-stores
     - name: apps-rook-ceph-cluster

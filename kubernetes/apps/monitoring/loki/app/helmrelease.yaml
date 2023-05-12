@@ -25,11 +25,7 @@ spec:
       retries: 3
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: monitoring
-    - name: ingress-nginx
-      namespace: network
+
   # https://github.com/grafana/loki/blob/main/production/helm/loki/values.yaml
   values:
     loki:
@@ -39,6 +35,9 @@ spec:
           log_level: info
           http_listen_port: 3100
           grpc_listen_port: 9095
+
+          grpc_server_max_recv_msg_size: 8388608
+          grpc_server_max_send_msg_size: 8388608
 
         memberlist:
           join_members: ["loki-memberlist"]
@@ -52,6 +51,8 @@ spec:
           split_queries_by_interval: 15m
           ingestion_rate_mb: 8
           ingestion_burst_size_mb: 16
+          shard_streams:
+            enabled: true
 
         schema_config:
           configs:
@@ -62,19 +63,19 @@ spec:
               index:
                 prefix: loki_index_
                 period: 24h
+
         common:
           path_prefix: /var/loki
           replication_factor: 3
           storage:
             s3:
-              bucketnames: loki
-              endpoint: ${MINIO_HOST}:9000
               s3: null
               insecure: true
               s3forcepathstyle: true
           ring:
             kvstore:
               store: memberlist
+
         ruler:
           enable_api: true
           enable_alertmanager_v2: true
@@ -87,10 +88,12 @@ spec:
           ring:
             kvstore:
               store: memberlist
+
         distributor:
           ring:
             kvstore:
               store: memberlist
+
         compactor:
           working_directory: /var/loki/boltdb-shipper-compactor
           shared_store: s3
@@ -98,14 +101,19 @@ spec:
           retention_enabled: true
           retention_delete_delay: 2h
           retention_delete_worker_count: 150
+
         ingester:
           max_chunk_age: 1h
           lifecycler:
             ring:
               kvstore:
                 store: memberlist
+
         analytics:
           reporting_enabled: false
+
+      podAnnotations:
+        secret.reloader.stakater.com/reload: loki-secret
 
     gateway:
       replicas: 3
@@ -173,10 +181,13 @@ spec:
           emptyDir: {}
 
     monitoring:
+      dashboards:
+        annotations:
+          grafana_folder: Loki
       serviceMonitor:
         enabled: false
-      rules:
-        enabled: false
+        metricsInstance:
+          enabled: false
       selfMonitoring:
         enabled: false
         grafanaAgent:
@@ -190,9 +201,21 @@ spec:
   valuesFrom:
     - kind: Secret
       name: loki-secret
-      valuesKey: AWS_ACCESS_KEY_ID
+      valuesKey: S3_BUCKET_NAME
+      targetPath: loki.structuredConfig.common.storage.s3.bucketnames
+    - kind: Secret
+      name: loki-secret
+      valuesKey: S3_BUCKET_HOST
+      targetPath: loki.structuredConfig.common.storage.s3.endpoint
+    - kind: Secret
+      name: loki-secret
+      valuesKey: S3_BUCKET_REGION
+      targetPath: loki.structuredConfig.common.storage.s3.region
+    - kind: Secret
+      name: loki-secret
+      valuesKey: S3_ACCESS_KEY
       targetPath: loki.structuredConfig.common.storage.s3.access_key_id
     - kind: Secret
       name: loki-secret
-      valuesKey: AWS_SECRET_ACCESS_KEY
+      valuesKey: S3_SECRET_KEY
       targetPath: loki.structuredConfig.common.storage.s3.secret_access_key
