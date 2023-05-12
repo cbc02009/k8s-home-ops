@@ -16,15 +16,16 @@ terraform {
       source  = "hashicorp/http"
       version = "3.3.0"
     }
-    sops = {
-      source  = "carlpett/sops"
-      version = "0.7.2"
-    }
   }
-  required_version = ">= 1.3.0"
 }
 
+# Obtain current home IP address
+data "http" "ipv4_lookup_raw" {
+  url = "http://ipv4.icanhazip.com"
+}
 
-data "sops_file" "secrets" {
-  source_file = "secret.sops.yaml"
+module "onepassword_item_cloudflare" {
+  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  vault  = "Services"
+  item   = "cloudflare"
 }
