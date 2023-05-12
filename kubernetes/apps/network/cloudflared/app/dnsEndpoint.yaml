@@ -5,9 +5,9 @@ metadata:
   name: cloudflared-tunnel
   namespace: network
   annotations:
-    external-dns.alpha.kubernetes.io/target: ipv4.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: ingress.kokoro.wtf
 spec:
   endpoints:
-    - dnsName: ipv4.kokoro.wtf
+    - dnsName: ingress.kokoro.wtf
       recordType: CNAME
       targets: ["8764aa66-2500-45b7-a3db-9c098e02d23c.cfargotunnel.com"]
