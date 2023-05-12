@@ -3,7 +3,7 @@ resource "cloudflare_filter" "countries" {
   count = var.enable_default_firewall_rules ? 1 : 0
 
   zone_id     = cloudflare_zone.zone.id
-  description = "Expression to block all countries except NL/BE/DE"
+  description = "Expression to certain countries"
   expression  = "(ip.geoip.country in {\"CN\" \"IN\" \"RU\"})"
 }
 
@@ -11,7 +11,7 @@ resource "cloudflare_firewall_rule" "countries" {
   count = var.enable_default_firewall_rules ? 1 : 0
 
   zone_id     = cloudflare_zone.zone.id
-  description = "Firewall rule to block all countries except NL/BE/DE"
+  description = "Firewall rule to block certain countries"
   filter_id   = cloudflare_filter.countries[count.index].id
   action      = "block"
 }
