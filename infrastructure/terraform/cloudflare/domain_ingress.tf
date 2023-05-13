@@ -7,13 +7,13 @@ module "cf_domain_ingress" {
       name  = "ipv4"
       value = local.home_ipv4
     },
-    # {
-    #   id      = "vpn"
-    #   name    = module.onepassword_item_cloudflare.fields["vpn-subdomain"]
-    #   value   = "ipv4.kokoro.wtf"
-    #   type    = "CNAME"
-    #   proxied = false
-    # },
+    {
+      id      = "vpn"
+      name    = module.onepassword_item_cloudflare.fields["vpn_subdomain"]
+      value   = "ipv4.kokoro.wtf"
+      type    = "CNAME"
+      proxied = false
+    },
     # Generic settings
     {
       name  = "_dmarc"
