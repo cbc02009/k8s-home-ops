@@ -24,7 +24,7 @@ spec:
       enabled: true
       className: nginx
       annotations:
-        ingress.home.arpa/type: "external"
+        ingress.home.arpa/type: "internal"
         hajimari.io/icon: mdi:sawtooth-wave
       hosts:
         - host: &host gitops.${EXTERNAL_DOMAIN}
