@@ -111,7 +111,7 @@ spec:
         pathType: Prefix
         ingressClassName: "nginx"
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: database-clock
           hajimari.io/appName: Prometheus
@@ -241,7 +241,7 @@ spec:
         pathType: Prefix
         ingressClassName: "nginx"
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+          ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
           hajimari.io/icon: bell-alert
           hajimari.io/appName: Alertmanager
