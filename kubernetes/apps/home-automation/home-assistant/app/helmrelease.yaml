@@ -74,7 +74,7 @@ spec:
             'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
           ]
       init-db:
-        image: ghcr.io/onedr0p/postgres-initdb:14.7
+        image: ghcr.io/onedr0p/postgres-initdb:14.8
         env:
           - name: POSTGRES_HOST
             value: ${POSTGRES_HOST}
