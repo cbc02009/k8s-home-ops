@@ -116,7 +116,7 @@ spec:
         secret.reloader.stakater.com/reload: loki-secret
 
     gateway:
-      replicas: 3
+      replicas: 2
       enabled: true
       affinity: |
         podAntiAffinity:
@@ -146,13 +146,31 @@ spec:
               - *host
 
     write:
-      replicas: 1
+      replicas: 2
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.writeSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
       persistence:
         size: 10Gi
         storageClass: ceph-block
 
     read:
-      replicas: 1
+      replicas: 2
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.readSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
       persistance:
         size: 10Gi
         storageClass: ceph-block
@@ -164,7 +182,16 @@ spec:
           emptyDir: {}
 
     backend:
-      replicas: 1
+      replicas: 2
+      affinity: |
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "loki.backendSelectorLabels" . | nindent 12 }}
+                topologyKey: kubernetes.io/hostname
       persistance:
         size: 10Gi
         storageClass: ceph-block
