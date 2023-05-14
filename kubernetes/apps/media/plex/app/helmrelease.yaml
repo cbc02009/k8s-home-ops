@@ -138,7 +138,7 @@ spec:
 
     resources:
       requests:
-        cpu: 2
+        cpu: 4
         memory: 2000M
       limits:
         cpu: 12
