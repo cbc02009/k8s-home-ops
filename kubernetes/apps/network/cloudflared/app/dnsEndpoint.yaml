@@ -10,4 +10,4 @@ spec:
   endpoints:
     - dnsName: ingress.kokoro.wtf
       recordType: CNAME
-      targets: ["8764aa66-2500-45b7-a3db-9c098e02d23c.cfargotunnel.com"]
+      targets: ["0e8be0df-9994-43db-80ea-dc0e6a814a66.cfargotunnel.com"]
