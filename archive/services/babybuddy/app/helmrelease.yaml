@@ -39,7 +39,7 @@ spec:
         env:
           - name: POSTGRES_HOST
             value: ${POSTGRES_HOST}
-          - name: POSTGRES_DB
+          - name: INIT_POSTGRES_DBNAME
             value: "babybuddy"
         envFrom:
           - secretRef:

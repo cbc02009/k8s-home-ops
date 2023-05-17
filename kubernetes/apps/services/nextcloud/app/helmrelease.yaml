@@ -221,7 +221,7 @@ spec:
       #    image: busybox
       #    command: ['do', 'something']
         - name: init-db
-          image: ghcr.io/onedr0p/postgres-initdb:14.8
+          image: ghcr.io/onedr0p/postgres-init:14.8
           envFrom:
             - secretRef:
                 name: nextcloud-secret
@@ -293,7 +293,7 @@ spec:
       existingSecret:
         enabled: true
         secretName: nextcloud-secret
-        usernameKey: POSTGRES_USER
+        usernameKey: INIT_POSTGRES_USER
         passwordKey: POSTGRES_PASS
 
     ## Cronjob to execute Nextcloud background tasks
