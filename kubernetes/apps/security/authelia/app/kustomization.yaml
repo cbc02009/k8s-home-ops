@@ -7,8 +7,6 @@ resources:
   - ./externalsecret.yaml
   - ./service-monitor.yaml
   - ./helmrelease.yaml
-patchesStrategicMerge:
-  - patches/env.yaml
 configMapGenerator:
   - name: authelia-configmap
     files:
