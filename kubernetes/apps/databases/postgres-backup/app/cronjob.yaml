@@ -30,9 +30,9 @@ spec:
               env:
                 - name: POSTGRES_HOST
                   value: ${POSTGRES_HOST}
-                - name: POSTGRES_DB
+                - name: INIT_POSTGRES_DBNAME
                   value: "authelia, gitea, grafana, home_assistant, immich, nextcloud, postgres, prowlarr_main, radarr_main, vaultwarden"
-                - name: POSTGRES_USER
+                - name: INIT_POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
                       name: postgres-backup-secret
