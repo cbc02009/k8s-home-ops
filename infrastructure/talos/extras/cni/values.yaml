@@ -43,4 +43,3 @@ ipv6:
 
 containerRuntime:
   integration: containerd
-
