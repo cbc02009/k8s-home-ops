@@ -73,13 +73,8 @@ spec:
             "-c",
             'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
           ]
-      init-db:
+      01-init-db:
         image: ghcr.io/onedr0p/postgres-init:14.8
-        env:
-          - name: POSTGRES_HOST
-            value: ${POSTGRES_HOST}
-          - name: INIT_POSTGRES_DBNAME
-            value: home_assistant
         envFrom:
           - secretRef:
               name: home-assistant-secret
