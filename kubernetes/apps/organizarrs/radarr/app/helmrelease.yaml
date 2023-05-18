@@ -31,7 +31,7 @@ spec:
         reloader.stakater.com/auto: "true"
 
     initContainers:
-      init-db:
+      01-init-db:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
