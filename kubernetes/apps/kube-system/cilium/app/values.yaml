@@ -33,7 +33,7 @@ cluster:
   # -- (int) Unique ID of the cluster. Must be unique across all connected
   # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
   # may be 0 if Cluster Mesh is not used.
-  id: 1
+  id: 0
 
 # -- Configure container runtime specific integration.
 containerRuntime:
@@ -157,7 +157,7 @@ operator:
   rollOutPods: true
 
 # -- Roll out cilium agent pods automatically when configmap is updated.
-rollOutCiliumPods: false
+rollOutCiliumPods: true
 
 securityContext:
   # -- Run the pod with elevated privileges
