@@ -7,6 +7,5 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./pvc.yaml
-  - ./volsync-b2.yaml
 metadata:
   namespace: media

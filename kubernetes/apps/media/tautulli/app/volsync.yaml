@@ -15,13 +15,17 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPOSITORY_TEMPLATE }}/tautulli'
-        RESTIC_PASSWORD: '{{ .RESTIC_PASSWORD }}'
-        AWS_ACCESS_KEY_ID: '{{ .AWS_ACCESS_KEY_ID }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .AWS_SECRET_ACCESS_KEY }}'
+        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/tautulli'
+        RESTIC_PASSWORD: '{{ .r2_restic_password }}'
+        AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
   dataFrom:
     - extract:
         key: volsync-restic-template
+      rewrite:
+        - regexp:
+            source: "(.*)"
+            target: "r2_$1"
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1

@@ -5,6 +5,5 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./volsync.yaml
-  - ./volsync-b2.yaml
   - ./externalsecret.yaml
   - ./pvc.yaml
