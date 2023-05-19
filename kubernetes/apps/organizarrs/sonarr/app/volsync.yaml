@@ -21,7 +21,7 @@ spec:
         AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
   dataFrom:
     - extract:
-        key: volsync-restic-template
+        key: volsync-restic-template-r2
       rewrite:
         - regexp:
             source: "(.*)"
