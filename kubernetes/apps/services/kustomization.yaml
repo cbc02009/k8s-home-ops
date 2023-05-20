@@ -8,12 +8,12 @@ resources:
   # Flux-Kustomizations
   - ./cyberchef/ks.yaml
   # - ./epic-freegames/ks.yaml
-  # - ./immich/ks.yaml
+  - ./immich/ks.yaml
   - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
   - ./nextcloud/ks.yaml
   # - ./obico/ks.yaml
-  # - ./paperless/ks.yaml
+  - ./paperless/ks.yaml
   - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
