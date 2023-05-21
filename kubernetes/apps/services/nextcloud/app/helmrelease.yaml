@@ -137,7 +137,9 @@ spec:
           host: smtp-relay.${EXTERNAL_DOMAIN}
           secure: none
           port: 25
-          authtype: LOGIN
+          auth/type: LOGIN
+          name: ""
+          passsword: ""
       # PHP Configuration files
       # Will be injected in /usr/local/etc/php/conf.d for apache image and in /usr/local/etc/php-fpm.d when nginx.enabled: true
       phpConfigs: {}
