@@ -44,7 +44,7 @@ spec:
             # -- Specify the Gluetun image
             repository: ghcr.io/cbc02009/gluetun
             # -- Specify the Gluetun image tag
-            tag: v3.33.0
+            tag: v3.34.0
             # -- Specify the Gluetun image pull policy
             pullPolicy: IfNotPresent
         env:
