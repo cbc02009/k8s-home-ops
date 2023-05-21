@@ -21,8 +21,8 @@ tasks:
   reset:
     desc: reset the talos cluster
     cmds:
-      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n ram.ctec.run -e ram.ctec.run
-      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n rem.ctec.run -e rem.ctec.run
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n ram.ctec.run -e ram.ctec.run
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n rem.ctec.run -e rem.ctec.run
 
       - echo "Waiting for workers to reset... ^C to stop here"
       - sleep 5
