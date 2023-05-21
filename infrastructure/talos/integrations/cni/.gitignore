@@ -1,2 +1,3 @@
 # Kustomize helmChart transformer creates a charts/ dir that can be ignored
 charts/
+cilium.yaml
