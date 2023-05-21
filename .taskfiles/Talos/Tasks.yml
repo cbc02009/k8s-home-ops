@@ -2,9 +2,28 @@
 version: '3'
 
 tasks:
-  create-cluster:
-    desc: Create a local cluster (IP=local ip addr)
+  apply-config:
+    desc: apply config files to all nodes
     cmds:
-      - |
-        talosctl cluster create  --kubernetes-version 1.25.0   -p 69:69/udp,8081:8081/tcp,51821:51821/udp   --workers 0   --endpoint ${IP}
-        kubectl taint node talos-default-controlplane-1 node-role.kubernetes.io/control-plane:NoSchedule-
+      - talosctl apply-config -i -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
+      - talosctl apply-config -i -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
+      - talosctl apply-config -i -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
+      # - talosctl apply-config -i -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
+      # - talosctl apply-config -i -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
+  reset:
+    desc: reset the talos cluster
+    cmds:
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n ram.ctec.run -e ram.ctec.run
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n rem.ctec.run -e rem.ctec.run
+
+      - echo "Waiting for workers to reset... ^C to stop here"
+      - sleep 5
+
+      # Reset the control plane nodes
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n uiharu.ctec.run -e uiharu.ctec.run
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n anya.ctec.run -e anya.ctec.run
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n sakura.ctec.run -e sakura.ctec.run
+  bootstrap:
+    desc: bootstrap the cluster
+    cmds:
+      - talosctl bootstrap -n uiharu.ctec.run
