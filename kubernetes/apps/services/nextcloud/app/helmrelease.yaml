@@ -130,7 +130,7 @@ spec:
       persistence:
         subPath:
       mail:
-        enabled: true
+        enabled: false
         fromAddress: admin
         domain: ${EXTERNAL_DOMAIN}
         smtp:
