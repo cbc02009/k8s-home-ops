@@ -8,7 +8,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: postmaster@kokoro.wtf
+    email: ${ACME_EMAIL}
     privateKeySecretRef:
       name: letsencrypt-production
     solvers:
@@ -17,7 +17,7 @@ spec:
             - ${EXTERNAL_DOMAIN}
         dns01:
           cloudflare:
-            email: postmaster@kokoro.wtf
+            email: ${ACME_EMAIL}
             apiKeySecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_APIKEY
@@ -31,7 +31,7 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: postmaster@kokoro.wtf
+    email: ${ACME_EMAIL}
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
@@ -40,7 +40,7 @@ spec:
             - ${EXTERNAL_DOMAIN}
         dns01:
           cloudflare:
-            email: postmaster@kokoro.wtf
+            email: ${ACME_EMAIL}
             apiKeySecretRef:
               name: cloudflare-secret
               key: CLOUDFLARE_APIKEY
