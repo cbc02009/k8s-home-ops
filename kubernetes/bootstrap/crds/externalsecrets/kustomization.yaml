@@ -14,6 +14,6 @@ resources:
   - https://raw.githubusercontent.com/external-secrets/external-secrets/main/config/crds/bases/generators.external-secrets.io_passwords.yaml
 commonAnnotations:
   meta.helm.sh/release-name: external-secrets
-  meta.helm.sh/release-namespace: kube-system
+  meta.helm.sh/release-namespace: security
 commonLabels:
   app.kubernetes.io/managed-by: Helm

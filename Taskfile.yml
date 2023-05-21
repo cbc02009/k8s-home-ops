@@ -11,7 +11,7 @@ vars:
 
 includes:
   fx: .taskfiles/Flux/Tasks.yml
-  bootstrap: .taskfiles/bootstrap.yml
+  bs: .taskfiles/bootstrap.yml
   pr: .taskfiles/PreCommit/Tasks.yml
   so: .taskfiles/sops.yml
   ro: .taskfiles/Rook/Tasks.yaml
