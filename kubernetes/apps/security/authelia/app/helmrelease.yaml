@@ -32,7 +32,7 @@ spec:
               name: authelia-secret
 
     controller:
-      replicas: 2
+      replicas: 1
       type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
