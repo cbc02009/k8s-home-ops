@@ -9,8 +9,8 @@
 talosctl apply-config -i -n uiharu.ctec.run -f ./clusterconfig/kokoro-uiharu.ctec.run.yaml
 talosctl apply-config -i -n sakura.ctec.run -f ./clusterconfig/kokoro-sakura.ctec.run.yaml
 talosctl apply-config -i -n anya.ctec.run -f ./clusterconfig/kokoro-anya.ctec.run.yaml
-talosctl apply-config -i -n rem.ctec.run -f ./clusterconfig/kokoro-rem.ctec.run.yaml
-talosctl apply-config -i -n ram.ctec.run -f ./clusterconfig/kokoro-ram.ctec.run.yaml
+# talosctl apply-config -i -n rem.ctec.run -f ./clusterconfig/kokoro-rem.ctec.run.yaml
+# talosctl apply-config -i -n ram.ctec.run -f ./clusterconfig/kokoro-ram.ctec.run.yaml
 
 # It will take a few minutes for the nodes to spin up with the configuration.  Once ready, execute
 # talosctl bootstrap -n k8s-1
