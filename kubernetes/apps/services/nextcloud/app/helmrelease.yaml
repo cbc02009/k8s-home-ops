@@ -130,13 +130,13 @@ spec:
       persistence:
         subPath:
       mail:
-        enabled: false
+        enabled: true
         fromAddress: admin
         domain: ${EXTERNAL_DOMAIN}
         smtp:
-          host: smtp-relay.services.svc.cluster.local
+          host: smtp-relay.${EXTERNAL_DOMAIN}
           secure: none
-          port: 587
+          port: 25
           authtype: LOGIN
       # PHP Configuration files
       # Will be injected in /usr/local/etc/php/conf.d for apache image and in /usr/local/etc/php-fpm.d when nginx.enabled: true
@@ -294,7 +294,7 @@ spec:
         enabled: true
         secretName: nextcloud-secret
         usernameKey: INIT_POSTGRES_USER
-        passwordKey: POSTGRES_PASS
+        passwordKey: INIT_POSTGRES_PASS
 
     ## Cronjob to execute Nextcloud background tasks
     ## ref: https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/background_jobs_configuration.html#cron

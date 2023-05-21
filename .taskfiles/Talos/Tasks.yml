@@ -8,8 +8,16 @@ tasks:
       - talosctl apply-config -i -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
       - talosctl apply-config -i -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
       - talosctl apply-config -i -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
-      # - talosctl apply-config -i -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
-      # - talosctl apply-config -i -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
+      - talosctl apply-config -i -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
+      - talosctl apply-config -i -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
+  update-config:
+    desc: apply config files to all nodes
+    cmds:
+      - talosctl apply-config -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
+      - talosctl apply-config -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
+      - talosctl apply-config -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
+      - talosctl apply-config -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
+      - talosctl apply-config -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
   reset:
     desc: reset the talos cluster
     cmds:
