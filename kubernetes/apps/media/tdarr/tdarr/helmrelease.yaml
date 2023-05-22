@@ -27,14 +27,19 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/haveagitgat/tdarr_acc
       tag: 2.00.20.1
+
     env:
       TZ: "${TZ}"
       PUID: "1000"
       PGID: "1000"
       ffmpegPath: "/usr/local/bin/ffmpeg"
+
     service:
       main:
         ports:
@@ -44,6 +49,7 @@ spec:
             enabled: true
             protocol: TCP
             port: 8266
+
     ingress:
       main:
         enabled: true
@@ -62,12 +68,12 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: tdarr-config
+        existingClaim: tdarr-config-v1
         mountPath: /app/configs
 
       data:
         enabled: true
-        existingClaim: tdarr-data
+        existingClaim: tdarr-data-v1
         mountPath: /app/server
 
       cache:
