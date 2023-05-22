@@ -18,6 +18,7 @@ resources:
   - ./gabe565-charts.yaml
   - ./gitea-charts.yaml
   - ./grafana-charts.yaml
+  - ./intel.yaml
   - ./kyverno-charts.yaml
   - ./jetstack-charts.yaml
   - ./k8s-gateway-charts.yaml
