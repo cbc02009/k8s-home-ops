@@ -83,10 +83,7 @@ spec:
         existingClaim: sabnzbd-config-v1
       media:
         enabled: true
-        type: nfs
-        server: nas.ctec.run
-        path: /tank/media
-        mountPath: /media
+        existingClaim: media
       incomplete:
         enabled: true
         type: emptyDir
