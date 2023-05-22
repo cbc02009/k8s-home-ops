@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ./10gb-nic.yaml
   - ./aeotec-zwave-device.yaml
+  - ./intel-gpu.yaml
   - ./google-coral-device.yaml
