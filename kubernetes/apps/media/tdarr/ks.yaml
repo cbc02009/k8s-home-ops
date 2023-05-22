@@ -27,7 +27,7 @@ metadata:
 spec:
   dependsOn:
     - name: apps-tdarr
-    - name: apps-intel-gpu-plugin
+    - name: apps-intel-device-plugin-gpu
   path: ./kubernetes/apps/media/tdarr/tdarr-node
   prune: true
   sourceRef:
