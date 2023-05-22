@@ -93,12 +93,15 @@ spec:
 
       media:
         enabled: true
-        existingClaim: media
+        type: nfs
+        server: &nas nas.ctec.run
+        path: /tank/media
+        mountPath: /media
 
       backup:
         enabled: true
         type: nfs
-        server: nas.ctec.run
+        server: *nas
         path: /tank/backup/kubernetes/apps/plex
         mountPath: /config/backup
 

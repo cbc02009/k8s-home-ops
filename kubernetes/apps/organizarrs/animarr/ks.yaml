@@ -24,4 +24,3 @@ spec:
   dependsOn:
     - name: apps-external-secrets-stores
     - name: apps-rook-ceph-cluster
-    - name: apps-media-pvc
