@@ -98,10 +98,7 @@ spec:
         existingClaim: qbittorrent-config-v1
       media:
         enabled: true
-        type: nfs
-        server: "nas.ctec.run"
-        path: /tank/media
-        mountPath: /media
+        existingClaim: media
       torrents:
         enabled: true
         type: nfs

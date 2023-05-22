@@ -3,24 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-komga
+  name: apps-media-pvc
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/media/komga/app/'
+  path: ./kubernetes/apps/media/_pvc/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: true
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: komga
-      namespace: media
-  dependsOn:
-    - name: apps-rook-ceph-cluster
-    - name: apps-media-pvc
