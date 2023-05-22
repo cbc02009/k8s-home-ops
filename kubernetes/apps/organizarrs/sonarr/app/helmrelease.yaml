@@ -82,7 +82,10 @@ spec:
 
       media:
         enabled: true
-        existingClaim: media
+        type: nfs
+        server: "nas.ctec.run"
+        path: /tank/media
+        mountPath: /media
 
       backup:
         enabled: true

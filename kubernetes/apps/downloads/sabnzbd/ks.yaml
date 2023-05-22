@@ -23,4 +23,3 @@ spec:
       namespace: downloads
   dependsOn:
     - name: apps-rook-ceph-cluster
-    - name: apps-media-pvc

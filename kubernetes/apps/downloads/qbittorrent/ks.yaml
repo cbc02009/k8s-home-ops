@@ -24,4 +24,3 @@ spec:
   dependsOn:
     - name: apps-rook-ceph-cluster
     - name: apps-ingress-nginx
-    - name: apps-media-pvc

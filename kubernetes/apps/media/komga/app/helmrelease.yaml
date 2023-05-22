@@ -67,4 +67,7 @@ spec:
 
       media:
         enabled: true
-        existingClaim: media
+        type: nfs
+        server: "nas.ctec.run"
+        path: /tank/media/manga
+        mountPath: /media
