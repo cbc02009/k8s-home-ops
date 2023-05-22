@@ -1,0 +1,108 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: tdarr-config-restic
+  namespace: media
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: tdarr-config-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/tdarr-config'
+        RESTIC_PASSWORD: '{{ .r2_restic_password }}'
+        AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
+  dataFrom:
+    - extract:
+        key: volsync-restic-template
+      rewrite:
+        - regexp:
+            source: "(.*)"
+            target: "r2_$1"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: tdarr-config
+  namespace: media
+spec:
+  sourcePVC: tdarr-config-v1
+  trigger:
+    schedule: '0 0 * * *'
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: tdarr-config-restic-secret
+    cacheCapacity: 20Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+    retain:
+      daily: 10
+      monthly: 3
+      within: 3d
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: tdarr-data-restic
+  namespace: media
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    name: tdarr-config-restic-secret
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/tdarr-config'
+        RESTIC_PASSWORD: '{{ .r2_restic_password }}'
+        AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
+  dataFrom:
+    - extract:
+        key: volsync-restic-template
+      rewrite:
+        - regexp:
+            source: "(.*)"
+            target: "r2_$1"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: tdarr-data
+  namespace: media
+spec:
+  sourcePVC: tdarr-data-v1
+  trigger:
+    schedule: '0 0 * * *'
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 10
+    repository: tdarr-data-restic-secret
+    cacheCapacity: 20Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+    retain:
+      daily: 10
+      monthly: 3
+      within: 3d

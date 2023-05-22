@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tdarr
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    image:
+      repository: ghcr.io/haveagitgat/tdarr_acc
+      tag: 2.00.20.1
+    env:
+      TZ: "${TZ}"
+      PUID: "1000"
+      PGID: "1000"
+      ffmpegPath: "/usr/local/bin/ffmpeg"
+    service:
+      main:
+        ports:
+          http:
+            port: 8265
+          server:
+            enabled: true
+            protocol: TCP
+            port: 8266
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          ingress.home.arpa/type: "internal"
+        hosts:
+          - host: &host tdarr.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - secretName: tdarr-tls
+            hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: tdarr-config
+        mountPath: /app/configs
+
+      data:
+        enabled: true
+        existingClaim: tdarr-data
+        mountPath: /app/server
+
+      cache:
+        enabled: true
+        existingClaim: tdarr-cache
+
+      media:
+        enabled: true
+        type: nfs
+        server: nas.ctec.run
+        path: /tank/media
+        mountPath: /media
+
+    podSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      capabilities:
+        add:
+          - CHOWN
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 250Mi

@@ -81,6 +81,7 @@ spec:
         - 44
         - 109
         - 100
+        - 1010
 
     persistence:
       config:
