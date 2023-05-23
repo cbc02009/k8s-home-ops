@@ -64,12 +64,12 @@ spec:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: tdarr-config-restic-secret
+    name: tdarr-data-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/tdarr-config'
+        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/tdarr-data'
         RESTIC_PASSWORD: '{{ .r2_restic_password }}'
         AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
         AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
