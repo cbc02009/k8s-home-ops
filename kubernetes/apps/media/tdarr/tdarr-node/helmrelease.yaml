@@ -61,7 +61,10 @@ spec:
         mountPath: /media
       cache:
         enabled: true
-        existingClaim: tdarr-cache
+        type: nfs
+        server: nas.ctec.run
+        path: /smoltank/k8s/apps/tdarr-cache
+        mountPath: /cache
     podSecurityContext:
       runAsUser: 0
       runAsGroup: 0
