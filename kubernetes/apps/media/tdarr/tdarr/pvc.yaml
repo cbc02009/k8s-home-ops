@@ -24,16 +24,3 @@ spec:
     requests:
       storage: 15Gi
   storageClassName: ceph-block
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tdarr-cache
-  namespace: media
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 200Gi
-  storageClassName: ceph-filesystem
