@@ -23,11 +23,16 @@ spec:
     remediation:
       retries: 5
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/onedr0p/jellyfin
       tag: 10.8.10@sha256:1ef614db6a4c589777eb48bc9004d573b9c09f0d6d573a509041c6060f3a956b
+
     env:
       TZ: "${TZ}"
+
     service:
       main:
         type: LoadBalancer
@@ -36,6 +41,7 @@ spec:
         ports:
           http:
             port: 8096
+
     ingress:
       main:
         enabled: true
@@ -50,6 +56,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -72,6 +79,7 @@ spec:
       transcode:
         enabled: true
         type: emptyDir
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
