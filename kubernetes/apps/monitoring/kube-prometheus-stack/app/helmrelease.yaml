@@ -229,18 +229,18 @@ spec:
         global:
           resolve_timeout: 5m
 
-        route:
-          group_by: ["alertname", "job"]
-          group_wait: 30s
-          group_interval: 5m
-          repeat_interval: 6h
-          receiver: "discord"
-          routes:
-            - receiver: "null"
-              matchers:
-                - alertname =~ "InfoInhibitor|Watchdog|CPUThrottlingHigh|KubeCPUOvercommit"
-              continue: false
-            - receiver: "discord"
+        # route:
+        #   group_by: ["alertname", "job"]
+        #   group_wait: 30s
+        #   group_interval: 5m
+        #   repeat_interval: 6h
+        #   receiver: "discord"
+        #   routes:
+        #     - receiver: "null"
+        #       matchers:
+        #         - alertname =~ "InfoInhibitor|Watchdog|CPUThrottlingHigh|KubeCPUOvercommit"
+        #       continue: false
+        #     - receiver: "discord"
 
         # receivers:
         #   - name: "null"
