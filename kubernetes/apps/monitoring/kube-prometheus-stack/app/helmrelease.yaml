@@ -33,7 +33,7 @@ spec:
     cleanPrometheusOperatorObjectNames: true
 
     kubeControllerManager:
-      enabled: true
+      enabled: false
       endpoints: &cp
         - 10.0.2.10
         - 10.0.2.11
@@ -50,7 +50,7 @@ spec:
       endpoints: *cp
 
     kubelet:
-      enabled: true
+      enabled: false
       serviceMonitor:
         metricRelabelings:
           # Remove duplicate metrics
