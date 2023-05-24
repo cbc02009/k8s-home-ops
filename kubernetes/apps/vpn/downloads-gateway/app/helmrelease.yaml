@@ -94,9 +94,9 @@ spec:
       - IP: 10
         hostname: qbittorrent-0
         ports:
-          - port: 50413
+          - port: 55454
             type: udp
-          - port: 50413
+          - port: 55454
             type: tcp
 
     routed_namespaces:
