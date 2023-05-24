@@ -80,20 +80,20 @@ spec:
         enabled: true
         type: emptyDir
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: intel.feature.node.kubernetes.io/gpu
-                  operator: In
-                  values:
-                    - "true"
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: intel.feature.node.kubernetes.io/gpu
+    #               operator: In
+    #               values:
+    #                 - "true"
     resources:
       requests:
-        gpu.intel.com/i915: 1
+        # gpu.intel.com/i915: 1
         cpu: 100m
         memory: 1000Mi
       limits:
-        gpu.intel.com/i915: 1
+        # gpu.intel.com/i915: 1
         memory: 6000Mi
