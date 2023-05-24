@@ -36,17 +36,6 @@ spec:
 
     DNS: 172.16.1.1
 
-    service:
-      vpn:
-        enabled: true
-        type: LoadBalancer
-        externalTrafficPolicy: Local
-        loadBalancerIP: "${LB_VPN}"
-        ports:
-          shadowsocks:
-            enabled: true
-            port: 8388
-
     addons:
       netshoot:
         enabled: true
