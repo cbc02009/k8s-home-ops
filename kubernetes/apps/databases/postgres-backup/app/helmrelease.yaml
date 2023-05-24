@@ -72,7 +72,7 @@ spec:
         enabled: true
         type: nfs
         server: "nas.ctec.run"
-        path: /tank/backup/kubernetes/apps/plex
+        path: /tank/backup/kubernetes/apps/postgres
         mountPath: /backups
 
     podSecurityContext:
