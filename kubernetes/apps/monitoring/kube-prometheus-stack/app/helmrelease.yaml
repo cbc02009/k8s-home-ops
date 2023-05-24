@@ -46,7 +46,7 @@ spec:
             action: keep
 
     kubeEtcd:
-      enabled: true
+      enabled: false
       endpoints: *cp
 
     kubelet:
@@ -82,7 +82,7 @@ spec:
       endpoints: *cp
 
     kubeScheduler:
-      enabled: true
+      enabled: false
       endpoints: *cp
       serviceMonitor:
         metricRelabelings:
