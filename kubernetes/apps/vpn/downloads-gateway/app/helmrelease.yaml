@@ -75,7 +75,7 @@ spec:
           - name: LOG_LEVEL
             value: debug
           - name: SERVER_CITIES
-            value: "New York"
+            value: "New York NY"
           - name: SERVER_HOSTNAMES
             value: us-nyc-wg-602
           - name: HEALTH_TARGET_ADDRESS
