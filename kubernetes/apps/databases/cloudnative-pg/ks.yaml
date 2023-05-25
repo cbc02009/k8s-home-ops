@@ -6,7 +6,7 @@ metadata:
   name: apps-cloudnative-pg
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/cloudnative-pg/app
+  path: ./kubernetes/apps/databases/cloudnative-pg/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -27,7 +27,7 @@ spec:
     - name: apps-cloudnative-pg
     - name: apps-rook-ceph-cluster
     - name: apps-external-secrets-stores
-  path: ./kubernetes/apps/cloudnative-pg/cluster
+  path: ./kubernetes/apps/databases/cloudnative-pg/cluster
   prune: true
   sourceRef:
     kind: GitRepository
