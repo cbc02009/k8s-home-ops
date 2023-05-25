@@ -1,6 +1,35 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
 sonarr:
+  animarr:
+    base_url: http://animarr.organizarrs.svc.cluster.local:8989
+    api_key: !env_var ANIMARR_API_KEY
+    delete_old_custom_formats: true
+
+    quality_definition:
+      type: series
+
+    custom_formats:
+      # Anime
+      - trash_ids:
+          - 949c16fe0a8147f50ba82cc2df9411c9 # Anime BD Tier 01 (Top SeaDex Muxers)
+          - ed7f1e315e000aef424a58517fa48727 # Anime BD Tier 02 (SeaDex Muxers)
+          - 096e406c92baa713da4a72d88030b815 # Anime BD Tier 03 (SeaDex Muxers)
+          - 30feba9da3030c5ed1e0f7d610bcadc4 # Anime BD Tier 04 (SeaDex Muxers)
+          - 545a76b14ddc349b8b185a6344e28b04 # Anime BD Tier 05 (Remuxes)
+          - 25d2afecab632b1582eaf03b63055f72 # Anime BD Tier 06 (FanSubs)
+          - 0329044e3d9137b08502a9f84a7e58db # Anime BD Tier 07 (P2P/Scene)
+          - e0014372773c8f0e1bef8824f00c7dc4 # Anime Web Tier 01 (Muxers)
+          - 19180499de5ef2b84b6ec59aae444696 # Anime Web Tier 02 (Top FanSubs)
+          - c27f2ae6a4e82373b0f1da094e2489ad # Anime Web Tier 03 (Official Subs)
+          - 4fd5528a3a8024e6b49f9c67053ea5f3 # Anime Web Tier 04 (Official Subs)
+          - 29c2a13d091144f63307e4a8ce963a39 # Anime Web Tier 05 (FanSubs)
+          - dc262f88d74c651b12e9d90b39f6c753 # Anime Web Tier 06 (FanSubs)
+        quality_profiles:
+          - name: Remux-1080p - Anime
+            reset_unmatched_scores: true
+
+
   standard:
     base_url: http://sonarr.organizarrs.svc.cluster.local:8989
     api_key: !env_var SONARR_API_KEY
