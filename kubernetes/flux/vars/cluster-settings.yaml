@@ -10,6 +10,8 @@ data:
 
   CLUSTER_CERT: letsencrypt
 
+  CLUSTER_CLOUDFLARE_TUNNEL_ID: "f6eec35a-57d6-4078-b507-84181af51423"
+
   EXTERNAL_DOMAIN: kokoro.wtf
   INTERNAL_DOMAIN: ctec.run
 
