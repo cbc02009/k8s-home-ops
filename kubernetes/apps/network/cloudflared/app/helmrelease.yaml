@@ -44,7 +44,7 @@ spec:
       - --config
       - /etc/cloudflared/config/config.yaml
       - run
-      - "${CLUSTER_CLOUDFLARE_TUNNEL_ID}"
+      - "$(TUNNEL_ID)"
 
     service:
       main:

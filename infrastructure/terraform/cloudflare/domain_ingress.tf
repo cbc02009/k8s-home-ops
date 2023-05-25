@@ -14,6 +14,13 @@ module "cf_domain_ingress" {
       type    = "CNAME"
       proxied = false
     },
+    {
+      id      = "ingress"
+      name    = "ingress"
+      value   = cloudflare_tunnel.tunnel.cname
+      type    = "CNAME"
+      proxied = true
+    },
     # Generic settings
     {
       name  = "_dmarc"
