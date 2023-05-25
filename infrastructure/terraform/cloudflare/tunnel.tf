@@ -14,6 +14,10 @@ resource "cloudflare_tunnel_config" "config" {
           service  = "https://ingress-nginx-controller.network.svc.cluster.local:443"
       }
       ingress_rule {
+          hostname = "kokoro.wtf"
+          service  = "https://ingress-nginx-controller.network.svc.cluster.local:443"
+      }
+      ingress_rule {
           service = "http_status:404"
       }
   }
