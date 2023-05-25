@@ -41,6 +41,8 @@ spec:
             name: external-dns-external-secret
             key: api-key
     extraArgs:
+      - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+      - --crd-source-kind=DNSEndpoint
       - --cloudflare-proxied
       - --annotation-filter=external-dns.alpha.kubernetes.io/target
     policy: sync
