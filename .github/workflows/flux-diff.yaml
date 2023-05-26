@@ -9,6 +9,7 @@ on:
 env:
   BOT_USERNAME: mahoro-bot[bot]
   KUBERNETES_DIR: kubernetes/
+  conf_live_branch: main
 
 jobs:
   diff:
@@ -23,7 +24,7 @@ jobs:
           private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Run Diff
-        uses: allenporter/flux-local/action/diff@2.0.0
+        uses: allenporter/flux-local/action/diff@main
         id: diff
         with:
           path: ${{ env.KUBERNETES_DIR }}
