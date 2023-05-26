@@ -88,6 +88,18 @@ sonarr:
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
 
+      # No Dubs
+      - trash_ids:
+          - 9c14d194486c4014d422adc64092d794 # Dubs Only
+        quality_profiles:
+          - name: Webrip-1080p - Anime
+            reset_unmatched_scores: true
+            score: -10000
+          - name: Remux-1080p - Anime
+            reset_unmatched_scores: true
+            score: -10000
+
+
   standard:
     base_url: http://sonarr.organizarrs.svc.cluster.local:8989
     api_key: !env_var SONARR_API_KEY
