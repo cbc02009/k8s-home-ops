@@ -225,7 +225,7 @@ sonarr:
           - 29c2a13d091144f63307e4a8ce963a39 # Anime Web Tier 05 (FanSubs)
           - dc262f88d74c651b12e9d90b39f6c753 # Anime Web Tier 06 (FanSubs)
         quality_profiles:
-          - name: Remux-1080p - Anime
+          - name: Anime
             reset_unmatched_scores: true
 
 radarr:
