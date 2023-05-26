@@ -8,7 +8,6 @@ metadata:
 spec:
   dependsOn:
     - name: apps-external-secrets-stores
-    - name: apps-lidarr
     - name: apps-radarr
     - name: apps-sonarr
     - name: apps-animarr
