@@ -46,6 +46,10 @@ spec:
       LIDARR__PORT: &port 8686
       LIDARR__LOG_LEVEL: info
 
+    envFrom:
+      - secretRef:
+          name: radarr-secret
+
     service:
       main:
         ports:
