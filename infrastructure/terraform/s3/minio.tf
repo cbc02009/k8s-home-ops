@@ -3,7 +3,6 @@ locals {
     "gitea",
     "loki",
     "thanos",
-    "volsync",
     "nextcloud",
     "postgres",
     "tandoor"
