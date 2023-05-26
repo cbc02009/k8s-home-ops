@@ -170,7 +170,6 @@ sonarr:
 
       # Misc
       - trash_ids:
-          - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncut
           - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
           - eb3d5cc0a2be0db205fb823640db6a3c # Repack v2
           - 44e7c4de10ae50265753082e5dc76047 # Repack v3
@@ -181,6 +180,20 @@ sonarr:
             reset_unmatched_scores: true
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
+
+      # Uncut
+      - trash_ids:
+          - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncut
+        quality_profiles:
+          - name: Web-2160p
+            reset_unmatched_scores: true
+            score: 1000
+          - name: Web-1080p
+            reset_unmatched_scores: true
+            score: 1000
+          - name: Remux-1080p - Anime
+            reset_unmatched_scores: true
+            score: 1000
 
       # Unwanted
       - trash_ids:
