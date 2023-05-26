@@ -54,8 +54,6 @@ spec:
           ingress.home.arpa/type: "internal"
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sabnzbd/plex.css"></head>';
-            sub_filter_once on;
           hajimari.io/icon: mdi:download
         hosts:
           - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
