@@ -15,7 +15,8 @@ tasks:
       - kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone {{.cniDir}} >> {{.cniDir}}/cilium.yaml
       - rm -rf {{.cniDir}}/charts
       - kubectl apply -f {{.cniDir}}/cilium.yaml
-      - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/configmap.yaml
+      - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/bgppeeringpolicy.yaml
+      - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/loadbalanceerippool.yaml
 
   csr-approver:
     desc: 1. Bootstrap the CSR Approver
