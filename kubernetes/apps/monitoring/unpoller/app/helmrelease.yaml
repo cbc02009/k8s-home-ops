@@ -29,7 +29,7 @@ spec:
       UP_UNIFI_DEFAULT_ROLE: home-ops
       UP_UNIFI_DEFAULT_URL: https://unifi:8443
       UP_UNIFI_DEFAULT_VERIFY_SSL: false
-      UP_UNIFI_DEFAULT_USER: unpoller
+      UP_UNIFI_DEFAULT_USER: unifipoller
       UP_UNIFI_DEFAULT_PASS:
         valueFrom:
           secretKeyRef:
