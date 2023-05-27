@@ -94,9 +94,10 @@ sonarr:
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
           - 17e889ce13117940092308f48b48b45b # HLG
           - 9b27ab6498ec0f31a3353992e19434ca # DV WEBDL no-fallback
-          - 2016d1676f5ee13a5b7257ff86ac9a93 # No SDR
         quality_profiles:
           - name: Web-2160p
+            reset_unmatched_scores: true
+          - name: Web-1080p
             reset_unmatched_scores: true
 
       # HQ Source Groups
@@ -167,6 +168,13 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
             reset_unmatched_scores: true
+          - name: Web-1080p
+            reset_unmatched_scores: true
+
+      # Unwanted 2160p only
+      - trash_ids:
+          - 2016d1676f5ee13a5b7257ff86ac9a93 # No SDR
+        quality_profiles:
           - name: Web-1080p
             reset_unmatched_scores: true
 
