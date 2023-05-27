@@ -66,7 +66,6 @@ sonarr:
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
           - 9c14d194486c4014d422adc64092d794 # Dubs Only
           - 07a32f77690263bb9fda1842db7e273f # VOSTFR
-          - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
         quality_profiles:
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
