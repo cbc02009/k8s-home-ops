@@ -26,21 +26,30 @@ sonarr:
           - 4fd5528a3a8024e6b49f9c67053ea5f3 # Anime Web Tier 04 (Official Subs)
           - 29c2a13d091144f63307e4a8ce963a39 # Anime Web Tier 05 (FanSubs)
           - dc262f88d74c651b12e9d90b39f6c753 # Anime Web Tier 06 (FanSubs)
+          - b4a1b3d705159cdca36d71e57ca86871 # No Raws
+          - e3515e519f3b1360cbfc17651944354c # Anime LQ Groups
         quality_profiles:
-          - name: Web-1080p - Anime
-            reset_unmatched_scores: true
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
 
+      # Quality
+      - trash_ids:
+          - b2550eb333d27b75833e25b8c2557b38 # 10 bit
+        quality_profiles:
+          - name: Remux-1080p - Anime
+            reset_unmatched_scores: true
+            score: 100
+
       # Misc
       - trash_ids:
+          - d2d7b8a9d39413da5f44054080e028a3 # v0
+          - 273bd326df95955e1b6c26527d1df89b # v1
+          - 228b8ee9aa0a609463efca874524a6b8 # v2
           - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
           - eb3d5cc0a2be0db205fb823640db6a3c # Repack v2
           - 44e7c4de10ae50265753082e5dc76047 # Repack v3
         quality_profiles:
           - name: Remux-1080p - Anime
-            reset_unmatched_scores: true
-          - name: Web-1080p - Anime
             reset_unmatched_scores: true
 
       # Uncut
@@ -49,32 +58,19 @@ sonarr:
         quality_profiles:
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
-            score: 1000
-          - name: Web-1080p - Anime
-            reset_unmatched_scores: true
-            score: 1000
+            score: 10
 
-      # No Dubs
-      - trash_ids:
-          - 9c14d194486c4014d422adc64092d794 # Dubs Only
-        quality_profiles:
-          - name: Web-1080p - Anime
-            reset_unmatched_scores: true
-            score: -10000
-          - name: Remux-1080p - Anime
-            reset_unmatched_scores: true
-            score: -10000
-
-      # Unwanted
+      # Not Wanted
       - trash_ids:
           - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
-          # - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+          - 9c14d194486c4014d422adc64092d794 # Dubs Only
+          - 07a32f77690263bb9fda1842db7e273f # VOSTFR
+          - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
         quality_profiles:
           - name: Remux-1080p - Anime
             reset_unmatched_scores: true
-          - name: Web-1080p - Anime
-            reset_unmatched_scores: true
+            score: -10000
 
   standard:
     base_url: http://sonarr.organizarrs.svc.cluster.local:8989
@@ -160,10 +156,10 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
             reset_unmatched_scores: true
-            score: 1000
+            score: 10
           - name: Web-1080p
             reset_unmatched_scores: true
-            score: 1000
+            score: 10
 
       # Unwanted
       - trash_ids:
