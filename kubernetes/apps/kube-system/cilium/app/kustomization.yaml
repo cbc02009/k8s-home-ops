@@ -5,7 +5,9 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - ./helmrelease.yaml
-  - ./configmap.yaml
+  - ./bgppeeringpolicy.yaml
+  - ./loadbalancerippool.yaml
+  - ./servicemonitor.yaml
 configMapGenerator:
   - name: cilium-values
     files:
@@ -13,3 +15,7 @@ configMapGenerator:
 
 configurations:
   - kustomizeconfig.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/name: cilium
+      app.kubernetes.io/instance: cilium
