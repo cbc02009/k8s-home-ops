@@ -60,8 +60,6 @@ spec:
             port: *port-bt
             protocol: TCP
             targetPort: *port-bt
-        externalTrafficPolicy: Local
-
     podAnnotations:
       setGateway: "true"
 

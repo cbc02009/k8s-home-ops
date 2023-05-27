@@ -37,7 +37,6 @@ spec:
       main:
         type: LoadBalancer
         externalIPs: ["${LB_JELLYFIN}"]
-        externalTrafficPolicy: Local
         ports:
           http:
             port: 8096
