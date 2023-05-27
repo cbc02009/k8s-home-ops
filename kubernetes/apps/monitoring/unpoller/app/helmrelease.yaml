@@ -17,14 +17,18 @@ spec:
         namespace: flux-system
 
   values:
+
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/unpoller/unpoller
       tag: v2.7.13
 
     env:
       UP_UNIFI_DEFAULT_ROLE: home-ops
-      UP_UNIFI_DEFAULT_URL: https://unifi.kokoro.wtf
-      # UP_UNIFI_DEFAULT_VERIFY_SSL: false
+      UP_UNIFI_DEFAULT_URL: https://unifi:8443
+      UP_UNIFI_DEFAULT_VERIFY_SSL: false
       UP_UNIFI_DEFAULT_USER: unpoller
       UP_UNIFI_DEFAULT_PASS:
         valueFrom:
