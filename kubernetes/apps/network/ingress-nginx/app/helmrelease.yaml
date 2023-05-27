@@ -38,7 +38,6 @@ spec:
           external-dns.alpha.kubernetes.io/hostname: "ingress.kokoro.wtf"
           metallb.universe.tf/loadBalancerIPs: |-
             ${LB_NGINX_INGRESS}
-        externalTrafficPolicy: Local
 
       publishService:
         enabled: true
