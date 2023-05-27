@@ -14,4 +14,5 @@ resources:
   - ./node-exporter/ks.yaml
   - ./prometheus-rules/ks.yaml
   - ./thanos/ks.yaml
+  - ./unpoller/ks.yaml
   - ./vector/ks.yaml
