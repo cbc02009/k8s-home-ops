@@ -10,7 +10,7 @@ bgp:
   enabled: false
   announce:
     # -- Enable allocation and announcement of service LoadBalancer IPs
-    loadbalancerIP: true
+    loadbalancerIP: false
     # -- Enable announcement of node pod CIDR
     podCIDR: false
 
