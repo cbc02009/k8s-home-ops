@@ -16,7 +16,7 @@ tasks:
       - rm -rf {{.cniDir}}/charts
       - kubectl apply -f {{.cniDir}}/cilium.yaml
       - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/bgppeeringpolicy.yaml
-      - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/loadbalanceerippool.yaml
+      - kubectl apply -f ./kubernetes/apps/kube-system/cilium/app/loadbalancerippool.yaml
 
   csr-approver:
     desc: 1. Bootstrap the CSR Approver
