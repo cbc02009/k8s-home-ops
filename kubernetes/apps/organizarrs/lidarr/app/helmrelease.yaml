@@ -51,7 +51,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: radarr-secret
+          name: lidarr-secret
 
     service:
       main:
