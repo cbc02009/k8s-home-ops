@@ -14,7 +14,7 @@ spec:
       version: v0.8.0
       sourceRef:
         kind: HelmRepository
-        name: nvidia
+        name: nvgfd
         namespace: flux-system
       interval: 5m
   values:
