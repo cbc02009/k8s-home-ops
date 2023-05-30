@@ -14,6 +14,6 @@ spec:
       version: v22.9.2
       sourceRef:
         kind: HelmRepository
-        name: nvidia-charts
+        name: nvidia
         namespace: flux-system
       interval: 5m
