@@ -28,6 +28,7 @@ resources:
   - ./k8s-at-home-charts.yaml
   - ./lwolf-charts.yaml
   - ./nextcloud-charts.yaml
+  - ./nvidia.yaml
   - ./piraeus-charts.yaml
   - ./postfinance-charts.yaml
   - ./prometheus-community-charts.yaml
