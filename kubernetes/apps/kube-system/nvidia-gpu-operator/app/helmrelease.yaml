@@ -17,3 +17,6 @@ spec:
         name: nvidia
         namespace: flux-system
       interval: 5m
+  values:
+    nfd:
+      enabled: false
