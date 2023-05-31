@@ -270,7 +270,7 @@ radarr:
       - trash_ids:
           - 9c38ebb7384dada637be8899efa68e6f # No SDR
         quality_profiles:
-          - name: Web-2160p
+          - name: Remux-2160p
             reset_unmatched_scores: true
 
       # HQ Release Groups
