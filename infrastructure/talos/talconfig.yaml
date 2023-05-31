@@ -51,7 +51,7 @@ nodes:
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
-    controlPlane: true
+    controlPlane: false
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -127,6 +127,28 @@ nodes:
       - interface: eth0
         addresses:
           - 10.0.2.14/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+
+  - hostname: miri.ctec.run
+    ipAddress: 10.0.2.15
+    installDiskSelector:
+      serial: PNY2251221219010040D
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.5.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: e4:1d:4b:2d:a9:8a
+        addresses:
+          - 10.0.2.15/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
