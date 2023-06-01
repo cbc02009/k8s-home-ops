@@ -39,6 +39,7 @@ spec:
       [global]
       bdev_enable_discard = true
       bdev_async_discard = true
+      osd_class_update_on_start = false
 
     cephClusterSpec:
       network:
@@ -142,7 +143,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 2
+            size: 3
         storageClass:
           enabled: true
           name: ceph-block
@@ -165,21 +166,20 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 2
+              size: 3
           dataPools:
             - failureDomain: host
               replicated:
-                size: 2
+                size: 3
           metadataServer:
             activeCount: 1
             activeStandby: true
             resources:
               limits:
-                # cpu: "500m"
+                cpu: "1000m"
                 memory: "4Gi"
               requests:
-                cpu: "1000m"
-                # memory: "4Gi"
+                memory: "4Gi"
         storageClass:
           enabled: true
           isDefault: false
