@@ -65,8 +65,8 @@ spec:
             value: debug
           - name: SERVER_CITIES
             value: "New York NY"
-          # - name: SERVER_HOSTNAMES
-          #   value: us-nyc-wg-602
+          - name: SERVER_HOSTNAMES
+            value: us-nyc-wg-602
           - name: HEALTH_TARGET_ADDRESS
             value: '1.1.1.1'
           - name: HEALTH_VPN_DURATION_INITIAL
