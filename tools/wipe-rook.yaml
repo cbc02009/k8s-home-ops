@@ -38,6 +38,24 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: disk-wipe-miri
+spec:
+  restartPolicy: Never
+  nodeName: miri
+  containers:
+    - name: disk-wipe
+      image: ubuntu
+      securityContext:
+        privileged: true
+      command: ['/bin/sh', '-c']
+      args:
+        [
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
+        ]
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: disk-clean-uiharu
 spec:
   restartPolicy: Never
@@ -63,6 +81,27 @@ metadata:
 spec:
   restartPolicy: Never
   nodeName: sakura
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: busybox
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-miri
+spec:
+  restartPolicy: Never
+  nodeName: miri
   volumes:
   - name: rook-data-dir
     hostPath:
