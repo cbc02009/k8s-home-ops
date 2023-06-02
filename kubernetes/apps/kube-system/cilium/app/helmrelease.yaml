@@ -40,7 +40,7 @@ spec:
     hubble:
       metrics:
         serviceMonitor:
-          enabled: true
+          enabled: false
 
       ui:
         enabled: true
