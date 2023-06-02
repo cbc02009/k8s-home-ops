@@ -29,7 +29,7 @@ spec:
         reloader.stakater.com/auto: "true"
     fullNameOverride: *app
     image:
-      repository: docker.io/benbusby/whoogle-search
+      repository: ghcr.io/benbusby/whoogle-search
       tag: 0.8.2
     env:
       # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
