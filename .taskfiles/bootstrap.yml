@@ -45,7 +45,7 @@ tasks:
       - sops --decrypt {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl apply -f -
 
   cluster:
-    desc: 7. Bootstrap Cluster
+    desc: 8. Bootstrap Cluster
     cmds:
       - kubectl apply --server-side --kustomize kubernetes/flux/config/
 
@@ -53,6 +53,11 @@ tasks:
     desc: 6. Bootstrap CRDs
     cmds:
       - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/crds/
+
+  rook:
+    desc: 7. Wipe Rook
+    cmds:
+      - kubectl apply -f tools/wipe-rook.yaml
 
   all:
     desc: run all bootstrap commands in order
@@ -63,4 +68,5 @@ tasks:
       - go-task bs:sops
       - go-task bs:github
       - go-task bs:crds
+      - go-task bs:rook
       - go-task bs:cluster
