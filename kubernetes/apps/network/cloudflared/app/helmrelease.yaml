@@ -25,7 +25,7 @@ spec:
         reloader.stakater.com/auto: "true"
 
     image:
-      repository: docker.io/cloudflare/cloudflared
+      repository: ghcr.io/cbc02009/cloudflared
       tag: 2023.5.1
 
     env:
