@@ -24,7 +24,7 @@ spec:
   values:
     controller:
       type: statefulset
-      replicas: 2
+      # replicas: 2
       strategy: RollingUpdate
 
     image:
