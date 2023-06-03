@@ -33,6 +33,7 @@ resources:
   - ./postfinance-charts.yaml
   - ./prometheus-community-charts.yaml
   - ./rook-ceph-charts.yaml
+  - ./teampiped.yaml
   - ./bitnami-charts.yaml
   - ./hajimari-charts.yaml
   - ./ingress-nginx-charts.yaml
