@@ -13,8 +13,7 @@ metadata:
       that are not not exposed to the internet.
 spec:
   background: true
-  mutateExistingOnPolicyUpdate: true
-  generateExistingOnPolicyUpdate: true
+  mutateExistingOnPolicyUpdate: false
   validationFailureAction: enforce
   rules:
     - name: ensure-annotation-present
@@ -35,10 +34,6 @@ spec:
           - resources:
               kinds: ["Ingress"]
       mutate:
-        targets:
-          - apiVersion: v1
-            kind: Ingress
-            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -52,10 +47,6 @@ spec:
               annotations:
                 ingress.home.arpa/type: "internal"
       mutate:
-        targets:
-          - apiVersion: v1
-            kind: Ingress
-            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -69,10 +60,6 @@ spec:
               annotations:
                 ingress.home.arpa/type: "external"
       mutate:
-        targets:
-          - apiVersion: v1
-            kind: Ingress
-            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -87,10 +74,6 @@ spec:
               annotations:
                 ingress.home.arpa/type: "external-auth"
       mutate:
-        targets:
-          - apiVersion: v1
-            kind: Ingress
-            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
