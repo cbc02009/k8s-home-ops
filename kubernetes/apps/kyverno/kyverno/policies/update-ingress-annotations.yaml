@@ -37,7 +37,8 @@ spec:
       mutate:
         targets:
           - apiVersion: v1
-          - kind: Ingress
+            kind: Ingress
+            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -52,7 +53,9 @@ spec:
                 ingress.home.arpa/type: "internal"
       mutate:
         targets:
-          - kind: Ingress
+          - apiVersion: v1
+            kind: Ingress
+            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -67,7 +70,9 @@ spec:
                 ingress.home.arpa/type: "external"
       mutate:
         targets:
-          - kind: Ingress
+          - apiVersion: v1
+            kind: Ingress
+            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -83,7 +88,9 @@ spec:
                 ingress.home.arpa/type: "external-auth"
       mutate:
         targets:
-          - kind: Ingress
+          - apiVersion: v1
+            kind: Ingress
+            namespace: "{{ request.object.metadata.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
