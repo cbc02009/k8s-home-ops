@@ -64,7 +64,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: "external-auth"
         hosts:
           - host: &host "recipes.${EXTERNAL_DOMAIN}"
             paths:
