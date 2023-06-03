@@ -65,7 +65,7 @@ spec:
       AUTHELIA_DUO_API_DISABLE: "true"
       AUTHELIA_LOG_LEVEL: info
       AUTHELIA_NOTIFIER_SMTP_DISABLE_REQUIRE_TLS: "true"
-      AUTHELIA_NOTIFIER_SMTP_HOST: smtp-relay.ctec.run
+      AUTHELIA_NOTIFIER_SMTP_HOST: smtp-relay.kokoro.wtf
       AUTHELIA_NOTIFIER_SMTP_PORT: 25
       AUTHELIA_NOTIFIER_SMTP_SENDER: "Authelia <authelia@kokoro.wtf>"
       AUTHELIA_NOTIFIER_DISABLE_STARTUP_CHECK: "true"
