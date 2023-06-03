@@ -37,7 +37,6 @@ spec:
       mutate:
         targets:
           - kind: Ingress
-            namespace: "{{ request.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -53,7 +52,6 @@ spec:
       mutate:
         targets:
           - kind: Ingress
-            namespace: "{{ request.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -69,7 +67,6 @@ spec:
       mutate:
         targets:
           - kind: Ingress
-            namespace: "{{ request.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
@@ -86,7 +83,6 @@ spec:
       mutate:
         targets:
           - kind: Ingress
-            namespace: "{{ request.namespace }}"
         patchStrategicMerge:
           metadata:
             annotations:
