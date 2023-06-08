@@ -35,6 +35,10 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
@@ -46,6 +50,12 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    patches:
+      - |-
+        machine:
+          install:
+            extensions:
+              - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
 
   - hostname: anya.ctec.run
     ipAddress: 10.0.2.11
@@ -78,6 +88,10 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
+      # - name: nvidia
+      # - name: nvidia_uvm
+      # - name: nvidia_drm
+      # - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
@@ -89,6 +103,12 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    # patches:
+    #   - |-
+    #     machine:
+    #       install:
+    #         extensions:
+    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.2.13
@@ -184,21 +204,22 @@ controlPlane:
               enable_unprivileged_icmp = true
           op: create
           path: /etc/cri/conf.d/20-customization.part
-      # install:
-      #   extraKernelArgs:
-      #     - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      install:
+        extraKernelArgs:
+          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
           feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
           rotate-server-certificates: 'true'
-      # logging:
-      #   destinations:
-      #     - endpoint: udp://vector.kokoro.wtf:6051/
-      #       format: json_lines
+      logging:
+        destinations:
+          - endpoint: udp://vector.kokoro.wtf:6051/
+            format: json_lines
       sysctls:
         net.core.rmem_max: 2500000
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
+        net.core.bpf_jit_harden: 1
       time:
         disabled: false
         servers:
@@ -219,21 +240,22 @@ worker:
               enable_unprivileged_icmp = true
           op: create
           path: /etc/cri/conf.d/20-customization.part
-      # install:
-      #   extraKernelArgs:
-      #     - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      install:
+        extraKernelArgs:
+          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
           feature-gates: MixedProtocolLBService=true
           rotate-server-certificates: 'true'
-      # logging:
-      #   destinations:
-      #     - endpoint: udp://vector.kokoro.wtf:6051/
-      #       format: json_lines
+      logging:
+        destinations:
+          - endpoint: udp://vector.kokoro.wtf:6051/
+            format: json_lines
       sysctls:
         net.core.rmem_max: 2500000
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
+        net.core.bpf_jit_harden: 1
       time:
         disabled: false
         servers:
