@@ -25,6 +25,9 @@ spec:
       tag: v0.14.0
     runtimeClassName: nvidia
 
+    gfd:
+      enabled: true
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
