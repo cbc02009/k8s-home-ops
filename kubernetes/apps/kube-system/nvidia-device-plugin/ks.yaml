@@ -3,21 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-gpu-feature-discovery
+  name: apps-nvidia-device-plugin
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/kube-system/gpu-feature-discovery/app/'
+  dependsOn:
+    - name: apps-node-feature-discovery
+  path: ./kubernetes/apps/kube-system/nvidia-device-plugin/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: true
   interval: 30m
   retryInterval: 1m
-  timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: gpu-feature-discovery
-      namespace: kube-system
+  timeout: 5m
+---
