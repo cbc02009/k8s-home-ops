@@ -22,6 +22,8 @@ spec:
     remediation:
       retries: 5
   values:
+    runtimeClassName: nvidia
+
     controller:
       type: statefulset
       # replicas: 2
@@ -33,6 +35,8 @@ spec:
 
     env:
       TZ: "${TZ}"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
 
     envFrom:
       - secretRef:
