@@ -34,9 +34,9 @@ spec:
       tag: 1.32.4.7164-1dc22f47b@sha256:10e2a059bca57b7843708f8984ffa2463ff01a496b0b797b7b0c998f932f719f
 
     env:
-      TZ: "${TZ}"
-      NVIDIA_VISIBLE_DEVICES: all
-      NVIDIA_DRIVER_CAPABILITIES: all
+      # TZ: "${TZ}"
+      # NVIDIA_VISIBLE_DEVICES: all
+      # NVIDIA_DRIVER_CAPABILITIES: all
 
     envFrom:
       - secretRef:
