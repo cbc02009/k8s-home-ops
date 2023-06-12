@@ -145,4 +145,5 @@ spec:
         nvidia.com/gpu: 1
       limits:
         cpu: 6
+        nvidia.com/gpu: 1
         # memory: 10000M
