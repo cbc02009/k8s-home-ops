@@ -32,6 +32,7 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
+      - name: mlx4_en
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
@@ -85,13 +86,14 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
+      - name: mlx4_en
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      # - name: nvidia
-      # - name: nvidia_uvm
-      # - name: nvidia_drm
-      # - name: nvidia_modeset
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
@@ -103,12 +105,12 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # patches:
-    #   - |-
-    #     machine:
-    #       install:
-    #         extensions:
-    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
+    patches:
+      - |-
+        machine:
+          install:
+            extensions:
+              - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.2.13

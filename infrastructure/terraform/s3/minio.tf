@@ -5,7 +5,7 @@ locals {
     "thanos",
     "nextcloud",
     "postgres",
-    "tandoor"
+    "tandoor",
   ]
 }
 
