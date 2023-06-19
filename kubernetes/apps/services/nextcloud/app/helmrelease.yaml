@@ -28,10 +28,7 @@ spec:
     ##
     image:
       repository: docker.io/nextcloud
-      # tag: 24.0.3-apache
       pullPolicy: IfNotPresent
-      # pullSecrets:
-      #   - myRegistrKeySecretName
 
     nameOverride: ""
     fullnameOverride: ""
