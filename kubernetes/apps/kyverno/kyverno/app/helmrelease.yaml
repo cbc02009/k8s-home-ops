@@ -46,6 +46,14 @@ spec:
               resources:
                 - ingresses
                 - pods
+      resources:
+        # -- Pod resource limits
+        limits:
+          memory: 512Mi
+        # -- Pod resource requests
+        requests:
+          cpu: 100m
+          memory: 64Mi
 
     cleanupController:
       serviceMonitor:
