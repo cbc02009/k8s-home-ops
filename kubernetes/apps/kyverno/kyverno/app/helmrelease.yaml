@@ -56,7 +56,7 @@ spec:
         enabled: true
 
     admissionController:
-      replicas: 1
+      replicas: 3
       serviceMonitor:
         enabled: true
       rbac:
@@ -74,9 +74,8 @@ spec:
       resources:
       # -- Pod resource limits
       limits:
-        cpu: 100m
-        memory: 512Mi
+        memory: 1024Mi
       # -- Pod resource requests
       requests:
-        cpu: 10m
-        memory: 64Mi
+        cpu: 500m
+        memory: 512Mi
