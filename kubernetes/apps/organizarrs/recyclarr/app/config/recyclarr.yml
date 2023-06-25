@@ -77,6 +77,7 @@ sonarr:
           - 15a05bc7c1a36e2b57fd628f8977e2fc # AV1
         quality_profiles:
           - name: Remux-1080p - Anime
+            score: -10000
           - name: Web-1080p - Anime
             score: -10000
 
