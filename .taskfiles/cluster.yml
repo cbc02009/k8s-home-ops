@@ -102,7 +102,7 @@ tasks:
               "containers": [
                 {
                   "name": "debug",
-                  "image": "ghcr.io/onedr0p/alpine:rolling",
+                  "image": "ghcr.io/cbc02009/ubuntu:23.10",
                   "command": [
                     "/bin/bash"
                   ],
