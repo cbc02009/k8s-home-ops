@@ -43,6 +43,7 @@ sonarr:
           - b2550eb333d27b75833e25b8c2557b38 # 10 bit
         quality_profiles:
           - name: Remux-1080p - Anime
+            score: 100
           - name: Web-1080p - Anime
             score: 100
 
@@ -63,6 +64,7 @@ sonarr:
           - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncut
         quality_profiles:
           - name: Remux-1080p - Anime
+            score: 10
           - name: Web-1080p - Anime
             score: 10
 

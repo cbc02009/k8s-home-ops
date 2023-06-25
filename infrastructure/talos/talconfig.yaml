@@ -36,10 +36,10 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
+      # - name: nvidia
+      # - name: nvidia_uvm
+      # - name: nvidia_drm
+      # - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
@@ -51,12 +51,12 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - |-
-        machine:
-          install:
-            extensions:
-              - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
+    # patches:
+    #   - |-
+    #     machine:
+    #       install:
+    #         extensions:
+    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:530.41.03-v1.12.1
 
   - hostname: anya.ctec.run
     ipAddress: 10.0.2.11
@@ -222,6 +222,7 @@ controlPlane:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
         net.core.bpf_jit_harden: 1
+        vm.nr_hugepages: 1024
       time:
         disabled: false
         servers:
@@ -258,6 +259,7 @@ worker:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
         net.core.bpf_jit_harden: 1
+        vm.nr_hugepages: 1024
       time:
         disabled: false
         servers:

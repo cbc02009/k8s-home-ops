@@ -20,6 +20,7 @@ includes:
   vs: .taskfiles/VolSync/Tasks.yml
   tf: .taskfiles/Terraform/Tasks.yml
   pg: .taskfiles/Postgres/Tasks.yml
+  cluster: .taskfiles/cluster.yml
 
 tasks:
   default:
