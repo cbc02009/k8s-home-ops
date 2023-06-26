@@ -44,7 +44,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: sonarr-secret
+          name: *app
 
     service:
       main:
