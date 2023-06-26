@@ -11,7 +11,7 @@ spec:
   dependsOn:
     - name: apps-rook-ceph-cluster
     - name: apps-volsync
-  path: './kubernetes/apps/media/calibre/app/'
+  path: './kubernetes/apps/media/calibre-web/app/'
   prune: true
   sourceRef:
     kind: GitRepository
