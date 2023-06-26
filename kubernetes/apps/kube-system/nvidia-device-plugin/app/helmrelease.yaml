@@ -39,6 +39,9 @@ spec:
     gfd:
       enabled: true
 
+    nfd:
+      enabled: false
+
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
