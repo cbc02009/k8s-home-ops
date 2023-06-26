@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app calibre-web
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+
+    controller:
+      type: statefulset
+      # replicas: 2
+      strategy: RollingUpdate
+
+    image:
+      repository: ghcr.io/bjw-s/calibre-web
+      tag: 0.6.19@sha256:7c00c5b6d75c24f3e951298a0e1550aae1b1b29aeb354fef1255658c4221a67f
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65539
+
+    enableServiceLinks: false
+
+    env:
+      CACHE_DIR: /cache
+
+    service:
+      main:
+        ports:
+          http:
+            port: 8083
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          ingress.home.arpa/type: "external-auth"
+        ingressClassName: nginx
+        hosts:
+          - host: &host calibre.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+        tls:
+          - hosts:
+              - *host
+      kobo:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - host: &host_kobo calibre.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /kobo/
+        tls:
+          - hosts:
+              - *host_kobo
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: calibre-config-v1
+      media:
+        enabled: true
+        type: nfs
+        server: &nas nas.ctec.run
+        path: /tank/media
+        mountPath: /data/media
+      cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /cache
+
+    resources:
+      requests:
+        cpu: 15m
+        memory: 249M
+      limits:
+        memory: 299M
