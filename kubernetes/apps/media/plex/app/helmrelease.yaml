@@ -22,11 +22,10 @@ spec:
     remediation:
       retries: 5
   values:
-    # runtimeClassName: nvidia
+    runtimeClassName: nvidia
 
     controller:
       type: statefulset
-      # replicas: 2
       strategy: RollingUpdate
 
     image:
@@ -34,7 +33,7 @@ spec:
       tag: 1.32.5.7210-77f7f99fa@sha256:a62697b38736f9c5621b1b3b4b0859a369cd690455ae2ee313ca39dca98fc74c
 
     env:
-      # TZ: "${TZ}"
+      TZ: "${TZ}"
       # NVIDIA_VISIBLE_DEVICES: all
       # NVIDIA_DRIVER_CAPABILITIES: all
 
@@ -132,22 +131,22 @@ spec:
 
     # -- Affinity constraint rules to place the Pod on a specific node.
     # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: feature.node.kubernetes.io/10gb-network
-                  operator: In
-                  values:
-                    - "true"
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: feature.node.kubernetes.io/10gb-network
+    #               operator: In
+    #               values:
+    #                 - "true"
 
     resources:
       requests:
         cpu: 4
         memory: 2000M
-        # nvidia.com/gpu: 1
+        nvidia.com/gpu: 1
       limits:
         cpu: 6
-        # nvidia.com/gpu: 1
-        # memory: 10000M
+        nvidia.com/gpu: 1
+        memory: 10000M
