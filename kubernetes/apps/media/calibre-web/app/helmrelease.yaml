@@ -64,16 +64,6 @@ spec:
         tls:
           - hosts:
               - *host
-      kobo:
-        enabled: true
-        ingressClassName: nginx
-        hosts:
-          - host: &host_kobo calibre.${EXTERNAL_DOMAIN}
-            paths:
-              - path: /kobo/
-        tls:
-          - hosts:
-              - *host_kobo
 
     persistence:
       config:
