@@ -11,6 +11,7 @@ spec:
   dependsOn:
     - name: apps-rook-ceph-cluster
     - name: apps-volsync
+    - name: apps-calibre
   path: './kubernetes/apps/media/calibre-web/app/'
   prune: true
   sourceRef:

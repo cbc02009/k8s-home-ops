@@ -6,7 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  # - ./calibre/ks.yaml
+  - ./calibre/ks.yaml
   # - ./calibre-web/ks.yaml
   - ./jellyfin/ks.yaml
   - ./komga/ks.yaml
