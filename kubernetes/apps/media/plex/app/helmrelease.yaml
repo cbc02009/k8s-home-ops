@@ -26,7 +26,6 @@ spec:
 
     controller:
       type: statefulset
-      strategy: RollingUpdate
 
     image:
       repository: ghcr.io/onedr0p/plex-beta
