@@ -2,7 +2,7 @@
 clusterName: kokoro
 
 # renovate: image depName=ghcr.io/siderolabs/installer
-talosVersion: v1.4.5
+talosVersion: v1.5.0-alpha.1
 # renovate: image depName=registry.k8s.io/kube-apiserver
 kubernetesVersion: v1.27.3
 
