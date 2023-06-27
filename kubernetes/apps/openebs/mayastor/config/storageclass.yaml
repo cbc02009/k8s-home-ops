@@ -2,7 +2,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: mayastor-single
+  name: mayastor-1
 parameters:
   ioTimeout: "30"
   protocol: nvmf
@@ -12,9 +12,9 @@ provisioner: io.openebs.csi-mayastor
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: mayastor-replicated
+  name: mayastor-2
 parameters:
   ioTimeout: "30"
   protocol: nvmf
-  repl: "1"
+  repl: "2"
 provisioner: io.openebs.csi-mayastor
