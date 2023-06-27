@@ -58,7 +58,7 @@ spec:
           ingress.home.arpa/type: "external-auth"
         ingressClassName: nginx
         hosts:
-          - host: &host calibre.${EXTERNAL_DOMAIN}
+          - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:
               - path: /
         tls:
