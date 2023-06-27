@@ -7,4 +7,4 @@ resources:
   - ./helmrelease.yaml
   - ./volsync.yaml
 metadata:
-  namespace: organizarrs
+  namespace: media
