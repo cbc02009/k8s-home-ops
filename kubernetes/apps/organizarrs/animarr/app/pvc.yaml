@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 10Gi
 
-  storageClassName: mayastor-2
+  storageClassName: ceph-block
