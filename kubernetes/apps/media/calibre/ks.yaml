@@ -8,7 +8,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/organizarrs/calibre/app/'
+  path: './kubernetes/apps/media/calibre/app/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,6 +20,6 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: calibre
-      namespace: organizarrs
+      namespace: media
   dependsOn:
     - name: apps-rook-ceph-cluster
