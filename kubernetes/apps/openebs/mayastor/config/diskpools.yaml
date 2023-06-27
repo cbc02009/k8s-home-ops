@@ -1,0 +1,18 @@
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: DiskPool
+metadata:
+  name: sakura-sata
+  namespace: openebs
+spec:
+  node: sakura
+  disks: ["/dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120"]
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: DiskPool
+metadata:
+  name: miri-sata
+  namespace: openebs
+spec:
+  node: miri
+  disks: ["/dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011502110"]
