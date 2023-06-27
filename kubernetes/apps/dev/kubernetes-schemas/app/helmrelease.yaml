@@ -31,7 +31,7 @@ spec:
       type: statefulset
     image:
       repository: ghcr.io/cbc02009/kubernetes-schemas-web
-      tag: latest@sha256:337e37bcfd502e6cf0e11f39a7dfc4a9ccbb221791bc35d50f89cc7748db1780
+      tag: latest@sha256:fba487e71812b524a49f86737ea564b05b5027ca41278fb92e30ac7692ac9fd9
     service:
       main:
         ports:
