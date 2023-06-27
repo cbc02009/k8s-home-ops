@@ -53,6 +53,6 @@ spec:
       callhome:
         enabled: false
     etcd:
-      replicaCount: 1
+      replicaCount: 3
       persistence:
         enabled: false
