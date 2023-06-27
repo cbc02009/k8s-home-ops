@@ -23,6 +23,8 @@ spec:
     remediation:
       retries: 5
   values:
+    controller:
+      type: statefulset
     image:
       repository: ghcr.io/linuxserver/calibre
       tag: version-v6.14.1
