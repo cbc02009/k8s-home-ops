@@ -3,19 +3,19 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: calibre-restic
+  name: calibre-web-restic
   namespace: media
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
   target:
-    name: calibre-restic-secret
+    name: calibre-web-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/calibre'
+        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/calibre-web'
         RESTIC_PASSWORD: '{{ .r2_restic_password }}'
         AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
         AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
@@ -31,16 +31,16 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: calibre
+  name: calibre-web
   namespace: media
 spec:
-  sourcePVC: calibre-config-v1
+  sourcePVC: calibre-web-config-v1
   trigger:
     schedule: '0 0 * * *'
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: calibre-restic-secret
+    repository: calibre-web-restic-secret
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
