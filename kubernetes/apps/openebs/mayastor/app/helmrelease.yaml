@@ -40,11 +40,11 @@ spec:
   values:
     io_engine:
       envcontext: iova-mode=pa
-      # resources:
-      #   limits:
-      #     cpu: 100m
-      #   requests:
-      #     cpu: "100m"
+      resources:
+        limits:
+          cpu: 1
+        requests:
+          cpu: 1
     jaeger:
       enabled: false
     loki-stack:
