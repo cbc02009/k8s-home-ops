@@ -107,20 +107,6 @@
       matchPackageNames: ["blakeblackshear/frigate"],
       versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
     },
-    // Version strategies
-    {
-      matchDatasources: ["docker"],
-      matchPackageNames: [
-        "ghcr.io/kubernetes-at-home/plex",
-        "ghcr.io/kubernetes-at-home/qbittorrent",
-      ],
-      versioning: "loose",
-    },
-    {
-      matchDatasources: ["docker"],
-      matchPackageNames: ["tomsquest/docker-radicale"],
-      versioning: "pep440",
-    },
     // Group packages
     {
       matchDatasources: ["helm", "docker"],
@@ -156,30 +142,14 @@
       matchDatasources: ["docker"],
       matchPackageNames: [
         "ghcr.io/linuxserver/calibre",
-        "ghcr.io/linuxserver/calibre-web",
+        "ghcr.io/bwj-s/calibre-web",
       ],
       versioning: "regex:^version-v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["blakeblackshear/frigate"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
-    },
-    {
-      "matchDatasources": ["docker"],
       "matchPackageNames": ["docker.io/timberio/vector"],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
-    },
-    {
-      "description": "Use custom versioning for Minio",
-      "matchDatasources": ["docker"],
-      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$",
-      "matchPackageNames": ["quay.io/minio/minio"]
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["tomsquest/docker-radicale"],
-      "versioning": "pep440"
     },
     {
       "description": "Use loose versioning for certain dependencies",
