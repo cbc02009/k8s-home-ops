@@ -13,50 +13,19 @@
       "separateMinorPatch": true
     },
     {
-      "description": "1Password Connect and Sync images",
-      "groupName": "1Password",
-      "matchPackagePatterns": ["1password"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
-      "description": "Immich images",
+      "description": "Immich Group",
       "groupName": "Immich",
       "matchPackagePatterns": ["immich"],
       "matchDatasources": ["docker"],
-      "allowedVersions": "/v.*_(.*)/",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
       "separateMinorPatch": true
     },
     {
-      "description": "Obico images",
-      "groupName": "Obico",
-      "matchPackagePatterns": ["obico"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
-      "description": "Rook-Ceph image and chart",
+      "description": "Rook-Ceph Group",
       "groupName": "Rook-Ceph",
       "matchPackagePatterns": ["rook.ceph"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
-      "description": "External Snapshotter charts",
-      "groupName": "External Snapshotter",
-      "matchPackageNames": ["snapshot-controller", "snapshot-validation-webhook"],
       "matchDatasources": ["helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -64,15 +33,14 @@
       "separateMinorPatch": true
     },
     {
-      "description": "Thanos image and chart - mismatched versions",
-      "groupName": "Thanos",
-      "matchPackagePatterns": ["thanos"],
-      "matchDatasources": ["docker", "github-releases", "helm"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "description": "External Snapshotter Group",
+      "groupName": "External Snapshotter",
+      "matchPackageNames": ["snapshot-controller", "snapshot-validation-webhook"],
+      "matchDatasources": ["helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
-      "separateMinorPatch": false
+      "separateMinorPatch": true
     }
   ]
 }
