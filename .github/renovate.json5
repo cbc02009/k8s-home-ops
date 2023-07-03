@@ -6,7 +6,6 @@
     ":disableRateLimiting",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":enablePreCommit",
     ":automergeDigest",
     ":automergeBranch",
     "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions.json5",
@@ -28,7 +27,7 @@
     "prIgnoreNotification"
   ],
   "rebaseWhen":"conflicted",
-  "ignorePaths": ["kubernetes/**/volsync.yaml", "kubernetes/**/ks.yaml"],
+  "ignorePaths": ["kubernetes/**/volsync.yaml", "kubernetes/**/ks.yaml, archive/**"],
   "flux": {
     "fileMatch": ["kubernetes/.+\\.ya?ml$"]
   },
@@ -40,8 +39,19 @@
   },
   "regexManagers": [
     {
+      "description": "Process Tekton dependencies",
+      "fileMatch": [
+        "kubernetes/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "depName=(?<depName>\\S+)?\n.*?(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
       "description": "Process custom dependencies",
       "fileMatch": [
+        "ansible/.+\\.ya?ml$",
         "kubernetes/.+\\.ya?ml$"
       ],
       "matchStrings": [
@@ -50,122 +60,30 @@
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
-  ],
-  "regexManagers": [
     {
-      "description": ["Process CRD dependencies - Chart and Github Release are the same version"],
-      "fileMatch": ["kubernetes/.+\\.ya?ml$"],
-      "matchStrings": [
-        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
-      ],
-      "datasourceTemplate": "helm"
-    },
-    {
-      "description": "Process various dependencies",
+      "description": "Process imageName values",
       "fileMatch": [
         "kubernetes/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
+        "imageName: (?<depName>\\S+):(?<currentValue>.*\\-.*)"
       ],
-      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
-    },
-    {
-      "description": "Process raw GitHub URLs",
-      "fileMatch": ["kubernetes/.+\\.ya?ml$"],
-      "matchStrings": [
-        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*"
-      ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "semver"
-    },
-    {
-      fileMatch: ["infrastructure/.+\\.ya?ml$"],
-      matchStrings: [
-        "# renovate: image( versioning=(?<versioning>.+=?))?\n.*[:|=] \"?(?<depName>.+?):(?<currentValue>[^\"\n]+=?)\"?",
-        "# renovate: image depName=(?<depName>.+=?)( versioning=(?<versioning>.+=?))?\n.*[:|=] \"?(?<currentValue>[^\"\n]+=?)\"?",
-      ],
-      datasourceTemplate: "docker",
-      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
-    },
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "redhat"
+    }
   ],
-  packageRules: [
-    // Setup datasources
+  "packageRules": [
     {
-      matchDatasources: ["helm"],
-      ignoreDeprecated: true,
-    },
-    {
-      "description": "Use loose versioning for certain dependencies",
-      "matchDatasources": ["docker", "github-releases"],
-      "versioning": "loose",
-      "matchPackagePatterns": ["changedetection", "immich", "plex", "qbittorrent"]
-    },
-    {
-      matchDatasources: ["docker"],
-      matchPackageNames: ["blakeblackshear/frigate"],
-      versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
-    },
-    // Group packages
-    {
-      matchDatasources: ["helm", "docker"],
-      matchPackagePatterns: ["^rook.ceph"],
-      groupName: "rook-ceph-suite",
-      additionalBranchPrefix: "",
-      separateMinorPatch: true,
-    },
-    {
-      matchDatasources: ["docker"],
-      matchPackageNames: [
-        "kubernetes.gcr.io/kube-apiserver",
-        "kubernetes.gcr.io/kube-controller-manager",
-        "kubernetes.gcr.io/kube-scheduler",
-        "ghcr.io/siderolabs/kubelet",
-      ],
-      groupName: "kubernetes",
-      additionalBranchPrefix: "",
-      separateMinorPatch: true,
-    },
-    {
-      matchDatasources: ["helm", "docker"],
-      matchPackageNames: [
-        "quay.io/cilium/cilium",
-        "quay.io/cilium/operator-generic",
-        "cilium",
-      ],
-      groupName: "cilium",
-      additionalBranchPrefix: "",
-      separateMinorPatch: true,
-    },
-    {
-      matchDatasources: ["docker"],
-      matchPackageNames: [
-        "ghcr.io/linuxserver/calibre",
-        "ghcr.io/bwj-s/calibre-web",
-      ],
-      versioning: "regex:^version-v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-    },
-    {
+      "description": "Loose versioning for non-semver packages",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["docker.io/timberio/vector"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
-    },
-    {
-      "description": "Use loose versioning for certain dependencies",
-      "matchDatasources": ["docker", "github-releases"],
       "versioning": "loose",
-      "matchPackageNames": [
-        "plex",
-        "qbittorrent",
-        "immich",
-        "changedetection"
-      ]
+      "matchPackagePatterns": ["changedetection", "plex", "qbittorrent"]
     },
     {
-      "description": "Three day stability period for npm packages except Renovate",
+      "description": "Use custom versioning for Minio",
       "matchDatasources": ["docker"],
-      "stabilityDays": 7
-    },
-  ],
+      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z$",
+      "matchPackagePatterns": ["minio"]
+    }
+  ]
 }
