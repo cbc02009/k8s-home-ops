@@ -38,7 +38,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: lidarr-secret
+              name: *app
 
     env:
       TZ: "${TZ}"
@@ -51,7 +51,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: lidarr-secret
+          name: *app
 
     service:
       main:
