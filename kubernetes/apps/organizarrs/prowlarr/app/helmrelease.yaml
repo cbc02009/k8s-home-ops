@@ -35,7 +35,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: prowlarr-secret
+              name: *app
 
     image:
       repository: ghcr.io/onedr0p/prowlarr-develop
@@ -53,7 +53,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: prowlarr-secret
+          name: *app
 
     service:
       main:
