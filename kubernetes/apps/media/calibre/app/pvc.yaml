@@ -13,5 +13,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: ceph-filesystem
+      storage: 1Gi
+  storageClassName: ceph-block
