@@ -23,6 +23,7 @@ spec:
     remediation:
       retries: 5
   values:
+    runtimeClassName: nvidia
     controller:
       type: statefulset
     image:
@@ -79,8 +80,10 @@ spec:
       requests:
         cpu: 15m
         memory: 249M
+        nvidia.com/gpu: 1
       limits:
         memory: 4000M
+        nvidia.com/gpu: 1
     probes:
       startup:
         spec:
