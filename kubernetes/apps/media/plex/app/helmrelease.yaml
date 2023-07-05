@@ -109,6 +109,37 @@ spec:
         path: /tank/backup/kubernetes/apps/plex
         mountPath: /config/backup
 
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: feature.node.kubernetes.io/custom-intel-gpu
+    #               operator: In
+    #               values:
+    #                 - "true"
+
+    # resources:
+    #   requests:
+    #     gpu.intel.com/i915: 1
+    #     cpu: 100m
+    #     memory: 2000Mi
+    #   limits:
+    #     gpu.intel.com/i915: 1
+    #     memory: 10000Mi
+
+    # -- Affinity constraint rules to place the Pod on a specific node.
+    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: feature.node.kubernetes.io/10gb-network
+    #               operator: In
+    #               values:
+    #                 - "true"
+
     resources:
       requests:
         cpu: 4
