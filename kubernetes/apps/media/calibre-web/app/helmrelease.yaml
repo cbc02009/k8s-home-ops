@@ -55,7 +55,7 @@ spec:
       main:
         enabled: true
         annotations:
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: "external"
         ingressClassName: nginx
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
