@@ -23,7 +23,6 @@ spec:
     remediation:
       retries: 5
   values:
-    runtimeClassName: nvidia
     controller:
       type: statefulset
     image:
@@ -51,19 +50,6 @@ spec:
         loadBalancerIP: "${LB_CALIBRE}"
         annotations:
           metallb.universe.tf/allow-shared-ip: *app
-      # wireless:
-      #   enabled: true
-      #   ports:
-      #     wireless:
-      #       enabled: true
-      #       port: 9090
-      #       protocol: TCP
-      #       targetPort: 9090
-      #   type: LoadBalancer
-      #   externalTrafficPolicy: Cluster
-      #   loadBalancerIP: "${LB_CALIBRE}"
-      #   annotations:
-      #     metallb.universe.tf/allow-shared-ip: *app
     ingress:
       main:
         enabled: true
