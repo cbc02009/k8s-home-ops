@@ -39,7 +39,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/radarr-develop
-      tag: 4.6.4.7568
+      tag: 4.6.4.7568@sha256:7dd197028efcc9e4e4bc52cd383efbaa1b6631c8932b3f831a3a1b1687fa8954
 
     env:
       TZ: ${TZ}
