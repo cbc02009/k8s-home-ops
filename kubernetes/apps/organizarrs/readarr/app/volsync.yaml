@@ -8,24 +8,21 @@ metadata:
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
-    name: onepassword-connect
+    name: restic-template
   target:
     name: readarr-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .r2_repository_template }}/readarr'
-        RESTIC_PASSWORD: '{{ .r2_restic_password }}'
-        AWS_ACCESS_KEY_ID: '{{ .r2_access_key }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .r2_secret_key }}'
+        RESTIC_REPOSITORY: '{{ .REPO_TEMPLATE }}/readarr'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASS }}'
+        AWS_ACCESS_KEY_ID: '{{ .ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .SECRET_KEY }}'
   dataFrom:
-    - extract:
-        key: volsync-restic-template
-      rewrite:
-        - regexp:
-            source: "(.*)"
-            target: "r2_$1"
+    - find:
+        name:
+          regexp: .*
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
