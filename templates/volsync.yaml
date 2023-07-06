@@ -4,7 +4,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: <name>-restic
-  namespace: media
+  namespace: <namespace>
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -29,7 +29,7 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: <name>
-  namespace: media
+  namespace: <namespace>
 spec:
   sourcePVC: <name>-config-v1
   trigger:
