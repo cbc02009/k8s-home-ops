@@ -46,6 +46,13 @@ spec:
               resources:
                 - ingresses
                 - pods
+              verbs:
+                - create
+                - update
+                - patch
+                - delete
+                - get
+                - list
       resources:
         # -- Pod resource limits
         limits:
