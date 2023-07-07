@@ -36,7 +36,7 @@ metadata:
 spec:
   sourcePVC: jellyfin-config-v1
   trigger:
-    schedule: '4 0 * * *'
+    schedule: '0 4 * * *'
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
