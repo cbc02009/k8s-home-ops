@@ -39,12 +39,12 @@ spec:
       FRIGATE_MQTT_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: emqx-secret
-            key: user_1_password
+            name: emqx
+            key: USER_1_PASSWORD
 
     envFrom:
       - secretRef:
-          name: frigate-secret
+          name: frigate
 
     service:
       main:
