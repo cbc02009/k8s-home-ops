@@ -47,9 +47,14 @@ spec:
               annotations:
                 ingress.home.arpa/type: "internal"
       mutate:
+        targets:
+          - apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            namespace: "{{request.namespace}}"
         patchStrategicMerge:
           metadata:
             annotations:
+              <(ingress.home.arpa/type): "internal"
               +(nginx.ingress.kubernetes.io/whitelist-source-range): "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
 
     - name: external
@@ -60,9 +65,14 @@ spec:
               annotations:
                 ingress.home.arpa/type: "external"
       mutate:
+        targets:
+          - apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            namespace: "{{request.namespace}}"
         patchStrategicMerge:
           metadata:
             annotations:
+              <(ingress.home.arpa/type): "external"
               +(external-dns.alpha.kubernetes.io/public): "true"
               +(external-dns.alpha.kubernetes.io/target): "ingress.${EXTERNAL_DOMAIN}"
 
@@ -74,9 +84,14 @@ spec:
               annotations:
                 ingress.home.arpa/type: "external-auth"
       mutate:
+        targets:
+          - apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            namespace: "{{request.namespace}}"
         patchStrategicMerge:
           metadata:
             annotations:
+              <(ingress.home.arpa/type): "external-auth"
               +(external-dns.alpha.kubernetes.io/public): "true"
               +(external-dns.alpha.kubernetes.io/target): "ingress.${EXTERNAL_DOMAIN}"
               # +(nginx.ingress.kubernetes.io/satisfy): "any"
