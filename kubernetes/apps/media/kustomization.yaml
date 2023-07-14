@@ -11,5 +11,5 @@ resources:
   - ./jellyfin/ks.yaml
   - ./komga/ks.yaml
   - ./plex/ks.yaml
-  - ./tdarr/ks.yaml
+  # - ./tdarr/ks.yaml
   - ./tautulli/ks.yaml
