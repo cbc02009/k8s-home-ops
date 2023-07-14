@@ -36,10 +36,6 @@ spec:
       # NVIDIA_VISIBLE_DEVICES: all
       # NVIDIA_DRIVER_CAPABILITIES: all
 
-    envFrom:
-      - secretRef:
-          name: plex-secret
-
     service:
       main:
         type: LoadBalancer
