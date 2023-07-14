@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
-              name: grafana-secret
+              name: *app
 
     env:
       GF_AUTH_GENERIC_OAUTH_API_URL: https://auth.${EXTERNAL_DOMAIN}/api/oidc/userinfo
@@ -53,7 +53,7 @@ spec:
       GF_SERVER_ROOT_URL: https://grafana.${EXTERNAL_DOMAIN}
 
     envFromSecrets:
-      - name: grafana-secret
+      - name: *app
 
     replicas: 1
 
