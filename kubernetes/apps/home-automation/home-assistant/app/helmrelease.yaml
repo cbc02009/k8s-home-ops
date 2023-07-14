@@ -38,7 +38,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: home-assistant-secret
+          name: *app
 
     service:
       main:
@@ -77,7 +77,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: home-assistant-secret
+              name: *app
 
     podSecurityContext:
       runAsUser: 568
