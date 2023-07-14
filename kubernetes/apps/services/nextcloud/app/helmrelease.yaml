@@ -114,7 +114,7 @@ spec:
       ## Use an existing secret
       existingSecret:
         enabled: true
-        secretName: nextcloud-secret
+        secretName: *app
         usernameKey: ADMIN_USER
         passwordKey: ADMIN_PASS
         # tokenKey: serverinfo_token
@@ -223,7 +223,7 @@ spec:
           image: ghcr.io/onedr0p/postgres-init:14.8
           envFrom:
             - secretRef:
-                name: nextcloud-secret
+                name: *app
 
       # Extra sidecar containers.
       extraSidecarContainers: []
@@ -291,7 +291,7 @@ spec:
       ## Use a existing secret
       existingSecret:
         enabled: true
-        secretName: nextcloud-secret
+        secretName: *app
         usernameKey: INIT_POSTGRES_USER
         passwordKey: INIT_POSTGRES_PASS
 
