@@ -35,7 +35,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: tandoor-secret
+              name: *app
 
     image:
       repository: docker.io/vabene1111/recipes
@@ -51,7 +51,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: tandoor-secret
+          name: *app
 
     service:
       main:
