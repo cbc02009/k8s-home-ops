@@ -32,18 +32,8 @@ spec:
   runnerPodTemplate:
     spec:
       env:
-        - name: OP_CONNECT_HOST
-          value: http://onepassword-connect.kokoro.wtf:8080
-        - name: OP_CONNECT_TOKEN
+        - name: DOPPLER_TOKEN
           valueFrom:
             secretKeyRef:
-              name: tf-controller-op-secret
-              key: OP_CONNECT_TOKEN
-      volumeMounts:
-        - name: tf-controller-sops-key
-          mountPath: /home/runner/.config/sops/age/keys.txt
-          subPath: keys.txt
-      volumes:
-        - name: tf-controller-sops-key
-          secret:
-            secretName: tf-controller-sops-secret
+              name: tf-controller-doppler-pat
+              key: DOPPLER_TOKEN

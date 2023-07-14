@@ -9,7 +9,7 @@ module "cf_domain_ingress" {
     },
     {
       id      = "vpn"
-      name    = module.onepassword_item_cloudflare.fields["vpn_subdomain"]
+      name    = data.doppler_secrets.this.map.VPN_SUBDOMAIN
       value   = "ipv4.kokoro.wtf"
       type    = "CNAME"
       proxied = false
