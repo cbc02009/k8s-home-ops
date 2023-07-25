@@ -9,6 +9,6 @@ metadata:
     external-dns.alpha.kubernetes.io/target: ingress.kokoro.wtf
 spec:
   endpoints:
-    - dnsName: ingress.kokoro.wtf
+    - dnsName: ingress-ext.kokoro.wtf
       recordType: CNAME
       targets: ["${CLUSTER_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]

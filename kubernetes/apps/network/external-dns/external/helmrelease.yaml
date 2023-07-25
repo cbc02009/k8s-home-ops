@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: external-dns-external
+  name: externaldns-external
   namespace: network
 spec:
   interval: 15m
@@ -24,11 +24,13 @@ spec:
       retries: 5
   values:
 
-    fullnameOverride: external-dns-external
+    fullnameOverride: &name externaldns-external
 
     interval: 2m
+
     # logLevel: debug
     provider: cloudflare
+
     env:
       - name: CF_API_EMAIL
         valueFrom:
@@ -40,25 +42,35 @@ spec:
           secretKeyRef:
             name: external-dns-external-secret
             key: api-key
+
     extraArgs:
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
       - --cloudflare-proxied
-      - --annotation-filter=external-dns.alpha.kubernetes.io/public
+      - --ingress-class=external-nginx
+
     policy: sync
+
     sources:
       - ingress
+      - crd
+
     txtPrefix: "k8s."
+
     txtOwnerId: default
+
     domainFilters:
       - "${EXTERNAL_DOMAIN}"
+
     serviceMonitor:
       enabled: true
+
     resources:
       requests:
         memory: 100Mi
         cpu: 25m
       limits:
         memory: 250Mi
+
     podAnnotations:
-      secret.reloader.stakater.com/reload: external-dns-secret
+      secret.reloader.stakater.com/reload: externaldns-external-secret

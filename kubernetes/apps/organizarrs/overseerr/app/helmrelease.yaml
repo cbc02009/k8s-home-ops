@@ -44,7 +44,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: "external-nginx"
         annotations:
           ingress.home.arpa/type: "external"
           # nginx.ingress.kubernetes.io/configuration-snippet: |

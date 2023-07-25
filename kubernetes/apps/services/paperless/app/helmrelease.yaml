@@ -73,7 +73,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-int
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "0"
           ingress.home.arpa/type: "internal"

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ingress-nginx
+  name: nginx-external
   namespace: network
 spec:
   interval: 15m
@@ -26,24 +26,29 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   values:
+
+    fullnameOverride: nginx-external
+
     controller:
       replicaCount: 3
+      updateStrategy:
+        type: RollingUpdate
       extraEnvs:
         - name: TZ
           value: "${TZ}"
 
       service:
-        loadBalancerIP: ${LB_NGINX_INGRESS}
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ingress.kokoro.wtf"
-          metallb.universe.tf/loadBalancerIPs: |-
-            ${LB_NGINX_INGRESS}
+          external-dns.alpha.kubernetes.io/hostname: "ingress-int.kokoro.wtf"
+          io.cilium/lb-ipam-ips: "10.6.0.2"
 
       publishService:
         enabled: true
 
       ingressClassResource:
-        default: true
+        name: external-nginx
+        default: false
+        controllerValue: k8s.io/ingress-nginx-external
 
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
@@ -52,16 +57,11 @@ spec:
         client-header-timeout: 120
         client-body-buffer-size: "100M"
         client-body-timeout: 120
-        # custom-http-errors: >-
-        #   401,403,404,500,501,502,503
         enable-brotli: "true"
-        forwarded-for-header: "CF-Connecting-IP"
+        enable-real-ip: "true"
         hsts-max-age: "31449600"
         keep-alive: 120
         keep-alive-requests: 10000
-        proxy-body-size: "100M"
-        ssl-protocols: "TLSv1.3 TLSv1.2"
-        use-forwarded-headers: "true"
         # The below X-Clacks-Overehead is a do-nothing header
         # That is simply a memoriam for Sir Terry Pratchett
         # Ref: https://xclacksoverhead.org/home/about
@@ -76,6 +76,9 @@ spec:
           "path": "$uri", "request_query": "$args", "request_length": $request_length,
           "duration": $request_time,"method": "$request_method", "http_referrer": "$http_referer",
           "http_user_agent": "$http_user_agent"}
+        proxy-body-size: 0
+        proxy-buffer-size: "16k"
+        ssl-protocols: "TLSv1.3 TLSv1.2"
 
       metrics:
         enabled: true
@@ -84,24 +87,9 @@ spec:
           namespace: network
           namespaceSelector:
             any: true
-        prometheusRule:
-          enabled: false
-
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                    - key: app.kubernetes.io/name
-                      operator: In
-                      values:
-                        - ingress-nginx
-                topologyKey: kubernetes.io/hostname
 
       topologySpreadConstraints:
-        - maxSkew: 1
+        - maxSkew: 2
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
@@ -114,20 +102,12 @@ spec:
         - effect: NoExecute
           operator: Exists
 
-      podAnnotations:
-        configmap.reloader.stakater.com/reload: "cloudflare-proxied-networks"
-
       resources:
         requests:
-          cpu: 23m
-          memory: 381M
+          cpu: 99m
+          memory: 768Mi
         limits:
-          memory: 1000M
+          memory: 768Mi
 
-  valuesFrom:
-    # Cloudflare Networks
-    # https://www.cloudflare.com/ips/
-    - targetPath: controller.config.proxy-real-ip-cidr
-      kind: ConfigMap
-      name: cloudflare-networks
-      valuesKey: cloudflare-networks.txt
+    defaultBackend:
+      enabled: false

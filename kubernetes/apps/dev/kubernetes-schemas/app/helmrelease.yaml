@@ -40,7 +40,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-int
         annotations:
           ingress.home.arpa/type: "internal"
           hajimari.io/icon: mdi:code-json

@@ -37,7 +37,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-int
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:
@@ -50,7 +50,7 @@ spec:
 
       backend:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-int
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:
@@ -64,7 +64,7 @@ spec:
 
       ytproxy:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-int
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:

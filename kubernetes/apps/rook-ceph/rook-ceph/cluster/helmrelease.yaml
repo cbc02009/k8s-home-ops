@@ -120,7 +120,7 @@ spec:
 
     ingress:
       dashboard:
-        ingressClassName: "nginx"
+        ingressClassName: "internal-nginx"
         annotations:
           ingress.home.arpa/type: "internal"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
