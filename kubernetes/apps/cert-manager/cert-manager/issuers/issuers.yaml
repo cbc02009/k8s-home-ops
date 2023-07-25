@@ -19,7 +19,7 @@ spec:
           cloudflare:
             email: ${ACME_EMAIL}
             apiKeySecretRef:
-              name: cloudflare-secret
+              name: cert-manager
               key: CLOUDFLARE_APIKEY
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/cert-manager.io/clusterissuer_v1.json
@@ -42,5 +42,5 @@ spec:
           cloudflare:
             email: ${ACME_EMAIL}
             apiKeySecretRef:
-              name: cloudflare-secret
+              name: cert-manager
               key: CLOUDFLARE_APIKEY
