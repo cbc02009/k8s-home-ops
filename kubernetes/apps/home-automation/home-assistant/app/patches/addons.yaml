@@ -25,7 +25,7 @@ spec:
           - "/config/.vscode"
         ingress:
           enabled: true
-          ingressClassName: "nginx"
+          ingressClassName: "external-nginx"
           annotations:
             ingress.home.arpa/type: "internal"
           hosts:

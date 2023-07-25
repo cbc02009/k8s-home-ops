@@ -134,7 +134,7 @@ spec:
         tag: 1.25-alpine
       ingress:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: "internal-nginx"
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:

@@ -33,8 +33,8 @@ spec:
         repository: ghcr.io/gabe565/obico/web
         tag: sha-72b26dfa6f35800388816c621870664e5501dd19
 
-    # envFrom:
-    #   - configMapRef: obico-configmap
+      # envFrom:
+      #   - configMapRef: obico-configmap
 
       env:
         OCTOPRINT_TUNNEL_PORT_RANGE: "0-0"
@@ -42,7 +42,7 @@ spec:
       ingress:
         main:
           enabled: true
-          ingressClassName: "nginx"
+          ingressClassName: "external-nginx"
           annotations:
             ingress.home.arpa/type: "external-auth"
             nginx.ingress.kubernetes.io/proxy-body-size: 64m
