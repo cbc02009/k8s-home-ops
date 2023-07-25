@@ -6,7 +6,7 @@ metadata:
   name: cloudflared
   namespace: network
   annotations:
-    external-dns.alpha.kubernetes.io/target: ingress.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: ingress-ext.kokoro.wtf
 spec:
   endpoints:
     - dnsName: ingress-ext.kokoro.wtf

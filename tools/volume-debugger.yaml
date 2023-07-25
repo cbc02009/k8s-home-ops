@@ -4,15 +4,15 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: volume-debugger
-  namespace: <NAMESPACE>
+  namespace: services
 spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: <CLAIM NAME GOES HERE>
+        claimName: nextcloud-config-v1
     - name: backups
       nfs:
-        server: 10.0.0.4
+        server: 10.0.2.4
         path: /tank/backup/kubernetes/apps
   containers:
     - name: volume-debugger
