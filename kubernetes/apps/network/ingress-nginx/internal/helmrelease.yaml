@@ -27,7 +27,7 @@ spec:
     cleanupOnFail: true
   values:
 
-    fullnameOverride: nginx-external
+    fullnameOverride: nginx-internal
 
     controller:
       replicaCount: 3
@@ -46,9 +46,9 @@ spec:
         enabled: true
 
       ingressClassResource:
-        name: external-nginx
+        name: internal-nginx
         default: false
-        controllerValue: k8s.io/ingress-nginx-external
+        controllerValue: k8s.io/ingress-nginx-internal
 
       extraArgs:
         default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
