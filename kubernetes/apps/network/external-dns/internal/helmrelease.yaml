@@ -36,12 +36,12 @@ spec:
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
         valueFrom:
           secretKeyRef:
-            name: external-dns-internal-secret
+            name: externaldns-internal-secret
             key: bind_rndc_algorithm
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
         valueFrom:
           secretKeyRef:
-            name: external-dns-internal-secret
+            name: externaldns-internal-secret
             key: bind_rndc_secret
 
     podAnnotations:
