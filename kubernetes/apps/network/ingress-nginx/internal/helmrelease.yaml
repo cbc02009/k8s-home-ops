@@ -51,7 +51,7 @@ spec:
         controllerValue: k8s.io/ingress-nginx-internal
 
       extraArgs:
-        default-ssl-certificate: "network/${EXTERNAL_DOMAIN/./-}-tls"
+        default-ssl-certificate: "network/kokoro-wtf-tls"
 
       config:
         client-header-timeout: 120

@@ -3,10 +3,10 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: '${EXTERNAL_DOMAIN/./-}'
+  name: 'kokoro-wtf'
   namespace: network
 spec:
-  secretName: '${EXTERNAL_DOMAIN/./-}-tls'
+  secretName: 'kokoro-wtf-tls'
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
