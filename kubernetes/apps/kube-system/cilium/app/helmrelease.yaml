@@ -47,7 +47,7 @@ spec:
         rollOutPods: true
         ingress:
           enabled: true
-          className: "nginx"
+          className: "internal-nginx"
           annotations:
             ingress.home.arpa/type: "internal"
             hajimari.io/enable: "true"
