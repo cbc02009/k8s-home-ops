@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
-              name: immich-secret
+              name: immich
     controller:
       type: statefulset
       annotations:
@@ -46,7 +46,7 @@ spec:
       - ./start-server.sh
     envFrom:
       - secretRef:
-          name: immich-secret
+          name: immich
       - configMapRef:
           name: immich-configmap
     service:

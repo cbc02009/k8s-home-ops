@@ -41,7 +41,7 @@ spec:
       - ./entrypoint.sh
     envFrom:
       - secretRef:
-          name: immich-secret
+          name: immich
       - configMapRef:
           name: immich-configmap
     service:
