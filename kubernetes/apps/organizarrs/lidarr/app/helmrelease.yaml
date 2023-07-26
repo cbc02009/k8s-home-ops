@@ -47,7 +47,7 @@ spec:
       LIDARR__LOG_LEVEL: info
       LIDARR__POSTGRES_MAIN_DB: lidarr_main
       LIDARR__POSTGRES_LOG_DB: lidarr_log
-      LIDARR__POSTGRES_HOST: ${POSTGRES_HOST}
+
 
     envFrom:
       - secretRef:
