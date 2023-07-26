@@ -29,7 +29,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: authelia-secret
+              name: *app
 
     controller:
       replicas: 2
@@ -82,7 +82,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: authelia-secret
+          name: *app
 
     enableServiceLinks: false
 
