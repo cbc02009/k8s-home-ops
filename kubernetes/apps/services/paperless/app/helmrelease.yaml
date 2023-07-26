@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: paperless
+  name: &app paperless
   namespace: services
 spec:
   interval: 15m
@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
-              name: paperless-secret
+              name: *app
     controller:
       type: statefulset
       annotations:
