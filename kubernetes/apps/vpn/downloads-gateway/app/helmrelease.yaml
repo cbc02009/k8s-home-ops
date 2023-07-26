@@ -71,7 +71,7 @@ spec:
             value: 30s
         envFrom:
           - secretRef:
-              name: mullvad
+              name: downloads-gateway
         securityContext:
           capabilities:
             add:
