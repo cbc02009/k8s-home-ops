@@ -33,6 +33,16 @@ spec:
         value: "true"
       - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
         value: externaldns
+      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
+        valueFrom:
+          secretKeyRef:
+            name: externaldns-internal
+            key: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
+      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: externaldns-internal
+            key: EXTERNAL_DNS_RFC2136_TSIG_SECRET
 
     envFrom:
       - secretRef:
