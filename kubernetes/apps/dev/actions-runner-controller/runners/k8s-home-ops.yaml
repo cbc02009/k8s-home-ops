@@ -1,43 +1,52 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/actions.summerwind.dev/runnerdeployment_v1alpha1.json
-apiVersion: actions.summerwind.dev/v1alpha1
-kind: RunnerDeployment
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
 metadata:
-  name: k8s-home-ops
+  name: arc-k8s-home-ops
   namespace: dev
 spec:
-  template:
+  interval: 30m
+  chart:
     spec:
-      image: ghcr.io/actions/actions-runner-controller/actions-runner-dind:v2.299.1-ubuntu-22.04
-      imagePullPolicy: IfNotPresent
-      dockerdWithinRunnerContainer: false
-      ephemeral: true
-      repository: cbc02009/k8s-home-ops
-      labels: ["self-hosted"]
-      volumeMounts:
-        - name: cache-volume
-          mountPath: /cache
-      volumes:
-        - name: cache-volume
-          persistentVolumeClaim:
-            claimName: actions-runner-controller-cache
----
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/actions.summerwind.dev/horizontalrunnerautoscaler_v1alpha1.json
-apiVersion: actions.summerwind.dev/v1alpha1
-kind: HorizontalRunnerAutoscaler
-metadata:
-  name: k8s-home-ops
-  namespace: dev
-spec:
-  scaleTargetRef:
-    name: k8s-home-ops
-  scaleUpTriggers:
-    - githubEvent:
-        workflowJob: {}
-      amount: 1
-      duration: 30m
-  minReplicas: 1
-  maxReplicas: 3
-  metrics:
-    - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
-      repositoryNames: ["k8s-home-ops"]
+      chart: gha-runner-scale-set
+      version: 0.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    runnerScaleSetName: arc-runner-set-k8s-home-ops
+    githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
+    minRunners: 1
+    maxRunners: 3
+    containerMode:
+      type: dind
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:2.307.1@sha256:5703960b0e91cb0101e69aab55ee9e9fbd4a870adcdf906f63c3fff2342cccc4
+  valuesFrom:
+    - kind: Secret
+      name: actions-runner-controller
+      valuesKey: github_app_id
+      targetPath: githubConfigSecret.github_app_id
+    - kind: Secret
+      name: actions-runner-controller
+      valuesKey: github_app_installation_id
+      targetPath: githubConfigSecret.github_app_installation_id
+    - kind: Secret
+      name: actions-runner-controller
+      valuesKey: github_app_private_key
+      targetPath: githubConfigSecret.github_app_private_key
