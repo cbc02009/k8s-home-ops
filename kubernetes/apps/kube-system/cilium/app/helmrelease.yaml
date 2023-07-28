@@ -41,7 +41,8 @@ spec:
       metrics:
         serviceMonitor:
           enabled: false
-
+      relay:
+        enabled: true
       ui:
         enabled: true
         rollOutPods: true
