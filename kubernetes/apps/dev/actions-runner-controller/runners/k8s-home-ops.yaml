@@ -28,8 +28,8 @@ spec:
   values:
     runnerScaleSetName: arc-runner-set-k8s-home-ops
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
-    minRunners: 1
-    maxRunners: 3
+    minRunners: 0
+    maxRunners: 2
     containerMode:
       type: dind
     template:
