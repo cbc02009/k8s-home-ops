@@ -2,5 +2,4 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "username": "mahoro-bot[bot]",
   "gitAuthor": "mahoro-bot <115426318+mahoro-bot[bot]@users.noreply.github.com>",
-  "repositories": ["cbc02009/k8s-home-ops"]
 }
