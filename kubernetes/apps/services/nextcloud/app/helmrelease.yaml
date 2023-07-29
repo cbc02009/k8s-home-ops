@@ -164,6 +164,11 @@ spec:
       # ref: https://docs.nextcloud.com/server/13/admin_manual/configuration_files/primary_storage.html#simple-storage-service-s3
       #
       configs:
+        log.config.php: |-
+          <?php
+          $CONFIG = array (
+            'loglevel' => '0',
+          );
         s3.config.php: |-
           <?php
           $CONFIG = array (
