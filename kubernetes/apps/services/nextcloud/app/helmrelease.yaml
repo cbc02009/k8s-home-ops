@@ -27,13 +27,14 @@ spec:
     ## ref: https://hub.docker.com/r/library/nextcloud/tags/
     ##
     image:
-      repository: docker.io/nextcloud
+      repository: nextcloud
       pullPolicy: IfNotPresent
 
     nameOverride: ""
     fullnameOverride: ""
     podAnnotations: {}
     deploymentAnnotations: {}
+    deploymentLabels: {}
 
     # Number of replicas to be deployed
     replicaCount: 1
@@ -187,7 +188,7 @@ spec:
           $CONFIG = array (
             'trusted_proxies' =>
             array(
-               0 => '10.0.0.0/8',
+                0 => '10.0.0.0/8',
             ),
             'forwarded_for_headers' =>
             array (
@@ -246,12 +247,20 @@ spec:
       #  - name: nfs
       #    mountPath: "/legacy_data"
 
-      # Extra secuurityContext parameters. For example you may need to define runAsNonRoot directive
-      # extraSecurityContext:
-      #   runAsUser: "33"
-      #   runAsGroup: "33"
+      # Set securityContext parameters for the nextcloud CONTAINER only (will not affect nginx container).
+      # For example, you may need to define runAsNonRoot directive
+      securityContext: {}
+      #   runAsUser: 33
+      #   runAsGroup: 33
       #   runAsNonRoot: true
-      #   readOnlyRootFilesystem: true
+      #   readOnlyRootFilesystem: false
+
+      # Set securityContext parameters for the entire pod. For example, you may need to define runAsNonRoot directive
+      podSecurityContext: {}
+      #   runAsUser: 33
+      #   runAsGroup: 33
+      #   runAsNonRoot: true
+      #   readOnlyRootFilesystem: false
 
     nginx:
       ## You need to set an fpm version of the image for nextcloud if you want to use nginx!
@@ -268,6 +277,14 @@ spec:
         #     worker_processes  1;..
 
       resources: {}
+
+      # Set nginx container securityContext parameters. For example, you may need to define runAsNonRoot directive
+      securityContext: {}
+      # the nginx alpine container default user is 82
+      #   runAsUser: 82
+      #   runAsGroup: 33
+      #   runAsNonRoot: true
+      #   readOnlyRootFilesystem: true
 
     internalDatabase:
       enabled: false
@@ -318,7 +335,7 @@ spec:
     ##
     persistence:
       # Nextcloud Data (/var/www/html)
-      enabled: true
+      enabled: false
       annotations: {}
       ## nextcloud data Persistent Volume Storage Class
       ## If defined, storageClassName: <storageClass>
@@ -415,11 +432,15 @@ spec:
       # Currently you still need to set the token manually in your nextcloud install
       token: ""
       timeout: 5s
+      # if set to true, exporter skips certificate verification of Nextcloud server.
+      tlsSkipVerify: false
 
       image:
         repository: xperimental/nextcloud-exporter
         tag: 0.6.1
         pullPolicy: IfNotPresent
+        # pullSecrets:
+        #   - myRegistrKeySecretName
 
       ## Metrics exporter resource requests and limits
       ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -477,3 +498,7 @@ spec:
         create: true
         name: nextcloud-serviceaccount
         annotations: {}
+
+
+    ## @param securityContext for nextcloud pod @deprecated Use `nextcloud.podSecurityContext` instead
+    securityContext: {}
