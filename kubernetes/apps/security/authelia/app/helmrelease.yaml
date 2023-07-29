@@ -79,6 +79,8 @@ spec:
       AUTHELIA_THEME: grey
       AUTHELIA_TOTP_ISSUER: authelia.com
       AUTHELIA_WEBAUTHN_DISABLE: "true"
+      AUTHELIA_SERVER_BUFFERS_READ: 8192
+      AUTHELIA_SERVER_BUFFERS_WRITE: 8192
 
     envFrom:
       - secretRef:
