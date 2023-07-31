@@ -167,7 +167,8 @@ spec:
         log.config.php: |-
           <?php
           $CONFIG = array (
-            'loglevel' => '0'
+            'loglevel' => '0',
+            'logfile' => '/dev/stdout'
           );
         s3.config.php: |-
           <?php
