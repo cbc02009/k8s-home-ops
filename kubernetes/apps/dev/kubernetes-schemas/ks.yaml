@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: kubernetes-schemas
       namespace: dev
+  dependsOn:
+    - name: apps-nginx-internal
