@@ -4,7 +4,7 @@ clusterName: kokoro
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.4.6
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.27.3
+kubernetesVersion: v1.27.4
 
 endpoint: https://cluster.ctec.run:6443
 
