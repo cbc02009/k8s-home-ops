@@ -65,7 +65,7 @@ tasks:
       - go-task bs:csr-approver
       - go-task bs:cilium
       - go-task bs:flux
-      - go-task bs:sops
+      - go-task bs:doppler
       - go-task bs:github
       - go-task bs:crds
       - go-task bs:rook
