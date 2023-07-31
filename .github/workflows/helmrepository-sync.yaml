@@ -18,7 +18,7 @@ on:
 jobs:
   sync:
     name: Flux HelmRepository Sync
-    runs-on: ["self-hosted"]
+    runs-on: ["arc-runner-set-k8s-home-ops"]
     # runs-on: ubuntu-latest
     steps:
       - name: Checkout

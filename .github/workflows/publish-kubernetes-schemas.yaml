@@ -15,7 +15,7 @@ env:
 jobs:
   publish-kubernetes-schemas:
     name: Publish Kubernetes Schemas
-    runs-on: ["self-hosted"]
+    runs-on: ["arc-runner-set-k8s-home-ops"]
     # runs-on: ubuntu-latest
     steps:
       - name: Setup Kube Tools
