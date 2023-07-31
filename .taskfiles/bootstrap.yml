@@ -27,10 +27,11 @@ tasks:
       - rm -rf {{.csrDir}}/charts
       - kubectl apply -f {{.csrDir}}/csr-approver.yaml
 
-  sops:
-    desc: 4. Bootstrap sops
+  doppler:
+    desc: 4. Bootstrap Doppler
     cmds:
-      - cat ~/.config/sops/age/keys.txt | kubectl -n flux-system create secret generic sops-age --from-file=age.agekey=/dev/stdin
+      - kubectl create secret generic  -n flux-system cluster-secrets --from-env-file <(doppler secrets download -p cluster -c prd --no-file --format docker)
+      - kubectl create secret generic -n flux-system doppler-token-auth-api --from-literal dopplerToken=$(doppler secrets -p doppler -c prd get DOPPLER_PAT --plain)
 
   github:
     desc: 5. decrypt and load github ssh key
@@ -42,7 +43,6 @@ tasks:
     cmds:
       - kubectl apply -n flux-system --server-side --kustomize {{.CLUSTER_DIR}}/bootstrap/flux
       - kubectl apply -f {{.CLUSTER_DIR}}/flux/vars/cluster-settings.yaml
-      - sops --decrypt {{.CLUSTER_DIR}}/flux/vars/cluster-secrets.sops.yaml | kubectl apply -f -
 
   cluster:
     desc: 8. Bootstrap Cluster
