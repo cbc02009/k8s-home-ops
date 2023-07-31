@@ -22,5 +22,5 @@ spec:
       name: readarr
       namespace: organizarrs
   dependsOn:
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
     - name: apps-rook-ceph-cluster

@@ -22,4 +22,4 @@ spec:
       name: downloads-gateway
       namespace: vpn
   dependsOn:
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets

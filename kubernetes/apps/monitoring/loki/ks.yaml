@@ -23,5 +23,5 @@ spec:
       namespace: monitoring
   dependsOn:
     - name: apps-kube-prometheus-stack
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
     - name: apps-rook-ceph-cluster

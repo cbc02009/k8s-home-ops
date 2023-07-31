@@ -22,6 +22,6 @@ spec:
   #     name: nextcloud
   #     namespace: services
   dependsOn:
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
     - name: apps-rook-ceph-cluster
     - name: apps-volsync
