@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: unpoller
+  name: &app unpoller
   namespace: monitoring
 spec:
   interval: 30m
@@ -33,8 +33,8 @@ spec:
       UP_UNIFI_DEFAULT_PASS:
         valueFrom:
           secretKeyRef:
-            name: unpoller-secret
-            key: unifipoller_password
+            name: *app
+            key: DEFAULT_PASSWORD
       UP_INFLUXDB_DISABLE: true
 
     service:
