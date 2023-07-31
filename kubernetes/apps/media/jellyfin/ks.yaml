@@ -23,3 +23,5 @@ spec:
       namespace: media
   dependsOn:
     - name: apps-rook-ceph-cluster
+    - name: apps-nginx-internal
+    - name: apps-external-secrets
