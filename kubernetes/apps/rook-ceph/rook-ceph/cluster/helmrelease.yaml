@@ -45,6 +45,9 @@ spec:
       network:
         provider: host
 
+      mon:
+        count: 1
+
       resources:
         mgr:
           limits:
