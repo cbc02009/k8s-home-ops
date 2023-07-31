@@ -167,7 +167,7 @@ spec:
         log.config.php: |-
           <?php
           $CONFIG = array (
-            'loglevel' => '0',
+            'loglevel' => '2',
           );
         s3.config.php: |-
           <?php
@@ -498,7 +498,7 @@ spec:
 
 
     rbac:
-      enabled: false
+      enabled: true
       serviceaccount:
         create: true
         name: nextcloud-serviceaccount
