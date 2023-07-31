@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: apps-redis
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
     - name: apps-immich-redis
   path: ./kubernetes/apps/services/immich/app
   prune: true

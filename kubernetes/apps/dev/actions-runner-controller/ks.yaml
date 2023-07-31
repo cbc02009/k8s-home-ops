@@ -10,7 +10,7 @@ metadata:
 spec:
   path: './kubernetes/apps/dev/actions-runner-controller/app/'
   dependsOn:
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
     - name: apps-rook-ceph-cluster
   prune: true
   sourceRef:
