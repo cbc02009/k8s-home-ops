@@ -222,7 +222,7 @@ controlPlane:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
         net.core.bpf_jit_harden: 1
-        vm.nr_hugepages: 1024
+        # vm.nr_hugepages: 1024
       time:
         disabled: false
         servers:
@@ -259,7 +259,7 @@ worker:
         fs.inotify.max_user_instances: '8192'
         fs.inotify.max_user_watches: '1048576'
         net.core.bpf_jit_harden: 1
-        vm.nr_hugepages: 1024
+        # vm.nr_hugepages: 1024
       time:
         disabled: false
         servers:

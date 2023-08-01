@@ -35,7 +35,7 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.8
         envFrom:
           - secretRef:
-              name: radarr-secret
+              name: *app
 
     image:
       repository: ghcr.io/onedr0p/radarr-develop
