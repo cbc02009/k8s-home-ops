@@ -64,7 +64,7 @@ spec:
       USERMAP_GID: 568
     envFrom:
       - secretRef:
-          name: paperless-secret
+          name: *app
     service:
       main:
         ports:
