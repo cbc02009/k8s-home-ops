@@ -30,7 +30,7 @@ spec:
       type: statefulset
     envFrom:
       - secretRef:
-          name: pgadmin-secret
+          name: *app
     service:
       main:
         ports:
