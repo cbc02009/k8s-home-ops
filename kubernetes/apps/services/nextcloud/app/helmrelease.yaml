@@ -256,15 +256,15 @@ spec:
       # Set securityContext parameters for the nextcloud CONTAINER only (will not affect nginx container).
       # For example, you may need to define runAsNonRoot directive
       securityContext:
-        runAsUser: 568
-        runAsGroup: 568
+        # runAsUser: 568
+        # runAsGroup: 568
         runAsNonRoot: true
       #   readOnlyRootFilesystem: false
 
       # Set securityContext parameters for the entire pod. For example, you may need to define runAsNonRoot directive
       podSecurityContext:
-        runAsUser: 568
-        runAsGroup: 568
+        # runAsUser: 568
+        # runAsGroup: 568
         runAsNonRoot: true
       #   readOnlyRootFilesystem: false
 
