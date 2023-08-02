@@ -168,8 +168,9 @@ spec:
           <?php
           $CONFIG = array (
             'loglevel' => '0',
-            'logfile' => '/dev/stdout'
+            'log_type' => 'errorlog',
           );
+
         s3.config.php: |-
           <?php
           $CONFIG = array (
