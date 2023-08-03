@@ -21,7 +21,7 @@ spec:
   backendConfig:
     disable: true
   cliConfigSecretRef:
-    name: tf-controller-tfrc-secret
+    name: tf-controller-tfrc
   path: "./"
   sourceRef:
     kind: OCIRepository
