@@ -59,7 +59,7 @@ spec:
         enabled: true
         ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: "internal"
           hajimari.io/icon: mdi:google
         hosts:
           - host: &host "search.${EXTERNAL_DOMAIN}"
