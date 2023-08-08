@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: nginx-internal
+  name: &app nginx-internal
   namespace: network
 spec:
   interval: 15m
@@ -94,8 +94,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: ingress-nginx
-              app.kubernetes.io/component: controller
+              app.kubernetes.io/name: *app
 
       resources:
         requests:
