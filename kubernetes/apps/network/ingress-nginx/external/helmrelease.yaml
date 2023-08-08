@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: nginx-external
+  name: &app nginx-external
   namespace: network
 spec:
   interval: 15m
@@ -43,7 +43,7 @@ spec:
           io.cilium/lb-ipam-ips: "10.6.0.1"
 
       publishService:
-        enabled: true
+        enabled: false
 
       ingressClassResource:
         name: external-nginx
@@ -94,8 +94,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: ingress-nginx
-              app.kubernetes.io/component: controller
+              app.kubernetes.io/name: *app
 
       resources:
         requests:
