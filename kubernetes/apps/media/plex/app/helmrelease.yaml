@@ -38,8 +38,8 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: "${LB_PLEX}"
+        # type: LoadBalancer
+        # loadBalancerIP: "${LB_PLEX}"
         ports:
           http:
             port: 32400
