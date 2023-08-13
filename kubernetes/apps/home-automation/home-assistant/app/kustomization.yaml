@@ -7,7 +7,5 @@ resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
   - ./pvc.yaml
-patchesStrategicMerge:
-  - patches/addons.yaml
 metadata:
   namespace: home-automation
