@@ -91,7 +91,7 @@ sonarr:
         reset_unmatched_scores: true
       - name: Web-1080p
         reset_unmatched_scores: true
-      - name: Remux-1080p
+      - name: Bluray-1080p
         reset_unmatched_scores: true
 
     quality_definition:
@@ -115,7 +115,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
-          - name: Remux-1080p
+          - name: Bluray-1080p
 
       # HQ Source Groups
       - trash_ids:
@@ -126,7 +126,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
-          - name: Remux-1080p
+          - name: Bluray-1080p
 
       # Streaming Services
       - trash_ids:
@@ -152,7 +152,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
-          - name: Remux-1080p
+          - name: Bluray-1080p
 
       # Misc
       - trash_ids:
@@ -162,7 +162,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
-          - name: Remux-1080p
+          - name: Bluray-1080p
 
       # Uncut
       - trash_ids:
@@ -172,7 +172,7 @@ sonarr:
             score: 10
           - name: Web-1080p
             score: 10
-          - name: Remux-1080p
+          - name: Bluray-1080p
             score: 10
 
       # Unwanted
@@ -183,14 +183,13 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
-          - name: Remux-1080p
+          - name: Bluray-1080p
 
       # Unwanted 2160p only
       - trash_ids:
           - 2016d1676f5ee13a5b7257ff86ac9a93 # No SDR
         quality_profiles:
           - name: Web-2160p
-          - name: Remux-1080p
 
 
 radarr:
