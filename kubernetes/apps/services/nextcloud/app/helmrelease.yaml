@@ -227,7 +227,7 @@ spec:
       #    image: busybox
       #    command: ['do', 'something']
         - name: init-db
-          image: ghcr.io/onedr0p/postgres-init:14.8
+          image: ghcr.io/onedr0p/postgres-init:14.9
           envFrom:
             - secretRef:
                 name: *app
