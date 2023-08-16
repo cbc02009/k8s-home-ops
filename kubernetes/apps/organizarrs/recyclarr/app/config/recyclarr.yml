@@ -91,6 +91,8 @@ sonarr:
         reset_unmatched_scores: true
       - name: Web-1080p
         reset_unmatched_scores: true
+      - name: Remux-1080p
+        reset_unmatched_scores: true
 
     quality_definition:
       type: series
@@ -113,6 +115,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
+          - name: Remux-1080p
 
       # HQ Source Groups
       - trash_ids:
@@ -123,6 +126,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
+          - name: Remux-1080p
 
       # Streaming Services
       - trash_ids:
@@ -148,6 +152,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
+          - name: Remux-1080p
 
       # Misc
       - trash_ids:
@@ -157,6 +162,7 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
+          - name: Remux-1080p
 
       # Uncut
       - trash_ids:
@@ -165,6 +171,8 @@ sonarr:
           - name: Web-2160p
             score: 10
           - name: Web-1080p
+            score: 10
+          - name: Remux-1080p
             score: 10
 
       # Unwanted
@@ -175,12 +183,14 @@ sonarr:
         quality_profiles:
           - name: Web-2160p
           - name: Web-1080p
+          - name: Remux-1080p
 
       # Unwanted 2160p only
       - trash_ids:
           - 2016d1676f5ee13a5b7257ff86ac9a93 # No SDR
         quality_profiles:
           - name: Web-2160p
+          - name: Remux-1080p
 
 
 radarr:
@@ -194,6 +204,8 @@ radarr:
       - name: Remux-1080p
         reset_unmatched_scores: true
       - name: Remux-2160p
+        reset_unmatched_scores: true
+      - name: Web-1080p
         reset_unmatched_scores: true
 
     quality_definition:
@@ -240,6 +252,7 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
 
       # Movie Versions
       - trash_ids:
@@ -255,6 +268,7 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
 
       # Unwanted
       - trash_ids:
@@ -265,6 +279,7 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
 
         # Unwanted 2160p only
       - trash_ids:
@@ -287,6 +302,7 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
 
       # Streaming Services
       - trash_ids:
@@ -306,6 +322,8 @@ radarr:
             score: 1
           - name: Remux-2160p
             score: 1
+          - name: Web-1080p
+            score: 1
 
       # Misc
       - trash_ids:
@@ -314,6 +332,7 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
 
       # Optional
       - trash_ids:
@@ -328,3 +347,4 @@ radarr:
         quality_profiles:
           - name: Remux-1080p
           - name: Remux-2160p
+          - name: Web-1080p
