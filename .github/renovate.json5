@@ -1,13 +1,8 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    "docker:enableMajor",
-    ":disableRateLimiting",
-    ":dependencyDashboard",
-    ":semanticCommits",
-    ":automergeDigest",
-    ":automergeBranch",
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>cbc02009/renovate-config",
+    "github>cbc02009/renovate-config:automerge-github-actions",
     "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage.json5",
@@ -19,6 +14,7 @@
   "repositories":[
     "cbc02009/k8s-home-ops"
   ],
+  platform: "github"
   "onboarding":false,
   "requireConfig":"optional",
   "timezone":"America/New_York",
@@ -27,7 +23,7 @@
     "prIgnoreNotification"
   ],
   "rebaseWhen":"conflicted",
-  "ignorePaths": ["kubernetes/**/volsync.yaml", "kubernetes/**/ks.yaml, archive/**"],
+  "ignorePaths": ["^kubernetes/**/volsync.yaml", "^kubernetes/**/ks.yaml, ^archive/**"],
   "flux": {
     "fileMatch": ["kubernetes/.+\\.ya?ml$"]
   },
