@@ -2,7 +2,7 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>cbc02009/renovate-config",
-    "github>cbc02009/renovate-config:automerge-github-actions",
+    "github>cbc02009/renovate-config:automerge-github-actions.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage.json5",
