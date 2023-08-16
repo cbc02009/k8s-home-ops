@@ -14,7 +14,7 @@
   "repositories":[
     "cbc02009/k8s-home-ops"
   ],
-  platform: "github"
+  platform: "github",
   "onboarding":false,
   "requireConfig":"optional",
   "timezone":"America/New_York",
