@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
-  - ./volsync.yaml
   - ./pvc.yaml
 metadata:
   namespace: organizarrs
