@@ -57,6 +57,9 @@ spec:
       - name: CODER_ACCESS_URL
         value: "https://coder.${EXTERNAL_DOMAIN}"
 
+    service:
+      type: ClusterIP
+
     ingress:
       main:
         enabled: true
