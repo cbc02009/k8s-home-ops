@@ -41,6 +41,8 @@ spec:
       PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       SONARR__LOG_LEVEL: info
+      SONARR__POSTGRES_MAIN_DB: sonarr_main
+      SONARR__POSTGRES_LOG_DB: sonarr_log
 
     envFrom:
       - secretRef:
