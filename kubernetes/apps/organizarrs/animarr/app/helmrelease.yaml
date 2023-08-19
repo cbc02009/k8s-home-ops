@@ -48,6 +48,8 @@ spec:
       SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
       SONARR__LOG_LEVEL: info
       PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+      SONARR__POSTGRES_MAIN_DB: animarr_main
+      SONARR__POSTGRES_LOG_DB: animarr_log
 
     envFrom:
       - secretRef:
