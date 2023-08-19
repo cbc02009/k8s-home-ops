@@ -28,6 +28,14 @@ spec:
     keepHistory: false
   values:
     coder:
+
+      initContainers:
+        01-init-db:
+          image: ghcr.io/onedr0p/postgres-init:14.9
+          envFrom:
+            - secretRef:
+                name: *app
+
     # You can specify any environment variables you'd like to pass to Coder
     # here. Coder consumes environment variables listed in
     # `coder server --help`, and these environment variables are also passed
