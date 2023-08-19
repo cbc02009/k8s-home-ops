@@ -30,6 +30,13 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
 
+    initContainers:
+      01-init-db:
+        image: ghcr.io/onedr0p/postgres-init:14.9
+        envFrom:
+          - secretRef:
+              name: *app
+
     image:
       repository: ghcr.io/onedr0p/sonarr-develop
       tag: 4.0.0.630@sha256:387e6063ca04949350d760104f17fe1557a013c0a272dd78be9c3f83e3fd3f14
