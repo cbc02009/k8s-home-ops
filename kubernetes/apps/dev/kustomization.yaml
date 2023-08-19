@@ -7,5 +7,5 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./actions-runner-controller/ks.yaml
-  # - ./gitea/ks.yaml
+  - ./coder/ks.yaml
   - ./kubernetes-schemas/ks.yaml
