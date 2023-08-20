@@ -62,7 +62,7 @@ spec:
 
       ingress:
         enable: true
-        ClassName: internal-nginx
+        className: internal-nginx
         annotations:
           ingress.home.arpa/type: "internal"
           hajimari.io/icon: mdi:code-json
