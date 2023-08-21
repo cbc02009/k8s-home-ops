@@ -30,7 +30,7 @@ spec:
     fullNameOverride: *app
     image:
       repository: ghcr.io/benbusby/whoogle-search
-      tag: 0.8.2
+      tag: 0.8.3
     env:
       # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
       # WHOOGLE_ALT_YT: piped.${EXTERNAL_DOMAIN}
