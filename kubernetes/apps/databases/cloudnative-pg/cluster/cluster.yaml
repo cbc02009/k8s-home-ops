@@ -36,7 +36,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v1
+      serverName: &currentCluster postgres-v0
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
@@ -46,7 +46,7 @@ spec:
           key: aws-secret-access-key
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
-    - name: postgres-v1
+    - name: postgres-v0
       barmanObjectStore:
         wal:
           compression: bzip2
