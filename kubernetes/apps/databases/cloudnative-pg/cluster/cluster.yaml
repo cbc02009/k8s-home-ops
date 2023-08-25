@@ -66,4 +66,4 @@ spec:
         user: postgres
       password:
         name: cloudnative-pg
-        key: username
+        key: password
