@@ -40,7 +40,7 @@ spec:
     command: ["/backup.sh"]
     env:
       - name: POSTGRES_HOST
-        value: ${POSTGRES_HOST}
+        value: postgres.kokoro.wtf
       - name: POSTGRES_USER
         valueFrom:
           secretKeyRef:
