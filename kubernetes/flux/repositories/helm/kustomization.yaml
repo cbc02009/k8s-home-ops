@@ -11,6 +11,7 @@ resources:
   - ./backube-charts.yaml
   - ./bjw-s-charts.yaml
   - ./cilium-charts.yaml
+  - ./cloudnative-pg.yaml
   - ./coder-v2.yaml
   - ./emqx-charts.yaml
   - ./external-dns-charts.yaml
