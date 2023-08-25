@@ -9,7 +9,7 @@ metadata:
     kyverno.io/ignore: "true"
 spec:
   instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:14.9-5
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.3-5
   inheritedMetadata:
     labels:
       kube-image-keeper.enix.io/image-caching-policy: ignore
@@ -19,9 +19,9 @@ spec:
     storageClass: ceph-block
   superuserSecret:
     name: cloudnative-pg
-  # bootstrap:
-  #   recovery:
-  #     source: &previousCluster postgres-v3
+  bootstrap:
+    recovery:
+      source: &previousCluster postgres-v0
   postgresql:
     parameters:
       max_connections: "600"
@@ -60,3 +60,4 @@ spec:
           secretAccessKey:
             name: cloudnative-pg
             key: aws-secret-access-key
+    # - name: postgres-lxd
