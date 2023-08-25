@@ -25,7 +25,7 @@ metadata:
 spec:
   dependsOn:
     - name: apps-cloudnative-pg
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
   path: ./kubernetes/apps/databases/cloudnative-pg/cluster
   prune: true
   sourceRef:
