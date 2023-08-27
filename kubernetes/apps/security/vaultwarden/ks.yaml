@@ -23,3 +23,4 @@ spec:
       namespace: security
   dependsOn:
     - name: apps-external-secrets
+    - name: apps-cloudnative-pg-cluster

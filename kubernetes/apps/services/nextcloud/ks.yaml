@@ -25,4 +25,4 @@ spec:
     - name: apps-external-secrets
     - name: apps-rook-ceph-cluster
     - name: apps-volsync
-    - name: apps-external-secrets
+    - name: apps-cloudnative-pg-cluster

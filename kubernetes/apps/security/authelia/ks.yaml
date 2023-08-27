@@ -23,3 +23,4 @@ spec:
     - name: apps-external-secrets
     - name: apps-lldap
     - name: apps-redis
+    - name: apps-cloudnative-pg-cluster

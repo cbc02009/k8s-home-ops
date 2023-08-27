@@ -10,6 +10,7 @@ spec:
     - name: apps-redis
     - name: apps-external-secrets
     - name: apps-immich-redis
+    - name: apps-cloudnative-pg-cluster
   path: ./kubernetes/apps/services/immich/app
   prune: true
   sourceRef:
