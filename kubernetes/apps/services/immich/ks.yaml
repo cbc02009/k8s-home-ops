@@ -7,7 +7,6 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apps-redis
     - name: apps-external-secrets
     - name: apps-immich-redis
     - name: apps-cloudnative-pg-cluster
