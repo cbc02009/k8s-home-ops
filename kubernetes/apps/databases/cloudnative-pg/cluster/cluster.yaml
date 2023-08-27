@@ -20,8 +20,13 @@ spec:
   superuserSecret:
     name: cloudnative-pg
   bootstrap:
-    pg_basebackup:
-      source: postgres-lxd
+    # pg_basebackup:
+    #   source: postgres-lxd
+    recovery:
+      source: postgres-r2
+  # replica:
+  #   enabled: true
+  #   source: postgres-lxd
   postgresql:
     parameters:
       max_connections: "600"
