@@ -3,8 +3,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: csr-approver
-  namespace:
+  name: kubelet-csr-approver
+  namespace: system-controllers
 spec:
   interval: 15m
   chart:
@@ -26,10 +26,6 @@ spec:
     - kind: ConfigMap
       name: kubelet-csr-approver-values
   values:
-
-    namespace:
-
-    bypassDnsResolution: true
 
     providerIpPrefixes:
       - 10.0.2.0/24

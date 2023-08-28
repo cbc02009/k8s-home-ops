@@ -3,12 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-csr-approver
+  name: apps-kubelet-csr-approver
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps//csr-approver/app/'
+  path: './kubernetes/apps/kubelet-csr-approver/app/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,4 +20,4 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
       name: csr-approver
-      namespace:
+      namespace: system-controllers

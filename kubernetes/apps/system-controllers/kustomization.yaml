@@ -7,5 +7,5 @@ resources:
   # Flux-Kustomizations
   - ./k8s-ycl/ks.yaml
   - ./k8tz/ks.yaml
-  - ./csr-approver/ks.yaml
+  - ./kubelet-csr-approver/ks.yaml
   - ./snapshotcontroller/ks.yaml
