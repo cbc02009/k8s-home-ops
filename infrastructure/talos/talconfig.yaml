@@ -91,10 +91,10 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
+      # - name: nvidia
+      # - name: nvidia_uvm
+      # - name: nvidia_drm
+      # - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:

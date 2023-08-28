@@ -31,7 +31,8 @@ jobs:
           /bin/imager installer \
             --arch ${{ matrix.arch }} \
             --system-extension-image ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.1@sha256:f0b397d45322ddec3a6b9ee5ea8eca63425c92d253d28ec00686612b1df84baa \
-            --system-extension-image ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5@sha256:e3fcc5727da6824cb39e50d828a7eee594f1a4f8956c5e44a73cfea2ff4ea83d
+            --system-extension-image ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5@sha256:e3fcc5727da6824cb39e50d828a7eee594f1a4f8956c5e44a73cfea2ff4ea83d \
+            --system-extension-image ghcr.io/siderolabs/amd-ucode:20230804@sha256:5d01ef821a8dbb8581a87370c6a911bd4ef80e01b86345c4f00eef50776b3823
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
