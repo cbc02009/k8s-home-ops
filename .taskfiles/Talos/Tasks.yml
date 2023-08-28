@@ -5,7 +5,7 @@ tasks:
   apply-config:
     desc: apply config files to all nodes
     cmds:
-      - talosctl apply-config -i -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
+      # - talosctl apply-config -i -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
       - talosctl apply-config -i -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
       - talosctl apply-config -i -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
       - talosctl apply-config -i -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
@@ -14,7 +14,7 @@ tasks:
   update-config:
     desc: apply config files to all nodes
     cmds:
-      - talosctl apply-config -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
+      # - talosctl apply-config -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
       - talosctl apply-config -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
       - talosctl apply-config -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
       - talosctl apply-config -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
@@ -31,10 +31,10 @@ tasks:
       - sleep 5
 
       # Reset the control plane nodes
-      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n uiharu.ctec.run -e uiharu.ctec.run
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n uiharu.ctec.run -e uiharu.ctec.run
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n miri.ctec.run -e miri.ctec.run
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n sakura.ctec.run -e sakura.ctec.run
   bootstrap:
     desc: bootstrap the cluster
     cmds:
-      - talosctl bootstrap -n uiharu.ctec.run
+      - talosctl bootstrap -n miri.ctec.run
