@@ -91,10 +91,10 @@ nodes:
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      # - name: nvidia
-      # - name: nvidia_uvm
-      # - name: nvidia_drm
-      # - name: nvidia_modeset
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
@@ -106,13 +106,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # patches:
-    #   - |-
-    #     machine:
-    #       install:
-    #         extensions:
-    #           - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
-    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
+    patches:
+      - |-
+        machine:
+          install:
+            extensions:
+              - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
+              - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.2.13
