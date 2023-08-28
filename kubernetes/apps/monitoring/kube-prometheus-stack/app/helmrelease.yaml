@@ -176,7 +176,7 @@ spec:
           image: quay.io/thanos/thanos:v0.32.0
           objectStorageConfig:
             name: &secret thanos-objstore-secret
-            key: objstore.yml
+            key: minio.yaml
 
         podAnnotations:
           secret.reloader.stakater.com/reload: *secret
