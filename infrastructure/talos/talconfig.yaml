@@ -63,7 +63,7 @@ nodes:
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
-    controlPlane: false
+    controlPlane: true
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -72,7 +72,7 @@ nodes:
     nameservers:
       - 10.5.0.4
     networkInterfaces:
-      - interface: eth0
+      - interface: eno1
         addresses:
           - 10.0.2.11/24
         mtu: 1500
@@ -127,7 +127,7 @@ nodes:
     nameservers:
       - 10.5.0.4
     networkInterfaces:
-      - interface: eth0
+      - interface: eno1
         addresses:
           - 10.0.2.13/24
         mtu: 1500
@@ -148,7 +148,7 @@ nodes:
     nameservers:
       - 10.5.0.4
     networkInterfaces:
-      - interface: eth0
+      - interface: eno1
         addresses:
           - 10.0.2.14/24
         mtu: 1500
