@@ -18,15 +18,13 @@ tasks:
 
   csr-approver:
     desc: 1. Bootstrap the CSR Approver
-    cmds: |
-      rm -rf kubelet-csr-approver/charts
-      envsubst < kubernetes/apps/system-controllers/kubelet-csr-approver/app/values.yaml > {{.csrDir}}/csr-approver/values.yaml
-      if ! kubectl get ns system-controllers >/dev/null 2>&1; then
-        kubectl create ns system-controllers
-      fi
-      kustomize build --enable-helm csr-approver | kubectl apply -f -
-      rm kubelet-csr-approver/values.yaml
-      rm -rf kubelet-csr-approver/charts
+    cmds:
+      - rm -rf kubelet-csr-approver/charts
+      - envsubst < kubernetes/apps/system-controllers/kubelet-csr-approver/app/values.yaml > {{.csrDir}}/values.yaml
+      - kubectl create ns system-controllers
+      - kustomize build --enable-helm {{.csrDir}} | kubectl apply -f -
+      - rm {{.csrDir}}/values.yaml
+      - rm -rf {{.csrDir}}/charts
 
   doppler:
     desc: 4. Bootstrap Doppler
