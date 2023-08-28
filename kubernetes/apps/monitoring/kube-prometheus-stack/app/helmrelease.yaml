@@ -175,7 +175,7 @@ spec:
         thanos:
           image: quay.io/thanos/thanos:v0.32.0
           objectStorageConfig:
-            name: &secret thanos-objstore-secret
+            name: &secret thanos
             key: minio.yaml
 
         podAnnotations:
