@@ -7,11 +7,9 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./cilium/ks.yaml
-  - ./csr-approver/ks.yaml
   - ./descheduler/ks.yaml
   - ./intel-device-plugin/ks.yaml
   - ./metrics-server/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./nvidia-device-plugin/ks.yaml
   - ./reloader/ks.yaml
-  - ./snapshotcontroller/ks.yaml

@@ -4,7 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: csr-approver
-  namespace: kube-system
+  namespace:
 spec:
   interval: 15m
   chart:
@@ -27,7 +27,7 @@ spec:
       name: kubelet-csr-approver-values
   values:
 
-    namespace: kube-system
+    namespace:
 
     bypassDnsResolution: true
 

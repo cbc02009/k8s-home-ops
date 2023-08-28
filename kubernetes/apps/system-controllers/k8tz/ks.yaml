@@ -1,14 +1,13 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-csr-approver
+  name: cluster-apps-k8tz
   namespace: flux-system
   labels:
-    substitution.flux.home.arpa/enabled: 'true'
+    substitution.flux.home.arpa/enabled: "true"
 spec:
-  path: './kubernetes/apps/kube-system/csr-approver/app/'
+  path: "./kubernetes/apps/system-controllers/k8tz/app/"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -19,5 +18,5 @@ spec:
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
-      name: csr-approver
-      namespace: kube-system
+      name: k8tz
+      namespace: system-controllers
