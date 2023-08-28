@@ -46,7 +46,7 @@ spec:
         provider: host
 
       mon:
-        count: 1
+        count: 2
 
       resources:
         mgr:
