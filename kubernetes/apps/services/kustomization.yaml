@@ -10,7 +10,6 @@ resources:
   - ./immich/ks.yaml
   - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
-  - ./nextcloud/ks.yaml
   - ./obico/ks.yaml
   - ./paperless/ks.yaml
   - ./teddit/ks.yaml
