@@ -12,7 +12,7 @@ spec:
     - name: apps-nginx-internal
     - name: apps-rook-ceph-cluster
     - name: apps-volsync
-    - name: apps-intel-device-plugin-gpu
+    - name: apps-nvidia-device-plugin
   path: './kubernetes/apps/media/plex/app/'
   prune: true
   sourceRef:
