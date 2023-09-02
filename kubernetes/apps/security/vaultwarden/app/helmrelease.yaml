@@ -30,7 +30,7 @@ spec:
 
     image:
       repository: ghcr.io/cbc02009/vaultwarden
-      tag: 1.29.1
+      tag: 1.29.2
 
     initContainers:
       init-db:
