@@ -23,6 +23,9 @@ spec:
     remediation:
       retries: 5
   values:
+
+    runtimeClassName: nvidia
+
     controller:
       type: statefulset
       annotations:
