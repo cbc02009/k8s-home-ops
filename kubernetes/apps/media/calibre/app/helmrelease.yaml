@@ -23,20 +23,26 @@ spec:
     remediation:
       retries: 5
   values:
+
     controller:
       type: statefulset
+
     image:
       repository: ghcr.io/linuxserver/calibre
       tag: 6.25.0
+
     env:
       TZ: "${TZ}"
       PUID: "568"
       PGID: "568"
+      FM_HOME: "/media/calibre"
+
     service:
       main:
         ports:
           http:
             port: 8080
+
       webserver:
         enabled: true
         ports:
@@ -48,8 +54,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Cluster
         loadBalancerIP: "${LB_CALIBRE}"
-        annotations:
-          metallb.universe.tf/allow-shared-ip: *app
+
     ingress:
       main:
         enabled: true
@@ -65,6 +70,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     persistence:
       config:
         enabled: true
@@ -75,12 +81,14 @@ spec:
         server: "nas.${INTERNAL_DOMAIN}"
         path: /tank/media
         mountPath: /media
+
     resources:
       requests:
         cpu: 15m
         memory: 249M
       limits:
         memory: 4000M
+
     probes:
       startup:
         spec:
