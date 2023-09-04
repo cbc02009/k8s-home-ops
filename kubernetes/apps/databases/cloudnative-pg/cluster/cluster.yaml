@@ -21,7 +21,7 @@ spec:
     name: cloudnative-pg
   bootstrap:
     recovery:
-      source: &previousCluster postgres-v2
+      source: &previousCluster postgres-v3
   postgresql:
     parameters:
       max_connections: "600"
@@ -36,7 +36,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v3
+      serverName: &currentCluster postgres-v4
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
