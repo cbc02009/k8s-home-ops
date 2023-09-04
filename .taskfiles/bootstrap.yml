@@ -56,7 +56,9 @@ tasks:
   rook:
     desc: 7. Wipe Rook
     cmds:
-      - kubectl apply -f tools/wipe-rook.yaml
+      - kubectl label --overwrite ns default pod-security.kubernetes.io/enforce=privileged pod-security.kubernetes.io/warn=baseline pod-security.kubernetes.io/audit=baseline
+      - kubectl apply -f tools/wipe-rook.yaml -n default
+      - kubectl label ns default pod-security.kubernetes.io/audit- pod-security.kubernetes.io/enforce- pod-security.kubernetes.io/warn-
 
   all:
     desc: run all bootstrap commands in order
