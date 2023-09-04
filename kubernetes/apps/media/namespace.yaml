@@ -7,3 +7,4 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   annotations:
     volsync.backube/privileged-movers: "true"
+    pod-security.kubernetes.io/enforce: privileged
