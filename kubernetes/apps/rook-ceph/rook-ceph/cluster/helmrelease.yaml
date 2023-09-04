@@ -114,9 +114,9 @@ spec:
           - name: "sakura"
             devices:
               - name: "/dev/disk/by-id/ata-SPCC_Solid_State_Disk_AAAA0000000000019076"
-          # - name: "uiharu"
-          #   devices:
-          #     - name: "/dev/disk/by-id/nvme-INTEL_SSDPEKNU010TZ_PHKA222301PY1P0B"
+          - name: "uiharu"
+            devices:
+              - name: "/dev/disk/by-id/nvme-INTEL_SSDPEKNU010TZ_PHKA222301PY1P0B"
           - name: "miri"
             devices:
               - name: "/dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF"
