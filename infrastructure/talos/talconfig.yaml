@@ -4,7 +4,7 @@ clusterName: kokoro
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.5.0
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.27.5
+kubernetesVersion: v1.28.1
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -51,13 +51,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - |-
-        machine:
-          install:
-            extensions:
-              - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
-              - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
+    # patches:
+    #   - |-
+    #     machine:
+    #       install:
+    #         extensions:
+    #           - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
+    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
 
   - hostname: anya.ctec.run
     ipAddress: 10.0.2.11
@@ -106,13 +106,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - |-
-        machine:
-          install:
-            extensions:
-              - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
-              - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
+    # patches:
+    #   - |-
+    #     machine:
+    #       install:
+    #         extensions:
+    #           - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
+    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.2.13
@@ -181,25 +181,13 @@ nodes:
 controlPlane:
   inlinePatch:
     cluster:
-      apiServer:
-        admissionControl: []
-        extraArgs:
-          feature-gates: MixedProtocolLBService=true
       allowSchedulingOnMasters: true
-      controllerManager:
-        extraArgs:
-          feature-gates: MixedProtocolLBService=true
       discovery:
         registries:
           service:
             disabled: true
       proxy:
         disabled: true
-        extraArgs:
-          feature-gates: MixedProtocolLBService=true
-      scheduler:
-        extraArgs:
-          feature-gates: MixedProtocolLBService=true
     machine:
       files:
         - content: |
@@ -213,7 +201,6 @@ controlPlane:
           - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
-          feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
           rotate-server-certificates: 'true'
       logging:
         destinations:
@@ -250,7 +237,6 @@ worker:
           - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
-          feature-gates: MixedProtocolLBService=true
           rotate-server-certificates: 'true'
       logging:
         destinations:
