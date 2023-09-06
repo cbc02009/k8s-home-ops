@@ -35,7 +35,7 @@ jobs:
             --system-extension-image ghcr.io/siderolabs/amd-ucode:20230804@sha256:5d01ef821a8dbb8581a87370c6a911bd4ef80e01b86345c4f00eef50776b3823
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
           name: talos-build-assets
           path: /out/*
