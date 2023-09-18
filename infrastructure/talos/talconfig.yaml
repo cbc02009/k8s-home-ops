@@ -4,7 +4,7 @@ clusterName: kokoro
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.5.0
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.27.5
+kubernetesVersion: v1.28.1
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -23,6 +23,26 @@ clusterSvcNets:
   - 10.10.0.0/16
 cniConfig:
   name: none
+
+# Configure the API server admission plugins.
+admissionControl:
+  - name: PodSecurity # Name is the name of the admission controller.
+    # Configuration is an embedded configuration object to be used as the plugin's
+    configuration:
+      apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+      defaults:
+        audit: baseline
+        audit-version: latest
+        enforce: privileged
+        enforce-version: latest
+        warn: baseline
+        warn-version: latest
+      exemptions:
+        namespaces:
+          - kube-system
+        runtimeClasses: []
+        usernames: []
+      kind: PodSecurityConfiguration
 
 nodes:
   - hostname: uiharu.ctec.run
