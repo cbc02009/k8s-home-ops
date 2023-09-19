@@ -26,8 +26,8 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    controllerServiceAccount:
-      name: actions-runner-controller-gha-rs-controller
+    # controllerServiceAccount:
+    #   name: actions-runner-controller-gha-rs-controller
     runnerScaleSetName: arc-runner-set-k8s-home-ops
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
     minRunners: 1
