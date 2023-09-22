@@ -23,7 +23,7 @@ jobs:
           - amd64
           - arm64
     container:
-      image: ghcr.io/siderolabs/imager:v1.5.2
+      image: ghcr.io/siderolabs/imager:v1.5.3
       options: --privileged
     steps:
       - name: Build installer w/ Nvidia extensions
