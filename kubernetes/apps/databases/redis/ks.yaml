@@ -9,7 +9,7 @@ metadata:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   dependsOn:
-    - name: apps-external-secrets-stores
+    - name: apps-external-secrets
   path: './kubernetes/apps/databases/redis/app/'
   prune: true
   sourceRef:
