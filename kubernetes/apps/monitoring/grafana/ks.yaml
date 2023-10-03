@@ -5,19 +5,16 @@ kind: Kustomization
 metadata:
   name: apps-grafana
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/monitoring/grafana/app/'
+  dependsOn:
+    - name: apps-cloudnative-pg-cluster
+    - name: apps-external-secrets
+  path: ./kubernetes/apps/monitoring/grafana/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: false
   interval: 30m
   retryInterval: 1m
-  timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: grafana
-      namespace: monitoring
+  timeout: 5m
