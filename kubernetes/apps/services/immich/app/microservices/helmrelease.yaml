@@ -29,7 +29,7 @@ spec:
     - name: immich-typesense
       namespace: services
     - name: redis
-      namespace: database
+      namespace: databases
   values:
     controller:
       type: statefulset
