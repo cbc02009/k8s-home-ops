@@ -7,7 +7,7 @@ tasks:
     cmds:
       - talosctl apply-config -i -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
       - talosctl apply-config -i -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
-      - talosctl apply-config -i -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
+      # - talosctl apply-config -i -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
       # - talosctl apply-config -i -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
       # - talosctl apply-config -i -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
       - talosctl apply-config -i -n miri.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-miri.ctec.run.yaml
@@ -16,22 +16,22 @@ tasks:
     cmds:
       - talosctl apply-config -n uiharu.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-uiharu.ctec.run.yaml
       - talosctl apply-config -n sakura.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-sakura.ctec.run.yaml
-      - talosctl apply-config -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
+      # - talosctl apply-config -n anya.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-anya.ctec.run.yaml
       # - talosctl apply-config -n rem.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-rem.ctec.run.yaml
       # - talosctl apply-config -n ram.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-ram.ctec.run.yaml
       - talosctl apply-config -n miri.ctec.run -f ./infrastructure/talos/clusterconfig/kokoro-miri.ctec.run.yaml
   reset:
     desc: reset the talos cluster
     cmds:
-      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n ram.ctec.run -e ram.ctec.run
-      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n rem.ctec.run -e rem.ctec.run
-      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n anya.ctec.run -e anya.ctec.run
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n ram.ctec.run -e ram.ctec.run
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n rem.ctec.run -e rem.ctec.run
+      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n anya.ctec.run -e anya.ctec.run
 
-      - echo "Waiting for workers to reset... ^C to stop here"
-      - sleep 5
+      # - echo "Waiting for workers to reset... ^C to stop here"
+      # - sleep 5
 
       # Reset the control plane nodes
-      # - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n uiharu.ctec.run -e uiharu.ctec.run
+      - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n uiharu.ctec.run -e uiharu.ctec.run
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n miri.ctec.run -e miri.ctec.run
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --reboot -n sakura.ctec.run -e sakura.ctec.run
   bootstrap:
