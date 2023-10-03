@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: security
 resources:
   - ./externalsecret.yaml
-  - ./service-monitor.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: authelia-configmap

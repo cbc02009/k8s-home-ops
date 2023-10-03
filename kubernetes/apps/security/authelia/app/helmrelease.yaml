@@ -27,7 +27,7 @@ spec:
     initContainers:
       01-init-db:
         image: ghcr.io/onedr0p/postgres-init:14.9
-        envFrom:
+        envFrom: &envFrom
           - secretRef:
               name: *app
 
@@ -40,7 +40,7 @@ spec:
 
     image:
       repository: ghcr.io/authelia/authelia
-      tag: v4.38.0-beta2
+      tag: master@sha256:a3647c3dd136402745c7639e446944004145630c822f27e22f999c414c234d2f
 
     args: ["--config", "/config/configuration.yml", "--config.experimental.filters", "expand-env"]
 
@@ -64,11 +64,11 @@ spec:
       AUTHELIA_DEFAULT_REDIRECTION_URL: "https://auth.kokoro.wtf"
       AUTHELIA_DUO_API_DISABLE: "true"
       AUTHELIA_LOG_LEVEL: info
+      AUTHELIA_NOTIFIER_DISABLE_STARTUP_CHECK: "true"
       AUTHELIA_NOTIFIER_SMTP_DISABLE_REQUIRE_TLS: "true"
       AUTHELIA_NOTIFIER_SMTP_HOST: smtp-relay.kokoro.wtf
       AUTHELIA_NOTIFIER_SMTP_PORT: 25
       AUTHELIA_NOTIFIER_SMTP_SENDER: "Authelia <authelia@kokoro.wtf>"
-      AUTHELIA_NOTIFIER_DISABLE_STARTUP_CHECK: "true"
       AUTHELIA_SERVER_DISABLE_HEALTHCHECK: "true"
       AUTHELIA_SERVER_PORT: &port 80
       AUTHELIA_SESSION_DOMAIN: "kokoro.wtf"
@@ -76,15 +76,13 @@ spec:
       AUTHELIA_SESSION_REDIS_HOST: redis.databases.svc.cluster.local
       AUTHELIA_TELEMETRY_METRICS_ADDRESS: "tcp://0.0.0.0:8080"
       AUTHELIA_TELEMETRY_METRICS_ENABLED: "true"
-      AUTHELIA_THEME: grey
+      AUTHELIA_THEME: dark
       AUTHELIA_TOTP_ISSUER: authelia.com
       AUTHELIA_WEBAUTHN_DISABLE: "true"
       AUTHELIA_SERVER_BUFFERS_READ: 8192
       AUTHELIA_SERVER_BUFFERS_WRITE: 8192
 
-    envFrom:
-      - secretRef:
-          name: *app
+    envFrom: *envFrom
 
     enableServiceLinks: false
 
@@ -96,6 +94,16 @@ spec:
           metrics:
             enabled: true
             port: 8080
+
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
 
     ingress:
       main:
@@ -116,17 +124,6 @@ spec:
         tls:
           - hosts:
               - *host
-
-    serviceMonitor:
-      main:
-        enabled: false
-        endpoints:
-          - port: metrics
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
-
     probes:
       liveness: &probes
         enabled: true
@@ -171,4 +168,4 @@ spec:
         cpu: 5m
         memory: 10Mi
       limits:
-        memory: 100Mi
+        memory: 200Mi
