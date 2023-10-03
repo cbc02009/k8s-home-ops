@@ -114,17 +114,17 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/data
-          - name: "flux"
+          - name: flux
             orgId: 1
-            folder: "Flux"
+            folder: Flux
             type: file
             disableDeletion: false
             editable: true
             options:
               path: /var/lib/grafana/dashboards/flux
-          - name: "kubernetes"
+          - name: kubernetes
             orgId: 1
-            folder: "Kubernetes"
+            folder: Kubernetes
             type: file
             disableDeletion: false
             editable: true
@@ -154,15 +154,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/thanos
-          - name: "unifi"
+          - name: unifi
             orgId: 1
-            folder: "Unifi"
+            folder: Unifi
             type: file
             disableDeletion: false
             editable: true
             options:
               path: /var/lib/grafana/dashboards/unifi
-
     datasources:
       datasources.yaml:
         apiVersion: 1
