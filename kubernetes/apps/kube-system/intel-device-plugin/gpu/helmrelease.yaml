@@ -25,7 +25,10 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  dependsOn:
+    - name: intel-device-plugin-operator
+      namespace: kube-system
   values:
-    name: intel-gpu-plugin
+    name: intel-device-plugin-gpu
     sharedDevNum: 3
     nodeFeatureRule: true
