@@ -91,7 +91,7 @@ spec:
       replicaCount: 2
       replicaLabel: __replica__
       alertmanagers:
-        - http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
+        - http://alertmanager-operated.monitoring.svc.cluster.local:9093
       extraFlags: ["--web.prefix-header=X-Forwarded-Prefix"]
       clusterName: kokoro # must match with kube-prometheus-stack value `.prometheus.prometheusSpec.externalLabels.cluster`
       config: |-
