@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: reloader
+  namespace: system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: reloader
+      version: 1.0.41
+      sourceRef:
+        kind: HelmRepository
+        name: stakater-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    remediation: # perform remediation when helm install fails
+      retries: 3
+  upgrade:
+    remediation: # perform remediation when helm upgrade fails
+      retries: 3
+      remediateLastFailure: true # remediate the last failure, when no retries remain
+    cleanupOnFail: true
+  values:
+    nameOverride: reloader
+
+    fullnameOverride: reloader
+
+    reloader:
+      reloadStrategy: annotations
+      reloadOnCreate: false
+      deployment:
+        image:
+          name: ghcr.io/cbc02009/reloader
+      podMonitor:
+        enabled: true
+        namespace: system
+
+    resources:
+      requests:
+        cpu: 15m
+        memory: 64M
+      limits:
+        memory: 64M
