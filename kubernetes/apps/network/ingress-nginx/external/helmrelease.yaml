@@ -15,40 +15,36 @@ spec:
         kind: HelmRepository
         name: ingress-nginx-charts
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
+    remediation:
       retries: 3
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
-
     fullnameOverride: nginx-external
-
     controller:
       replicaCount: 2
-      updateStrategy:
-        type: RollingUpdate
-      extraEnvs:
-        - name: TZ
-          value: "${TZ}"
-
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "ingress-ext.kokoro.wtf"
           io.cilium/lb-ipam-ips: "10.6.0.1"
-
-      publishService:
-        enabled: false
-
+        externalTrafficPolicy: Cluster
       ingressClassResource:
         name: external-nginx
         default: false
         controllerValue: k8s.io/ingress-nginx-external
+      admissionWebhooks:
+        objectSelector:
+          matchExpressions:
+            - key: ingress-class
+              operator: In
+              values: ["external"]
+      allowSnippetAnnotations: true
 
       extraArgs:
         default-ssl-certificate: "network/kokoro-wtf-tls"
@@ -79,7 +75,6 @@ spec:
         proxy-body-size: 0
         proxy-buffer-size: "16k"
         ssl-protocols: "TLSv1.3 TLSv1.2"
-
       metrics:
         enabled: true
         serviceMonitor:
@@ -98,10 +93,9 @@ spec:
 
       resources:
         requests:
-          cpu: 99m
-          memory: 768Mi
+          cpu: 100m
+          memory: 250Mi
         limits:
-          memory: 768Mi
-
+          memory: 500Mi
     defaultBackend:
       enabled: false

@@ -15,16 +15,16 @@ spec:
         kind: HelmRepository
         name: ingress-nginx-charts
         namespace: flux-system
-      interval: 5m
+  maxHistory: 2
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
+    remediation:
       retries: 3
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
 
     fullnameOverride: nginx-internal
@@ -41,14 +41,18 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "ingress-int.kokoro.wtf"
           io.cilium/lb-ipam-ips: "10.6.0.2"
-
-      publishService:
-        enabled: true
-
+        externalTrafficPolicy: Cluster
       ingressClassResource:
         name: internal-nginx
-        default: false
+        default: true
         controllerValue: k8s.io/ingress-nginx-internal
+      admissionWebhooks:
+        objectSelector:
+          matchExpressions:
+            - key: ingress-class
+              operator: In
+              values: ["internal"]
+      allowSnippetAnnotations: true
 
       extraArgs:
         default-ssl-certificate: "network/kokoro-wtf-tls"
@@ -98,10 +102,9 @@ spec:
 
       resources:
         requests:
-          cpu: 99m
-          memory: 768Mi
+          cpu: 100m
+          memory: 250Mi
         limits:
-          memory: 768Mi
-
+          memory: 500Mi
     defaultBackend:
       enabled: false
