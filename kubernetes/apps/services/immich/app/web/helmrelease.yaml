@@ -15,9 +15,8 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -28,22 +27,23 @@ spec:
     keepHistory: false
   dependsOn:
     - name: immich-server
+      namespace: services
+    - name: redis
+      namespace: database
   values:
     controller:
       type: statefulset
       annotations:
-        reloader.stakater.com/auto: "true"
+        configmap.reloader.stakater.com/reload: &configMap immich-configmap
+        secret.reloader.stakater.com/reload: &secret immich
     image:
       repository: ghcr.io/immich-app/immich-web
       tag: v1.80.0
-    command: /bin/sh
-    args:
-      - ./entrypoint.sh
     envFrom:
-      - secretRef:
-          name: immich
       - configMapRef:
-          name: immich-configmap
+          name: *configMap
+      - secretRef:
+          name: *secret
     service:
       main:
         ports:
@@ -74,6 +74,11 @@ spec:
         tls:
           - hosts:
               - *host
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
     persistence:
       library:
         enabled: true
@@ -88,7 +93,5 @@ spec:
             app.kubernetes.io/name: *app
     resources:
       requests:
-        cpu: 10m
-        memory: 100Mi
-      limits:
-        memory: 500Mi
+        cpu: 100m
+        memory: 250Mi

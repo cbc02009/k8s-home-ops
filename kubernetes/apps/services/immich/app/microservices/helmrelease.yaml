@@ -15,9 +15,8 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -28,11 +27,15 @@ spec:
     keepHistory: false
   dependsOn:
     - name: immich-typesense
+      namespace: services
+    - name: redis
+      namespace: database
   values:
     controller:
       type: statefulset
       annotations:
-        reloader.stakater.com/auto: "true"
+        configmap.reloader.stakater.com/reload: &configMap immich-configmap
+        secret.reloader.stakater.com/reload: &secret immich
     image:
       repository: ghcr.io/immich-app/immich-server
       tag: v1.80.0
@@ -40,18 +43,39 @@ spec:
     args:
       - ./start-microservices.sh
     envFrom:
-      - secretRef:
-          name: immich
       - configMapRef:
-          name: immich-configmap
+          name: *configMap
+      - secretRef:
+          name: *secret
+	  
     service:
       main:
         enabled: false
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
+      supplementalGroups: [44, 105]
     persistence:
       library:
         enabled: true
         existingClaim: immich-nfs
         mountPath: /usr/src/app/upload
+      geocoding-dump:
+        enabled: true
+        type: emptyDir
+        mountPath: /usr/src/app/.reverse-geocoding-dump
+      geoname-dump:
+        enabled: true
+        type: emptyDir
+        mountPath: /usr/src/app/node_modules/local-reverse-geocoder/geonames_dump
+      transformers-cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /usr/src/app/.transformers_cache
+    nodeSelector:
+      intel.feature.node.kubernetes.io/gpu: "true"
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
@@ -61,7 +85,9 @@ spec:
             app.kubernetes.io/name: *app
     resources:
       requests:
-        cpu: 10m
-        memory: 100Mi
+        gpu.intel.com/i915: 1
+        cpu: 100m
+        memory: 1000Mi
       limits:
-        memory: 500Mi
+        gpu.intel.com/i915: 1
+        memory: 6000Mi

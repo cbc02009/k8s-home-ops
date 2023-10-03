@@ -8,47 +8,13 @@ metadata:
 spec:
   dependsOn:
     - name: apps-external-secrets
-    - name: apps-immich-redis
     - name: apps-cloudnative-pg-cluster
   path: ./kubernetes/apps/services/immich/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: immich-microservices
-      namespace: services
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: immich-server
-      namespace: services
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: immich-web
-      namespace: services
-  interval: 30m
-  retryInterval: 1m
-  timeout: 5m
----
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: apps-immich-redis
-  namespace: flux-system
-spec:
-  path: ./kubernetes/apps/services/immich/redis
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: k8s-home-ops
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: immich-redis
-      namespace: services
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m

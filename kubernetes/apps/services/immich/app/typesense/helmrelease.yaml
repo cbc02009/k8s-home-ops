@@ -15,9 +15,8 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 3
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -30,15 +29,16 @@ spec:
     controller:
       type: statefulset
       annotations:
-        reloader.stakater.com/auto: "true"
+        configmap.reloader.stakater.com/reload: &configMap immich-configmap
+        secret.reloader.stakater.com/reload: &secret immich
     image:
       repository: docker.io/typesense/typesense
       tag: 0.25.1
     envFrom:
-      - secretRef:
-          name: immich
       - configMapRef:
-          name: immich-configmap
+          name: *configMap
+      - secretRef:
+          name: *secret
     service:
       main:
         ports:
@@ -69,5 +69,3 @@ spec:
       requests:
         cpu: 100m
         memory: 250Mi
-      limits:
-        memory: 1000Mi
