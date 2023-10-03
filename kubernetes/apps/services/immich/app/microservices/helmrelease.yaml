@@ -47,7 +47,6 @@ spec:
           name: *configMap
       - secretRef:
           name: *secret
-	  
     service:
       main:
         enabled: false

@@ -14,7 +14,7 @@ spec:
       command: ['/bin/sh', '-c']
       args:
         [
-          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/nvme1n1; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/nvme1n1; wipefs -af /dev/nvme1n1; blkdiscard /dev/nvme1n1; partprobe /dev/nvme1n1',
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/nvme0n1; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/nvme1n1; wipefs -af /dev/nvme1n1; blkdiscard /dev/nvme1n1; partprobe /dev/nvme1n1',
         ]
 ---
 apiVersion: v1
