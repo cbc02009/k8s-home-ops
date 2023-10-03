@@ -31,7 +31,7 @@ spec:
       01-init-db:
         image: ghcr.io/onedr0p/postgres-init:14.9
         imagePullPolicy: IfNotPresent
-        envFrom:
+        envFrom: &envFrom
           - secretRef:
               name: *app
     controller:
@@ -41,17 +41,14 @@ spec:
         reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/lldap/lldap
-      # TODO: Switch to release tag on next release
-      tag: latest-alpine@sha256:49a328c0318e6b6325454a191ab259aeae73ef3517a9262673544e220713802d
+      tag: v0.5.0
     env:
       TZ: ${TZ}
       LLDAP_HTTP_PORT: &http-port 80
       LLDAP_HTTP_URL: https://lldap.kokoro.wtf
       LLDAP_LDAP_PORT: &ldap-port 389
       LLDAP_LDAP_BASE_DN: dc=home,dc=arpa
-    envFrom:
-      - secretRef:
-          name: *app
+    envFrom: *envFrom
     service:
       main:
         ports:
