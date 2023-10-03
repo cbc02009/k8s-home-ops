@@ -138,7 +138,7 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/loki
-	  - name: nginx
+          - name: nginx
             orgId: 1
             folder: Nginx
             type: file
@@ -146,7 +146,7 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/nginx
-	  - name: thanos
+          - name: thanos
             orgId: 1
             folder: Thanos
             type: file
@@ -206,47 +206,45 @@ spec:
           url: https://raw.githubusercontent.com/cilium/cilium/v1.13.4/examples/kubernetes/addons/prometheus/files/grafana-dashboards/hubble-dashboard.json
           datasource: Prometheus
       cloudflared:
-          gnetId: 17457 # https://grafana.com/grafana/dashboards/17457?tab=revisions
-          revision: 6
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
+        gnetId: 17457 # https://grafana.com/grafana/dashboards/17457?tab=revisions
+        revision: 6
+        datasource:
+          - { name: DS_PROMETHEUS, value: Prometheus }
       external-dns:
-          gnetId: 15038 # https://grafana.com/grafana/dashboards/15038?tab=revisions
-          revision: 1
-          datasource: Prometheus
-      
+        gnetId: 15038 # https://grafana.com/grafana/dashboards/15038?tab=revisions
+        revision: 1
+        datasource: Prometheus
       loki:
         loki-metrics:
           gnetId: 13407
           revision: 1
           datasource: Prometheus
       minio:
-          gnetId: 13502 # https://grafana.com/grafana/dashboards/13502?tab=revisions
-          revision: 23
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
-        node-exporter-full:
-          gnetId: 1860 # https://grafana.com/grafana/dashboards/1860?tab=revisions
-          revision: 31
-          datasource: Prometheus
-        redis:
-          gnetId: 763 # https://grafana.com/grafana/dashboards/763?tab=revisions
-          revision: 5
-          datasource: Prometheus
-
-        zfs:
-          gnetId: 7845 # https://grafana.com/grafana/dashboards/7845?tab=revisions
-          revision: 4
-          datasource: Prometheus
-        cloudnative-pg:
-          url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
-          datasource: Prometheus
-        cert-manager:
-          url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
-          datasource: Prometheus
-        external-secrets:
-          url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
-          datasource: Prometheus
+        gnetId: 13502 # https://grafana.com/grafana/dashboards/13502?tab=revisions
+        revision: 23
+        datasource:
+          - { name: DS_PROMETHEUS, value: Prometheus }
+      node-exporter-full:
+        gnetId: 1860 # https://grafana.com/grafana/dashboards/1860?tab=revisions
+        revision: 31
+        datasource: Prometheus
+      redis:
+        gnetId: 763 # https://grafana.com/grafana/dashboards/763?tab=revisions
+        revision: 5
+        datasource: Prometheus
+      zfs:
+        gnetId: 7845 # https://grafana.com/grafana/dashboards/7845?tab=revisions
+        revision: 4
+        datasource: Prometheus
+      cloudnative-pg:
+        url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/grafana-dashboard.json
+        datasource: Prometheus
+      cert-manager:
+        url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
+        datasource: Prometheus
+      external-secrets:
+        url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
+        datasource: Prometheus
       ceph:
         ceph-cluster:
           gnetId: 2842 # https://grafana.com/grafana/dashboards/2842?tab=revisions
