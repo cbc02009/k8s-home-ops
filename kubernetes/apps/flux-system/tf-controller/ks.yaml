@@ -18,7 +18,7 @@ spec:
       kind: HelmRelease
       name: tf-controller
       namespace: flux-system
-  interval: 15m
+  interval: 30m
   retryInterval: 1m
   timeout: 3m
 ---
@@ -37,6 +37,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-  interval: 15m
+  interval: 30m
   retryInterval: 1m
   timeout: 3m

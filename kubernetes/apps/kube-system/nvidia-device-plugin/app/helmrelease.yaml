@@ -7,7 +7,7 @@ metadata:
   name: nvidia-device-plugin
   namespace: kube-system
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       # renovate: registryUrl=https://nvidia.github.io/k8s-device-plugin
@@ -17,7 +17,7 @@ spec:
         kind: HelmRepository
         name: nvdp
         namespace: flux-system
-      interval: 15m
+      interval: 30m
   # https://github.com/NVIDIA/k8s-device-plugin/blob/main/deployments/helm/nvidia-device-plugin/values.yaml
   values:
     image:

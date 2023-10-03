@@ -6,7 +6,7 @@ metadata:
   name: &app emqx
   namespace: home-automation
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: emqx
