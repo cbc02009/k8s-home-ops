@@ -6,9 +6,8 @@ metadata:
   name: kube-prometheus-stack
   namespace: monitoring
 spec:
-  interval: 6h
-  maxHistory: 2
-  timeout: 20m
+  interval: 30m
+  timeout: 15m
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -17,18 +16,23 @@ spec:
         kind: HelmRepository
         name: prometheus-community-charts
         namespace: flux-system
+  maxHistory: 2
   install:
-    createNamespace: true
-    crds: CreateReplace
-    remediation: # perform remediation when helm install fails
-      retries: 5
+    remediation:
+      retries: 3
   upgrade:
-    crds: CreateReplace
-    remediation: # perform remediation when helm upgrade fails
-      retries: 5
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   values:
+
+    crds:
+      enabled: true
 
     cleanPrometheusOperatorObjectNames: true
 
@@ -38,17 +42,16 @@ spec:
         - 10.0.2.10
         - 10.0.2.11
         - 10.0.2.12
+        - 10.0.2.15
       serviceMonitor:
         metricRelabelings:
           # Remove duplicate metrics
           - sourceLabels: ["__name__"]
             regex: "(apiserver_audit|apiserver_client|apiserver_delegated|apiserver_envelope|apiserver_storage|apiserver_webhooks|attachdetach_controller|authenticated_user|authentication|cronjob_controller|disabled_metric|endpoint_slice|ephemeral_volume|garbagecollector_controller|get_token|go|hidden_metric|job_controller|kubernetes_build|kubernetes_feature|leader_election|node_collector|node_ipam|process_cpu|process_max|process_open|process_resident|process_start|process_virtual|pv_collector|registered_metric|replicaset_controller|rest_client|retroactive_storageclass|root_ca|running_managed|scrape_duration|scrape_samples|scrape_series|service_controller|storage_count|storage_operation|ttl_after|volume_operation|workqueue)_(.+)"
             action: keep
-
     kubeEtcd:
       enabled: false
       endpoints: *cp
-
     kubelet:
       enabled: false
       serviceMonitor:
@@ -60,7 +63,6 @@ spec:
           - sourceLabels: ["node"]
             targetLabel: instance
             action: replace
-
     kubeApiServer:
       enabled: true
       serviceMonitor:
@@ -76,11 +78,9 @@ spec:
           - sourceLabels: ["__name__"]
             regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
             action: drop
-
     kubeProxy:
       enabled: false # Disabled because eBPF
       endpoints: *cp
-
     kubeScheduler:
       enabled: false
       endpoints: *cp
@@ -102,21 +102,6 @@ spec:
           multicluster:
             etcd:
               enabled: true
-
-    kube-state-metrics:
-      metricLabelsAllowlist:
-        - "pods=[*]"
-        - "deployments=[*]"
-        - "persistentvolumeclaims=[*]"
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
-              targetLabel: kubernetes_node
 
     nodeExporter:
       enabled: false
@@ -147,39 +132,33 @@ spec:
         enabled: true
 
       prometheusSpec:
-        externalLabels:
-          cluster: kokoro
         replicas: 2
         replicaExternalLabelName: __replica__
         ruleSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
-        retentionSize: "8GB"
-        retention: 14d
+        scrapeConfigSelectorNilUsesHelmValues: false
         enableAdminAPI: true
         walCompression: true
+        enableFeatures:
+          - auto-gomaxprocs
+          - memory-snapshot-on-shutdown
+          - new-service-discovery-manager
+        thanos:
+          image: quay.io/thanos/thanos:v0.32.4
+          objectStorageConfig:
+            name: thanos-objstore-secret
+            key: objstore.yml
+        retention: 2d
+        retentionSize: 15GB
         storageSpec:
           volumeClaimTemplate:
             spec:
               storageClassName: ceph-block
               resources:
                 requests:
-                  storage: 10Gi
-        resources:
-          requests:
-            cpu: 350m
-            memory: 4744M
-            # limits:
-            # memory: 4744M
-        thanos:
-          image: quay.io/thanos/thanos:v0.32.3
-          objectStorageConfig:
-            name: &secret thanos
-            key: minio.yaml
-
-        podAnnotations:
-          secret.reloader.stakater.com/reload: *secret
+                  storage: 20Gi
 
         additionalScrapeConfigs:
 
@@ -209,18 +188,18 @@ spec:
           #     - targets:
           #         - "nas.ctec.run:9633"
 
-          - job_name: node-exporter
-            scrape_interval: 1m
-            scrape_timeout: 10s
-            honor_timestamps: true
-            static_configs:
-              - targets:
-                  - "sakura.ctec.run:9100"
-                  - "anya.ctec.run:9100"
-                  - "uiharu.ctec.run:9100"
-                  - "rem.ctec.run:9100"
-                  - "ram.ctec.run:9100"
-                  - "gateway.ctec.run:9100"
+          # - job_name: node-exporter
+          #   scrape_interval: 1m
+          #   scrape_timeout: 10s
+          #   honor_timestamps: true
+          #   static_configs:
+          #     - targets:
+          #         - "sakura.ctec.run:9100"
+          #         - "anya.ctec.run:9100"
+          #         - "uiharu.ctec.run:9100"
+          #         - "rem.ctec.run:9100"
+          #         - "ram.ctec.run:9100"
+          #         - "gateway.ctec.run:9100"
 
     alertmanager:
       config:
@@ -280,10 +259,3 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-
-      resources:
-        requests:
-          cpu: 10m
-          memory: 50M
-        limits:
-          memory: 99M

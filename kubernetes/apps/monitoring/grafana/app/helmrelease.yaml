@@ -98,17 +98,17 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/ceph
-          - name: "cilium"
+          - name: cilium
             orgId: 1
-            folder: "Cilium"
+            folder: Cilium
             type: file
             disableDeletion: false
             editable: true
             options:
               path: /var/lib/grafana/dashboards/cilium
-          - name: "data"
+          - name: data
             orgId: 1
-            folder: "Data"
+            folder: Data
             type: file
             disableDeletion: false
             editable: true
@@ -130,9 +130,9 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
-          - name: "loki"
+          - name: loki
             orgId: 1
-            folder: "Loki"
+            folder: Loki
             type: file
             disableDeletion: false
             editable: true
