@@ -39,7 +39,7 @@ spec:
           - configMapRef:
               name: &configMap immich-configmap
           - secretRef:
-              name: immich
+              name: &secret immich
     controller:
       type: statefulset
       annotations:
