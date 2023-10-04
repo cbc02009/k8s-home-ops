@@ -32,7 +32,7 @@ spec:
               name: *app
 
     controller:
-      replicas: 2
+      replicas: 1
       type: statefulset
       strategy: RollingUpdate
       annotations:

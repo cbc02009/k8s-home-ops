@@ -86,6 +86,7 @@ resource "cloudflare_filter" "plex_notifications" {
   description = "Expression to block Plex notifications"
   expression  = "(http.host eq \"plex.kokoro.wtf\" and http.request.uri.path contains \"/:/eventsource/notifications\")"
 }
+
 resource "cloudflare_firewall_rule" "plex_notifications" {
   zone_id     = module.cf_domain_ingress.zone_id
   description = "Firewall rule to block Plex notifications"
