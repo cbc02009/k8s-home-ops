@@ -188,18 +188,18 @@ spec:
           #     - targets:
           #         - "nas.ctec.run:9633"
 
-          # - job_name: node-exporter
-          #   scrape_interval: 1m
-          #   scrape_timeout: 10s
-          #   honor_timestamps: true
-          #   static_configs:
-          #     - targets:
+          - job_name: node-exporter
+            scrape_interval: 1m
+            scrape_timeout: 10s
+            honor_timestamps: true
+            static_configs:
+              - targets:
           #         - "sakura.ctec.run:9100"
           #         - "anya.ctec.run:9100"
           #         - "uiharu.ctec.run:9100"
           #         - "rem.ctec.run:9100"
           #         - "ram.ctec.run:9100"
-          #         - "gateway.ctec.run:9100"
+                  - "gateway.ctec.run:9100"
 
     alertmanager:
       config:
