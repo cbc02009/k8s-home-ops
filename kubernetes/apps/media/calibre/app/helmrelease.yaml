@@ -29,7 +29,7 @@ spec:
 
     image:
       repository: ghcr.io/linuxserver/calibre
-      tag: 6.27.0
+      tag: 6.28.0
 
     env:
       TZ: "${TZ}"
