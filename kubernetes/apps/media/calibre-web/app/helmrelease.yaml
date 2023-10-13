@@ -30,7 +30,7 @@ spec:
 
     image:
       repository: ghcr.io/bjw-s/calibre-web
-      tag: 0.6.20@sha256:05f36eb46effdbacc88217654def7f5c3cd40e933d9d4e3799d24efcf2fdff40
+      tag: 0.6.20@sha256:0779c8166ca0acaa9c3e48de86afd67d4507c3629ba6d615e22daa0410533945
 
     podSecurityContext:
       runAsUser: 568
