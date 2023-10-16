@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,28 +23,36 @@ spec:
       retries: 5
   values:
 
-    controller:
-      type: statefulset
-      # replicas: 2
-      strategy: RollingUpdate
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 65539
 
-    image:
-      repository: ghcr.io/bjw-s/calibre-web
-      tag: 0.6.20@sha256:46df9b7f1775518e5fe78b433ef1d04db8942becb6cea51a2183bea4f0226104
+    controllers:
+      main:
+        type: statefulset
+        # replicas: 2
+        strategy: RollingUpdate
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
+        containers:
+          main:
+            image:
+              repository: ghcr.io/bjw-s/calibre-web
+              tag: 0.6.20@sha256:46df9b7f1775518e5fe78b433ef1d04db8942becb6cea51a2183bea4f0226104
 
-    enableServiceLinks: false
+            env:
+              CACHE_DIR: /cache
 
-    env:
-      CACHE_DIR: /cache
-
+            resources:
+              requests:
+                cpu: 15m
+                memory: 249M
+              limits:
+                memory: 299M
     service:
       main:
         ports:
@@ -55,16 +63,19 @@ spec:
       main:
         enabled: true
         annotations:
-          ingress.home.arpa/type: "external"
-        ingressClassName: external-nginx
+          ingress.home.arpa/type: external
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:
               - path: /
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
+        className: external-nginx
     persistence:
       config:
         enabled: true
@@ -74,15 +85,11 @@ spec:
         type: nfs
         server: &nas nas.ctec.run
         path: /tank/media
-        mountPath: /data/media
+        globalMounts:
+          - path: /data/media
       cache:
         enabled: true
         type: emptyDir
-        mountPath: /cache
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 249M
-      limits:
-        memory: 299M
+        globalMounts:
+          - path: /cache
+    enableServiceLinks: false

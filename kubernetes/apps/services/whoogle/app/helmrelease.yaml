@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,32 +23,49 @@ spec:
     remediation:
       retries: 5
   values:
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    fullNameOverride: *app
-    image:
-      repository: ghcr.io/benbusby/whoogle-search
-      tag: 0.8.3
-    env:
-      # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
-      # WHOOGLE_ALT_YT: piped.${EXTERNAL_DOMAIN}
-      # WHOOGLE_ALT_IG: imginn.com
-      WHOOGLE_ALT_RD: libreddit.${EXTERNAL_DOMAIN}
-      # WHOOGLE_ALT_MD: scribe.${EXTERNAL_DOMAIN}
-      WHOOGLE_ALT_TL: ""
-      WHOOGLE_ALT_IMG: bibliogram.art
-      WHOOGLE_ALT_IMDB: ""
-      WHOOGLE_ALT_WIKI: ""
-      WHOOGLE_ALT_QUORA: ""
-      WHOOGLE_CONFIG_ALTS: 1
-      WHOOGLE_CONFIG_THEME: system
-      WHOOGLE_CONFIG_URL: "https://search.${EXTERNAL_DOMAIN}"
-      WHOOGLE_CONFIG_GET_ONLY: 1
-      # WHOOGLE_CONFIG_COUNTRY: US
-      WHOOGLE_CONFIG_VIEW_IMAGE: 1
-      WHOOGLE_CONFIG_DISABLE: 1
+    defaultPodOptions:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/benbusby/whoogle-search
+              tag: 0.8.3
+            env:
+              # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
+              # WHOOGLE_ALT_YT: piped.${EXTERNAL_DOMAIN}
+              # WHOOGLE_ALT_IG: imginn.com
+              WHOOGLE_ALT_RD: libreddit.${EXTERNAL_DOMAIN}
+              # WHOOGLE_ALT_MD: scribe.${EXTERNAL_DOMAIN}
+              WHOOGLE_ALT_TL: ''
+              WHOOGLE_ALT_IMG: bibliogram.art
+              WHOOGLE_ALT_IMDB: ''
+              WHOOGLE_ALT_WIKI: ''
+              WHOOGLE_ALT_QUORA: ''
+              WHOOGLE_CONFIG_ALTS: 1
+              WHOOGLE_CONFIG_THEME: system
+              WHOOGLE_CONFIG_URL: https://search.${EXTERNAL_DOMAIN}
+              WHOOGLE_CONFIG_GET_ONLY: 1
+              # WHOOGLE_CONFIG_COUNTRY: US
+              WHOOGLE_CONFIG_VIEW_IMAGE: 1
+              WHOOGLE_CONFIG_DISABLE: 1
+            resources:
+              requests:
+                cpu: 5m
+                memory: 50Mi
+              limits:
+                memory: 250Mi
     service:
       main:
         ports:
@@ -57,34 +74,23 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: external-auth
           hajimari.io/icon: mdi:google
         hosts:
-          - host: &host "search.${EXTERNAL_DOMAIN}"
+          - host: &host search.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: *app
-
+        className: external-nginx
+    fullNameOverride: *app
     podAnnotations:
-      reloader.stakater.com/auto: "true"
+      reloader.stakater.com/auto: 'true'
       # setGateway: "true"
-
-    resources:
-      requests:
-        cpu: 5m
-        memory: 50Mi
-      limits:
-        memory: 250Mi

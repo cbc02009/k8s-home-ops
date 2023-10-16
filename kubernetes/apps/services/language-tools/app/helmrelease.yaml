@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,13 +23,23 @@ spec:
     remediation:
       retries: 5
   values:
-    image:
-      repository: docker.io/silviof/docker-languagetool
-      tag: latest@sha256:17fea40a390299b78a038e92289323038a6fb5008febfcceb5e308ad25fb8069
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: docker.io/silviof/docker-languagetool
+              tag: latest@sha256:17fea40a390299b78a038e92289323038a6fb5008febfcceb5e308ad25fb8069
 
-    env:
-      TZ: "${TZ}"
+            env:
+              TZ: ${TZ}
 
+            resources:
+              requests:
+                cpu: 15m
+                memory: 716M
+              limits:
+                memory: 1307M
     service:
       main:
         ports:
@@ -39,21 +49,18 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    resources:
-      requests:
-        cpu: 15m
-        memory: 716M
-      limits:
-        memory: 1307M
+        className: internal-nginx

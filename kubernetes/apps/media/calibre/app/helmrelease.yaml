@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,19 +24,34 @@ spec:
       retries: 5
   values:
 
-    controller:
-      type: statefulset
+    controllers:
+      main:
+        type: statefulset
 
-    image:
-      repository: ghcr.io/linuxserver/calibre
-      tag: 6.28.1
+        containers:
+          main:
+            image:
+              repository: ghcr.io/linuxserver/calibre
+              tag: 6.28.1
 
-    env:
-      TZ: "${TZ}"
-      PUID: "568"
-      PGID: "568"
-      FM_HOME: "/media/calibre"
+            env:
+              TZ: ${TZ}
+              PUID: '568'
+              PGID: '568'
+              FM_HOME: /media/calibre
 
+            resources:
+              requests:
+                cpu: 15m
+                memory: 249M
+              limits:
+                memory: 4000M
+
+            probes:
+              startup:
+                spec:
+                  initialDelaySeconds: 60
+                  failureThreshold: 160
     service:
       main:
         ports:
@@ -53,24 +68,27 @@ spec:
             targetPort: 8081
         type: LoadBalancer
         externalTrafficPolicy: Cluster
-        loadBalancerIP: "${LB_CALIBRE}"
+        loadBalancerIP: ${LB_CALIBRE}
 
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
           hajimari.io/icon: mdi:bookshelf
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: external-auth
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
+        className: external-nginx
     persistence:
       config:
         enabled: true
@@ -78,19 +96,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "nas.${INTERNAL_DOMAIN}"
+        server: nas.${INTERNAL_DOMAIN}
         path: /tank/media
-        mountPath: /media
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 249M
-      limits:
-        memory: 4000M
-
-    probes:
-      startup:
-        spec:
-          initialDelaySeconds: 60
-          failureThreshold: 160
+        globalMounts:
+          - path: /media

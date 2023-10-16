@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -27,20 +27,48 @@ spec:
       namespace: vpn
   values:
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
 
-    image:
-      repository: ghcr.io/onedr0p/qbittorrent
-      tag: 4.5.5@sha256:f4a1a5eece13beed61e579172d2a54b1fc2e7ff2bbdbd7ef22a4d9f6fc36e198
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: feature.node.kubernetes.io/10gb-network
+                    operator: In
+                    values:
+                      - 'true'
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    env:
-      TZ: "${TZ}"
-      QBITTORRENT__PORT: &port 8080
-      QBITTORRENT__BT_PORT: &port-bt 55420
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent
+              tag: 4.5.5@sha256:f4a1a5eece13beed61e579172d2a54b1fc2e7ff2bbdbd7ef22a4d9f6fc36e198
 
+            env:
+              TZ: ${TZ}
+              QBITTORRENT__PORT: &port 8080
+              QBITTORRENT__BT_PORT: &port-bt 55420
+
+            resources:
+              requests:
+                cpu: 10m
+                memory: 250Mi
+              limits:
+                memory: 6000Mi
+
+    # -- Affinity constraint rules to place the Pod on a specific node.
+    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
     service:
       main:
         type: LoadBalancer
@@ -60,36 +88,30 @@ spec:
             port: *port-bt
             protocol: TCP
             targetPort: *port-bt
-    podAnnotations:
-      setGateway: "true"
-
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_hide_header "x-webkit-csp";
             proxy_hide_header "content-security-policy";
             proxy_hide_header "X-Frame-Options";
-          hajimari.io/enable: "true"
-          hajimari.io/icon: "cloud-download"
+          hajimari.io/enable: 'true'
+          hajimari.io/icon: cloud-download
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
+        className: internal-nginx
     persistence:
       config:
         enabled: true
@@ -97,31 +119,16 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "nas.ctec.run"
+        server: nas.ctec.run
         path: /tank/media
-        mountPath: /media
+        globalMounts:
+          - path: /media
       torrents:
         enabled: true
         type: nfs
-        server: "nas.ctec.run"
+        server: nas.ctec.run
         path: /smoltank/torrents
-        mountPath: /torrents
-
-    resources:
-      requests:
-        cpu: 10m
-        memory: 250Mi
-      limits:
-        memory: 6000Mi
-
-    # -- Affinity constraint rules to place the Pod on a specific node.
-    # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: feature.node.kubernetes.io/10gb-network
-                  operator: In
-                  values:
-                    - "true"
+        globalMounts:
+          - path: /torrents
+    podAnnotations:
+      setGateway: 'true'

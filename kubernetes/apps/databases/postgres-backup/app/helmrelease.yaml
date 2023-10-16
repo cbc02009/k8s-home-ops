@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -27,45 +27,53 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    controller:
-      type: cronjob
-      cronjob:
-        schedule: "@daily"
-        ttlSecondsAfterFinished: 43200
-    restartPolicy: OnFailure
-    image:
-      repository: docker.io/prodrigestivill/postgres-backup-local
-      tag: 16@sha256:085926531fbabe298792a83384d07d6146683732e53e51891ac75eaa71e09d08
-      pullPolicy: IfNotPresent
-    command: ["/backup.sh"]
-    env:
-      - name: POSTGRES_HOST
-        value: postgres.kokoro.wtf
-      - name: POSTGRES_USER
-        valueFrom:
-          secretKeyRef:
-            name: postgres
-            key: SUPER_USER
-      - name: POSTGRES_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: postgres
-            key: SUPER_PASS
-      - name: POSTGRES_CLUSTER
-        value: "true"
-      - name: POSTGRES_DB
-        value: "animarr_main, authelia, grafana, home_assistant, immich, lidarr_main, nextcloud, postgres, prowlarr_main, radarr_main, sonarr_main, vaultwarden"
-      - name: BACKUP_KEEP_DAYS
-        value: "7"
-      - name: BACKUP_KEEP_WEEKS
-        value: "4"
-      - name: BACKUP_KEEP_MONTHS
-        value: "6"
-      - name: BACKUP_KEEP_MINS
-        value: "7200"
-      - name: POSTGRES_EXTRA_OPTS
-        value: "--clean"
-    enableServiceLinks: false
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      main:
+        type: cronjob
+        cronjob:
+          schedule: '@daily'
+          ttlSecondsAfterFinished: 43200
+        containers:
+          main:
+            image:
+              repository: docker.io/prodrigestivill/postgres-backup-local
+              tag: 16@sha256:085926531fbabe298792a83384d07d6146683732e53e51891ac75eaa71e09d08
+              pullPolicy: IfNotPresent
+            env:
+              - name: POSTGRES_HOST
+                value: postgres.kokoro.wtf
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: SUPER_USER
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: SUPER_PASS
+              - name: POSTGRES_CLUSTER
+                value: 'true'
+              - name: POSTGRES_DB
+                value: animarr_main, authelia, grafana, home_assistant, immich, lidarr_main,
+                  nextcloud, postgres, prowlarr_main, radarr_main, sonarr_main, vaultwarden
+              - name: BACKUP_KEEP_DAYS
+                value: '7'
+              - name: BACKUP_KEEP_WEEKS
+                value: '4'
+              - name: BACKUP_KEEP_MONTHS
+                value: '6'
+              - name: BACKUP_KEEP_MINS
+                value: '7200'
+              - name: POSTGRES_EXTRA_OPTS
+                value: --clean
+            command: [/backup.sh]
     service:
       main:
         enabled: false
@@ -73,12 +81,9 @@ spec:
       backup:
         enabled: true
         type: nfs
-        server: "nas.ctec.run"
+        server: nas.ctec.run
         path: /tank/backup/kubernetes/apps/postgres
-        mountPath: /backups
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
+        globalMounts:
+          - path: /backups
+    restartPolicy: OnFailure
+    enableServiceLinks: false

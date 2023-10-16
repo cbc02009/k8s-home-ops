@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -22,24 +22,46 @@ spec:
     remediation:
       retries: 5
   values:
-    runtimeClassName: nvidia
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 44
+          - 109
+          - 100
+          - 1010
 
-    controller:
-      type: statefulset
+    controllers:
+      main:
+        type: statefulset
 
-    image:
-      repository: ghcr.io/onedr0p/plex-beta
-      tag: 1.32.7.7571-13cdc68dc@sha256:59d99221e5560d57ecb1e8550c330bb7dd5ccb77cd0ecab3832125a6608b3207
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/plex-beta
+              tag:
+                1.32.7.7571-13cdc68dc@sha256:59d99221e5560d57ecb1e8550c330bb7dd5ccb77cd0ecab3832125a6608b3207
 
-    env:
-      TZ: "${TZ}"
-      # NVIDIA_VISIBLE_DEVICES: all
-      # NVIDIA_DRIVER_CAPABILITIES: all
+            env:
+              TZ: ${TZ}
+              # NVIDIA_VISIBLE_DEVICES: all
+              # NVIDIA_DRIVER_CAPABILITIES: all
 
+            resources:
+              requests:
+                cpu: 100m
+                memory: 2000M
+                nvidia.com/gpu: 1
+              limits:
+                nvidia.com/gpu: 1
+                memory: 10000M
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: "${LB_PLEX}"
+        loadBalancerIP: ${LB_PLEX}
         ports:
           http:
             port: 32400
@@ -47,14 +69,13 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external"
-          hajimari.io/enable: "true"
+          ingress.home.arpa/type: external
+          hajimari.io/enable: 'true'
           hajimari.io/icon: plex
           hajimari.io/appName: plex
-          hajimari.io/url: "https://plex.${EXTERNAL_DOMAIN}/web/"
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          hajimari.io/url: https://plex.${EXTERNAL_DOMAIN}/web/
+          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
           nginx.ingress.kubernetes.io/configuration-snippet: |
             location = / {
               if ($http_x_plex_device = ""){
@@ -62,26 +83,19 @@ spec:
               }
             }
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
             secretName: tls.plex
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 44
-        - 109
-        - 100
-        - 1010
-
+        className: external-nginx
     persistence:
       config:
         enabled: true
@@ -96,20 +110,13 @@ spec:
         type: nfs
         server: &nas nas.ctec.run
         path: /tank/media
-        mountPath: /media
-
+        globalMounts:
+          - path: /media
       backup:
         enabled: true
         type: nfs
         server: *nas
         path: /tank/backup/kubernetes/apps/plex
-        mountPath: /config/backup
-
-    resources:
-      requests:
-        cpu: 100m
-        memory: 2000M
-        nvidia.com/gpu: 1
-      limits:
-        nvidia.com/gpu: 1
-        memory: 10000M
+        globalMounts:
+          - path: /config/backup
+    runtimeClassName: nvidia

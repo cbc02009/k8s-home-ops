@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,68 +24,83 @@ spec:
       retries: 5
   values:
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 100
 
-    image:
-      repository: ghcr.io/onedr0p/lidarr-develop
-      tag: 1.4.5.3639@sha256:8afcbef8d7867849cecfe7a4b3e9db3f02231b0351c73edb2af7c09b892dee23
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    initContainers:
-      01-init-db:
-        image: ghcr.io/onedr0p/postgres-init:14.9
-        envFrom:
-          - secretRef:
-              name: *app
+        initContainers:
+          01-init-db:
+            envFrom:
+              - secretRef:
+                  name: *app
 
-    env:
-      TZ: "${TZ}"
-      LIDARR__INSTANCE_NAME: Lidarr
-      LIDARR__PORT: &port 8686
-      LIDARR__LOG_LEVEL: info
-      LIDARR__POSTGRES_MAIN_DB: lidarr_main
-      LIDARR__POSTGRES_LOG_DB: lidarr_log
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '14.9'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/lidarr-develop
+              tag:
+                1.4.5.3639@sha256:8afcbef8d7867849cecfe7a4b3e9db3f02231b0351c73edb2af7c09b892dee23
+
+            envFrom:
+              - secretRef:
+                  name: *app
+
+            env:
+              TZ: ${TZ}
+              LIDARR__INSTANCE_NAME: Lidarr
+              LIDARR__PORT: &port 8686
+              LIDARR__LOG_LEVEL: info
+              LIDARR__POSTGRES_MAIN_DB: lidarr_main
+              LIDARR__POSTGRES_LOG_DB: lidarr_log
 
 
-    envFrom:
-      - secretRef:
-          name: *app
-
+            resources:
+              requests:
+                cpu: 10m
+                memory: 250Mi
+              limits:
+                memory: 2000Mi
     service:
       main:
         ports:
           http:
             port: *port
-
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/lidarr/dracula.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
-
+        className: internal-nginx
     persistence:
       config:
         enabled: true
@@ -94,20 +109,14 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: &nas "nas.ctec.run"
+        server: &nas nas.ctec.run
         path: /tank/media
-        mountPath: /media
-
+        globalMounts:
+          - path: /media
       backup:
         enabled: true
         type: nfs
         server: *nas
         path: /tank/backup/kubernetes/apps/radarr
-        mountPath: /config/Backups
-
-    resources:
-      requests:
-        cpu: 10m
-        memory: 250Mi
-      limits:
-        memory: 2000Mi
+        globalMounts:
+          - path: /config/Backups

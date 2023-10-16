@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -25,65 +25,88 @@ spec:
 
   values:
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 100
 
-    initContainers:
-      01-init-db:
-        image: ghcr.io/onedr0p/postgres-init:14.9
-        envFrom:
-          - secretRef:
-              name: *app
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    image:
-      repository: ghcr.io/onedr0p/sonarr-develop
-      tag: 4.0.0.697@sha256:fa87be887075ebef98933fe409b83e348eb0a3908e9c86ed5526a333250b98e6
+        initContainers:
+          01-init-db:
+            envFrom:
+              - secretRef:
+                  name: *app
 
-    env:
-      TZ: "${TZ}"
-      SONARR__INSTANCE_NAME: Animarr
-      SONARR__PORT: &port 8989
-      SONARR__APPLICATION_URL: "https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-      SONARR__LOG_LEVEL: info
-      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-      SONARR__POSTGRES_MAIN_DB: animarr_main
-      SONARR__POSTGRES_LOG_DB: animarr_log
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '14.9'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/sonarr-develop
+              tag:
+                4.0.0.697@sha256:fa87be887075ebef98933fe409b83e348eb0a3908e9c86ed5526a333250b98e6
 
-    envFrom:
-      - secretRef:
-          name: *app
+            envFrom:
+              - secretRef:
+                  name: *app
 
+            env:
+              TZ: ${TZ}
+              SONARR__INSTANCE_NAME: Animarr
+              SONARR__PORT: &port 8989
+              SONARR__APPLICATION_URL: https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}
+              SONARR__LOG_LEVEL: info
+              PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+              SONARR__POSTGRES_MAIN_DB: animarr_main
+              SONARR__POSTGRES_LOG_DB: animarr_log
+
+            resources:
+              requests:
+                cpu: 15m
+                memory: 411M
+              limits:
+                memory: 1000M
     service:
       main:
         ports:
           http:
             port: *port
-
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/organizr.css"></head>';
             sub_filter_once on;
-          hajimari.io/enable: "true"
-          hajimari.io/icon: "television-box"
+          hajimari.io/enable: 'true'
+          hajimari.io/icon: television-box
           hajimari.io/appName: animarr
         hosts:
           - host: *host
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
+        className: internal-nginx
     persistence:
       config:
         enabled: true
@@ -92,28 +115,14 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "nas.ctec.run"
+        server: nas.ctec.run
         path: /tank/media
-        mountPath: /media
-
+        globalMounts:
+          - path: /media
       backup:
         enabled: true
         type: nfs
         server: nas.ctec.run
         path: /tank/backup/kubernetes/apps/animarr
-        mountPath: /config/Backups
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 411M
-      limits:
-        memory: 1000M
+        globalMounts:
+          - path: /config/Backups

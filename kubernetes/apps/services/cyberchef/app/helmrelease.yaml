@@ -10,22 +10,25 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   values:
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    image:
-      repository: docker.io/mpepping/cyberchef
-      tag: v10.5.2
-    env:
-      TZ: ${TZ}
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
+        containers:
+          main:
+            image:
+              repository: docker.io/mpepping/cyberchef
+              tag: v10.5.2
+            env:
+              TZ: ${TZ}
     service:
       main:
         ports:
@@ -34,15 +37,17 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external-auth"
-          hajimari.io/enable: "true"
+          ingress.home.arpa/type: external-auth
+          hajimari.io/enable: 'true'
           hajimari.io/icon: hammer-wrench
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
@@ -52,3 +57,4 @@ spec:
 #     memory: 79M
 #   limits:
 #     memory: 79M
+        className: external-nginx

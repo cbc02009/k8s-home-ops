@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,69 +23,75 @@ spec:
     remediation:
       retries: 5
   values:
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-    fullNameOverride: *app
-    image:
-      repository: ghcr.io/auricom/libreddit
-      tag: 0.30.1@sha256:4106b2aa4d9ce76f16ea9db1aa75ace2e9c80c067f698dad2f92c68c7cd94c30
-    env:
-      LIBREDDIT_DEFAULT_SHOW_NSFW: on
-      LIBREDDIT_DEFAULT_WIDE: on
-      LIBREDDIT_DEFAULT_USE_HLS: on
-      LIBREDDIT_DEFAULT_HIDE_HLS_NOTIFICATION: on
+    defaultPodOptions:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/auricom/libreddit
+              tag: 0.30.1@sha256:4106b2aa4d9ce76f16ea9db1aa75ace2e9c80c067f698dad2f92c68c7cd94c30
+            env:
+              LIBREDDIT_DEFAULT_SHOW_NSFW: on
+              LIBREDDIT_DEFAULT_WIDE: on
+              LIBREDDIT_DEFAULT_USE_HLS: on
+              LIBREDDIT_DEFAULT_HIDE_HLS_NOTIFICATION: on
+            resources:
+              requests:
+                cpu: 5m
+                memory: 50Mi
+              limits:
+                memory: 250Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /settings
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+
     service:
       main:
         ports:
           http:
-            port: &port 8080
+            port: *port
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: external-auth
           hajimari.io/icon: simple-icons:reddit
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: *app
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /settings
-            port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
-
+        className: external-nginx
+    fullNameOverride: *app
     podAnnotations:
-      reloader.stakater.com/auto: "true"
-      setGateway: "true"
-
-    resources:
-      requests:
-        cpu: 5m
-        memory: 50Mi
-      limits:
-        memory: 250Mi
+      reloader.stakater.com/auto: 'true'
+      setGateway: 'true'

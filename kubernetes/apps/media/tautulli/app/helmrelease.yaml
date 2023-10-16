@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,15 +24,31 @@ spec:
       retries: 5
   values:
 
-    controller:
-      type: statefulset
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
 
-    image:
-      repository: ghcr.io/onedr0p/tautulli
-      tag: 2.13.1@sha256:525209414d149214584819313b0ec7507a3259dfa5f8d618692c34b54f172db9
+    controllers:
+      main:
+        type: statefulset
 
-    env:
-      TZ: "${TZ}"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/tautulli
+              tag: 2.13.1@sha256:525209414d149214584819313b0ec7507a3259dfa5f8d618692c34b54f172db9
+
+            env:
+              TZ: ${TZ}
+
+            resources:
+              requests:
+                cpu: 92m
+                memory: 249M
+              limits:
+                memory: 300M
 
     service:
       main:
@@ -43,26 +59,24 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
-          hajimari.io/enable: "true"
-          hajimari.io/icon: "chart-bar"
+          ingress.home.arpa/type: internal
+          hajimari.io/enable: 'true'
+          hajimari.io/icon: chart-bar
 
         hosts:
-          - host: &host "tautulli.${EXTERNAL_DOMAIN}"
+          - host: &host tautulli.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-
+        className: internal-nginx
     persistence:
       config:
         enabled: true
@@ -71,13 +85,6 @@ spec:
       add-ons:
         enabled: true
         type: emptyDir
-
-    resources:
-      requests:
-        cpu: 92m
-        memory: 249M
-      limits:
-        memory: 300M
 
     sidecars:
       jbops:
@@ -90,4 +97,4 @@ spec:
           - --wait=21600 # 6 hours
           - --root=/add-ons/jbops
         volumeMounts:
-          - { name: add-ons, mountPath: /add-ons }
+          - {name: add-ons, mountPath: /add-ons}

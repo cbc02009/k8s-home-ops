@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -18,28 +18,79 @@ spec:
         namespace: flux-system
 
   values:
-    controller:
-      replicas: 2
-      strategy: RollingUpdate
-      annotations:
-        reloader.stakater.com/auto: "true"
+    defaultPodOptions:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudflared
 
-    image:
-      repository: ghcr.io/cbc02009/cloudflared
-      tag: 2023.8.2
+    controllers:
+      main:
+        replicas: 2
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    env:
-      NO_AUTOUPDATE: "true"
-      TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
-      TUNNEL_METRICS: 0.0.0.0:8080
-      TUNNEL_TRANSPORT_PROTOCOL: auto
+        containers:
+          main:
+            image:
+              repository: ghcr.io/cbc02009/cloudflared
+              tag: 2023.8.2
 
-    args:
-      - tunnel
-      - --config
-      - /etc/cloudflared/config/config.yaml
-      - run
-      - "${CLUSTER_CLOUDFLARE_TUNNEL_ID}"
+            env:
+              NO_AUTOUPDATE: 'true'
+              TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
+              TUNNEL_METRICS: 0.0.0.0:8080
+              TUNNEL_TRANSPORT_PROTOCOL: auto
+
+            resources:
+              requests:
+                cpu: 5m
+                memory: 30Mi
+              limits:
+                memory: 128Mi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ready
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ready
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ready
+                    port: http
+                  failureThreshold: 30
+                  periodSeconds: 10
+
+            args:
+              - tunnel
+              - --config
+              - /etc/cloudflared/config/config.yaml
+              - run
+              - ${CLUSTER_CLOUDFLARE_TUNNEL_ID}
 
     service:
       main:
@@ -47,6 +98,24 @@ spec:
           http:
             port: 8080
 
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: cloudflared-configmap
+        readOnly: true
+        globalMounts:
+          - path: /etc/cloudflared/config/config.yaml
+            subPath: config.yaml
+      creds:
+        enabled: true
+        type: secret
+        name: *app
+        readOnly: true
+
+        globalMounts:
+          - path: /etc/cloudflared/creds/credentials.json
+            subPath: credentials.json
     serviceMonitor:
       main:
         enabled: true
@@ -56,67 +125,3 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 30s
-
-    probes:
-      liveness:
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /ready
-            port: http
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness:
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /ready
-            port: http
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      startup:
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /ready
-            port: http
-          failureThreshold: 30
-          periodSeconds: 10
-
-    persistence:
-      config:
-        enabled: true
-        type: configMap
-        name: cloudflared-configmap
-        subPath: config.yaml
-        mountPath: /etc/cloudflared/config/config.yaml
-        readOnly: true
-      creds:
-        enabled: true
-        type: secret
-        name: *app
-        subPath: credentials.json
-        mountPath: /etc/cloudflared/creds/credentials.json
-        readOnly: true
-
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: cloudflared
-
-    resources:
-      requests:
-        cpu: 5m
-        memory: 30Mi
-      limits:
-        memory: 128Mi

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -26,94 +26,102 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   values:
-    controller:
-      type: daemonset
-      strategy: RollingUpdate
-      annotations:
-        reloader.stakater.com/auto: "true"
+    controllers:
+      main:
+        type: daemonset
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    image:
-      repository: ghcr.io/onedr0p/vector
-      tag: 0.33.0-debian
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/vector
+              tag: 0.33.0-debian
 
-    args: ["--config", "/etc/vector/vector.yaml"]
+            env:
+              PROCFS_ROOT: /host/proc
+              SYSFS_ROOT: /host/sys
+              VECTOR_SELF_NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: spec.nodeName
+              VECTOR_SELF_POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.name
+              VECTOR_SELF_POD_NAMESPACE:
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
 
-    env:
-      PROCFS_ROOT: /host/proc
-      SYSFS_ROOT: /host/sys
-      VECTOR_SELF_NODE_NAME:
-        valueFrom:
-          fieldRef:
-            apiVersion: v1
-            fieldPath: spec.nodeName
-      VECTOR_SELF_POD_NAME:
-        valueFrom:
-          fieldRef:
-            apiVersion: v1
-            fieldPath: metadata.name
-      VECTOR_SELF_POD_NAMESPACE:
-        valueFrom:
-          fieldRef:
-            apiVersion: v1
-            fieldPath: metadata.namespace
+            resources:
+              requests:
+                cpu: 23m
+                memory: 249M
+              # limits:
+              #   memory: 918M
+
+            securityContext:
+              privileged: true
+
+            args: [--config, /etc/vector/vector.yaml]
+    service:
+      main:
+        enabled: false
 
     persistence:
       config:
         enabled: true
         type: configMap
         name: vector-agent-configmap
-        subPath: vector.yaml
-        mountPath: /etc/vector/vector.yaml
         readOnly: true
+        globalMounts:
+          - path: /etc/vector/vector.yaml
+            subPath: vector.yaml
       data:
         enabled: true
         type: emptyDir
-        mountPath: /vector-data-dir
+        globalMounts:
+          - path: /vector-data-dir
       var-log:
         enabled: true
         type: hostPath
         hostPath: /var/log
         hostPathType: Directory
-        mountPath: /var/log
         readOnly: true
+        globalMounts:
+          - path: /var/log
       var-lib:
         enabled: true
         type: hostPath
         hostPath: /var/lib
         hostPathType: Directory
-        mountPath: /var/lib
         readOnly: true
+        globalMounts:
+          - path: /var/lib
       procfs:
         enabled: true
         type: hostPath
         hostPath: /proc
         hostPathType: Directory
-        mountPath: /host/proc
         readOnly: true
+        globalMounts:
+          - path: /host/proc
       sysfs:
         enabled: true
         type: hostPath
         hostPath: /sys
         hostPathType: Directory
-        mountPath: /host/sys
         readOnly: true
 
+        globalMounts:
+          - path: /host/sys
     podMonitor:
       enabled: true
-
-    resources:
-      requests:
-        cpu: 23m
-        memory: 249M
-      # limits:
-      #   memory: 918M
-
-    securityContext:
-      privileged: true
-
-    service:
-      main:
-        enabled: false
 
     serviceAccount:
       create: true

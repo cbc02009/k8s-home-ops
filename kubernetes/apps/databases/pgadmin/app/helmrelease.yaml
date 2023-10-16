@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,14 +23,29 @@ spec:
     remediation:
       retries: 5
   values:
-    image:
-      repository: dpage/pgadmin4
-      tag: "7.7"
-    controller:
-      type: statefulset
-    envFrom:
-      - secretRef:
-          name: *app
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 5050
+        runAsGroup: 5050
+        fsGroup: 5050
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      main:
+        type: statefulset
+        containers:
+          main:
+            image:
+              repository: dpage/pgadmin4
+              tag: '7.7'
+            envFrom:
+              - secretRef:
+                  name: *app
+            resources:
+              requests:
+                cpu: 15m
+                memory: 164M
+              limits:
+                memory: 236M
     service:
       main:
         ports:
@@ -39,36 +54,30 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
           hajimari.io/icon: simple-icons:adminer
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
-    podSecurityContext:
-      runAsUser: 5050
-      runAsGroup: 5050
-      fsGroup: 5050
-      fsGroupChangePolicy: "OnRootMismatch"
+                service:
+                  name: main
+                  port: http
+        className: internal-nginx
     persistence:
       config:
         enabled: true
         existingClaim: pgadmin-config-v1
-        mountPath: "/var/lib/pgadmin"
+        globalMounts:
+          - path: /var/lib/pgadmin
       server-json:
         enabled: true
         type: configMap
         name: servers-json
-        subPath: servers.json
-        mountPath: /pgadmin4/servers.json
+        globalMounts:
+          - path: /pgadmin4/servers.json
+            subPath: servers.json
     podAnnotations:
-      reloader.stakater.com/auto: "true"
-    resources:
-      requests:
-        cpu: 15m
-        memory: 164M
-      limits:
-        memory: 236M
+      reloader.stakater.com/auto: 'true'

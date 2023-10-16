@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -18,25 +18,34 @@ spec:
 
   values:
 
-    controller:
-      type: statefulset
+    controllers:
+      main:
+        type: statefulset
 
-    image:
-      repository: ghcr.io/unpoller/unpoller
-      tag: v2.9.2
+        containers:
+          main:
+            image:
+              repository: ghcr.io/unpoller/unpoller
+              tag: v2.9.2
 
-    env:
-      UP_UNIFI_DEFAULT_ROLE: home-ops
-      UP_UNIFI_DEFAULT_URL: https://unifi:8443
-      UP_UNIFI_DEFAULT_VERIFY_SSL: false
-      UP_UNIFI_DEFAULT_USER: unifipoller
-      UP_UNIFI_DEFAULT_PASS:
-        valueFrom:
-          secretKeyRef:
-            name: *app
-            key: DEFAULT_PASSWORD
-      UP_INFLUXDB_DISABLE: true
+            env:
+              UP_UNIFI_DEFAULT_ROLE: home-ops
+              UP_UNIFI_DEFAULT_URL: https://unifi:8443
+              UP_UNIFI_DEFAULT_VERIFY_SSL: false
+              UP_UNIFI_DEFAULT_USER: unifipoller
+              UP_UNIFI_DEFAULT_PASS:
+                valueFrom:
+                  secretKeyRef:
+                    name: *app
+                    key: DEFAULT_PASSWORD
+              UP_INFLUXDB_DISABLE: true
 
+            resources:
+              requests:
+                cpu: 10m
+                memory: 100Mi
+              limits:
+                memory: 500Mi
     service:
       main:
         ports:
@@ -52,10 +61,3 @@ spec:
             path: /metrics
             interval: 2m # Unifi API only polls at 2m intervals
             scrapeTimeout: 5s
-
-    resources:
-      requests:
-        cpu: 10m
-        memory: 100Mi
-      limits:
-        memory: 500Mi

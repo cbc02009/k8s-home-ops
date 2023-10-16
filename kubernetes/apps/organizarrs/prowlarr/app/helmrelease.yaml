@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -25,86 +25,102 @@ spec:
 
   values:
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 100
 
-    initContainers:
-      init-db:
-        image: ghcr.io/onedr0p/postgres-init:14.9
-        envFrom:
-          - secretRef:
-              name: *app
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    image:
-      repository: ghcr.io/onedr0p/prowlarr-develop
-      tag: 1.9.4.4039@sha256:b7653578d4d6900cf2c00f0f09b447301fc8c7a58d822e8b271e3047c54941ae
+        initContainers:
+          init-db:
+            envFrom:
+              - secretRef:
+                  name: *app
 
-    env:
-      TZ: "${TZ}"
-      PROWLARR__INSTANCE_NAME: Prowlarr
-      PUSHOVER_APP_URL: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-      PROWLARR__PORT: &port 9696
-      PROWLARR__LOG_LEVEL: info
-      PROWLARR__POSTGRES_MAIN_DB: prowlarr_main
-      PROWLARR__POSTGRES_LOG_DB: prowlarr_log
-      PROWLARR__POSTGRES_HOST: 10.6.0.20
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '14.9'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/prowlarr-develop
+              tag:
+                1.9.4.4039@sha256:b7653578d4d6900cf2c00f0f09b447301fc8c7a58d822e8b271e3047c54941ae
 
-    envFrom:
-      - secretRef:
-          name: *app
+            envFrom:
+              - secretRef:
+                  name: *app
+
+            env:
+              TZ: ${TZ}
+              PROWLARR__INSTANCE_NAME: Prowlarr
+              PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+              PROWLARR__PORT: &port 9696
+              PROWLARR__LOG_LEVEL: info
+              PROWLARR__POSTGRES_MAIN_DB: prowlarr_main
+              PROWLARR__POSTGRES_LOG_DB: prowlarr_log
+              PROWLARR__POSTGRES_HOST: 10.6.0.20
+
+            resources:
+              requests:
+                cpu: 15m
+                memory: 164M
+              limits:
+                cpu: 100m
+                memory: 299M
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
 
     service:
       main:
         ports:
           http:
             port: *port
-
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
         annotations:
-          ingress.home.arpa/type: "internal"
+          ingress.home.arpa/type: internal
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/prowlarr/organizr.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /ping
-            port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
-
+        className: internal-nginx
     persistence:
       config:
         enabled: true
@@ -114,15 +130,7 @@ spec:
         type: nfs
         server: nas.ctec.run
         path: /tank/backup/kubernetes/apps/prowlarr
-        mountPath: /config/Backups
-
+        globalMounts:
+          - path: /config/Backups
     podAnnotations:
-      setGateway: "true"
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 164M
-      limits:
-        cpu: 100m
-        memory: 299M
+      setGateway: 'true'
