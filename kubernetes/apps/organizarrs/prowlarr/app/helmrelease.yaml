@@ -109,7 +109,7 @@ spec:
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/prowlarr/organizr.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix

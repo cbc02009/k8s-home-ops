@@ -101,13 +101,13 @@ spec:
           annotations:
             ingress.home.arpa/type: "internal"
           hosts:
-            - host: &host "hass-code.${EXTERNAL_DOMAIN}"
+            - host: &code-host "hass-code.${EXTERNAL_DOMAIN}"
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - *host
+                - *code-host
         volumeMounts:
           - name: config
             mountPath: /config

@@ -243,10 +243,10 @@ spec:
           hajimari.io/appName: Alertmanager
 
         hosts:
-          - &host alertmanager.${EXTERNAL_DOMAIN}
+          - &am-host alertmanager.${EXTERNAL_DOMAIN}
         tls:
           - hosts:
-              - *host
+              - *am-host
 
 
       alertmanagerSpec:
