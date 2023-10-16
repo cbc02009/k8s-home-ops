@@ -10,17 +10,26 @@ vars:
 
 
 includes:
-  fx: .taskfiles/Flux/Tasks.yml
-  ku: .taskfiles/Kubernetes/Tasks.yml
+  fx:
+    dir: .taskfiles/Flux
+    taskfile: .taskfiles/Flux
   bs: .taskfiles/bootstrap.yml
-  pr: .taskfiles/PreCommit/Tasks.yml
   so: .taskfiles/sops.yml
-  ro: .taskfiles/Rook/Tasks.yaml
-  ta: .taskfiles/Talos/Tasks.yml
-  es: .taskfiles/ExternalSecrets/Tasks.yml
-  vs: .taskfiles/VolSync/Tasks.yml
-  tf: .taskfiles/Terraform/Tasks.yml
-  pg: .taskfiles/Postgres/Tasks.yml
+  ro:
+    dir: .taskfiles/Rook
+    taskfile: .taskfiles/Rook
+  ta:
+    dir: .taskfiles/Talos
+    taskfile: .taskfiles/Talos
+  es:
+    dir: .taskfiles/ExternalSecrets
+    taskfile: .taskfiles/ExternalSecrets
+  vs:
+    dir: .taskfiles/VolSync
+    taskfile: .taskfiles/VolSync
+  tf:
+    dir: .taskfiles/Terraform
+    taskfile: .taskfiles/Terraform
   cluster: .taskfiles/cluster.yml
 
 tasks:

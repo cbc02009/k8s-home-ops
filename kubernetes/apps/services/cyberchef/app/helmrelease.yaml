@@ -51,10 +51,4 @@ spec:
         tls:
           - hosts:
               - *host
-# resources:
-#   requests:
-#     cpu: 15m
-#     memory: 79M
-#   limits:
-#     memory: 79M
         className: external-nginx
