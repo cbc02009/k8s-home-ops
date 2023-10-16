@@ -21,3 +21,5 @@ spec:
       kind: HelmRelease
       name: k8s-ycl
       namespace: system-controllers
+  dependsOn:
+    - name: apps-cert-manager
