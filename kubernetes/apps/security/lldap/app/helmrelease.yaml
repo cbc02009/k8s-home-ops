@@ -34,7 +34,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: &app lldap
+              app.kubernetes.io/name: *app
     controllers:
       main:
         replicas: 2

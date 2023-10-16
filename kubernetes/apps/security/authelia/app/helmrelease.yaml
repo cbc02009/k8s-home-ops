@@ -37,7 +37,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: &app authelia
+              app.kubernetes.io/name: *app
 
     controllers:
       main:
