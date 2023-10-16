@@ -16,42 +16,42 @@ spec:
         [
           'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/nvme0n1; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/nvme0n1; wipefs -af /dev/nvme0n1; blkdiscard /dev/nvme0n1; partprobe /dev/nvme0n1',
         ]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-wipe-sakura
-# spec:
-#   restartPolicy: Never
-#   nodeName: sakura
-#   containers:
-#     - name: disk-wipe
-#       image: ghcr.io/cbc02009/ubuntu:22.04
-#       securityContext:
-#         privileged: true
-#       command: ['/bin/sh', '-c']
-#       args:
-#         [
-#           'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120; wipefs -af /dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120; blkdiscard /dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120; partprobe /dev/disk/by-id/ata-T-FORCE_512GB_TPBF2209200011501120',
-#         ]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-wipe-miri
-# spec:
-#   restartPolicy: Never
-#   nodeName: miri
-#   containers:
-#     - name: disk-wipe
-#       image: ghcr.io/cbc02009/ubuntu:22.04
-#       securityContext:
-#         privileged: true
-#       command: ['/bin/sh', '-c']
-#       args:
-#         [
-#           'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF; wipefs -af /dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF; blkdiscard /dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF; partprobe /dev/disk/by-id/ata-CT1000BX500SSD1_2306E6A834FF',
-#         ]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-wipe-sakura
+spec:
+  restartPolicy: Never
+  nodeName: sakura
+  containers:
+    - name: disk-wipe
+      image: ghcr.io/cbc02009/ubuntu:22.04
+      securityContext:
+        privileged: true
+      command: ['/bin/sh', '-c']
+      args:
+        [
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sdb; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sdb; wipefs -af /dev/sdb; blkdiscard /dev/sdb; partprobe /dev/sdb',
+        ]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-wipe-miri
+spec:
+  restartPolicy: Never
+  nodeName: miri
+  containers:
+    - name: disk-wipe
+      image: ghcr.io/cbc02009/ubuntu:22.04
+      securityContext:
+        privileged: true
+      command: ['/bin/sh', '-c']
+      args:
+        [
+          'apt update; apt install fdisk gdisk parted udev -y; sgdisk --zap-all /dev/sda; dd if=/dev/zero bs=1M count=100 oflag=direct,dsync of=/dev/sda; wipefs -af /dev/sda; blkdiscard /dev/sda; partprobe /dev/sda',
+        ]
 ---
 apiVersion: v1
 kind: Pod
@@ -73,108 +73,108 @@ spec:
     - name: rook-data-dir
       mountPath: /node/rook-data
     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-clean-sakura
-# spec:
-#   restartPolicy: Never
-#   nodeName: sakura
-#   volumes:
-#   - name: rook-data-dir
-#     hostPath:
-#       path: /var/lib/rook
-#   containers:
-#   - name: disk-clean
-#     image: ghcr.io/cbc02009/busybox:1.36.1
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#     - name: rook-data-dir
-#       mountPath: /node/rook-data
-#     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-clean-miri
-# spec:
-#   restartPolicy: Never
-#   nodeName: miri
-#   volumes:
-#   - name: rook-data-dir
-#     hostPath:
-#       path: /var/lib/rook
-#   containers:
-#   - name: disk-clean
-#     image: ghcr.io/cbc02009/busybox:1.36.1
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#     - name: rook-data-dir
-#       mountPath: /node/rook-data
-#     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-clean-rem
-# spec:
-#   restartPolicy: Never
-#   nodeName: rem
-#   volumes:
-#   - name: rook-data-dir
-#     hostPath:
-#       path: /var/lib/rook
-#   containers:
-#   - name: disk-clean
-#     image: ghcr.io/cbc02009/busybox:1.36.1
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#     - name: rook-data-dir
-#       mountPath: /node/rook-data
-#     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-clean-ram
-# spec:
-#   restartPolicy: Never
-#   nodeName: ram
-#   volumes:
-#   - name: rook-data-dir
-#     hostPath:
-#       path: /var/lib/rook
-#   containers:
-#   - name: disk-clean
-#     image: ghcr.io/cbc02009/busybox:1.36.1
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#     - name: rook-data-dir
-#       mountPath: /node/rook-data
-#     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
-# ---
-# apiVersion: v1
-# kind: Pod
-# metadata:
-#   name: disk-clean-anya
-# spec:
-#   restartPolicy: Never
-#   nodeName: anya
-#   volumes:
-#   - name: rook-data-dir
-#     hostPath:
-#       path: /var/lib/rook
-#   containers:
-#   - name: disk-clean
-#     image: ghcr.io/cbc02009/busybox:1.36.1
-#     securityContext:
-#       privileged: true
-#     volumeMounts:
-#     - name: rook-data-dir
-#       mountPath: /node/rook-data
-#     command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-sakura
+spec:
+  restartPolicy: Never
+  nodeName: sakura
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: ghcr.io/cbc02009/busybox:1.36.1
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-miri
+spec:
+  restartPolicy: Never
+  nodeName: miri
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: ghcr.io/cbc02009/busybox:1.36.1
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-rem
+spec:
+  restartPolicy: Never
+  nodeName: rem
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: ghcr.io/cbc02009/busybox:1.36.1
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-ram
+spec:
+  restartPolicy: Never
+  nodeName: ram
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: ghcr.io/cbc02009/busybox:1.36.1
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: disk-clean-anya
+spec:
+  restartPolicy: Never
+  nodeName: anya
+  volumes:
+  - name: rook-data-dir
+    hostPath:
+      path: /var/lib/rook
+  containers:
+  - name: disk-clean
+    image: ghcr.io/cbc02009/busybox:1.36.1
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: rook-data-dir
+      mountPath: /node/rook-data
+    command: ["/bin/sh", "-c", "rm -rf /node/rook-data/*"]
