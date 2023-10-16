@@ -60,7 +60,7 @@ spec:
           main:
             image:
               repository: ghcr.io/authelia/authelia
-              tag: master@sha256:0095d320b980deddebd3d6be2d77c85254fa1bf08624922a5a5c982a4df04991
+              tag: master@sha256:8f4155a799e599e39851970c307524781d4c13b48e28d639899536870b7ac4fc
 
             envFrom: *envFrom
             env:
