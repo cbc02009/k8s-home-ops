@@ -41,7 +41,6 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
-
             image:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '14.9'
@@ -50,11 +49,9 @@ spec:
             image:
               repository: ghcr.io/cbc02009/vaultwarden
               tag: 1.29.2
-
             envFrom:
               - secretRef:
                   name: *app
-
             env:
               TZ: ${TZ}
               DATA_FOLDER: config
@@ -98,14 +95,16 @@ spec:
                 pathType: Prefix
                 service:
                   name: main
-                  port: http
+                  port: *port
               - path: /notifications/hub/negotiate
                 pathType: Prefix
                 service:
+                  name: main
                   port: *port
               - path: /notifications/hub
                 pathType: Prefix
                 service:
+                  name: main
                   port: *websocket-port
         tls:
           - hosts:
