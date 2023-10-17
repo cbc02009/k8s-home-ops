@@ -109,7 +109,6 @@ spec:
         tls:
           - hosts:
               - *host
-
         className: external-nginx
     persistence:
       config:
