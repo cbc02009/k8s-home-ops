@@ -1,8 +1,8 @@
 ---
 clusterName: kokoro
 
-# renovate: image depName=ghcr.io/siderolabs/installer
-talosVersion: v1.5.3
+# renovate: image depName=ghcr.io/cbc02009/installer
+talosVersion: v1.5.4
 # renovate: image depName=registry.k8s.io/kube-apiserver
 kubernetesVersion: v1.28.1
 
@@ -51,13 +51,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # patches:
-    #   - |-
-    #     machine:
-    #       install:
-    #         extensions:
-    #           - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
-    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
 
   - hostname: anya.ctec.run
     ipAddress: 10.0.2.11
@@ -106,13 +99,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # patches:
-    #   - |-
-    #     machine:
-    #       install:
-    #         extensions:
-    #           - image: ghcr.io/siderolabs/nonfree-kmod-nvidia:535.54.03-v1.5.0
-    #           - image: ghcr.io/siderolabs/nvidia-container-toolkit:535.54.03-v1.13.5
 
   - hostname: rem.ctec.run
     ipAddress: 10.0.2.13
