@@ -123,7 +123,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
+        className: "internal-nginx"
         annotations:
           ingress.home.arpa/type: "internal"
           nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -135,8 +135,10 @@ spec:
         hosts:
           - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:
-              - path: /
-                pathType: Prefix
+              path: /
+              service:
+                name: main
+                port: http
         tls:
           - hosts:
               - *host
