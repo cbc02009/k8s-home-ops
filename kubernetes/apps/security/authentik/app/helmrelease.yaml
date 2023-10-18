@@ -22,13 +22,13 @@ spec:
 
     initContainers:
       01-init-db:
-        name: init-db
-        envFrom:
-          - secretRef:
-              name: authentik-secret
-        image:
-          repository: ghcr.io/onedr0p/postgres-init
-          tag: '14.9'
+        - name: init-db
+          envFrom:
+            - secretRef:
+                name: authentik-secret
+          image:
+            repository: ghcr.io/onedr0p/postgres-init
+            tag: '14.9'
 
     authentik:
       log_level: info
