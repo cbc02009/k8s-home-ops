@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: &app authentik
+  namespace: security
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: authentik
+      version: 2023.8.3
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: security
+  values:
+    annotations:
+      secret.reloader.stakater.com/reload: authentik,authentik-redis
+
+    authentik:
+      log_level: info
+      email:
+        port: 587
+        use_tls: true
+      error_reporting:
+        enabled: false
+        send_pii: false
+      redis:
+        host: "authentik-redis.security.svc.cluster.local"
+        password: ""
+
+    envFrom:
+      -secretRef:
+        name: *app
+
+    ingress:
+      enabled: true
+      ingressClassName: external-nginx
+      annotations:
+        ingress.home.arpa/type: "external"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      hosts:
+        - host: &host authentik.${EXTERNAL_DOMAIN}
+          paths:
+            - path: /
+      tls:
+        - hosts:
+            - *host
+
+    postgresql:
+      enabled: false
+
+    prometheus:
+      rules:
+        create: true
+      serviceMonitor:
+        create: true
+
+    redis:
+      enabled: false
