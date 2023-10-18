@@ -33,3 +33,4 @@ spec:
   dependsOn:
     - name: apps-external-secrets
     - name: apps-authentik-redis
+    - name: apps-cloudnative-pg-cluster
