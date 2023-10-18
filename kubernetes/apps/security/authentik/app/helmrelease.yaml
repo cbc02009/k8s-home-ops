@@ -22,11 +22,11 @@ spec:
 
     initContainers:
       01-init-db:
-        name: init-db
         envFrom:
           - secretRef:
               name: authentik-secret
         image: ghcr.io/onedr0p/postgres-init:14.9
+        imagePullPolicy: IfNotPresent
 
     authentik:
       log_level: info
