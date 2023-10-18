@@ -65,7 +65,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.81.1
+              tag: v1.82.1
             envFrom: *envFrom
             resources:
               requests:
