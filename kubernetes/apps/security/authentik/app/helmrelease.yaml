@@ -18,13 +18,13 @@ spec:
         namespace: security
   values:
     annotations:
-      secret.reloader.stakater.com/reload: authentik,authentik-redis
+      secret.reloader.stakater.com/reload: authentik-secret,authentik-redis
 
     authentik:
       log_level: info
       email:
-        port: 587
-        use_tls: true
+        port: 25
+        use_tls: false
       error_reporting:
         enabled: false
         send_pii: false
@@ -34,7 +34,7 @@ spec:
 
     envFrom:
       - secretRef:
-          name: *app
+          name: authentik-secret
 
     ingress:
       enabled: true
