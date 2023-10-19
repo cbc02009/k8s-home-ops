@@ -58,18 +58,22 @@ spec:
         oauth_allow_insecure_email_lookup: true # https://github.com/grafana/grafana/issues/70203
       auth.generic_oauth:
         enabled: true
-        name: Authelia
+        name: Authentik
         icon: signin
-        scopes: openid profile email groups
+        scopes: openid profile email
         empty_scopes: false
         login_attribute_path: preferred_username
         groups_attribute_path: groups
         name_attribute_path: name
         use_pkce: true
-      auth.generic_oauth.group_mapping:
-        org_id: 1
+        client_id: 5EfoenaCiQ5OWdz8nndoRIchQe13apSuefElHRMg
+        client_secret: # Set by env vars
+        auth_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/authorize/
+        token_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/token/
+        api_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/userinfo/
+        # map user groups to Grafana roles
         role_attribute_path: |
-          contains(groups[*], 'admins') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
+          contains(groups[*], 'Grafana admins') && 'Admin' || contains(groups[*], 'Grafana Editors') && 'Editor' || 'Viewer'
       auth.basic:
         enabled: false
       auth.anonymous:
