@@ -13,46 +13,52 @@ module "cf_domain_hardware" {
       value = "v=DMARC1; p=none; rua=mailto:postmaster@ctec.run; ruf=mailto:postmaster@ctec.run; fo=1;"
       type  = "TXT"
     },
-    # Fastmail settings
+    # Proton settings
     {
-      id       = "fastmail_mx_1"
+      id       = "protonmail_verification"
+      name     = "@"
+      value    = "protonmail-verification=3060333aaf4ebaae4f1faf707ae7669f88d6808c"
+      type     = "TXT"
+    },
+    {
+      id       = "protonmail_mx_1"
       name     = "@"
       priority = 10
-      value    = "in1-smtp.messagingengine.com"
+      value    = "mail.protonmail.ch"
       type     = "MX"
     },
     {
-      id       = "fastmail_mx_2"
+      id       = "protonmail_mx_2"
       name     = "@"
       priority = 20
-      value    = "in2-smtp.messagingengine.com"
+      value    = "mailsec.protonmail.ch"
       type     = "MX"
     },
     {
-      id      = "fastmail_dkim_1"
-      name    = "fm1._domainkey"
-      value   = "fm1.ctec.run.dkim.fmhosted.com"
+      id      = "protonmail_dkim_1"
+      name    = "protonmail._domainkey"
+      value   = "protonmail.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id      = "fastmail_dkim_2"
-      name    = "fm2._domainkey"
-      value   = "fm2.ctec.run.dkim.fmhosted.com"
+      id      = "protonmail_dkim_2"
+      name    = "protonmail2._domainkey"
+      value   = "protonmail2.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id      = "fastmail_dkim_3"
-      name    = "fm3._domainkey"
-      value   = "fm3.ctec.run.dkim.fmhosted.com"
+      id      = "protonmail_dkim_3"
+      name    = "protonmail3._domainkey"
+      value   = "protonmail3.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id    = "fastmail_spf"
+      id    = "protonmail_spf"
       name  = "@"
-      value = "v=spf1 include:spf.messagingengine.com ?all"
+      value = "v=spf1 include:_spf.protonmail.ch mx ~all"
       type  = "TXT"
     }
   ]

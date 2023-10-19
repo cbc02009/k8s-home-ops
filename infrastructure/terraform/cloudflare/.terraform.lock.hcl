@@ -1,27 +1,6 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/1password/onepassword" {
-  version     = "1.1.4"
-  constraints = "1.1.4"
-  hashes = [
-    "h1:+cONzCC4jHPsPHku0Ced0PTngpTIfbYyNe7YHaqi4Gw=",
-    "zh:018f3e223ae82ba675f0f088af135a9196326501f9f57f397067a65342cdcca3",
-    "zh:1a077bba8db0ffa0c969bbcd8525d30f4d8018257363408b4e6891b319397e91",
-    "zh:273534ba172eec6bc71cdf107cb51197fb58818b5a31bf9812b89ebaa0545522",
-    "zh:2956acd7594b024f708588fe47f495abb555593bd0360c544b97a700490810fb",
-    "zh:2a204b457c53c2808a990e9fe2ceafc73c1371eb11d60a7e9baf5f2db2d5891d",
-    "zh:329bcfccbb6f96d3cdfc79d04c677545a5e170e3a29480a3002459fc1801db0e",
-    "zh:446e6e9fad793e14f53cecf8140407fab6a8178590a032f764a0fe300171e2d8",
-    "zh:69ca3fa115f292b48defdc5c06297f68ce38389596b0cb715ac8730a1080512d",
-    "zh:cce0942774602a0357251f3c10570fb71c4d2b4769c324cea6532e75d7e58c14",
-    "zh:d4aec090dbd03beba2f4eea52d64cfc9417433418c7ada6d76649364429af220",
-    "zh:e99adab86730b3847332d93d66621fdf4fea3b309579266c45469358f68f10c9",
-    "zh:eef501df7d4f1694cb1145a6c8a905d7338a4abd0001d43e2425986e3d8768f6",
-    "zh:f8424c10cc66fd8feea457aaab47fc122f67ca5a9dfbcb47c7c79859cf7291ed",
-  ]
-}
-
 provider "registry.terraform.io/cloudflare/cloudflare" {
   version     = "4.16.0"
   constraints = "4.16.0"
@@ -40,6 +19,21 @@ provider "registry.terraform.io/cloudflare/cloudflare" {
     "h1:oJp1Ew4R1rVTbu4yWHgAZfQfwfuwOKlYU4Au4Nm+9Mk=",
     "h1:pia7CCAHtyGxEAeYkz+MiohX2YnRhPYwrexSbW560es=",
     "h1:wwfTxiKtAT/RUPaRW6qDg9GywT+ibu8pJC3eZ+43lyw=",
+    "zh:0e2add99a234202d0cb306a06d98f7234024fbf03387f326b484ee3793eb17b7",
+    "zh:217485b986a34845f91836cec516f257fda8c1a18394eee12084fc006d0f0a4f",
+    "zh:2e2c58e37810f4b14137fce818282442aa308cf99686cf65d0329796c2a3ef0f",
+    "zh:3293b690d361c8df71e5322ef8f2dde92c9017c0408c7c995aa9b6780a6b2514",
+    "zh:4c21f8b04ff2698400c9e81181483ea222e223cfd804ed391c026521a58ef7a9",
+    "zh:582a2a462cebfc70d2f981bead2758dfa830bafc745d0e4a02af4916d9519fc1",
+    "zh:5bb51df5dcdebc63a5e413fee0dbcdfeb039327281541f49032e1ad5f36bb237",
+    "zh:5da1fba0da01c91ec6120ce728d0f76ecc6263a73e8347027abf4e3886995f3c",
+    "zh:7ef058196d3483a6e7c37583b6beebbec57dc22ef743e2419711f64b91ca807c",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:a4f3f78ec4a6bbd2be2533102963ea5e4fa952bd57c70bec9a967fa1e46a9f4a",
+    "zh:c0a9aa63ae7d2c0e6c5c6d5f0edd9069c43d79e5daff11cf10f3257b4f60c1bc",
+    "zh:d74799e6c9abc24d6095b6a04d03d37f4a8fd181cc75f01ff974668164b94739",
+    "zh:da3198fb6114a9932c9a122e5a83f8d5260dfadb1e58837e59364fd9767af100",
+    "zh:f82605b39c613178c744ee928a585403a507bcb9f7d4fefa81b62bcfed057903",
   ]
 }
 
@@ -61,6 +55,20 @@ provider "registry.terraform.io/dopplerhq/doppler" {
     "h1:hHgbVjn5s64Ou/cKO8pNtj7IHG66j185t+AUcYB+fr8=",
     "h1:k3z7HPiqKLPlaCnFTKNWB+XV/q3rHxTjYcrQ7BRriLc=",
     "h1:x8sHxTzOxHoi9mTmJs5PC05vsSMSYzWhYCT3Cmn12tw=",
+    "zh:1ef1786e923127e11c57e1c3d49ca7fad69f5cd53c10556d463e5d1449a4d285",
+    "zh:2ce8a0a96c6cdb61232a07639c22a6e8db6d3db6582ed760fbe5fc9fe4914c73",
+    "zh:41a7e0314833f8801e7a9e1e96a45e34e3e3af113fdcf7251cbe5f39ff04da8a",
+    "zh:59ae67ecd7ffcf49a8ed412f57c90fd1d5d322ae34ff46f2aa3b577c3c8991c7",
+    "zh:6556cd1c08b91d4b57b69d25cb0027f881a57589f14df29986215c4300215374",
+    "zh:6ababbf1c4c8410c1954ac552ff74baea312f149f7ccf0799d870397137156cc",
+    "zh:700e7b18dc6a9eea60b1c519e9d401be8f0143872afcaa81473cdc79ec804565",
+    "zh:7a6d20f019a3df864dc78e724c31ff3c7cc4fcc0260172d77f5983c3bc38e5ae",
+    "zh:8a41db773fb848b12d3e3254fe120845cc470def67a4385c0840c2cf90cc8423",
+    "zh:b406c3a66d62aae83a063c2853a0949a4c2c1276dd4132a8fce29a4a005916c9",
+    "zh:c029eeb82a9a29a427d53a35262703fab32365cfa14449dbd0663abe937adcb9",
+    "zh:c6e6161961efa40f91a4e5779ad0f4a8cee2042a6897a9823e4d8b5ebd076855",
+    "zh:c74d98b94d2bb62ed19741f6b3263094cfd644b13024532490cd25a88c7b6775",
+    "zh:f010da7f0a6ed88c59dee7ae5d14417b4c4d59e015e11a0a90c9604c7eb8f50a",
   ]
 }
 
