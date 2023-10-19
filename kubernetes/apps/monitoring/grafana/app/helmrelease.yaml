@@ -56,6 +56,7 @@ spec:
       auth:
         oauth_auto_login: true
         oauth_allow_insecure_email_lookup: true # https://github.com/grafana/grafana/issues/70203
+        signout_redirect_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/grafana/end-session/
       auth.generic_oauth:
         enabled: true
         name: Authentik
@@ -82,6 +83,8 @@ spec:
         # org_role: Viewer
       news:
         news_feed_enabled: false
+      server:
+        root_url: https://grafana.${EXTERNAL_DOMAIN}
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -199,6 +202,10 @@ spec:
 
     dashboards:
       default:
+        authentik:
+          gnetId: 14837
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         cilium:
           cilium-dashboard:
             url: https://raw.githubusercontent.com/cilium/cilium/v1.13.4/examples/kubernetes/addons/prometheus/files/grafana-dashboards/cilium-dashboard.json
