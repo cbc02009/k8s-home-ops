@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
-    paths: ["terraform/**"]
+    paths: ["infrastructure/terraform/**"]
 
 jobs:
   publish-terraform:
@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           flux push artifact oci://${{ steps.generate-tag.outputs.tag }} \
-              --path="./terraform" \
+              --path="./infrastructure/terraform" \
               --source="$(git config --get remote.origin.url)" \
               --revision="$(git branch --show-current)/$(git rev-parse HEAD)"
 
