@@ -70,3 +70,9 @@ spec:
 
     redis:
       enabled: false
+
+    autoscaling:
+      server:
+        enabled: true
+      worker:
+        enabled: true
