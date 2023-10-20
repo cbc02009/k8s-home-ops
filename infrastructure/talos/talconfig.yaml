@@ -26,6 +26,7 @@ cniConfig:
 
 nodes:
   - hostname: uiharu.ctec.run
+    talosImageURL: factory.talos.dev/installer/1eb5ee4f11d7032edb746fe7f9eb9f7d138fe88f5db88935d6e62dc795d82027
     ipAddress: 10.0.2.10
     installDiskSelector:
       serial: PHKA1261000X1P0B
@@ -53,6 +54,7 @@ nodes:
             gateway: 10.0.2.1
 
   - hostname: anya.ctec.run
+    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
@@ -74,6 +76,7 @@ nodes:
             gateway: 10.0.2.1
 
   - hostname: sakura.ctec.run
+    talosImageURL: factory.talos.dev/installer/1eb5ee4f11d7032edb746fe7f9eb9f7d138fe88f5db88935d6e62dc795d82027
     ipAddress: 10.0.2.12
     installDiskSelector:
       model: INTEL SSDPEKNW512G8
@@ -101,6 +104,7 @@ nodes:
             gateway: 10.0.2.1
 
   - hostname: rem.ctec.run
+    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.13
     installDiskSelector:
       model: FPT310M8SSD256G
@@ -122,6 +126,7 @@ nodes:
             gateway: 10.0.2.1
 
   - hostname: ram.ctec.run
+    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.14
     installDiskSelector:
       model: FPT310M8SSD256G
@@ -143,6 +148,7 @@ nodes:
             gateway: 10.0.2.1
 
   - hostname: miri.ctec.run
+    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.15
     installDiskSelector:
       serial: PNY2251221219010040D
