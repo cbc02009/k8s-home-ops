@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: oci://ghcr.io/cbc02009/terraform-s3
+  url: oci://ghcr.io/cbc02009/terraform/s3
   ref:
     tag: main
 ---
