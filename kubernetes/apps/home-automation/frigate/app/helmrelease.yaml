@@ -98,9 +98,9 @@ spec:
     ingress:
       main:
         enabled: true
-        className: internal-nginx
+        className: external-nginx
         annotations:
-          ingress.home.arpa/type: internal
+          ingress.home.arpa/type: external
           # This should be the in-cluster DNS name for the authentik outpost service
           # as when the external URL is specified here, nginx will overwrite some crucial headers
           nginx.ingress.kubernetes.io/auth-url: |-
