@@ -23,6 +23,7 @@ spec:
       retries: 5
   values:
     defaultPodOptions:
+      runtimeClassName: nvidia
       securityContext:
         runAsUser: 568
         runAsGroup: 568
@@ -119,4 +120,3 @@ spec:
         path: /tank/backup/kubernetes/apps/plex
         globalMounts:
           - path: /config/backup
-    runtimeClassName: nvidia
