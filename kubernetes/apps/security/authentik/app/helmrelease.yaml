@@ -29,7 +29,7 @@ spec:
         imagePullPolicy: IfNotPresent
 
     authentik:
-      log_level: info
+      log_level: debug
       email:
         port: 25
         use_tls: false
