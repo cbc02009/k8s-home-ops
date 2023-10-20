@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,71 +24,95 @@ spec:
       retries: 5
   values:
 
-    runtimeClassName: nvidia
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: google.feature.node.kubernetes.io/coral
+                    operator: In
+                    values:
+                      - 'true'
+      runtimeClassName: nvidia
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+    controllers:
+      main:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
 
-    image:
-      repository: ghcr.io/blakeblackshear/frigate
-      tag: 0.12.1
+        containers:
+          main:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.12.1
 
-    env:
-      TZ: "${TZ}"
-      LIBVA_DRIVER_NAME: i965
-      FRIGATE_MQTT_USERNAME: frigate
-      FRIGATE_MQTT_PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: emqx
-            key: USER_1_PASSWORD
+            envFrom:
+              - secretRef:
+                  name: frigate
 
-    envFrom:
-      - secretRef:
-          name: frigate
+            env:
+              TZ: ${TZ}
+              LIBVA_DRIVER_NAME: i965
+              FRIGATE_MQTT_USERNAME: frigate
+              FRIGATE_MQTT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: emqx
+                    key: USER_1_PASSWORD
+
+            resources:
+              requests:
+                cpu: 10m
+                memory: 1000Mi
+                nvidia.com/gpu: 1
+              limits:
+                memory: 8000Mi
+                nvidia.com/gpu: 1
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: &port 5000
+
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+
+            securityContext:
+              privileged: true
 
     service:
       main:
         ports:
           http:
-            port: &port 5000
-
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /api/version
             port: *port
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
-      startup:
-        enabled: false
-
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
         annotations:
-          ingress.home.arpa/type: "external-auth"
+          ingress.home.arpa/type: external-auth
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
           - hosts:
               - *host
 
-    securityContext:
-      privileged: true
-
+        className: external-nginx
     persistence:
       data:
         enabled: true
@@ -97,39 +121,26 @@ spec:
         enabled: true
         type: configMap
         name: *app
-        subPath: config.yaml
-        mountPath: /config/config.yml
         readOnly: true
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yaml
       media:
         enabled: true
         existingClaim: frigate-nfs
-        mountPath: /media
+        globalMounts:
+          - path: /media
       cache:
         enabled: true
         type: emptyDir
         medium: Memory
         sizeLimit: 4Gi
-        mountPath: /dev/shm
+        globalMounts:
+          - path: /dev/shm
       usb:
         enabled: true
         type: hostPath
         hostPath: /dev/bus/usb
         hostPathType: Directory
-        mountPath: /dev/bus/usb
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: google.feature.node.kubernetes.io/coral
-                  operator: In
-                  values:
-                    - "true"
-    resources:
-      requests:
-        cpu: 10m
-        memory: 1000Mi
-        nvidia.com/gpu: 1
-      limits:
-        memory: 8000Mi
-        nvidia.com/gpu: 1
+        globalMounts:
+          - path: /dev/bus/usb
