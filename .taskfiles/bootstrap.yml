@@ -71,3 +71,13 @@ tasks:
       - go-task bs:crds
       - go-task bs:rook
       - go-task bs:cluster
+
+  prep:
+    desc: run all bootstrap commands in order
+    cmds:
+      - go-task bs:csr-approver
+      - go-task bs:cilium
+      - go-task bs:flux
+      - go-task bs:doppler
+      - go-task bs:github
+      - go-task bs:crds
