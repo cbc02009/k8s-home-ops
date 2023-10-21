@@ -39,6 +39,7 @@ spec:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
+          setGateway: 'true'
 
         initContainers:
           init-db:
@@ -130,5 +131,3 @@ spec:
         path: /tank/backup/kubernetes/apps/prowlarr
         globalMounts:
           - path: /config/Backups
-    podAnnotations:
-      setGateway: 'true'
