@@ -66,7 +66,7 @@ spec:
               PROWLARR__LOG_LEVEL: info
               PROWLARR__POSTGRES_MAIN_DB: prowlarr_main
               PROWLARR__POSTGRES_LOG_DB: prowlarr_log
-              PROWLARR__POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
+              PROWLARR__POSTGRES_HOST: ${LB_POSTGRES}
 
             resources:
               requests:
@@ -130,5 +130,5 @@ spec:
         path: /tank/backup/kubernetes/apps/prowlarr
         globalMounts:
           - path: /config/Backups
-    # podAnnotations:
-    #   setGateway: 'true'
+    podAnnotations:
+      setGateway: 'true'
