@@ -63,6 +63,7 @@ spec:
       main:
         type: LoadBalancer
         loadBalancerIP: ${LB_PLEX}
+        externalTrafficPolicy: Cluster
         ports:
           http:
             port: 32400
