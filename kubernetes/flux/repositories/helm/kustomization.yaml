@@ -39,7 +39,6 @@ resources:
   - ./rook-ceph-charts.yaml
   - ./teampiped.yaml
   - ./bitnami-charts.yaml
-  - ./hajimari-charts.yaml
   - ./ingress-nginx-charts.yaml
   - ./stakater-charts.yaml
   - ./tf-controller.yaml

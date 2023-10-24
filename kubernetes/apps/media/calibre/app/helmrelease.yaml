@@ -74,7 +74,6 @@ spec:
       main:
         enabled: true
         annotations:
-          hajimari.io/icon: mdi:bookshelf
           external-dns.alpha.kubernetes.io/public: "true"
           external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
           nginx.ingress.kubernetes.io/satisfy: "any"

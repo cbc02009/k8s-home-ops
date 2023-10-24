@@ -132,8 +132,6 @@ spec:
             proxy_hide_header "x-webkit-csp";
             proxy_hide_header "content-security-policy";
             proxy_hide_header "X-Frame-Options";
-          hajimari.io/enable: "true"
-          hajimari.io/icon: "cloud-download"
         hosts:
           - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:

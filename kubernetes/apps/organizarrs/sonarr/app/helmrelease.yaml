@@ -91,9 +91,6 @@ spec:
             proxy_set_header Accept-Encoding "";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/organizr.css"></head>';
             sub_filter_once on;
-          hajimari.io/enable: 'true'
-          hajimari.io/icon: television-box
-          hajimari.io/appName: sonarr
         hosts:
           - host: *host
             paths:

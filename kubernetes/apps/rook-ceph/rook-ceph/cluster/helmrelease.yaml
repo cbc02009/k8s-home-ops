@@ -129,9 +129,6 @@ spec:
           external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-          hajimari.io/enable: "true"
-          hajimari.io/icon: content-save
-          hajimari.io/appName: "rook-ceph"
 
         host:
           name: &host "rook.${EXTERNAL_DOMAIN}"
