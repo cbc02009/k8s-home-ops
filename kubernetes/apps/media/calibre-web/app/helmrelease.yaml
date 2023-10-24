@@ -63,7 +63,9 @@ spec:
       main:
         enabled: true
         annotations:
-          ingress.home.arpa/type: external
+          external-dns.alpha.kubernetes.io/public: "true"
+          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:
