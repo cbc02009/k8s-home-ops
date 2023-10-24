@@ -3,9 +3,9 @@ ingress:
   - hostname: "*.kokoro.wtf"
     service: https://nginx-external-controller.network.svc.cluster.local:443
     originRequest:
-      originServerName: ingress-ext.kokoro.wtf
+      originServerName: external.kokoro.wtf
   - hostname: "kokoro.wtf"
     service: https://nginx-external-controller.network.svc.cluster.local:443
     originRequest:
-      originServerName: ingress-ext.kokoro.wtf
+      originServerName: external.kokoro.wtf
   - service: http_status:404
