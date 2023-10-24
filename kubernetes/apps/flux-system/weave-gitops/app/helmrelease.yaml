@@ -22,7 +22,7 @@ spec:
 
     ingress:
       enabled: true
-      className: internal-nginx
+      className: internal
       annotations:
         ingress.home.arpa/type: "internal"
         hajimari.io/icon: mdi:sawtooth-wave

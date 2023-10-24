@@ -62,7 +62,7 @@ spec:
     ingress:
       dashboard:
         enabled: true
-        ingressClassName: internal-nginx
+        ingressClassName: internal
         annotations:
           ingress.home.arpa/type: "internal"
         path: /

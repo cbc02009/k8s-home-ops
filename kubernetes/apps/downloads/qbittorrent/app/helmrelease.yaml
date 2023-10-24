@@ -123,7 +123,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: "internal-nginx"
+        className: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
           nginx.ingress.kubernetes.io/configuration-snippet: |

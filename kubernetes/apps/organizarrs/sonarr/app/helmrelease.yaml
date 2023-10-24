@@ -106,7 +106,7 @@ spec:
               - *host
             secretName: &tls tls.sonarr
 
-        className: internal-nginx
+        className: internal
     persistence:
       config:
         enabled: true

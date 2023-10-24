@@ -8,7 +8,7 @@ metadata:
     ingress.home.arpa/type: "external"
     hajimari.io/enable: "false"
 spec:
-  ingressClassName: "external-nginx"
+  ingressClassName: "external"
   rules:
     - host: &host "flux-receiver.kokoro.wtf"
       http:

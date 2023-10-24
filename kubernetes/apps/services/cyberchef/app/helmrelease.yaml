@@ -51,4 +51,4 @@ spec:
         tls:
           - hosts:
               - *host
-        className: external-nginx
+        className: external

@@ -46,7 +46,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
+        ingressClassName: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:

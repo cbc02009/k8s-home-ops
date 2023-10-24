@@ -97,7 +97,7 @@ spec:
           - hosts:
               - *host
 
-        className: internal-nginx
+        className: internal
     persistence:
       config:
         enabled: true

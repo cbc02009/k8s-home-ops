@@ -39,13 +39,13 @@ spec:
 
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ingress-int.kokoro.wtf"
-          io.cilium/lb-ipam-ips: "10.6.0.2"
+          external-dns.alpha.kubernetes.io/hostname: "internal.kokoro.wtf"
+          io.cilium/lb-ipam-ips: 10.6.0.2
         externalTrafficPolicy: Cluster
       ingressClassResource:
-        name: internal-nginx
+        name: internal
         default: true
-        controllerValue: k8s.io/ingress-nginx-internal
+        controllerValue: k8s.io/internal
       admissionWebhooks:
         objectSelector:
           matchExpressions:

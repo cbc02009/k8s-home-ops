@@ -63,7 +63,6 @@ spec:
       main:
         type: LoadBalancer
         loadBalancerIP: ${LB_PLEX}
-        externalTrafficPolicy: Cluster
         ports:
           http:
             port: 32400
@@ -71,7 +70,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external-nginx
+        className: external
         annotations:
           ingress.home.arpa/type: external
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS

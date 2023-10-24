@@ -62,7 +62,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "external-nginx"
+        ingressClassName: "external"
         annotations:
           ingress.home.arpa/type: "external-auth"
         hosts:

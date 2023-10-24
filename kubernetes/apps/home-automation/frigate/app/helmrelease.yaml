@@ -98,7 +98,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external-nginx
+        className: external
         annotations:
           ingress.home.arpa/type: external
           # This should be the in-cluster DNS name for the authentik outpost service

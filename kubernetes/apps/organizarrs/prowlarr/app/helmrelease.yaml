@@ -100,7 +100,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: internal-nginx
+        className: internal
         annotations:
           ingress.home.arpa/type: internal
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}

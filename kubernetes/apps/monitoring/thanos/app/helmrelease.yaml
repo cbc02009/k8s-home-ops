@@ -51,7 +51,7 @@ spec:
       ingress:
         enabled: true
         hostname: &host thanos-query-frontend.${EXTERNAL_DOMAIN}
-        ingressClassName: "internal-nginx"
+        ingressClassName: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"

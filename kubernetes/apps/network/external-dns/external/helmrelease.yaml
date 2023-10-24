@@ -47,7 +47,7 @@ spec:
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
       - --cloudflare-proxied
-      - --ingress-class=external-nginx
+      - --ingress-class=external
       - --annotation-filter=external-dns.alpha.kubernetes.io/public
 
     policy: sync

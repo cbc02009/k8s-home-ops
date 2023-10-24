@@ -70,7 +70,7 @@ spec:
           - hosts:
               - *host
 
-        className: external-nginx
+        className: external
     persistence:
       config:
         enabled: true

@@ -63,4 +63,4 @@ spec:
           - hosts:
               - *host
 
-        className: internal-nginx
+        className: internal

@@ -51,7 +51,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal-nginx"
+        ingressClassName: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
         hosts:
@@ -97,7 +97,7 @@ spec:
           - "/config/.vscode"
         ingress:
           enabled: true
-          ingressClassName: "external-nginx"
+          ingressClassName: "external"
           annotations:
             ingress.home.arpa/type: "internal"
           hosts:

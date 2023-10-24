@@ -109,7 +109,7 @@ spec:
               - *host
             secretName: &tls tls.radarr
 
-        className: internal-nginx
+        className: internal
     persistence:
       config:
         enabled: true

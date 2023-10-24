@@ -31,13 +31,13 @@ spec:
       replicaCount: 2
       service:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ingress-ext.kokoro.wtf"
-          io.cilium/lb-ipam-ips: "10.6.0.1"
+          external-dns.alpha.kubernetes.io/hostname: "external.kokoro.wtf"
+          io.cilium/lb-ipam-ips: 10.6.0.1
         externalTrafficPolicy: Cluster
       ingressClassResource:
-        name: external-nginx
+        name: external
         default: false
-        controllerValue: k8s.io/ingress-nginx-external
+        controllerValue: k8s.io/external
       admissionWebhooks:
         objectSelector:
           matchExpressions:

@@ -48,7 +48,7 @@ spec:
 
     ingress:
       enabled: true
-      ingressClassName: external-nginx
+      ingressClassName: external
       annotations:
         ingress.home.arpa/type: "external"
         nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"

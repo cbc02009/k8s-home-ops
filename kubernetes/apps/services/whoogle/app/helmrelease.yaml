@@ -89,7 +89,7 @@ spec:
           - hosts:
               - *host
 
-        className: external-nginx
+        className: external
     fullNameOverride: *app
     podAnnotations:
       reloader.stakater.com/auto: 'true'

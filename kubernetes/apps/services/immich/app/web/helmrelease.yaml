@@ -96,7 +96,7 @@ spec:
         tls:
           - hosts:
               - *host
-        className: internal-nginx
+        className: internal
     persistence:
       library:
         enabled: true

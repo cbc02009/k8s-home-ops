@@ -65,7 +65,7 @@ spec:
                 service:
                   name: main
                   port: http
-        className: internal-nginx
+        className: internal
     persistence:
       config:
         enabled: true

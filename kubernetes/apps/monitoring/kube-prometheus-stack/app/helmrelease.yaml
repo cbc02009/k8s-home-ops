@@ -113,7 +113,7 @@ spec:
       ingress:
         enabled: true
         pathType: Prefix
-        ingressClassName: "internal-nginx"
+        ingressClassName: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
@@ -235,7 +235,7 @@ spec:
       ingress:
         enabled: true
         pathType: Prefix
-        ingressClassName: "internal-nginx"
+        ingressClassName: "internal"
         annotations:
           ingress.home.arpa/type: "internal"
           hajimari.io/enable: "true"
