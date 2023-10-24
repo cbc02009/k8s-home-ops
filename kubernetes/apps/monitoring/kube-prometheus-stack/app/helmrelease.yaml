@@ -115,7 +115,9 @@ spec:
         pathType: Prefix
         ingressClassName: "internal"
         annotations:
-          ingress.home.arpa/type: "internal"
+          external-dns.alpha.kubernetes.io/public: "true"
+          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
           hajimari.io/enable: "true"
           hajimari.io/icon: database-clock
           hajimari.io/appName: Prometheus
@@ -194,11 +196,11 @@ spec:
             honor_timestamps: true
             static_configs:
               - targets:
-          #         - "sakura.ctec.run:9100"
-          #         - "anya.ctec.run:9100"
-          #         - "uiharu.ctec.run:9100"
-          #         - "rem.ctec.run:9100"
-          #         - "ram.ctec.run:9100"
+                  # - "sakura.ctec.run:9100"
+                  # - "anya.ctec.run:9100"
+                  # - "uiharu.ctec.run:9100"
+                  # - "rem.ctec.run:9100"
+                  # - "ram.ctec.run:9100"
                   - "gateway.ctec.run:9100"
 
     alertmanager:
@@ -237,7 +239,9 @@ spec:
         pathType: Prefix
         ingressClassName: "internal"
         annotations:
-          ingress.home.arpa/type: "internal"
+          external-dns.alpha.kubernetes.io/public: "true"
+          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
           hajimari.io/enable: "true"
           hajimari.io/icon: bell-alert
           hajimari.io/appName: Alertmanager

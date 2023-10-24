@@ -5,7 +5,8 @@ metadata:
   name: minio
   namespace: network
   annotations:
-    ingress.home.arpa/type: "internal"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
   labels:
     app.kubernetes.io/name: minio
     app.kubernetes.io/instance: minio
@@ -32,7 +33,8 @@ metadata:
   name: s3
   namespace: network
   annotations:
-    ingress.home.arpa/type: "internal"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
   labels:
     app.kubernetes.io/name: s3
     app.kubernetes.io/instance: s3
