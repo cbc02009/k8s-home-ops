@@ -73,6 +73,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: internal
         annotations:
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
           nginx.ingress.kubernetes.io/auth-url: http://ak-outpost-proxy-provider.authentik.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx
@@ -91,7 +92,6 @@ spec:
           - hosts:
               - *host
 
-        className: external
     persistence:
       config:
         enabled: true
