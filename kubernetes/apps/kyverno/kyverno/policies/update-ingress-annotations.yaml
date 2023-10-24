@@ -64,7 +64,7 @@ spec:
             annotations:
               <(ingress.home.arpa/type): "external"
               +(external-dns.alpha.kubernetes.io/public): "true"
-              +(external-dns.alpha.kubernetes.io/target): "ingress-ext.${EXTERNAL_DOMAIN}"
+              +(external-dns.alpha.kubernetes.io/target): "external.${EXTERNAL_DOMAIN}"
               +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
 
     - name: external-auth
@@ -84,7 +84,7 @@ spec:
             annotations:
               <(ingress.home.arpa/type): "external-auth"
               +(external-dns.alpha.kubernetes.io/public): "true"
-              +(external-dns.alpha.kubernetes.io/target): "ingress-ext.${EXTERNAL_DOMAIN}"
+              +(external-dns.alpha.kubernetes.io/target): "external.${EXTERNAL_DOMAIN}"
               +(nginx.ingress.kubernetes.io/satisfy): "any"
               +(nginx.ingress.kubernetes.io/whitelist-source-range): "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
               +(nginx.ingress.kubernetes.io/auth-method): GET
