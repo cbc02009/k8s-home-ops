@@ -17,24 +17,16 @@ spec:
   generateExistingOnPolicyUpdate: true
   validationFailureAction: enforce
   rules:
-    - name: ensure-annotation-present
-      match:
-        any:
-          - resources:
-              kinds: ["Ingress"]
-      validate:
-        message: "You must have ingress.home.arpa/type annotation set to internal/external/external-auth/internal-auth"
-        pattern:
-          metadata:
-            annotations:
-              ingress.home.arpa/type: "internal|external|external-auth|internal-auth"
     - name: internal
       match:
         any:
           - resources:
               kinds: ["Ingress"]
-              annotations:
-                ingress.home.arpa/type: "internal"
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.ingressClassName }}"
+            operator: Equal
+            value: "internal"
       mutate:
         targets:
           - apiVersion: networking.k8s.io/v1
@@ -43,7 +35,6 @@ spec:
         patchStrategicMerge:
           metadata:
             annotations:
-              <(ingress.home.arpa/type): "internal"
               +(nginx.ingress.kubernetes.io/whitelist-source-range): "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
               +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
 
@@ -52,8 +43,11 @@ spec:
         any:
           - resources:
               kinds: ["Ingress"]
-              annotations:
-                ingress.home.arpa/type: "external"
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.ingressClassName }}"
+            operator: Equal
+            value: "external"
       mutate:
         targets:
           - apiVersion: networking.k8s.io/v1
@@ -62,7 +56,6 @@ spec:
         patchStrategicMerge:
           metadata:
             annotations:
-              <(ingress.home.arpa/type): "external"
               +(external-dns.alpha.kubernetes.io/public): "true"
               +(external-dns.alpha.kubernetes.io/target): "external.${EXTERNAL_DOMAIN}"
               +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
