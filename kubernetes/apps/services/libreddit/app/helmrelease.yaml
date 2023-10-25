@@ -78,7 +78,7 @@ spec:
         enabled: true
         className: external
         annotations:
-          ingress.home.arpa/type: external-auth
+          authentik.home.arpa/enabled: "true"
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
