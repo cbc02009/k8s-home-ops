@@ -87,8 +87,6 @@ spec:
       main:
         enabled: true
         className: external
-        annotations:
-          ingress.home.arpa/type: external
         hosts:
           - host: &host vault.${EXTERNAL_DOMAIN}
             paths:

@@ -60,8 +60,6 @@ spec:
       main:
         enabled: true
         className: internal
-        annotations:
-          ingress.home.arpa/type: internal
 
         hosts:
           - host: &host tautulli.${EXTERNAL_DOMAIN}

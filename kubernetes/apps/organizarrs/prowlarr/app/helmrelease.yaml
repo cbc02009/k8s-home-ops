@@ -102,7 +102,6 @@ spec:
         enabled: true
         className: internal
         annotations:
-          ingress.home.arpa/type: internal
           cert-manager.io/cluster-issuer: ${CLUSTER_CERT}
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";

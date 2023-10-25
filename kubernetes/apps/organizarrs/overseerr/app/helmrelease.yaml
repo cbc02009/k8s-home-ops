@@ -54,7 +54,6 @@ spec:
         enabled: true
         className: external
         annotations:
-          ingress.home.arpa/type: external
           # nginx.ingress.kubernetes.io/configuration-snippet: |
           #   proxy_set_header Accept-Encoding "";
           #   sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/overseerr/nord.css"></head>';

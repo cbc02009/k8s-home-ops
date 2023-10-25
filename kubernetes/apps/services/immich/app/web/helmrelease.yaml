@@ -74,7 +74,6 @@ spec:
         enabled: true
         className: internal
         annotations:
-          ingress.home.arpa/type: internal
           nginx.ingress.kubernetes.io/configuration-snippet: |
             rewrite /api/(.*) /$1 break;
           nignx.ingress.kubernetes.io/force-ssl-redirect: 'true'

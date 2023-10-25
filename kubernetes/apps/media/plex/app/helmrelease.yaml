@@ -72,7 +72,6 @@ spec:
         enabled: true
         className: external
         annotations:
-          ingress.home.arpa/type: external
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'

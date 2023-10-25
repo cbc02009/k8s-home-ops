@@ -64,7 +64,7 @@ spec:
         enabled: true
         className: internal
         annotations:
-          ingress.home.arpa/type: external
+          authentik.home.arpa/enabled: true
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:

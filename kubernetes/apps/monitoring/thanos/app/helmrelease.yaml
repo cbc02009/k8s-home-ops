@@ -52,8 +52,6 @@ spec:
         enabled: true
         hostname: &host thanos-query-frontend.${EXTERNAL_DOMAIN}
         ingressClassName: "internal"
-        annotations:
-          ingress.home.arpa/type: internal
         tls: true
         extraTls:
           - hosts:

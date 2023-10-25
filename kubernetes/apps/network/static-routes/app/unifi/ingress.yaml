@@ -6,7 +6,6 @@ metadata:
   namespace: network
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingress.home.arpa/type: internal
   labels:
     app.kubernetes.io/name: unifi
     app.kubernetes.io/instance: unifi
