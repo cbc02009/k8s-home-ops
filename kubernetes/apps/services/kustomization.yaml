@@ -8,7 +8,6 @@ resources:
   # Flux-Kustomizations
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
-  - ./language-tools/ks.yaml
   - ./libreddit/ks.yaml
   - ./obico/ks.yaml
   - ./teddit/ks.yaml
