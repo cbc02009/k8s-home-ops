@@ -17,6 +17,25 @@ spec:
   generateExistingOnPolicyUpdate: true
   validationFailureAction: enforce
   rules:
+    - name: internal
+      match:
+        any:
+          - resources:
+              kinds: ["Ingress"]
+              annotations:
+                ingress.home.arpa/type: "internal"
+      mutate:
+        targets:
+          - apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            namespace: "{{request.object.metadata.namespace}}"
+        patchStrategicMerge:
+          metadata:
+            annotations:
+              <(ingress.home.arpa/type): "internal"
+              +(nginx.ingress.kubernetes.io/whitelist-source-range): "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+              +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
+
     - name: external-auth
       match:
         any:
