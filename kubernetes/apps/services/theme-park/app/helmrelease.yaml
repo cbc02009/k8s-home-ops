@@ -57,7 +57,7 @@ spec:
               - path: /
 
         tls:
-          - secretName: tls.theme-park
+          - secretName: *host
             hosts:
               - *host
 

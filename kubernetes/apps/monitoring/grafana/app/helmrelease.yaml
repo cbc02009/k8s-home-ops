@@ -378,7 +378,8 @@ spec:
       hosts:
         - &host "grafana.kokoro.wtf"
       tls:
-        - hosts:
+        - secretName: *host
+          hosts:
             - *host
     persistence:
       enabled: false

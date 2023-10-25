@@ -62,7 +62,8 @@ spec:
               - path: /
                 pathType: Prefix
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
     initContainers:
@@ -110,8 +111,9 @@ spec:
                 - path: /
                   pathType: Prefix
           tls:
-            - hosts:
-                - *code-host
+            - secretName: *host
+              hosts:
+                - *host
         volumeMounts:
           - name: config
             mountPath: /config

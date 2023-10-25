@@ -56,7 +56,8 @@ spec:
           hosts:
             - &host "hubble.${EXTERNAL_DOMAIN}"
           tls:
-            - hosts:
+            - secretName: *host
+              hosts:
                 - *host
 
     prometheus:

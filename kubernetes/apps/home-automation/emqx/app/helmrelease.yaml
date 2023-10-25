@@ -72,7 +72,8 @@ spec:
         hosts:
           - &host "emqx.${EXTERNAL_DOMAIN}"
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
     metrics:

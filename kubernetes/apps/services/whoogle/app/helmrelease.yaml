@@ -74,6 +74,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: external
         annotations:
           ingress.home.arpa/type: external-auth
         hosts:
@@ -85,11 +86,11 @@ spec:
                   name: main
                   port: http
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
-        className: external
+
     fullNameOverride: *app
     podAnnotations:
       reloader.stakater.com/auto: 'true'
-      # setGateway: "true"

@@ -140,7 +140,8 @@ spec:
                   name: main
                   port: http
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
     persistence:

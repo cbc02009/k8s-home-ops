@@ -122,7 +122,8 @@ spec:
         hosts:
           - &host prometheus.${EXTERNAL_DOMAIN}
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
       thanosService:
@@ -243,7 +244,8 @@ spec:
         hosts:
           - &am-host alertmanager.${EXTERNAL_DOMAIN}
         tls:
-          - hosts:
+          - secretName: *am-host
+            hosts:
               - *am-host
 
 

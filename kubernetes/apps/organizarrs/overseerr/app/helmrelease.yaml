@@ -52,6 +52,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: external
         annotations:
           ingress.home.arpa/type: external
           # nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -67,10 +68,10 @@ spec:
                   name: main
                   port: http
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
-        className: external
     persistence:
       config:
         enabled: true

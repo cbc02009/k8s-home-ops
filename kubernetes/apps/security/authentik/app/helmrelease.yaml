@@ -60,7 +60,8 @@ spec:
           paths:
             - path: /
       tls:
-        - hosts:
+        - secretName: *host
+          hosts:
             - *host
 
     postgresql:

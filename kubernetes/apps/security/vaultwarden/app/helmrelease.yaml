@@ -86,6 +86,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: external
         annotations:
           ingress.home.arpa/type: external
         hosts:
@@ -107,9 +108,10 @@ spec:
                   name: main
                   port: *websocket-port
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
-        className: external
+
     persistence:
       config:
         enabled: true

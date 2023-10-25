@@ -72,6 +72,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: internal
         annotations:
           ingress.home.arpa/type: internal
           nginx.ingress.kubernetes.io/configuration-snippet: |
@@ -92,9 +93,10 @@ spec:
                   name: immich-server
                   port: 3001
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
-        className: internal
+
     persistence:
       library:
         enabled: true

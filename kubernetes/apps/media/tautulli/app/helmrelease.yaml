@@ -59,6 +59,7 @@ spec:
     ingress:
       main:
         enabled: true
+        className: internal
         annotations:
           ingress.home.arpa/type: internal
 
@@ -71,10 +72,10 @@ spec:
                   name: main
                   port: http
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
-        className: internal
     persistence:
       config:
         enabled: true
