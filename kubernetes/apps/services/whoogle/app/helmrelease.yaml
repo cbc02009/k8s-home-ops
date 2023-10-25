@@ -77,8 +77,7 @@ spec:
         className: external
         annotations:
           authentik.home.arpa/enabled: "true"
-          nginx.ingress.kubernetes.io/auth-signin: |-
-            https://search.${EXTERNAL_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+          nginx.ingress.kubernetes.io/auth-signin: /outpost.goauthentik.io/start?rd=$escaped_request_uri
         hosts:
           - host: &host search.${EXTERNAL_DOMAIN}
             paths:
