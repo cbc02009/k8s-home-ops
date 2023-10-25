@@ -22,11 +22,6 @@ spec:
         any:
           - resources:
               kinds: ["Ingress"]
-      preconditions:
-        all:
-          - key: "{{ request.object.spec.ingressClassName }}"
-            operator: Equal
-            value: "internal"
       mutate:
         targets:
           - apiVersion: networking.k8s.io/v1
@@ -45,11 +40,6 @@ spec:
         any:
           - resources:
               kinds: ["Ingress"]
-      preconditions:
-        all:
-          - key: "{{ request.object.spec.ingressClassName }}"
-            operator: Equal
-            value: "external"
       mutate:
         targets:
           - apiVersion: networking.k8s.io/v1
