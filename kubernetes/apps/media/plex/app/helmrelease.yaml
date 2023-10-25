@@ -72,9 +72,7 @@ spec:
         enabled: true
         className: external
         annotations:
-          external-dns.alpha.kubernetes.io/public: "true"
-          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          ingress.home.arpa/type: external
           nginx.ingress.kubernetes.io/backend-protocol: HTTPS
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
