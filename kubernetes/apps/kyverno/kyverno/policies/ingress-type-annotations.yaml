@@ -23,11 +23,11 @@ spec:
           - resources:
               kinds: ["Ingress"]
       validate:
-        message: "You must have ingress.home.arpa/type annotation set to internal/external/external-auth"
+        message: "You must have ingress.home.arpa/type annotation set to internal/external/external-auth/internal-auth"
         pattern:
           metadata:
             annotations:
-              ingress.home.arpa/type: "internal|external|external-auth"
+              ingress.home.arpa/type: "internal|external|external-auth|internal-auth"
     - name: internal
       match:
         any:
@@ -66,6 +66,30 @@ spec:
               +(external-dns.alpha.kubernetes.io/public): "true"
               +(external-dns.alpha.kubernetes.io/target): "external.${EXTERNAL_DOMAIN}"
               +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
+
+    - name: internal-auth
+      match:
+        any:
+          - resources:
+              kinds: ["Ingress"]
+              annotations:
+                ingress.home.arpa/type: "internal"
+      mutate:
+        targets:
+          - apiVersion: networking.k8s.io/v1
+            kind: Ingress
+            namespace: "{{request.object.metadata.namespace}}"
+        patchStrategicMerge:
+          metadata:
+            annotations:
+              <(ingress.home.arpa/type): "internal-auth"
+              +(nginx.ingress.kubernetes.io/force-ssl-redirect): "true"
+              +(nginx.ingress.kubernetes.io/auth-response-headers): |-
+                Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+              +(nginx.ingress.kubernetes.io/auth-snippet): |-
+                proxy_set_header X-Forwarded-Host $http_host;
+              +(nginx.ingress.kubernetes.io/auth-url): |-
+                http://ak-outpost-proxy-outpost.security.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx
 
     - name: external-auth
       match:
