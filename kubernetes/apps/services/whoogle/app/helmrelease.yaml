@@ -71,13 +71,14 @@ spec:
         ports:
           http:
             port: 5000
+
     ingress:
       main:
         enabled: true
-        className: external
+        className: internal
         annotations:
-          authentik.home.arpa/enabled: "true"
-          nginx.ingress.kubernetes.io/auth-signin: /outpost.goauthentik.io/start?rd=$escaped_request_uri
+          # authentik.home.arpa/enabled: "true"
+          # nginx.ingress.kubernetes.io/auth-signin: /outpost.goauthentik.io/start?rd=$escaped_request_uri
         hosts:
           - host: &host search.${EXTERNAL_DOMAIN}
             paths:
