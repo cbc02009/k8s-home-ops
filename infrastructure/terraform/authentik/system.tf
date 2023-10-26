@@ -2,16 +2,16 @@ data "authentik_certificate_key_pair" "generated" {
   name = "authentik Self-signed Certificate"
 }
 
-resource "authentik_tenant" "home" {
-  domain           = data.doppler_secrets.this.map.DOMAIN
-  default          = false
-  branding_title   = "Home"
+# resource "authentik_tenant" "home" {
+#   domain           = data.doppler_secrets.this.map.DOMAIN
+#   default          = false
+#   branding_title   = "Home"
 
-  flow_authentication = authentik_flow.authentication.uuid
-  flow_invalidation   = authentik_flow.invalidation.uuid
-  flow_user_settings  = authentik_flow.user-settings.uuid
-  event_retention     = "days=365"
-}
+#   flow_authentication = authentik_flow.authentication.uuid
+#   flow_invalidation   = authentik_flow.invalidation.uuid
+#   flow_user_settings  = authentik_flow.user-settings.uuid
+#   event_retention     = "days=365"
+# }
 
 resource "authentik_service_connection_kubernetes" "local" {
   name  = "local"
