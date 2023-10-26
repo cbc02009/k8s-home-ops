@@ -27,6 +27,7 @@ resource "authentik_outpost" "proxyoutpost" {
     module.proxy-radarr.id,
     module.proxy-sonarr.id,
     module.proxy-lidarr.id,
+    module.proxy-readarr.id,
     module.proxy-animarr.id,
     module.proxy-whoogle.id,
   ]
