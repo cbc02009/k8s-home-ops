@@ -22,44 +22,44 @@ module "cf_domain_ingress" {
     },
     # Fastmail settings
     {
-      id       = "fastmail_mx_1"
+      id       = "protonmail_mx_1"
       name     = "@"
       priority = 10
-      value    = "in1-smtp.messagingengine.com"
+      value    = "mail.protonmail.ch"
       type     = "MX"
     },
     {
-      id       = "fastmail_mx_2"
+      id       = "protonmail_mx_2"
       name     = "@"
       priority = 20
-      value    = "in2-smtp.messagingengine.com"
+      value    = "mailsec.protonmail.ch"
       type     = "MX"
     },
     {
-      id      = "fastmail_dkim_1"
-      name    = "fm1._domainkey"
-      value   = "fm1.kokoro.wtf.dkim.fmhosted.com"
+      id      = "protonmail_dkim_1"
+      name    = "protonmail1._domainkey"
+      value   = "protonmail.domainkey.dyjrbchw73q7udksl2ucl4epepdg6tayyfi3ltddq2zxrtdg5j74a.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id      = "fastmail_dkim_2"
-      name    = "fm2._domainkey"
-      value   = "fm2.kokoro.wtf.dkim.fmhosted.com"
+      id      = "protonmail_dkim_2"
+      name    = "protonmail2._domainkey"
+      value   = "protonmail2.domainkey.dyjrbchw73q7udksl2ucl4epepdg6tayyfi3ltddq2zxrtdg5j74a.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id      = "fastmail_dkim_3"
-      name    = "fm3._domainkey"
-      value   = "fm3.kokoro.wtf.dkim.fmhosted.com"
+      id      = "protonmail_dkim_3"
+      name    = "protonmail3._domainkey"
+      value   = "protonmail3.domainkey.dyjrbchw73q7udksl2ucl4epepdg6tayyfi3ltddq2zxrtdg5j74a.domains.proton.ch."
       type    = "CNAME"
       proxied = false
     },
     {
-      id    = "fastmail_spf"
+      id    = "protonmail_spf"
       name  = "@"
-      value = "v=spf1 include:spf.messagingengine.com ?all"
+      value = "v=spf1 include:_spf.protonmail.ch mx ~all"
       type  = "TXT"
     }
   ]
