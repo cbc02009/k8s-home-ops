@@ -29,8 +29,8 @@ spec:
         imagePullPolicy: IfNotPresent
 
     image:
-    repository: ghcr.io/goauthentik/dev-server
-    tag: gh-providers-proxy-fix-closed-redis-client-1698699753-596c16b
+      repository: ghcr.io/goauthentik/dev-server
+      tag: gh-providers-proxy-fix-closed-redis-client-1698699753-596c16b
 
     authentik:
       log_level: debug
