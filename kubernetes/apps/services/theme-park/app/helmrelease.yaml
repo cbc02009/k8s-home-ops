@@ -24,14 +24,14 @@ spec:
   values:
     controllers:
       main:
-        pod:
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: *app
+        # pod:
+        #   topologySpreadConstraints:
+        #     - maxSkew: 1
+        #       topologyKey: kubernetes.io/hostname
+        #       whenUnsatisfiable: DoNotSchedule
+        #       labelSelector:
+        #         matchLabels:
+        #           app.kubernetes.io/name: *app
 
         containers:
           main:
