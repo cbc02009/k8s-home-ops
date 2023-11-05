@@ -10,7 +10,7 @@ terraform {
   required_providers {
     minio = {
       source = "aminueza/minio"
-      version = "1.18.0"
+      version = "2.0.0"
     }
     doppler = {
       source = "DopplerHQ/doppler"
