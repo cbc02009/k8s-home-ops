@@ -48,7 +48,7 @@ spec:
           main:
             image:
               repository: ghcr.io/cbc02009/vaultwarden
-              tag: 1.29.2
+              tag: 1.30.0
             envFrom:
               - secretRef:
                   name: *app
