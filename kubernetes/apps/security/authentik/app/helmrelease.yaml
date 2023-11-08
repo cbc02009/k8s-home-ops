@@ -29,8 +29,7 @@ spec:
         imagePullPolicy: IfNotPresent
 
     image:
-      repository: ghcr.io/goauthentik/dev-server
-      tag: gh-providers-proxy-fix-closed-redis-client-1698699753-596c16b
+      tag: 2023.8.4
 
     authentik:
       log_level: debug
@@ -44,8 +43,8 @@ spec:
         host: "authentik-redis.security.svc.cluster.local"
         password: ""
       outposts:
-        container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
-        # docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
+        # container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
+        docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
 
     envFrom:
       - secretRef:
