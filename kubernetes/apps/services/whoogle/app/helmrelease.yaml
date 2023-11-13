@@ -75,9 +75,9 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external
+        className: internal
         annotations:
-          authentik.home.arpa/enabled: "true"
+          # authentik.home.arpa/enabled: "true"
         hosts:
           - host: &host search.${EXTERNAL_DOMAIN}
             paths:
