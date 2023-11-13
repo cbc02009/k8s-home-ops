@@ -75,7 +75,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external
+        className: internal
         annotations:
           # authentik.home.arpa/enabled: "true"
         hosts:
