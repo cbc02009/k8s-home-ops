@@ -66,11 +66,4 @@ spec:
       ingress:
         enable: true
         className: internal
-        annotations:
-          external-dns.alpha.kubernetes.io/public: "true"
-          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         host: &host 'coder.${EXTERNAL_DOMAIN}'
-        # tls:
-        #   - hosts:
-        #       - *host
