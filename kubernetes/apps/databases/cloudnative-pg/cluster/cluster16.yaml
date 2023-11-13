@@ -48,7 +48,7 @@ spec:
           name: cloudnative-pg
           key: aws-secret-access-key
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  externalClusters:
+  # externalClusters:
     # - name: *previousCluster
     #   barmanObjectStore:
     #     wal:
