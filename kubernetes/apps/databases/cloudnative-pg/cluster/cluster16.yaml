@@ -14,27 +14,68 @@ spec:
   superuserSecret:
     name: cloudnative-pg
   enableSuperuserAccess: true
-  bootstrap:
-    initdb:
-      import:
-        type: monolith
-        databases: ["*"]
-        roles: ["*"]
-        source:
-          externalCluster: cnpg-6
+  # bootstrap:
+  #   recovery:
+  #     source: &previousCluster postgres16-v0
+  # bootstrap:
+  #   initdb:
+  #     import:
+  #       type: monolith
+  #       databases: ["*"]
+  #       roles: ["*"]
+  #       source:
+  #         externalCluster: cnpg-6
   postgresql:
     parameters:
       max_connections: "600"
       shared_buffers: 512MB
   monitoring:
     enablePodMonitor: true
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: s3://cnpg/
+      endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+      serverName: &currentCluster postgres16-v1
+      s3Credentials:
+        accessKeyId:
+          name: cloudnative-pg
+          key: aws-access-key-id
+        secretAccessKey:
+          name: cloudnative-pg
+          key: aws-secret-access-key
+  # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
-    - name: cnpg-6
-      connectionParameters:
-        host: postgres-rw.databases.svc.cluster.local
-        user: postgres
-        dbname: postgres
-        sslmode: require
-      password:
-        name: cloudnative-pg
-        key: password
+    # - name: *previousCluster
+    #   barmanObjectStore:
+    #     wal:
+    #       compression: bzip2
+    #       maxParallel: 8
+    #     destinationPath: s3://cnpg/
+    #     endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+    #     s3Credentials:
+    #       accessKeyId:
+    #         name: cloudnative-pg
+    #         key: aws-access-key-id
+    #       secretAccessKey:
+    #         name: cloudnative-pg
+    #         key: aws-secret-access-key
+    # - name: postgres-lxd
+    #   connectionParameters:
+    #     host: postgres.ctec.run
+    #     user: postgres
+    #   password:
+    #     name: cloudnative-pg
+    #     key: password
+    # - name: cnpg-6
+    #   connectionParameters:
+    #     host: postgres-rw.databases.svc.cluster.local
+    #     user: postgres
+    #     dbname: postgres
+    #     sslmode: require
+    #   password:
+    #     name: cloudnative-pg
+    #     key: password
