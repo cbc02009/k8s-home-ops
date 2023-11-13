@@ -17,7 +17,6 @@ resources:
   - ./external-secrets-charts.yaml
   - ./fairwinds-charts.yaml
   - ./gabe565-charts.yaml
-  - ./gitea-charts.yaml
   - ./grafana-charts.yaml
   - ./intel.yaml
   - ./kyverno-charts.yaml
