@@ -49,3 +49,19 @@ spec:
       daily: 10
       monthly: 3
       within: 3d
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: komga-dst
+  namespace: media
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: komga-restic-secret
+    copyMethod: Snapshot
+    storageClassName: ceph-block
+    accessModes: ["ReadWriteOnce"]
+    capacity: 1Gi
+    volumeSnapshotClassName: csi-ceph-blockpool
