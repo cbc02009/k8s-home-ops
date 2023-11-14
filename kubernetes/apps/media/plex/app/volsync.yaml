@@ -28,7 +28,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: plex-src
+  name: plex
   namespace: media
 spec:
   sourcePVC: plex-config-v1
