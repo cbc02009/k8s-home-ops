@@ -20,7 +20,7 @@ tasks:
     desc: 1. Bootstrap the CSR Approver
     cmds:
       - rm -rf kubelet-csr-approver/charts
-      - envsubst < kubernetes/apps/system-controllers/kubelet-csr-approver/app/values.yaml > {{.csrDir}}/values.yaml
+      - envsubst < {{.CLUSTER_DIR}}/apps/system-controllers/kubelet-csr-approver/app/values.yaml > {{.csrDir}}/values.yaml
       - kubectl create ns system-controllers
       - kustomize build --enable-helm {{.csrDir}} | kubectl apply -f -
       - rm {{.csrDir}}/values.yaml
