@@ -1,25 +1,4 @@
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: komga-config-v1
-  namespace: media
-  labels:
-    app.kubernetes.io/name: &name komga
-    app.kubernetes.io/instance: *name
-    snapshot.home.arpa/enabled: "true"
-spec:
-  accessModes:
-    - ReadWriteOnce
-  dataSourceRef:
-    kind: ReplicationDestination
-    apiGroup: volsync.backube
-    name: komga-dst
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: ceph-block
----
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/external-secrets.io/externalsecret_v1beta1.json
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -49,7 +28,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: komga-rsrc
+  name: komga
   namespace: media
 spec:
   sourcePVC: komga-config-v1
