@@ -14,9 +14,9 @@ spec:
   superuserSecret:
     name: cloudnative-pg
   enableSuperuserAccess: true
-  # bootstrap:
-  #   recovery:
-  #     source: &previousCluster postgres16-v0
+  bootstrap:
+    recovery:
+      source: &previousCluster postgres16-v1
   # bootstrap:
   #   initdb:
   #     import:
@@ -39,7 +39,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres16-v1
+      serverName: &currentCluster postgres16-v2
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
@@ -48,21 +48,21 @@ spec:
           name: cloudnative-pg
           key: aws-secret-access-key
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       wal:
-  #         compression: bzip2
-  #         maxParallel: 8
-  #       destinationPath: s3://cnpg/
-  #       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-  #       s3Credentials:
-  #         accessKeyId:
-  #           name: cloudnative-pg
-  #           key: aws-access-key-id
-  #         secretAccessKey:
-  #           name: cloudnative-pg
-  #           key: aws-secret-access-key
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        wal:
+          compression: bzip2
+          maxParallel: 8
+        destinationPath: s3://cnpg/
+        endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg
+            key: aws-access-key-id
+          secretAccessKey:
+            name: cloudnative-pg
+            key: aws-secret-access-key
   #   - name: postgres-lxd
   #     connectionParameters:
   #       host: postgres.ctec.run
