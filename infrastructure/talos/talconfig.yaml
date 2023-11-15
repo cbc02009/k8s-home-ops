@@ -25,6 +25,14 @@ cniConfig:
   name: none
 
 nodes:
+# Image URL rendered on https://factory.talos.dev
+# customization:
+#     systemExtensions:
+#         officialExtensions:
+#             - siderolabs/amd-ucode
+#             - siderolabs/nvidia-container-toolkit
+#             - siderolabs/nonfree-kmod-nvidia
+# ?????
   - hostname: uiharu.ctec.run
     talosImageURL: factory.talos.dev/installer/1eb5ee4f11d7032edb746fe7f9eb9f7d138fe88f5db88935d6e62dc795d82027
     ipAddress: 10.0.2.10
@@ -53,6 +61,12 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
 
+# Image URL rendered on https://factory.talos.dev
+# customization:
+#     systemExtensions:
+#         officialExtensions:
+#             - siderolabs/amd-ucode
+#             - siderolabs/intel-ucode
   - hostname: anya.ctec.run
     talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.11
@@ -75,6 +89,14 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
 
+# Image URL rendered on https://factory.talos.dev
+# customization:
+#     systemExtensions:
+#         officialExtensions:
+#             - siderolabs/amd-ucode
+#             - siderolabs/nvidia-container-toolkit
+#             - siderolabs/nonfree-kmod-nvidia
+# ?????
   - hostname: sakura.ctec.run
     talosImageURL: factory.talos.dev/installer/1eb5ee4f11d7032edb746fe7f9eb9f7d138fe88f5db88935d6e62dc795d82027
     ipAddress: 10.0.2.12
@@ -103,50 +125,12 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
 
-  - hostname: rem.ctec.run
-    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
-    ipAddress: 10.0.2.13
-    installDiskSelector:
-      model: FPT310M8SSD256G
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.5.0.4
-    networkInterfaces:
-      - interface: eno1
-        addresses:
-          - 10.0.2.13/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
-
-  - hostname: ram.ctec.run
-    talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
-    ipAddress: 10.0.2.14
-    installDiskSelector:
-      model: FPT310M8SSD256G
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.5.0.4
-    networkInterfaces:
-      - interface: eno1
-        addresses:
-          - 10.0.2.14/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
-
+# Image URL rendered on https://factory.talos.dev
+# customization:
+#     systemExtensions:
+#         officialExtensions:
+#             - siderolabs/amd-ucode
+#             - siderolabs/intel-ucode
   - hostname: miri.ctec.run
     talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.15
