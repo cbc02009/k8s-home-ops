@@ -35,7 +35,7 @@ tasks:
   github:
     desc: 5. decrypt and load github ssh key
     cmds:
-      - sops --decrypt kubernetes/bootstrap/github-deploy-key.sops.yaml | kubectl apply -f -
+      - sops --decrypt {{.CLUSTER_DIR}}/bootstrap/github-deploy-key.sops.yaml | kubectl apply -f -
 
   flux:
     desc: 3. Bootstrap flux (as per version in manifest)

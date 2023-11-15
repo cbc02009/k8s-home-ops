@@ -4,7 +4,7 @@ version: "3"
 vars:
   PROJECT_DIR:
     sh: git rev-parse --show-toplevel
-  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
+  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes/cluster"
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
   POSTGRES_IP: '10.0.1.11'
 
