@@ -12,3 +12,7 @@ kokoro-ram.ctec.run.yaml
 kokoro-megumin.ctec.run.yaml
 kokoro-akane.ctec.run.yaml
 kokoro-miri.ctec.run.yaml
+cluster-uiharu.ctec.run.yaml
+cluster-anya.ctec.run.yaml
+cluster-sakura.ctec.run.yaml
+cluster-miri.ctec.run.yaml

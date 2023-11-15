@@ -124,9 +124,9 @@ ipam:
 ipv4NativeRoutingCIDR: 10.11.0.0/16
 
 # -- (string) Kubernetes service host
-k8sServiceHost: cluster.ctec.run
+k8sServiceHost: localhost
 # -- (string) Kubernetes service port
-k8sServicePort: 6443
+k8sServicePort: 7445
 
 # -- Configure the kube-proxy replacement in Cilium BPF datapath
 # Valid options are "disabled", "partial", "strict".
