@@ -46,7 +46,7 @@ tasks:
   cluster:
     desc: 8. Bootstrap Cluster
     cmds:
-      - kubectl apply --server-side --kustomize kubernetes/flux/config/
+      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/flux/config/
 
   crds:
     desc: 6. Bootstrap CRDs
