@@ -168,7 +168,7 @@ controlPlane:
         time:
           disabled: false
           servers:
-            - 10.1.1.1
+            - 10.0.2.1
 
     # Enable KubePrism
     - |-
@@ -194,7 +194,7 @@ controlPlane:
         allowSchedulingOnMasters: true
         proxy:
           disabled: true
-    
+
     # ETCD configuration
     - |-
       cluster:
@@ -231,8 +231,8 @@ controlPlane:
         extraConfig:
           maxPods: 150
         nodeIP:
-            validSubnets:
-                - 10.0.2.0/24
+          validSubnets:
+            - 10.0.2.0/24
       logging:
         destinations:
           - endpoint: udp://vector.kokoro.wtf:6051/
