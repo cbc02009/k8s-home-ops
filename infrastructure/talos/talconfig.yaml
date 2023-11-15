@@ -194,6 +194,13 @@ controlPlane:
         allowSchedulingOnMasters: true
         proxy:
           disabled: true
+    
+    # ETCD configuration
+    - |-
+      cluster:
+        etcd:
+          advertisedSubnets:
+            - 10.0.2.0/24
 
     # Configure containerd
     - |-
@@ -223,6 +230,9 @@ controlPlane:
           rotate-server-certificates: 'true'
         extraConfig:
           maxPods: 150
+        nodeIP:
+            validSubnets:
+                - 10.0.2.0/24
       logging:
         destinations:
           - endpoint: udp://vector.kokoro.wtf:6051/
