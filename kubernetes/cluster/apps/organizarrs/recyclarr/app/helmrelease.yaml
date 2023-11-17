@@ -35,14 +35,13 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       main:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
           main:
             image:
               repository: ghcr.io/recyclarr/recyclarr
-              tag: 5.4.3
+              tag: 6.0.2
             envFrom:
               - secretRef:
                   name: recyclarr
@@ -54,18 +53,19 @@ spec:
                 memory: 50Mi
               limits:
                 memory: 200Mi
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              accessMode: ReadWriteOnce
-              size: 1Gi
-              storageClass: ceph-block
-              globalMounts:
-                - path: /config
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
     service:
       main:
         enabled: false
     persistence:
+      config:
+        enabled: true
+        existingClaim: recyclarr
       config-file:
         enabled: true
         type: configMap
