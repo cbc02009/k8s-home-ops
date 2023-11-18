@@ -27,8 +27,6 @@ spec:
 
     controllers:
       main:
-        type: statefulset
-
         containers:
           main:
             image:
@@ -64,7 +62,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: komga-config-v1
+        existingClaim: *app
 
       media:
         enabled: true
