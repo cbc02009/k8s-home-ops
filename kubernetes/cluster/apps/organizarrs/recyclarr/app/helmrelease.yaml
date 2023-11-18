@@ -35,6 +35,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       main:
+        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
