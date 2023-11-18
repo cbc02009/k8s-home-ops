@@ -41,6 +41,7 @@ spec:
                     operator: In
                     values:
                       - 'true'
+
     controllers:
       main:
         type: statefulset
@@ -99,7 +100,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: sabnzbd-config-v1
+        existingClaim: *app
       media:
         enabled: true
         type: nfs

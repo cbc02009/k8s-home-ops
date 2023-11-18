@@ -24,14 +24,52 @@ spec:
         name:
           regexp: .*
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: sabnzbd
   namespace: downloads
 spec:
-  sourcePVC: sabnzbd-config-v1
+  accessModes: ["ReadWriteOnce"]
+  dataSourceRef:
+    kind: ReplicationDestination
+    apiGroup: volsync.backube
+    name: sabnzbd-rdst
+  resources:
+    requests:
+      storage: 1Gi # must match the ReplicationDestination `.spec.capacity` below
+  storageClassName: ceph-block
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/volsync.backube/replicationdestination_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: sabnzbd-rdst
+  namespace: downloads
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    repository: sabnzbd-restic-secret
+    copyMethod: Snapshot
+    volumeSnapshotClassName: csi-ceph-blockpool
+    cacheStorageClassName: ceph-block
+    cacheAccessModes: ["ReadWriteOnce"]
+    cacheCapacity: 2Gi
+    storageClassName: ceph-block
+    accessModes: ["ReadWriteOnce"]
+    capacity: 1Gi # must match the PersistentVolumeClaim `.resources.requests.storage` size above
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: sabnzbd-rsrc
+  namespace: downloads
+spec:
+  sourcePVC: sabnzbd
   trigger:
     schedule: '0 4 * * *'
   restic:
