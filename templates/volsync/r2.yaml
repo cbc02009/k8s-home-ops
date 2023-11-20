@@ -7,22 +7,21 @@ metadata:
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
-    name: onepassword-connect
+    name: restic-template
   target:
-    name: "${APP}-volsync-r2-secret"
+    name: ${APP}-restic-secret
     creationPolicy: Owner
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "{{ .REPOSITORY_TEMPLATE }}/${APP}"
-        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
-        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
-        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+        RESTIC_REPOSITORY: '{{ .REPO_TEMPLATE }}/${APP}'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASS }}'
+        AWS_ACCESS_KEY_ID: '{{ .ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .SECRET_KEY }}'
   dataFrom:
-    - extract:
-        key: cloudflare
-    - extract:
-        key: volsync-r2-template
+    - find:
+        name:
+          regexp: .*
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
