@@ -22,7 +22,4 @@ spec:
       name: frigate
       namespace: home-automation
   dependsOn:
-    - name: apps-rook-ceph-cluster
-    - name: apps-emqx
     - name: apps-nginx-internal
-    - name: apps-nvidia-device-plugin
