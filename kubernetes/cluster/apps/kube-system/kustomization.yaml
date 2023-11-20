@@ -8,4 +8,5 @@ resources:
   # Flux-Kustomizations
   - ./cilium/ks.yaml
   - ./descheduler/ks.yaml
+  - ./local-path-provisioner/ks.yaml
   - ./metrics-server/ks.yaml
