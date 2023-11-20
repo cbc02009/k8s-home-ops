@@ -6,7 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./nfs-pvc.yaml
   - ./helmrelease.yaml
-  - ../../../../../templates/volsync
+  - ../../../../templates/volsync
 namespace: home-automation
 configMapGenerator:
   - name: frigate
