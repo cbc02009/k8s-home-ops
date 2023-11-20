@@ -6,6 +6,7 @@ namespace: organizarrs
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ../../../../templates/volsync
 configMapGenerator:
   - name: recyclarr-configmap
     files:
