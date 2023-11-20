@@ -8,11 +8,6 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  dependsOn:
-    - name: apps-nginx-internal
-    - name: apps-rook-ceph-cluster
-    - name: apps-volsync
-    - name: apps-nvidia-device-plugin
   path: './kubernetes/cluster/apps/media/plex/app/'
   prune: true
   sourceRef:
