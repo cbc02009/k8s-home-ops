@@ -14,15 +14,14 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "{{ .REPOSITORY_TEMPLATE }}/${APP}"
-        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
-        AWS_ACCESS_KEY_ID: "{{ .MINIO_ROOT_USER }}"
-        AWS_SECRET_ACCESS_KEY: "{{ .MINIO_ROOT_PASSWORD }}"
+        RESTIC_REPOSITORY: '{{ .REPO_TEMPLATE }}/${APP}'
+        RESTIC_PASSWORD: '{{ .RESTIC_PASS }}'
+        AWS_ACCESS_KEY_ID: '{{ .ACCESS_KEY }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .SECRET_KEY }}'
   dataFrom:
-    - extract:
-        key: minio
-    - extract:
-        key: volsync-minio-template
+    - find:
+        name:
+          regexp: .*
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationdestination_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
