@@ -15,35 +15,73 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: volsync
   values:
+    controllers:
+      main:
+        type: statefulset
+        initContainers:
+          wait-for-pg:
+            image: quay.io/prometheus/busybox
+            imagePullPolicy: IfNotPresent
+            command:
+              [
+                "sh",
+                "-c",
+                'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
+              ]
+          01-init-db:
+            image: ghcr.io/onedr0p/postgres-init:14.9
+            envFrom:
+              - secretRef:
+                  name: *app
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2023.11.2@sha256:29a2a48386bcd182c97229892ef123f4ee9d4b1dead7e5ea31a2ecc85fa13ab3
+            env:
+              TZ: "${TZ}"
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+                resources:
+                  requests:
+                    cpu: 10m
+                    memory: 128Mi
+                  limits:
+                    memory: 1Gi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
 
-    controller:
-      type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
-
-    image:
-      repository: ghcr.io/onedr0p/home-assistant
-      tag: 2023.11.2@sha256:29a2a48386bcd182c97229892ef123f4ee9d4b1dead7e5ea31a2ecc85fa13ab3
-
-    env:
-      TZ: "${TZ}"
-
-    envFrom:
-      - secretRef:
-          name: *app
 
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: ${LB_HASS}
         ports:
           http:
             port: 8123
@@ -53,8 +91,6 @@ spec:
         enabled: true
         ingressClassName: "internal"
         annotations:
-          external-dns.alpha.kubernetes.io/public: "true"
-          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         hosts:
           - host: &host "hass.${EXTERNAL_DOMAIN}"
@@ -66,101 +102,7 @@ spec:
             hosts:
               - *host
 
-    initContainers:
-      wait-for-pg:
-        image: quay.io/prometheus/busybox
-        imagePullPolicy: IfNotPresent
-        command:
-          [
-            "sh",
-            "-c",
-            'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
-          ]
-      01-init-db:
-        image: ghcr.io/onedr0p/postgres-init:14.10
-        envFrom:
-          - secretRef:
-              name: *app
-
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.19.0
-        env:
-          TZ: "${TIMEZONE}"
-        workingDir: /config
-        args:
-          - --auth
-          - "none"
-          - --user-data-dir
-          - "/config/.vscode"
-          - --extensions-dir
-          - "/config/.vscode"
-        ingress:
-          enabled: true
-          ingressClassName: "external"
-          annotations:
-            external-dns.alpha.kubernetes.io/public: "true"
-          external-dns.alpha.kubernetes.io/target: "external.${EXTERNAL_DOMAIN}"
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-          hosts:
-            - host: &code-host "hass-code.${EXTERNAL_DOMAIN}"
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - secretName: *host
-              hosts:
-                - *host
-        volumeMounts:
-          - name: config
-            mountPath: /config
-          - name: backup
-            mountPath: /config/backups
-
-        podSecurityContext:
-          runAsUser: 568
-          runAsGroup: 568
-          fsGroup: 568
-          fsGroupChangePolicy: "OnRootMismatch"
-          supplementalGroups:
-            - 100
-            - 1010
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
-        - 1010
-
     persistence:
       config:
         enabled: true
-        existingClaim: home-assistant-config-v1
-
-      backup:
-        enabled: true
-        type: nfs
-        server: nas.ctec.run
-        path: /tank/backup/kubernetes/apps/hass
-        mountPath: /config/backups
-
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-
-    resources:
-      requests:
-        cpu: 48m
-        memory: 443M
-      limits:
-        memory: 709M
+        existingClaim: home-assistant
