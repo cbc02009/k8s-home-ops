@@ -32,7 +32,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${APP}-volsync-r2-secret"
+    repository: "${APP}-volsync-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-ceph-block}"
