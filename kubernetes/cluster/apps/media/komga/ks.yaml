@@ -21,3 +21,7 @@ spec:
       kind: HelmRelease
       name: komga
       namespace: media
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 5Gi
