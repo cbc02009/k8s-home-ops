@@ -2,7 +2,7 @@
 
 resource "authentik_stage_authenticator_totp" "authenticator-totp-setup" {
   name           = "authenticator-totp-setup"
-  digits         = 6
+  digits         = "6"
   configure_flow = authentik_flow.authenticator-totp-setup.uuid
 }
 
