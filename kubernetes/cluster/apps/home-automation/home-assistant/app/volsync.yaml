@@ -41,7 +41,7 @@ spec:
       storage: 5Gi
   storageClassName: ceph-filesystem
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/volsync.backube/replicationdestination_v1alpha1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationdestination_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
@@ -56,7 +56,7 @@ spec:
     repository: home-assistant-restic-secret
     copyMethod: Snapshot
     volumeSnapshotClassName: csi-ceph-filesystem
-    cacheStorageClassName: local-path
+    cacheStorageClassName: ceph-block
     cacheAccessModes: ["ReadWriteOnce"]
     cacheCapacity: 8Gi
     storageClassName: ceph-filesystem
