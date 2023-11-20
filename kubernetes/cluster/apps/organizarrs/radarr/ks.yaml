@@ -21,3 +21,6 @@ spec:
       kind: HelmRelease
       name: radarr
       namespace: organizarrs
+  dependsOn:
+    - name: cloudnative-pg-cluster
+    - name: external-secrets-stores

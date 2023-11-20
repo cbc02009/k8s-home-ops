@@ -21,3 +21,6 @@ spec:
       kind: HelmRelease
       name: sonarr
       namespace: organizarrs
+  dependsOn:
+    - name: cloudnative-pg-cluster
+    - name: external-secrets-stores
