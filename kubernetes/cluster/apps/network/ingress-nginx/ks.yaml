@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-nginx-shared
+  name: nginx-shared
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -17,13 +17,13 @@ spec:
   retryInterval: 1m
   timeout: 3m
   dependsOn:
-    - name: apps-cert-manager-issuers
+    - name: cert-manager-issuers
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-nginx-external
+  name: nginx-external
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -42,13 +42,13 @@ spec:
       name: nginx-external
       namespace: network
   dependsOn:
-    - name: apps-nginx-shared
+    - name: nginx-shared
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-nginx-internal
+  name: nginx-internal
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -67,4 +67,4 @@ spec:
       name: nginx-internal
       namespace: network
   dependsOn:
-    - name: apps-nginx-shared
+    - name: nginx-shared

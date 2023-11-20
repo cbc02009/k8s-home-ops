@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-loki
+  name: loki
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -22,6 +22,6 @@ spec:
       name: loki
       namespace: monitoring
   dependsOn:
-    - name: apps-kube-prometheus-stack
-    - name: apps-external-secrets
-    - name: apps-rook-ceph-cluster
+    - name: kube-prometheus-stack
+    - name: external-secrets
+    - name: rook-ceph-cluster

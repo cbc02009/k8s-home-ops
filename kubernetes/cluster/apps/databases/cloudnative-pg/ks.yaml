@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-cloudnative-pg
+  name: cloudnative-pg
   namespace: flux-system
 spec:
   path: ./kubernetes/cluster/apps/databases/cloudnative-pg/app
@@ -20,12 +20,12 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-cloudnative-pg-cluster
+  name: cloudnative-pg-cluster
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apps-cloudnative-pg
-    - name: apps-external-secrets
+    - name: cloudnative-pg
+    - name: external-secrets
   path: ./kubernetes/cluster/apps/databases/cloudnative-pg/cluster
   prune: true
   sourceRef:

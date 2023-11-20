@@ -3,15 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-recyclarr
+  name: recyclarr
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apps-external-secrets
-    - name: apps-radarr
-    - name: apps-sonarr
-    - name: apps-animarr
-    - name: apps-volsync
+    - name: external-secrets
+    - name: radarr
+    - name: sonarr
+    - name: animarr
+    - name: volsync
   path: ./kubernetes/cluster/apps/organizarrs/recyclarr/app
   prune: true
   sourceRef:

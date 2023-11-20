@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-readarr
+  name: readarr
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -22,5 +22,5 @@ spec:
       name: readarr
       namespace: organizarrs
   dependsOn:
-    - name: apps-external-secrets
-    - name: apps-rook-ceph-cluster
+    - name: external-secrets
+    - name: rook-ceph-cluster

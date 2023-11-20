@@ -3,12 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-immich
+  name: immich
   namespace: flux-system
 spec:
   dependsOn:
-    - name: apps-external-secrets
-    - name: apps-cloudnative-pg-cluster
+    - name: external-secrets
+    - name: cloudnative-pg-cluster
   path: ./kubernetes/cluster/apps/services/immich/app
   prune: true
   sourceRef:

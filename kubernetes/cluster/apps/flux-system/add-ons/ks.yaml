@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-add-ons-dashboard
+  name: add-ons-dashboard
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -21,7 +21,7 @@ spec:
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
 # kind: Kustomization
 # metadata:
-#   name: apps-add-ons-notifications
+#   name: add-ons-notifications
 #   namespace: flux-system
 #   labels:
 #     substitution.flux.home.arpa/enabled: 'true'
@@ -39,7 +39,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-add-ons-webhook
+  name: add-ons-webhook
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -53,4 +53,4 @@ spec:
   retryInterval: 1m
   timeout: 3m
   dependsOn:
-    - name: apps-nginx-internal
+    - name: nginx-internal

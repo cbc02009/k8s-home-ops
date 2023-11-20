@@ -3,15 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-actions-runner-controller
+  name: actions-runner-controller
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   path: './kubernetes/cluster/apps/dev/actions-runner-controller/app/'
   dependsOn:
-    - name: apps-external-secrets
-    - name: apps-rook-ceph-cluster
+    - name: external-secrets
+    - name: rook-ceph-cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -29,7 +29,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-actions-runner-runners
+  name: actions-runner-runners
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -43,4 +43,4 @@ spec:
   retryInterval: 1m
   timeout: 3m
   dependsOn:
-    - name: apps-actions-runner-controller
+    - name: actions-runner-controller

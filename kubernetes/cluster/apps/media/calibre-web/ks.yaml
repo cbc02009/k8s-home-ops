@@ -3,16 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-calibre-web
+  name: calibre-web
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   dependsOn:
-    - name: apps-rook-ceph-cluster
-    - name: apps-volsync
-    - name: apps-calibre
-    - name: apps-nginx-internal
+    - name: rook-ceph-cluster
+    - name: volsync
+    - name: calibre
+    - name: nginx-internal
   path: './kubernetes/cluster/apps/media/calibre-web/app/'
   prune: true
   sourceRef:

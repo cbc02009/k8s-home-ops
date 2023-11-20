@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-coder
+  name: coder
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -22,5 +22,5 @@ spec:
       name: coder
       namespace: dev
   dependsOn:
-    - name: apps-nginx-internal
-    - name: apps-cloudnative-pg-cluster
+    - name: nginx-internal
+    - name: cloudnative-pg-cluster
