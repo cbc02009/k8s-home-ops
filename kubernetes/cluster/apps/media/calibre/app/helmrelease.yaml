@@ -92,7 +92,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: calibre-config-v1
+        existingClaim: *app
       media:
         enabled: true
         type: nfs

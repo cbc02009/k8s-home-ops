@@ -5,6 +5,5 @@ kind: Kustomization
 resources:
   - ./volsync.yaml
   - ./helmrelease.yaml
-  - ./pvc.yaml
 metadata:
   namespace: media
