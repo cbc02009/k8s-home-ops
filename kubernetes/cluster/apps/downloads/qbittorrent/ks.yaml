@@ -21,6 +21,7 @@ spec:
       kind: HelmRelease
       name: qbittorrent
       namespace: downloads
-  dependsOn:
-    - name: rook-ceph-cluster
-    - name: nginx-internal
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 1Gi

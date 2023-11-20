@@ -2,9 +2,8 @@ locals {
   minio_buckets = [
     "loki",
     "thanos",
-    "nextcloud",
-    "postgres",
-    "tandoor",
+    "volsync",
+
   ]
 }
 
