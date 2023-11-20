@@ -28,13 +28,14 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:14.10
         imagePullPolicy: IfNotPresent
 
-    # image:
-    #   tag: 2023.8.4
     image:
-      repository: ghcr.io/goauthentik/dev-server
-      tag: gh-next
-      # pullPolicy: Always to ensure you always get the latest version
+      tag: 2023.8.4
       pullPolicy: IfNotPresent
+    # image:
+    #   repository: ghcr.io/goauthentik/dev-server
+    #   tag: gh-next
+    #   # pullPolicy: Always to ensure you always get the latest version
+    #   pullPolicy: IfNotPresent
 
     authentik:
       log_level: debug
@@ -48,8 +49,8 @@ spec:
         host: "authentik-redis.security.svc.cluster.local"
         password: ""
       outposts:
-        # docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
-        container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
+        docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
+        # container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
 
     envFrom:
       - secretRef:
