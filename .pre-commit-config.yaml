@@ -17,11 +17,13 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
-      - id: check-merge-conflict
-      - id: detect-private-key
       - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
       - id: check-added-large-files
-        args: ["--maxkb=2000"]
+        args: [--maxkb=2048]
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.4
@@ -47,10 +49,3 @@ repos:
     rev: v8.18.1
     hooks:
       - id: gitleaks
-
-  - repo: https://github.com/Truxnell/pre-commit
-    rev: v0.0.9
-    hooks:
-      - id: kustomize_build
-        files: ^kubernetes/cluster/
-        args: [--dry-run=server]
