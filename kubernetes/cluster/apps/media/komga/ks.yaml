@@ -21,7 +21,7 @@ spec:
       kind: HelmRelease
       name: komga
       namespace: media
-  dependsOn:
-    - name: rook-ceph-cluster
-    - name: nginx-internal
-    - name: external-secrets
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 5Gi
