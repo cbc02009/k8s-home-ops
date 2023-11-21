@@ -25,7 +25,7 @@ spec:
         envFrom:
           - secretRef:
               name: authentik-secret
-        image: ghcr.io/onedr0p/postgres-init:14.10
+        image: ghcr.io/onedr0p/postgres-init:15.5
         imagePullPolicy: IfNotPresent
 
     image:
