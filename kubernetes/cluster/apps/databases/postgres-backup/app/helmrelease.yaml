@@ -61,8 +61,8 @@ spec:
               - name: POSTGRES_CLUSTER
                 value: 'true'
               - name: POSTGRES_DB
-                value: animarr_main, authelia, grafana, home_assistant, immich, lidarr_main,
-                  nextcloud, postgres, prowlarr_main, radarr_main, sonarr_main, vaultwarden
+                value: animarr_main, authentik, grafana, home_assistant, immich, lidarr_main,
+                 postgres, prowlarr_main, radarr_main, sonarr_main, vaultwarden
               - name: BACKUP_KEEP_DAYS
                 value: '7'
               - name: BACKUP_KEEP_WEEKS
