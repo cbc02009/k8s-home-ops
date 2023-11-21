@@ -30,6 +30,9 @@ includes:
   tf:
     dir: .taskfiles/Terraform
     taskfile: .taskfiles/Terraform
+  pc:
+    dir: .taskfiles/PreCommit
+    taskfile: .taskfiles/PreCommit
   cluster: .taskfiles/cluster.yml
 
 tasks:
