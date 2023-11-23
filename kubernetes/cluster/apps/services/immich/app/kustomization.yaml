@@ -11,4 +11,3 @@ resources:
   - ./typesense
   - ./microservices
   - ./machine-learning
-  - ./web
