@@ -95,11 +95,6 @@ spec:
                 service:
                   name: main
                   port: http
-              - path: /api
-                pathType: Prefix
-                service:
-                  name: immich-server
-                  port: 3001
         tls:
           - secretName: *host
             hosts:
