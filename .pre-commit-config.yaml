@@ -1,16 +1,11 @@
 ---
-exclude: |
-  (?x)^(
-      provision/ansible/roles/.*
-  )$
-
 repos:
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.33.0
     hooks:
       - args:
           - --config-file
-          - .github/linters/.yamllint.yaml
+          - .github/yamllint-config.yaml
         id: yamllint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -28,7 +23,9 @@ repos:
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.4
     hooks:
+      - id: forbid-crlf
       - id: remove-crlf
+      - id: forbid-tabs
       - id: remove-tabs
 
   # - repo: https://github.com/jumanjihouse/pre-commit-hooks
@@ -49,6 +46,23 @@ repos:
     rev: v8.18.1
     hooks:
       - id: gitleaks
+
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
+    hooks:
+      - id: check-json5
+        files: ^(.+\.json5)$
+        types:
+          - file
+
+  # - repo: local
+  #   hooks:
+  #   - id: manifest
+  #     name: manifest
+  #     entry: scripts/run-in-env.sh scripts/update-manifest.sh
+  #     language: script
+  #     files: ^(.+\.yaml)$
+  #     types: [text]
 
   # - repo: https://github.com/Truxnell/pre-commit
   #   rev: v0.0.9
