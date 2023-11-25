@@ -139,8 +139,9 @@ spec:
           - path: /config/config.yml
             subPath: config.yaml
       media:
-        enabled: true
-        existingClaim: frigate-nfs
+        type: nfs
+        server: nas.ctec.run
+        path: /tank/k8s/apps/frigate
         globalMounts:
           - path: /media
       cache:
