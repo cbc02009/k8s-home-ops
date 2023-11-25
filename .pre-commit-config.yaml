@@ -57,11 +57,11 @@ repos:
 
   # - repo: local
   #   hooks:
-  #   - id: manifest
-  #     name: manifest
-  #     entry: scripts/run-in-env.sh scripts/update-manifest.sh
+  #   - id: test
+  #     name: flux-local test
+  #     entry: scripts/run-in-env.sh scripts/flux-local-test.sh
   #     language: script
-  #     files: ^(.+\.yaml)$
+  #     files: ^(kubernetes\/.+\.yaml)$
   #     types: [text]
 
   # - repo: https://github.com/Truxnell/pre-commit
