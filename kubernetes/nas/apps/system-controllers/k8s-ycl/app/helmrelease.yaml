@@ -19,16 +19,7 @@ spec:
   values:
     controllers:
       main:
-        replicas: 3
-
-        pod:
-          topologySpreadConstraints:
-            - maxSkew: 2
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: *app
+        replicas: 1
 
         containers:
           main:
