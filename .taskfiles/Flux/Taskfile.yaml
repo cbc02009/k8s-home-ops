@@ -26,9 +26,11 @@ tasks:
     desc: Sync Flux HelmReleases
     cmds:
       - |
-        kubectl get helmreleases --all-namespaces --no-headers | awk '{print $1, $2}' \
+        kubectl get helmreleases --context={{.cluster}} --all-namespaces --no-headers | awk '{print $1, $2}' \
           | xargs --max-procs=4 -l bash -c \
-            'kubectl -n $0 annotate helmrelease/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --overwrite'
+            'kubectl --context={{.cluster}} -n $0 annotate helmrelease/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --overwrite'
+    vars:
+      cluster: '{{.cluster | default "main"}}'
 
   tf-sync:
     desc: Sync Flux Terraforms
@@ -37,6 +39,8 @@ tasks:
         kubectl get terraforms --all-namespaces --no-headers | awk '{print $1, $2}' \
           | xargs --max-procs=4 -l bash -c \
             'kubectl -n $0 annotate terraform/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --overwrite'
+    vars:
+      cluster: '{{.cluster | default "main"}}'
 
   hr-suspend:
     desc: Suspend all Flux HelmReleases
