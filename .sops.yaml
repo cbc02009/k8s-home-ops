@@ -1,0 +1,18 @@
+---
+creation_rules:
+  - path_regex: kubernetes/.*\.sops\.ya?ml
+    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
+    age: >-
+      age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  - path_regex: kubernetes/.*\.sops\.json
+    key_groups:
+      - age:
+          - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  - path_regex: kubernetes/.*\.sops\.toml
+    key_groups:
+      - age:
+          - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  - path_regex: infrastructure/.*\.sops\.ya?ml
+    key_groups:
+      - age:
+          - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
