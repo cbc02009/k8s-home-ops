@@ -7,6 +7,7 @@ resources:
   - ./external-dns.yaml
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
+  - ./k8tz.yaml
   - ./metrics-server.yaml
   - ./prometheus-community.yaml
   - ./stakater.yaml
