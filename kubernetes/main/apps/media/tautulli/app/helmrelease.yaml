@@ -80,7 +80,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: tautulli-config-v1
+        existingClaim: *app
 
       add-ons:
         enabled: true
