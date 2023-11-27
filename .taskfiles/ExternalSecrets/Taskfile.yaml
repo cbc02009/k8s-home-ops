@@ -18,7 +18,5 @@ tasks:
       secret: '{{ .secret | default ""}}'
       ns: '{{.ns | default "default"}}'
       cluster: '{{.cluster | default "main"}}'
-    env:
-      KUBECONFIG: "{{.CLUSTER_DIR}}/{{.cluster}}/kubeconfig"
     preconditions:
       - kubectl -n {{.ns}} get externalsecret {{.secret}}

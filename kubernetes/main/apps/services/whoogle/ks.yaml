@@ -1,0 +1,23 @@
+---
+# yaml-language-server goes here
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: whoogle
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  path: './kubernetes/main/apps/services/whoogle/app/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  interval: 30m
+  retryInterval: 1m
+  timeout: 3m
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: whoogle
+      namespace: services

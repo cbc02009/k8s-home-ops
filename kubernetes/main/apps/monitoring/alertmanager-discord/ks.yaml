@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: alertmanager-discord
+  namespace: flux-system
+spec:
+  path: ./kubernetes/main/apps/monitoring/alertmanager-discord/app
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  dependsOn:
+    - name: external-secrets
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: alertmanager-discord
+      namespace: monitoring
+  prune: true
+  wait: true
+  interval: 30m
+  retryInterval: 2m
+  timeout: 1m
