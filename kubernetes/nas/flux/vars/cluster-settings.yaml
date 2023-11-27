@@ -7,3 +7,4 @@ metadata:
 data:
   CLUSTER_NAME: nas
   TZ: America/New_York
+  EXTERNAL_DOMAIN: kokoro.wtf
