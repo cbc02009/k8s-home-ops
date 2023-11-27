@@ -29,9 +29,11 @@ tasks:
   doppler:
     desc: 4. Bootstrap Doppler
     cmds:
-      - kubectl create secret generic  -n flux-system cluster-secrets --from-env-file <(doppler secrets download -p cluster -c prd --no-file --format docker)
+      - kubectl create secret generic --context {{.cluster}} -n flux-system cluster-secrets --from-env-file <(doppler secrets download -p {{.cluster}}-cluster -c prd --no-file --format docker)
       - kubectl create secret generic -n flux-system doppler-token-auth-api --from-literal dopplerToken=$(doppler secrets -p doppler -c prd get DOPPLER_PAT --plain)
       - doppler secrets -p cluster -c prd get GITHUB_DEPLOY_KEY --plain | kubectl apply -f -
+    vars:
+      cluster: '{{.cluster | default "main"}}'
 
   flux:
     desc: 3. Bootstrap flux (as per version in manifest)
