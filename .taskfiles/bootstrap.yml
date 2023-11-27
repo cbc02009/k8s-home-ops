@@ -31,11 +31,7 @@ tasks:
     cmds:
       - kubectl create secret generic  -n flux-system cluster-secrets --from-env-file <(doppler secrets download -p cluster -c prd --no-file --format docker)
       - kubectl create secret generic -n flux-system doppler-token-auth-api --from-literal dopplerToken=$(doppler secrets -p doppler -c prd get DOPPLER_PAT --plain)
-
-  github:
-    desc: 5. decrypt and load github ssh key
-    cmds:
-      - sops --decrypt {{.CLUSTER_DIR}}/bootstrap/github-deploy-key.sops.yaml | kubectl apply -f -
+      - doppler secrets -p cluster -c prd get GITHUB_DEPLOY_KEY --plain | kubectl apply -f -
 
   flux:
     desc: 3. Bootstrap flux (as per version in manifest)
@@ -67,7 +63,6 @@ tasks:
       - go-task bs:cilium
       - go-task bs:flux
       - go-task bs:doppler
-      - go-task bs:github
       - go-task bs:crds
       - go-task bs:rook
       - go-task bs:cluster
@@ -79,5 +74,4 @@ tasks:
       - go-task bs:cilium
       - go-task bs:flux
       - go-task bs:doppler
-      - go-task bs:github
       - go-task bs:crds
