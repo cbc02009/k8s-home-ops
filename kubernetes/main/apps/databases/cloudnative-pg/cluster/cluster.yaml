@@ -16,7 +16,7 @@ spec:
   enableSuperuserAccess: true
   bootstrap:
     recovery:
-      source: &previousCluster postgres-v5
+      source: &previousCluster postgres16-v5
   # bootstrap:
   #   initdb:
   #     import:
