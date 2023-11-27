@@ -16,6 +16,7 @@ metadata:
   name: s3
   namespace: flux-system
 spec:
+  suspend: false
   interval: 12h
   approvePlan: "auto"
   backendConfig:

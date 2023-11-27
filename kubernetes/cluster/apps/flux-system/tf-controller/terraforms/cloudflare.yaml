@@ -18,6 +18,7 @@ metadata:
   name: cloudflare
   namespace: flux-system
 spec:
+  suspend: false
   interval: 12h
   approvePlan: "auto"
   backendConfig:
