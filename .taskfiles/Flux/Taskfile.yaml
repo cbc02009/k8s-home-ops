@@ -8,15 +8,19 @@ tasks:
       - |
         kubectl get gitrepositories --all-namespaces --no-headers | awk '{print $1, $2}' \
           | xargs --max-procs=4 -l bash -c \
-            'kubectl -n $0 annotate gitrepository/$1 reconcile.fluxcd.io/requestedAt=$(date +%s) --field-manager=flux-client-side-apply --overwrite'
+            'kubectl --context={{.cluster}} -n $0 annotate gitrepository/$1 reconcile.fluxcd.io/requestedAt=$(date +%s) --field-manager=flux-client-side-apply --overwrite'
+    vars:
+      cluster: '{{.cluster | default "main"}}'
 
   ks-sync:
     desc: Sync Flux Kustomizations
     cmds:
       - |
-        kubectl get kustomization --all-namespaces --no-headers | awk '{print $1, $2}' \
+        kubectl get kustomization --context={{.cluster}} --all-namespaces --no-headers | awk '{print $1, $2}' \
           | xargs --max-procs=4 -l bash -c \
-            'kubectl -n $0 annotate kustomization/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --field-manager=flux-client-side-apply --overwrite'
+            'kubectl --context={{.cluster}} -n $0 annotate kustomization/$1 reconcile.fluxcd.io/requestedAt="$(date +%s)" --field-manager=flux-client-side-apply --overwrite'
+    vars:
+      cluster: '{{.cluster | default "main"}}'
 
   hr-sync:
     desc: Sync Flux HelmReleases
