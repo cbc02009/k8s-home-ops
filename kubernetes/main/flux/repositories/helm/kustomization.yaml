@@ -14,7 +14,7 @@ resources:
   - ./cloudnative-pg.yaml
   - ./emqx-charts.yaml
   - ./external-dns-charts.yaml
-  - ./external-secrets-charts.yaml
+  - ./external-secrets.yaml
   - ./fairwinds-charts.yaml
   - ./gabe565-charts.yaml
   - ./grafana-charts.yaml
