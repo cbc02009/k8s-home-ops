@@ -35,6 +35,11 @@ spec:
               - --console-address
               - :9001
             env:
+              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.${EXTERNAL_DOMAIN},https://s3.${EXTERNAL_DOMAIN}
+              MINIO_BROWSER_REDIRECT_URL: https://minio.${EXTERNAL_DOMAIN}
+              MINIO_PROMETHEUS_AUTH_TYPE: public
+              MINIO_SERVER_URL: https://s3.${EXTERNAL_DOMAIN}
+              MINIO_UPDATE: "off"
               MINIO_ROOT_USER:
                 valueFrom:
                   secretKeyRef:
@@ -49,9 +54,27 @@ spec:
               requests:
                 cpu: 5m
                 memory: 128M
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /minio/health/live
+                    port: 9000
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 6
+              readiness: *probes
+              startup:
+                enabled: false
             securityContext:
-              privileged: true
-              runAsUser: 0
+              runAsUser: 568
+              runAsGroup: 568
+              fsGroup: 568
+              fsGroupChangePolicy: OnRootMismatch
+              supplementalGroups: [100]
 
     service:
       main:
@@ -60,6 +83,16 @@ spec:
             port: 9001
           s3:
             port: 9000
+
+    serviceMonitor:
+      main:
+        enabled: true
+        endpoints:
+          - port: s3
+            scheme: http
+            path: /minio/v2/metrics/cluster
+            interval: 1m
+            scrapeTimeout: 10s
 
     # ingress:
     #   main:
