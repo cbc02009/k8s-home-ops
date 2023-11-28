@@ -20,7 +20,7 @@ spec:
     fullnameOverride: &name externaldns-internal
 
     domainFilters:
-      - bjw-s.dev
+      - kokoro.wtf
 
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
@@ -28,7 +28,7 @@ spec:
       - name: EXTERNAL_DNS_RFC2136_PORT
         value: "53"
       - name: EXTERNAL_DNS_RFC2136_ZONE
-        value: "bjw-s.dev"
+        value: "kokoro.wtf"
       - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
         value: "true"
       - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME

@@ -11,6 +11,9 @@ includes:
   fx:
     dir: .taskfiles/Flux
     taskfile: .taskfiles/Flux
+    vars: &vars
+      KUBECTL: kubectl --context {{.cluster}}
+      FLUXCTL: flux --context {{.cluster}}
   bs: .taskfiles/bootstrap.yml
   so: .taskfiles/sops.yml
   ro:
@@ -25,6 +28,7 @@ includes:
   vs:
     dir: .taskfiles/VolSync
     taskfile: .taskfiles/VolSync
+    vars: *vars
   tf:
     dir: .taskfiles/Terraform
     taskfile: .taskfiles/Terraform
