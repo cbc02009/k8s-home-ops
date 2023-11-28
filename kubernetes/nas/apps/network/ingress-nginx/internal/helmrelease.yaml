@@ -1,10 +1,9 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app nginx-internal
-  namespace: network
+  name: nginx-internal
 spec:
   interval: 30m
   chart:
@@ -13,49 +12,43 @@ spec:
       version: 4.8.3
       sourceRef:
         kind: HelmRepository
-        name: ingress-nginx-charts
+        name: ingress-nginx
         namespace: flux-system
-  maxHistory: 2
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+      interval: 30m
   values:
-
     fullnameOverride: nginx-internal
 
     controller:
-      replicaCount: 2
+      replicaCount: 1
+
       updateStrategy:
-        type: RollingUpdate
-      extraEnvs:
-        - name: TZ
-          value: "${TZ}"
+        type: Recreate
+
+      allowSnippetAnnotations: true
+      enableAnnotationValidations: true
 
       service:
+        enabled: true
+        type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "internal.kokoro.wtf"
-          io.cilium/lb-ipam-ips: 10.6.0.2
+          external-dns.alpha.kubernetes.io/hostname: "nas-int.${EXTERNAL_DOMAIN}"
         externalTrafficPolicy: Cluster
+
+      publishService:
+        enabled: true
+
       ingressClassResource:
         name: internal
         default: true
-        controllerValue: k8s.io/internal
+        controllerValue: k8s.io/ingress-nginx-internal
+
       admissionWebhooks:
         objectSelector:
           matchExpressions:
             - key: ingress-class
               operator: In
-              values: ["internal"]
-      allowSnippetAnnotations: true
-
-      extraArgs:
-        default-ssl-certificate: "network/kokoro-wtf-tls"
+              values:
+                - internal
 
       config:
         block-user-agents: "GPTBot,~*GPTBot*,ChatGPT-User,~*ChatGPT-User*,Google-Extended,~*Google-Extended*,CCBot,~*CCBot*,Omgilibot,~*Omgilibot*,FacebookBot,~*FacebookBot*" # taken from https://github.com/superseriousbusiness/gotosocial/blob/main/internal/web/robots.go
@@ -63,15 +56,12 @@ spec:
         client-body-buffer-size: "100M"
         client-body-timeout: 120
         enable-brotli: "true"
+        enable-ocsp: "true"
         enable-real-ip: "true"
+        hide-headers: Server,X-Powered-By
         hsts-max-age: "31449600"
         keep-alive: 120
         keep-alive-requests: 10000
-        # The below X-Clacks-Overehead is a do-nothing header
-        # That is simply a memoriam for Sir Terry Pratchett
-        # Ref: https://xclacksoverhead.org/home/about
-        location-snippet: |
-          add_header X-Clacks-Overhead "GNU Terry Pratchett" always;
         log-format-escape-json: "true"
         log-format-upstream: >
           {"time": "$time_iso8601", "remote_addr": "$proxy_protocol_addr",
@@ -84,28 +74,22 @@ spec:
         proxy-body-size: 0
         proxy-buffer-size: "16k"
         ssl-protocols: "TLSv1.3 TLSv1.2"
+        use-forwarded-headers: "true"
 
       metrics:
-        enabled: true
+        enabled: false
         serviceMonitor:
-          enabled: true
-          namespace: network
-          namespaceSelector:
-            any: true
+          enabled: false
 
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: *app
+      extraArgs:
+        default-ssl-certificate: "network/kokoro-wtf-tls"
 
       resources:
         requests:
-          cpu: 100m
-          memory: 250Mi
+          cpu: 5m
+          memory: 128Mi
         limits:
-          memory: 500Mi
+          memory: 768Mi
+
     defaultBackend:
       enabled: false
