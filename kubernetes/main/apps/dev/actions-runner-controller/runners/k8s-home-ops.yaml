@@ -38,9 +38,9 @@ spec:
           - name: runner
             image: ghcr.io/actions/actions-runner:2.311.0
             command: ["/home/runner/run.sh"]
-    controllerServiceAccount:
-      name: actions-runner-controller-gha-rs-controller
-      namespace: dev
+    # controllerServiceAccount:
+    #   name: actions-runner-controller-gha-rs-controller
+    #   namespace: dev
   valuesFrom:
     - kind: Secret
       name: actions-runner-controller
