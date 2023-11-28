@@ -188,6 +188,36 @@ controlPlane:
                 - cluster.ctec.run
                 - 10.5.0.2
 
+    # Configure pull through cache
+    - |-
+      machine:
+        registries:
+          mirrors:
+            docker.io:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/docker.io
+              overridePath: true
+            ghcr.io:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/ghcr.io
+              overridePath: true
+            quay.io:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/quay.io
+              overridePath: true
+            gcr.io:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/gcr.io
+              overridePath: true
+            registry.k8s.io:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/registry.k8s.io
+              overridePath: true
+            public.ecr.aws:
+              endpoints:
+                - https://zot.kokoro.wtf/v2/public.ecr.aws
+              overridePath: true
+
     # Cluster configuration
     - |-
       cluster:
