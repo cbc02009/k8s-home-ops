@@ -3,7 +3,6 @@ locals {
     "loki",
     "thanos",
     "volsync",
-
   ]
 }
 
