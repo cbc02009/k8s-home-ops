@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: minio
+  name: &app minio
 spec:
   interval: 30m
   chart:
@@ -38,12 +38,12 @@ spec:
               MINIO_ROOT_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: minio-secret
+                    name: *app
                     key: MINIO_ROOT_USER
               MINIO_ROOT_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: minio-secret
+                    name: *app
                     key: MINIO_ROOT_PASSWORD
             resources:
               requests:
