@@ -104,10 +104,6 @@ spec:
                 service:
                   name: main
                   port: s3
-        tls:
-          - hosts:
-              - *host
-              - *s3
 
     persistence:
       dev:
