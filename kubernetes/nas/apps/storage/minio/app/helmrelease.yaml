@@ -94,23 +94,30 @@ spec:
     #         interval: 1m
     #         scrapeTimeout: 10s
 
-    # ingress:
-    #   main:
-    #     enabled: true
-    #     className: "internal"
-    #     hosts:
-    #       - host: &host "minio.${EXTERNAL_DOMAIN}"
-    #         paths:
-    #           - path: /
-    #             service:
-    #               name: main
-    #               port: http
-    #       - host: &host "s3.${EXTERNAL_DOMAIN}"
-    #         paths:
-    #           - path: /
-    #             service:
-    #               name: main
-    #               port: s3
+    ingress:
+      main:
+        enabled: true
+        className: "internal"
+        hosts:
+          - host: &host "minio.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+          - host: &s3 "s3.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: s3
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+          - secretName: *s3
+            hosts:
+              - *s3
 
     persistence:
       dev:
