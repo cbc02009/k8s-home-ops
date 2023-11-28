@@ -105,11 +105,8 @@ spec:
                   name: main
                   port: s3
         tls:
-          - secretName: *host
-            hosts:
+          - hosts:
               - *host
-          - secretName: *s3
-            hosts:
               - *s3
 
     persistence:
