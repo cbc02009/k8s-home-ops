@@ -17,8 +17,9 @@ env:
 jobs:
   kubeconform:
     name: Kubeconform
-    runs-on: ubuntu-latest
-    # runs-on: ["arc-runner-set-k8s-home-ops"]
+    # runs-on: ubuntu-latest
+    runs-on: ["arc-runner-set-k8s-home-ops"]
+    container: ubuntu:22.04
     steps:
       - name: Generate Token
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
