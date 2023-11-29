@@ -32,6 +32,10 @@ jobs:
         with:
           token: "${{ steps.generate-token.outputs.token }}"
 
+      - name: Install Homebrew
+        run: |
+          NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
       - name: Setup Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
