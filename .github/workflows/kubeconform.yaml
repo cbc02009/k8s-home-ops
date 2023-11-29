@@ -13,7 +13,6 @@ on:
 env:
   KUBERNETES_DIR: ./kubernetes
   SCHEMA_DIR: /home/runner/.datree/crdSchemas
-  NONINTERACTIVE: 1
 
 jobs:
   kubeconform:
@@ -36,13 +35,15 @@ jobs:
       - name: Install Homebrew
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        env:
+          NONINTERACTIVE: 1
 
       - name: Setup Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
       - name: Setup Tools
         run: |
-          brew install fluxcd/tap/flux kubeconform kustomize
+          brew install gcc fluxcd/tap/flux kubeconform kustomize
 
       - name: Download CRDs
         run: |
