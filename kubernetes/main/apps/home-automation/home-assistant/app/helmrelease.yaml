@@ -34,18 +34,20 @@ spec:
     controllers:
       main:
         type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
         initContainers:
-          wait-for-pg:
-            image:
-              repository: quay.io/prometheus/busybox
-              tag: 'latest'
-            imagePullPolicy: IfNotPresent
-            command:
-              [
-                "sh",
-                "-c",
-                'until nc -vz ${POSTGRES_HOST} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
-              ]
+          # 02-wait-for-pg:
+          #   image:
+          #     repository: quay.io/prometheus/busybox
+          #     tag: 'latest'
+          #   imagePullPolicy: IfNotPresent
+          #   command:
+          #     [
+          #       "sh",
+          #       "-c",
+          #       'until nc -vz postgres.${EXTERNAL_DOMAIN} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
+          #     ]
           01-init-db:
             image:
               repository: ghcr.io/onedr0p/postgres-init
@@ -60,6 +62,8 @@ spec:
               tag: 2023.11.3@sha256:a24bb33c22c67e1e89a0cace283af24315ccbedd859199b2048f2fc97bbd1139
             env:
               TZ: "${TZ}"
+              POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
+              POSTGRES_DB: home_assistant
             envFrom:
               - secretRef:
                   name: *app
@@ -111,4 +115,4 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: home-assistant
+        existingClaim: *app

@@ -3,42 +3,56 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: home-assistant
+  name: &app home-assistant
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/main/apps/home-automation/home-assistant/app/'
+  targetNamespace: home-automation
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: cloudnative-pg-cluster
+    - name: external-secrets
+  path: ./kubernetes/main/apps/home-automation/home-assistant/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: false
   interval: 30m
   retryInterval: 1m
-  timeout: 3m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: home-assistant
-      namespace: home-automation
-  dependsOn:
-    - name: external-secrets
-    - name: cloudnative-pg-cluster
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      GATUS_SUBDOMAIN: hass
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_ACCESSMODES: ReadWriteMany
+      VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: home-assistant-code
+  name: &app home-assistant-code
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/main/apps/home-automation/home-assistant/code/'
+  targetNamespace: home-automation
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/main/apps/home-automation/home-assistant/code
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: false
   interval: 30m
   retryInterval: 1m
-  timeout: 3m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
