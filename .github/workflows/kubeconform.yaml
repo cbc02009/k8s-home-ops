@@ -32,6 +32,10 @@ jobs:
         with:
           token: "${{ steps.generate-token.outputs.token }}"
 
+      - name: Update apt
+        run: |
+          sudo apt update && sudo apt install git curl
+
       - name: Install Homebrew
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
