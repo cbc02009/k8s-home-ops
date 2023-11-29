@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app plex
+  name: &app jellyfin
   namespace: media
 spec:
   interval: 30m
@@ -53,13 +53,11 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/plex-beta
-              tag: 1.32.8.7639-fb6452ebf@sha256:84c51a3abe3cec182d034cea58e65086b20f3dc49831d8a1fc16f67c85ca6e53
+              repository: ghcr.io/onedr0p/jellyfin
+              tag: 10.8.11
 
             env:
               TZ: ${TZ}
-              # NVIDIA_VISIBLE_DEVICES: all
-              # NVIDIA_DRIVER_CAPABILITIES: all
 
             resources:
               requests:
@@ -72,7 +70,6 @@ spec:
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: ${LB_PLEX}
         ports:
           http:
             port: 32400
@@ -101,9 +98,13 @@ spec:
         enabled: true
         existingClaim: *app
 
-      transcode:
+      cache:
         enabled: true
         type: emptyDir
+        advancedMounts:
+          main:
+            main:
+              - path: /config/cache
 
       media:
         enabled: true
@@ -112,10 +113,3 @@ spec:
         path: /tank/media
         globalMounts:
           - path: /media
-      backup:
-        enabled: true
-        type: nfs
-        server: *nas
-        path: /tank/backup/kubernetes/apps/plex
-        globalMounts:
-          - path: /config/backup
