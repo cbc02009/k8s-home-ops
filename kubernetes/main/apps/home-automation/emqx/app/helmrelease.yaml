@@ -128,3 +128,11 @@ spec:
       kind: Secret
       name: *app
       valuesKey: USER_2_PASSWORD
+    - targetPath: emqxConfig.EMQX_AUTH__USER__3__USERNAME
+      kind: Secret
+      name: *app
+      valuesKey: USER_3_USERNAME
+    - targetPath: emqxConfig.EMQX_AUTH__USER__3__PASSWORD
+      kind: Secret
+      name: *app
+      valuesKey: USER_3_PASSWORD
