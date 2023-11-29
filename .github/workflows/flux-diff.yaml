@@ -9,7 +9,7 @@ on:
 jobs:
   flux-diff:
     name: Flux Diff
-    runs-on: ["arc-runner-set-k8s-home-ops"]
+    # runs-on: ["arc-runner-set-k8s-home-ops"]
     strategy:
       matrix:
         path: ["kubernetes"]
