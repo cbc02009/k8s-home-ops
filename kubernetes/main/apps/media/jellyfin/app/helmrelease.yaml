@@ -69,7 +69,6 @@ spec:
                 memory: 10000M
     service:
       main:
-        type: LoadBalancer
         ports:
           http:
             port: 32400
@@ -77,9 +76,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+        className: internal
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
