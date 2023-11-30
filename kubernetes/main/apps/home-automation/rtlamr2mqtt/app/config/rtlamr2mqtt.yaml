@@ -19,9 +19,16 @@ custom_parameters:
   rtlamr: -unique=true -symbollength=32
 
 meters:
-  - id: "{{ .METER_ID }}"
+  - id: "{{ .MAIN_METER_ID }}"
     protocol: scm
     name: energy_meter
+    # format: "######"
+    unit_of_measurement: kWh
+    icon: mdi:gauge
+    device_class: energy
+  - id: "{{ .SOLAR_METER_ID }}"
+    protocol: scm
+    name: solar_meter
     # format: "######"
     unit_of_measurement: kWh
     icon: mdi:gauge
