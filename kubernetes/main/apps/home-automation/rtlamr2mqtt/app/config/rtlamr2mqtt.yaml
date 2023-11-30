@@ -32,3 +32,4 @@ meters:
     unit_of_measurement: kWh
     icon: mdi:gauge
     device_class: energy
+    state_class: "total"
