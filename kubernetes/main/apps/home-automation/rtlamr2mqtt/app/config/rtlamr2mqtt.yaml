@@ -25,10 +25,10 @@ meters:
     unit_of_measurement: kWh
     icon: mdi:gauge
     device_class: energy
+    state_class: "total"
   - id: "{{ .SOLAR_METER_ID }}"
     protocol: scm+
     name: solar_meter
     unit_of_measurement: kWh
     icon: mdi:gauge
     device_class: energy
-    state_class: "total"
