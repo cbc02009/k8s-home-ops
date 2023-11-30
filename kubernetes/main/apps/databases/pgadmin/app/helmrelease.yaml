@@ -35,6 +35,8 @@ spec:
     controllers:
       main:
         type: statefulset
+        podAnnotations:
+          reloader.stakater.com/auto: 'true'
         containers:
           main:
             image:
@@ -49,6 +51,13 @@ spec:
                 memory: 164M
               limits:
                 memory: 236M
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+
     service:
       main:
         ports:
@@ -60,18 +69,23 @@ spec:
         className: internal
 
         hosts:
-          - host: '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
                 service:
                   name: main
                   port: http
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+
 
     persistence:
       config:
         enabled: true
-        existingClaim: pgadmin-config-v1
+        existingClaim: *app
         globalMounts:
           - path: /var/lib/pgadmin
       server-json:
@@ -81,5 +95,3 @@ spec:
         globalMounts:
           - path: /pgadmin4/servers.json
             subPath: servers.json
-    podAnnotations:
-      reloader.stakater.com/auto: 'true'

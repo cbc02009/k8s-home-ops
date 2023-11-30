@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: pgadmin
+  name: &app pgadmin
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -23,4 +23,7 @@ spec:
       namespace: databases
   dependsOn:
     - name: rook-ceph-cluster
-    - name: nginx-internal
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 1Gi
