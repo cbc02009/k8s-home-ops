@@ -42,9 +42,9 @@ spec:
               tag: 2.3.3
             securityContext:
               privileged: true
-            # env:
-            #   LISTEN_ONLY: yes
-            #   RTL_MSGTYPE: "all"
+            env:
+              LISTEN_ONLY: yes
+              RTL_MSGTYPE: "all"
             resources:
               requests:
                 cpu: 50m
