@@ -48,3 +48,4 @@ spec:
       fsGroup: ${VOLSYNC_USER:-568}
     retain:
       daily: 7
+      weekly: 5
