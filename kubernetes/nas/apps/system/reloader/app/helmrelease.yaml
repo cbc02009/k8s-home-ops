@@ -37,7 +37,7 @@ spec:
         image:
           name: ghcr.io/cbc02009/reloader
       podMonitor:
-        enabled: true
+        enabled: false
         namespace: system
 
     resources:
