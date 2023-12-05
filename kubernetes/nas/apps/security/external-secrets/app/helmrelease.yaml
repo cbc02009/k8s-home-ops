@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     installCRDs: true
-    replicaCount: 3
+    replicaCount: 1
     leaderElect: true
     serviceMonitor:
       enabled: true
