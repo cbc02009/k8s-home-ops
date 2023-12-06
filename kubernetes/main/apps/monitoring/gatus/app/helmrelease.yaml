@@ -38,7 +38,7 @@ spec:
               pullPolicy: IfNotPresent
             envFrom: &envFrom
               - secretRef:
-                  name: *app
+                  name: gatus-secret
           # TODO: Convert this to a proper 'sidecar' container someday
           init-config:
             order: 2
