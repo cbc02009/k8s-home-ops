@@ -24,19 +24,19 @@ connectivity:
     target: 1.1.1.1:53
     interval: 1m
 endpoints:
-  # - name: status
-  #   group: external
-  #   url: https://status.kokoro.wtf
-  #   interval: 1m
-  #   client:
-  #     dns-resolver: tcp://1.1.1.1:53
-  #   conditions:
-  #     - "[STATUS] == 200"
+  - name: status
+    group: external
+    url: https://status.kokoro.wtf
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
   #   alerts:
   #     - type: pushover
   - name: flux-webhook
     group: external
-    url: https://flux-webhook.kokoro.wtf
+    url: https://flux-receiver.kokoro.wtf
     interval: 1m
     client:
       dns-resolver: tcp://1.1.1.1:53
