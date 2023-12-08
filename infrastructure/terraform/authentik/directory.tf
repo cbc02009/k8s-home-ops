@@ -17,11 +17,13 @@ resource "authentik_group" "infrastructure" {
 resource "authentik_group" "home" {
   name         = "Home Automation"
   is_superuser = false
+  parent       = resource.authentik_group.users.id
 }
 
 resource "authentik_group" "search" {
   name         = "Search"
   is_superuser = false
+  parent       = resource.authentik_group.users.id
 }
 
 data "authentik_group" "admins" {
