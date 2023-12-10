@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: libreddit
+  name: &app libreddit
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -21,3 +21,6 @@ spec:
       kind: HelmRelease
       name: libreddit
       namespace: services
+  postBuild:
+    substitute:
+      APP: *app

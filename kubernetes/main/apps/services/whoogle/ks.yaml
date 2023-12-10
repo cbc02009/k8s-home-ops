@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: whoogle
+  name: &app whoogle
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -21,3 +21,6 @@ spec:
       kind: HelmRelease
       name: whoogle
       namespace: services
+  postBuild:
+    substitute:
+      APP: *app
