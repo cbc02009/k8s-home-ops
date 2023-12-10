@@ -6,5 +6,6 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./pvc.yaml
+  - ../../../../templates/gatus/guarded
 metadata:
   namespace: organizarrs
