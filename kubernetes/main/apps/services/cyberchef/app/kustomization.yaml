@@ -6,5 +6,3 @@ namespace: services
 resources:
   - ./helmrelease.yaml
   - ../../../../templates/gatus/guarded
-metadata:
-  namespace: services
