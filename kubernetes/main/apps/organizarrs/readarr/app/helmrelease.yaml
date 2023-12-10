@@ -42,6 +42,16 @@ spec:
         annotations:
           reloader.stakater.com/auto: 'true'
 
+        initContainers:
+          01-init-db:
+            envFrom:
+              - secretRef:
+                  name: *app
+
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '16.1'
+
         containers:
           main:
             image:
