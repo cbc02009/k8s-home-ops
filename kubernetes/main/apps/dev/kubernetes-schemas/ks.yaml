@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: kubernetes-schemas
+  name: &app kubernetes-schemas
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -23,3 +23,6 @@ spec:
       namespace: dev
   dependsOn:
     - name: nginx-internal
+  postBuild:
+    substitute:
+      APP: *app
