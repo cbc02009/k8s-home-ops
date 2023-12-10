@@ -108,7 +108,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: internal
+        className: external
         hosts:
           - host: &host "{{ .Release.Name }}.kokoro.wtf"
             paths:
