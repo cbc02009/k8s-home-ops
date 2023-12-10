@@ -23,7 +23,6 @@ spec:
       namespace: home-automation
   dependsOn:
     - name: rook-ceph-cluster
-    - name: nginx-internal
   postBuild:
     substitute:
       APP: *app

@@ -22,5 +22,4 @@ spec:
       name: coder
       namespace: dev
   dependsOn:
-    - name: nginx-internal
     - name: cloudnative-pg-cluster

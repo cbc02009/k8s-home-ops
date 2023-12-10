@@ -12,7 +12,6 @@ spec:
     - name: rook-ceph-cluster
     - name: volsync
     - name: calibre
-    - name: nginx-internal
   path: './kubernetes/main/apps/media/calibre-web/app/'
   prune: true
   sourceRef:

@@ -23,7 +23,6 @@ spec:
       namespace: media
   dependsOn:
     - name: rook-ceph-cluster
-    - name: nginx-internal
   postBuild:
     substitute:
       APP: *app
