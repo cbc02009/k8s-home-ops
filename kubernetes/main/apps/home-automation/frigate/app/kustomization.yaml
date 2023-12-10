@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ../../../../templates/gatus/guarded
   - ../../../../templates/volsync
 namespace: home-automation
 configMapGenerator:
