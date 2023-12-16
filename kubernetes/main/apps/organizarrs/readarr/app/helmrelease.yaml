@@ -67,6 +67,8 @@ spec:
               READARR__INSTANCE_NAME: Readarr
               READARR__PORT: &port 8787
               READARR__LOG_LEVEL: info
+              READARR__POSTGRES_MAIN_DB: readarr_main
+              READARR__POSTGRES_LOG_DB: readarr_log
 
             resources:
               requests:
