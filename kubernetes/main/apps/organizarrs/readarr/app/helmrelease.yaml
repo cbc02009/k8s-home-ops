@@ -105,7 +105,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: *app
+        existingClaim: readarr-config-v1
       media:
         enabled: true
         type: nfs
