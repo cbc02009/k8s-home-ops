@@ -60,7 +60,7 @@ spec:
             image:
               repository: ghcr.io/onedr0p/lidarr-develop
               tag:
-                2.0.6.3818@sha256:58128c7750b54a705a7709b8ccc811a0560a2a33a71db7576a352f039782616d
+                2.1.0.3856@sha256:a804847dc155618645974f5576ffbfb6e90bb44a1add221ccc672e4641cc979e
 
             envFrom:
               - secretRef:
