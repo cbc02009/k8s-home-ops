@@ -69,6 +69,7 @@ spec:
               READARR__LOG_LEVEL: info
               READARR__POSTGRES_MAIN_DB: readarr_main
               READARR__POSTGRES_LOG_DB: readarr_log
+              READARR__POSTGRES_CACHE_DB: readarr_cache
 
             resources:
               requests:
