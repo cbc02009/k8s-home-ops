@@ -6,7 +6,7 @@ metadata:
   name: postgres
 spec:
   instances: 3
-  imageName: ghcr.io/bo0tzz/cnpgvecto.rs:16.10-v0.1.11
+  imageName: ghcr.io/bo0tzz/cnpgvecto.rs:16-v0.1.13
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
