@@ -8,6 +8,5 @@ resources:
   - ./configmap.yaml
   - ./nfs-pvc.yaml
   - ./server
-  - ./typesense
   - ./microservices
   - ./machine-learning
