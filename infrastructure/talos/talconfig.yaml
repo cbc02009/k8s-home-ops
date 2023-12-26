@@ -75,7 +75,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/882917545be6056d41184d74d925e6092e7ea620450955b06f4470581f6a7089
     ipAddress: 10.0.2.12
     installDiskSelector:
-      model: INTEL SSDPEKNW512G8
+      model: KINGSTON SA400S3
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -139,7 +139,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/7b907eb314b67294518604227f0e81e42fc67f45cbe63c7f972b7c490a95697f
     ipAddress: 10.0.2.15
     installDiskSelector:
-      serial: PNY2251221219010040D
+      serial: T-FORCE 512GB
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
