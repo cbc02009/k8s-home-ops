@@ -93,7 +93,7 @@ jobs:
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
             --all-namespaces
-            --sources "home-kubernetes"
+            --sources "k8s-home-ops"
             --output-file diff.patch
 
       - name: Generate Diff
