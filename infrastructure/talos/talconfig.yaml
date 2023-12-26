@@ -139,7 +139,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/7b907eb314b67294518604227f0e81e42fc67f45cbe63c7f972b7c490a95697f
     ipAddress: 10.0.2.15
     installDiskSelector:
-      serial: T-FORCE 512GB
+      model: T-FORCE 512GB
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
