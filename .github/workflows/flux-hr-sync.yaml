@@ -26,14 +26,14 @@ jobs:
     runs-on: ["arc-runner-set-k8s-home-ops"]
     steps:
       - name: Generate Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@2986852ad836768dfea7781f31828eb3e17990fa # v1
         id: app-token
         with:
           app-id: "${{ secrets.BOT_APP_ID }}"
           private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       - name: Checkout Default Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           token: "${{ steps.app-token.outputs.token }}"
           fetch-depth: 0
@@ -43,7 +43,7 @@ jobs:
         run: sudo apt-get -qq update && sudo apt-get -qq install --no-install-recommends -y curl git
 
       - name: Setup Workflow Tools
-        uses: jdx/rtx-action@v1
+        uses: jdx/rtx-action@61c1bfbed63c70a82ff0ce3301bde41875b17844 # v1
         with:
           install: true
           rtx_toml: |
@@ -53,7 +53,7 @@ jobs:
 
       - name: Write kubeconfig
         id: kubeconfig
-        uses: timheuer/base64-to-file@v1
+        uses: timheuer/base64-to-file@adaa40c0c581f276132199d4cf60afa07ce60eac # v1
         with:
           encodedString: "${{ secrets.KUBECONFIG }}"
           fileName: kubeconfig
@@ -61,7 +61,7 @@ jobs:
       - if: ${{ github.event.inputs.clusterName == '' && github.event.inputs.helmRepoNamespace == '' && github.event.inputs.helmRepoName == '' }}
         name: Get Changed Files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@716b1e13042866565e00e85fd4ec490e186c4a2f # v41
         with:
           files: kubernetes/**/helmrelease.yaml
           safe_output: false
