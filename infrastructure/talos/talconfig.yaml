@@ -4,7 +4,7 @@ clusterName: cluster
 # renovate: image depName=ghcr.io/siderolabs/installer
 talosVersion: v1.6.1
 # renovate: image depName=registry.k8s.io/kube-apiserver
-kubernetesVersion: v1.28.3
+kubernetesVersion: v1.28.5
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -174,7 +174,7 @@ controlPlane:
         time:
           disabled: false
           servers:
-            - 10.0.2.1
+            - time.cloudflare.com
 
     # Enable KubePrism
     - |-
