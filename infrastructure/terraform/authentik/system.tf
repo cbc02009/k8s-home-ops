@@ -23,12 +23,12 @@ resource "authentik_outpost" "proxyoutpost" {
   type               = "proxy"
   service_connection = authentik_service_connection_kubernetes.local.id
   protocol_providers = [
-    module.proxy-prowlarr.id,
-    module.proxy-radarr.id,
-    module.proxy-sonarr.id,
-    module.proxy-lidarr.id,
-    module.proxy-readarr.id,
-    module.proxy-animarr.id,
+    # module.proxy-prowlarr.id,
+    # module.proxy-radarr.id,
+    # module.proxy-sonarr.id,
+    # module.proxy-lidarr.id,
+    # module.proxy-readarr.id,
+    # module.proxy-animarr.id,
     module.proxy-whoogle.id,
     module.proxy-frigate.id,
   ]
