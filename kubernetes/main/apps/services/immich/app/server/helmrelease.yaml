@@ -26,8 +26,6 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: immich-typesense
-      namespace: services
     - name: redis
       namespace: databases
   values:
