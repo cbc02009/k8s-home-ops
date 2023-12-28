@@ -91,3 +91,21 @@ module "proxy-frigate" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   auth_groups        = [authentik_group.home.id]
 }
+
+module "oauth2-immich" {
+  source             = "./oauth2_application"
+  name               = "Immich"
+  icon_url           = "https://github.com/immich-app/immich/raw/main/docs/static/img/favicon.png"
+  launch_url         = "https://photos.${data.doppler_secrets.this.map.DOMAIN}"
+  description        = "Photo managment"
+  newtab             = true
+  group              = "Media"
+  auth_groups        = [authentik_group.media.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  client_id          = data.doppler_secrets.this.map.IMMICH_OIDC_ID
+  client_secret      = data.doppler_secrets.this.map.IMMICH_OIDC_SECRET
+  redirect_uris = [
+    "https://photos.${data.doppler_secrets.this.map.DOMAIN}/auth/login",
+    "app.immich:/"
+  ]
+}
