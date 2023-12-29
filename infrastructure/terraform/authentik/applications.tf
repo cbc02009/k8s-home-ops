@@ -79,6 +79,7 @@ module "proxy-whoogle" {
   domain             = data.doppler_secrets.this.map.DOMAIN
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   auth_groups        = [authentik_group.search.id]
+  access_token_validity = 720
 }
 
 module "proxy-frigate" {
@@ -90,6 +91,7 @@ module "proxy-frigate" {
   domain             = data.doppler_secrets.this.map.DOMAIN
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   auth_groups        = [authentik_group.home.id]
+  access_token_validity = 720
 }
 
 module "oauth2-immich" {
