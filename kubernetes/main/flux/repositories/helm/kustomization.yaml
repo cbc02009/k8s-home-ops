@@ -12,6 +12,7 @@ resources:
   - ./bjw-s-charts.yaml
   - ./cilium-charts.yaml
   - ./cloudnative-pg.yaml
+  - ./democratic-csi.yaml
   - ./emqx-charts.yaml
   - ./external-dns-charts.yaml
   - ./external-secrets.yaml
