@@ -13,5 +13,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: ceph-block
+      storage: 1Gi
+  storageClassName: local-hostpath
