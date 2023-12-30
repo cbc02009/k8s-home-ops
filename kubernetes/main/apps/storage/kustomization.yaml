@@ -7,5 +7,3 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./local-path-provisioner/ks.yaml
-  - ./minio/ks.yaml
-  - ./zot/ks.yaml
