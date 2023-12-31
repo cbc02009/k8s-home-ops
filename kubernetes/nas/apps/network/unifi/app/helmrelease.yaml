@@ -58,7 +58,7 @@ spec:
     service:
       main:
         type: LoadBalancer
-        externalTrafficPolicy: Cluster
+        externalTrafficPolicy: Local
         ports:
           http:
             port: 8443
