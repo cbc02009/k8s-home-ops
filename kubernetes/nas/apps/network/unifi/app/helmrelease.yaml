@@ -54,7 +54,7 @@ spec:
               size: 1Gi
               storageClass: local-hostpath
               globalMounts:
-                - path: /usr/lib/unifi
+                - path: /usr/lib/unifi/data
     service:
       main:
         type: LoadBalancer
