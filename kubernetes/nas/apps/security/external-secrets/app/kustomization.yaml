@@ -5,6 +5,3 @@ kind: Kustomization
 namespace: security
 resources:
   - ./helmrelease.yaml
-  - ./helmrepository.yaml
-metadata:
-  namespace: security
