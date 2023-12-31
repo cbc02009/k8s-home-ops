@@ -130,10 +130,3 @@ spec:
       config:
         enabled: true
         existingClaim: prowlarr-config-v1
-      backup:
-        enabled: true
-        type: nfs
-        server: nas.ctec.run
-        path: /tank/backup/kubernetes/apps/prowlarr
-        globalMounts:
-          - path: /config/Backups
