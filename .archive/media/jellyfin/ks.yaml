@@ -3,12 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps-jellyfin
+  name: &app jellyfin
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/apps/media/jellyfin/app/'
+  path: './kubernetes/main/apps/media/jellyfin/app/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -21,7 +21,7 @@ spec:
       kind: HelmRelease
       name: jellyfin
       namespace: media
-  dependsOn:
-    - name: apps-rook-ceph-cluster
-    - name: apps-nginx-internal
-    - name: apps-external-secrets
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 50Gi

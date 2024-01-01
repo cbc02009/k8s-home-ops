@@ -1,91 +1,112 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: &app jellyfin
   namespace: media
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.4.0
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: system
   values:
-    runtimeClassName: nvidia
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 44
+          - 109
+          - 100
+          - 1010
 
-    controller:
-      type: statefulset
+    controllers:
+      main:
+        type: statefulset
 
-    image:
-      repository: ghcr.io/onedr0p/jellyfin
-      tag: 10.8.10@sha256:1ef614db6a4c589777eb48bc9004d573b9c09f0d6d573a509041c6060f3a956b
+        containers:
+          main:
+            image:
+              repository: ghcr.io/onedr0p/jellyfin
+              tag: 10.8.11
 
-    env:
-      TZ: "${TZ}"
+            env:
+              TZ: ${TZ}
 
+            resources:
+              requests:
+                cpu: 100m
+                memory: 2000M
+                nvidia.com/gpu: 1
+              limits:
+                nvidia.com/gpu: 1
+                memory: 10000M
     service:
       main:
-        type: LoadBalancer
-        externalIPs: ["${LB_JELLYFIN}"]
         ports:
           http:
-            port: 8096
+            port: 32400
 
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal"
-        annotations:
-          ingress.home.arpa/type: "internal"
+        className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
+                service:
+                  name: main
+                  port: http
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 44
-        - 109
-        - 100
     persistence:
       config:
         enabled: true
-        existingClaim: jellyfin-config-v1
+        existingClaim: *app
+
+      cache:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          main:
+            main:
+              - path: /config/cache
+
       media:
         enabled: true
         type: nfs
         server: &nas nas.ctec.run
         path: /tank/media
-        mountPath: /media
-      transcode:
-        enabled: true
-        type: emptyDir
-
-    resources:
-      requests:
-        nvidia.com/gpu: 1
-        cpu: 100m
-        memory: 1000Mi
-      limits:
-        nvidia.com/gpu: 1
-        memory: 6000Mi
+        globalMounts:
+          - path: /media
