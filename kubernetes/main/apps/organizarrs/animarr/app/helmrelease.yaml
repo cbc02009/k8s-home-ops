@@ -121,10 +121,3 @@ spec:
         path: /tank/media
         globalMounts:
           - path: /media
-      backup:
-        enabled: true
-        type: nfs
-        server: nas.ctec.run
-        path: /tank/backup/kubernetes/apps/animarr
-        globalMounts:
-          - path: /config/Backups

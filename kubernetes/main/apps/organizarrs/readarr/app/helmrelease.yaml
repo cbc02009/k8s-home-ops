@@ -116,10 +116,3 @@ spec:
         path: /tank/media
         globalMounts:
           - path: /media
-      backup:
-        enabled: true
-        type: nfs
-        server: *nas
-        path: /tank/backup/kubernetes/apps/readarr
-        globalMounts:
-          - path: /config/Backups
