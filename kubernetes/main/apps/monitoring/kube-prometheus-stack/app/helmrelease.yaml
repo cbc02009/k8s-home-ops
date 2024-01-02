@@ -168,7 +168,7 @@ spec:
             scheme: https
             static_configs:
               - targets:
-                  - "minio.kokoro.wtf"
+                  - "s3.kokoro.wtf"
 
           - job_name: speedtest-exporter
             scrape_interval: 60m
