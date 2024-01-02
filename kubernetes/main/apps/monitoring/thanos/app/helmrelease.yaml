@@ -26,8 +26,6 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: local-path-provisioner
-      namespace: storage
     - name: redis
       namespace: databases
     - name: rook-ceph-cluster
@@ -85,7 +83,14 @@ spec:
             redis-node-2.redis-headless.databases.svc.cluster.local:26379
           db: 13
           master_name: redis-master
-
+      ingress:
+        enabled: true
+        ingressClassName: internal
+        hostname: &host thanos-query-frontend.${EXTERNAL_DOMAIN}
+        tls: true
+        extraTls:
+          - hosts:
+              - *host
     bucketweb:
       enabled: true
       replicaCount: 2
