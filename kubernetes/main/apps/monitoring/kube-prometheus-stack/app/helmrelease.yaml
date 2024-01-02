@@ -178,13 +178,13 @@ spec:
               - targets:
                   - gateway.${INTERNAL_DOMAIN}:9798
 
-          # - job_name: smartctl-exporter
-          #   scrape_interval: 10m
-          #   scrape_timeout: 10s
-          #   honor_timestamps: true
-          #   static_configs:
-          #     - targets:
-          #         - "nas.ctec.run:9633"
+          - job_name: smartctl-exporter
+            scrape_interval: 10m
+            scrape_timeout: 10s
+            honor_timestamps: true
+            static_configs:
+              - targets:
+                  - "nas.ctec.run:9633"
 
           - job_name: node-exporter
             scrape_interval: 1m
