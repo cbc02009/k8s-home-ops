@@ -168,7 +168,7 @@ spec:
             scheme: http
             static_configs:
               - targets:
-                  - "${MINIO_HOST}:9000"
+                  - "minio.kokoro.wtf"
 
           - job_name: speedtest-exporter
             scrape_interval: 60m
