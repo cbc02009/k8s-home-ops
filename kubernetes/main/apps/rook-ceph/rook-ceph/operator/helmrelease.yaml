@@ -29,22 +29,17 @@ spec:
   values:
     crds:
       enabled: true
-
     csi:
-      kubeletDirPath: /var/lib/kubelet
-      enableCSIHostNetwork: true
-      pluginTolerations:
-        - effect: "NoExecute"
-          operator: "Exists"
-        - effect: "NoSchedule"
-          operator: "Exists"
-
+      provisioner:
+        image: registry.k8s.io/sig-storage/csi-provisioner:v3.6.3
+      cephFSKernelMountOptions: ms_mode=prefer-crc
+      enableLiveness: true
+      serviceMonitor:
+        enabled: true
     monitoring:
-      enabled: false
-
+      enabled: true
     resources:
       requests:
-        cpu: 109m
-        memory: 204M
-      limits:
-        memory: 453M
+        memory: 128Mi # unchangable
+        cpu: 100m # unchangable
+      limits: {}
