@@ -111,6 +111,7 @@ spec:
     storegateway:
       enabled: true
       replicaCount: 2
+      config: *config
       persistence:
         enabled: true
         storageClass: ceph-block
