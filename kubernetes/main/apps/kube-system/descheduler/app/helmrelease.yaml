@@ -26,71 +26,42 @@ spec:
       remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
   values:
+    replicas: 2
     kind: Deployment
-    replicas: 3
-
+    deschedulerPolicyAPIVersion: descheduler/v1alpha2
+    deschedulerPolicy:
+      profiles:
+        - name: Default
+          pluginConfig:
+            - name: DefaultEvictor
+              args:
+                evictFailedBarePods: true
+                evictLocalStoragePods: true
+                evictSystemCriticalPods: true
+                nodeFit: true
+            - name: RemovePodsViolatingInterPodAntiAffinity
+            - name: RemovePodsViolatingNodeAffinity
+              args:
+                nodeAffinityType:
+                  - requiredDuringSchedulingIgnoredDuringExecution
+            - name: RemovePodsViolatingNodeTaints
+            - name: RemovePodsViolatingTopologySpreadConstraint
+              args:
+                constraints:
+                  - DoNotSchedule
+                  - ScheduleAnyway
+          plugins:
+            balance:
+              enabled:
+                - RemovePodsViolatingTopologySpreadConstraint
+            deschedule:
+              enabled:
+                - RemovePodsViolatingInterPodAntiAffinity
+                - RemovePodsViolatingNodeAffinity
+                - RemovePodsViolatingNodeTaints
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true
     leaderElection:
       enabled: true
-      # leaseDuration: 15
-      # renewDeadline: 10
-      # retryPeriod: 2
-      # resourceLock: "leases"
-      # resourceName: "descheduler"
-      # resourceNamescape: "kube-system"
-
-    podAnnotations:
-      botkube.io/disable: "true"
-      configmap.reloader.stakater.com/reload: "descheduler"
-
-    deschedulerPolicy:
-      strategies:
-        RemoveDuplicates:
-          enabled: true
-
-        RemovePodsViolatingNodeTaints:
-          enabled: true
-
-        RemovePodsViolatingNodeAffinity:
-          enabled: true
-          params:
-            nodeAffinityType:
-              - requiredDuringSchedulingIgnoredDuringExecution
-
-        RemovePodsViolatingTopologySpreadConstraint:
-          enabled: true
-          params:
-            includeSoftConstraints: true
-
-        RemovePodsViolatingInterPodAntiAffinity:
-          enabled: true
-          params:
-            nodeFit: true
-
-        LowNodeUtilization:
-          enabled: true
-
-        RemoveFailedPods:
-          enabled: true
-          params:
-            failedPods:
-              # reasons:
-              #   - OutOfcpu
-              #   - CreateContainerConfigError
-              includingInitContainers: true
-              excludeOwnerKinds:
-                - Job
-              minPodLifetimeSeconds: 3600
-
-        RemovePodsHavingTooManyRestarts:
-          enabled: true
-          params:
-            podsHavingTooManyRestarts:
-              podRestartThreshold: 10
-              includingInitContainers: true
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 64M
-      limits:
-        memory: 64M
