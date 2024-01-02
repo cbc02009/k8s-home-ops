@@ -21,6 +21,8 @@ spec:
       kind: HelmRelease
       name: libreddit
       namespace: services
+  dependsOn:
+    - name: external-secrets
   postBuild:
     substitute:
       APP: *app
