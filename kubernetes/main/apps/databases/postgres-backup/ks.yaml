@@ -15,6 +15,6 @@ spec:
     name: k8s-home-ops
   interval: 30m
   retryInterval: 1m
-  timeout: 3m
+  timeout: 15m
   dependsOn:
     - name: external-secrets

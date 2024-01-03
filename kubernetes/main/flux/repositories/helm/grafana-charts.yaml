@@ -8,4 +8,4 @@ metadata:
 spec:
   interval: 2h
   url: https://grafana.github.io/helm-charts
-  timeout: 3m
+  timeout: 15m

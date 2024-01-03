@@ -8,4 +8,4 @@ metadata:
 spec:
   interval: 2h
   url: https://charts.fairwinds.com/stable
-  timeout: 3m
+  timeout: 15m
