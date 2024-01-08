@@ -36,7 +36,7 @@ spec:
           main:
             image:
               repository: ghcr.io/goofball222/unifi
-              tag: 8.0.24-ubuntu
+              tag: 8.0.26-ubuntu
               pullPolicy: IfNotPresent
             env:
               TZ: ${TZ}
