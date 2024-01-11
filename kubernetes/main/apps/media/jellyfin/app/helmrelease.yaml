@@ -26,15 +26,12 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: nvidia-device-plugin
-      namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: volsync
       namespace: system
   values:
     defaultPodOptions:
-      runtimeClassName: nvidia
       securityContext:
         runAsUser: 568
         runAsGroup: 568
@@ -63,9 +60,7 @@ spec:
               requests:
                 cpu: 100m
                 memory: 2000M
-                nvidia.com/gpu: 1
               limits:
-                nvidia.com/gpu: 1
                 memory: 10000M
     service:
       main:
