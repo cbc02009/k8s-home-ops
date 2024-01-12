@@ -35,7 +35,6 @@ nodes:
 #             - siderolabs/amd-ucode
   - hostname: uiharu.ctec.run
     talosImageURL: factory.talos.dev/installer/35d4d494d4d7c9c9bc9fb253fd94f721c48308aef54ea91e401ccd8a76a05146
-    # talosImageURL: factory.talos.dev/installer/2d4e77bbf93dfeb1f1195d99608143eebe44fc6bcc3fecbc6a09feac47a21049 No NUT
     ipAddress: 10.0.2.10
     installDiskSelector:
       serial: PHKA1261000X1P0B
@@ -72,7 +71,6 @@ nodes:
 #             - siderolabs/amd-ucode
   - hostname: sakura.ctec.run
     talosImageURL: factory.talos.dev/installer/35d4d494d4d7c9c9bc9fb253fd94f721c48308aef54ea91e401ccd8a76a05146
-    # talosImageURL: factory.talos.dev/installer/2d4e77bbf93dfeb1f1195d99608143eebe44fc6bcc3fecbc6a09feac47a21049
     ipAddress: 10.0.2.12
     installDiskSelector:
       model: KINGSTON SA400S3
@@ -108,7 +106,6 @@ nodes:
 #             - siderolabs/nut-client
   - hostname: anya.ctec.run
     talosImageURL: factory.talos.dev/installer/7b907eb314b67294518604227f0e81e42fc67f45cbe63c7f972b7c490a95697f
-    # talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
@@ -133,15 +130,14 @@ nodes:
 # customization:
 #     systemExtensions:
 #         officialExtensions:
-#             - siderolabs/amd-ucode
+#             - siderolabs/i915-ucode
 #             - siderolabs/intel-ucode
 #             - siderolabs/nut-client
   - hostname: miri.ctec.run
-    talosImageURL: factory.talos.dev/installer/7b907eb314b67294518604227f0e81e42fc67f45cbe63c7f972b7c490a95697f
-    # talosImageURL: factory.talos.dev/installer/9f14d3d939d420f57d8ee3e64c4c2cd29ecb6fa10da4e1c8ac99da4b04d5e463
+    talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.15
     installDiskSelector:
-      model: T-FORCE 512GB
+      model: SATA SSD
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -152,7 +148,7 @@ nodes:
       - 10.5.0.4
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: e4:1d:4b:2d:a9:8a
+          hardwareAddr: 58:47:ca:71:c1:b2
         addresses:
           - 10.0.2.15/24
         mtu: 1500
