@@ -29,31 +29,25 @@ nodes:
 # customization:
 #     systemExtensions:
 #         officialExtensions:
+#             - siderolabs/i915-ucode
+#             - siderolabs/intel-ucode
 #             - siderolabs/nut-client
-#             - siderolabs/nvidia-container-toolkit
-#             - siderolabs/nonfree-kmod-nvidia
-#             - siderolabs/amd-ucode
   - hostname: uiharu.ctec.run
-    talosImageURL: factory.talos.dev/installer/35d4d494d4d7c9c9bc9fb253fd94f721c48308aef54ea91e401ccd8a76a05146
+    talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.10
     installDiskSelector:
-      serial: PHKA1261000X1P0B
+      model: T-FORCE 512GB
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
-      - name: mlx4_en
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: e4:1d:2d:12:4b:60
+          hardwareAddr: 58:47:ca:73:bd:aa
         addresses:
           - 10.0.2.10/24
         mtu: 1500
@@ -65,31 +59,25 @@ nodes:
 # customization:
 #     systemExtensions:
 #         officialExtensions:
+#             - siderolabs/i915-ucode
+#             - siderolabs/intel-ucode
 #             - siderolabs/nut-client
-#             - siderolabs/nvidia-container-toolkit
-#             - siderolabs/nonfree-kmod-nvidia
-#             - siderolabs/amd-ucode
   - hostname: sakura.ctec.run
-    talosImageURL: factory.talos.dev/installer/35d4d494d4d7c9c9bc9fb253fd94f721c48308aef54ea91e401ccd8a76a05146
+    talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.12
     installDiskSelector:
-      model: KINGSTON SA400S3
+      model: T-FORCE 512GB
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
-      - name: mlx4_en
       - name: br_netfilter
         parameters:
           - nf_conntrack_max=131072
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
     nameservers:
       - 10.5.0.4
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: e4:1d:2d:dd:7c:60
+          hardwareAddr: 58:47:ca:71:c5:02
         addresses:
           - 10.0.2.12/24
         mtu: 1500
@@ -101,11 +89,11 @@ nodes:
 # customization:
 #     systemExtensions:
 #         officialExtensions:
-#             - siderolabs/amd-ucode
+#             - siderolabs/i915-ucode
 #             - siderolabs/intel-ucode
 #             - siderolabs/nut-client
   - hostname: anya.ctec.run
-    talosImageURL: factory.talos.dev/installer/7b907eb314b67294518604227f0e81e42fc67f45cbe63c7f972b7c490a95697f
+    talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: KingFast
@@ -261,6 +249,23 @@ controlPlane:
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
+
+    # Configure nfs mount options
+    - |-
+      machine:
+        files:
+          - op: overwrite
+            path: /etc/nfsmount.conf
+            permissions: 0o644
+            content: |
+              [ NFSMount_Global_Options ]
+              nfsvers=4.2
+              hard=True
+              noatime=True
+              nodiratime=True
+              rsize=131072
+              wsize=131072
+              nconnect=8
 
   inlinePatch:
     machine:
