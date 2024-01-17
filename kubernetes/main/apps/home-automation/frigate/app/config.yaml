@@ -31,9 +31,6 @@ ffmpeg:
     record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -ar 44100 -c:a aac
     rtmp: -c:v copy -f flv -ar 44100 -c:a aac
 
-rtmp:
-  enabled: true
-
 snapshots:
   enabled: true
   timestamp: false
@@ -60,34 +57,22 @@ objects:
       max_area: 100000
       threshold: 0.7
 
+go2rtc:
+  streams:
+    doorbell:
+      - "ffmpeg:http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
+    doorbell_sub:
+      - "http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
+
 cameras:
-  frigate_doorbell:
+  reolink:
     ffmpeg:
-      input_args:
-        - -avoid_negative_ts
-        - make_zero
-        - -fflags
-        - +genpts+discardcorrupt
-        - -flags
-        - low_delay
-        - -strict
-        - experimental
-        - -analyzeduration
-        - 1000M
-        - -probesize
-        - 1000M
-        - -rw_timeout
-        - "5000000"
       inputs:
-        - path: http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}
+        - path: rtsp://127.0.0.1:8554/doorbell?video=copy&audio=aac
+          input_args: preset-rtsp-restream
           roles:
-            - rtmp
             - record
-        - path: http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}
+        - path: rtsp://127.0.0.1:8554/doorbell_sub?video=copy
+          input_args: preset-rtsp-restream
           roles:
             - detect
-          global_args: -analyzeduration 1000M -probesize 1000M
-    detect:
-      width: 640
-      height: 480
-      fps: 10
