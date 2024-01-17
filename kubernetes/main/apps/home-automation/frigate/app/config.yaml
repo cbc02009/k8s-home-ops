@@ -24,7 +24,7 @@ ffmpeg:
     - -hide_banner
     - -loglevel
     - warning
-  hwaccel_args: preset-intel-qsv-h264
+  hwaccel_args: preset-vaapi
 
   # https://github.com/blakeblackshear/frigate/issues/3296
   output_args:
