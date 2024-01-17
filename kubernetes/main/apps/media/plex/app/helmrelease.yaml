@@ -15,7 +15,6 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
     remediation:
       retries: 3
@@ -26,57 +25,77 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: nvidia-device-plugin
+    - name: intel-device-plugin-gpu
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: volsync
       namespace: system
   values:
-    defaultPodOptions:
-      runtimeClassName: nvidia
-      securityContext:
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 44
-          - 109
-          - 100
-          - 1010
-
     controllers:
       main:
         type: statefulset
-
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           main:
             image:
               repository: ghcr.io/onedr0p/plex-beta
               tag: 1.40.0.7775-456fbaf97@sha256:cd6bafd8cf9f75c2d5b6517de312a82a986049f89f089da74b6bdb23928b8b37
-
             env:
               TZ: ${TZ}
-              # NVIDIA_VISIBLE_DEVICES: all
-              # NVIDIA_DRIVER_CAPABILITIES: all
-
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
-                memory: 2000M
-                nvidia.com/gpu: 1
               limits:
-                nvidia.com/gpu: 1
-                memory: 10000M
+                gpu.intel.com/i915: 1
+                memory: 16Gi
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values: ["frigate"]
+                  topologyKey: kubernetes.io/hostname
+          nodeSelector:
+            intel.feature.node.kubernetes.io/gpu: "true"
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            runAsNonRoot: true
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups: [44, 105, 10000]
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: ${LB_PLEX}
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_PLEX}
         ports:
           http:
             port: 32400
-
     ingress:
       main:
         enabled: true
@@ -87,28 +106,29 @@ spec:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
-                pathType: Prefix
                 service:
                   name: main
                   port: http
         tls:
-          - secretName: *host
-            hosts:
+          - hosts:
               - *host
-
     persistence:
       config:
         enabled: true
         existingClaim: *app
-
-      transcode:
-        enabled: true
+      # Separate PVC for cache to avoid backing up cache files
+      plex-cache:
+        existingClaim: plex-cache
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
+      tmp:
         type: emptyDir
-
+      transcode:
+        type: emptyDir
       media:
-        enabled: true
         type: nfs
         server: &nas nas.ctec.run
         path: /tank/media
         globalMounts:
           - path: /media
+            readOnly: true
