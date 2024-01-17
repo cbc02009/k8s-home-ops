@@ -26,7 +26,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: nvidia-device-plugin
+    - name: intel-device-plugin-gpu
       namespace: system
     - name: emqx
       namespace: home-automation
@@ -46,7 +46,6 @@ spec:
                     operator: In
                     values:
                       - 'true'
-      runtimeClassName: nvidia
 
     controllers:
       main:
@@ -78,10 +77,9 @@ spec:
               requests:
                 cpu: 10m
                 memory: 1000Mi
-                nvidia.com/gpu: 1
               limits:
+                gpu.intel.com/i915: "1"
                 memory: 8000Mi
-                nvidia.com/gpu: 1
             probes:
               liveness: &probes
                 enabled: true
