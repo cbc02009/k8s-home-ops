@@ -27,25 +27,10 @@ spec:
       namespace: system-controllers
   values:
     manageCRDs: true
+    image: &image
+      repository: ghcr.io/onedr0p/volsync
+      tag: 0.8.0
+    restic:
+      <<: *image
     metrics:
       disableAuth: true
-  postRenderers:
-    - kustomize:
-        patchesStrategicMerge:
-          - apiVersion: apps/v1
-            kind: Deployment
-            metadata:
-              name: volsync
-            spec:
-              template:
-                spec:
-                  containers:
-                    - name: manager
-                      volumeMounts:
-                        - name: tz-config
-                          mountPath: /etc/localtime
-                  volumes:
-                    - name: tz-config
-                      hostPath:
-                        path: /usr/share/zoneinfo/America/New_York
-                        type: File
