@@ -81,6 +81,8 @@ spec:
         className: external
         annotations:
           authentik.home.arpa/enabled: "true"
+          nginx.ingress.kubernetes.io/satisfy: any
+          nginx.ingress.kubernetes.io/whitelist-source-range: 10.0.0.0/8
         hosts:
           - host: &host search.${EXTERNAL_DOMAIN}
             paths:
