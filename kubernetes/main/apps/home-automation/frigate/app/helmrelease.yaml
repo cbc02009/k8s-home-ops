@@ -65,7 +65,7 @@ spec:
 
             env:
               TZ: ${TZ}
-              LIBVA_DRIVER_NAME: i965
+              # LIBVA_DRIVER_NAME: i965
               FRIGATE_MQTT_USERNAME: frigate
               FRIGATE_MQTT_PASSWORD:
                 valueFrom:
