@@ -40,16 +40,6 @@ spec:
         supplementalGroups:
           - 100
 
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: feature.node.kubernetes.io/10gb-network
-                    operator: In
-                    values:
-                      - 'true'
-
     controllers:
       main:
         type: statefulset
