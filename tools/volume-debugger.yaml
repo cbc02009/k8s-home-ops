@@ -4,16 +4,12 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: volume-debugger
-  namespace: services
+  namespace: media
 spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: nextcloud-config-v1
-    - name: backups
-      nfs:
-        server: 10.0.2.4
-        path: /tank/backup/kubernetes/apps
+        claimName: plex
   containers:
     - name: volume-debugger
       image: ubuntu
@@ -21,5 +17,3 @@ spec:
       volumeMounts:
         - mountPath: "/mnt/volume"
           name: debug-volume
-        - mountPath: "/mnt/backups"
-          name: backups
