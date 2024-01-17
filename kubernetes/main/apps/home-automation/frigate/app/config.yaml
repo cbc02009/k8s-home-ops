@@ -26,6 +26,10 @@ ffmpeg:
     - warning
   hwaccel_args: preset-intel-qsv-h264
 
+  # https://github.com/blakeblackshear/frigate/issues/3296
+  output_args:
+    record: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c:v copy -ar 44100 -c:a aac
+
 snapshots:
   enabled: true
   timestamp: false
