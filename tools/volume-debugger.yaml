@@ -9,7 +9,7 @@ spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: plex
+        claimName: plex-cache
   containers:
     - name: volume-debugger
       image: ubuntu

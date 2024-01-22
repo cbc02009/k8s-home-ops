@@ -49,7 +49,7 @@ spec:
               # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
               # WHOOGLE_ALT_YT: piped.${EXTERNAL_DOMAIN}
               # WHOOGLE_ALT_IG: imginn.com
-              WHOOGLE_ALT_RD: libreddit.${EXTERNAL_DOMAIN}
+              WHOOGLE_ALT_RD: redlib.${EXTERNAL_DOMAIN}
               # WHOOGLE_ALT_MD: scribe.${EXTERNAL_DOMAIN}
               WHOOGLE_ALT_TL: ''
               WHOOGLE_ALT_IMG: bibliogram.art

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: &app libreddit
+  name: &app redlib
   namespace: services
 spec:
   interval: 30m
@@ -42,13 +42,13 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/auricom/libreddit
-              tag: 0.30.1@sha256:c89c2b98ab0eb08f4677d24a3a7577661ed4325c797b042023ce959195534c4f
+              repository: quay.io/redlib/redlib
+              tag: 0.31.0
             env:
-              LIBREDDIT_DEFAULT_SHOW_NSFW: on
-              LIBREDDIT_DEFAULT_WIDE: on
-              LIBREDDIT_DEFAULT_USE_HLS: on
-              LIBREDDIT_DEFAULT_HIDE_HLS_NOTIFICATION: on
+              REDLIB_DEFAULT_SHOW_NSFW: on
+              REDLIB_DEFAULT_WIDE: on
+              REDLIB_DEFAULT_USE_HLS: on
+              REDLIB_DEFAULT_HIDE_HLS_NOTIFICATION: on
             envFrom:
               - secretRef:
                   name: *app
