@@ -9,7 +9,6 @@ resources:
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
   - ./redlib/ks.yaml
-  - ./obico/ks.yaml
   - ./searxng/ks.yaml
   - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
