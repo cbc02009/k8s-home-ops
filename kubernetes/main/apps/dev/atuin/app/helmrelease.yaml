@@ -9,77 +9,68 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 2.5.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controllers:
       main:
-        replicas: 2
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
+
         initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16
-              pullPolicy: IfNotPresent
-            envFrom: &envFrom
+          01-init-db:
+            envFrom:
               - secretRef:
                   name: *app
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '16.1'
+
+        pod:
+          enableServiceLinks: false
+
         containers:
           main:
             image:
               repository: ghcr.io/atuinsh/atuin
-              tag: 17.1.0
+              tag: v17.2.1
+            args:
+              - server
+              - start
             env:
               ATUIN_HOST: 0.0.0.0
-              ATUIN_PORT: &port 80
-              ATUIN_OPEN_REGISTRATION: "true"
-            envFrom: *envFrom
-            args: ["server", "start"]
+              ATUIN_PORT: &port 8888
+              ATUIN_OPEN_REGISTRATION: false
+              ATUIN_TLS__ENABLE: false
+              ATUIN_TLS__CERT_PATH: ""
+              ATUIN_TLS__PKEY_PATH: ""
+            envFrom:
+              - secretRef:
+                  name: *app
             resources:
               requests:
-                memory: 128Mi
                 cpu: 10m
+                memory: 128Mi
               limits:
                 memory: 512Mi
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
+
     service:
       main:
         ports:
           http:
             port: *port
+
     ingress:
       main:
         enabled: true
-        className: internal
+        className: "internal-nginx"
         hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  name: main
-                  port: http
-          - host: &customHost "sh.${EXTERNAL_DOMAIN}"
+          - host: &host atuin.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 service:
@@ -89,9 +80,8 @@ spec:
           - secretName: *host
             hosts:
               - *host
-          - secretName: *customHost
-            hosts:
-              - *customHost
+
+
     persistence:
       config:
         enabled: true

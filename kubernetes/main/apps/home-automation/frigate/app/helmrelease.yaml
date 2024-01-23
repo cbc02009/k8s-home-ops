@@ -61,7 +61,7 @@ spec:
 
             envFrom:
               - secretRef:
-                  name: frigate
+                  name: *app
 
             env:
               TZ: ${TZ}
