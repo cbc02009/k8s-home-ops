@@ -18,6 +18,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  interval: 30m
+  retryInterval: 1m
+  timeout: 15m
   wait: false
   postBuild:
     substitute:
