@@ -38,7 +38,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.10
     installDiskSelector:
-      model: T-FORCE 512GB
+      model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -68,7 +68,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.12
     installDiskSelector:
-      model: T-FORCE 512GB
+      model: Samsung SSD 850
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -127,7 +127,7 @@ nodes:
     talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
     ipAddress: 10.0.2.15
     installDiskSelector:
-      model: SATA SSD
+      model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
