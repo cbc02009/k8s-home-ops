@@ -36,6 +36,7 @@ resources:
   - ./rook-ceph-charts.yaml
   - ./bitnami-charts.yaml
   - ./ingress-nginx-charts.yaml
+  - ./spegel.yaml
   - ./stakater.yaml
   - ./tf-controller.yaml
   - ./vector-charts.yaml
