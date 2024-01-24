@@ -269,6 +269,17 @@ controlPlane:
               wsize=131072
               nconnect=8
 
+    # Enable K8s Talos API Access
+    - |-
+      machine:
+        features:
+          kubernetesTalosAPIAccess:
+            enabled: true
+            allowedRoles:
+              - os:admin
+            allowedKubernetesNamespaces:
+              - system-controllers
+
   inlinePatch:
     machine:
       install:
