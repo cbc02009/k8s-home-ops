@@ -10,4 +10,5 @@ resources:
   - ./node-feature-discovery/ks.yaml
   - ./nvidia-device-plugin/ks.yaml
   - ./reloader/ks.yaml
+  - ./spegel/ks.yaml
   - ./volsync/ks.yaml
