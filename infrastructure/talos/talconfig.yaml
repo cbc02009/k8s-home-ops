@@ -12,6 +12,7 @@ allowSchedulingOnMasters: true
 
 additionalApiServerCertSans:
   - 10.5.0.2
+  - 127.0.0.1
 
 additionalMachineCertSans:
   - 127.0.0.1
