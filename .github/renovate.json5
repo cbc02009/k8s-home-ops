@@ -31,7 +31,8 @@
   "ignorePaths": [
     "**/*.sops.*",
     "**/.archive/**",
-    "**/resources/**"
+    "**/resources/**",
+    "**/recyclarr.yml"
   ],
   "flux": {
     "fileMatch": [

@@ -55,6 +55,53 @@
       },
       "separateMinorPatch": true
     },
-
+    {
+      description: "Actions Runner Controller charts",
+      groupName: "ARC",
+      matchPackageNames: [
+        "actions-runner-controller-charts/gha-runner-scale-set-controller",
+        "actions-runner-controller-charts/gha-runner-scale-set",
+      ],
+      matchDatasources: ["helm", "docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      separateMinorPatch: false,
+    },
+    {
+      description: "Talos",
+      groupName: "Talos",
+      matchPackageNames: [
+        "ghcr.io/siderolabs/installer",
+        "ghcr.io/siderolabs/talosctl",
+      ],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      separateMinorPatch: true,
+    },
+    {
+      description: "Thanos image and chart - versions do not match",
+      groupName: "Thanos",
+      matchPackagePatterns: ["quay.io/thanos/thanos", "thanos"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      separateMinorPatch: false,
+    },
+    {
+      description: "Vector image and chart - versions do not match",
+      groupName: "Vector",
+      matchPackagePatterns: ["vector"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      separateMinorPatch: false,
+    },
   ]
 }
