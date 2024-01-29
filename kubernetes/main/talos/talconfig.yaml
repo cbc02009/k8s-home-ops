@@ -11,15 +11,13 @@ endpoint: https://cluster.ctec.run:6443
 
 allowSchedulingOnMasters: true
 
-additionalApiServerCertSans:
-  - 10.5.0.2
-  - 127.0.0.1
-
-additionalMachineCertSans:
-  - 127.0.0.1
-  - 10.5.0.2
-  - cluster.local
+additionalApiServerCertSans: &san
+  - "127.0.0.1"
+  - "10.5.0.2"
   - cluster.ctec.run
+
+additionalMachineCertSans: *san
+
 clusterPodNets:
   - 10.11.0.0/16
 clusterSvcNets:
@@ -292,7 +290,7 @@ controlPlane:
           - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
       kubelet:
         extraArgs:
-          feature-gates: CronJobTimeZone=true,GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
+          feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
           rotate-server-certificates: 'true'
         extraConfig:
           maxPods: 150
