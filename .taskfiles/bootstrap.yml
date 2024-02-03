@@ -55,7 +55,6 @@ tasks:
   all:
     desc: run all bootstrap commands in order
     cmds:
-      - task bs:integrations
       - task bs:flux
       - task bs:doppler
       - task bs:crds
@@ -65,7 +64,6 @@ tasks:
   prep:
     desc: run all bootstrap commands in order
     cmds:
-      - task bs:integrations
       - task bs:flux
       - task bs:doppler
       - task bs:crds
