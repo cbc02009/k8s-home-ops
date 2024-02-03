@@ -5,7 +5,7 @@ clusterName: cluster
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
 talosVersion: v1.6.2
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
-kubernetesVersion: v1.28.5
+kubernetesVersion: v1.29.1
 
 endpoint: https://cluster.ctec.run:6443
 
@@ -234,6 +234,10 @@ controlPlane:
                 [plugins."io.containerd.grpc.v1.cri"]
                   enable_unprivileged_ports = true
                   enable_unprivileged_icmp = true
+                [plugins."io.containerd.grpc.v1.cri".containerd]
+                  discard_unpacked_layers = false
+                [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                  discard_unpacked_layers = false
 
     # Configure NUT client
     - |-
@@ -278,6 +282,7 @@ controlPlane:
               - os:admin
             allowedKubernetesNamespaces:
               - system-controllers
+              - system
 
   inlinePatch:
     machine:
