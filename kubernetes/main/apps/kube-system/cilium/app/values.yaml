@@ -1,4 +1,7 @@
 ---
+cni:
+  exclusive: false
+
 # -- Enable installation of PodCIDR routes between worker
 # nodes if worker nodes share a common L2 network segment.
 autoDirectNodeRoutes: true
@@ -10,7 +13,7 @@ bgp:
   enabled: false
   announce:
     # -- Enable allocation and announcement of service LoadBalancer IPs
-    loadbalancerIP: false
+    loadbalancerIP: true
     # -- Enable announcement of node pod CIDR
     podCIDR: false
 
@@ -32,7 +35,7 @@ cgroup:
 
 cluster:
   # -- Name of the cluster. Only required for Cluster Mesh.
-  name: kokoro
+  name: cluster
   # -- (int) Unique ID of the cluster. Must be unique across all connected
   # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
   # may be 0 if Cluster Mesh is not used.
@@ -111,6 +114,11 @@ ipam:
   # ref: https://docs.cilium.io/en/stable/concepts/networking/ipam/
   mode: kubernetes
 
+ingressController:
+  # -- Enable cilium ingress controller
+  # This will automatically set enable-envoy-config as well.
+  enabled: false
+
 # -- (string) Allows to explicitly specify the IPv4 CIDR for native routing.
 # When specified, Cilium assumes networking for this CIDR is preconfigured and
 # hands traffic destined for that range to the Linux network stack without
@@ -122,6 +130,14 @@ ipam:
 # the user must configure the routes to reach pods, either manually or by
 # setting the auto-direct-node-routes flag.
 ipv4NativeRoutingCIDR: 10.11.0.0/16
+
+# -- Enable native-routing mode or tunneling mode.
+# Possible values:
+#   - ""
+#   - native
+#   - tunnel
+# @default -- `"tunnel"`
+routingMode: native
 
 # -- (string) Kubernetes service host
 k8sServiceHost: localhost
@@ -148,6 +164,12 @@ loadBalancer:
   # -- mode is the operation mode of load balancing for remote backends
   # e.g. snat, dsr, hybrid
   mode: dsr
+
+bandwidthManager:
+  # -- Enable bandwidth manager infrastructure (also prerequirement for BBR)
+  enabled: true
+  # -- Activate BBR TCP congestion control for Pods
+  bbr: true
 
 # -- Enable Local Redirect Policy.
 localRedirectPolicy: true
@@ -237,14 +259,19 @@ securityContext:
       #- BPF
 
 bpf:
-  hostRouting: true
-  lbBypassFIBLookup: true
+  # -- (bool) Enable native IP masquerade support in eBPF
+  # @default -- `false`
   masquerade: true
+  # -- (bool) Configure the eBPF-based TPROXY to reduce reliance on iptables rules
+  # for implementing Layer 7 policy.
+  # @default -- `false`
   tproxy: true
 
-# -- Configure the encapsulation configuration for communication between nodes.
-# Possible values:
-#   - disabled
-#   - vxlan (default)
-#   - geneve
-tunnel: "disabled"
+# -- Enable Layer 7 network policy.
+l7Proxy: true
+
+# -- Enable endpoint status.
+# Status can be: policy, health, controllers, log and / or state. For 2 or more options use a space.
+endpointStatus:
+  enabled: true
+  status: "policy"
