@@ -64,7 +64,7 @@ spec:
         enabled: true
         className: internal
         annotations:
-          authentik.home.arpa/enabled: true
+          authentik.home.arpa/enabled: "true"
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:
@@ -93,4 +93,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /cache
-    enableServiceLinks: false
