@@ -68,7 +68,7 @@ spec:
     ingress:
       main:
         enabled: true
-        className: "internal-nginx"
+        className: "internal"
         hosts:
           - host: &host atuin.${EXTERNAL_DOMAIN}
             paths:
