@@ -58,7 +58,7 @@ spec:
                   name: *secret
             image:
               repository: ghcr.io/onedr0p/postgres-init
-              tag: '16.1'
+              tag: '16.2'
         containers:
           main:
             image:
