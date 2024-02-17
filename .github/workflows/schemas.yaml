@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Setup System Tools
         shell: bash
-        run: sudo apt-get -qq update && sudo apt-get -qq install --no-install-recommends -y curl git
+        run: sudo apt-get -qq update && sudo apt-get -qq install --no-install-recommends -y curl git unzip
 
       # - name: Setup Homebrew
       #   uses: Homebrew/actions/setup-homebrew@master
