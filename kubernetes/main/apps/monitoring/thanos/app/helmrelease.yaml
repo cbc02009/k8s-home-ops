@@ -15,7 +15,6 @@ spec:
         kind: HelmRepository
         name: bitnami-charts
         namespace: flux-system
-  maxHistory: 2
   install:
     remediation:
       retries: 3
@@ -63,13 +62,10 @@ spec:
       config:
         insecure: false
 
-    query:
-      enabled: true
-      replicaCount: 2
-      replicaLabel: ["__replica__"]
-      dnsDiscovery:
-        sidecarsService: kube-prometheus-stack-thanos-discovery
-        sidecarsNamespace: monitoring
+    receive:
+      enabled: false
+      networkPolicy:
+        enabled: false
 
     queryFrontend:
       enabled: true
@@ -91,10 +87,23 @@ spec:
         extraTls:
           - hosts:
               - *host
+      networkPolicy:
+        enabled: false
+    query:
+      enabled: true
+      replicaCount: 2
+      replicaLabel: ["__replica__"]
+      dnsDiscovery:
+        sidecarsService: kube-prometheus-stack-thanos-discovery
+        sidecarsNamespace: monitoring
+      stores: ["thanos.${EXTERNAL_DOMAIN}:10901"]
+      networkPolicy:
+        enabled: false
     bucketweb:
       enabled: true
       replicaCount: 2
-
+      networkPolicy:
+        enabled: false
     compactor:
       enabled: true
       extraFlags:
@@ -105,18 +114,20 @@ spec:
       retentionResolution1h: 90d
       persistence:
         enabled: true
-        storageClass: ceph-block
+        storageClass: openebs-hostpath
         size: 10Gi
-
+      networkPolicy:
+        enabled: false
     storegateway:
       enabled: true
       replicaCount: 2
       config: *config
       persistence:
         enabled: true
-        storageClass: ceph-block
+        storageClass: openebs-hostpath
         size: 10Gi
-
+      networkPolicy:
+        enabled: false
     ruler:
       enabled: true
       replicaCount: 2
@@ -138,9 +149,10 @@ spec:
                   severity: critical
       persistence:
         enabled: true
-        storageClass: ceph-block
+        storageClass: openebs-hostpath
         size: 10Gi
-
+      networkPolicy:
+        enabled: false
     metrics:
       enabled: true
       serviceMonitor:
