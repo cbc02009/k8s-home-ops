@@ -30,6 +30,7 @@ resources:
   - ./mayastor.yaml
   - ./nextcloud-charts.yaml
   - ./nvidia.yaml
+  - ./openebs.yaml
   - ./piraeus-charts.yaml
   - ./postfinance-charts.yaml
   - ./prometheus-community-charts.yaml
