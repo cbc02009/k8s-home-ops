@@ -11,6 +11,7 @@ resources:
   - ./jetstack.yaml
   - ./k8tz.yaml
   - ./metrics-server.yaml
+  - ./openebs.yaml
   - ./prometheus-community.yaml
   - ./stakater.yaml
   - ./weaveworks.yaml

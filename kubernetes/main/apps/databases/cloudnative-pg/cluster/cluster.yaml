@@ -10,13 +10,13 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
-    storageClass: local-hostpath
+    storageClass: openebs-hostpath
   superuserSecret:
     name: cloudnative-pg
   enableSuperuserAccess: true
   bootstrap:
     recovery:
-      source: &previousCluster postgres-v10
+      source: &previousCluster postgres-v12
   # bootstrap:
   #   initdb:
   #     import:
@@ -41,7 +41,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v12
+      serverName: &currentCluster postgres-v13
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
