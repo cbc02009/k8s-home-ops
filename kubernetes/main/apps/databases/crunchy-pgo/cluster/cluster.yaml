@@ -38,7 +38,7 @@ spec:
     pgbackrest:
       configuration: &backupConfig
         - secret:
-            name: crunchy-pgo
+            name: crunchy-pgo-secret
       global: &backupFlag
         archive-timeout: "60"
         compress-type: lz4
