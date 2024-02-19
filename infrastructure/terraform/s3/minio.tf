@@ -3,6 +3,7 @@ locals {
     "loki",
     "thanos",
     "volsync",
+    "cpgo",
   ]
 }
 
