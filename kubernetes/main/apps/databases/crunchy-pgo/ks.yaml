@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/database/crunchy-pgo/app
+  path: ./kubernetes/main/apps/databases/crunchy-pgo/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -34,7 +34,7 @@ spec:
   dependsOn:
     - name: crunchy-pgo
     - name: external-secrets
-  path: ./kubernetes/main/apps/database/crunchy-pgo/cluster
+  path: ./kubernetes/main/apps/databases/crunchy-pgo/cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -51,17 +51,17 @@ metadata:
   name: &app crunchy-pgo-secrets
   namespace: flux-system
 spec:
-  targetNamespace: database
+  targetNamespace: databases
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
-  path: ./kubernetes/main/apps/database/crunchy-pgo/secrets
+  path: ./kubernetes/main/apps/databases/crunchy-pgo/secrets
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: k8s-home-ops
   wait: true
   interval: 30m
   retryInterval: 1m

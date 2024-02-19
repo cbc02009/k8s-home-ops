@@ -68,8 +68,8 @@ spec:
         - # Minio
           name: repo1
           s3: &minio
-            bucket: crunchy-pgo
-            endpoint: s3.turbo.ac
+            bucket: cpgo
+            endpoint: s3.${EXTERNAL_DOMAIN}
             region: us-east-1
           schedules:
             full: "0 1 * * 0"           # Sunday at 1am
@@ -79,7 +79,7 @@ spec:
           name: repo2
           s3: &r2
             bucket: crunchy-pgo
-            endpoint: ${CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+            endpoint: ${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
             region: us-east-1
           schedules:
             full: "0 2 * * 0"           # Sunday at 2am
@@ -97,8 +97,8 @@ spec:
       service:
         metadata:
           annotations:
-            external-dns.alpha.kubernetes.io/hostname: cpgo.devbu.io
-            io.cilium/lb-ipam-ips: 192.168.42.207
+            external-dns.alpha.kubernetes.io/hostname: cpgo.kokoro.wtf
+            io.cilium/lb-ipam-ips: 10.6.0.21
         type: LoadBalancer
       port: 5432
       replicas: *replica
