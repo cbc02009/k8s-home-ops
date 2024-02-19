@@ -35,6 +35,9 @@ includes:
   pc:
     dir: .taskfiles/PreCommit
     taskfile: .taskfiles/PreCommit
+  pg:
+    dir: .taskfiles/Postgresql
+    taskfile: .taskfiles/Postgresql
   cluster: .taskfiles/cluster.yml
 
 tasks:

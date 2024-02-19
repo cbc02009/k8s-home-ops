@@ -14,6 +14,9 @@ spec:
   superuserSecret:
     name: cloudnative-pg
   enableSuperuserAccess: true
+  nodeMaintenanceWindow:
+    inProgress: false
+    reusePVC: true
   bootstrap:
     recovery:
       source: &previousCluster postgres-v12
