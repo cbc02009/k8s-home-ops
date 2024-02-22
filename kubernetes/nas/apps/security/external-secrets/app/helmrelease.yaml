@@ -14,7 +14,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: external-secrets
-        namespace: security
+        namespace: flux-system
   maxHistory: 2
   install:
     remediation:
