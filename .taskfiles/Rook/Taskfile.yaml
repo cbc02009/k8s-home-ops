@@ -13,6 +13,15 @@ vars:
 
 tasks:
 
+  reset-all:
+    vars: &vars
+      cluster: main
+      cephnodes: sakura miri uiharu
+      cephdisk: /dev/nvme0n1
+    cmds:
+      - task: reset
+        vars: *vars
+
   reset:
     desc: Reset Rook
     vars: &vars
