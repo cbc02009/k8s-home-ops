@@ -12,7 +12,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: main
-          image: ghcr.io/cbc02009/restic:0.16.4
+          image: ghcr.io/cbc02009/restic:2023.5.1
           args: ["snapshots"]
           envFrom:
             - secretRef:
