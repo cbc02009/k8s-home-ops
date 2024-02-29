@@ -10,7 +10,7 @@ sonarr:
     quality_profiles:
       - name: Web-1080p - Anime
         reset_unmatched_scores:
-          enabled: true
+          enabled: false
         upgrade:
           allowed: true
           until_quality: WEB 1080p
@@ -34,7 +34,7 @@ sonarr:
           - name: DVD
       - name: Remux-1080p - Anime
         reset_unmatched_scores:
-          enabled: true
+          enabled: false
         upgrade:
           allowed: true
           until_quality: Bluray-1080p Remux
