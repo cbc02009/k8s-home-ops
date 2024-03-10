@@ -42,18 +42,16 @@ jobs:
         shell: bash
         run: sudo apt-get -qq update && sudo apt-get -qq install --no-install-recommends -y curl git
 
+      - name: Setup Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
       - name: Setup Workflow Tools
-        uses: jdx/rtx-action@61c1bfbed63c70a82ff0ce3301bde41875b17844 # v1
-        with:
-          install: true
-          rtx_toml: |
-            [tools]
-            flux2 = "latest"
-            yq = "latest"
+        shell: bash
+        run: brew install fluxcd/tap/flux yq
 
       - name: Write kubeconfig
         id: kubeconfig
-        uses: timheuer/base64-to-file@adaa40c0c581f276132199d4cf60afa07ce60eac # v1
+        uses: timheuer/base64-to-file@v1
         with:
           encodedString: "${{ secrets.KUBECONFIG }}"
           fileName: kubeconfig
@@ -61,7 +59,7 @@ jobs:
       - if: ${{ github.event.inputs.clusterName == '' && github.event.inputs.helmRepoNamespace == '' && github.event.inputs.helmRepoName == '' }}
         name: Get Changed Files
         id: changed-files
-        uses: tj-actions/changed-files@800a2825992141ddde1a8bca8ad394cec34d3188 # v42
+        uses: tj-actions/changed-files@v42
         with:
           files: kubernetes/**/helmrelease.yaml
           safe_output: false
