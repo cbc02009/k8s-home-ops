@@ -131,4 +131,3 @@ spec:
         path: /tank/media
         globalMounts:
           - path: /media
-            readOnly: true
