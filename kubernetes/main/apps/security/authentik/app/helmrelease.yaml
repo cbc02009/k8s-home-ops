@@ -39,6 +39,8 @@ spec:
           memory: 500Mi
         limits:
           memory: 800Mi
+      autoscaling:
+        enabled: true
 
     authentik:
       log_level: debug
@@ -91,9 +93,3 @@ spec:
 
     redis:
       enabled: false
-
-    autoscaling:
-      server:
-        enabled: true
-      worker:
-        enabled: true
