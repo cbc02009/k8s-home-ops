@@ -28,14 +28,13 @@ spec:
         image: ghcr.io/onedr0p/postgres-init:16.2
         imagePullPolicy: IfNotPresent
 
-    image:
-      tag: 2023.8.4
-      pullPolicy: IfNotPresent
-    # image:
-    #   repository: ghcr.io/goauthentik/dev-server
-    #   tag: gh-next
-    #   # pullPolicy: Always to ensure you always get the latest version
-    #   pullPolicy: IfNotPresent
+    global:
+      image:
+        tag: 2023.8.4
+        pullPolicy: IfNotPresent
+      envFrom:
+        - secretRef:
+            name: authentik-secret
 
     authentik:
       log_level: debug
@@ -51,10 +50,6 @@ spec:
       outposts:
         docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
         # container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
-
-    envFrom:
-      - secretRef:
-          name: authentik-secret
 
     ingress:
       enabled: true
