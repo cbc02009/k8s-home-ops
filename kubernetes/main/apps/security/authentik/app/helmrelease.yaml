@@ -45,6 +45,21 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
+      ingress:
+        enabled: true
+        ingressClassName: external
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        hosts:
+          - host: &host auth.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
 
     authentik:
       log_level: debug
@@ -60,22 +75,6 @@ spec:
       outposts:
         docker_image_base: ghcr.io/goauthentik/%(type)s:%(version)s
         # container_image_base: ghcr.io/goauthentik/dev-%(type)s:gh-%(build_hash)s
-
-    ingress:
-      enabled: true
-      ingressClassName: external
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      hosts:
-        - host: &host auth.${EXTERNAL_DOMAIN}
-          paths:
-            - path: /
-      tls:
-        - secretName: *host
-          hosts:
-            - *host
 
     worker:
       replicas: 1
