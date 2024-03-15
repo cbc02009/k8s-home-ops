@@ -57,8 +57,7 @@ spec:
         paths:
           - path: /
         tls:
-          - secretName: *host
-            hosts:
+          - hosts:
               - *host
 
     authentik:
