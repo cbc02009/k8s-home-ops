@@ -53,11 +53,12 @@ spec:
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
         hosts:
-          - host: &host auth.${EXTERNAL_DOMAIN}
+          - &host auth.${EXTERNAL_DOMAIN}
         paths:
           - path: /
         tls:
-          - hosts:
+          - secretName: *host
+            hosts:
               - *host
 
     authentik:
