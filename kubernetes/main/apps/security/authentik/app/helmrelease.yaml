@@ -55,7 +55,7 @@ spec:
         hosts:
           - &host auth.${EXTERNAL_DOMAIN}
         paths:
-          - path: /
+          - /
         tls:
           - secretName: *host
             hosts:
