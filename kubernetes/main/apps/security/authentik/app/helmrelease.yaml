@@ -41,6 +41,10 @@ spec:
           memory: 800Mi
       autoscaling:
         enabled: true
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
 
     authentik:
       log_level: debug
@@ -88,8 +92,5 @@ spec:
     prometheus:
       rules:
         create: true
-      serviceMonitor:
-        create: true
-
     redis:
       enabled: false
