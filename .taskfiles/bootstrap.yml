@@ -25,15 +25,15 @@ tasks:
   flux:
     desc: 3. Bootstrap flux (as per version in manifest)
     cmds:
-      - kubectl apply --context={{.cluster}} -n flux-system --server-side --kustomize {{.CLUSTER_DIR}}/{{.cluster}}/bootstrap/flux
-      - kubectl apply -f {{.CLUSTER_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
+      - kubectl apply --context={{.cluster}} -n flux-system --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux
+      - kubectl apply -f {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
     vars:
       cluster: '{{.cluster | default "main"}}'
 
   cluster:
     desc: 8. Bootstrap Cluster
     cmds:
-      - kubectl apply --context={{.cluster}} --server-side --kustomize {{.CLUSTER_DIR}}/{{.cluster}}/flux/config/
+      - kubectl apply --context={{.cluster}} --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/flux/config/
     vars:
       cluster: '{{.cluster | default "main"}}'
 
@@ -41,7 +41,7 @@ tasks:
     summary: task {{.TASK}} [cluster=main]?
     desc: 6. Bootstrap CRDs
     cmds:
-      - kubectl apply --server-side --kustomize {{.CLUSTER_DIR}}/{{.cluster}}/bootstrap/crds/
+      - kubectl apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/crds/
     vars:
       cluster: '{{.cluster | default "main"}}'
 

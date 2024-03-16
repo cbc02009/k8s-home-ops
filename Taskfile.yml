@@ -2,10 +2,8 @@
 version: "3"
 
 vars:
-  PROJECT_DIR:
-    sh: git rev-parse --show-toplevel
-  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
-  TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+  TERRAFORM_DIR: "{{.ROOT_DIR}}/infrastructure/terraform"
 
 includes:
   fx:
