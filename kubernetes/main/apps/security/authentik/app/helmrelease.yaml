@@ -39,8 +39,8 @@ spec:
           memory: 500Mi
         limits:
           memory: 800Mi
-      autoscaling:
-        enabled: true
+      # autoscaling:
+      #   enabled: true
       metrics:
         enabled: true
         serviceMonitor:
