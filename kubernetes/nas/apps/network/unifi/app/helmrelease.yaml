@@ -55,6 +55,7 @@ spec:
               storageClass: openebs-hostpath
               globalMounts:
                 - path: /usr/lib/unifi/data
+
     service:
       main:
         type: LoadBalancer
@@ -104,3 +105,11 @@ spec:
           - secretName: *host
             hosts:
               - *host
+
+    persistence:
+      dev:
+        type: hostPath
+        hostPath: /tank/backup/kubernetes/apps/unifi
+        hostPathType: Directory
+        globalMounts:
+          - path: /usr/lib/unifi/data/backup
