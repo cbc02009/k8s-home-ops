@@ -6,7 +6,7 @@ metadata:
   name: k8tz
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 30m
   path: "./kubernetes/main/apps/system-controllers/k8tz/app"
   prune: true
   sourceRef:

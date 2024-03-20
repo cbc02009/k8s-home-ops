@@ -61,6 +61,30 @@ nodes:
                   - rshared
                   - rw
 
+  - hostname: miri.ctec.run
+    ipAddress: 10.0.2.11
+    installDiskSelector:
+      model: Samsung SSD 870
+    controlPlane: true
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.5.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:71:c1:b2
+        addresses:
+          - 10.0.2.11/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+    patches:
+      - *kubelet_extra_mounts
+
   - hostname: sakura.ctec.run
     ipAddress: 10.0.2.12
     installDiskSelector:
@@ -94,7 +118,7 @@ nodes:
 #             - siderolabs/nut-client
   - hostname: anya.ctec.run
     talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
-    ipAddress: 10.0.2.11
+    ipAddress: 10.0.2.13
     installDiskSelector:
       model: KingFast
     controlPlane: false
@@ -108,31 +132,7 @@ nodes:
     networkInterfaces:
       - interface: eno1
         addresses:
-          - 10.0.2.11/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
-    patches:
-      - *kubelet_extra_mounts
-
-  - hostname: miri.ctec.run
-    ipAddress: 10.0.2.15
-    installDiskSelector:
-      model: Samsung SSD 870
-    controlPlane: true
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.5.0.4
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:71:c1:b2
-        addresses:
-          - 10.0.2.15/24
+          - 10.0.2.13/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0

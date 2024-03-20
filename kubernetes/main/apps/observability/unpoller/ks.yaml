@@ -5,7 +5,7 @@ metadata:
   name: unpoller
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 30m
   path: "./kubernetes/main/apps/observability/unpoller/app"
   prune: true
   sourceRef:
