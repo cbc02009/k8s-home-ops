@@ -90,6 +90,7 @@ module "proxy-frigate" {
   slug               = "frigate"
   domain             = data.doppler_secrets.this.map.DOMAIN
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  group              = "Home Automation"
   auth_groups        = [authentik_group.home.id]
   access_token_validity = 720
 }
@@ -134,7 +135,7 @@ module "oauth2-tandoor" {
   launch_url                 = "https://recipes.${data.doppler_secrets.this.map.DOMAIN}"
   description                = "Recipes"
   newtab                     = true
-  group                      = "Groupware"
+  group                      = "Media"
   auth_groups                = [authentik_group.media.id]
   authorization_flow         = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   client_id                  = data.doppler_secrets.this.map.TANDOOR_OIDC_ID
