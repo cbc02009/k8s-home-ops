@@ -116,7 +116,7 @@ module "oauth2-grafana" {
   source             = "./oauth2_application"
   name               = "Grafana"
   icon_url           = "https://raw.githubusercontent.com/grafana/grafana/main/public/img/icons/mono/grafana.svg"
-  launch_url         = "https://grafana.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}"
+  launch_url         = "https://grafana.${data.doppler_secrets.this.map.DOMAIN}"
   description        = "Infrastructure graphs"
   newtab             = true
   group              = "Infrastructure"
@@ -124,14 +124,14 @@ module "oauth2-grafana" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   client_id          = data.doppler_secrets.this.map.GRAFANA_OIDC_ID
   client_secret      = data.doppler_secrets.this.map.GRAFANA_OIDC_SECRET
-  redirect_uris      = ["https://grafana.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}/login/generic_oauth"]
+  redirect_uris      = ["https://grafana.${data.doppler_secrets.this.map.DOMAIN}/login/generic_oauth"]
 }
 
 module "oauth2-tandoor" {
   source                     = "./oauth2_application"
   name                       = "Recipes"
   icon_url                   = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
-  launch_url                 = "https://recipes.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}"
+  launch_url                 = "https://recipes.${data.doppler_secrets.this.map.DOMAIN}"
   description                = "Recipes"
   newtab                     = true
   group                      = "Groupware"
@@ -141,7 +141,7 @@ module "oauth2-tandoor" {
   client_secret              = data.doppler_secrets.this.map.TANDOOR_OIDC_SECRET
   include_claims_in_id_token = false
   sub_mode                   = "user_username"
-  redirect_uris              = ["https://recipes.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}/accounts/authentik/login/callback/"]
+  redirect_uris              = ["https://recipes.${data.doppler_secrets.this.map.DOMAIN}/accounts/authentik/login/callback/"]
 }
 
 module "oauth2-paperless" {
