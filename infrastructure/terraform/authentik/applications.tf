@@ -111,3 +111,50 @@ module "oauth2-immich" {
     "app.immich:/"
   ]
 }
+
+module "oauth2-grafana" {
+  source             = "./oauth2_application"
+  name               = "Grafana"
+  icon_url           = "https://raw.githubusercontent.com/grafana/grafana/main/public/img/icons/mono/grafana.svg"
+  launch_url         = "https://grafana.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}"
+  description        = "Infrastructure graphs"
+  newtab             = true
+  group              = "Infrastructure"
+  auth_groups        = [authentik_group.infrastructure.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  client_id          = module.secret_grafana.fields["OIDC_CLIENT_ID"]
+  client_secret      = module.secret_grafana.fields["OIDC_CLIENT_SECRET"]
+  redirect_uris      = ["https://grafana.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}/login/generic_oauth"]
+}
+
+module "oauth2-tandoor" {
+  source                     = "./oauth2_application"
+  name                       = "Recipes"
+  icon_url                   = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
+  launch_url                 = "https://recipes.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}"
+  description                = "Recipes"
+  newtab                     = true
+  group                      = "Groupware"
+  auth_groups                = [authentik_group.media.id]
+  authorization_flow         = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  client_id                  = module.secret_tandoor.fields["OIDC_CLIENT_ID"]
+  client_secret              = module.secret_tandoor.fields["OIDC_CLIENT_SECRET"]
+  include_claims_in_id_token = false
+  sub_mode                   = "user_username"
+  redirect_uris              = ["https://recipes.${module.secret_authentik.fields["CLUSTER_DOMAIN"]}/accounts/authentik/login/callback/"]
+}
+
+module "oauth2-paperless" {
+  source = "./oauth2_application"
+  name = "Paperless"
+  icon_url = "https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/Color%20logo%20-%20no%20background.svg"
+  launch_url = "https://documents.movishell.pl"
+  description = "Documents"
+  newtab = true
+  group = "Groupware"
+  auth_groups = [authentik_group.infrastructure.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  client_id = module.secret_paperless.fields["OIDC_CLIENT_ID"]
+  client_secret = module.secret_paperless.fields["OIDC_CLIENT_SECRET"]
+  redirect_uris = ["https://documents.movishell.pl/accounts/oidc/authentik/login/callback/"]
+}
