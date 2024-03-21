@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: paperless
+  name: &app paperless
 spec:
   interval: 30m
   chart:
@@ -35,24 +35,14 @@ spec:
             env:
               # Configure application
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
-              PAPERLESS_SECRET_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_SECRET_KEY
-              PAPERLESS_URL: https://paperless.bjw-s.dev
+              PAPERLESS_URL: https://paperless.${EXTERNAL_DOMAIN}
               PAPERLESS_PORT: "8000"
-              PAPERLESS_TIME_ZONE: "Europe/Amsterdam"
+              PAPERLESS_TIME_ZONE: ${TZ}
               PAPERLESS_WEBSERVER_WORKERS: "2"
               PAPERLESS_TASK_WORKERS: "2"
               # Configure Remote User auth
               PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: "false"
               PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "false"
-              PAPERLESS_SOCIALACCOUNT_PROVIDERS:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_SOCIALACCOUNT_PROVIDERS
               # Configure folders
               PAPERLESS_CONSUMPTION_DIR: /data/nas/incoming
               PAPERLESS_DATA_DIR: /data/local/data
@@ -63,23 +53,20 @@ spec:
               PAPERLESS_CONSUMER_RECURSIVE: "true"
               PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
               # Configure OCR
-              PAPERLESS_OCR_LANGUAGES: nld
-              PAPERLESS_OCR_LANGUAGE: nld
+              PAPERLESS_OCR_LANGUAGES: eng
+              PAPERLESS_OCR_LANGUAGE: eng
               # Configure redis integration
-              PAPERLESS_REDIS: redis://paperless-redis.selfhosted.svc.cluster.local:6379
+              PAPERLESS_REDIS: redis://localhost:6379
+              # Configure Tika and Gotenburg
+              PAPERLESS_TIKA_ENABLED: 1
+              PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
+              PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
               # Configure user permissions
-              USERMAP_GID: "65542" # gladius:external-services
-              # Configure admin user
-              PAPERLESS_ADMIN_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_ADMIN_USER
-              PAPERLESS_ADMIN_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_ADMIN_PASSWORD
+              USERMAP_UID: 568
+              USERMAP_GID: 568
+            envFrom:
+              - secretRef:
+                  name: *app
             probes:
               liveness:
                 enabled: true
@@ -96,7 +83,29 @@ spec:
                 memory: 2048Mi
               limits:
                 memory: 2048Mi
-
+          gotenburg:
+            image:
+              repository: docker.io/thecodingmachine/gotenberg
+              tag: 8.2.2
+            env:
+              - {name: DISABLE_GOOGLE_CHROME, value: "1"}
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
+          redis:
+            image:
+              repository: public.ecr.aws/docker/library/redis
+              tag: 7.2.4
+            securityContext:
+              runAsUser: 999
+              runAsGroup: 999
+          tika:
+            image:
+              repository: ghcr.io/paperless-ngx/tika
+              tag: 2.9.1-full
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
     service:
       app:
         controller: paperless
@@ -108,7 +117,7 @@ spec:
       app:
         className: "internal-nginx"
         hosts:
-          - host: &hostName paperless.bjw-s.dev
+          - host: &hostName paperless.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 service:
@@ -120,14 +129,14 @@ spec:
 
     persistence:
       data:
-        existingClaim: paperless-data
+        existingClaim: *app
         advancedMounts:
           paperless:
             app:
               - path: /data/local
       nas:
         type: nfs
-        server: gladius.bjw-s.casa
-        path: /tank/Apps/paperless
+        server: nas.ctec.run
+        path: /tank/k8s/apps/paperless
         globalMounts:
           - path: /data/nas

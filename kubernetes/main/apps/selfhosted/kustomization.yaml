@@ -8,6 +8,7 @@ resources:
   # Flux-Kustomizations
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
+  - ./paperless/ks.yaml
   - ./redlib/ks.yaml
   - ./searxng/ks.yaml
   - ./tandoor/ks.yaml
