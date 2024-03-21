@@ -12,8 +12,9 @@ includes:
     vars: &vars
       KUBECTL: kubectl --context {{.cluster}}
       FLUXCTL: flux --context {{.cluster}}
-  bs: .taskfiles/bootstrap.yml
-  so: .taskfiles/sops.yml
+  bs:
+    dir: .taskfiles/Bootstrap
+    taskfile: .taskfiles/Bootstrap
   ro:
     dir: .taskfiles/Rook
     taskfile: .taskfiles/Rook

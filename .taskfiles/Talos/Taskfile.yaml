@@ -8,29 +8,27 @@ tasks:
     summary: |
       Args:
         cluster: Cluster to run command against (required)
-        controller: Controller node to run command against (required)
     prompt: Bootstrap Talos on the '{{.cluster}}' cluster... continue?
     cmds:
       - task: bootstrap-etcd
         vars: &vars
           cluster: "{{.cluster}}"
-          controller: "{{.controller}}"
-      - task: fetch-kubeconfig
-        vars: *vars
+      # - task: fetch-kubeconfig
+      #   vars: *vars
       - task: bootstrap-integrations
         vars: *vars
     requires:
       vars:
         - cluster
-        - controller
 
   bootstrap-etcd:
     desc: Bootstrap Etcd
     cmd: until talosctl --context {{.cluster}} --nodes {{.controller}} bootstrap; do sleep 10; done
+    vars:
+      controller:
+        sh: talosctl --context {{.cluster}} config info --output json | jq --raw-output '.endpoints[0]'
     requires:
-      vars:
-        - cluster
-        - controller
+      vars: ["cluster"]
 
   bootstrap-integrations:
     desc: Bootstrap core integrations needed for Talos
@@ -52,11 +50,14 @@ tasks:
     cmd: |
       talosctl --context {{.cluster}} kubeconfig --nodes {{.controller}} \
           --force --force-context-name {{.cluster}} {{.KUBERNETES_DIR}}/{{.cluster}}
+    vars:
+      controller:
+        sh: talosctl --context {{.cluster}} config info --output json | jq --raw-output '.endpoints[0]'
     requires:
-      vars:
-        - cluster
+      vars: ["cluster"]
     preconditions:
-      - talosctl config get-contexts | grep {{.cluster}}
+      - test -d {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/clusterconfig
+      - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos

@@ -40,7 +40,7 @@ tasks:
 
   reset-disk:
     desc: Reset a rook disk on a node
-    prompt: Reset rook disk with '{{.node}}/{{.disk}}' in the '{{.cluster}}' cluster ... continue?
+    # prompt: Reset rook disk with '{{.node}}/{{.disk}}' in the '{{.cluster}}' cluster ... continue?
     summary: |
       Args:
         cluster: Cluster to run command against (required)
@@ -63,7 +63,7 @@ tasks:
 
   reset-data:
     desc: Reset rook data on a node
-    prompt: Reset rook data on node '{{.node}}' in the '{{.cluster}}' cluster ... continue?
+    # prompt: Reset rook data on node '{{.node}}' in the '{{.cluster}}' cluster ... continue?
     summary: |
       Args:
         cluster: Cluster to run command against (required)
