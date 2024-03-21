@@ -86,7 +86,7 @@ module "proxy-frigate" {
   source             = "./proxy_application"
   name               = "Frigate"
   description        = "DVR"
-  icon_url           = "https://raw.githubusercontent.com/blakeblackshear/frigate/blob/dev/web/images/apple-touch-icon.png"
+  icon_url           = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
   slug               = "frigate"
   domain             = data.doppler_secrets.this.map.DOMAIN
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
