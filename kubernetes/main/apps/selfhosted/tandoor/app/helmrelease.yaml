@@ -23,11 +23,6 @@ spec:
           reloader.stakater.com/auto: "true"
 
         pod:
-          labels:
-            egress.home.arpa/internet: allow
-            db.home.arpa/pg: postgres
-            ingress.home.arpa/nginx-external: allow
-            egress.home.arpa/kubedns: allow # FIXME: Remove when clusterNetworkPolicy is in place
           securityContext:
             runAsUser: 568
             runAsGroup: 568
@@ -43,15 +38,13 @@ spec:
             env:
               COMMENT_PREF_DEFAULT: 0
               DEBUG: 1
-              ENABLE_SIGNUP: 0
+              ENABLE_SIGNUP: 1
               FRACTION_PREF_DEFAULT: 0
               GUNICORN_MEDIA: 0
               MAX_OWNED_SPACES_PREF_DEFAULT: 0
               SHOPPING_MIN_AUTOSYNC_INTERVAL: 5
               TANDOOR_PORT: &tandoorPort 8000
             envFrom:
-              - secretRef:
-                  name: tandoor-secret
               - secretRef:
                   name: tandoor-db-secret
             probes:
@@ -104,18 +97,17 @@ spec:
     ingress:
       app:
         className: "external-nginx"
-        annotations:
-          external-dns.alpha.kubernetes.io/target: ingress-ext.bjw-s.dev
         hosts:
-          - host: &hostName tandoor.bjw-s.dev
+          - host: &host tandoor.${EXTERNAL_DOMIAN}
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
         tls:
-          - hosts:
-              - *hostName
+          - secretName: *host
+            hosts:
+              - *host
 
     persistence:
       files:

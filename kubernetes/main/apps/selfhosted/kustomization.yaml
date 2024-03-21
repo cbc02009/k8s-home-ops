@@ -10,6 +10,7 @@ resources:
   - ./immich/ks.yaml
   - ./redlib/ks.yaml
   - ./searxng/ks.yaml
+  - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
   - ./whoogle/ks.yaml
