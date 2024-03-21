@@ -19,7 +19,7 @@ spec:
     reusePVC: true
   bootstrap:
     recovery:
-      source: &previousCluster postgres-v16
+      source: &previousCluster postgres-v17
   # bootstrap:
   #   initdb:
   #     import:
@@ -44,7 +44,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v17
+      serverName: &currentCluster postgres-v18
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
