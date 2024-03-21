@@ -111,7 +111,7 @@ spec:
       app:
         className: "internal"
         hosts:
-          - host: &host tandoor.${EXTERNAL_DOMAIN}
+          - host: &host recipes.${EXTERNAL_DOMAIN}
             paths:
               - path: /
                 service:
