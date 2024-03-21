@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: tandoor
+  name: &app tandoor
 spec:
   interval: 30m
   chart:
@@ -30,6 +30,16 @@ spec:
             fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
 
+        initContainers:
+          01-init-db:
+            envFrom:
+              - secretRef:
+                  name: tandoor-db
+
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '16.2'
+
         containers:
           app:
             image:
@@ -46,7 +56,7 @@ spec:
               TANDOOR_PORT: &tandoorPort 8000
             envFrom:
               - secretRef:
-                  name: tandoor-db-secret
+                  name: tandoor-db
             probes:
               liveness: &probes
                 enabled: true
@@ -96,7 +106,7 @@ spec:
 
     ingress:
       app:
-        className: "external-nginx"
+        className: "internal"
         hosts:
           - host: &host tandoor.${EXTERNAL_DOMIAN}
             paths:
