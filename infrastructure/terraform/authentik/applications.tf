@@ -149,7 +149,7 @@ module "oauth2-paperless" {
   source = "./oauth2_application"
   name = "Paperless"
   icon_url = "https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/Color%20logo%20-%20no%20background.svg"
-  launch_url = "https://documents.movishell.pl"
+  launch_url = "https://paperless.${data.doppler_secrets.this.map.DOMAIN}"
   description = "Documents"
   newtab = true
   group = "Groupware"
@@ -157,5 +157,5 @@ module "oauth2-paperless" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   client_id          = data.doppler_secrets.this.map.PAPERLESS_OIDC_ID
   client_secret      = data.doppler_secrets.this.map.PAPERLESS_OIDC_SECRET
-  redirect_uris = ["https://documents.movishell.pl/accounts/oidc/authentik/login/callback/"]
+  redirect_uris = ["https://paperless.${data.doppler_secrets.this.map.DOMAIN}/accounts/oidc/authentik/login/callback/"]
 }
