@@ -56,7 +56,7 @@ spec:
           main:
             image:
               repository: ghcr.io/onedr0p/readarr-nightly
-              tag: 0.3.21.2469
+              tag: 0.3.21.2475
 
             envFrom:
               - secretRef:
