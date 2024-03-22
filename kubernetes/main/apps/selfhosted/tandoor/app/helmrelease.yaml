@@ -53,7 +53,7 @@ spec:
               ENABLE_SIGNUP: 1
               FRACTION_PREF_DEFAULT: 0
               GUNICORN_MEDIA: 0
-              MAX_OWNED_SPACES_PREF_DEFAULT: 0
+              MAX_OWNED_SPACES_PREF_DEFAULT: 1
               SHOPPING_MIN_AUTOSYNC_INTERVAL: 5
               TANDOOR_PORT: &tandoorPort 8000
               SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
