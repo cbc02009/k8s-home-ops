@@ -104,7 +104,6 @@ spec:
         enabled: true
         type: configMap
         name: cloudflared-configmap
-        readOnly: true
         globalMounts:
           - path: /etc/cloudflared/config/config.yaml
             subPath: config.yaml
@@ -112,13 +111,13 @@ spec:
         enabled: true
         type: secret
         name: *app
-        readOnly: true
 
         globalMounts:
           - path: /etc/cloudflared/creds/credentials.json
             subPath: credentials.json
     serviceMonitor:
-      main:
+      cloudflared:
+        serviceName: main
         enabled: true
         endpoints:
           - port: http
