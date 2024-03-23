@@ -33,7 +33,7 @@ spec:
   values:
 
     controllers:
-      app:
+      qbittorrent:
         type: statefulset
         annotations:
           configmap.reloader.stakater.com/reload: qbittorrent-dnsdist
