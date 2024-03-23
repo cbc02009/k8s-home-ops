@@ -16,12 +16,12 @@ spec:
           args: ["unlock", "--remove-all"]
           envFrom:
             - secretRef:
-                name: ${app}-volsync-secret
+                name: ${app}-volsync-minio
           resources: {}
         - name: r2
           image: ghcr.io/cbc02009/restic:0.16.4
           args: ["unlock", "--remove-all"]
           envFrom:
             - secretRef:
-                name: ${app}-volsync-r2-secret
+                name: ${app}-volsync-r2
           resources: {}

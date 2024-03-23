@@ -58,6 +58,7 @@ spec:
 
     service:
       main:
+        controller: unifi
         type: LoadBalancer
         externalTrafficPolicy: Local
         ports:

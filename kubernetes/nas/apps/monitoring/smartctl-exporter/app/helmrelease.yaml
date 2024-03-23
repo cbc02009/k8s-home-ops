@@ -41,6 +41,7 @@ spec:
 
     service:
       main:
+        controller: smartctl-exporter
         type: LoadBalancer
         ports:
           http:
