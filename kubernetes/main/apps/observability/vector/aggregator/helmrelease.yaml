@@ -66,7 +66,6 @@ spec:
         enabled: true
         type: configMap
         name: vector-aggregator-configmap
-        readOnly: true
         globalMounts:
           - path: /etc/vector/vector.yaml
             subPath: vector.yaml

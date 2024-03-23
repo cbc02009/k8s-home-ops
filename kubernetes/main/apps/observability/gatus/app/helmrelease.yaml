@@ -103,6 +103,7 @@ spec:
             port: *port
     serviceMonitor:
       main:
+        serviceName: main
         enabled: true
     ingress:
       main:
@@ -141,4 +142,3 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-            readOnly: true

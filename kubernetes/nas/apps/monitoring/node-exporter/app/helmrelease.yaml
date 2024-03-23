@@ -53,18 +53,15 @@ spec:
         hostPathType: Directory
         globalMounts:
           - path: /host/proc
-            readOnly: true
       sysfs:
         type: hostPath
         hostPath: /sys
         hostPathType: Directory
         globalMounts:
           - path: /host/sys
-            readOnly: true
       rootfs:
         type: hostPath
         hostPath: /
         hostPathType: Directory
         globalMounts:
           - path: /rootfs
-            readOnly: true

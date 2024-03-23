@@ -54,4 +54,3 @@ spec:
         hostPathType: Directory
         globalMounts:
           - path: /host/dev
-            readOnly: true

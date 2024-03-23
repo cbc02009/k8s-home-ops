@@ -64,4 +64,3 @@ spec:
         globalMounts:
           - path: /etc/rtlamr2mqtt.yaml
             subPath: rtlamr2mqtt.yaml
-            readOnly: true

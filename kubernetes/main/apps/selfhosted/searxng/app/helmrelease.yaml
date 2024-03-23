@@ -93,13 +93,11 @@ spec:
         enabled: true
         type: configMap
         name: *app
-        readOnly: true
         advancedMounts:
           main:
             main:
               - path: /etc/searxng/settings.yml
                 subPath: settings.yml
-                readOnly: true
       tmp:
         enabled: true
         type: emptyDir

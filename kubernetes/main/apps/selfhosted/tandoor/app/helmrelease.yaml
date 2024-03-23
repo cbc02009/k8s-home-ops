@@ -145,7 +145,6 @@ spec:
             nginx:
               - path: /etc/nginx/nginx.conf
                 subPath: nginx-config
-                readOnly: true
       temp:
         type: emptyDir
         advancedMounts:

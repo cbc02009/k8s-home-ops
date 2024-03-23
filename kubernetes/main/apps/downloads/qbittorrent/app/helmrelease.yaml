@@ -182,7 +182,6 @@ spec:
             dnsdist:
               - path: /etc/dnsdist/dnsdist.conf
                 subPath: dnsdist.conf
-                readOnly: true
       gluetun-data:
         type: emptyDir
         advancedMounts:
@@ -191,4 +190,3 @@ spec:
               - path: /tmp/gluetun
             port-forward:
               - path: /tmp/gluetun
-                readOnly: true
