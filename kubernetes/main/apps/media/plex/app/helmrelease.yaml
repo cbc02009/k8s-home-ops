@@ -90,6 +90,7 @@ spec:
             supplementalGroups: [44, 1010]
     service:
       main:
+        controller: *app
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${LB_PLEX}
