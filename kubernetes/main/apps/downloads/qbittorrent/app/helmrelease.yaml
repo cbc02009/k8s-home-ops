@@ -33,7 +33,7 @@ spec:
   values:
 
     controllers:
-      qbittorrent:
+      app:
         type: statefulset
         annotations:
           configmap.reloader.stakater.com/reload: qbittorrent-dnsdist
@@ -46,7 +46,7 @@ spec:
             fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
-          main:
+          qbittorrent:
             nameOverride: *app
             image:
               repository: ghcr.io/onedr0p/qbittorrent
@@ -153,16 +153,16 @@ spec:
         enabled: true
         existingClaim: *app
         advancedMounts:
-          main:
-            main:
+          app:
+            qbittorrent:
               - path: /config
       media:
         enabled: true
         type: nfs
         server: "nas.ctec.run"
         advancedMounts:
-          main:
-            main:
+          app:
+            qbittorrent:
               - path: /media
         path: /tank/media
       torrents:
@@ -171,14 +171,14 @@ spec:
         server: "nas.ctec.run"
         path: /smoltank/torrents
         advancedMounts:
-          main:
-            main:
+          app:
+            qbittorrent:
               - path: /torrents
       dnsdist-config:
         type: configMap
         name: qbittorrent-dnsdist
         advancedMounts:
-          main:
+          app:
             dnsdist:
               - path: /etc/dnsdist/dnsdist.conf
                 subPath: dnsdist.conf
@@ -186,7 +186,7 @@ spec:
       gluetun-data:
         type: emptyDir
         advancedMounts:
-          main:
+          app:
             gluetun:
               - path: /tmp/gluetun
             port-forward:
