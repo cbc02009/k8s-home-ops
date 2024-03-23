@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -9,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -26,18 +27,9 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
-        # pod:
-        #   topologySpreadConstraints:
-        #     - maxSkew: 1
-        #       topologyKey: kubernetes.io/hostname
-        #       whenUnsatisfiable: DoNotSchedule
-        #       labelSelector:
-        #         matchLabels:
-        #           app.kubernetes.io/name: *app
-
+      theme-park:
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/theme-park
               tag: 1.16.0@sha256:ea7df908833d0aa7b9b68dd74708d48ce4aef4e03b79ef32946e2188eecd6fc6
@@ -51,6 +43,7 @@ spec:
 
     service:
       main:
+        controller: *app
         ports:
           http:
             port: 8080
@@ -64,7 +57,7 @@ spec:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
         tls:
           - secretName: *host

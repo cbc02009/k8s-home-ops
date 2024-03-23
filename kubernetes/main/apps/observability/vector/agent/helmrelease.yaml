@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -27,14 +27,14 @@ spec:
     cleanupOnFail: true
   values:
     controllers:
-      main:
+      vector-agent:
         type: daemonset
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: 'true'
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/vector
               tag: 0.34.1-debian
@@ -62,8 +62,8 @@ spec:
               requests:
                 cpu: 23m
                 memory: 249M
-              # limits:
-              #   memory: 918M
+              limits:
+                memory: 918M
 
             securityContext:
               privileged: true
@@ -71,6 +71,7 @@ spec:
             args: [--config, /etc/vector/vector.yaml]
     service:
       main:
+        controller: vector-agent
         enabled: false
 
     persistence:
@@ -78,7 +79,6 @@ spec:
         enabled: true
         type: configMap
         name: vector-agent-configmap
-        readOnly: true
         globalMounts:
           - path: /etc/vector/vector.yaml
             subPath: vector.yaml
@@ -92,7 +92,6 @@ spec:
         type: hostPath
         hostPath: /var/log
         hostPathType: Directory
-        readOnly: true
         globalMounts:
           - path: /var/log
       var-lib:
@@ -100,7 +99,6 @@ spec:
         type: hostPath
         hostPath: /var/lib
         hostPathType: Directory
-        readOnly: true
         globalMounts:
           - path: /var/lib
       procfs:
@@ -108,7 +106,6 @@ spec:
         type: hostPath
         hostPath: /proc
         hostPathType: Directory
-        readOnly: true
         globalMounts:
           - path: /host/proc
       sysfs:
@@ -116,10 +113,10 @@ spec:
         type: hostPath
         hostPath: /sys
         hostPathType: Directory
-        readOnly: true
 
         globalMounts:
           - path: /host/sys
+
     podMonitor:
       enabled: true
 

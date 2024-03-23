@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -26,12 +26,11 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
+      gatus:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
-          init-db:
-            order: 1
+          01-init-db:
             image:
               repository: ghcr.io/onedr0p/postgres-init
               tag: 16
@@ -40,8 +39,7 @@ spec:
               - secretRef:
                   name: gatus-secret
           # TODO: Convert this to a proper 'sidecar' container someday
-          init-config:
-            order: 2
+          init-config-02:
             image: &configSyncImage
               repository: ghcr.io/kiwigrid/k8s-sidecar
               tag: 1.26.1
@@ -60,7 +58,7 @@ spec:
               limits:
                 memory: 128Mi
         containers:
-          main:
+          gatus:
             image:
               repository: ghcr.io/twin/gatus
               tag: v5.8.0
@@ -99,6 +97,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
     service:
       main:
+        controller: *app
         ports:
           http:
             port: *port
@@ -114,13 +113,13 @@ spec:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
           - host: &customHost status.kokoro.wtf
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
         tls:
           - secretName: *host

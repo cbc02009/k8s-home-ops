@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -31,7 +31,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
 
     controllers:
-      main:
+      vaultwarden:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
@@ -76,6 +76,7 @@ spec:
                 memory: 64M
     service:
       main:
+        controller: *app
         ports:
           http:
             port: &port 80
@@ -93,17 +94,17 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: *port
               - path: /notifications/hub/negotiate
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: *port
               - path: /notifications/hub
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: *websocket-port
         tls:
           - secretName: *host

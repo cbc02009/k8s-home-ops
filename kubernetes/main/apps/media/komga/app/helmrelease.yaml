@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -33,10 +33,10 @@ spec:
   values:
 
     controllers:
-      main:
+      komga:
         type: statefulset
         containers:
-          main:
+          komga:
             image:
               repository: ghcr.io/cbc02009/komga
               tag: 1.10.4@sha256:8f92d2c9e64292c5e7b19cf8184fc08f33dcd0368d08e0885ceaf41d179fbace
@@ -47,6 +47,7 @@ spec:
 
     service:
       main:
+        controller: *app
         ports:
           http:
             port: *port
@@ -60,7 +61,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: http
         tls:
           - secretName: *host

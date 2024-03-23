@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -34,11 +34,11 @@ spec:
         fsGroup: 568
 
     controllers:
-      main:
+      tautulli:
         type: statefulset
 
         containers:
-          main:
+          tautulli:
             image:
               repository: ghcr.io/onedr0p/tautulli
               tag: 2.13.4@sha256:b3000c0063cc4c0c6f2436fb7174f4bcfd8d91eca05206731edccb8b643ea570
@@ -55,6 +55,7 @@ spec:
 
     service:
       main:
+        controller: *app
         ports:
           http:
             port: 8181
@@ -70,7 +71,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: http
         tls:
           - secretName: *host

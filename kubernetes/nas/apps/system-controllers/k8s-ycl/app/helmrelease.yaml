@@ -18,7 +18,7 @@ spec:
 
   values:
     controllers:
-      main:
+      k8s-ycl:
         replicas: 1
 
         containers:

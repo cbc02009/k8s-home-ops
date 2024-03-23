@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
@@ -12,7 +12,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       interval: 30m
       sourceRef:
         kind: HelmRepository
@@ -29,14 +29,14 @@ spec:
             matchLabels:
               app.kubernetes.io/name: vector-aggregator
     controllers:
-      main:
+      vector-aggregator:
         replicas: 1
         strategy: Recreate
         annotations:
           reloader.stakater.com/auto: 'true'
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/vector
               tag: 0.34.1-debian
