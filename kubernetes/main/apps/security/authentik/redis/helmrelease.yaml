@@ -27,7 +27,7 @@ spec:
           automountServiceAccountToken: false
 
         containers:
-          main:
+          app:
             image:
               repository: public.ecr.aws/docker/library/redis
               tag: 7.2.4

@@ -63,6 +63,7 @@ spec:
               # WHOOGLE_CONFIG_COUNTRY: US
               WHOOGLE_CONFIG_VIEW_IMAGE: 1
               WHOOGLE_CONFIG_DISABLE: 1
+              WHOOGLE_CONFIG_SAFE: 0
             resources:
               requests:
                 cpu: 5m
