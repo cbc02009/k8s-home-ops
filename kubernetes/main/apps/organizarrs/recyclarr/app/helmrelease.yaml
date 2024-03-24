@@ -65,6 +65,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
     service:
       main:
+        controller: *app
         enabled: false
     persistence:
       config:

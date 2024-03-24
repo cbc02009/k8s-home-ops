@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: vector-aggregator
     app.kubernetes.io/name: vector-aggregator
-  name: vector-aggregator
+  name: &app vector-aggregator
   namespace: observability
 spec:
   chart:
@@ -44,6 +44,7 @@ spec:
             args: [--config, /etc/vector/vector.yaml]
     service:
       main:
+        controller: *app
         type: LoadBalancer
         loadBalancerIP: ${LB_VECTOR}
         annotations:
