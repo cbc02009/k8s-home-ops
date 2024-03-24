@@ -24,7 +24,7 @@ spec:
         type: statefulset
 
         containers:
-          unpoller:
+          app:
             image:
               repository: ghcr.io/unpoller/unpoller
               tag: v2.10.0
@@ -56,6 +56,7 @@ spec:
 
     serviceMonitor:
       main:
+        serviceName: main
         enabled: true
         endpoints:
           - port: http

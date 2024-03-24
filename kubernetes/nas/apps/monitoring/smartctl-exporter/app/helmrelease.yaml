@@ -20,7 +20,7 @@ spec:
     controllers:
       smartctl-exporter:
         containers:
-          main:
+          app:
             image:
               repository: quay.io/prometheuscommunity/smartctl-exporter
               tag: v0.12.0

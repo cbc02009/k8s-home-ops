@@ -23,7 +23,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
-          main:
+          app:
             image:
               repository: docker.io/mpepping/cyberchef
               tag: v10.8.2

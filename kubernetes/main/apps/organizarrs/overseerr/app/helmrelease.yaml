@@ -36,7 +36,7 @@ spec:
         type: statefulset
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/sct/overseerr
               tag: 1.33.2

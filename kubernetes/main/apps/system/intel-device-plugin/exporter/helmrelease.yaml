@@ -36,7 +36,7 @@ spec:
       intel-device-plugin-exporter:
         type: daemonset
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/intel-gpu-exporter
               tag: rolling@sha256:f324725adc5497510f204aec64d398dddddd15052ce234c3f700606bb3d91a99

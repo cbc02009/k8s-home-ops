@@ -53,7 +53,7 @@ spec:
               tag: '16.2'
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/readarr-nightly
               tag: 0.3.21.2469

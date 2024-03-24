@@ -58,7 +58,7 @@ spec:
               limits:
                 memory: 128Mi
         containers:
-          gatus:
+          app:
             image:
               repository: ghcr.io/twin/gatus
               tag: v5.8.0

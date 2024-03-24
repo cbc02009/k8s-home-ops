@@ -39,7 +39,7 @@ spec:
       kubernetes-schemas:
         type: statefulset
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/cbc02009/kubernetes-schemas
               tag: latest@sha256:3db2458317b4ec3434381c482ce95ece25e6c392f68f73f0a862d31dc9c5775f

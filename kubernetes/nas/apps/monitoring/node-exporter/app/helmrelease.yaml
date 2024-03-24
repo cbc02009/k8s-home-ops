@@ -20,7 +20,7 @@ spec:
     controllers:
       node-exporter:
         containers:
-          main:
+          app:
             image:
               repository: quay.io/prometheus/node-exporter
               tag: v1.7.0

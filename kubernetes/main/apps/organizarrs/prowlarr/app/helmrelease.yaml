@@ -56,7 +56,7 @@ spec:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.2'
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/onedr0p/prowlarr-develop
               tag: 1.14.3.4333@sha256:af90aa422bf142df26cf70aaebab5fd609f68cc5639ebfe643b4547fee8c76e3

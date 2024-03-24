@@ -41,7 +41,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/benbusby/whoogle-search
               tag: 0.8.4

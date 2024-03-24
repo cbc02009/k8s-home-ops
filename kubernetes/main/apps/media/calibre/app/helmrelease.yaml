@@ -37,7 +37,7 @@ spec:
         type: statefulset
 
         containers:
-          calibre:
+          app:
             image:
               repository: ghcr.io/linuxserver/calibre
               tag: 7.7.0

@@ -45,7 +45,7 @@ spec:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.2'
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/cbc02009/vaultwarden
               tag: 1.30.5

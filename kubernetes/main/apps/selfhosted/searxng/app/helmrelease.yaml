@@ -47,7 +47,7 @@ spec:
           annotations:
             setGateway: "true"
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/cbc02009/searxng
               tag: 2023.7.22-65d8b1a31
@@ -94,8 +94,8 @@ spec:
         type: configMap
         name: *app
         advancedMounts:
-          main:
-            main:
+          searxng:
+            app:
               - path: /etc/searxng/settings.yml
                 subPath: settings.yml
       tmp:

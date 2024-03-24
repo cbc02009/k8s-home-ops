@@ -41,7 +41,7 @@ spec:
           reloader.stakater.com/auto: 'true'
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/cbc02009/teddit
               tag: latest@sha256:9a825311531cd65f8305e778e54de5726403f6092eb7b62915a28363a0ab6ba0

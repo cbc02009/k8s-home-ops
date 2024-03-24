@@ -35,7 +35,7 @@ spec:
           enableServiceLinks: false
 
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/atuinsh/atuin
               tag: v18.1.0
