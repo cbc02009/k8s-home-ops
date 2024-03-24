@@ -74,6 +74,7 @@ spec:
               - ./start-microservices.sh
     service:
       main:
+        controller: *app
         enabled: false
     persistence:
       library:

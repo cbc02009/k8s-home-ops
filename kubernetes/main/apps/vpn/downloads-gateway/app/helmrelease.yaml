@@ -100,7 +100,7 @@ spec:
     routed_namespaces:
       - downloads
       - organizarrs
-      - services
+      - selfhosted
 
     settings:
       VPN_INTERFACE: "wg0"
