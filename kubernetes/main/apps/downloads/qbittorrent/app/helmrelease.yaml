@@ -153,16 +153,16 @@ spec:
         enabled: true
         existingClaim: *app
         advancedMounts:
-          app:
-            qbittorrent:
+          qbittorrent:
+            app:
               - path: /config
       media:
         enabled: true
         type: nfs
         server: "nas.ctec.run"
         advancedMounts:
-          app:
-            qbittorrent:
+          qbittorrent:
+            app:
               - path: /media
         path: /tank/media
       torrents:
@@ -171,21 +171,21 @@ spec:
         server: "nas.ctec.run"
         path: /smoltank/torrents
         advancedMounts:
-          app:
-            qbittorrent:
+          qbittorrent:
+            app:
               - path: /torrents
       dnsdist-config:
         type: configMap
         name: qbittorrent-dnsdist
         advancedMounts:
-          app:
+          qbittorrent:
             dnsdist:
               - path: /etc/dnsdist/dnsdist.conf
                 subPath: dnsdist.conf
       gluetun-data:
         type: emptyDir
         advancedMounts:
-          app:
+          qbittorrent:
             gluetun:
               - path: /tmp/gluetun
             port-forward:
