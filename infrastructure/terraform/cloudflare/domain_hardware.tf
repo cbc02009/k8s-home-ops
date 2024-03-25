@@ -34,27 +34,6 @@ module "cf_domain_hardware" {
       value    = "mailsec.protonmail.ch"
       type     = "MX"
     },
-    # {
-    #   id      = "protonmail_dkim_1"
-    #   name    = "protonmail._domainkey"
-    #   value   = "protonmail.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
-    #   type    = "CNAME"
-    #   proxied = false
-    # },
-    # {
-    #   id      = "protonmail_dkim_2"
-    #   name    = "protonmail2._domainkey"
-    #   value   = "protonmail2.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
-    #   type    = "CNAME"
-    #   proxied = false
-    # },
-    # {
-    #   id      = "protonmail_dkim_3"
-    #   name    = "protonmail3._domainkey"
-    #   value   = "protonmail3.domainkey.dyhvzqp4p2xqazzrepen5x2ykwsbchouvlgb4rjl7phvtycq7xtwa.domains.proton.ch."
-    #   type    = "CNAME"
-    #   proxied = false
-    # },
     {
       id = "postmark_dkim"
       name = "20240322033030pm._domainkey"
