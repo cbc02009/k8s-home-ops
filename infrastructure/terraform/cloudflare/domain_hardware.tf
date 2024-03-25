@@ -66,7 +66,7 @@ module "cf_domain_hardware" {
       id = "postmark_return_path"
       name = "pm-bounces"
       value = "pm.mtasv.net"
-      type = "cname"
+      type = "CNAME"
       proxied = "false"
     },
     {
