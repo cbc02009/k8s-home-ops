@@ -40,10 +40,10 @@ spec:
 
         pod:
           securityContext:
-            runAsUser: 568
-            runAsGroup: 568
             fsGroup: 568
             fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 1010 # shana:zfswrite
 
         containers:
           app:
@@ -55,6 +55,16 @@ spec:
               TZ: "${TZ}"
               UMASK: "002"
               QBITTORRENT__PORT: &port 8080
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 49m
@@ -64,11 +74,12 @@ spec:
             securityContext:
               runAsUser: 568
               runAsGroup: 568
-
-          dnsdist:
-            image:
-              repository: docker.io/powerdns/dnsdist-18
-              tag: 1.8.3
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
 
           gluetun:
             image:
@@ -105,18 +116,29 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
+              allowPrivilegeEscalation: false
 
           port-forward:
             image:
-              repository: docker.io/snoringdragon/gluetun-qbittorrent-port-manager
-              tag: "1.3"
+              repository: ghcr.io/bjw-s/gluetun-qb-port-sync
+              tag: v0.0.1
             env:
-              - name: QBITTORRENT_SERVER
-                value: localhost
-              - name: QBITTORRENT_PORT
-                value: "8080"
-              - name: PORT_FORWARDED
-                value: "/tmp/gluetun/forwarded_port"
+              GLUETUN_CONTROL_SERVER_HOST: localhost
+              GLUETUN_CONTROL_SERVER_PORT: 8000
+              QBITTORRENT_HOST: localhost
+              QBITTORRENT_WEBUI_PORT: *port
+              CRON_ENABLED: true
+              CRON_SCHEDULE: "*/5 * * * *"
+              LOG_TIMESTAMP: false
+            securityContext:
+              runAsUser: 568
+              runAsGroup: 568
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
 
     service:
       main:
@@ -174,19 +196,3 @@ spec:
           qbittorrent:
             app:
               - path: /torrents
-      dnsdist-config:
-        type: configMap
-        name: qbittorrent-dnsdist
-        advancedMounts:
-          qbittorrent:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
-      gluetun-data:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            gluetun:
-              - path: /tmp/gluetun
-            port-forward:
-              - path: /tmp/gluetun
