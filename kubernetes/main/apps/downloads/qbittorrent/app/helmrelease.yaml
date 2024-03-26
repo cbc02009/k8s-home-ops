@@ -36,7 +36,7 @@ spec:
       qbittorrent:
         type: statefulset
         annotations:
-          configmap.reloader.stakater.com/reload: qbittorrent-dnsdist
+          configmap.reloader.stakater.com/reload: proton-vpn
 
         pod:
           securityContext:
