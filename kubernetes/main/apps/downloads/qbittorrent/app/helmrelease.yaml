@@ -86,29 +86,15 @@ spec:
               repository: ghcr.io/qdm12/gluetun
               tag: latest@sha256:60a209d70ba8b77ebebec64de1f33cbcd321146019bcd28888f2505f5be00577
             env:
-              - name: VPN_SERVICE_PROVIDER
-                value: custom
-              - name: VPN_TYPE
-                value: wireguard
-              - name: VPN_INTERFACE
-                value: wg0
-              - name: VPN_ENDPOINT_PORT
-                value: "51820"
-              - name: VPN_PORT_FORWARDING
-                value: "on"
-              - name: VPN_PORT_FORWARDING_PROVIDER
-                value: "protonvpn"
-              - name: FIREWALL_INPUT_PORTS
-                value: "8080"
-              - name: FIREWALL_OUTBOUND_SUBNETS
-                # Allow access to k8s subnets
-                value: "10.11.0.0/16,10.10.0.0/16"
-              - name: SHADOWSOCKS
-                value: "on"
-              - name: DOT
-                value: "off"
-              - name: DNS_PLAINTEXT_ADDRESS
-                value: "127.0.0.2"
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              VPN_ENDPOINT_PORT: 51820
+              VPN_PORT_FORWARDING: on
+              VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              FIREWALL_INPUT_PORTS: 8080
+              FIREWALL_OUTBOUND_SUBNETS: "10.11.0.0/16,10.10.0.0/16"
+              SHADOWSOCKS: "on"
             envFrom:
               - secretRef:
                   name: proton-vpn
