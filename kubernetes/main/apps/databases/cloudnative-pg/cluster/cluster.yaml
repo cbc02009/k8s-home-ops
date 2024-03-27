@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/postgresql.cnpg.io/cluster_v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/postgresql.cnpg.io/cluster_v1.jso
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -34,6 +34,7 @@ spec:
       shared_buffers: 512MB
     shared_preload_libraries:
       - "vectors.so"
+    search_path: '"$user", public, vectors"'
   monitoring:
     enablePodMonitor: true
   backup:
