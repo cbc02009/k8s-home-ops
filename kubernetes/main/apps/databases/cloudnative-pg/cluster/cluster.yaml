@@ -34,7 +34,6 @@ spec:
       shared_buffers: 512MB
     shared_preload_libraries:
       - "vectors.so"
-    search_path: '"$user", public, vectors"'
   monitoring:
     enablePodMonitor: true
   backup:
