@@ -77,3 +77,4 @@ jobs:
       - name: Tag OCI
         run: |
           flux tag artifact "oci://ghcr.io/cbc02009/terraform/$(basename ${{ matrix.project }}):$(git rev-parse --short HEAD)" \
+          --tag main
