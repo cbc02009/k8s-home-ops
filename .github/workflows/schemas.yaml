@@ -51,6 +51,9 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Install Flux
+        uses: fluxcd/flux2/action@534684601ec8888beb0cc4f51117b59e97606c4d # v2.2.3
+
       - name: Write kubeconfig
         id: kubeconfig
         uses: timheuer/base64-to-file@v1
