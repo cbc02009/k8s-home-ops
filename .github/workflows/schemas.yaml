@@ -14,12 +14,13 @@ jobs:
     name: Publish Manifests
     runs-on: ["arc-runner-set-k8s-home-ops"]
     steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@v1
-        id: app-token
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
         with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+          registry: ghcr.io
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Checkout
         uses: actions/checkout@v4
