@@ -1,6 +1,7 @@
 # Configure the Doppler provider with the token
 provider "doppler" {
 
+
 }
 
 # Define our data source to fetch secrets
