@@ -30,9 +30,9 @@ jobs:
         shell: bash
         run: sudo apt-get -qq update && sudo apt-get -qq install --no-install-recommends -y curl git unzip
 
-      - name: Install Homebrew
-        shell: bash
-        run: $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+      # - name: Install Homebrew
+      #   shell: bash
+      #   run: $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 
       - name: Setup Homebrew
         uses: Homebrew/actions/setup-homebrew@master
