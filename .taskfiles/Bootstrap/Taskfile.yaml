@@ -20,14 +20,14 @@ tasks:
       - test -d {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/clusterconfig
       - talosctl --context {{.cluster}} config info >/dev/null 2>&1
 
-  storage:
+  dns:
     vars: &vars
-      cluster: storage
-      playbook: cluster-installation
+      cluster: dns
     cmds:
-      - task: :ansible:venv
+      - task: :ta:bootstrap
         vars: *vars
-      - task: :ansible:run
+      - task: :fx:bootstrap
         vars: *vars
-      - task: :flux:bootstrap
-        vars: *vars
+    preconditions:
+      - test -d {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/clusterconfig
+      - talosctl --context {{.cluster}} config info >/dev/null 2>&1

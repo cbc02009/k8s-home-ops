@@ -46,7 +46,6 @@ spec:
         ingress:
           enabled: true
           className: "internal"
-          annotations:
           hosts:
             - &host "hubble.${EXTERNAL_DOMAIN}"
           tls:
