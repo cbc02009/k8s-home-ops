@@ -21,13 +21,13 @@ tasks:
       - kubectl --context {{.cluster}} apply --server-side --filename https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/{{.PROMETHEUS_OPERATOR_VERSION}}/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
       - kubectl --context {{.cluster}} apply --server-side --filename https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/{{.PROMETHEUS_OPERATOR_VERSION}}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
       # Install external secrets CRDs
-      - kubectl apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/crds/
+      - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/crds/
       # Install Flux
       - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/flux
       # Install secrets and configmaps
       - kubectl create secret generic --context {{.cluster}} -n flux-system cluster-secrets --from-env-file <(doppler secrets download -p {{.cluster}}-cluster -c prd --no-file --format docker)
       - kubectl create secret generic --context {{.cluster}} -n flux-system doppler-token-auth-api --from-literal dopplerToken=$(doppler secrets -p doppler -c prd get DOPPLER_PAT --plain)
-      - doppler secrets -p {{.cluster}}-cluster -c prd get GITHUB_DEPLOY_KEY --plain | kubectl apply -f -
+      - doppler  secrets -p {{.cluster}}-cluster -c prd get GITHUB_DEPLOY_KEY --plain | kubectl apply --context {{.cluster}} -f -
       - kubectl --context {{.cluster}} apply --server-side --filename {{.KUBERNETES_DIR}}/{{.cluster}}/flux/vars/cluster-settings.yaml
       # Install Flux Kustomization resources
       - kubectl --context {{.cluster}} apply --server-side --kustomize {{.KUBERNETES_DIR}}/{{.cluster}}/flux/config
