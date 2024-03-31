@@ -1,0 +1,28 @@
+; Make sure to update the epoch time in the SOA records so coreDNS picks up the changes automatically
+; https://www.epochconverter.com/
+
+; SOA Records
+$TTL 3600
+$ORIGIN 0.10.in-addr.arpa.
+@ 3600 IN SOA gateway.ctec.run. gateway.ctec.run. (
+  1682790096         ; serial number (epoch timestamp)
+  7200               ; refresh period
+  3600               ; retry period
+  1209600            ; expire time
+  3600               ; minimum ttl
+)
+
+; NS Records
+@                          IN  NS gateway.ctec.run.
+
+; Reset origin
+$ORIGIN in-addr.arpa.
+
+; LAN
+1.0.0.10                   IN  PTR  gateway.ctec.run.
+
+; Servers
+4.2.0.10                   IN  PTR  shana.ctec.run.
+10.2.0.10                  IN  PTR  uiharu.ctec.run.
+11.2.0.10                  IN  PTR  miri.ctec.run.
+12.2.0.10                  IN  PTR  sakura.ctec.run.

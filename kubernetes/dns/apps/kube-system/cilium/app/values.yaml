@@ -184,6 +184,8 @@ operator:
   # -- Roll out cilium-operator pods automatically when configmap is updated.
   rollOutPods: true
 
+  replicas: 1
+
 # -- Roll out cilium agent pods automatically when configmap is updated.
 rollOutCiliumPods: true
 
