@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: alertmanager-discord
+  name: &app alertmanager-discord
   namespace: flux-system
 spec:
   path: ./kubernetes/main/apps/observability/alertmanager-discord/app

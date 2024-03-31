@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: externaldns-shared
+  name: &app externaldns-shared
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -21,7 +21,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: externaldns-external
+  name: &app externaldns-external
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -41,7 +41,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: externaldns-internal
+  name: &app externaldns-internal
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'

@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: add-ons-dashboard
+  name: &app add-ons-dashboard
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -39,7 +39,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: add-ons-webhook
+  name: &app add-ons-webhook
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'

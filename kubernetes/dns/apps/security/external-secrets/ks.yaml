@@ -3,11 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: external-secrets
+  name: &app external-secrets
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: security
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/dns/apps/security/external-secrets/app/'
   prune: true
   sourceRef:

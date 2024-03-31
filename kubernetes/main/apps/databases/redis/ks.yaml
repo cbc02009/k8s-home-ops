@@ -3,11 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: redis
+  name: &app redis
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: databases
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
   path: './kubernetes/main/apps/databases/redis/app/'
