@@ -25,7 +25,7 @@ resources:
   - ./jetstack.yaml
   - ./k8tz.yaml
   - ./kubernetes-sigs-descheduler-charts.yaml
-  - ./kubernetes-sigs-metrics-server.yaml
+  - ./metrics-server.yaml
   - ./kubernetes-sigs-nfd-charts.yaml
   - ./lwolf-charts.yaml
   - ./mayastor.yaml
