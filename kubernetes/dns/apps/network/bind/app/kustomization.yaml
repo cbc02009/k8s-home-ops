@@ -9,7 +9,7 @@ configMapGenerator:
   - name: bind-configmap
     files:
       - ./resources/named.conf
-      - ./resources/zones/db.1.10.in-addr.arpa
+      - ./resources/zones/db.0.10.in-addr.arpa
       - ./resources/zones/db.ctec.run
       - ./resources/zones/db.kokoro.wtf
       - ./resources/zones/db.unifi

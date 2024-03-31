@@ -72,7 +72,7 @@ spec:
           - path: /etc/bind/named.conf
             subPath: named.conf
             readOnly: true
-          - path: /etc/bind/zones/db.1.10.in-addr.arpa
+          - path: /etc/bind/zones/db.0.10.in-addr.arpa
             subPath: db.1.10.in-addr.arpa
             readOnly: true
           - path: /etc/bind/zones/db.ctec.run
