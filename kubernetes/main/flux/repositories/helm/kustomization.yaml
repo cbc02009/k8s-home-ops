@@ -10,7 +10,7 @@ resources:
   - ./authelia-charts.yaml
   - ./backube-charts.yaml
   - ./bjw-s-charts.yaml
-  - ./cilium-charts.yaml
+  - ./cilium.yaml
   - ./cloudnative-pg.yaml
   - ./crunchydata.yaml
   - ./democratic-csi.yaml
