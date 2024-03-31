@@ -13,3 +13,4 @@ resources:
   - ./postfinance.yaml
   - ./prometheus-community.yaml
   - ./stakater.yaml
+  - ./kubernetes-sigs-metrics-server.yaml
