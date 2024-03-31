@@ -42,7 +42,7 @@ nodes:
       - deviceSelector:
           hardwareAddr: 68:1d:ef:2d:e3:47
         addresses:
-          - 10.0.7.10/24
+          - 10.0.7.2/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
