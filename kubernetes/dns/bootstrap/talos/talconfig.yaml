@@ -27,7 +27,7 @@ cniConfig:
 nodes:
 
   - hostname: ivy.ctec.run
-    ipAddress: 10.0.7.10
+    ipAddress: 10.0.7.2
     installDiskSelector:
       model: KINGSTON SA400S3
     controlPlane: true
@@ -48,7 +48,7 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.7.1
         vip:
-          ip: 10.0.7.2
+          ip: 10.0.7.3
     patches:
       - |-
         machine:
