@@ -5,6 +5,10 @@ metadata:
   name: &app unpoller
   namespace: flux-system
 spec:
+  targetNamespace: observability
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   interval: 30m
   path: "./kubernetes/main/apps/observability/unpoller/app"
   prune: true

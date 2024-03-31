@@ -8,8 +8,11 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: media
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
-    - name: rook-ceph-cluster
     - name: volsync
     - name: calibre
   path: './kubernetes/main/apps/media/calibre-web/app/'

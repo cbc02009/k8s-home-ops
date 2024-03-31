@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: security
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/security/vaultwarden/app/'
   prune: true
   sourceRef:

@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: rook-ceph
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/rook-ceph/rook-ceph/cluster/'
   prune: true
   sourceRef:
@@ -33,6 +37,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: rook-ceph
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/rook-ceph/rook-ceph/operator/'
   prune: true
   sourceRef:

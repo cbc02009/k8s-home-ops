@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: observability
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/observability/prometheus-rules/app/'
   prune: true
   sourceRef:

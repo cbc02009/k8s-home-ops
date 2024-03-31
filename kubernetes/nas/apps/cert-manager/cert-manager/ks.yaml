@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: cert-manager
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/nas/apps/cert-manager/cert-manager/app/'
   prune: true
   sourceRef:
@@ -31,6 +35,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: cert-manager
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/nas/apps/cert-manager/cert-manager/issuers/'
   prune: true
   sourceRef:

@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: selfhosted
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/selfhosted/teddit/app/'
   prune: true
   sourceRef:

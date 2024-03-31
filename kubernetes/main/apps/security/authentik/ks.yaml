@@ -6,6 +6,10 @@ metadata:
   name: &app authentik-redis
   namespace: flux-system
 spec:
+  targetNamespace: security
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   interval: 30m
   path: "./kubernetes/main/apps/security/authentik/redis"
   prune: true
@@ -23,6 +27,10 @@ metadata:
   name: &app authentik
   namespace: flux-system
 spec:
+  targetNamespace: security
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   interval: 30m
   path: "./kubernetes/main/apps/security/authentik/app"
   prune: true

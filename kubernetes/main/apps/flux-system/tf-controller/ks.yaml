@@ -6,6 +6,10 @@ metadata:
   name: &app tf-controller
   namespace: flux-system
 spec:
+  targetNamespace: flux-system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
   path: ./kubernetes/main/apps/flux-system/tf-controller/app
@@ -29,6 +33,10 @@ metadata:
   name: &app tf-controller-terraforms
   namespace: flux-system
 spec:
+  targetNamespace: flux-system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
     - name: tf-controller

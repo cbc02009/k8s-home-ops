@@ -8,6 +8,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/network/ingress-nginx/shared/'
   prune: true
   sourceRef:
@@ -28,6 +32,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/network/ingress-nginx/external/'
   prune: true
   sourceRef:
@@ -53,6 +61,10 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/network/ingress-nginx/internal/'
   prune: true
   sourceRef:

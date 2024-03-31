@@ -6,6 +6,10 @@ metadata:
   name: &app immich
   namespace: flux-system
 spec:
+  targetNamespace: selfhosted
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
     - name: cloudnative-pg-cluster

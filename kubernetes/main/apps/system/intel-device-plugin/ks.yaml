@@ -6,6 +6,10 @@ metadata:
   name: &app intel-device-plugin-operator
   namespace: flux-system
 spec:
+  targetNamespace: system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/system/intel-device-plugin/app
   prune: true
   sourceRef:
@@ -23,6 +27,10 @@ metadata:
   name: &app intel-device-plugin-gpu
   namespace: flux-system
 spec:
+  targetNamespace: system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/system/intel-device-plugin/gpu
   prune: true
   sourceRef:
@@ -40,6 +48,10 @@ metadata:
   name: &app intel-device-plugin-exporter
   namespace: flux-system
 spec:
+  targetNamespace: system
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/system/intel-device-plugin/exporter
   prune: true
   sourceRef:
