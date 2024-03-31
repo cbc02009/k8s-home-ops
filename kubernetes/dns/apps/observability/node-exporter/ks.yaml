@@ -9,7 +9,7 @@ metadata:
     substitution.flux.home.arpa/enabled: "true"
 spec:
   interval: 30m
-  path: "./kubernetes/main/apps/observability/node-exporter/app"
+  path: "./kubernetes/dns/apps/observability/node-exporter/app"
   prune: true
   sourceRef:
     kind: GitRepository
