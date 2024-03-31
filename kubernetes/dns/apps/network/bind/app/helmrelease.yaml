@@ -19,6 +19,7 @@ spec:
   values:
     controllers:
       bind:
+        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
 
@@ -86,7 +87,7 @@ spec:
             readOnly: true
       other-conf-file:
         type: secret
-        name: bind-secret
+        name: *app
         defaultMode: 400
         globalMounts:
           # - path: /etc/bind/rndc.conf
