@@ -7,7 +7,7 @@ talosVersion: v1.6.7
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
 kubernetesVersion: v1.29.2
 
-endpoint: https://10.0.7.2:6443
+endpoint: https://10.0.7.5:6443
 
 allowSchedulingOnMasters: true
 
@@ -48,7 +48,7 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.7.1
         vip:
-          ip: 10.0.7.3
+          ip: 10.0.7.5
     patches:
       - |-
         machine:

@@ -17,5 +17,5 @@ metadata:
   name: pool
 spec:
   blocks:
-    - start: "10.0.7.5"
+    - start: "10.0.7.6"
       stop: "10.0.7.20"
