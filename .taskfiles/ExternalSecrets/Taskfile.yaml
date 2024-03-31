@@ -18,8 +18,8 @@ tasks:
       vars: ["cluster", "secret"]
     vars:
       ns: '{{.ns | default "default"}}'
-    preconditions:
-      - kubectl --context {{.cluster}} -n {{.ns}} get externalsecret {{.secret}}
+    preconditions: []
+      # - kubectl --context {{.cluster}} -n {{.ns}} get externalsecret {{.secret}}
 
   sync-all:
     desc: Sync all ExternalSecrets for a cluster
