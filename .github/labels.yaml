@@ -13,6 +13,8 @@
   color: "ffc300"
 - name: cluster/nas
   color: "ffc300"
+- name: cluster/dns
+  color: "ffc300"
 # Renovate Types
 - name: renovate/container
   color: "027fa0"
