@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: docker.io/mpepping/cyberchef
-              tag: v10.9.0
+              tag: v10.13.0
             env:
               TZ: ${TZ}
     service:
