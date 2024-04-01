@@ -16,7 +16,7 @@ $ORIGIN ctec.run.
 @                          IN  NS gateway.ctec.run.
 
 ; DNS
-ivy                        IN  A  10.0.7.2
+ivy                        IN  A  10.0.5.2
 
 ; LAN
 gateway                    IN  A  10.0.0.1
