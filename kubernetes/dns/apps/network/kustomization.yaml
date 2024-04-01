@@ -9,3 +9,4 @@ resources:
   - ./bind/ks.yaml
   - ./blocky/ks.yaml
   - ./dnsdist/ks.yaml
+  - ./external-dns/ks.yaml
