@@ -6,4 +6,8 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./dragonfly/ks.yaml
+  - ./cloudnative-pg/ks.yaml
+  - ./dragonfly-operator/ks.yaml
+  - ./postgres-backup/ks.yaml
+  - ./pgadmin/ks.yaml
+  - ./redis/ks.yaml
