@@ -28,4 +28,4 @@ metadata:
   name: main-pool
 spec:
   cidrs:
-    - cidr: 10.7.0.1/24
+    - cidr: 10.4.0.1/24
