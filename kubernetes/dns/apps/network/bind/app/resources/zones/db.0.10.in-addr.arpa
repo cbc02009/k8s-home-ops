@@ -19,10 +19,12 @@ $ORIGIN 0.10.in-addr.arpa.
 $ORIGIN in-addr.arpa.
 
 ; LAN
-1.0.0.10                   IN  PTR  gateway.ctec.run.
+$ORIGIN 0.0.10.in-addr.arpa.
+1                           IN  PTR  gateway.ctec.run.
 
 ; Servers
-4.2.0.10                   IN  PTR  shana.ctec.run.
-10.2.0.10                  IN  PTR  uiharu.ctec.run.
-11.2.0.10                  IN  PTR  miri.ctec.run.
-12.2.0.10                  IN  PTR  sakura.ctec.run.
+$ORIGIN 2.0.10.in-addr.arpa.
+4                            IN  PTR  shana.ctec.run.
+10                           IN  PTR  uiharu.ctec.run.
+11                           IN  PTR  miri.ctec.run.
+12                           IN  PTR  sakura.ctec.run.
