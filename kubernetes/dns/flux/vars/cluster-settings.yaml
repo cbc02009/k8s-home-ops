@@ -9,3 +9,4 @@ data:
   CLUSTER_ID: "1"
 
   TZ: America/New_York
+  EXTERNAL_DOMAIN: kokoro.wtf
