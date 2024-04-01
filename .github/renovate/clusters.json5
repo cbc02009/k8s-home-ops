@@ -12,9 +12,16 @@
     {
       "description": "Separate PRs for storage cluster",
       "matchFileNames": [
-        "**/kubernetes/storage/**",
+        "**/kubernetes/nas/**",
       ],
-      "additionalBranchPrefix": "storage-"
+      "additionalBranchPrefix": "nas-"
+    },
+        {
+      "description": "Separate PRs for DNS cluster",
+      "matchFileNames": [
+        "**/kubernetes/dns/**",
+      ],
+      "additionalBranchPrefix": "dns-"
     }
   ]
 }
