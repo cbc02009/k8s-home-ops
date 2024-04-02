@@ -11,7 +11,7 @@ data:
   TZ: America/New_York
   EXTERNAL_DOMAIN: kokoro.wtf
 
-  LB_NGINX: 10.4.0.5
-  LB_DNSDIST: 10.4.0.6
+  LB_NGINX: 10.4.0.2
+  LB_DNSDIST: 10.4.0.4
   LB_BLOCKY: 10.4.0.7
-  LB_BIND: 10.4.0.8
+  LB_BIND: 10.4.0.3
