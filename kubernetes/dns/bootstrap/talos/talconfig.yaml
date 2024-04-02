@@ -7,13 +7,14 @@ talosVersion: v1.6.7
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
 kubernetesVersion: v1.29.2
 
-endpoint: https://10.0.5.5:6443
+endpoint: https://10.0.2.5:6443
 
 allowSchedulingOnMasters: true
 
 additionalApiServerCertSans: &san
   - "127.0.0.1"
-  - "ivy.ctec.run"
+  - "10.0.2.5"
+  - "dns.ctec.run"
 
 additionalMachineCertSans: *san
 
@@ -27,7 +28,7 @@ cniConfig:
 nodes:
 
   - hostname: ivy.ctec.run
-    ipAddress: 10.0.5.2
+    ipAddress: 10.0.2.5
     installDiskSelector:
       model: KINGSTON SA400S3
     controlPlane: true
@@ -42,13 +43,11 @@ nodes:
       - deviceSelector:
           hardwareAddr: 68:1d:ef:2d:e3:47
         addresses:
-          - 10.0.5.2/24
+          - 10.0.2.5/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
-            gateway: 10.0.5.1
-        vip:
-          ip: 10.0.5.5
+            gateway: 10.0.2.1
     patches:
       - |-
         machine:
@@ -105,7 +104,7 @@ controlPlane:
       cluster:
         etcd:
           advertisedSubnets:
-            - 10.0.5.0/24
+            - 10.0.2.0/24
 
     # Configure containerd
     - |-
@@ -160,7 +159,7 @@ controlPlane:
                 - rw
           nodeIP:
             validSubnets:
-              - 10.0.5.0/24
+              - 10.0.2.0/24
 
     # Custom sysctls
     - |-

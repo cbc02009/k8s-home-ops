@@ -3,3 +3,5 @@ providerRegex: |
   ^(ivy)$
 
 bypassDnsResolution: true
+
+replicas: 1
