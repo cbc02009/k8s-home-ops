@@ -89,23 +89,23 @@ spec:
             enabled: true
             port: 10001
             protocol: UDP
-    ingress:
-      main:
-        enabled: true
-        className: "internal"
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - secretName: *host
-            hosts:
-              - *host
+    # ingress:
+    #   main:
+    #     enabled: true
+    #     className: "internal"
+    #     annotations:
+    #       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    #     hosts:
+    #       - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
+    #         paths:
+    #           - path: /
+    #             service:
+    #               identifier: main
+    #               port: http
+    #     tls:
+    #       - secretName: *host
+    #         hosts:
+    #           - *host
 
     persistence:
       dev:
