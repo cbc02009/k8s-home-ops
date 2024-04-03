@@ -15,8 +15,6 @@ $ORIGIN ctec.run.
 ; NS Records
 @                          IN  NS gateway.ctec.run.
 
-; DNS
-ivy                        IN  A  10.0.5.2
 
 ; LAN
 gateway                    IN  A  10.0.0.1
@@ -31,8 +29,9 @@ petra                      IN  A 10.0.1.121
 ; Servers
 nut-server                 IN  A  10.0.2.3
 shana                      IN  A  10.0.2.4
+rem                        IN  A  10.0.2.5
+ram                        IN  A  10.0.2.6
 uiharu                     IN  A  10.0.2.10
-anya                       IN  A  10.0.2.13
 sakura                     IN  A  10.0.2.12
 miri                       IN  A  10.0.2.11
 
