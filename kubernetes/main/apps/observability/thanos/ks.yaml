@@ -12,6 +12,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: dragonfly-cluster
+    - name: external-secrets
   path: './kubernetes/main/apps/observability/thanos/app/'
   prune: true
   sourceRef:

@@ -6,8 +6,6 @@ namespace: flux-system
 resources:
   - ./actions-runner-controller-charts.yaml
   - ./angelnu-charts.yaml
-  - ./aqua-charts.yaml
-  - ./authelia-charts.yaml
   - ./backube-charts.yaml
   - ./bjw-s-charts.yaml
   - ./cilium.yaml
@@ -29,8 +27,6 @@ resources:
   - ./kubernetes-sigs-nfd-charts.yaml
   - ./lwolf-charts.yaml
   - ./mayastor.yaml
-  - ./nextcloud-charts.yaml
-  - ./nvidia.yaml
   - ./openebs.yaml
   - ./piraeus-charts.yaml
   - ./postfinance-charts.yaml
@@ -40,6 +36,6 @@ resources:
   - ./ingress-nginx-charts.yaml
   - ./spegel.yaml
   - ./stakater.yaml
+  - ./stevehipwell.yaml
   - ./tf-controller.yaml
   - ./vector-charts.yaml
-  - ./weave-gitops.yaml
