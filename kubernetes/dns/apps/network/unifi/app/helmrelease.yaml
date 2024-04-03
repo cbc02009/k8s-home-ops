@@ -108,9 +108,9 @@ spec:
               - *host
 
     persistence:
-      dev:
-        type: hostPath
-        hostPath: /tank/backup/kubernetes/apps/unifi
-        hostPathType: Directory
+      backup:
+        type: nfs
+        server: &nas nas.ctec.run
+        path: /tank/backup/kubernetes/apps/unifi
         globalMounts:
           - path: /usr/lib/unifi/data/backup
