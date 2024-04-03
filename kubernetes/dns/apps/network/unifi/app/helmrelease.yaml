@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: unifi
-  namespace: network
 spec:
   interval: 30m
   chart:
@@ -110,7 +109,7 @@ spec:
     persistence:
       backup:
         type: nfs
-        server: &nas nas.ctec.run
+        server: 10.0.2.4
         path: /tank/backup/kubernetes/apps/unifi
         globalMounts:
           - path: /usr/lib/unifi/data/backup
