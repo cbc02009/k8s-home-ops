@@ -27,7 +27,7 @@ cniConfig:
 
 nodes:
 
-  - hostname: ivy.ctec.run
+  - hostname: rem.ctec.run
     ipAddress: 10.0.2.5
     installDiskSelector:
       model: KINGSTON SA400S3
@@ -45,6 +45,41 @@ nodes:
           hardwareAddr: 68:1d:ef:2d:e3:47
         addresses:
           - 10.0.2.5/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+    patches:
+      - |-
+        machine:
+          kubelet:
+            extraMounts:
+              - destination: /var/openebs/local
+                type: bind
+                source: /var/openebs/local
+                options:
+                  - bind
+                  - rshared
+                  - rw
+
+  - hostname: ram.ctec.run
+    ipAddress: 10.0.2.6
+    installDiskSelector:
+      model: FPT310M8SSD256G
+    controlPlane: false
+    disableSearchDomain: true
+    kernelModules:
+      - name: br_netfilter
+        parameters:
+          - nf_conntrack_max=131072
+    nameservers:
+      - 10.4.0.4
+      - 1.1.1.1
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 68:1d:ef:2d:79:3f
+        addresses:
+          - 10.0.2.6/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
@@ -123,6 +158,117 @@ controlPlane:
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
+
+    # Configure nfs mount options
+    - |-
+      machine:
+        files:
+          - op: overwrite
+            path: /etc/nfsmount.conf
+            permissions: 0o644
+            content: |
+              [ NFSMount_Global_Options ]
+              nfsvers=4.2
+              hard=True
+              noatime=True
+              nodiratime=True
+              rsize=131072
+              wsize=131072
+              nconnect=8
+
+    # Kubelet configuration
+    - |-
+      machine:
+        kubelet:
+          extraArgs:
+            feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
+            rotate-server-certificates: "true"
+          extraConfig:
+            maxPods: 150
+          extraMounts:
+            - destination: /var/openebs/local
+              type: bind
+              source: /var/openebs/local
+              options:
+                - bind
+                - rshared
+                - rw
+          nodeIP:
+            validSubnets:
+              - 10.0.2.0/24
+
+    # Custom sysctls
+    - |-
+      machine:
+        sysctls:
+          net.core.rmem_max: 2500000
+          fs.inotify.max_queued_events: 65536
+          fs.inotify.max_user_watches: 524288
+          fs.inotify.max_user_instances: 8192
+          net.core.bpf_jit_harden: 1
+          # vm.nr_hugepages: 1024
+
+    # Misc Machine values
+    - |-
+      machine:
+        logging:
+          destinations:
+            - endpoint: udp://vector.kokoro.wtf:6051/
+              format: json_lines
+
+        install:
+          extraKernelArgs:
+          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+
+worker:
+  schematic:
+    customization:
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/intel-ucode
+          - siderolabs/i915-ucode
+
+  patches:
+    # Disable search domain everywhere
+    - |-
+      machine:
+        network:
+          disableSearchDomain: true
+
+    # Configure NTP
+    - |-
+      machine:
+        time:
+          disabled: false
+          servers:
+            - time.cloudflare.com
+
+    # Enable KubePrism
+    - |-
+      machine:
+        features:
+          kubePrism:
+            enabled: true
+            port: 7445
+
+    # Cluster configuration
+    - |-
+      cluster:
+        allowSchedulingOnMasters: true
+        proxy:
+          disabled: true
+
+    # Configure containerd
+    - |-
+      machine:
+        files:
+          - op: create
+            path: /etc/cri/conf.d/20-customization.part
+            content: |
+              [plugins]
+                [plugins."io.containerd.grpc.v1.cri"]
+                  enable_unprivileged_ports = true
+                  enable_unprivileged_icmp = true
 
     # Configure nfs mount options
     - |-
