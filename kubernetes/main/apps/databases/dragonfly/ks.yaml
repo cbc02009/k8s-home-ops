@@ -6,21 +6,17 @@ metadata:
   name: &app dragonfly-operator
   namespace: flux-system
 spec:
-  targetNamespace: database
+  targetNamespace: databases
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-secrets
-  path: ./kubernetes/main/apps/databases/dragonfly-operator/app
+  interval: 30m
+  path: ./kubernetes/main/apps/databases/dragonfly/operator
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
   wait: true
-  interval: 30m
-  retryInterval: 1m
-  timeout: 5m
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -33,14 +29,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: dragonfly-operator
-  path: ./kubernetes/main/apps/databases/dragonfly-operator/cluster
+  interval: 30m
+  path: ./kubernetes/main/apps/databases/dragonfly/cluster
   prune: true
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
   wait: true
-  interval: 30m
-  retryInterval: 1m
-  timeout: 5m
+  dependsOn:
+    - name: dragonfly-operator
