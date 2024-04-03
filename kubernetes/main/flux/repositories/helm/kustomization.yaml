@@ -10,6 +10,7 @@ resources:
   - ./bjw-s-charts.yaml
   - ./cilium.yaml
   - ./cloudnative-pg.yaml
+  - ./coder.yaml
   - ./crunchydata.yaml
   - ./democratic-csi.yaml
   - ./emqx-charts.yaml
