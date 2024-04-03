@@ -39,6 +39,7 @@ nodes:
           - nf_conntrack_max=131072
     nameservers:
       - 10.4.0.4
+      - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 68:1d:ef:2d:e3:47
