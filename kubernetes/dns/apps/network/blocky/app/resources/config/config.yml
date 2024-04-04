@@ -102,9 +102,9 @@ prometheus:
   enable: true
   path: /metrics
 
-redis:
-  address: dragonfly.databases.svc.cluster.local:6379
-  database: 0
+# redis:
+#   address: dragonfly.databases.svc.cluster.local:6379
+#   database: 0
 
 upstreams:
   groups:
