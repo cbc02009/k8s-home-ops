@@ -2,22 +2,42 @@
 version: "3"
 
 vars:
-  PROJECT_DIR:
-    sh: git rev-parse --show-toplevel
-  CLUSTER_DIR: "{{.PROJECT_DIR}}/kubernetes"
-  TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
-
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+  TERRAFORM_DIR: "{{.ROOT_DIR}}/infrastructure/terraform"
 
 includes:
-  fx: .taskfiles/Flux/Tasks.yml
-  bootstrap: .taskfiles/bootstrap.yml
-  pr: .taskfiles/PreCommit/Tasks.yml
-  so: .taskfiles/sops.yml
-  ro: .taskfiles/Rook/Tasks.yaml
-  ta: .taskfiles/Talos/Tasks.yml
-  es: .taskfiles/ExternalSecrets/Tasks.yml
-  vs: .taskfiles/VolSync/Tasks.yml
-  tf: .taskfiles/Terraform/Tasks.yml
+  fx:
+    dir: .taskfiles/Flux
+    taskfile: .taskfiles/Flux
+    vars: &vars
+      KUBECTL: kubectl --context {{.cluster}}
+      FLUXCTL: flux --context {{.cluster}}
+  bs:
+    dir: .taskfiles/Bootstrap
+    taskfile: .taskfiles/Bootstrap
+  ro:
+    dir: .taskfiles/Rook
+    taskfile: .taskfiles/Rook
+  ta:
+    dir: .taskfiles/Talos
+    taskfile: .taskfiles/Talos
+  es:
+    dir: .taskfiles/ExternalSecrets
+    taskfile: .taskfiles/ExternalSecrets
+  vs:
+    dir: .taskfiles/VolSync
+    taskfile: .taskfiles/VolSync
+    vars: *vars
+  tf:
+    dir: .taskfiles/Terraform
+    taskfile: .taskfiles/Terraform
+  pc:
+    dir: .taskfiles/PreCommit
+    taskfile: .taskfiles/PreCommit
+  pg:
+    dir: .taskfiles/Postgresql
+    taskfile: .taskfiles/Postgresql
+  cluster: .taskfiles/cluster.yml
 
 tasks:
   default:

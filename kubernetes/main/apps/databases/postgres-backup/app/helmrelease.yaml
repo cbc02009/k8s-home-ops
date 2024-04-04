@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app postgres-backup
+  namespace: databases
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      postgres-backup:
+        type: cronjob
+        cronjob:
+          schedule: '@daily'
+          ttlSecondsAfterFinished: 43200
+        containers:
+          app:
+            image:
+              repository: docker.io/prodrigestivill/postgres-backup-local
+              tag: 16@sha256:c577b0d62673d4dce0471c75d21e3e08e4e9789903f5a3fd6613c410442e9670
+              pullPolicy: IfNotPresent
+            env:
+              - name: POSTGRES_HOST
+                value: postgres.kokoro.wtf
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: SUPER_USER
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: SUPER_PASS
+              - name: POSTGRES_CLUSTER
+                value: 'true'
+              - name: POSTGRES_DB
+                value: animarr_main, authentik, grafana, home_assistant, immich, lidarr_main,
+                 postgres, prowlarr_main, radarr_main, sonarr_main, vaultwarden
+              - name: BACKUP_KEEP_DAYS
+                value: '7'
+              - name: BACKUP_KEEP_WEEKS
+                value: '4'
+              - name: BACKUP_KEEP_MONTHS
+                value: '6'
+              - name: BACKUP_KEEP_MINS
+                value: '7200'
+              - name: POSTGRES_EXTRA_OPTS
+                value: --clean
+            command: [/backup.sh]
+    service:
+      main:
+        controller: *app
+        enabled: false
+    persistence:
+      backup:
+        enabled: true
+        type: nfs
+        server: nas.ctec.run
+        path: /tank/backup/kubernetes/apps/postgres
+        globalMounts:
+          - path: /backups
+    restartPolicy: OnFailure
+    enableServiceLinks: false

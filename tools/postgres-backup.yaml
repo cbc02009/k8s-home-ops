@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/postgresql.cnpg.io/backup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  name: postgres-manual
+  namespace: databases
+spec:
+  cluster:
+    name: postgres16

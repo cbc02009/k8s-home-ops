@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app authentik
+  namespace: security
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: authentik
+      version: 2024.2.2
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: security
+  values:
+
+    global:
+      deploymentAnnotations:
+        secret.reloader.stakater.com/reload: authentik-secret, authentik-redis
+      envFrom:
+        - secretRef:
+            name: authentik-secret
+
+    server:
+      replicas: 1
+      initContainers:
+        - name: init-db
+          image: ghcr.io/onedr0p/postgres-init:16.2
+          envFrom:
+            - secretRef:
+                name: authentik-secret
+      resources:
+        requests:
+          cpu: 50m
+          memory: 500Mi
+        limits:
+          memory: 800Mi
+      # autoscaling:
+      #   enabled: true
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      ingress:
+        enabled: true
+        ingressClassName: external
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        hosts:
+          - &host auth.${EXTERNAL_DOMAIN}
+        paths:
+          - /
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+
+    authentik:
+      log_level: debug
+      email:
+        port: 25
+        use_tls: false
+      error_reporting:
+        enabled: false
+        send_pii: false
+      redis:
+        host: "authentik-redis.security.svc.cluster.local"
+        password: ""
+
+    worker:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 50m
+          memory: 500Mi
+        limits:
+          memory: 1200Mi
+
+    postgresql:
+      enabled: false
+
+    prometheus:
+      rules:
+        enabled: true
+
+    redis:
+      enabled: false
