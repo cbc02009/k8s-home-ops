@@ -8,7 +8,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  targetNamespace: dev
+  targetNamespace: action-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -38,7 +38,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  targetNamespace: dev
+  targetNamespace: action-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
