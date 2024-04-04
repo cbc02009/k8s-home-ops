@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/source.toolkit.fluxcd.io/helmrepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: nvidia
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://helm.ngc.nvidia.com/nvidia
+  timeout: 15m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/source.toolkit.fluxcd.io/helmrepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: nvgfd
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://nvidia.github.io/gpu-feature-discovery
+  timeout: 15m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/source.toolkit.fluxcd.io/helmrepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: nvdp
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://nvidia.github.io/k8s-device-plugin
+  timeout: 15m
+---

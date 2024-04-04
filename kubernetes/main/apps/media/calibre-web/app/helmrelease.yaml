@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app calibre-web
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 65539
+
+    controllers:
+      calibre-web:
+        type: statefulset
+        # replicas: 2
+        strategy: RollingUpdate
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bjw-s/calibre-web
+              tag: 0.6.21@sha256:9aef000820ef1b25705f7c573e285f03b79a50777d95f90748029ceb853f7cf0
+
+            env:
+              CACHE_DIR: /cache
+
+            resources:
+              requests:
+                cpu: 15m
+                memory: 249M
+              limits:
+                memory: 299M
+    service:
+      main:
+        controller: *app
+        ports:
+          http:
+            port: 8083
+
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        annotations:
+          authentik.home.arpa/enabled: "true"
+        hosts:
+          - host: &host calibre-web.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: calibre-web-config-v1
+      media:
+        enabled: true
+        type: nfs
+        server: &nas nas.ctec.run
+        path: /tank/media
+        globalMounts:
+          - path: /data/media
+      cache:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /cache

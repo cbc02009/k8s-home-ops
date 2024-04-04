@@ -1,32 +1,31 @@
 ---
-exclude: |
-  (?x)^(
-      provision/ansible/roles/.*
-  )$
-
 repos:
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.29.0
+    rev: v1.33.0
     hooks:
       - args:
           - --config-file
-          - .github/linters/.yamllint.yaml
+          - .github/yamllint-config.yaml
         id: yamllint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: trailing-whitespace
-      - id: check-merge-conflict
-      - id: detect-private-key
       - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
       - id: check-added-large-files
-        args: ["--maxkb=2000"]
+        args: [--maxkb=2048]
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.4.2
+    rev: v1.5.4
     hooks:
+      - id: forbid-crlf
       - id: remove-crlf
+      - id: forbid-tabs
       - id: remove-tabs
 
   # - repo: https://github.com/jumanjihouse/pre-commit-hooks
@@ -37,25 +36,37 @@ repos:
   #       args: [--severity=error]
   #       additional_dependencies: []
 
-  - repo: https://github.com/k8s-at-home/sops-pre-commit
-    rev: v2.1.1
-    hooks:
-      - id: forbid-secrets
-
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.5.0
+    rev: 0.6.3
     hooks:
       - id: fix-smartquotes
       - id: fix-ligatures
 
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.16.0
+    rev: v8.18.1
     hooks:
       - id: gitleaks
 
-  - repo: https://github.com/Truxnell/pre-commit
-    rev: v0.0.9
+  - repo: https://gitlab.com/bmares/check-json5
+    rev: v1.0.0
     hooks:
-      - id: kustomize_build
-        # files: ^cluster/
-        args: [--dry-run=server]
+      - id: check-json5
+        files: ^(.+\.json5)$
+        types:
+          - file
+
+  # - repo: local
+  #   hooks:
+  #   - id: test
+  #     name: flux-local test
+  #     entry: scripts/run-in-env.sh scripts/flux-local-test.sh
+  #     language: script
+  #     files: ^(kubernetes\/.+\.yaml)$
+  #     types: [text]
+
+  # - repo: https://github.com/Truxnell/pre-commit
+  #   rev: v0.0.9
+  #   hooks:
+  #     - id: kustomize_build
+  #       files: ^kubernetes/cluster/
+  #       args: [--dry-run=server]

@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app home-assistant
+  namespace: home-automation
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: system
+  values:
+    controllers:
+      home-assistant:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          # 02-wait-for-pg:
+          #   image:
+          #     repository: quay.io/prometheus/busybox
+          #     tag: 'latest'
+          #   imagePullPolicy: IfNotPresent
+          #   command:
+          #     [
+          #       "sh",
+          #       "-c",
+          #       'until nc -vz postgres.${EXTERNAL_DOMAIN} 5432; do echo "Waiting for postgres..."; sleep 3; done;',
+          #     ]
+          01-init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '16.2'
+            envFrom:
+              - secretRef:
+                  name: *app
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2024.4.0@sha256:b0f16ea4c87a5e2936b6a2ac51fd4c7921f8ffe8a8b96241cdcae5d40a9756b5
+            env:
+              TZ: "${TZ}"
+              POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
+              POSTGRES_DB: home_assistant
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+
+
+    service:
+      main:
+        controller: *app
+        ports:
+          http:
+            port: 8123
+
+    ingress:
+      main:
+        enabled: true
+        className: "internal"
+        annotations:
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        hosts:
+          - host: &host "hass.${EXTERNAL_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: *app

@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app komga
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: system
+  values:
+
+    controllers:
+      komga:
+        type: statefulset
+        containers:
+          app:
+            image:
+              repository: ghcr.io/cbc02009/komga
+              tag: 1.10.4@sha256:8f92d2c9e64292c5e7b19cf8184fc08f33dcd0368d08e0885ceaf41d179fbace
+
+            env:
+              KOMGA_CONFIGDIR: /config
+              SERVER_PORT: &port 8443
+
+    service:
+      main:
+        controller: *app
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: *app
+
+      media:
+        enabled: true
+        type: nfs
+        server: nas.ctec.run
+        path: /tank/media/manga
+        globalMounts:
+          - path: /media

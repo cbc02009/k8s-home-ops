@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app rtlamr2mqtt
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: volsync
+      namespace: system
+  values:
+    controllers:
+      rtlamr2mqtt:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: docker.io/allangood/rtlamr2mqtt
+              tag: 2.3.4
+            securityContext:
+              privileged: true
+            # env:
+            #   LISTEN_ONLY: yes
+            #   RTL_MSGTYPE: "all"
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 128Mi
+        pod:
+          nodeSelector:
+            nesdr.feature.node.kubernetes.io/rtlamr: "true"
+    service:
+      main:
+        controller: rtlamr2mqtt
+        enabled: false
+    persistence:
+      config-file:
+        type: secret
+        name: *app
+        globalMounts:
+          - path: /etc/rtlamr2mqtt.yaml
+            subPath: rtlamr2mqtt.yaml

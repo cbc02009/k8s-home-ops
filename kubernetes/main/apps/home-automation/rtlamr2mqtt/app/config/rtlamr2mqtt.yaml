@@ -1,0 +1,35 @@
+general:
+  sleep_for: 0
+  verbosity: debug
+  tickle_rtl_tcp: false
+  device_id: 0bda:2838
+
+mqtt:
+  host: emqx.home-automation.svc.cluster.local
+  port: 1883
+  tls_enabled: false
+  user: "{{ .MQTT_USERNAME }}"
+  password: "{{ .MQTT_PASSWORD }}"
+  ha_autodiscovery: true
+  ha_autodiscovery_topic: homeassistant
+  base_topic: rtlamr
+
+custom_parameters:
+  rtltcp: -s 2048000
+  rtlamr: -unique=true -symbollength=32
+
+meters:
+  - id: "{{ .MAIN_METER_ID }}"
+    protocol: scm+
+    name: main_meter
+    unit_of_measurement: kWh
+    icon: mdi:gauge
+    device_class: energy
+    state_class: "total"
+  - id: "{{ .SOLAR_METER_ID }}"
+    protocol: scm+
+    name: solar_meter
+    unit_of_measurement: kWh
+    icon: mdi:gauge
+    device_class: energy
+    state_class: "total"

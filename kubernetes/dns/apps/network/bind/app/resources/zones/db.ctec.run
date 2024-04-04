@@ -1,0 +1,53 @@
+; Make sure to update the epoch time in the SOA records so coreDNS picks up the changes automatically
+; https://www.epochconverter.com/
+
+; SOA Records
+$TTL 3600
+$ORIGIN ctec.run.
+@ 3600 IN SOA gateway.ctec.run. gateway.ctec.run. (
+  1682790096         ; serial number (epoch timestamp)
+  7200               ; refresh period
+  3600               ; retry period
+  1209600            ; expire time
+  3600               ; minimum ttl
+)
+
+; NS Records
+@                          IN  NS gateway.ctec.run.
+
+
+; LAN
+gateway                    IN  A  10.0.0.1
+
+; Trusted
+shinobu                    IN  A 10.0.1.5
+yuzu                       IN  A 10.0.1.50
+Poro                       IN  A 10.0.1.119
+himari                     IN  A 10.0.1.120
+petra                      IN  A 10.0.1.121
+
+; Servers
+nut-server                 IN  A  10.0.2.3
+shana                      IN  A  10.0.2.4
+rem                        IN  A  10.0.2.5
+ram                        IN  A  10.0.2.6
+uiharu                     IN  A  10.0.2.10
+sakura                     IN  A  10.0.2.12
+miri                       IN  A  10.0.2.11
+
+; IOT
+prusa                      IN  A  10.0.3.110
+printer                    IN  A  10.0.3.51
+
+; Video
+
+; LXD
+talos                      IN  A  10.0.2.93
+
+; Containers
+main                       IN  A  10.5.0.2
+
+; CNAME records
+cluster                    IN  CNAME  main.ctec.run.
+nas                        IN  CNAME  shana.ctec.run.
+s3                         IN  CNAME  minio.ctec.run.

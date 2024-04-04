@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  labels:
+    app.kubernetes.io/instance: vector-aggregator
+    app.kubernetes.io/name: vector-aggregator
+  name: &app vector-aggregator
+  namespace: observability
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.1.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  values:
+    defaultPodOptions:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: vector-aggregator
+    controllers:
+      vector-aggregator:
+        replicas: 1
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: 'true'
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/vector
+              tag: 0.34.1-debian
+
+            args: [--config, /etc/vector/vector.yaml]
+    service:
+      main:
+        controller: *app
+        type: LoadBalancer
+        loadBalancerIP: ${LB_VECTOR}
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: vector.kokoro.wtf
+        ports:
+          http:
+            port: 8686
+          kubernetes-logs:
+            enabled: true
+            port: 6000
+          vyos-syslog:
+            enabled: true
+            port: 6001
+          journald-logs:
+            enabled: true
+            port: 6002
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: vector-aggregator-configmap
+        globalMounts:
+          - path: /etc/vector/vector.yaml
+            subPath: vector.yaml
+      data:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /vector-data-dir
