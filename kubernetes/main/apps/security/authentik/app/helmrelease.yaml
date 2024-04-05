@@ -70,7 +70,7 @@ spec:
         enabled: false
         send_pii: false
       redis:
-        host: "authentik-redis.security.svc.cluster.local"
+        host: "dragonfly.databases.svc.cluster.local"
         password: ""
 
     worker:
