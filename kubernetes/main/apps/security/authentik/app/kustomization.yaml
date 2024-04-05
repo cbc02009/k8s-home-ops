@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: security
 resources:
   - ./externalsecret.yaml
-  - ./helmrepository.yaml
   - ./helmrelease.yaml
   - ../../../../templates/gatus/guarded
 commonLabels:
