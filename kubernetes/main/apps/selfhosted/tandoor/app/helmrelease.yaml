@@ -35,7 +35,7 @@ spec:
           01-init-db:
             envFrom:
               - secretRef:
-                  name: tandoor-db
+                  name: *app
 
             image:
               repository: ghcr.io/onedr0p/postgres-init
@@ -59,7 +59,7 @@ spec:
               SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
             envFrom:
               - secretRef:
-                  name: tandoor-db
+                  name: *app
             probes:
               liveness: &probes
                 enabled: true
