@@ -6,6 +6,7 @@ namespace: flux-system
 resources:
   - ./actions-runner-controller-charts.yaml
   - ./angelnu-charts.yaml
+  - ./authentik.yaml
   - ./backube-charts.yaml
   - ./bjw-s-charts.yaml
   - ./cilium.yaml
