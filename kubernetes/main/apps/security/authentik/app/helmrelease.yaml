@@ -62,7 +62,7 @@ spec:
               - *host
 
     authentik:
-      log_level: debug
+      log_level: info
       email:
         port: 25
         use_tls: false
