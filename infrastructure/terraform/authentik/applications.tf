@@ -142,7 +142,7 @@ module "oauth2-tandoor" {
   client_secret              = data.doppler_secrets.this.map.TANDOOR_OIDC_SECRET
   include_claims_in_id_token = false
   sub_mode                   = "user_username"
-  redirect_uris              = ["https://recipes.${data.doppler_secrets.this.map.DOMAIN}/accounts/authentik/login/callback/"]
+  redirect_uris              = ["https://recipes.${data.doppler_secrets.this.map.DOMAIN}/accounts/oidc/authentik/login/callback/"]
 }
 
 module "oauth2-paperless" {
