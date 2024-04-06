@@ -13,6 +13,7 @@ sonarr:
           enabled: true
           except:
             - "Erai-Raws"
+            - "Leaks"
         upgrade:
           allowed: true
           until_quality: WEB 1080p
@@ -39,6 +40,7 @@ sonarr:
           enabled: true
           except:
             - "Erai-Raws"
+            - "Leaks"
         upgrade:
           allowed: true
           until_quality: Bluray-1080p Remux
