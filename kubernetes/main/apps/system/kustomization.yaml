@@ -7,7 +7,7 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./fstrim/ks.yaml
-  - ./intel-device-plugins/ks.yaml
+  - ./intel-device-pluginss/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
