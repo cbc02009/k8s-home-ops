@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: intel-device-pluginss-gpu
+  name: intel-device-plugins-gpu
 spec:
   interval: 30m
   chart:
     spec:
-      chart: intel-device-pluginss-gpu
+      chart: intel-device-plugins-gpu
       version: 0.29.0
       interval: 30m
       sourceRef:
