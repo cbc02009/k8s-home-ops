@@ -65,7 +65,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
     service:
       main:
-        controller: *app
+        controller: hass-code
         ports:
           http:
             port: 80
