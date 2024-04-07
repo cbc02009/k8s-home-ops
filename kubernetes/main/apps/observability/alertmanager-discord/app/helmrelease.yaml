@@ -50,6 +50,3 @@ spec:
         ports:
           http:
             port: 9094
-    ingress:
-      main:
-        enabled: false
