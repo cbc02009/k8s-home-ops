@@ -111,7 +111,7 @@ spec:
       app:
         className: external
         hosts:
-          - host: &host "{{ .Release.Name }}.kokoro.wtf"
+          - host: &host "status.kokoro.wtf"
             paths:
               - path: /
                 service:
