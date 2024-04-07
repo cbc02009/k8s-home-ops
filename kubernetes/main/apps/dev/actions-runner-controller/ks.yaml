@@ -8,11 +8,11 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  targetNamespace: action-runner-system
+  targetNamespace: dev
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/action-runner-system/actions-runner-controller/app/'
+  path: './kubernetes/main/apps/dev/actions-runner-controller/app/'
   dependsOn:
     - name: external-secrets
     - name: rook-ceph-cluster
@@ -38,11 +38,11 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  targetNamespace: action-runner-system
+  targetNamespace: dev
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/action-runner-system/actions-runner-controller/runners/'
+  path: './kubernetes/main/apps/dev/actions-runner-controller/runners/'
   prune: true
   sourceRef:
     kind: GitRepository
