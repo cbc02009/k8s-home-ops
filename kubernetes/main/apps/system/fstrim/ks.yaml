@@ -13,7 +13,7 @@ spec:
   path: "./kubernetes/main/apps/system/fstrim/app"
   sourceRef:
     kind: GitRepository
-    name: home-ops-kubernetes
+    name: k8s-home-ops
   interval: 10m
   prune: true
   wait: false
