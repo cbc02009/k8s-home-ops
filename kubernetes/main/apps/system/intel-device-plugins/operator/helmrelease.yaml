@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: intel-device-plugins-operator
+  name: intel-device-pluginss-operator
 spec:
   interval: 30m
   chart:
     spec:
-      chart: intel-device-plugins-operator
+      chart: intel-device-pluginss-operator
       version: 0.29.0
       interval: 30m
       sourceRef:

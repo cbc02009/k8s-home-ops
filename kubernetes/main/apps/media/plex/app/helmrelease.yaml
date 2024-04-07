@@ -25,7 +25,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: intel-device-plugin-gpu
+    - name: intel-device-plugins-gpu
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
