@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname intel-device-pluginss-operator
+  name: &appname intel-device-plugins-operator
   namespace: flux-system
 spec:
   targetNamespace: system
@@ -25,7 +25,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname intel-device-pluginss-gpu
+  name: &appname intel-device-plugins-gpu
   namespace: flux-system
 spec:
   targetNamespace: system
@@ -40,4 +40,4 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: intel-device-pluginss-operator
+    - name: intel-device-plugins-operator
