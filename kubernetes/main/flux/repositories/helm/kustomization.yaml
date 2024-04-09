@@ -21,7 +21,7 @@ resources:
   - ./gabe565-charts.yaml
   - ./grafana-charts.yaml
   - ./intel.yaml
-  - ./kyverno-charts.yaml
+  - ./kyverno.yaml
   - ./jetstack.yaml
   - ./k8tz.yaml
   - ./descheduler.yaml
