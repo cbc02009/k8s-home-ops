@@ -6,12 +6,12 @@ metadata:
   name: &app unifi
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: selfhosted
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
-  path: "./kubernetes/dns/apps/network/unifi/app"
+  path: "./kubernetes/dns/apps/selfhosted/unifi/app"
   prune: true
   sourceRef:
     kind: GitRepository
