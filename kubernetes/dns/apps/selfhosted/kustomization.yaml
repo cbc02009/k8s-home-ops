@@ -7,3 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./smtp-relay/ks.yaml
+  - ./unifi/ks.yaml
