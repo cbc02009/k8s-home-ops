@@ -37,7 +37,6 @@ spec:
               name: &secret grafana-secret
     replicas: 2
     env:
-      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: grafana
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
       GF_FEATURE_TOGGLES_ENABLE: publicDashboards
@@ -59,7 +58,6 @@ spec:
       auth.generic_oauth:
         name: authentik
         enabled: true
-        client_id: kppn2PY2FG6h6D58EMU6S9DmDoBuFcra0k1Bu1MGtSgVcfqiEsslwfsobJHGxdwA
         scopes: "openid profile email"
         auth_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/authorize/"
         token_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/token/"
