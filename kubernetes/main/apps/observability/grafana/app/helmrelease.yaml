@@ -44,7 +44,7 @@ spec:
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
       GF_SECURITY_COOKIE_SAMESITE: grafana
-      GF_SERVER_ROOT_URL: https://grafana.devbu.io
+      GF_SERVER_ROOT_URL: https://grafana.${EXTERNAL_DOMAIN}
     envFromSecrets:
       - name: *secret
     grafana.ini:
@@ -57,23 +57,15 @@ spec:
         oauth_allow_insecure_email_lookup: true # https://github.com/grafana/grafana/issues/70203
         signout_redirect_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/grafana/end-session/
       auth.generic_oauth:
+        name: authentik
         enabled: true
-        name: Authentik
-        icon: signin
-        scopes: openid profile email groups
-        empty_scopes: false
-        login_attribute_path: preferred_username
-        groups_attribute_path: groups
-        name_attribute_path: name
-        use_pkce: true
-        client_id: 5EfoenaCiQ5OWdz8nndoRIchQe13apSuefElHRMg
-        auth_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/authorize/
-        token_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/token/
-        api_url: https://authentik.${EXTERNAL_DOMAIN}/application/o/userinfo/
-        # map user groups to Grafana roles
-      auth.generic_oauth.group_mapping:
-        org_id: 1
-        role_attribute_path: contains(groups[*], 'admins') && 'Admin' || 'Viewer'
+        client_id: kppn2PY2FG6h6D58EMU6S9DmDoBuFcra0k1Bu1MGtSgVcfqiEsslwfsobJHGxdwA
+        scopes: "openid profile email"
+        auth_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/authorize/"
+        token_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/token/"
+        api_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/userinfo/"
+        # Optionally map user groups to Grafana roles
+        role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
       auth.basic:
         enabled: false
       auth.anonymous:
