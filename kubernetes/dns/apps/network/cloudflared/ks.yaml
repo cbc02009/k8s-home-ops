@@ -13,7 +13,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
-  path: "./kubernetes/main/apps/network/cloudflared/app"
+  path: "./kubernetes/dns/apps/network/cloudflared/app"
   prune: true
   sourceRef:
     kind: GitRepository
