@@ -5,7 +5,5 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
-  - ./prometheusrule.yaml
-  - ./configmap.yaml
 metadata:
   namespace: observability
