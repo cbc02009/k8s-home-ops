@@ -29,7 +29,7 @@ spec:
     - name: intel-device-plugins-gpu
       namespace: system
     - name: emqx
-      namespace: home-automation
+      namespace: databases
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: volsync
@@ -59,19 +59,12 @@ spec:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.13.2
 
-            envFrom:
-              - secretRef:
-                  name: *app
-
             env:
               TZ: ${TZ}
               # LIBVA_DRIVER_NAME: i965
-              FRIGATE_MQTT_USERNAME: frigate
-              FRIGATE_MQTT_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: emqx
-                    key: USER_1_PASSWORD
+            envFrom:
+              - secretRef:
+                  name: *app
 
             resources:
               requests:

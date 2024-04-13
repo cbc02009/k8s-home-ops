@@ -14,7 +14,7 @@ resources:
   - ./coder.yaml
   - ./crunchydata.yaml
   - ./democratic-csi.yaml
-  - ./emqx-charts.yaml
+  - ./emqx.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
   - ./fairwinds-charts.yaml

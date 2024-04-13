@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app emqx
+  namespace: flux-system
+spec:
+  targetNamespace: databases
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/main/apps/databases/emqx/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app emqx-cluster
+  namespace: flux-system
+spec:
+  targetNamespace: databases
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: emqx
+  path: ./kubernetes/main/apps/databases/emqx/cluster
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app emqx-exporter
+#   namespace: flux-system
+# spec:
+#   targetNamespace: databases
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   dependsOn:
+#     - name: emqx-cluster
+#   path: ./kubernetes/main/apps/databases/emqx/exporter
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: k8s-home-ops
+#   wait: false
+#   interval: 30m
+#   retryInterval: 1m
+#   timeout: 5m
