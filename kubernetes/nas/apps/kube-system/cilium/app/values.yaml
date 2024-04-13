@@ -16,32 +16,10 @@ devices: br0
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
+
 hubble:
   enabled: false
-  metrics:
-    enabled:
-      - dns:query
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-    serviceMonitor:
-      enabled: false
-    dashboards:
-      enabled: true
-      annotations:
-        grafana_folder: Cilium
-  relay:
-    enabled: false
-    rollOutPods: true
-    prometheus:
-      serviceMonitor:
-        enabled: false
-  ui:
-    enabled: false
-    rollOutPods: true
+
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.132.0.0/16

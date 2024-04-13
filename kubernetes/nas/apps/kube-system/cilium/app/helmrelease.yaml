@@ -29,15 +29,22 @@ spec:
   values:
 
     hubble:
+      enabled: true
       metrics:
+        enabled:
+          - dns:query
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - http
         serviceMonitor:
           enabled: false
-      dashboards:
-        enabled: true
-        label: grafana_dashboard
-        namespace: monitoring
-        labelValue: "1"
-        annotations: {}
+        dashboards:
+          enabled: true
+          annotations:
+            grafana_folder: Cilium
       relay:
         enabled: true
       ui:
