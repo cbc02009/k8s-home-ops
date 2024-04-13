@@ -17,7 +17,7 @@ enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 hubble:
-  enabled: true
+  enabled: false
   metrics:
     enabled:
       - dns:query
@@ -28,17 +28,17 @@ hubble:
       - icmp
       - http
     serviceMonitor:
-      enabled: true
+      enabled: false
     dashboards:
       enabled: true
       annotations:
         grafana_folder: Cilium
   relay:
-    enabled: true
+    enabled: false
     rollOutPods: true
     prometheus:
       serviceMonitor:
-        enabled: true
+        enabled: false
   ui:
     enabled: false
     rollOutPods: true
@@ -67,7 +67,7 @@ operator:
     annotations:
       grafana_folder: Cilium
 prometheus:
-  enabled: true
+  enabled: false
   serviceMonitor:
     enabled: true
     trustCRDsExist: true
