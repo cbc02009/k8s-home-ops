@@ -48,7 +48,7 @@ spec:
 
             env:
               DOMAIN: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
-              REDIS_HOST: redis-headless.databases.svc.cluster.local
+              REDIS_HOST: dragonfly.databases.svc.cluster.local
               USE_HELMET: true
               USE_HELMET_HSTS: true
               TRUST_PROXY: true

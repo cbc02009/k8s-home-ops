@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: immich-server
       namespace: selfhosted
-    - name: redis
+    - name: dragonfly-operator
       namespace: databases
   values:
     defaultPodOptions:
