@@ -6,12 +6,12 @@ metadata:
   name: &appname smartctl-exporter
   namespace: flux-system
 spec:
-  targetNamespace: monitoring
+  targetNamespace: observability
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
-  path: "./kubernetes/nas/apps/monitoring/smartctl-exporter/app"
+  path: "./kubernetes/nas/apps/observability/smartctl-exporter/app"
   prune: true
   sourceRef:
     kind: GitRepository

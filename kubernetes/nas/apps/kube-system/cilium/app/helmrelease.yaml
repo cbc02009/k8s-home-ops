@@ -64,16 +64,8 @@ spec:
           serviceMonitor:
             enabled: true
       ui:
-        enabled: true
+        enabled: false
         rollOutPods: true
-        ingress:
-          enabled: true
-          className: internal
-          hosts:
-            - &host hubble.turbo.ac
-          tls:
-            - hosts:
-                - *host
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.132.0.0/16
@@ -81,7 +73,7 @@ spec:
     k8sServicePort: 6444
     kubeProxyReplacement: true
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
-    l2announcements:
+    bgpControlPlane:
       enabled: true
     loadBalancer:
       algorithm: maglev
