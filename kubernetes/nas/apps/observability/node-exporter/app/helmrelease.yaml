@@ -42,6 +42,8 @@ spec:
       main:
         controller: node-exporter
         type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_NODEXP}
         ports:
           http:
             port: 9100
