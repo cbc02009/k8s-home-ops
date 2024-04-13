@@ -31,10 +31,6 @@ spec:
     - name: thanos
       namespace: observability
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: kube-state-metrics-configmap
-      valuesKey: kube-state-metrics.yaml
   values:
 
     crds:
