@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: &name nas-minio
+spec:
+  staticConfigs:
+    - targets: ["s3.kokoro.wtf"]
+  metricsPath: /minio/v2/metrics/cluster
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+# apiVersion: monitoring.coreos.com/v1alpha1
+# kind: ScrapeConfig
+# metadata:
+#   name: &name nas-smartctl
+# spec:
+#   staticConfigs:
+#     - targets: ["nas.ctec.run"]
+#   metricsPath: /metrics
+#   relabelings:
+#     - action: replace
+#       targetLabel: job
+#       replacement: *name
