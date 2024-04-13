@@ -12,7 +12,6 @@ resources:
   - ./kube-cleanup-operator/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
-  - ./node-exporter/ks.yaml
   - ./prometheus-rules/ks.yaml
   - ./thanos/ks.yaml
   - ./unpoller/ks.yaml
