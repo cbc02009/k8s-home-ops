@@ -7,6 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./cilium/ks.yaml
-  - ./descheduler/ks.yaml
-  - ./kube-cleanup-operator/ks.yaml
   - ./metrics-server/ks.yaml
