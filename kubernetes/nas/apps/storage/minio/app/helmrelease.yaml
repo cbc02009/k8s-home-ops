@@ -73,6 +73,9 @@ spec:
     service:
       app:
         controller: *app
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_MINIO}
         ports:
           http:
             port: 9001
@@ -94,8 +97,6 @@ spec:
       main:
         enabled: true
         className: "internal"
-        annotations:
-          io.cilium/lb-ipam-ips: ${LB_MINIO}
         hosts:
           - host: &host "minio.${EXTERNAL_DOMAIN}"
             paths:

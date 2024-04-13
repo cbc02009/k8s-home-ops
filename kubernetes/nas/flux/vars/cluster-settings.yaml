@@ -9,3 +9,5 @@ data:
   TZ: America/New_York
   EXTERNAL_DOMAIN: kokoro.wtf
   LB_MINIO: 10.7.0.3
+  LB_NODEXP: 10.7.0.4
+  LB_SMARTCTL: 10.7.0.5

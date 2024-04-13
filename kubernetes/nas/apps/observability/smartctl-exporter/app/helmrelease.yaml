@@ -43,6 +43,8 @@ spec:
       main:
         controller: smartctl-exporter
         type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_SMARTCTL}
         ports:
           http:
             port: 9633
