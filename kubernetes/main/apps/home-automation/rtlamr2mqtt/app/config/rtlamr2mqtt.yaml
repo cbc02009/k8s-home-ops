@@ -1,3 +1,4 @@
+---
 general:
   sleep_for: 0
   verbosity: debug
@@ -5,7 +6,7 @@ general:
   device_id: 0bda:2838
 
 mqtt:
-  host: emqx.home-automation.svc.cluster.local
+  host: emqx.databases.svc.cluster.local
   port: 1883
   tls_enabled: false
   user: "{{ .MQTT_USERNAME }}"
