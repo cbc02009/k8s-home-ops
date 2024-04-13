@@ -57,7 +57,7 @@ spec:
               PAPERLESS_OCR_LANGUAGES: eng
               PAPERLESS_OCR_LANGUAGE: eng
               # Configure redis integration
-              PAPERLESS_REDIS: redis:/dragonfly.databases.svc.cluster.local:6379
+              PAPERLESS_REDIS: redis://dragonfly.databases.svc.cluster.local:6379
               # Configure Tika and Gotenburg
               PAPERLESS_TIKA_ENABLED: 1
               PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
