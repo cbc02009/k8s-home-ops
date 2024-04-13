@@ -11,4 +11,3 @@ resources:
   - ./emqx/ks.yaml
   - ./postgres-backup/ks.yaml
   - ./pgadmin/ks.yaml
-  - ./redis/ks.yaml
