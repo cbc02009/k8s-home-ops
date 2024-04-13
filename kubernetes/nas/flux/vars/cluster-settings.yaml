@@ -8,3 +8,4 @@ data:
   CLUSTER_NAME: nas
   TZ: America/New_York
   EXTERNAL_DOMAIN: kokoro.wtf
+  LB_MINIO: 10.7.0.3
