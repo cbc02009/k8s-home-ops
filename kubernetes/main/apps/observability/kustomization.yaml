@@ -6,7 +6,6 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./alertmanager-discord/ks.yaml
   - ./alertmanager-silencer/ks.yaml
   - ./gatus/ks.yaml
   - ./grafana/ks.yaml

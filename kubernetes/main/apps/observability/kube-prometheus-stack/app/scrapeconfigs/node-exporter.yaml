@@ -3,9 +3,14 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: node-exporter
+  name: &name node-exporter
 spec:
   staticConfigs:
     - targets:
-        - "gateway.ctec.run:9100"
+        - gateway.ctec.run:9100
+        - pikvm.turbo.ac:9100
   metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
