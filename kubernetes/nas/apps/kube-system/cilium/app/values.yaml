@@ -17,7 +17,7 @@ enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 hubble:
-  enabled: false
+  enabled: true
   metrics:
     enabled:
       - dns:query
