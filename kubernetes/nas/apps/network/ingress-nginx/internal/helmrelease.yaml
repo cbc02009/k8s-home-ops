@@ -32,6 +32,7 @@ spec:
         type: LoadBalancer
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "nas-int.${EXTERNAL_DOMAIN}"
+          io.cilium/lb-ipam-ips: ${LB_NGINX}
         externalTrafficPolicy: Cluster
 
       publishService:
