@@ -6,7 +6,7 @@ metadata:
   name: &appname cilium
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
