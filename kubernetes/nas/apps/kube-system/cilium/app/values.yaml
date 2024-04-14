@@ -8,7 +8,7 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 cluster:
   id: 2
-name: nas
+  name: nas
 cni:
   binPath: /var/lib/rancher/k3s/data/current/bin
   confPath: /var/lib/rancher/k3s/agent/etc/cni/net.d
