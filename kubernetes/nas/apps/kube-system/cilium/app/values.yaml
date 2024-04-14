@@ -42,7 +42,7 @@ operator:
   prometheus:
     enabled: true
     serviceMonitor:
-      enabled: true
+      enabled: false
   dashboards:
     enabled: true
     annotations:
@@ -50,7 +50,7 @@ operator:
 prometheus:
   enabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
     trustCRDsExist: true
 dashboards:
   enabled: true
