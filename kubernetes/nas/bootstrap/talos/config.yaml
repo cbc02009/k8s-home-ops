@@ -28,5 +28,6 @@ secrets-encryption: true
 service-cidr: 10.43.0.0/16
 tls-san:
 - "nas.ctec.run"
+- "shana.ctec.run"
 - 10.0.2.4
 write-kubeconfig-mode: '0644'
