@@ -7,7 +7,7 @@ metadata:
 data:
   CLUSTER_NAME: nas
   TZ: America/New_York
-  EXTERNAL_DOMAIN: kokoro.wtf
+  EXTERNAL_DOMAIN: cnas.dev
   LB_NGINX: 10.7.0.1
   LB_MINIO: 10.7.0.2
   LB_NODEXP: 10.7.0.3
