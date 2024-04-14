@@ -6,7 +6,7 @@ metadata:
   name: &name nas-minio
 spec:
   staticConfigs:
-    - targets: ["s3.kokoro.wtf"]
+    - targets: ["s3.cnas.dev"]
   metricsPath: /minio/v2/metrics/cluster
   relabelings:
     - action: replace
