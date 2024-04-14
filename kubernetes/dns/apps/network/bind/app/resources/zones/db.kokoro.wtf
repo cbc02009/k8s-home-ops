@@ -16,7 +16,6 @@ $ORIGIN kokoro.wtf.
 @                          IN  NS gateway.ctec.run.
 
 ; Containers
-pihole                     IN  A 10.5.0.7
 smtp-relay                 IN  A 10.4.0.11
 
 
