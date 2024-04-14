@@ -20,7 +20,7 @@ spec:
     fullnameOverride: *app
 
     domainFilters:
-      - kokoro.wtf
+      - cnas.dev
 
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
