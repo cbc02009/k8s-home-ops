@@ -55,7 +55,7 @@ spec:
           className: "internal"
           annotations:
           hosts:
-            - &host "hubble.${EXTERNAL_DOMAIN}"
+            - &host "hubble-nas.${EXTERNAL_DOMAIN}"
           tls:
             - secretName: *host
               hosts:
