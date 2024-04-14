@@ -46,3 +46,4 @@ main                       IN  A  10.5.0.2
 
 ; CNAME records
 cluster                    IN  CNAME  main.ctec.run.
+nas                        IN  CNAME  shana.ctec.run.
