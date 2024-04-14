@@ -9,9 +9,12 @@ cgroup:
 cluster:
   id: 2
   name: nas
-containerRuntime:
-  integration: containerd
-  socketPath: /var/run/k3s/containerd/containerd.sock
+  cni:
+    binPath: /var/lib/rancher/k3s/data/current/bin
+    confPath: /var/lib/rancher/k3s/agent/etc/cni/net.d
+  containerRuntime:
+    integration: containerd
+    socketPath: /var/run/k3s/containerd/containerd.sock
 devices: br0
 enableRuntimeDeviceDetection: true
 endpointRoutes:
