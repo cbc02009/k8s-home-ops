@@ -79,6 +79,9 @@ spec:
           - path: /etc/bind/zones/db.ctec.run
             subPath: db.ctec.run
             readOnly: true
+          - path: /etc/bind/zones/db.cnas.dev
+            subPath: db.cnas.dev
+            readOnly: true
           - path: /etc/bind/zones/db.kokoro.wtf
             subPath: db.kokoro.wtf
             readOnly: true
