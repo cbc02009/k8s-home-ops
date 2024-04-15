@@ -37,6 +37,7 @@ spec:
               name: &secret grafana-secret
     replicas: 2
     env:
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: true
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
       GF_FEATURE_TOGGLES_ENABLE: publicDashboards
@@ -63,11 +64,17 @@ spec:
         token_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/token/"
         api_url: "https://auth.${EXTERNAL_DOMAIN}/application/o/userinfo/"
         # Optionally map user groups to Grafana roles
-        role_attribute_path: contains(groups, 'Grafana Admins') && 'Admin' || contains(groups, 'Grafana Editors') && 'Editor' || 'Viewer'
+        use_pkce: true
+        skip_org_role_sync: true
+      auth.generic_oauth.group_mapping:
+        role_attribute_path: |
+          contains(groups[*], 'infrastructure') && 'Admin' || 'Viewer'
       auth.basic:
         enabled: false
       auth.anonymous:
         enabled: false
+      log:
+        mode: console
       news:
         news_feed_enabled: false
     dashboardProviders:
@@ -410,9 +417,7 @@ spec:
       hosts:
         - &host "grafana.kokoro.wtf"
       tls:
-        - secretName: *host
-          hosts:
-            - *host
+        - hosts: [*host]
     persistence:
       enabled: false
     testFramework:
