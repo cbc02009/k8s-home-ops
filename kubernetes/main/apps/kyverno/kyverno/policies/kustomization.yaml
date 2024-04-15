@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./ingress-authentik-annotations.yaml
   - ./ingress-type-annotations.yaml
-  - ./ingress-cert-manager-annotations.yaml
+  # - ./ingress-cert-manager-annotations.yaml
