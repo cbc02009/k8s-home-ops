@@ -118,12 +118,14 @@ tasks:
   hr-indiv-restart:
     desc: Restart a particular hr
     cmds:
-      - echo {{.APP}}
-      - flux -n {{.NAMESPACE}} suspend helmrelease {{.APP}}
-      - flux -n {{.NAMESPACE}} resume helmrelease {{.APP}}
-    env:
-      APP: '{{.APP}}'
-      NAMESPACE: '{{.NAMESPACE}}'
+      - echo {{ .app }}
+      - flux --context {{ .cluster }} -n {{ .ns }} suspend helmrelease {{ .app }}
+      - flux --context {{ .cluster }} -n {{ .ns }} resume helmrelease {{ .app }}
+    requires:
+      vars: ["app"]
+    vars:
+      ns: '{{.ns | default "default"}}'
+      cluster: '{{.cluster | default "main"}}'
 
   reconcile:
     desc: Force update Flux to pull in changes from your Git repository
