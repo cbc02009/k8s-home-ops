@@ -4,41 +4,40 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: vector-agent
-  namespace: observability
 spec:
+  interval: 30m
+  timeout: 15m
   chart:
     spec:
       chart: app-template
       version: 3.1.0
-      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  interval: 30m
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
+    remediation:
       retries: 3
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: vector-aggregator
+      namespace: observability
   values:
     controllers:
       vector-agent:
         type: daemonset
         strategy: RollingUpdate
         annotations:
-          reloader.stakater.com/auto: 'true'
-
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/vector
-              tag: 0.34.1-debian
-
+              repository: docker.io/timberio/vector
+              tag: 0.37.1-alpine@sha256:ced16088cdcfcadd2f471c5760ea3b08bec82b9be00a8b90173b9ade7d001607
             env:
               PROCFS_ROOT: /host/proc
               SYSFS_ROOT: /host/sys
@@ -57,23 +56,12 @@ spec:
                   fieldRef:
                     apiVersion: v1
                     fieldPath: metadata.namespace
-
-            resources:
-              requests:
-                cpu: 23m
-                memory: 249M
-              limits:
-                memory: 918M
-
+            args: ["--config", "/etc/vector/vector.yaml"]
             securityContext:
               privileged: true
-
-            args: [--config, /etc/vector/vector.yaml]
-    service:
-      main:
-        controller: vector-agent
-        enabled: false
-
+    serviceAccount:
+      create: true
+      name: vector-agent
     persistence:
       config:
         enabled: true
@@ -82,48 +70,34 @@ spec:
         globalMounts:
           - path: /etc/vector/vector.yaml
             subPath: vector.yaml
+            readOnly: true
       data:
-        enabled: true
         type: emptyDir
         globalMounts:
           - path: /vector-data-dir
-      var-log:
-        enabled: true
-        type: hostPath
-        hostPath: /var/log
-        hostPathType: Directory
-        globalMounts:
-          - path: /var/log
-      var-lib:
-        enabled: true
-        type: hostPath
-        hostPath: /var/lib
-        hostPathType: Directory
-        globalMounts:
-          - path: /var/lib
       procfs:
-        enabled: true
         type: hostPath
         hostPath: /proc
         hostPathType: Directory
         globalMounts:
           - path: /host/proc
+            readOnly: true
       sysfs:
-        enabled: true
         type: hostPath
         hostPath: /sys
         hostPathType: Directory
-
         globalMounts:
           - path: /host/sys
-
-    podMonitor:
-      enabled: true
-
-    serviceAccount:
-      create: true
-      name: vector-agent
-
-    tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
+            readOnly: true
+      var-lib:
+        type: hostPath
+        hostPath: /var/lib
+        hostPathType: Directory
+        globalMounts:
+          - readOnly: true
+      var-log:
+        type: hostPath
+        hostPath: /var/log
+        hostPathType: Directory
+        globalMounts:
+          - readOnly: true
