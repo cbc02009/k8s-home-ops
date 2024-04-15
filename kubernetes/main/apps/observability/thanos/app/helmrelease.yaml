@@ -75,6 +75,7 @@ spec:
     query:
       replicas: 2
       extraArgs: ["--alert.query-url=https://thanos.${EXTERNAL_DOMAIN}"]
+      additionalStores: ["thanos.cnas.dev:10901"]
     queryFrontend:
       enabled: true
       replicas: 2
