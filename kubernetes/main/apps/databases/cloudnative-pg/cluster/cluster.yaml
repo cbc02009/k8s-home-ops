@@ -44,7 +44,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v25
+      serverName: &currentCluster postgres-v26
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
@@ -68,19 +68,3 @@ spec:
           secretAccessKey:
             name: cloudnative-pg
             key: aws-secret-access-key
-  #   - name: postgres-lxd
-  #     connectionParameters:
-  #       host: postgres.ctec.run
-  #       user: postgres
-  #     password:
-  #       name: cloudnative-pg
-  #       key: password
-  #   - name: cnpg-6
-  #     connectionParameters:
-  #       host: postgres-rw.databases.svc.cluster.local
-  #       user: postgres
-  #       dbname: postgres
-  #       sslmode: require
-  #     password:
-  #       name: cloudnative-pg
-  #       key: password
