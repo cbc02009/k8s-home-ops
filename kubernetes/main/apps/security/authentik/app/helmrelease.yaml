@@ -56,9 +56,7 @@ spec:
         paths:
           - /
         tls:
-          - secretName: *host
-            hosts:
-              - *host
+          - hosts: [*host]
 
     authentik:
       log_level: info
