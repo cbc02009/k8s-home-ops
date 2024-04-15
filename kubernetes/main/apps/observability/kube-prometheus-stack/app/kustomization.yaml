@@ -4,9 +4,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./externalsecret.yaml
-  - ./prometheusrules
+  - ./prometheusrule.yaml
   - ./helmrelease.yaml
-  - ./scrapeconfigs
+  - ./scrapeconfig.yaml
 configMapGenerator:
   - name: alertmanager-config-tpl
     files:
