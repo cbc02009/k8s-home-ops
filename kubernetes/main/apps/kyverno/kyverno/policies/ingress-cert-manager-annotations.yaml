@@ -28,4 +28,4 @@ spec:
           metadata:
             annotations:
               +(cert-manager.io/cluster-issuer): |-
-                letsencrypt-production
+                letsencrypt-staging
