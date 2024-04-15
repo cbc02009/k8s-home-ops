@@ -42,17 +42,13 @@ spec:
       ingress:
         enabled: true
         pathType: Prefix
-        ingressClassName: "internal"
-        annotations:
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        ingressClassName: internal
         hosts:
           - &am-host alertmanager.${EXTERNAL_DOMAIN}
         tls:
-          - secretName: *am-host
-            hosts:
-              - *am-host
+          - hosts: [*am-host]
       alertmanagerSpec:
-        replicas: 2
+        replicas: 3
         useExistingSecret: true
         configSecret: alertmanager-secret
         storage:
@@ -105,11 +101,8 @@ spec:
     prometheus:
       ingress:
         enabled: true
+        ingressClassName: internal
         pathType: Prefix
-        ingressClassName: "internal"
-        annotations:
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-
         hosts:
           - &host prometheus.${EXTERNAL_DOMAIN}
         tls:
@@ -123,7 +116,7 @@ spec:
         podMetadata:
           annotations:
             secret.reloader.stakater.com/reload: &secret thanos-objstore-config
-        replicas: 2
+        replicas: 3
         replicaExternalLabelName: __replica__
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
         ruleSelectorNilUsesHelmValues: false
