@@ -8,11 +8,11 @@ resources:
   - ./angelnu-charts.yaml
   - ./authentik.yaml
   - ./backube-charts.yaml
-  - ./bjw-s-charts.yaml
+  - ./bjw-s.yaml
   - ./cilium.yaml
   - ./cloudnative-pg.yaml
   - ./coder.yaml
-  - ./crunchydata.yaml
+  - ./coredns.yaml
   - ./democratic-csi.yaml
   - ./emqx.yaml
   - ./external-dns.yaml

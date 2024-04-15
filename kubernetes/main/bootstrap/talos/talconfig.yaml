@@ -48,18 +48,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - &kubelet_extra_mounts |-
-        machine:
-          kubelet:
-            extraMounts:
-              - destination: /var/openebs/local
-                type: bind
-                source: /var/openebs/local
-                options:
-                  - bind
-                  - rshared
-                  - rw
 
   - hostname: miri.ctec.run
     ipAddress: 10.0.2.11
@@ -82,8 +70,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - *kubelet_extra_mounts
 
   - hostname: sakura.ctec.run
     ipAddress: 10.0.2.12
@@ -106,8 +92,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - *kubelet_extra_mounts
 
 # Image URL rendered on https://factory.talos.dev
 # customization:
@@ -137,8 +121,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - *kubelet_extra_mounts
 
 controlPlane:
   schematic:
@@ -187,6 +169,8 @@ controlPlane:
       cluster:
         allowSchedulingOnMasters: true
         proxy:
+          disabled: true
+        coreDNS:
           disabled: true
 
     # ETCD configuration

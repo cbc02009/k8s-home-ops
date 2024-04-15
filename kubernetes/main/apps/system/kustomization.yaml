@@ -7,8 +7,8 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./fstrim/ks.yaml
-  - ./kube-cleanup-operator/ks.yaml
   - ./intel-device-plugins/ks.yaml
+  - ./kube-cleanup-operator/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
