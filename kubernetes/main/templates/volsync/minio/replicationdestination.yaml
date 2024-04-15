@@ -9,7 +9,7 @@ spec:
     manual: restore-once
   restic:
     copyMethod: Snapshot
-    repository: "${APP}-volsync-r2"
+    repository: "${APP}-volsync-minio"
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
@@ -22,4 +22,4 @@ spec:
     accessModes:
       - "${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"
     capacity: "${VOLSYNC_CAPACITY:-1Gi}"
-    restoreAsOf: "2024-04-14T05:00:00-04:00" #Remove after bootstrap
+    restoreAsOf: "2024-04-13T23:05:00-05:00"
