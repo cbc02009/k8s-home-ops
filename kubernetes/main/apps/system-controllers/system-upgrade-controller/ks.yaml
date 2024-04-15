@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: node-feature-discovery-rules
+    - name: node-feature-rules
   path: ./kubernetes/main/apps/system-controllers/system-upgrade-controller/app
   prune: true
   sourceRef:
