@@ -64,9 +64,7 @@ spec:
                   identifier: main
                   port: http
         tls:
-          - secretName: *host
-            hosts:
-              - *host
+          - hosts: [*host]
 
     persistence:
       config:

@@ -107,9 +107,7 @@ spec:
                   identifier: main
                   port: *websocket-port
         tls:
-          - secretName: *host
-            hosts:
-              - *host
+          - hosts: [*host]
 
     persistence:
       config:

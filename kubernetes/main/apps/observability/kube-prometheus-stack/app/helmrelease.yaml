@@ -113,9 +113,7 @@ spec:
         hosts:
           - &host prometheus.${EXTERNAL_DOMAIN}
         tls:
-          - secretName: *host
-            hosts:
-              - *host
+          - hosts: [*host]
       thanosService:
         enabled: true
       thanosServiceMonitor:
