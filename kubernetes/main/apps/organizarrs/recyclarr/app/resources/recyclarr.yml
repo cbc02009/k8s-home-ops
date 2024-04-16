@@ -25,7 +25,7 @@ sonarr:
             qualities:
               - WEBDL-1080p
               - WEBRip-1080p
-          - name: HDTV-1080p
+              - HDTV-1080p
           - name: WEB 720p
             qualities:
               - WEBDL-720p
@@ -79,6 +79,7 @@ sonarr:
           - 545a76b14ddc349b8b185a6344e28b04 # Anime BD Tier 05 (Remuxes)
           - 25d2afecab632b1582eaf03b63055f72 # Anime BD Tier 06 (FanSubs)
           - 0329044e3d9137b08502a9f84a7e58db # Anime BD Tier 07 (P2P/Scene)
+          - c81bbfb47fed3d5a3ad027d077f889de # Anime BD Tier 08 (Mini Encodes)
           - e0014372773c8f0e1bef8824f00c7dc4 # Anime Web Tier 01 (Muxers)
           - 19180499de5ef2b84b6ec59aae444696 # Anime Web Tier 02 (Top FanSubs)
           - c27f2ae6a4e82373b0f1da094e2489ad # Anime Web Tier 03 (Official Subs)
@@ -100,11 +101,26 @@ sonarr:
           - name: Web-1080p - Anime
             score: 100
 
+      # Anime Streaming Services
+      - trash_ids:
+          - 3e0b26604165f463f3e8e192261e7284 # CR
+          - 89358767a60cc28783cdc3d0be9388a4 # DSNP
+          - d34870697c9db575f17700212167be23 # NF
+          - d660701077794679fd59e8bdf4ce3a29 # AMZN
+          - 44a8ee6403071dd7b8a3a8dd3fe8cb20 # VRV
+          - 1284d18e693de8efe0fe7d6b3e0b9170 # FUNi
+          - a370d974bc7b80374de1d9ba7519760b # ABEMA
+          - d54cd2bf1326287275b56bccedb72ee2 # ADN
+          - 7dd31f3dee6d2ef8eeaa156e23c3857e # B-Global
+          - 4c67ff059210182b59cdd41697b8cb08 # BiliBili
+          - 570b03b3145a25011bf073274a407259 # HIDIVE
       # Misc
       - trash_ids:
           - d2d7b8a9d39413da5f44054080e028a3 # v0
           - 273bd326df95955e1b6c26527d1df89b # v1
           - 228b8ee9aa0a609463efca874524a6b8 # v2
+          - 0e5833d3af2cc5fa96a0c29cd4477feb # v3
+          - 4fc15eeb8f2f9a749f918217d4234ad8 # v4
           - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
           - eb3d5cc0a2be0db205fb823640db6a3c # Repack v2
           - 44e7c4de10ae50265753082e5dc76047 # Repack v3
