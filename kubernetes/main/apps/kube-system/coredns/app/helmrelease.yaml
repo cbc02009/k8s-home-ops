@@ -19,9 +19,9 @@ spec:
       retries: 3
   upgrade:
     cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+    # remediation:
+    #   strategy: rollback
+    #   retries: 3
   valuesFrom:
     - kind: ConfigMap
       name: coredns-helm-values
