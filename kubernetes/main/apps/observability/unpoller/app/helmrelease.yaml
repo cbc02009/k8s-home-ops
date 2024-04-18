@@ -48,15 +48,15 @@ spec:
               limits:
                 memory: 500Mi
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:
             port: 9130
 
     serviceMonitor:
-      main:
-        serviceName: main
+      app:
+        serviceName: unpoller
         enabled: true
         endpoints:
           - port: http
