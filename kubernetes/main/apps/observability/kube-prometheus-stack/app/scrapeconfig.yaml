@@ -62,7 +62,7 @@ spec:
 #   name: &name nas-smartctl
 # spec:
 #   staticConfigs:
-#     - targets: ["nas.ctec.run"]
+#     - targets: ["${NAS_HOST}"]
 #   metricsPath: /metrics
 #   relabelings:
 #     - action: replace

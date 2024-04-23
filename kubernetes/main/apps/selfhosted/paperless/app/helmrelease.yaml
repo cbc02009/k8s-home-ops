@@ -137,7 +137,7 @@ spec:
               - path: /data/local
       nas:
         type: nfs
-        server: nas.ctec.run
+        server: ${NAS_HOST}
         path: /tank/k8s/apps/paperless
         globalMounts:
           - path: /data/nas

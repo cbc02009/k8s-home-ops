@@ -23,7 +23,7 @@ data:
 
   CONTROL_IP: cluster.ctec.run
 
-  NAS_HOST: shana.ctec.run
+  NAS_HOST: 10.0.2.4
 
   LB_RANGE: 10.6.0.0/24
 
