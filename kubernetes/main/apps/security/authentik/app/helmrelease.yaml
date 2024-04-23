@@ -19,11 +19,10 @@ spec:
 
     global:
       deploymentAnnotations:
-        secret.reloader.stakater.com/reload: authentik-secret, authentik-redis
+        secret.reloader.stakater.com/reload: &secret authentik-secret
       envFrom:
         - secretRef:
-            name: authentik-secret
-
+            name: *secret
     server:
       replicas: 1
       initContainers:
@@ -31,15 +30,13 @@ spec:
           image: ghcr.io/onedr0p/postgres-init:16.2
           envFrom:
             - secretRef:
-                name: authentik-secret
+                name: *secret
       resources:
         requests:
           cpu: 50m
           memory: 500Mi
         limits:
           memory: 800Mi
-      # autoscaling:
-      #   enabled: true
       metrics:
         enabled: true
         serviceMonitor:
@@ -55,8 +52,7 @@ spec:
           - &host auth.${EXTERNAL_DOMAIN}
         paths:
           - /
-        tls:
-          - hosts: [*host]
+        tls: [hosts: [*host]]
 
     authentik:
       log_level: info
