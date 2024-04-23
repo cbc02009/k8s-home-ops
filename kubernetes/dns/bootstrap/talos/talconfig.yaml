@@ -106,35 +106,6 @@ controlPlane:
           - siderolabs/i915-ucode
 
   patches:
-    # Disable search domain everywhere
-    - |-
-      machine:
-        network:
-          disableSearchDomain: true
-
-    # Configure NTP
-    - |-
-      machine:
-        time:
-          disabled: false
-          servers:
-            - time.cloudflare.com
-
-    # Enable KubePrism
-    - |-
-      machine:
-        features:
-          kubePrism:
-            enabled: true
-            port: 7445
-
-    # Cluster configuration
-    - |-
-      cluster:
-        allowSchedulingOnMasters: true
-        proxy:
-          disabled: true
-
     # ETCD configuration
     - |-
       cluster:
@@ -142,83 +113,10 @@ controlPlane:
           advertisedSubnets:
             - 10.0.2.0/24
 
-    # Configure containerd
-    - |-
-      machine:
-        files:
-          - op: create
-            path: /etc/cri/conf.d/20-customization.part
-            content: |
-              [plugins]
-                [plugins."io.containerd.grpc.v1.cri"]
-                  enable_unprivileged_ports = true
-                  enable_unprivileged_icmp = true
-
     # Disable default API server admission plugins.
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
-
-    # Configure nfs mount options
-    - |-
-      machine:
-        files:
-          - op: overwrite
-            path: /etc/nfsmount.conf
-            permissions: 0o644
-            content: |
-              [ NFSMount_Global_Options ]
-              nfsvers=4.2
-              hard=True
-              noatime=True
-              nodiratime=True
-              rsize=131072
-              wsize=131072
-              nconnect=8
-
-    # Kubelet configuration
-    - |-
-      machine:
-        kubelet:
-          extraArgs:
-            feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
-            rotate-server-certificates: "true"
-          extraConfig:
-            maxPods: 150
-          extraMounts:
-            - destination: /var/openebs/local
-              type: bind
-              source: /var/openebs/local
-              options:
-                - bind
-                - rshared
-                - rw
-          nodeIP:
-            validSubnets:
-              - 10.0.2.0/24
-
-    # Custom sysctls
-    - |-
-      machine:
-        sysctls:
-          net.core.rmem_max: 2500000
-          fs.inotify.max_queued_events: 65536
-          fs.inotify.max_user_watches: 524288
-          fs.inotify.max_user_instances: 8192
-          net.core.bpf_jit_harden: 1
-          # vm.nr_hugepages: 1024
-
-    # Misc Machine values
-    - |-
-      machine:
-        logging:
-          destinations:
-            - endpoint: udp://vector.kokoro.wtf:6051/
-              format: json_lines
-
-        install:
-          extraKernelArgs:
-          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
 
 worker:
   schematic:
@@ -228,105 +126,107 @@ worker:
           - siderolabs/intel-ucode
           - siderolabs/i915-ucode
 
-  patches:
-    # Disable search domain everywhere
-    - |-
-      machine:
-        network:
-          disableSearchDomain: true
+patches:
+  # Disable search domain everywhere
+  - |-
+    machine:
+      network:
+        disableSearchDomain: true
 
-    # Configure NTP
-    - |-
-      machine:
-        time:
-          disabled: false
-          servers:
-            - time.cloudflare.com
+  # Configure NTP
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - time.cloudflare.com
 
-    # Enable KubePrism
-    - |-
-      machine:
-        features:
-          kubePrism:
-            enabled: true
-            port: 7445
+  # Enable KubePrism
+  - |-
+    machine:
+      features:
+        kubePrism:
+          enabled: true
+          port: 7445
 
-    # Cluster configuration
-    - |-
-      cluster:
-        allowSchedulingOnMasters: true
-        proxy:
-          disabled: true
+  # Cluster configuration
+  - |-
+    cluster:
+      allowSchedulingOnMasters: true
+      proxy:
+        disabled: true
+      coreDNS:
+        disabled: true
 
-    # Configure containerd
-    - |-
-      machine:
-        files:
-          - op: create
-            path: /etc/cri/conf.d/20-customization.part
-            content: |
-              [plugins]
-                [plugins."io.containerd.grpc.v1.cri"]
-                  enable_unprivileged_ports = true
-                  enable_unprivileged_icmp = true
+  # Configure containerd
+  - |-
+    machine:
+      files:
+        - op: create
+          path: /etc/cri/conf.d/20-customization.part
+          content: |
+            [plugins]
+              [plugins."io.containerd.grpc.v1.cri"]
+                enable_unprivileged_ports = true
+                enable_unprivileged_icmp = true
 
-    # Configure nfs mount options
-    - |-
-      machine:
-        files:
-          - op: overwrite
-            path: /etc/nfsmount.conf
-            permissions: 0o644
-            content: |
-              [ NFSMount_Global_Options ]
-              nfsvers=4.2
-              hard=True
-              noatime=True
-              nodiratime=True
-              rsize=131072
-              wsize=131072
-              nconnect=8
+  # Configure nfs mount options
+  - |-
+    machine:
+      files:
+        - op: overwrite
+          path: /etc/nfsmount.conf
+          permissions: 0o644
+          content: |
+            [ NFSMount_Global_Options ]
+            nfsvers=4.2
+            hard=True
+            noatime=True
+            nodiratime=True
+            rsize=131072
+            wsize=131072
+            nconnect=8
 
-    # Kubelet configuration
-    - |-
-      machine:
-        kubelet:
-          extraArgs:
-            feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
-            rotate-server-certificates: "true"
-          extraConfig:
-            maxPods: 150
-          extraMounts:
-            - destination: /var/openebs/local
-              type: bind
-              source: /var/openebs/local
-              options:
-                - bind
-                - rshared
-                - rw
-          nodeIP:
-            validSubnets:
-              - 10.0.2.0/24
+  # Kubelet configuration
+  - |-
+    machine:
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
+          rotate-server-certificates: "true"
+        extraConfig:
+          maxPods: 150
+        extraMounts:
+          - destination: /var/openebs/local
+            type: bind
+            source: /var/openebs/local
+            options:
+              - bind
+              - rshared
+              - rw
+        nodeIP:
+          validSubnets:
+            - 10.0.2.0/24
 
-    # Custom sysctls
-    - |-
-      machine:
-        sysctls:
-          net.core.rmem_max: 2500000
-          fs.inotify.max_queued_events: 65536
-          fs.inotify.max_user_watches: 524288
-          fs.inotify.max_user_instances: 8192
-          net.core.bpf_jit_harden: 1
-          # vm.nr_hugepages: 1024
+  # Custom sysctls
+  - |-
+    machine:
+      sysctls:
+        net.core.rmem_max: 2500000
+        fs.inotify.max_queued_events: 65536
+        fs.inotify.max_user_watches: 524288
+        fs.inotify.max_user_instances: 8192
+        net.core.bpf_jit_harden: 1
+        # vm.nr_hugepages: 1024
 
-    # Misc Machine values
-    - |-
-      machine:
-        logging:
-          destinations:
-            - endpoint: udp://vector.kokoro.wtf:6051/
-              format: json_lines
+  # Misc Machine values
+  - |-
+    machine:
+      logging:
+        destinations:
+          - endpoint: udp://vector.kokoro.wtf:6051/
+            format: json_lines
 
-        install:
-          extraKernelArgs:
-          - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
+      install:
+        extraKernelArgs:
+        - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
