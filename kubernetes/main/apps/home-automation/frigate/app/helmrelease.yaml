@@ -129,7 +129,7 @@ spec:
             subPath: config.yaml
       media:
         type: nfs
-        server: nas.ctec.run
+        server: ${NAS_HOST}
         path: /tank/k8s/apps/frigate
         globalMounts:
           - path: /media

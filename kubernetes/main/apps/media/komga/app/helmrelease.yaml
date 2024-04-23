@@ -74,7 +74,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: nas.ctec.run
+        server: ${NAS_HOST}
         path: /tank/media/manga
         globalMounts:
           - path: /media

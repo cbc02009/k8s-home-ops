@@ -128,7 +128,7 @@ spec:
         type: emptyDir
       media:
         type: nfs
-        server: &nas nas.ctec.run
+        server: &nas ${NAS_HOST}
         path: /tank/media
         globalMounts:
           - path: /media
