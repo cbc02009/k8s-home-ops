@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./bjw-s.yaml
   - ./cilium.yaml
+  - ./coredns.yaml
   - ./descheduler.yaml
   - ./external-dns.yaml
   - ./external-secrets.yaml
