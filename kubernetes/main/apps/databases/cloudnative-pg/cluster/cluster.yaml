@@ -19,15 +19,7 @@ spec:
     reusePVC: true
   bootstrap:
     recovery:
-      source: &previousCluster postgres-v20
-  # bootstrap:
-  #   initdb:
-  #     import:
-  #       type: monolith
-  #       databases: ["*"]
-  #       roles: ["*"]
-  #       source:
-  #         externalCluster: cnpg-6
+      source: &previousCluster postgres-v27
   postgresql:
     parameters:
       max_connections: "600"
@@ -44,7 +36,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v27
+      serverName: &currentCluster postgres-v28
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
