@@ -35,7 +35,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cloudnative-pg
-    - name: external-secrets
   path: ./kubernetes/main/apps/databases/cloudnative-pg/cluster
   prune: true
   sourceRef:
