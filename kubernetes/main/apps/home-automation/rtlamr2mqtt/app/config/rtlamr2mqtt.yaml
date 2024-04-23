@@ -6,7 +6,7 @@ general:
   device_id: 0bda:2838
 
 mqtt:
-  host: emqx.databases.svc.cluster.local
+  host: emqx-listeners.databases.svc.cluster.local
   port: 1883
   tls_enabled: false
   user: "{{ .MQTT_USERNAME }}"
