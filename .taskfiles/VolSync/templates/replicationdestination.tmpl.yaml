@@ -11,12 +11,12 @@ spec:
     repository: ${app}-volsync-minio
     destinationPVC: ${claim}
     copyMethod: Direct
-    storageClassName: ceph-block
-    # storageClassName: ceph-filesystem
-    # accessModes: ["ReadWriteMany"]
+    # storageClassName: ceph-block
+    storageClassName: ceph-filesystem
+    accessModes: ["ReadWriteMany"]
     # IMPORTANT NOTE:
     #   Set to the last X number of snapshots to restore from
-    # previous: ${previous}
+    previous: ${previous}
     # OR;
     # IMPORTANT NOTE:
     #   On bootstrap set `restoreAsOf` to the time the old cluster was destroyed.
@@ -24,7 +24,7 @@ spec:
     #   from a application that started with default data in the PVC.
     #   Do not restore snapshots made after the following RFC3339 Timestamp.
     #   date --rfc-3339=seconds (--utc)
-    restoreAsOf: "2024-04-14T05:00:00-05:00"
+    # restoreAsOf: "2024-04-02T05:00:00-05:00"
     moverSecurityContext:
       runAsUser: ${puid}
       runAsGroup: ${pgid}
