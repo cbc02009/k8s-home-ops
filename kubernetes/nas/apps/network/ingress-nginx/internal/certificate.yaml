@@ -13,3 +13,5 @@ spec:
   dnsNames:
     - '${EXTERNAL_DOMAIN}'
     - '*.${EXTERNAL_DOMAIN}'
+  privateKey:
+    algorithm: "Ed25519"
