@@ -127,12 +127,12 @@ tasks:
           yq -r ".talosVersion" {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talconfig.yaml
       TALOS_IMAGE:
         sh: |
-          doppler run -p talenv -c prd talhelper genurl installer -- \
+          doppler run -p talenv-{{.cluster}} -c prd talhelper genurl installer -- \
             --config-file {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talconfig.yaml \
           | grep {{.node}} \
           | awk '{split($0,u," "); print u[2]}'
     cmds:
-      - talosctl --context {{.cluster}} upgrade -n {{.node}} --image {{.TALOS_IMAGE }}
+      - talosctl --context {{.cluster}} upgrade --preserve -n {{.node}} --image {{.TALOS_IMAGE }}
     requires:
       vars:
         - cluster
@@ -140,7 +140,6 @@ tasks:
     preconditions:
       - which talhelper
       - talosctl config get-contexts | grep {{.cluster}}
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talenv.sops.yaml
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talconfig.yaml
       - msg: "Talos image could not be determined for {{.node}}"
         sh: 'test -n "{{.TALOS_IMAGE}}"'
