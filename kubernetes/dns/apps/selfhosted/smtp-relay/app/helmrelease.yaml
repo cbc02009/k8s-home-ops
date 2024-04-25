@@ -74,6 +74,7 @@ spec:
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${LB_SMTP}
+          external-dns.alpha.kubernetes.io/hostname: smtp-relay.kokoro.wtf
         ports:
           http:
             primary: true
