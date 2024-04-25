@@ -164,7 +164,6 @@ tasks:
     preconditions:
       - which talhelper
       - talosctl config get-contexts | grep {{.cluster}}
-      - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talenv.sops.yaml
       - test -f {{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/talconfig.yaml
       - msg: "Kubernetes version could not be determined for cluster {{.cluster}}"
         sh: 'test -n "{{.KUBERNETES_VERSION}}"'

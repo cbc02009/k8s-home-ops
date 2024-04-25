@@ -2,19 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": "Actions Runner Controller Group",
-      "groupName": "Actions Runner Controller",
-      "matchPackageNames": [
-        "actions-runner-controller-charts/gha-runner-scale-set-controller",
-        "actions-runner-controller-charts/gha-runner-scale-set"
-      ],
-      "matchDatasources": ["helm", "docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "separateMinorPatch": true
-    },
-    {
       "description": ["Dragonfly Operator Group"],
       "groupName": "Dragonfly Operator",
       "matchPackagePatterns": ["dragonfly(?:db)?.operator"],
@@ -69,17 +56,17 @@
       separateMinorPatch: false,
     },
     {
-      description: "Talos",
-      groupName: "Talos",
-      matchPackageNames: [
-        "ghcr.io/siderolabs/installer",
-        "ghcr.io/siderolabs/talosctl",
+      "description": ["Talos Group"],
+      "groupName": "Talos",
+      "matchPackagePatterns": [
+        "siderolabs/talosctl",
+        "siderolabs/installer"
       ],
-      matchDatasources: ["docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
       },
-      separateMinorPatch: true,
+      "separateMinorPatch": true
     },
     {
       description: "Thanos image and chart - versions do not match",

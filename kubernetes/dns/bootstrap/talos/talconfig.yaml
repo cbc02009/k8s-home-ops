@@ -49,18 +49,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - |-
-        machine:
-          kubelet:
-            extraMounts:
-              - destination: /var/openebs/local
-                type: bind
-                source: /var/openebs/local
-                options:
-                  - bind
-                  - rshared
-                  - rw
 
   - hostname: ram.ctec.run
     ipAddress: 10.0.2.6
@@ -84,18 +72,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    patches:
-      - |-
-        machine:
-          kubelet:
-            extraMounts:
-              - destination: /var/openebs/local
-                type: bind
-                source: /var/openebs/local
-                options:
-                  - bind
-                  - rshared
-                  - rw
 
 controlPlane:
   schematic:
