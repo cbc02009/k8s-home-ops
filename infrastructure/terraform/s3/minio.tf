@@ -1,5 +1,6 @@
 locals {
   minio_buckets = [
+    "forgejo",
     "loki",
     "thanos",
     "volsync",
