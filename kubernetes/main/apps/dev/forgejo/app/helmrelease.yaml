@@ -46,40 +46,6 @@ spec:
               pullPolicy: IfNotPresent
               tag: 1.21.10-0-rootless@sha256:5aed3d4a1c3067c888e7d81d852d984c356f512205d4349e15fa63f83cac5d68
             envFrom: *envFrom
-            env:
-              TZ: ${TZ}
-              USER_UID: 1000
-              USER_GID: 1000
-              FORGEJO__APP_NAME: "The Homelab Git"
-              FORGEJO__actions__ENABLED: "true"
-              FORGEJO__actions__DEFAULT_ACTIONS_URL: "https://code.forgejo.org"
-              FORGEJO__admin__DISABLE_REGULAR_ORG_CREATION: "true"
-              FORGEJO__cache__ENABLED: "true"
-              FORGEJO__cache__ADAPTER: "redis"
-              FORGEJO__cache__HOST: "redis://:${SECRET_FORGEJO_REDIS_PASSWORD}@forgejo-redis-master.development.svc.cluster.local:6379/0?pool_size=100&idle_timeout=180s"
-              FORGEJO__database__DB_TYPE: "postgres"
-              FORGEJO__federation__ENABLED: "false"
-              FORGEJO__git.timeout__MIGRATE: "1000"
-              FORGEJO__git.timeout__MIRROR: "1000"
-              FORGEJO__mailer__ENABLED: "true"
-              FORGEJO__mailer__PROTOCOL: "smtp+starttls"
-              FORGEJO__mailer__SMTP_ADDR: "${SECRET_SMTP_DOMAIN}"
-              FORGEJO__mailer__SMTP_PORT: "587"
-              FORGEJO__mailer__FROM: "${SECRET_FORGEJO_SMTP_USER}"
-              FORGEJO__mailer__USER: "${SECRET_FORGEJO_SMTP_USER}"
-              FORGEJO__mailer__PASSWD: "${SECRET_FORGEJO_SMTP_PASSWORD}"
-              FORGEJO__repository__DEFAULT_PRIVATE: "true"
-              FORGEJO__security__PASSWORD_COMPLEXITY: "lower,upper"
-              FORGEJO__security__MIN_PASSWORD_LENGTH: "12"
-              FORGEJO__security__SECRET_KEY: "${SECRET_FORGEJO_SECRET_KEY}"
-              FORGEJO__server__ROOT_URL: "https://git.${SECRET_DOMAIN}"
-              FORGEJO__server__APP_DATA_PATH: "/data/gitea"
-              FORGEJO__server__SSH_PORT: "22"
-              FORGEJO__server__SSH_LISTEN_PORT: "2222"
-              FORGEJO__service__DISABLE_REGISTRATION: "true"
-              FORGEJO__service__REQUIRE_SIGNIN_VIEW: "false"
-              FORGEJO__storage__STORAGE_TYPE: "minio"
-              FORGEJO__ui__DEFAULT_THEME: "arc-green"
             resources:
               requests:
                 cpu: 100m
