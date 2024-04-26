@@ -23,11 +23,11 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 15m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: forgejo
-      namespace: dev
+  # healthChecks:
+  #   - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  #     kind: HelmRelease
+  #     name: forgejo
+  #     namespace: dev
   postBuild:
     substitute:
       APP: *app
