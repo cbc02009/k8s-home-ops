@@ -100,3 +100,9 @@ spec:
         existingClaim: forgejo-data-pvc
         globalMounts:
           - path: /data
+      config-file:
+        type: secret
+        name: forgejo-app-ini
+        globalMounts:
+          - path: /etc/gitea/app.ini
+            subPath: app.ini
