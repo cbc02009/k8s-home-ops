@@ -30,7 +30,6 @@ spec:
     controllers:
       forgejo:
         type: statefulset
-        strategy: Recreate
         initContainers:
           01-init-db:
             envFrom: &envFrom
