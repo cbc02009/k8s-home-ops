@@ -53,7 +53,7 @@ spec:
               SABNZBD__PORT: &port 80
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
                 sabnzbd, sabnzbd.media, sabnzbd.downloads.svc, sabnzbd.downloads.svc.cluster,
-                sabnzbd.downloads.svc.cluster.local, sabnzbd.${EXTERNAL_DOMAIN}
+                sabnzbd.downloads.svc.cluster.local, sab.${EXTERNAL_DOMAIN}
 
             probes:
               liveness: &probes
