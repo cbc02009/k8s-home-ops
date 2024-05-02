@@ -75,10 +75,9 @@ spec:
 
             resources:
               requests:
-                cpu: 10m
-                memory: 250Mi
+                cpu: 100m
               limits:
-                memory: 8000Mi
+                memory: 8Gi
 
     defaultPodOptions:
       securityContext:
@@ -111,8 +110,13 @@ spec:
 
     persistence:
       config:
-        enabled: true
         existingClaim: *app
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tmp:
+        type: emptyDir
       media:
         enabled: true
         type: nfs
@@ -120,6 +124,3 @@ spec:
         path: /tank/media
         globalMounts:
           - path: /media
-      incomplete:
-        enabled: true
-        type: emptyDir
