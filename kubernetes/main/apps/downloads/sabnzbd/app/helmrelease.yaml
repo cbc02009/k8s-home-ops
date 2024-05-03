@@ -98,7 +98,6 @@ spec:
 
     ingress:
       main:
-        enabled: true
         className: internal
         hosts:
           - host: &host 'sab.${EXTERNAL_DOMAIN}'
