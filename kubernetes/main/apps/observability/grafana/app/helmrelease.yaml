@@ -187,6 +187,10 @@ spec:
 
     dashboards:
       default:
+        authentik:
+          gnetId: 14837
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         blocky:
           # renovate: depName="blocky"
           gnetId: 13768
@@ -194,14 +198,15 @@ spec:
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_BLOCKY_URL, value: 'http:\\/\\/192.168.254.9:4000' }
-        authentik:
-          gnetId: 14837
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
         cloudflared:
           # renovate: depName="Cloudflare Tunnels (cloudflared)"
           gnetId: 17457
           revision: 6
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
+        cloudnative-pg:
+          gnetId: 20417
+          revision: 2
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
         external-dns:
