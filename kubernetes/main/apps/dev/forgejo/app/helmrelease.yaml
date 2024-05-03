@@ -90,14 +90,13 @@ spec:
                   identifier: main
                   port: http
     persistence:
-      config:
-        enabled: true
-        existingClaim: forgejo-config-pvc
-        globalMounts:
-          - path: /etc/gitea
+      # config:
+      #   enabled: true
+      #   existingClaim: forgejo-config-pvc
+      #   globalMounts:
+      #     - path: /etc/gitea
       data:
-        enabled: true
-        existingClaim: forgejo-data-pvc
+        existingClaim: *app
         globalMounts:
           - path: /data
       config-file:
