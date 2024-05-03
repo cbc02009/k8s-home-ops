@@ -15,4 +15,5 @@ spec:
     - '${EXTERNAL_DOMAIN}'
     - '*.${EXTERNAL_DOMAIN}'
   privateKey:
-    algorithm: "Ed25519"
+    algorithm: ECDSA
+    size: 384
