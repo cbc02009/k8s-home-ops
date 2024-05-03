@@ -48,6 +48,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    extensionServices: &nut-service
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
 
   - hostname: miri.ctec.run
     ipAddress: 10.0.2.11
@@ -70,6 +77,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
     ipAddress: 10.0.2.12
@@ -92,6 +100,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    extensionServices: *nut-service
 
 # Image URL rendered on https://factory.talos.dev
 # customization:
@@ -121,6 +130,15 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+    extensionServices: *nut-service
+
+patches:
+  - |-
+    machine:
+      features:
+        hostDNS:
+          enabled: true
+          forwardKubeDNSToHost: true
 
 controlPlane:
   schematic:
@@ -195,17 +213,6 @@ controlPlane:
                   discard_unpacked_layers = false
                 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
                   discard_unpacked_layers = false
-
-    # Configure NUT client
-    - |-
-      machine:
-        files:
-          - path: /var/etc/nut/upsmon.conf
-            permissions: 0o600
-            op: create
-            content: |-
-              MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
-              SHUTDOWNCMD "/sbin/poweroff"
 
     # Disable default API server admission plugins.
     - |-
