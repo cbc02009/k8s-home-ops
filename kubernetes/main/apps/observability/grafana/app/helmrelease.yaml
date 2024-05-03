@@ -97,6 +97,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/ceph-folder
+          - name: 'cloudnative-pg'
+            orgId: 1
+            folder: 'cloudnative-pg'
+            type: file
+            disableDeletion: true
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/cloudnative-pg
           - name: emqx
             orgId: 1
             folder: EMQX
