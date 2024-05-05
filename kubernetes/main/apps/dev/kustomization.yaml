@@ -11,3 +11,4 @@ resources:
   - ./coder/ks.yaml
   - ./forgejo/ks.yaml
   - ./kubernetes-schemas/ks.yaml
+  - ./vscode/ks.yaml
