@@ -50,6 +50,8 @@ spec:
             env:
               - name: GITEA_APP_INI
                 value: /data/gitea/conf/app.ini
+              - name: FORGEJO_WORK_DIR
+                value: "/data/gitea"
             command: ["/bin/bash", "-c"]
             args:
               -
@@ -78,6 +80,9 @@ spec:
               repository: codeberg.org/forgejo/forgejo
               pullPolicy: IfNotPresent
               tag: 1.21.11-0-rootless@sha256:8589e2f7436d0b267f5f00348912207c55703a26faf9ae7b335100458d2ca321
+            env:
+              - name: FORGEJO_WORK_DIR
+                value: "/data/gitea"
             resources:
               requests:
                 cpu: 100m
