@@ -32,9 +32,9 @@ spec:
         type: statefulset
         initContainers:
           01-init-db:
-            envFrom: &envFrom
+            envFrom:
               - secretRef:
-                  name: *app
+                  name: forgejo-db-init
             image:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.2'
@@ -45,7 +45,6 @@ spec:
               repository: codeberg.org/forgejo/forgejo
               pullPolicy: IfNotPresent
               tag: 1.21.11-0-rootless@sha256:8589e2f7436d0b267f5f00348912207c55703a26faf9ae7b335100458d2ca321
-            envFrom: *envFrom
             resources:
               requests:
                 cpu: 100m
