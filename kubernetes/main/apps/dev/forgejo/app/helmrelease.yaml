@@ -49,28 +49,25 @@ spec:
               tag: 1.21.11-0-rootless@sha256:8589e2f7436d0b267f5f00348912207c55703a26faf9ae7b335100458d2ca321
             env:
               - name: GITEA_APP_INI
-                value: /data/gitea/conf/app.ini
-              - name: FORGEJO_WORK_DIR
-                value: "/data/gitea"
+                value: /etc/gitea/app.ini
             command: ["/bin/bash", "-c"]
             args:
               -
-                if [[ ! -f ${GITEA_APP_INI} ]]; then
+                if [[ ! -f /etc/gitea/app.ini ]]; then
                   chown git:git /data;
                   mkdir -p /data/gitea/conf;
                   mkdir -p /data/git/.ssh;
                   chmod -R 700 /data/git/.ssh;
-                  cp /tmp/app.ini ${GITEA_APP_INI};
-                  chown -R git:git gitea/;
-                    if [[ -f ${GITEA_APP_INI} ]]; then
-                      echo "Created ${GITEA_APP_INI} Init Completed.";
-                      exit 0;
-                    else
-                      echo "ERROR Failed to complete init!";
-                      exit 1;
-                    fi
+                  cp /tmp/app.ini /etc/gitea/app.ini;
+                  if [[ -f /etc/gitea/app.ini ]]; then
+                    echo "Created /etc/gitea/app.ini Init Completed.";
+                    exit 0;
+                  else
+                    echo "ERROR Failed to complete init!";
+                    exit 1;
+                  fi
                 else
-                  echo "Existing ${GITEA_APP_INI} found, init skipped.";
+                  echo "Existing /etc/gitea/app.ini found, init skipped.";
                   exit 0;
                 fi
 
@@ -80,9 +77,6 @@ spec:
               repository: codeberg.org/forgejo/forgejo
               pullPolicy: IfNotPresent
               tag: 1.21.11-0-rootless@sha256:8589e2f7436d0b267f5f00348912207c55703a26faf9ae7b335100458d2ca321
-            env:
-              - name: FORGEJO_WORK_DIR
-                value: "/data/gitea"
             resources:
               requests:
                 cpu: 100m
