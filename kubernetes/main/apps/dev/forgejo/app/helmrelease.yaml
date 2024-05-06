@@ -30,6 +30,9 @@ spec:
     controllers:
       forgejo:
         type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
+
         initContainers:
           01-init-db:
             envFrom:
