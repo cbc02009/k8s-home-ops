@@ -84,6 +84,19 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 2048Mi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/healthz
+                    port: &port 3000
+                  initialDelaySeconds: 200
+                  timeoutSeconds: 5
+                  periodSeconds: 10
+                  successThreshold: 1
+                  failureThreshold: 10
     defaultPodOptions:
       securityContext:
         fsGroup: 1000
@@ -94,7 +107,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: 3000
+            port: *port
       ssh:
         type: LoadBalancer
         loadBalancerIP: ${LB_FORGEJO}
