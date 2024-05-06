@@ -42,6 +42,36 @@ spec:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.2'
 
+          02-load-app-ini:
+            image:
+              repository: codeberg.org/forgejo/forgejo
+              pullPolicy: IfNotPresent
+              tag: 1.21.11-0-rootless@sha256:8589e2f7436d0b267f5f00348912207c55703a26faf9ae7b335100458d2ca321
+            env:
+              - name: GITEA_APP_INI
+                value: /data/gitea/conf/app.ini
+            command: ["/bin/bash", "-c"]
+            args:
+              -
+                if [[ ! -f ${GITEA_APP_INI} ]]; then
+                  chown git:git /data;
+                  mkdir -p /data/gitea/conf;
+                  mkdir -p /data/git/.ssh;
+                  chmod -R 700 /data/git/.ssh;
+                  cp /tmp/app.ini ${GITEA_APP_INI};
+                  chown -R git:git gitea/;
+                    if [[ -f ${GITEA_APP_INI} ]]; then
+                      echo "Created ${GITEA_APP_INI} Init Completed.";
+                      exit 0;
+                    else
+                      echo "ERROR Failed to complete init!";
+                      exit 1;
+                    fi
+                else
+                  echo "Existing ${GITEA_APP_INI} found, init skipped.";
+                  exit 0;
+                fi
+
         containers:
           main:
             image:
@@ -92,11 +122,6 @@ spec:
                   identifier: main
                   port: http
     persistence:
-      # config:
-      #   enabled: true
-      #   existingClaim: forgejo-config-pvc
-      #   globalMounts:
-      #     - path: /etc/gitea
       data:
         existingClaim: *app
         globalMounts:
@@ -105,5 +130,5 @@ spec:
         type: secret
         name: forgejo-app-ini
         globalMounts:
-          - path: /etc/gitea/app.ini
+          - path: /tmp/app.ini
             subPath: app.ini
