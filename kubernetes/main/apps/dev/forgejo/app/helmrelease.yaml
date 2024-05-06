@@ -52,24 +52,24 @@ spec:
                 value: /etc/gitea/app.ini
             command: ["/bin/bash", "-c"]
             args:
-              -
-                if [[ ! -f /etc/gitea/app.ini ]]; then
-                  chown git:git /data;
-                  mkdir -p /data/gitea/conf;
-                  mkdir -p /data/git/.ssh;
-                  chmod -R 700 /data/git/.ssh;
-                  cp /tmp/app.ini /etc/gitea/app.ini;
-                  if [[ -f /etc/gitea/app.ini ]]; then
-                    echo "Created /etc/gitea/app.ini Init Completed.";
-                    exit 0;
-                  else
-                    echo "ERROR Failed to complete init!";
-                    exit 1;
-                  fi
-                else
-                  echo "Existing /etc/gitea/app.ini found, init skipped.";
-                  exit 0;
-                fi
+              - cp /tmp/app.ini /etc/gitea/app.ini;
+                # if [[ ! -f /etc/gitea/app.ini ]]; then
+                #   chown git:git /data;
+                #   mkdir -p /data/gitea/conf;
+                #   mkdir -p /data/git/.ssh;
+                #   chmod -R 700 /data/git/.ssh;
+                #   cp /tmp/app.ini /etc/gitea/app.ini;
+                #   if [[ -f /etc/gitea/app.ini ]]; then
+                #     echo "Created /etc/gitea/app.ini Init Completed.";
+                #     exit 0;
+                #   else
+                #     echo "ERROR Failed to complete init!";
+                #     exit 1;
+                #   fi
+                # else
+                #   echo "Existing /etc/gitea/app.ini found, init skipped.";
+                #   exit 0;
+                # fi
 
         containers:
           main:
