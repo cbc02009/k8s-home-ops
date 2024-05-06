@@ -64,12 +64,20 @@ spec:
     service:
       main:
         controller: *app
-        type: LoadBalancer
-        annotations:
-          io.cilium/lb-ipam-ips: ${LB_VSCODE}
         ports:
           http:
             port: 80
+      ssh:
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_VSCODE}
+        controller: *app
+        ports:
+          ssh:
+            enabled: true
+            port: 2222
+            protocol: TCP
+            targetPort: 2222
     ingress:
       main:
         className: internal
