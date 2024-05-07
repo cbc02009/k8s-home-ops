@@ -45,6 +45,7 @@ spec:
             env:
               TZ: ${TZ}
               PLEX_CLAIM: claim-bX1svEBZxeWbCDfWVTDP
+              ADVERTISE_IP: 10.6.0.12:32400
             # probes:
             #   liveness: &probes
             #     enabled: true
