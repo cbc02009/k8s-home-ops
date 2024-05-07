@@ -12,6 +12,6 @@ resources:
 configMapGenerator:
   - name: forgejo-config-tpl
     files:
-      - ./resources/app.ini
+      - ./resources/config.yaml
 generatorOptions:
   disableNameSuffixHash: true

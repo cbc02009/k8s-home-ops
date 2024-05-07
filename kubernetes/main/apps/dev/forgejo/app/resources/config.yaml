@@ -18,6 +18,7 @@ PASSWD = "{{ .PG_PASS }}"
 SECRET_KEY = "{{ .ENCRYPTION_KEY }}"
 MIN_PASSWORD_LENGTH = 12
 PASSWORD_COMPLEXITY = "lower,upper,digit"
+INSTALL_LOCK = true
 
 [git.timeout]
 MIGRATE = 1000
