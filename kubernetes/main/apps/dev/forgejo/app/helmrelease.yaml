@@ -53,16 +53,31 @@ spec:
             command: ["/bin/bash", "-c"]
             args:
               -
-                oldsha=$(sha256sum /etc/gitea/app.ini)
-                newsha=$(sha256sum /tmp/app.ini)
-
-                if [ $oldsha == $newsha ]; then
-                  echo "app.ini unchanged";
-                  exit 0
-                else
-                  echo "updating app.ini"
+                if [[ ! -f /etc/gitea/app.ini ]]; then
+                  chown git:git /data;
+                  mkdir -p /data/gitea/conf;
+                  mkdir -p /data/git/.ssh;
+                  chmod -R 700 /data/git/.ssh;
                   cp /tmp/app.ini /etc/gitea/app.ini;
-                  exit 0
+                  if [[ -f /etc/gitea/app.ini ]]; then
+                    echo "Created /etc/gitea/app.ini Init Completed.";
+                    exit 0;
+                  else
+                    echo "ERROR Failed to complete init!";
+                    exit 1;
+                  fi
+                else
+                  oldsha=$(sha256sum /etc/gitea/app.ini)
+                  newsha=$(sha256sum /tmp/app.ini)
+
+                  if [ $oldsha == $newsha ]; then
+                    echo "app.ini unchanged";
+                    exit 0
+                  else
+                    echo "updating app.ini"
+                    cp /tmp/app.ini /etc/gitea/app.ini;
+                    exit 0
+                  fi
                 fi
 
         containers:
