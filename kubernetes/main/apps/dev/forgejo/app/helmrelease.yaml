@@ -70,13 +70,13 @@ spec:
                   oldsha=$(sha256sum /etc/gitea/app.ini);
                   newsha=$(sha256sum /tmp/app.ini);
 
-                  if [ $oldsha == $newsha ]; then
+                  if [[ $oldsha == $newsha ]]; then
                     echo "app.ini unchanged";
-                    exit 0
+                    exit 0;
                   else
                     echo "updating app.ini";
                     cp /tmp/app.ini /etc/gitea/app.ini;
-                    exit 0
+                    exit 0;
                   fi
                 fi
 
