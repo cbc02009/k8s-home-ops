@@ -6,12 +6,6 @@ namespace: dev
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  # - ./pvc.yaml
+  - ./pvc.yaml
   - ../../../../templates/gatus/guarded
   - ../../../../templates/volsync
-configMapGenerator:
-  - name: forgejo-config-tpl
-    files:
-      - ./resources/config.yaml
-generatorOptions:
-  disableNameSuffixHash: true
