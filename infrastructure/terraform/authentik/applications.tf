@@ -159,3 +159,18 @@ module "oauth2-paperless" {
   client_secret      = data.doppler_secrets.this.map.PAPERLESS_OIDC_SECRET
   redirect_uris = ["https://paperless.${data.doppler_secrets.this.map.DOMAIN}/accounts/oidc/authentik/login/callback/"]
 }
+
+module "oauth2-forgejo" {
+  source = "./oauth2_application"
+  name = "Forgejo"
+  icon_url = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/public/assets/img/forgejo.svg"
+  launch_url = "https://git.${data.doppler_secrets.this.map.DOMAIN}"
+  description = "Git"
+  newtab = true
+  group = "Infrastructure"
+  auth_groups = [authentik_group.infrastructure.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  client_id          = data.doppler_secrets.this.map.FORGEJO_OIDC_ID
+  client_secret      = data.doppler_secrets.this.map.FORGEJO_OIDC_SECRET
+  redirect_uris = ["https://git.${data.doppler_secrets.this.map.DOMAIN}/accounts/oidc/authentik/login/callback/"]
+}

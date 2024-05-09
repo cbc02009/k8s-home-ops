@@ -6,7 +6,7 @@ metadata:
   name: &app forgejo
   namespace: flux-system
   labels:
-    substitution.flux.home.arpa/enabled: 'false'
+    substitution.flux.home.arpa/enabled: 'true'
 spec:
   targetNamespace: dev
   commonMetadata:

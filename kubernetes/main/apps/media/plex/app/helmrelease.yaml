@@ -44,7 +44,6 @@ spec:
               tag: 1.40.2.8395-c67dce28e@sha256:42ec63b7ea477b3dfe376862d82f1c398edb3bf34b40f616b629c149ad1ed194
             env:
               TZ: ${TZ}
-              PLEX_CLAIM_TOKEN: claim-na-mK_o1EshFKjPUCE3x
             # probes:
             #   liveness: &probes
             #     enabled: true
