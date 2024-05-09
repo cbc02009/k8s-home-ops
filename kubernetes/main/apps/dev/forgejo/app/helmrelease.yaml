@@ -81,13 +81,19 @@ spec:
 
     service:
       main:
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_FORGEJO}
+          io.cilium/lb-ipam-sharing-key: "forgejo"
         controller: *app
         ports:
           http:
             port: *port
       ssh:
         type: LoadBalancer
-        loadBalancerIP: ${LB_FORGEJO}
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_FORGEJO}
+          io.cilium/lb-ipam-sharing-key: "forgejo"
         controller: *app
         ports:
           ssh:
