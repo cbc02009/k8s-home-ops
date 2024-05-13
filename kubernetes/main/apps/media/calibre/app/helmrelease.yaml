@@ -47,6 +47,7 @@ spec:
               PUID: '568'
               PGID: '568'
               FM_HOME: /media/calibre
+              UMASK_SET: 002
 
             resources:
               requests:
@@ -67,17 +68,18 @@ spec:
           http:
             port: 8080
 
-      # webserver:
-      #   enabled: true
-      #   ports:
-      #     webserver:
-      #       enabled: true
-      #       port: 8081
-      #       protocol: TCP
-      #       targetPort: 8081
-      #   type: LoadBalancer
-      #   externalTrafficPolicy: Cluster
-      #   loadBalancerIP: ${LB_CALIBRE}
+      webserver:
+        controller: *app
+        primary: false
+        ports:
+          webserver:
+            enabled: true
+            port: 8081
+            protocol: TCP
+            targetPort: 8081
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
+        loadBalancerIP: ${LB_CALIBRE}
 
     ingress:
       main:
