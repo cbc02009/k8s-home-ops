@@ -46,6 +46,7 @@ spec:
               ATUIN_HOST: 0.0.0.0
               ATUIN_PORT: &port 8888
               ATUIN_OPEN_REGISTRATION: true
+              ATUIN_LOG: debug
               ATUIN_TLS__ENABLE: false
               ATUIN_TLS__CERT_PATH: ""
               ATUIN_TLS__PKEY_PATH: ""
