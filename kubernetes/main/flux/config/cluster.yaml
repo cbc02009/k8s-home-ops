@@ -35,6 +35,10 @@ spec:
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   postBuild:
     substituteFrom:
       - kind: ConfigMap
