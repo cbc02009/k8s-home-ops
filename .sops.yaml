@@ -1,18 +1,23 @@
 ---
 creation_rules:
-  - path_regex: kubernetes/.*\.sops\.ya?ml
-    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
-    age: >-
-      age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
-  - path_regex: kubernetes/.*\.sops\.json
+  - # IMPORTANT: Keep this rule first
+    path_regex: talos/.+\.secret(\.sops)?\.ya?ml
+    input_type: yaml
+    encrypted_regex: ^(token|crt|key|id|secret|secretboxEncryptionSecret|ca)$
     key_groups:
       - age:
           - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
-  - path_regex: kubernetes/.*\.sops\.toml
+  - path_regex: kubernetes/.+\.secret(\.sops)?\.ya?ml
+    input_type: yaml
+    encrypted_regex: ^(data|stringData)$
     key_groups:
       - age:
           - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
-  - path_regex: infrastructure/.*\.sops\.ya?ml
+  - path_regex: kubernetes/.+\.secret(\.sops)?\.env
+    input_type: env
     key_groups:
       - age:
-          - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+          - aage1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+stores:
+  yaml:
+    indent: 2
