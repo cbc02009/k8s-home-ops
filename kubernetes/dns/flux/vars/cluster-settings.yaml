@@ -12,7 +12,8 @@ data:
   EXTERNAL_DOMAIN: kokoro.wtf
 
   LB_NGINX: 10.4.0.2
+  LB_BIND: 10.4.0.3
   LB_DNSDIST: 10.4.0.4
   LB_BLOCKY: 10.4.0.7
-  LB_BIND: 10.4.0.3
   LB_SMTP: 10.4.0.11
+  LB_OPC: 10.4.0.12
