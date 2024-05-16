@@ -69,13 +69,16 @@ spec:
 
             env:
               TZ: ${TZ}
-              SONARR__INSTANCE_NAME: Sonarr
-              SONARR__PORT: &port 8989
+              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__SERVER__PORT: &port 8989
+              SONARR__UPDATE__BRANCH: develop
               PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
               SONARR__APPLICATION_URL: https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}
-              SONARR__LOG_LEVEL: info
+              SONARR__LOG__LEVEL: info
               SONARR__POSTGRES_MAIN_DB: sonarr_main
               SONARR__POSTGRES_LOG_DB: sonarr_log
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
 
             resources:
               requests:
