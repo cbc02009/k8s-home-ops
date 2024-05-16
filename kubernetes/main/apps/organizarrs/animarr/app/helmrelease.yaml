@@ -30,16 +30,6 @@ spec:
       namespace: rook-ceph
 
   values:
-
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 100
-
     controllers:
       animarr:
         type: statefulset
@@ -81,6 +71,17 @@ spec:
                 memory: 411M
               limits:
                 memory: 1000M
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [10000]
+        seccompProfile: { type: RuntimeDefault }
+
     service:
       main:
         controller: *app
