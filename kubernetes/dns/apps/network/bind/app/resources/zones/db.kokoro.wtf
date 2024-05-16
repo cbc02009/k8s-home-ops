@@ -15,10 +15,6 @@ $ORIGIN kokoro.wtf.
 ; NS Records
 @                          IN  NS gateway.ctec.run.
 
-; Containers
-smtp-relay                 IN  A 10.4.0.11
-
-
 ; CNAME Records
 vpn                        IN  CNAME gateway.ctec.run.
 portal                     IN  CNAME gateway.ctec.run.
