@@ -5,5 +5,4 @@ kind: Kustomization
 namespace: security
 resources:
   - ./helmrelease.yaml
-metadata:
-  namespace: security
+  - ./onepassword-connect.secret.sops.yaml
