@@ -9,8 +9,8 @@ mqtt:
   host: emqx-listeners.databases.svc.cluster.local
   port: 1883
   tls_enabled: false
-  user: "{{ .MQTT_USERNAME }}"
-  password: "{{ .MQTT_PASSWORD }}"
+  user: "{{ .emqx_mqtt_user }}"
+  password: "{{ .emqx_mqtt_pass }}"
   ha_autodiscovery: true
   ha_autodiscovery_topic: homeassistant
   base_topic: rtlamr
@@ -20,14 +20,14 @@ custom_parameters:
   rtlamr: -unique=true -symbollength=32
 
 meters:
-  - id: "{{ .MAIN_METER_ID }}"
+  - id: "{{ .main_meter_id }}"
     protocol: scm+
     name: main_meter
     unit_of_measurement: kWh
     icon: mdi:gauge
     device_class: energy
     state_class: "total"
-  - id: "{{ .SOLAR_METER_ID }}"
+  - id: "{{ .solar_meter_id }}"
     protocol: scm+
     name: solar_meter
     unit_of_measurement: kWh
