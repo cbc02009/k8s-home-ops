@@ -31,4 +31,4 @@ receivers:
   - name: "null"
   - name: "discord"
     discord_configs:
-      - webhook_url: "{{ .DISCORD_WEBHOOK }}"
+      - webhook_url: "{{ .discord_webhook }}"
