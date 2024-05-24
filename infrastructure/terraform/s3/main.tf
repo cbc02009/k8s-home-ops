@@ -1,10 +1,8 @@
 terraform {
 
-  cloud {
-    organization = "kokoro-wtf"
-    workspaces {
-      name = "arpa-home-s3"
-    }
+  backend "pg" {
+    conn_str = "postgres://10.6.0.20/terraform"
+    schema_name = "minio"
   }
 
   required_providers {
@@ -12,9 +10,18 @@ terraform {
       source = "aminueza/minio"
       version = "2.2.1"
     }
-    doppler = {
-      source = "DopplerHQ/doppler"
-      version = "1.7.1"
-    }
   }
+}
+
+module "onepassword_item_minio" {
+  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  vault  = "k8s-home-ops"
+  item   = "minio"
+}
+
+provider "minio" {
+  minio_server   = "s3.cnas.dev"
+  minio_user     = module.onepassword_item_minio.fields.username
+  minio_password = module.onepassword_item_minio.fields.password
+  minio_ssl = true
 }

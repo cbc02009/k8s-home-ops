@@ -7,15 +7,30 @@ terraform {
   }
 }
 
+module "onepassword" {
+  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  vault  = var.vault
+  item   = var.bucket_name
+}
+
 resource "minio_s3_bucket" "bucket" {
   bucket = var.bucket_name
-  acl    = var.is_public == true ? "public" : "private"
+  acl    = "private"
+}
+
+resource "minio_s3_bucket_versioning" "bucket" {
+  depends_on = [minio_s3_bucket.bucket]
+  bucket     = minio_s3_bucket.bucket.bucket
+  versioning_configuration {
+    status = "Enabled"
+  }
+  count = var.versioning ? 1 : 0
 }
 
 resource "minio_iam_user" "user" {
-  name          = var.owner_access_key != null ? var.owner_access_key : var.bucket_name
+  name          = var.user_name != null ? var.user_name : var.bucket_name
   force_destroy = true
-  secret        = var.owner_secret_key != null ? var.owner_secret_key : null
+  secret        = module.onepassword.fields[var.user_secret_item]
 }
 
 resource "minio_iam_policy" "rw_policy" {
