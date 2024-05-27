@@ -7,5 +7,5 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./capacitor/ks.yaml
-  # - ./tf-controller/ks.yaml
+  - ./tf-controller/ks.yaml
   - ./add-ons/ks.yaml
