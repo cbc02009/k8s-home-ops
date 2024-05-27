@@ -95,6 +95,18 @@ module "proxy-frigate" {
   access_token_validity = 720
 }
 
+module "proxy-calibre-web" {
+  source             = "./proxy_application"
+  name               = "Calibre Web"
+  description        = "Books"
+  slug               = "calibre-web"
+  domain             = data.doppler_secrets.this.map.DOMAIN
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  group              = "Media"
+  auth_groups        = [authentik_group.media.id]
+  access_token_validity = 720
+}
+
 module "oauth2-immich" {
   source             = "./oauth2_application"
   name               = "Immich"

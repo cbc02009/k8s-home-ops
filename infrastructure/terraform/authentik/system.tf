@@ -30,6 +30,7 @@ resource "authentik_outpost" "proxyoutpost" {
     # module.proxy-animarr.id,
     module.proxy-whoogle.id,
     module.proxy-frigate.id,
+    module.proxy-calibre-web.id
   ]
   config = jsonencode({
     authentik_host          = "https://auth.${data.doppler_secrets.this.map.DOMAIN}",
