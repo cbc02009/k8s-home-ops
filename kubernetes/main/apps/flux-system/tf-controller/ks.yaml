@@ -38,7 +38,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets
+    - name: external-secrets-stores
     - name: tf-controller
   path: ./kubernetes/main/apps/flux-system/tf-controller/terraforms
   prune: true
