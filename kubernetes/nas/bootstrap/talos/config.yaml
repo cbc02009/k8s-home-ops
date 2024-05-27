@@ -23,7 +23,7 @@ kube-controller-manager-arg:
 kube-scheduler-arg:
 - bind-address=0.0.0.0
 node-ip: 10.0.2.4
-pause-image: registry.k8s.io/pause:3.9
+pause-image: registry.k8s.io/pause:3.10
 secrets-encryption: true
 service-cidr: 10.43.0.0/16
 tls-san:
