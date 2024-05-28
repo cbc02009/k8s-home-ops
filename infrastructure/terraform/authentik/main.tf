@@ -18,12 +18,12 @@ terraform {
   }
 }
 
-module "secret_authentik" {
-  # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
-  vault  = "k8s-home-ops"
-  item   = "authentik"
-}
+# module "secret_authentik" {
+#   # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
+#   source = "github.com/bjw-s/terraform-1password-item?ref=main"
+#   vault  = "k8s-home-ops"
+#   item   = "authentik"
+# }
 
 # provider "authentik" {
 #   url   = module.secret_authentik.fields["endpoint"]
