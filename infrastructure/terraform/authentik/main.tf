@@ -25,7 +25,12 @@ module "secret_authentik" {
   item   = "authentik"
 }
 
+# provider "authentik" {
+#   url   = module.secret_authentik.fields["endpoint"]
+#   token = module.secret_authentik.fields["tf_token"]
+# }
+
 provider "authentik" {
-  url   = module.secret_authentik.fields["endpoint"]
-  token = module.secret_authentik.fields["tf_token"]
+  url   = data.doppler_secrets.this.map.ENDPOINT
+  token = data.doppler_secrets.this.map.TF_TOKEN
 }
