@@ -11,7 +11,12 @@ terraform {
       source  = "goauthentik/authentik"
       version = "2024.4.2"
     }
+    doppler = {
+      source = "DopplerHQ/doppler"
+      version = "1.7.1"
+    }
   }
+
 }
 
 module "secret_authentik" {
