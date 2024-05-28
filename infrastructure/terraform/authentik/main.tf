@@ -16,7 +16,6 @@ terraform {
       version = "1.7.1"
     }
   }
-
 }
 
 module "secret_authentik" {
