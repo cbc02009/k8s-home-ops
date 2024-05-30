@@ -8,3 +8,4 @@ resources:
   # Flux-Kustomizations
   - ./capacitor/ks.yaml
   - ./add-ons/ks.yaml
+  - ./tf-controller/ks.yaml
