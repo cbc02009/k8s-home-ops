@@ -23,8 +23,6 @@ spec:
   approvePlan: "auto"
   backendConfig:
     disable: true
-  cliConfigSecretRef:
-    name: tf-controller-tfrc
   path: "./"
   sourceRef:
     kind: OCIRepository
@@ -32,9 +30,6 @@ spec:
     namespace: infrastructure
   runnerPodTemplate:
     spec:
-      env:
-        - name: DOPPLER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: tf-controller-doppler-pat
-              key: DOPPLER_TOKEN
+      envFrom:
+        - secretRef:
+            name: tf-controller-secrets

@@ -10,31 +10,31 @@ spec:
   url: oci://ghcr.io/cbc02009/terraform/authentik
   ref:
     tag: main
----
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/infra.contrib.fluxcd.io/terraform_v1alpha2.json
-apiVersion: infra.contrib.fluxcd.io/v1alpha2
-kind: Terraform
-metadata:
-  name: authentik
-  namespace: infrastructure
-spec:
-  suspend: false
-  interval: 12h
-  approvePlan: "auto"
-  backendConfig:
-    disable: true
-  cliConfigSecretRef:
-    name: tf-controller-tfrc
-  path: "./"
-  sourceRef:
-    kind: OCIRepository
-    name: oci-terraform-authentik
-    namespace: infrastructure
-  runnerPodTemplate:
-    spec:
-      env:
-        - name: DOPPLER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: tf-controller-doppler-pat
-              key: DOPPLER_TOKEN
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/infra.contrib.fluxcd.io/terraform_v1alpha2.json
+# apiVersion: infra.contrib.fluxcd.io/v1alpha2
+# kind: Terraform
+# metadata:
+#   name: authentik
+#   namespace: infrastructure
+# spec:
+#   suspend: false
+#   interval: 12h
+#   approvePlan: "auto"
+#   backendConfig:
+#     disable: true
+#   cliConfigSecretRef:
+#     name: tf-controller-tfrc
+#   path: "./"
+#   sourceRef:
+#     kind: OCIRepository
+#     name: oci-terraform-authentik
+#     namespace: infrastructure
+#   runnerPodTemplate:
+#     spec:
+#       env:
+#         - name: DOPPLER_TOKEN
+#           valueFrom:
+#             secretKeyRef:
+#               name: tf-controller-doppler-pat
+#               key: DOPPLER_TOKEN

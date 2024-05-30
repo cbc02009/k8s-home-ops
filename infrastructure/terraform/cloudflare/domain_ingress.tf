@@ -9,7 +9,7 @@ module "cf_domain_ingress" {
     },
     {
       id      = "vpn"
-      name    = data.doppler_secrets.this.map.VPN_SUBDOMAIN
+      name    = module.secret_cf.fields.vpn_subdomain
       value   = "ipv4.kokoro.wtf"
       type    = "CNAME"
       proxied = false

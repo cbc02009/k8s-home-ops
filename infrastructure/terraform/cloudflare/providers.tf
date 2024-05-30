@@ -1,4 +1,4 @@
 provider "cloudflare" {
-  email   = data.doppler_secrets.this.map.EMAIL
-  api_key = data.doppler_secrets.this.map.API_KEY
+  email   = module.secret_cf.fields.email
+  api_key = module.secret_cf.fields.api_key
 }
