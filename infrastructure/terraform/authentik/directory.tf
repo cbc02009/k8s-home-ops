@@ -1,3 +1,11 @@
+data "authentik_group" "admins" {
+  name = "authentik Admins"
+}
+
+resource "authentik_group" "superusers" {
+  name = "superusers"
+}
+
 resource "authentik_group" "users" {
   name         = "users"
   is_superuser = false
@@ -24,8 +32,4 @@ resource "authentik_group" "search" {
   name         = "Search"
   is_superuser = false
   parent       = resource.authentik_group.users.id
-}
-
-data "authentik_group" "admins" {
-  name = "authentik Admins"
 }

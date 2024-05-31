@@ -2,7 +2,6 @@ terraform {
   required_providers {
     authentik = {
       source  = "goauthentik/authentik"
-      version = "2024.4.2"
     }
   }
 }
@@ -15,8 +14,13 @@ data "authentik_scope_mapping" "scopes" {
   managed_list = [
     "goauthentik.io/providers/oauth2/scope-email",
     "goauthentik.io/providers/oauth2/scope-openid",
-    "goauthentik.io/providers/oauth2/scope-profile"
+    "goauthentik.io/providers/oauth2/scope-profile",
+    "goauthentik.io/providers/oauth2/scope-offline_access"
   ]
+}
+
+resource "random_password" "client_secret" {
+  length = 52
 }
 
 resource "authentik_provider_oauth2" "oauth2-application" {
@@ -29,7 +33,7 @@ resource "authentik_provider_oauth2" "oauth2-application" {
   include_claims_in_id_token = var.include_claims_in_id_token
   issuer_mode                = var.issuer_mode
   sub_mode                   = var.sub_mode
-  access_code_validity       = "hours=${var.access_code_validity}"
+  access_code_validity       = var.access_code_validity
   property_mappings          = concat(data.authentik_scope_mapping.scopes.ids, var.additional_property_mappings)
   redirect_uris              = var.redirect_uris
 }

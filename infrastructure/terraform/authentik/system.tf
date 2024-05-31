@@ -3,7 +3,7 @@ data "authentik_certificate_key_pair" "generated" {
 }
 
 # resource "authentik_brand" "home" {
-#   domain           = data.doppler_secrets.this.map.DOMAIN
+  # domain           = module.secret_authentik.fields["domain"]
 #   default          = false
 #   branding_title   = "Home"
 
@@ -33,10 +33,10 @@ resource "authentik_outpost" "proxyoutpost" {
     module.proxy-calibre-web.id
   ]
   config = jsonencode({
-    authentik_host          = "https://auth.${data.doppler_secrets.this.map.DOMAIN}",
+    authentik_host          = "https://auth.${module.secret_authentik.fields["domain"]}",
     authentik_host_insecure = false,
     authentik_host_browser  = "",
-    log_level               = "info",
+    log_level               = "debug",
     object_naming_template  = "ak-outpost-%(name)s",
     docker_network          = null,
     docker_map_ports        = true,
@@ -47,7 +47,6 @@ resource "authentik_outpost" "proxyoutpost" {
     kubernetes_ingress_annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt-production"
     },
-    kubernetes_ingress_class_name = "external",
     kubernetes_ingress_secret_name = "proxy-outpost-tls",
     kubernetes_service_type        = "ClusterIP",
     kubernetes_disabled_components = [],

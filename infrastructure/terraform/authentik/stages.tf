@@ -2,7 +2,7 @@
 
 resource "authentik_stage_authenticator_totp" "authenticator-totp-setup" {
   name           = "authenticator-totp-setup"
-  # digits         = 6
+  digits         = 6
   configure_flow = authentik_flow.authenticator-totp-setup.uuid
 }
 
@@ -38,8 +38,8 @@ resource "authentik_stage_authenticator_validate" "authentication-mfa-validation
   device_classes        = ["static", "totp", "webauthn"]
   not_configured_action = "configure"
   configuration_stages = [
-    authentik_stage_authenticator_totp.authenticator-totp-setup.id,
-    authentik_stage_authenticator_webauthn.authenticator-webauthn-setup.id
+    authentik_stage_authenticator_webauthn.authenticator-webauthn-setup.id,
+    authentik_stage_authenticator_totp.authenticator-totp-setup.id
   ]
 }
 
