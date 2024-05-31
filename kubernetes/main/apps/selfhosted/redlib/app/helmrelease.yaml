@@ -42,7 +42,7 @@ spec:
         containers:
           app:
             image:
-              repository: quay.io/redlib/redlib
+              repository: ghcr.io/kankerdev/redlib
               tag: latest
             env:
               REDLIB_DEFAULT_SHOW_NSFW: on
