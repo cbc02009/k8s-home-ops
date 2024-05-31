@@ -4,7 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
   name: oci-terraform-authentik
-  namespace: infrastructure
+  namespace: flux-system
 spec:
   interval: 1m
   url: oci://ghcr.io/cbc02009/terraform/authentik
@@ -16,7 +16,7 @@ apiVersion: infra.contrib.fluxcd.io/v1alpha2
 kind: Terraform
 metadata:
   name: authentik
-  namespace: infrastructure
+  namespace: flux-system
 spec:
   suspend: false
   interval: 12h
@@ -25,7 +25,7 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: oci-terraform-authentik
-    namespace: infrastructure
+    namespace: flux-system
   runnerPodTemplate:
     spec:
       envFrom:
