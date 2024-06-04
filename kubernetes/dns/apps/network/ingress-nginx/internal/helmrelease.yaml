@@ -83,7 +83,7 @@ spec:
           enabled: false
 
       extraArgs:
-        default-ssl-certificate: "network/kokoro-wtf-tls"
+        default-ssl-certificate: "network/cutil-dev-tls"
 
       resources:
         requests:

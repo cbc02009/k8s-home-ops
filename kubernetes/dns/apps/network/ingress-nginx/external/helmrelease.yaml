@@ -47,7 +47,7 @@ spec:
       allowSnippetAnnotations: true
 
       extraArgs:
-        default-ssl-certificate: "network/kokoro-wtf-tls"
+        default-ssl-certificate: "network/cutil-dev-tls"
 
       config:
         client-header-timeout: 120
