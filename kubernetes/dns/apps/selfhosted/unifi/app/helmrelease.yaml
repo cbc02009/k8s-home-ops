@@ -60,6 +60,8 @@ spec:
       main:
         controller: unifi
         type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_UNIFI}
         externalTrafficPolicy: Local
         ports:
           http:
