@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: dpage/pgadmin4
-              tag: '8.6'
+              tag: '8.8'
             envFrom:
               - secretRef:
                   name: *app
