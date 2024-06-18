@@ -69,9 +69,6 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 6000Mi
-            command: /bin/sh
-            args:
-              - ./start-microservices.sh
     service:
       main:
         controller: *app

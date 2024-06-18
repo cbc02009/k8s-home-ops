@@ -68,7 +68,6 @@ spec:
               requests:
                 cpu: 100m
                 memory: 250Mi
-            args: [start-server.sh]
     service:
       main:
         controller: *app
