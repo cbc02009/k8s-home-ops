@@ -31,11 +31,11 @@ spec:
       namespace: system-controllers
   values:
     toolbox:
-      enabled: false
+      enabled: true
 
     monitoring:
-      enabled: false
-      createPrometheusRules: false
+      enabled: true
+      createPrometheusRules: true
 
     configOverride: |
       [global]
@@ -44,64 +44,47 @@ spec:
       osd_class_update_on_start = false
 
     cephClusterSpec:
+
+      crashCollector:
+        disable: false
+
+      mgr:
+        modules:
+          - name: pg_autoscaler
+            enabled: true
+
       network:
         provider: host
-
-      mon:
-        count: 2
+        connections:
+          requireMsgr2: true
+      # mon:
+      #   count: 2
 
       resources:
         mgr:
-          limits:
-            memory: "1Gi"
           requests:
-            cpu: "500m"
-            memory: "512Mi"
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 2Gi
         mon:
-          limits:
-            memory: "2Gi"
           requests:
-            cpu: "1000m"
-            memory: "1Gi"
+            cpu: 50m
+            memory: 512Mi
+          limits:
+            memory: 1Gi
         osd:
-          limits:
-            memory: "4Gi"
           requests:
-            cpu: "1000m"
-            memory: "4Gi"
-        prepareosd:
+            cpu: 500m
+            memory: 2Gi
           limits:
-            memory: "900Mi"
-          requests:
-            cpu: "500m"
-            memory: "50Mi"
+            memory: 6Gi
         mgr-sidecar:
-          limits:
-            memory: "100Mi"
           requests:
-            cpu: "100m"
-            memory: "40Mi"
-        crashcollector:
+            cpu: 50m
+            memory: 128Mi
           limits:
-            memory: "60Mi"
-          requests:
-            cpu: "100m"
-            memory: "60Mi"
-        logcollector:
-          limits:
-            memory: "1Gi"
-          requests:
-            cpu: "100m"
-            memory: "100Mi"
-        cleanup:
-          limits:
-            memory: "1Gi"
-          requests:
-            cpu: "500m"
-            memory: "100Mi"
-
-      crashCollector:
-        disable: true
+            memory: 256Mi
 
       dashboard:
         enabled: true
@@ -122,6 +105,16 @@ spec:
           - name: "miri"
             devices:
               - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W317717Z"
+
+      placement:
+        mgr: &placement
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+        mon: *placement
 
     ingress:
       dashboard:
