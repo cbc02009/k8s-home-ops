@@ -57,13 +57,14 @@ spec:
 
             env:
               TZ: ${TZ}
-              SONARR__INSTANCE_NAME: Animarr
-              SONARR__PORT: &port 8989
-              SONARR__APPLICATION_URL: https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}
-              SONARR__LOG_LEVEL: info
-              PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
-              SONARR__POSTGRES_MAIN_DB: animarr_main
-              SONARR__POSTGRES_LOG_DB: animarr_log
+              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 8989
+              SONARR__UPDATE__BRANCH: develop
 
             resources:
               requests:
@@ -99,7 +100,7 @@ spec:
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/sonarr/organizr.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: *host
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
