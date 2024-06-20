@@ -21,4 +21,4 @@ spec:
   retryInterval: 1m
   timeout: 15m
   dependsOn:
-    - name: external-secrets
+    - name: external-secrets-stores
