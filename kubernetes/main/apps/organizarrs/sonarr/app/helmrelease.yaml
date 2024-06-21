@@ -30,6 +30,65 @@ spec:
       namespace: rook-ceph
 
   values:
+    controllers:
+      sonarr:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: 'true'
+
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: '16.3'
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/sonarr-develop
+              tag:
+                4.0.5.1740@sha256:3890ecfb9628a528b2e8c511addc08ed5b875868d8e72bcbc9a1828af477444d
+
+            env:
+              TZ: ${TZ}
+              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 80
+              SONARR__UPDATE__BRANCH: develop
+
+            envFrom: *envFrom
+
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
 
     defaultPodOptions:
       securityContext:
@@ -41,49 +100,6 @@ spec:
         supplementalGroups: [10000]
         seccompProfile: { type: RuntimeDefault }
 
-    controllers:
-      sonarr:
-        type: statefulset
-        annotations:
-          reloader.stakater.com/auto: 'true'
-
-        initContainers:
-          01-init-db:
-            envFrom:
-              - secretRef:
-                  name: *app
-
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: '16.3'
-        containers:
-          app:
-            image:
-              repository: ghcr.io/onedr0p/sonarr-develop
-              tag:
-                4.0.5.1740@sha256:3890ecfb9628a528b2e8c511addc08ed5b875868d8e72bcbc9a1828af477444d
-
-            envFrom:
-              - secretRef:
-                  name: *app
-
-            env:
-              TZ: ${TZ}
-              SONARR__APP__INSTANCENAME: Sonarr
-              SONARR__APP__THEME: dark
-              SONARR__AUTH__METHOD: External
-              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
-              SONARR__LOG__DBENABLED: "False"
-              SONARR__LOG__LEVEL: info
-              SONARR__SERVER__PORT: &port 8989
-              SONARR__UPDATE__BRANCH: develop
-
-            resources:
-              requests:
-                cpu: 15m
-                memory: 411M
-              limits:
-                memory: 1000M
     service:
       main:
         controller: *app
@@ -115,6 +131,9 @@ spec:
       config:
         enabled: true
         existingClaim: sonarr-config-v1
+
+      tmp:
+        type: emptyDir
 
       media:
         enabled: true

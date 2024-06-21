@@ -31,16 +31,6 @@ spec:
 
   values:
 
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [10000]
-        seccompProfile: { type: RuntimeDefault }
-
     controllers:
       prowlarr:
         type: statefulset
@@ -50,21 +40,17 @@ spec:
 
         initContainers:
           init-db:
-            envFrom:
-              - secretRef:
-                  name: *app
             image:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.3'
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
         containers:
           app:
             image:
               repository: ghcr.io/onedr0p/prowlarr-develop
               tag: 1.18.0.4543@sha256:3b7016455028840cae468f1227560e84926c47d1d30b4f73c269704b3f97362f
-
-            envFrom:
-              - secretRef:
-                  name: *app
 
             env:
               TZ: ${TZ}
@@ -74,16 +60,11 @@ spec:
               PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
               PROWLARR__LOG__DBENABLED: "False"
               PROWLARR__LOG__LEVEL: info
-              PROWLARR__SERVER__PORT: &port 9696
+              PROWLARR__SERVER__PORT: &port 80
               PROWLARR__UPDATE__BRANCH: develop
 
-            resources:
-              requests:
-                cpu: 15m
-                memory: 164M
-              limits:
-                cpu: 100m
-                memory: 299M
+            envFrom: *envFrom
+
             probes:
               liveness: &probes
                 enabled: true
@@ -97,8 +78,26 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-              startup:
-                enabled: false
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
 
     service:
       main:

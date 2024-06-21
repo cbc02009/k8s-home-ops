@@ -45,39 +45,46 @@ spec:
 
         initContainers:
           01-init-db:
-            envFrom:
-              - secretRef:
-                  name: *app
-
             image:
               repository: ghcr.io/onedr0p/postgres-init
               tag: '16.3'
-
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
         containers:
           app:
             image:
               repository: ghcr.io/onedr0p/readarr-nightly
               tag: 0.3.29.2565
 
-            envFrom:
-              - secretRef:
-                  name: *app
-
             env:
               TZ: ${TIMEZONE}
               READARR__INSTANCE_NAME: Readarr
-              READARR__PORT: &port 8787
+              READARR__PORT: &port 80
               READARR__LOG_LEVEL: info
               READARR__POSTGRES_MAIN_DB: readarr_main
               READARR__POSTGRES_LOG_DB: readarr_log
               READARR__POSTGRES_CACHE_DB: readarr_cache
 
-            resources:
-              requests:
-                cpu: 10m
-                memory: 250Mi
-              limits:
-                memory: 1000Mi
+            envFrom: *envFrom
+
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
     service:
       main:
         controller: *app
