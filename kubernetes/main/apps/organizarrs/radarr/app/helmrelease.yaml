@@ -69,13 +69,14 @@ spec:
 
             env:
               TZ: ${TZ}
-              RADARR__INSTANCE_NAME: Radarr
-              PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
-              RADARR__PORT: &port 7878
-              RADARR__APPLICATION_URL: https://{{ .Release.Name }}.${EXTERNAL_DOMAIN}
-              RADARR__LOG_LEVEL: info
-              RADARR__POSTGRES_MAIN_DB: radarr_main
-              RADARR__POSTGRES_LOG_DB: radarr_log
+              SONARR__APP__INSTANCENAME: Radarr
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__SERVER__PORT: &port 80
+              SONARR__UPDATE__BRANCH: develop
 
             resources:
               requests:
@@ -101,7 +102,7 @@ spec:
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/radarr/organizr.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: *host
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
