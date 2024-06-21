@@ -57,7 +57,7 @@ spec:
 
             env:
               TZ: ${TZ}
-              SONARR__APP__INSTANCENAME: Sonarr
+              SONARR__APP__INSTANCENAME: Animarr
               SONARR__APP__THEME: dark
               SONARR__AUTH__METHOD: External
               SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
