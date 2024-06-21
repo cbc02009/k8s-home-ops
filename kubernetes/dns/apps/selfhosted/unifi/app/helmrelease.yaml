@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/goofball222/unifi
-              tag: 8.2-beta
+              tag: 8.3-beta
               pullPolicy: IfNotPresent
             env:
               TZ: ${TZ}
