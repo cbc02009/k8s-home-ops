@@ -6,6 +6,6 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./capacitor/ks.yaml
+  # - ./capacitor/ks.yaml
   - ./add-ons/ks.yaml
-  - ./tf-controller/ks.yaml
+  # - ./tf-controller/ks.yaml
