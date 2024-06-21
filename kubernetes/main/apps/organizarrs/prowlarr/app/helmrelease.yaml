@@ -128,5 +128,6 @@ spec:
 
     persistence:
       config:
-        enabled: true
-        existingClaim: prowlarr-config-v1
+        type: emptyDir
+      tmp:
+        type: emptyDir
