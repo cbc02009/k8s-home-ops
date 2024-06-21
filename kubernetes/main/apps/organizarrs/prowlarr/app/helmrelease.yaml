@@ -73,9 +73,9 @@ spec:
               PROWLARR__AUTH__METHOD: External
               PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
               PROWLARR__LOG__DBENABLED: "False"
-              PUSHOVER_APP_URL: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
-              PROWLARR__SERVER__PORT: &port 9696
               PROWLARR__LOG__LEVEL: info
+              PROWLARR__SERVER__PORT: &port 9696
+              PROWLARR__UPDATE__BRANCH: develop
 
             resources:
               requests:
@@ -111,13 +111,12 @@ spec:
         enabled: true
         className: internal
         annotations:
-          # authentik.home.arpa/enabled: "true"
           nginx.ingress.kubernetes.io/configuration-snippet: |
             proxy_set_header Accept-Encoding "";
             sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/prowlarr/organizr.css"></head>';
             sub_filter_once on;
         hosts:
-          - host: *host
+          - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
