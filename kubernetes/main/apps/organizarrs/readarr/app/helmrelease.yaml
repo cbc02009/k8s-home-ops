@@ -58,13 +58,15 @@ spec:
               tag: 0.3.29.2565
 
             env:
-              TZ: ${TIMEZONE}
-              READARR__INSTANCE_NAME: Readarr
-              READARR__PORT: &port 80
-              READARR__LOG_LEVEL: info
-              READARR__POSTGRES_MAIN_DB: readarr_main
-              READARR__POSTGRES_LOG_DB: readarr_log
-              READARR__POSTGRES_CACHE_DB: readarr_cache
+              TZ: ${TZ}
+              READARR__APP__INSTANCENAME: Readarr
+              READARR__APP__THEME: dark
+              READARR__AUTH__METHOD: External
+              READARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              READARR__LOG__DBENABLED: "False"
+              READARR__LOG__LEVEL: info
+              READARR__SERVER__PORT: &port 80
+              READARR__UPDATE__BRANCH: develop
 
             envFrom: *envFrom
 
