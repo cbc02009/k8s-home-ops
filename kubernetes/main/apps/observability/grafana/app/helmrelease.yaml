@@ -201,8 +201,8 @@ spec:
             - { name: DS_PROMETHEUS, value: Prometheus }
         blocky:
           # renovate: depName="blocky"
-          gnetId: 13768
-          revision: 3
+          gnetId: 14768
+          revision: 4
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_BLOCKY_URL, value: 'http:\\/\\/192.168.254.9:4000' }
