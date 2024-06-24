@@ -37,3 +37,5 @@ spec:
                 proxy_set_header X-Forwarded-Host $http_host;
               +(nginx.ingress.kubernetes.io/auth-url): |-
                 http://ak-outpost-proxy-outpost.security.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx
+              +(nginx.ingress.kubernetes.io/auth-signin): |-
+               /outpost.goauthentik.io/start?rd=$escaped_request_uri
