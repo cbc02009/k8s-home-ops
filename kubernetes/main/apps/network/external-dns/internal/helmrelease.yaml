@@ -22,6 +22,9 @@ spec:
     domainFilters:
       - kokoro.wtf
 
+    extraArgs:
+      - --ingress-class=internal
+
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
         value: "10.4.0.3"
