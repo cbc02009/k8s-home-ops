@@ -79,7 +79,7 @@ module "proxy-whoogle" {
   domain             = module.secret_authentik.fields["domain"]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   auth_groups        = [authentik_group.search.id]
-  access_token_validity = 720
+  access_token_validity = "weeks=20"
 }
 
 module "proxy-frigate" {
@@ -92,7 +92,7 @@ module "proxy-frigate" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   group              = "Home Automation"
   auth_groups        = [authentik_group.home.id]
-  access_token_validity = 720
+  access_token_validity = "weeks=20"
 }
 
 module "proxy-calibre-web" {
@@ -104,7 +104,7 @@ module "proxy-calibre-web" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   group              = "Media"
   auth_groups        = [authentik_group.media.id]
-  access_token_validity = 720
+  access_token_validity = "weeks=20"
 }
 
 module "oauth2-immich" {

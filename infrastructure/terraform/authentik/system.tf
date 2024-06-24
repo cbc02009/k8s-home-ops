@@ -15,6 +15,7 @@ data "authentik_certificate_key_pair" "generated" {
 resource "authentik_service_connection_kubernetes" "local" {
   name  = "local"
   local = true
+  verify_ssl = false
 }
 
 resource "authentik_outpost" "proxyoutpost" {

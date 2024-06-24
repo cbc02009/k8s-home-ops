@@ -1,9 +1,14 @@
 terraform {
-  cloud {
-    organization = "kokoro-wtf"
-    workspaces {
-      name = "arpa-home-authentik"
-    }
+  # cloud {
+  #   organization = "kokoro-wtf"
+  #   workspaces {
+  #     name = "arpa-home-authentik"
+  #   }
+  # }
+
+    backend "pg" {
+    conn_str = "postgres://10.6.0.20/terraform"
+    schema_name = "authentik"
   }
 
   required_providers {
