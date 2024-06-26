@@ -37,8 +37,8 @@ module "cf_domain_ingress" {
     },
     {
       id = "postmark_dkim"
-      name = "20240325183423pm._domainkey"
-      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLKLwt/yo4MWJcDqMUerhYz6LA5aA7rhtGYI/8HmWBf/j1a7kCkczyMVs2OAwTVZgwZs/EhWYlVw2ksk5oQzN1vzg3asgGUbGiqtSjY5M+RHzCQngTYGAgscNKXD00I/9aVIZoD9zKlxEvQBU6dBe0moIelOIVLRJDN+yrBUI9gwIDAQAB"
+      name = "20240322033030pm._domainkey"
+      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEyywwsPuQrCfQLqN7NPZYsgK+HWXODZUsx4WR/0s2ivZjUVenbEKHCQp8kjZ3xVjDh+FCftx2VruRDAUXcRDdt445+OL5B58+G1Dm+ccx0KsClSLnwvhw880bn39VYPsCZ6JQ1cJ2q52+F/HMZ+lYeOhSKlqjiwwfzqUiJpaVWQIDAQAB"
       type = "TXT"
       proxied = "false"
     },
