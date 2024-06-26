@@ -20,7 +20,14 @@ module "cf_domain_ingress" {
       value = "v=DMARC1; p=none; rua=mailto:postmaster@kokoro.wtf; ruf=mailto:postmaster@kokoro.wtf; fo=1;"
       type  = "TXT"
     },
-    # Fastmail settings
+
+    # Proton Settings
+    {
+      id       = "protonmail_verification"
+      name     = "@"
+      value    = "protonmail-verification=a49f59e33698e4d4f71cac4c7c7a0074654fd7c7"
+      type     = "TXT"
+    },
     {
       id       = "protonmail_mx_1"
       name     = "@"
@@ -37,8 +44,8 @@ module "cf_domain_ingress" {
     },
     {
       id = "postmark_dkim"
-      name = "20240322033030pm._domainkey"
-      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEyywwsPuQrCfQLqN7NPZYsgK+HWXODZUsx4WR/0s2ivZjUVenbEKHCQp8kjZ3xVjDh+FCftx2VruRDAUXcRDdt445+OL5B58+G1Dm+ccx0KsClSLnwvhw880bn39VYPsCZ6JQ1cJ2q52+F/HMZ+lYeOhSKlqjiwwfzqUiJpaVWQIDAQAB"
+      name = "20240325183423pm._domainkey"
+      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLKLwt/yo4MWJcDqMUerhYz6LA5aA7rhtGYI/8HmWBf/j1a7kCkczyMVs2OAwTVZgwZs/EhWYlVw2ksk5oQzN1vzg3asgGUbGiqtSjY5M+RHzCQngTYGAgscNKXD00I/9aVIZoD9zKlxEvQBU6dBe0moIelOIVLRJDN+yrBUI9gwIDAQAB"
       type = "TXT"
       proxied = "false"
     },
@@ -59,30 +66,30 @@ module "cf_domain_ingress" {
 }
 
 # Allow Flux Webhook to access zone
-resource "cloudflare_filter" "cf_domain_ingress_github_flux_webhook" {
-  zone_id     = module.cf_domain_ingress.zone_id
-  description = "Allow GitHub flux API"
-  expression  = "(ip.geoip.asnum eq 36459 and http.host eq \"flux-receiver.kokoro.wtf\")"
-}
+# resource "cloudflare_filter" "cf_domain_ingress_github_flux_webhook" {
+#   zone_id     = module.cf_domain_ingress.zone_id
+#   description = "Allow GitHub flux API"
+#   expression  = "(ip.geoip.asnum eq 36459 and http.host eq \"flux-receiver.kokoro.wtf\")"
+# }
 
-resource "cloudflare_firewall_rule" "cf_domain_ingress_github_flux_webhook" {
-  zone_id     = module.cf_domain_ingress.zone_id
-  description = "Allow GitHub flux API"
-  filter_id   = cloudflare_filter.cf_domain_ingress_github_flux_webhook.id
-  action      = "allow"
-  priority    = 1
-}
+# resource "cloudflare_firewall_rule" "cf_domain_ingress_github_flux_webhook" {
+#   zone_id     = module.cf_domain_ingress.zone_id
+#   description = "Allow GitHub flux API"
+#   filter_id   = cloudflare_filter.cf_domain_ingress_github_flux_webhook.id
+#   action      = "allow"
+#   priority    = 1
+# }
 
-# Block Plex notifications (prevents cloudflared container spam)
-resource "cloudflare_filter" "plex_notifications" {
-  zone_id     = module.cf_domain_ingress.zone_id
-  description = "Expression to block Plex notifications"
-  expression  = "(http.host eq \"plex.kokoro.wtf\" and http.request.uri.path contains \"/:/eventsource/notifications\")"
-}
+# # Block Plex notifications (prevents cloudflared container spam)
+# resource "cloudflare_filter" "plex_notifications" {
+#   zone_id     = module.cf_domain_ingress.zone_id
+#   description = "Expression to block Plex notifications"
+#   expression  = "(http.host eq \"plex.kokoro.wtf\" and http.request.uri.path contains \"/:/eventsource/notifications\")"
+# }
 
-resource "cloudflare_firewall_rule" "plex_notifications" {
-  zone_id     = module.cf_domain_ingress.zone_id
-  description = "Firewall rule to block Plex notifications"
-  filter_id   = cloudflare_filter.plex_notifications.id
-  action      = "block"
-}
+# resource "cloudflare_firewall_rule" "plex_notifications" {
+#   zone_id     = module.cf_domain_ingress.zone_id
+#   description = "Firewall rule to block Plex notifications"
+#   filter_id   = cloudflare_filter.plex_notifications.id
+#   action      = "block"
+# }

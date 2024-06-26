@@ -56,6 +56,20 @@ module "cf_domain_hardware" {
       proxied = false
     },
     {
+      id = "postmark_dkim"
+      name = "20240322033030pm._domainkey"
+      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEyywwsPuQrCfQLqN7NPZYsgK+HWXODZUsx4WR/0s2ivZjUVenbEKHCQp8kjZ3xVjDh+FCftx2VruRDAUXcRDdt445+OL5B58+G1Dm+ccx0KsClSLnwvhw880bn39VYPsCZ6JQ1cJ2q52+F/HMZ+lYeOhSKlqjiwwfzqUiJpaVWQIDAQAB"
+      type = "TXT"
+      proxied = "false"
+    },
+    {
+      id = "postmark_return_path"
+      name = "pm-bounces"
+      value = "pm.mtasv.net"
+      type = "CNAME"
+      proxied = "false"
+    },
+    {
       id    = "protonmail_spf"
       name  = "@"
       value = "v=spf1 include:_spf.protonmail.ch mx ~all"
