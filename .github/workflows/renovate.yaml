@@ -46,8 +46,8 @@ env:
 jobs:
   renovate:
     name: Renovate
-    # runs-on: ubuntu-latest
-    runs-on: ["arc-runner-set-k8s-home-ops"]
+    runs-on: ubuntu-latest
+    # runs-on: ["arc-runner-set-k8s-home-ops"]
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@ad38cffc07bac6e3857755914c4c88bfd2db4da4 # v1
