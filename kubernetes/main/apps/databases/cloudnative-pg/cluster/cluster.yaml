@@ -35,7 +35,7 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://cnpg/
-      endpointURL: https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+      endpointURL: https://${CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
       serverName: &currentCluster postgres-v31
       s3Credentials:
         accessKeyId:
