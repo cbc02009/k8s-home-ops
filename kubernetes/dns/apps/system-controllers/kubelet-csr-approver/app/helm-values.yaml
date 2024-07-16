@@ -1,6 +1,6 @@
 ---
 providerRegex: |
-  ^(ivy)$
+  ^(rem|ram)$
 
 bypassDnsResolution: true
 
