@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app mayastor
+  name: &app openebs
   namespace: flux-system
 spec:
-  targetNamespace: openebs-system
+  targetNamespace: openebs
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/openebs-system/mayastor/app
+  path: ./kubernetes/main/apps/openebs/openebs/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -29,7 +29,7 @@ spec:
 #   labels:
 #     substitution.flux.home.arpa/enabled: 'true'
 # spec:
-#   path: './kubernetes/apps/main/openebs-system/mayastor/config/'
+#   path: './kubernetes/apps/main/openebs/mayastor/config/'
 #   prune: true
 #   sourceRef:
 #     kind: GitRepository

@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: openebs
-      version: 3.10.0
+      version: 4.1.0
       sourceRef:
         kind: HelmRepository
         name: openebs
@@ -24,9 +24,22 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    localprovisioner:
+    localpv-provisioner:
       hostpathClass:
         enabled: true
         name: openebs-hostpath
         isDefaultClass: false
         basePath: /var/openebs/local
+    zfs-localpv:
+      enabled: false
+    lvm-localpv:
+      enabled: false
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+      replicated:
+        mayastor:
+          enabled: true

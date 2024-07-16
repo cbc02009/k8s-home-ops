@@ -27,7 +27,7 @@ spec:
       retries: 3
   dependsOn:
     - name: openebs
-      namespace: openebs-system
+      namespace: openebs
   values:
     cleanPrometheusOperatorObjectNames: true
     crds:

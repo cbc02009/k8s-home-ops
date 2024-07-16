@@ -5,7 +5,7 @@ clusterName: dns
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
 talosVersion: v1.7.5
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
-kubernetesVersion: v1.29.2
+kubernetesVersion: v1.30.2
 
 endpoint: https://10.0.2.5:6443
 
@@ -38,7 +38,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.34
       - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
@@ -61,7 +61,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.34
       - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
@@ -103,6 +103,15 @@ worker:
           - siderolabs/i915-ucode
 
 patches:
+
+  # Enable hostDNS
+  - |-
+    machine:
+      features:
+        hostDNS:
+          enabled: true
+          forwardKubeDNSToHost: false
+
   # Disable search domain everywhere
   - |-
     machine:
@@ -172,7 +181,7 @@ patches:
     machine:
       kubelet:
         extraArgs:
-          feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
+          feature-gates: GracefulNodeShutdown=true
           rotate-server-certificates: "true"
         extraConfig:
           maxPods: 150

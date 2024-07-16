@@ -27,7 +27,7 @@ spec:
       retries: 3
   dependsOn:
     - name: openebs
-      namespace: openebs-system
+      namespace: openebs
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: vector-agent
