@@ -10,5 +10,5 @@ configMapGenerator:
       - ./resources/dnsdist.conf
 generatorOptions:
   disableNameSuffixHash: true
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
+  # annotations:
+  #   kustomize.toolkit.fluxcd.io/substitute: disabled
