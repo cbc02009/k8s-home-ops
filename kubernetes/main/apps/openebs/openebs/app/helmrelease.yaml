@@ -42,4 +42,4 @@ spec:
           enabled: false
       replicated:
         mayastor:
-          enabled: true
+          enabled: false
