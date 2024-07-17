@@ -48,8 +48,3 @@ spec:
       replicated:
         mayastor:
           enabled: false
-          etcd:
-            localpvScConfig:
-              basePath: /var/openebs/local
-            persistence:
-              storageClass: openebs-hostpath
