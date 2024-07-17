@@ -7,7 +7,7 @@ cni:
 autoDirectNodeRoutes: true
 
 l2announcements:
-  enable: false
+  enable: true
 
 # -- Configure BGP
 bgp:
@@ -21,7 +21,7 @@ bgp:
     podCIDR: false
 
 bgpControlPlane:
-  enabled: true
+  enabled: false
 
 # -- Configure cgroup related configuration
 cgroup:
