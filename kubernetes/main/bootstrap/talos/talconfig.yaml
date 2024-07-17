@@ -38,7 +38,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.0.2.34
+      - 10.4.0.4
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:73:bd:aa
@@ -67,7 +67,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.0.2.34
+      - 10.4.0.4
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c1:b2
@@ -90,7 +90,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.0.2.34
+      - 10.4.0.4
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c5:02

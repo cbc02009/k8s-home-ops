@@ -16,4 +16,4 @@ $ORIGIN unifi.
 @                          IN  NS gateway.ctec.run.
 
 ; CNAME Records
-@                          IN  A  10.0.2.35
+@                          IN  A  10.4.0.5
