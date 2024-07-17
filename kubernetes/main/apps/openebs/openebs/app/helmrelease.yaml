@@ -24,6 +24,12 @@ spec:
   uninstall:
     keepHistory: false
   values:
+
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: false
+          keep: false
     localpv-provisioner:
       hostpathClass:
         enabled: true
