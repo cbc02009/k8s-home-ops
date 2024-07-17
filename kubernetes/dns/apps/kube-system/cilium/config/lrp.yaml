@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumlocalredirectpolicy_v2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/cilium.io/ciliumlocalredirectpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumLocalRedirectPolicy
 metadata:

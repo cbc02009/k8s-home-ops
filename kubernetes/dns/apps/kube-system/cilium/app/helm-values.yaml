@@ -21,7 +21,7 @@ bgp:
     podCIDR: false
 
 bgpControlPlane:
-  enabled: true
+  enabled: false
 
 # -- Configure cgroup related configuration
 cgroup:
@@ -280,3 +280,5 @@ l7Proxy: true
 endpointStatus:
   enabled: true
   status: "policy"
+
+devices: enp+
