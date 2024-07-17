@@ -16,7 +16,7 @@ creation_rules:
     input_type: env
     key_groups:
       - age:
-          - aage1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+          - age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
 stores:
   yaml:
     indent: 2

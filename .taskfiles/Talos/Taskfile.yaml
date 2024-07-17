@@ -197,6 +197,7 @@ tasks:
     desc: Apply a single Talos machineConfig to a Talos node
     cmds:
       - talosctl --context {{.cluster}} apply-config
+        -i
         --nodes "{{.hostname}}"
         --file "{{.KUBERNETES_DIR}}/{{.cluster}}/bootstrap/talos/clusterconfig/{{.filename}}"
         {{ if eq "true" .dry_run }}--dry-run{{ end }}

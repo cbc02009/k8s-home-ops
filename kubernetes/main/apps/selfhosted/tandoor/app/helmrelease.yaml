@@ -109,7 +109,7 @@ spec:
 
     ingress:
       app:
-        className: "internal"
+        className: "external"
         hosts:
           - host: &host recipes.${EXTERNAL_DOMAIN}
             paths:
