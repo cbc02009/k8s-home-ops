@@ -48,13 +48,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    extensionServices: &nut-service
-      - name: nut-client
-        configFiles:
-          - content: |-
-              MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
-              SHUTDOWNCMD "/sbin/poweroff"
-            mountPath: /usr/local/etc/nut/upsmon.conf
+    # extensionServices: &nut-service
+    #   - name: nut-client
+    #     configFiles:
+    #       - content: |-
+    #           MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
+    #           SHUTDOWNCMD "/sbin/poweroff"
+    #         mountPath: /usr/local/etc/nut/upsmon.conf
 
   - hostname: miri.ctec.run
     ipAddress: 10.0.2.11
@@ -77,7 +77,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    extensionServices: *nut-service
+    # extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
     ipAddress: 10.0.2.12
@@ -100,37 +100,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    extensionServices: *nut-service
-
-# Image URL rendered on https://factory.talos.dev
-# customization:
-#     systemExtensions:
-#         officialExtensions:
-#             - siderolabs/i915-ucode
-#             - siderolabs/intel-ucode
-#             - siderolabs/nut-client
-  - hostname: anya.ctec.run
-    talosImageURL: factory.talos.dev/installer/8a71f9fe5c25403801ac19ff2beeacbf79bcfaf82405833d75707ede0968c64d
-    ipAddress: 10.0.2.13
-    installDiskSelector:
-      model: KingFast
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.0.2.34
-    networkInterfaces:
-      - interface: eno1
-        addresses:
-          - 10.0.2.13/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
-    extensionServices: *nut-service
+    # extensionServices: *nut-service
 
 controlPlane:
   schematic:
@@ -139,7 +109,7 @@ controlPlane:
         officialExtensions:
           - siderolabs/intel-ucode
           - siderolabs/i915-ucode
-          - siderolabs/nut-client
+          # - siderolabs/nut-client
   patches:
     # Disable default API server admission plugins.
     - |-
