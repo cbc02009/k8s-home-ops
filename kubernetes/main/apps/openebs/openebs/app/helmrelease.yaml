@@ -24,7 +24,6 @@ spec:
   uninstall:
     keepHistory: false
   values:
-
     openebs-crds:
       csi:
         volumeSnapshots:
@@ -49,3 +48,6 @@ spec:
       replicated:
         mayastor:
           enabled: false
+          etcd:
+            localpvScConfig:
+              basePath: /var/openebs/local
