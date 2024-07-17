@@ -38,7 +38,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.0.2.34
+      - 10.4.0.4
       - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
@@ -61,7 +61,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.0.2.34
+      - 10.4.0.4
       - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
