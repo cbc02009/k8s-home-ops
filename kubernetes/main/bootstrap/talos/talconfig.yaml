@@ -48,13 +48,13 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # extensionServices: &nut-service
-    #   - name: nut-client
-    #     configFiles:
-    #       - content: |-
-    #           MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
-    #           SHUTDOWNCMD "/sbin/poweroff"
-    #         mountPath: /usr/local/etc/nut/upsmon.conf
+    extensionServices: &nut-service
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR ${UPSMONHOST} 1 observer ${UPSMONPASS} secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
 
   - hostname: miri.ctec.run
     ipAddress: 10.0.2.11
@@ -77,7 +77,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # extensionServices: *nut-service
+    extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
     ipAddress: 10.0.2.12
@@ -100,7 +100,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-    # extensionServices: *nut-service
+    extensionServices: *nut-service
 
 controlPlane:
   schematic:
@@ -109,7 +109,7 @@ controlPlane:
         officialExtensions:
           - siderolabs/intel-ucode
           - siderolabs/i915-ucode
-          # - siderolabs/nut-client
+          - siderolabs/nut-client
   patches:
     # Disable default API server admission plugins.
     - |-
@@ -249,7 +249,7 @@ patches:
         fs.inotify.max_user_watches: 524288
         fs.inotify.max_user_instances: 8192
         net.core.bpf_jit_harden: 1
-        # vm.nr_hugepages: 1024
+        vm.nr_hugepages: 1024
 
   # Misc Machine values
   - |-

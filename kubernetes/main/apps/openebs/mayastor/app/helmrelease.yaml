@@ -46,6 +46,9 @@ spec:
         mayastor:
           enabled: true
     mayastor:
+      base:
+        initContainers:
+          enabled: false
       etcd:
         localpvScConfig:
           enabled: false

@@ -1,0 +1,22 @@
+UPSMONHOST: ENC[AES256_GCM,data:ViTRWn0GnTIUra86UwR/31e/NA==,iv:wpotufH4Cz5L8ttP6tgnlj8Urj9qaphfcbjLOitrQ18=,tag:13KxpYM7itPYfFe2XhldKA==,type:str]
+UPSMONPASS: ENC[AES256_GCM,data:/6Vln3LIVCHyq74+v32QVUAx0DXSBJUskqX3Q0Pxcl8=,iv:R97fMM5P/kXIlo/FWhhrf7QGzYzfE96o4BmV1cpPX/o=,tag:s6vr5/gN8GBGuufleu7iWg==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1SUZQcDBVWW9JY005UlMw
+        aWlncVg0eCtWb05WZnR1UC9OV0dHWVRQSFh3CmQ3UVJNMjU0M3hXWEdRMEVFaUZo
+        b2hSTTh6dVR5dU1IMlRrVkduNmVIdUUKLS0tIGNOVExCQTE4eWthaVBxNHBiZ3JV
+        WFMxelNQQm5acGI1alpValFFZDRXZU0KQ1Xwikjctm7cJGDjIafuuvoUuqKIqPk6
+        k8Esym7DA4nJ/rr2V2rpGVOXshKCX/9MHXsvrWhVu1OXVPPA3MkLgQ==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-07-19T14:45:52Z"
+  mac: ENC[AES256_GCM,data:ZTQQm93nJK8CmshlTDCS92PLQYgmdQ5m/RUpDl5+bgNjZwoZaaEjerYeA+A3jsmB753iewGxbcyMiCIoJOB/qPw+Aq0Pv+8o/KGU8ZujKicp7geR6PJW/aqo5EcT113fTS9g46x2KnBNq29XItkk+4eA2fIihFSC/hLctBNaIus=,iv:CnIcGYJiMmAXlJmTIReOkg93dJfxzHeP8zMop5O5K5I=,tag:kAZ6poVIXp2t04P+/RNpMQ==,type:str]
+  pgp: []
+  unencrypted_suffix: _unencrypted
+  version: 3.9.0
