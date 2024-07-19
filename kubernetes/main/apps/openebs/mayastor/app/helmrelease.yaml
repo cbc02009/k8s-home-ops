@@ -57,5 +57,7 @@ spec:
           storageClass: openebs-hostpath
       loki-stack:
         enabled: false
+        localpvScConfig:
+          enabled: false
       promtail:
         enabled: false
