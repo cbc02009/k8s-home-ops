@@ -47,6 +47,6 @@ spec:
           enabled: true
           etcd:
             localpvScConfig:
-              basePath: /var/openebs/local
+              enabled: false
             persistence:
               storageClass: openebs-hostpath
