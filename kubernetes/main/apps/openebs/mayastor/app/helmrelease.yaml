@@ -45,8 +45,9 @@ spec:
       replicated:
         mayastor:
           enabled: true
-          etcd:
-            localpvScConfig:
-              enabled: false
-            persistence:
-              storageClass: openebs-hostpath
+    mayastor:
+      etcd:
+        localpvScConfig:
+          enabled: false
+        persistence:
+          storageClass: openebs-hostpath
