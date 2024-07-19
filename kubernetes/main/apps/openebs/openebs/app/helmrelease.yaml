@@ -47,4 +47,20 @@ spec:
           enabled: false
       replicated:
         mayastor:
+          enabled: true
+    mayastor:
+      csi:
+        node:
+          initContainers:
+            enabled: false
+      etcd:
+        localpvScConfig:
           enabled: false
+        persistence:
+          storageClass: openebs-hostpath
+      loki-stack:
+        enabled: false
+        localpvScConfig:
+          enabled: false
+      promtail:
+        enabled: false
