@@ -51,3 +51,7 @@ spec:
           enabled: false
         persistence:
           storageClass: openebs-hostpath
+      loki-stack:
+        enabled: false
+      promtail:
+        enabled: false
