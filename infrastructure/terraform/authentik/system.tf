@@ -31,7 +31,8 @@ resource "authentik_outpost" "proxyoutpost" {
     # module.proxy-animarr.id,
     module.proxy-whoogle.id,
     module.proxy-frigate.id,
-    module.proxy-calibre-web.id
+    module.proxy-calibre-web.id,
+    module.proxy-tandoor.id
   ]
   config = jsonencode({
     authentik_host          = "https://auth.${module.secret_authentik.fields["domain"]}",
