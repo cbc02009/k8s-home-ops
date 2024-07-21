@@ -107,6 +107,18 @@ module "proxy-calibre-web" {
   access_token_validity = "weeks=20"
 }
 
+module "proxy-tandoor" {
+  source             = "./proxy_application"
+  name               = "Tandoor"
+  description        = "Recipes"
+  icon_url           = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
+  slug               = "recipes"
+  domain             = module.secret_authentik.fields["domain"]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  auth_groups        = [authentik_group.media.id]
+  access_token_validity = "weeks=20"
+}
+
 module "oauth2-immich" {
   source             = "./oauth2_application"
   name               = "Immich"
