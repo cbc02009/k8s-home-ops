@@ -109,7 +109,7 @@ module "proxy-calibre-web" {
 
 module "proxy-tandoor" {
   source             = "./proxy_application"
-  name               = "Tandoor"
+  name               = "Recipes"
   description        = "Recipes"
   icon_url           = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
   slug               = "recipes"
@@ -154,7 +154,7 @@ module "oauth2-grafana" {
 
 module "oauth2-tandoor" {
   source                     = "./oauth2_application"
-  name                       = "Recipes"
+  name                       = "tandoor"
   icon_url                   = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
   launch_url                 = "https://recipes.${module.secret_authentik.fields["domain"]}"
   description                = "Recipes"
