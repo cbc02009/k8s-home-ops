@@ -46,6 +46,10 @@ spec:
         mayastor:
           enabled: true
     mayastor:
+      crds:
+        csi:
+          volumeSnapshots:
+            enabled: false
       csi:
         node:
           initContainers:
