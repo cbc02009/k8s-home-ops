@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app openebs
+  name: openebs
 spec:
   interval: 30m
   chart:
@@ -31,10 +31,7 @@ spec:
           keep: false
     localpv-provisioner:
       hostpathClass:
-        enabled: true
-        name: openebs-hostpath
-        isDefaultClass: false
-        basePath: /var/openebs/local
+        enabled: false
     zfs-localpv:
       enabled: false
     lvm-localpv:
@@ -47,4 +44,22 @@ spec:
           enabled: false
       replicated:
         mayastor:
+          enabled: true
+    mayastor:
+      csi:
+        node:
+          initContainers:
+            enabled: false
+      etcd:
+        localpvScConfig:
           enabled: false
+        persistence:
+          storageClass: openebs-hostpath
+      loki-stack:
+        enabled: false
+        localpvScConfig:
+          enabled: false
+      promtail:
+        enabled: false
+      storageClass:
+        enabled: false

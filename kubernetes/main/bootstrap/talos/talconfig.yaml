@@ -32,6 +32,8 @@ nodes:
     installDiskSelector:
       model: Samsung SSD 870
     controlPlane: true
+    nodeLabels: &nodeLabels
+      openebs.io/engine: mayastor
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -61,6 +63,7 @@ nodes:
     installDiskSelector:
       model: Samsung SSD 870
     controlPlane: true
+    nodeLabels: *nodeLabels
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
@@ -84,6 +87,7 @@ nodes:
     installDiskSelector:
       model: Samsung SSD 850
     controlPlane: true
+    nodeLabels: *nodeLabels
     disableSearchDomain: true
     kernelModules:
       - name: br_netfilter
