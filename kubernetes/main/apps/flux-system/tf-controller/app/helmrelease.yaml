@@ -27,6 +27,8 @@ spec:
     keepHistory: false
   values:
     installCRDs: true
+    awsPackage:
+      install: false
     metrics:
       enabled: true
       serviceMonitor:
