@@ -5,7 +5,7 @@ clusterName: main
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
 talosVersion: v1.7.5
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
-kubernetesVersion: v1.29.2
+kubernetesVersion: v1.30.2
 
 endpoint: https://10.5.0.2:6443
 
@@ -224,7 +224,7 @@ patches:
     machine:
       kubelet:
         extraArgs:
-          feature-gates: GracefulNodeShutdown=true,NewVolumeManagerReconstruction=false
+          feature-gates: GracefulNodeShutdown=true
           rotate-server-certificates: "true"
         extraConfig:
           maxPods: 150
