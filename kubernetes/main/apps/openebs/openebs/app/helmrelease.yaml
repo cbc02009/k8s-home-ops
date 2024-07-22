@@ -64,3 +64,5 @@ spec:
           enabled: false
       promtail:
         enabled: false
+      storageClass:
+        enabled: false
