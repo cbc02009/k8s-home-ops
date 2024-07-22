@@ -30,7 +30,7 @@ spec:
       namespace: system
     - name: emqx
       namespace: databases
-    - name: openebs-config
+    - name: openebs
       namespace: openebs
     - name: volsync
       namespace: system

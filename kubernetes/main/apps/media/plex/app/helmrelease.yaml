@@ -27,7 +27,7 @@ spec:
   dependsOn:
     - name: intel-device-plugins-gpu
       namespace: system
-    - name: openebs-config
+    - name: openebs
       namespace: openebs
     - name: volsync
       namespace: system

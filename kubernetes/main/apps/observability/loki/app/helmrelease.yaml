@@ -28,8 +28,7 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs
-    - name: openebs-config
-      namespace: openebs
+
     - name: vector-agent
       namespace: observability
     - name: vector-aggregator
