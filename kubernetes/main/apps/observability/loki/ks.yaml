@@ -22,4 +22,4 @@ spec:
   dependsOn:
     - name: kube-prometheus-stack
     - name: external-secrets-stores
-    - name: rook-ceph-cluster
+    - name: openebs-config

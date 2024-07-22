@@ -26,7 +26,7 @@ spec:
       name: pgadmin
       namespace: databases
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: openebs-config
   postBuild:
     substitute:
       APP: *app

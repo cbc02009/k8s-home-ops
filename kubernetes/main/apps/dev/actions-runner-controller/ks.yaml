@@ -15,7 +15,7 @@ spec:
   path: './kubernetes/main/apps/dev/actions-runner-controller/app/'
   dependsOn:
     - name: external-secrets-stores
-    - name: rook-ceph-cluster
+    - name: openebs-config
   prune: true
   sourceRef:
     kind: GitRepository

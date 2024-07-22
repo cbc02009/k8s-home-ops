@@ -27,7 +27,7 @@ spec:
       namespace: organizarrs
   dependsOn:
     - name: external-secrets-stores
-    - name: rook-ceph-cluster
+    - name: openebs-config
   postBuild:
     substitute:
       APP: *app
