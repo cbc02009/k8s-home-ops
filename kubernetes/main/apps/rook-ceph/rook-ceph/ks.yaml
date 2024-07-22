@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app rook-ceph-cluster
+  name: &app rook-ceph-operator
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/rook-ceph/rook-ceph/cluster/'
+  path: './kubernetes/main/apps/rook-ceph/rook-ceph/operator/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -23,16 +23,14 @@ spec:
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
       kind: HelmRelease
-      name: rook-ceph-cluster
+      name: rook-ceph-operator
       namespace: rook-ceph
-  dependsOn:
-    - name: rook-ceph-operator
 # ---
 # # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 # apiVersion: kustomize.toolkit.fluxcd.io/v1
 # kind: Kustomization
 # metadata:
-#   name: &app rook-ceph-operator
+#   name: &app rook-ceph-cluster
 #   namespace: flux-system
 #   labels:
 #     substitution.flux.home.arpa/enabled: 'true'
@@ -41,7 +39,7 @@ spec:
 #   commonMetadata:
 #     labels:
 #       app.kubernetes.io/name: *app
-#   path: './kubernetes/main/apps/rook-ceph/rook-ceph/operator/'
+#   path: './kubernetes/main/apps/rook-ceph/rook-ceph/cluster/'
 #   prune: true
 #   sourceRef:
 #     kind: GitRepository
@@ -52,5 +50,7 @@ spec:
 #   healthChecks:
 #     - apiVersion: helm.toolkit.fluxcd.io/v2beta1
 #       kind: HelmRelease
-#       name: rook-ceph-operator
+#       name: rook-ceph-cluster
 #       namespace: rook-ceph
+#   dependsOn:
+#     - name: rook-ceph-operator
