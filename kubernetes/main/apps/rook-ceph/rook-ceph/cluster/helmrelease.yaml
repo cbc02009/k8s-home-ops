@@ -90,21 +90,21 @@ spec:
         enabled: true
         urlPrefix: /
 
-      storage:
-        useAllNodes: false
-        useAllDevices: false
-        config:
-          osdsPerDevice: "1"
-        nodes:
-          - name: "sakura"
-            devices:
-              - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W319948H"
-          - name: "uiharu"
-            devices:
-              - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W318020L"
-          - name: "miri"
-            devices:
-              - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W317717Z"
+      # storage:
+      #   useAllNodes: false
+      #   useAllDevices: false
+      #   config:
+      #     osdsPerDevice: "1"
+      #   nodes:
+      #     - name: "sakura"
+      #       devices:
+      #         - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W319948H"
+      #     - name: "uiharu"
+      #       devices:
+      #         - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W318020L"
+      #     - name: "miri"
+      #       devices:
+      #         - name: "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W317717Z"
 
       placement:
         mgr: &placement

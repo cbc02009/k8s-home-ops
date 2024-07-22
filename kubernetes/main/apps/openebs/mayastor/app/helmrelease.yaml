@@ -47,6 +47,7 @@ spec:
           enabled: true
     mayastor:
       crds:
+        enabled: true
         csi:
           volumeSnapshots:
             enabled: false
