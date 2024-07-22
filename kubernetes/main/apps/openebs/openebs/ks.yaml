@@ -30,6 +30,9 @@ metadata:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
   targetNamespace: openebs
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   path: ./kubernetes/main/apps/openebs/openebs/config
   prune: true
   sourceRef:
