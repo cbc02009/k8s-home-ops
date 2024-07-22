@@ -25,7 +25,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: openebs-config
+    - name: openebs
       namespace: openebs
     - name: volsync
       namespace: system
