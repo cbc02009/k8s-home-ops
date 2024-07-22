@@ -27,8 +27,8 @@ spec:
     openebs-crds:
       csi:
         volumeSnapshots:
-          enabled: false
-          keep: false
+          enabled: true
+          keep: true
     localpv-provisioner:
       hostpathClass:
         enabled: true
