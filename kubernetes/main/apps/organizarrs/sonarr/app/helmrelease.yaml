@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   dependsOn:
     - name: openebs-config
-      namespace: rook-ceph
+      namespace: openebs
 
   values:
     controllers:

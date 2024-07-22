@@ -29,7 +29,7 @@ spec:
     - name: openebs
       namespace: openebs
     - name: openebs-config
-      namespace: rook-ceph
+      namespace: openebs
     - name: vector-agent
       namespace: observability
     - name: vector-aggregator

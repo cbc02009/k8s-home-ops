@@ -28,7 +28,7 @@ spec:
     - name: intel-device-plugins-gpu
       namespace: system
     - name: openebs-config
-      namespace: rook-ceph
+      namespace: openebs
     - name: volsync
       namespace: system
   values:

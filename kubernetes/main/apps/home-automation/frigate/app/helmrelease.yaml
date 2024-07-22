@@ -31,7 +31,7 @@ spec:
     - name: emqx
       namespace: databases
     - name: openebs-config
-      namespace: rook-ceph
+      namespace: openebs
     - name: volsync
       namespace: system
   values:
