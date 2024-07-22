@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - diskpools.yaml
   - storageclass.yaml
+  - snapshotclass.yaml
