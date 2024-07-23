@@ -7,13 +7,15 @@ talosVersion: v1.7.5
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
 kubernetesVersion: v1.30.2
 
-endpoint: https://10.5.0.2:6443
+# endpoint: https://10.5.0.2:6443
+endpoint: https://10.0.2.9:6443
 
 allowSchedulingOnMasters: true
 
 additionalApiServerCertSans: &san
   - "127.0.0.1"
   - "10.5.0.2"
+  - "10.0.2.9"
   - main.ctec.run
 
 additionalMachineCertSans: *san
@@ -48,6 +50,8 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: &vip
+          ip: 10.0.2.9
     extensionServices: &nut-service
       - name: nut-client
         configFiles:
@@ -77,6 +81,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: *vip
     extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
@@ -100,6 +105,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: *vip
     extensionServices: *nut-service
 
 controlPlane:
@@ -172,10 +178,9 @@ patches:
     machine:
       network:
         extraHostEntries:
-          - ip: 10.5.0.2
+          - ip: 10.0.2.9
             aliases:
               - main.ctec.run
-              - 10.5.0.2
 
   # Cluster configuration
   - |-

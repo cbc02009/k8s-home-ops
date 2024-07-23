@@ -20,6 +20,6 @@ spec:
       runAsUser: ${APP_UID:-568}
       runAsGroup: ${APP_GID:-568}
       fsGroup: ${APP_GID:-568}
-    pruneIntervalDays: 7
+    pruneIntervalDays: 30
     retain:
-      daily: 14
+      daily: 30
