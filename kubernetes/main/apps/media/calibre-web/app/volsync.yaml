@@ -3,14 +3,14 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: volsync-calibre-web-minio
+  name: calibre-web-volsync-minio
   namespace: media
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: restic-template
   target:
-    name: volsync-calibre-web-minio
+    name: calibre-web-volsync-minio
     creationPolicy: Owner
     template:
       engineVersion: v2
@@ -36,7 +36,7 @@ spec:
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: volsync-calibre-web-minio
+    repository: calibre-web-volsync-minio
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
