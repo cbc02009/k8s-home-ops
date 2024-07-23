@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: calibre-web-restic
+  name: volsync-calibre-minio
   namespace: media
 spec:
   secretStoreRef:
@@ -15,14 +15,13 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: '{{ .REPO_TEMPLATE }}/calibre-web'
-        RESTIC_PASSWORD: '{{ .RESTIC_PASS }}'
-        AWS_ACCESS_KEY_ID: '{{ .ACCESS_KEY }}'
-        AWS_SECRET_ACCESS_KEY: '{{ .SECRET_KEY }}'
+        RESTIC_REPOSITORY: '{{ .repo_template }}/${APP}'
+        RESTIC_PASSWORD: '{{ .restic_pass }}'
+        AWS_ACCESS_KEY_ID: '{{ .access_key }}'
+        AWS_SECRET_ACCESS_KEY: '{{ .secret_key }}'
   dataFrom:
-    - find:
-        name:
-          regexp: .*
+    - extract:
+        key: restic-template-minio
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
@@ -37,7 +36,7 @@ spec:
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
-    repository: calibre-web-restic-secret
+    repository: volsync-calibre-minio
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-ceph-blockpool
     storageClassName: ceph-block
