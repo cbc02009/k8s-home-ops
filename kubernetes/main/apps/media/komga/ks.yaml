@@ -30,3 +30,4 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_STORAGECLASS: mayastor-1
+      VOLSYNC_SNAPSHOTCLASS: csi-mayastor-snapshotclass
