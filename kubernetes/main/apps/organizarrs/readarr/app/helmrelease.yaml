@@ -55,7 +55,7 @@ spec:
           app:
             image:
               repository: ghcr.io/onedr0p/readarr-nightly
-              tag: 0.3.32.2585
+              tag: 0.4.0.2588
 
             env:
               TZ: ${TZ}
