@@ -21,6 +21,7 @@ spec:
               dd if=/dev/zero of=${disk} bs=1M count=100 oflag=direct;
               blkdiscard ${disk};
               partprobe ${disk};
+              sync;
           securityContext:
             privileged: true
           resources: {}
