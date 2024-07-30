@@ -1,21 +1,21 @@
-# ---
-# apiVersion: "openebs.io/v1beta2"
-# kind: DiskPool
-# metadata:
-#   name: sakura-nvme
-#   namespace: openebs
-# spec:
-#   node: sakura
-#   disks: ["/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W319948H"]
-# ---
-# apiVersion: "openebs.io/v1beta2"
-# kind: DiskPool
-# metadata:
-#   name: miri-nvme
-#   namespace: openebs
-# spec:
-#   node: miri
-#   disks: ["/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W317717Z"]
+---
+apiVersion: "openebs.io/v1beta2"
+kind: DiskPool
+metadata:
+  name: sakura-nvme
+  namespace: openebs
+spec:
+  node: sakura
+  disks: ["/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W319948H"]
+---
+apiVersion: "openebs.io/v1beta2"
+kind: DiskPool
+metadata:
+  name: miri-nvme
+  namespace: openebs
+spec:
+  node: miri
+  disks: ["/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S6S1NS0W317717Z"]
 ---
 apiVersion: "openebs.io/v1beta2"
 kind: DiskPool

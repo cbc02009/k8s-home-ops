@@ -32,14 +32,14 @@ metadata:
 spec:
   sourcePVC: calibre-web-config-v1
   trigger:
-    schedule: '0 4 * * *'
+    schedule: "0 * * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 10
     repository: calibre-web-volsync-minio
     cacheCapacity: 2Gi
-    volumeSnapshotClassName: csi-ceph-blockpool
-    storageClassName: ceph-block
+    volumeSnapshotClassName: csi-mayastor-snapshotclass
+    storageClassName: mayastor-3
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -60,12 +60,11 @@ spec:
   restic:
     copyMethod: Snapshot
     repository: "calibre-web-volsync-minio"
-    # repository: "calibre-web-volsync-r2"
     cacheStorageClassName: "openebs-hostpath"
     cacheAccessModes: ["ReadWriteOnce"]
     cacheCapacity: "1Gi"
-    storageClassName: "ceph-block"
-    volumeSnapshotClassName: "csi-ceph-blockpool"
+    storageClassName: "mayastor-3"
+    volumeSnapshotClassName: "csi-mayastor-snapshotclass"
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568

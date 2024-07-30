@@ -30,6 +30,8 @@ cniConfig:
 nodes:
 
   - hostname: uiharu.ctec.run
+    nodeLabels: &nodeLabels
+      openebs.io/engine: mayastor
     ipAddress: 10.0.2.10
     installDiskSelector:
       model: Samsung SSD 870
@@ -61,6 +63,7 @@ nodes:
             mountPath: /usr/local/etc/nut/upsmon.conf
 
   - hostname: miri.ctec.run
+    nodeLabels: *nodeLabels
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: Samsung SSD 870
@@ -85,6 +88,7 @@ nodes:
     extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
+    nodeLabels: *nodeLabels
     ipAddress: 10.0.2.12
     installDiskSelector:
       model: Samsung SSD 850
