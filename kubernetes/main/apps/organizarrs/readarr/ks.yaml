@@ -25,9 +25,6 @@ spec:
       kind: HelmRelease
       name: readarr
       namespace: organizarrs
-  dependsOn:
-    - name: external-secrets-stores
-    - name: rook-ceph-cluster
   postBuild:
     substitute:
       APP: *app

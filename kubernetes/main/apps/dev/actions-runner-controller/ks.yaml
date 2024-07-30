@@ -15,7 +15,6 @@ spec:
   path: './kubernetes/main/apps/dev/actions-runner-controller/app/'
   dependsOn:
     - name: external-secrets-stores
-    - name: rook-ceph-cluster
   prune: true
   sourceRef:
     kind: GitRepository

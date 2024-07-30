@@ -27,8 +27,6 @@ spec:
   dependsOn:
     - name: intel-device-plugins-gpu
       namespace: system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
     - name: volsync
       namespace: system
   values:

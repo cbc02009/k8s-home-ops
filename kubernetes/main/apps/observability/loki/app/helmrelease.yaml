@@ -28,8 +28,6 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
     - name: vector-agent
       namespace: observability
     - name: vector-aggregator

@@ -25,8 +25,6 @@ spec:
       kind: HelmRelease
       name: pgadmin
       namespace: databases
-  dependsOn:
-    - name: rook-ceph-cluster
   postBuild:
     substitute:
       APP: *app
