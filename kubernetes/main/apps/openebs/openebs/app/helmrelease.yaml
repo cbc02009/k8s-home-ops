@@ -47,7 +47,7 @@ spec:
           enabled: false
       replicated:
         mayastor:
-          enabled: false
+          enabled: true
     mayastor:
       csi:
         node:
@@ -58,9 +58,16 @@ spec:
           enabled: false
         persistence:
           storageClass: openebs-hostpath
+      io_engine:
+        cpuCount: "1"
+        resources:
+          limits:
+            cpu: 500m
       loki-stack:
         enabled: false
         localpvScConfig:
           enabled: false
       promtail:
+        enabled: false
+      storageClass:
         enabled: false
