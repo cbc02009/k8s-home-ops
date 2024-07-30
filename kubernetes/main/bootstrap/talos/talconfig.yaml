@@ -258,7 +258,7 @@ patches:
         fs.inotify.max_user_watches: 524288
         fs.inotify.max_user_instances: 8192
         net.core.bpf_jit_harden: 1
-        vm.nr_hugepages: 1024
+        vm.nr_hugepages: 2048
 
   # Misc Machine values
   - |-
