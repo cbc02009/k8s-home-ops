@@ -61,6 +61,8 @@ spec:
       io_engine:
         cpuCount: "1"
         resources:
+          requests:
+            cpu: 100m
           limits:
             cpu: 500m
       loki-stack:
