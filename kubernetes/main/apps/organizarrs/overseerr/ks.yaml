@@ -25,6 +25,8 @@ spec:
       kind: HelmRelease
       name: overseerr
       namespace: organizarrs
+  dependsOn:
+    - name: volsync
   postBuild:
     substitute:
       APP: *app
