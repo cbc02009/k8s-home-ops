@@ -27,7 +27,7 @@ spec:
       namespace: organizarrs
   dependsOn:
     - name: volsync
-    - name: mayastor-config
+    - name: openebs-config
   postBuild:
     substitute:
       APP: *app

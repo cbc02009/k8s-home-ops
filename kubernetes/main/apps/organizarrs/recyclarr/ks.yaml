@@ -21,7 +21,7 @@ spec:
   timeout: 5m
   dependsOn:
     - name: volsync
-    - name: mayastor-config
+    - name: openebs-config
   postBuild:
     substitute:
       APP: *app
