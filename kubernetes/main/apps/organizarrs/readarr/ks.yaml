@@ -25,6 +25,9 @@ spec:
       kind: HelmRelease
       name: readarr
       namespace: organizarrs
+  dependsOn:
+    - name: cloudnative-pg-cluster
+    - name: external-secrets-stores
   postBuild:
     substitute:
       APP: *app
