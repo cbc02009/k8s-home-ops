@@ -77,6 +77,7 @@ spec:
         mode: console
       news:
         news_feed_enabled: false
+
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -201,11 +202,11 @@ spec:
             - { name: DS_PROMETHEUS, value: Prometheus }
         blocky:
           # renovate: depName="blocky"
-          gnetId: 14768
+          gnetId: 13768
           revision: 4
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-            - { name: VAR_BLOCKY_URL, value: 'http:\\/\\/10.4.0.7:4000' }
+            - { name: VAR_BLOCKY_URL, value: 'http:\/\/10.4.0.7:4000' }
         cloudflared:
           # renovate: depName="Cloudflare Tunnels (cloudflared)"
           gnetId: 17457
