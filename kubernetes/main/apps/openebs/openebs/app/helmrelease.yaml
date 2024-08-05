@@ -60,6 +60,7 @@ spec:
           storageClass: openebs-hostpath
       io_engine:
         cpuCount: "1"
+        coreList: "{7}"
         envcontext: "iova-mode=pa"
         resources:
           requests:

@@ -115,11 +115,13 @@ nodes:
 controlPlane:
   schematic:
     customization:
+      extraKernelArgs:
+          - isolcpus=7
       systemExtensions:
-        officialExtensions:
-          - siderolabs/intel-ucode
-          - siderolabs/i915-ucode
-          - siderolabs/nut-client
+          officialExtensions:
+              - siderolabs/i915-ucode
+              - siderolabs/intel-ucode
+              - siderolabs/nut-client
   patches:
     # Disable default API server admission plugins.
     - |-
