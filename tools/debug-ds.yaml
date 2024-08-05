@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: debug
+spec:
+  selector:
+    matchLabels:
+      app: debug
+  template:
+    metadata:
+      labels:
+        app: debug
+      name: debug
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: linux
+        image: ubuntu
+        args:
+        - sleep
+        - "3600"
+        securityContext:
+          privileged: true
+          runAsGroup: 0
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /mnt/host
+          name: host
+      volumes:
+      - hostPath:
+          path: /
+          type: ""
+        name: host

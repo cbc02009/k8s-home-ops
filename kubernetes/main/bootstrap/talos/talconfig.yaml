@@ -88,7 +88,7 @@ nodes:
     extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
-    # nodeLabels: *nodeLabels
+    nodeLabels: *nodeLabels
     ipAddress: 10.0.2.12
     installDiskSelector:
       model: Samsung SSD 850
