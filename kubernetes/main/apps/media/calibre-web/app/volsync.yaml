@@ -39,7 +39,7 @@ spec:
     repository: calibre-web-volsync-minio
     cacheCapacity: 2Gi
     volumeSnapshotClassName: csi-mayastor-snapshotclass
-    storageClassName: mayastor-2
+    storageClassName: mayastor-3
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -63,7 +63,7 @@ spec:
     cacheStorageClassName: "openebs-hostpath"
     cacheAccessModes: ["ReadWriteOnce"]
     cacheCapacity: "1Gi"
-    storageClassName: "mayastor-2"
+    storageClassName: "mayastor-3"
     volumeSnapshotClassName: "csi-mayastor-snapshotclass"
     moverSecurityContext:
       runAsUser: 568

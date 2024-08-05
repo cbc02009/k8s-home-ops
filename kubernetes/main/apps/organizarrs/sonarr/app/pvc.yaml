@@ -16,4 +16,4 @@ spec:
     requests:
       storage: 1Gi
 
-  storageClassName: mayastor-2
+  storageClassName: mayastor-3
