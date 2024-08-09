@@ -115,8 +115,6 @@ nodes:
 controlPlane:
   schematic:
     customization:
-      extraKernelArgs:
-          - isolcpus=7
       systemExtensions:
           officialExtensions:
               - siderolabs/i915-ucode
@@ -261,6 +259,9 @@ patches:
         fs.inotify.max_user_instances: 8192
         net.core.bpf_jit_harden: 1
         vm.nr_hugepages: 2048
+  # cpu isolation for mayastor
+  - |-
+    machine:
 
   # Misc Machine values
   - |-
