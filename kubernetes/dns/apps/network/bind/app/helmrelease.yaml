@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: docker.io/internetsystemsconsortium/bind9
-              tag: 9.19
+              tag: 9.21
             command:
               - "/usr/sbin/named"
             args:
