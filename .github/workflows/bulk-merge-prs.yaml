@@ -13,6 +13,8 @@ on:
         description: Labels
         default: "any"
         required: false
+  schedule:
+    - cron: "0 0 * * 1"
 
 jobs:
   bulk-merge-prs:
