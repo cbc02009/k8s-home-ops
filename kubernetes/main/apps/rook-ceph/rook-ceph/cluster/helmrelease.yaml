@@ -129,8 +129,6 @@ spec:
         tls:
           - hosts: [*host]
 
-    cephBlockPools: []
-
     cephBlockPools:
       - name: ceph-blockpool
         spec:
