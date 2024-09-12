@@ -38,8 +38,8 @@ spec:
     pruneIntervalDays: 10
     repository: calibre-web-volsync-minio
     cacheCapacity: 2Gi
-    volumeSnapshotClassName: csi-mayastor-snapshotclass
-    storageClassName: mayastor-3
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-blockpool
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -63,8 +63,8 @@ spec:
     cacheStorageClassName: "openebs-hostpath"
     cacheAccessModes: ["ReadWriteOnce"]
     cacheCapacity: "1Gi"
-    storageClassName: "mayastor-3"
-    volumeSnapshotClassName: "csi-mayastor-snapshotclass"
+    storageClassName: "ceph-blockpool"
+    volumeSnapshotClassName: "csi-ceph-blockpool"
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568

@@ -14,8 +14,8 @@ spec:
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
-    storageClassName: "${VOLSYNC_STORAGECLASS:-mayastor-3}"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-mayastor-snapshotclass}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-blockpool}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     moverSecurityContext:
       runAsUser: ${APP_UID:-568}
       runAsGroup: ${APP_GID:-568}
