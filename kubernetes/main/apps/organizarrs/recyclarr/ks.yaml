@@ -21,7 +21,7 @@ spec:
   timeout: 5m
   dependsOn:
     - name: volsync
-    - name: openebs-config
+    - name: rook-ceph-cluster
   postBuild:
     substitute:
       APP: *app
