@@ -48,7 +48,7 @@ spec:
             image:
               repository: ghcr.io/onedr0p/radarr-develop
               tag:
-                5.10.0.9090@sha256:67a07be6401d7138325539dca4f87cd31b5b827789b94408baec7962160736e6
+                5.10.3.9178@sha256:751c19ed421afe5cec92f48c39f225ad7a2a420425da8e4f9ea121e489e53f05
 
             envFrom:
               - secretRef:
