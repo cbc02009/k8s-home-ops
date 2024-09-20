@@ -43,7 +43,7 @@ spec:
           app:
             image:
               repository: ghcr.io/kankerdev/redlib
-              tag: latest
+              tag: v0.35.1
             env:
               REDLIB_DEFAULT_SHOW_NSFW: on
               REDLIB_DEFAULT_WIDE: on
