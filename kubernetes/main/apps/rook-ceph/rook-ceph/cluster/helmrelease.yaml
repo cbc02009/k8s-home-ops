@@ -157,7 +157,7 @@ spec:
       deletionPolicy: Delete
 
     cephFileSystems:
-      - name: ceph-filesystem
+      - name: &cephFileSystemName ceph-filesystem
         spec:
           metadataPool:
             replicated:
