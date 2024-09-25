@@ -12,9 +12,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: volsync
-    - name: calibre
   path: './kubernetes/main/apps/media/calibre-web/app/'
   prune: true
   sourceRef:
