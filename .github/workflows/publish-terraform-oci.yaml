@@ -12,7 +12,7 @@ on: # yamllint disable-line rule:truthy
 jobs:
   changed-files:
     name: Generate matrix for building images
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -46,7 +46,7 @@ jobs:
             echo "matrix={\"project\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "${GITHUB_OUTPUT}"
           fi
   publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
       - changed-files
     strategy:
