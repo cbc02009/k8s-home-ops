@@ -59,7 +59,7 @@ objects:
 go2rtc:
   streams:
     doorbell:
-      - "ffmpeg:http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
+      - "ffmpeg:http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}#video=copy#audio=copy#audio=opus"
     doorbell_sub:
       - "ffmpeg:http://10.0.4.10/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
 
