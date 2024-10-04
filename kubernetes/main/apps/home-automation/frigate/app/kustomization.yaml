@@ -6,7 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ../../../../templates/gatus/external
-  - ../../../../templates/volsync
+  # - ../../../../templates/volsync
 namespace: home-automation
 configMapGenerator:
   - name: frigate
