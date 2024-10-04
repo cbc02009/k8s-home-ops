@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/external
-  # - ../../../../templates/volsync
+  # - ../../../../templates/gatus/external
+  - ../../../../templates/volsync
 namespace: home-automation
 configMapGenerator:
   - name: frigate
