@@ -42,7 +42,7 @@ spec:
           app:
             image:
               repository: ghcr.io/cbc02009/kubernetes-schemas
-              tag: latest@sha256:d9cb649595a7336a2f3b5b6c69fef116a602407967876ef88791b465e58fb4db
+              tag: latest@sha256:d47a3cd5e9db208a7d56dd1749b96d44789529c931c40cf4c5b1241c93d1b1bf
             resources:
               requests:
                 cpu: 10m
