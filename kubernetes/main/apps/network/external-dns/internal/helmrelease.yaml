@@ -24,9 +24,9 @@ spec:
 
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
-        value: "10.4.0.3"
+        value: "10.0.2.1"
       - name: EXTERNAL_DNS_RFC2136_PORT
-        value: "53"
+        value: "53530"
       - name: EXTERNAL_DNS_RFC2136_ZONE
         value: "kokoro.wtf"
       - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
