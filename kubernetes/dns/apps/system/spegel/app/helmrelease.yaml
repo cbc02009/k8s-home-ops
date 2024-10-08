@@ -9,10 +9,10 @@ spec:
   chart:
     spec:
       chart: spegel
-      version: v0.0.24
+      version: v0.0.25
       sourceRef:
         kind: HelmRepository
-        name: xenitab
+        name: spegel
         namespace: flux-system
       interval: 30m
   valuesFrom:
