@@ -45,9 +45,9 @@ spec:
 
     prometheus:
       serviceMonitor:
-        enabled: false
+        enabled: true
 
     operator:
       prometheus:
         serviceMonitor:
-          enabled: false
+          enabled: true
