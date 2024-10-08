@@ -4,6 +4,7 @@ version: "3"
 vars:
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
   TERRAFORM_DIR: "{{.ROOT_DIR}}/infrastructure/terraform"
+  CLUSTER: '{{.CLUSTER | default "main"}}'
 
 includes:
   fx:
