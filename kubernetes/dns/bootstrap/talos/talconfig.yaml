@@ -28,7 +28,7 @@ cniConfig:
 nodes:
 
   - hostname: anya.ctec.run
-    ipAddress: 10.0.2.5
+    ipAddress: 10.0.2.13
     installDiskSelector:
       model: KingFast
     controlPlane: true
@@ -44,7 +44,7 @@ nodes:
       - deviceSelector:
           hardwareAddr: fc:3f:db:0e:7a:79
         addresses:
-          - 10.0.2.5/24
+          - 10.0.2.13/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0

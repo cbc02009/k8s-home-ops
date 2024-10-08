@@ -7,8 +7,9 @@ talosVersion: v1.8.0
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
 kubernetesVersion: v1.31.1
 
-endpoint: https://10.5.0.2:6443
-# endpoint: https://10.0.2.9:6443
+# endpoint: https://10.5.0.2:6443
+# endpoint: https://10.0.1.1:6443
+endpoint: https://10.0.2.9:6443
 
 allowSchedulingOnMasters: true
 
@@ -42,7 +43,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:73:bd:aa
@@ -52,8 +53,8 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-        # vip: &vip
-        #   ip: 10.0.2.9
+        vip: &vip
+          ip: 10.0.2.9
     extensionServices: &nut-service
       - name: nut-client
         configFiles:
@@ -74,7 +75,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c1:b2
@@ -84,7 +85,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-        # vip: *vip
+        vip: *vip
     extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
@@ -99,7 +100,7 @@ nodes:
         parameters:
           - nf_conntrack_max=131072
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c5:02
@@ -109,7 +110,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-        # vip: *vip
+        vip: *vip
     extensionServices: *nut-service
 
 controlPlane:

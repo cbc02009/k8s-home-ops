@@ -1,6 +1,6 @@
 ---
 providerRegex: |
-  ^(rem|ram)$
+  ^(rem|ram|anya)$
 
 bypassDnsResolution: true
 
