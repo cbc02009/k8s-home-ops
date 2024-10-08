@@ -27,10 +27,10 @@ cniConfig:
 
 nodes:
 
-  - hostname: rem.ctec.run
+  - hostname: anya.ctec.run
     ipAddress: 10.0.2.5
     installDiskSelector:
-      model: KINGSTON SA400S3
+      model: KingFast
     controlPlane: true
     disableSearchDomain: true
     kernelModules:
@@ -42,7 +42,7 @@ nodes:
       - 1.1.1.1
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: 68:1d:ef:2d:e3:47
+          hardwareAddr: fc:3f:db:0e:7a:79
         addresses:
           - 10.0.2.5/24
         mtu: 1500
@@ -50,28 +50,28 @@ nodes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
 
-  - hostname: ram.ctec.run
-    ipAddress: 10.0.2.6
-    installDiskSelector:
-      model: SATA SSD
-    controlPlane: false
-    disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
-    nameservers:
-      - 10.4.0.4
-      - 1.1.1.1
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 68:1d:ef:2d:79:3f
-        addresses:
-          - 10.0.2.6/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
+  # - hostname: ram.ctec.run
+  #   ipAddress: 10.0.2.6
+  #   installDiskSelector:
+  #     model: SATA SSD
+  #   controlPlane: false
+  #   disableSearchDomain: true
+  #   kernelModules:
+  #     - name: br_netfilter
+  #       parameters:
+  #         - nf_conntrack_max=131072
+  #   nameservers:
+  #     - 10.4.0.4
+  #     - 1.1.1.1
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 68:1d:ef:2d:79:3f
+  #       addresses:
+  #         - 10.0.2.6/24
+  #       mtu: 1500
+  #       routes:
+  #         - network: 0.0.0.0/0
+  #           gateway: 10.0.2.1
 
 controlPlane:
   schematic:
