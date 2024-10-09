@@ -19,7 +19,7 @@ spec:
             - apk add --no-cache sgdisk util-linux util-linux-misc parted device-mapper;
               sgdisk --zap-all ${DISK};
               dd if=/dev/zero of=${DISK} bs=1M count=100 oflag=direct;
-              blkdiscard ${DISK};
+              blkdiscard -f ${DISK};
               partprobe ${DISK};
           securityContext:
             privileged: true
