@@ -26,7 +26,7 @@ resources:
   - ./k8tz.yaml
   - ./descheduler.yaml
   - ./metrics-server.yaml
-  - ./kubernetes-sigs-nfd-charts.yaml
+  - ./kubernetes-sigs-nfd.yaml
   - ./lwolf-charts.yaml
   - ./mayastor.yaml
   - ./openebs.yaml

@@ -7,9 +7,11 @@ resources:
   - ./helmrelease.yaml
   - ../../../../templates/gatus/guarded
   - ../../../../templates/volsync
+configMapGenerator:
+  - name: qbittorrent-dnsdist
+    files:
+      - ./config/dnsdist.conf
 generatorOptions:
   disableNameSuffixHash: true
-commonLabels:
-  app.kubernetes.io/name: qbittorrent
-  app.kubernetes.io/instance: qbittorrent
-  app.kubernetes.io/component: app
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
