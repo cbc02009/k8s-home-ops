@@ -3,19 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app promtail
+  name: &app certificates
   namespace: flux-system
 spec:
-  targetNamespace: observability
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/observability/promtail/app
-  prune: true
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/main/apps/network/certificates
+  prune: false
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
-  wait: false
+  wait: true
   interval: 30m
-  retryInterval: 1m
   timeout: 5m

@@ -1,27 +1,25 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app nginx-shared
+  name: &app nginx-certificates
   namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
 spec:
   targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/network/ingress-nginx/shared/'
-  prune: true
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/main/apps/network/nginx/certificates
+  prune: false
   sourceRef:
     kind: GitRepository
     name: k8s-home-ops
+  wait: true
   interval: 30m
-  retryInterval: 1m
-  timeout: 15m
-  dependsOn:
-    - name: cert-manager-issuers
+  timeout: 5m
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -49,8 +47,6 @@ spec:
       kind: HelmRelease
       name: nginx-external
       namespace: network
-  dependsOn:
-    - name: nginx-shared
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -78,5 +74,3 @@ spec:
       kind: HelmRelease
       name: nginx-internal
       namespace: network
-  dependsOn:
-    - name: nginx-shared

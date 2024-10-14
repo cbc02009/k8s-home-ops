@@ -3,17 +3,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: 'kokoro-wtf'
-  namespace: network
+  name: kokoro-wtf
 spec:
-  secretName: 'kokoro-wtf-tls'
+  secretName: kokoro-wtf-tls
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: '${EXTERNAL_DOMAIN}'
+  commonName: kokoro.wtf
   dnsNames:
-    - '${EXTERNAL_DOMAIN}'
-    - '*.${EXTERNAL_DOMAIN}'
-  privateKey:
-    algorithm: ECDSA
-    size: 384
+    - kokoro.wtf
+    - "*.kokoro.wtf"
