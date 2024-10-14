@@ -34,7 +34,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/network/ingress-nginx/external/'
+  path: './kubernetes/main/apps/network/nginx/external/'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -61,7 +61,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/network/ingress-nginx/internal/'
+  path: './kubernetes/main/apps/network/nginx/internal/'
   prune: true
   sourceRef:
     kind: GitRepository
