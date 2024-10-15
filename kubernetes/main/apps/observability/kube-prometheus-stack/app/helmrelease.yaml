@@ -34,7 +34,7 @@ spec:
   values:
 
     crds:
-      enabled: true
+      enabled: false
 
     cleanPrometheusOperatorObjectNames: true
 

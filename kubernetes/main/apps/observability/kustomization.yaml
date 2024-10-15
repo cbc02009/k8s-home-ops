@@ -13,6 +13,7 @@ resources:
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
   - ./prometheus-rules/ks.yaml
+  - ./prometheus-operator-crds/ks.yaml
   - ./promtail/ks.yaml
   - ./unpoller/ks.yaml
   - ./vector/ks.yaml
