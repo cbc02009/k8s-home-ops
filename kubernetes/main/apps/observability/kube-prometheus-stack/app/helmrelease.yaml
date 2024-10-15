@@ -28,8 +28,6 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs
-    - name: thanos
-      namespace: observability
 
   values:
 

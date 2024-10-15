@@ -89,71 +89,8 @@ spec:
             disableDeletion: false
             editable: true
             options:
-              path: /var/lib/grafana/dashboards/default-folder
-          - name: ceph
-            orgId: 1
-            folder: Ceph
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/ceph-folder
-          - name: emqx
-            orgId: 1
-            folder: EMQX
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/emqx-folder
-          - name: flux
-            orgId: 1
-            folder: Flux
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/flux-folder
-          - name: kubernetes
-            orgId: 1
-            folder: Kubernetes
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/kubernetes-folder
-          - name: nginx
-            orgId: 1
-            folder: Nginx
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/nginx-folder
-          - name: prometheus
-            orgId: 1
-            folder: Prometheus
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/prometheus-folder
-          - name: thanos
-            orgId: 1
-            folder: Thanos
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/thanos-folder
-          - name: unifi
-            orgId: 1
-            folder: Unifi
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/unifi-folder
+              path: /var/lib/grafana/dashboards/default
+              
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -166,16 +103,15 @@ spec:
             type: prometheus
             uid: prometheus
             access: proxy
-            url: http://thanos-query-frontend.observability.svc.cluster.local:10902
+            url: http://prometheus-operated.observability.svc.cluster.local:9090
             jsonData:
-              prometheusType: Thanos
               timeInterval: 1m
             isDefault: true
           - name: Loki
             type: loki
             uid: loki
             access: proxy
-            url: http://loki-gateway.observability.svc.cluster.local
+            url: http://loki-headless.observability.svc.cluster.local:3100
             jsonData:
               maxLines: 250
           - name: Alertmanager
