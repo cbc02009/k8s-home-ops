@@ -107,44 +107,22 @@ spec:
           - &host prometheus.${EXTERNAL_DOMAIN}
         tls:
           - hosts: [*host]
-      thanosService:
-        enabled: true
-      thanosServiceMonitor:
-        enabled: true
 
       prometheusSpec:
-        podMetadata:
-          annotations:
-            secret.reloader.stakater.com/reload: &secret thanos-objstore-config
-        replicas: 3
-        replicaExternalLabelName: __replica__
         scrapeInterval: 1m # Must match interval in Grafana Helm chart
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
         enableAdminAPI: true
         walCompression: true
         enableFeatures:
           - auto-gomemlimit
           - memory-snapshot-on-shutdown
           - new-service-discovery-manager
-        image:
-          registry: quay.io
-          repository: prometheus/prometheus
-          tag: v2.54.0-dedupelabels
-        thanos:
-          image: quay.io/thanos/thanos:${THANOS_VERSION}
-          version: "${THANOS_VERSION#v}"
-          objectStorageConfig:
-            existingSecret:
-              name: *secret
-              key: config
-        retention: 2d
-        retentionSize: 15GB
-        externalLabels:
-          cluster: main
+        retention: 14d
+        retentionSize: 70GB
         resources:
           requests:
             cpu: 100m
@@ -156,9 +134,7 @@ spec:
               storageClassName: openebs-hostpath
               resources:
                 requests:
-                  storage: 20Gi
-    nodeExporter:
-      enabled: true
+                  storage: 75Gi
     prometheus-node-exporter:
       fullnameOverride: node-exporter
       prometheus:
@@ -170,8 +146,6 @@ spec:
               replacement: $1
               sourceLabels: ["__meta_kubernetes_pod_node_name"]
               targetLabel: kubernetes_node
-    kubeStateMetrics:
-      enabled: true
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
       metricLabelsAllowlist:
@@ -190,10 +164,3 @@ spec:
     grafana:
       enabled: false
       forceDeployDashboards: true
-      sidecar:
-        dashboards:
-          annotations:
-            grafana_folder: Kubernetes
-          multicluster:
-            etcd:
-              enabled: true
