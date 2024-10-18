@@ -134,6 +134,7 @@ spec:
     ingress:
       app:
         enabled: true
+        className: internal
         hosts:
           - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
             paths:
