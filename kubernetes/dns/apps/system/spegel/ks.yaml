@@ -11,8 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
-  retryInterval: 1m
-  timeout: 15m
+    timeout: 5m
   path: "./kubernetes/dns/apps/system/spegel/app"
   prune: true
   sourceRef:

@@ -17,5 +17,4 @@ spec:
     name: k8s-home-ops
   wait: false
   interval: 30m
-  retryInterval: 1m
-  timeout: 5m
+    timeout: 5m
