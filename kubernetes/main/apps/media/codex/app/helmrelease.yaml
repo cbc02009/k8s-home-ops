@@ -39,16 +39,12 @@ spec:
               repository: docker.io/ajslater/codex
               tag: 1.7.8
 
-            env:
-              codex_CONFIGDIR: /config
-              SERVER_PORT: &port 8443
-
     service:
       main:
         controller: *app
         ports:
           http:
-            port: *port
+            port: 9810
     ingress:
       main:
         enabled: true
