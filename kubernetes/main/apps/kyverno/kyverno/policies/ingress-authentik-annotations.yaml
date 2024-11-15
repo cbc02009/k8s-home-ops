@@ -14,7 +14,6 @@ metadata:
 spec:
   background: true
   mutateExistingOnPolicyUpdate: true
-  generateExistingOnPolicyUpdate: true
   rules:
     - name: auth
       match:
