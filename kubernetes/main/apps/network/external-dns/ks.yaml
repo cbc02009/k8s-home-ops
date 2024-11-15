@@ -18,7 +18,7 @@ spec:
     kind: GitRepository
     name: k8s-home-ops
   interval: 30m
-    timeout: 5m
+  timeout: 5m
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -39,7 +39,7 @@ spec:
     kind: GitRepository
     name: k8s-home-ops
   interval: 30m
-    timeout: 5m
+  timeout: 5m
   dependsOn:
     - name: external-secrets-stores
 ---
@@ -62,6 +62,6 @@ spec:
     kind: GitRepository
     name: k8s-home-ops
   interval: 30m
-    timeout: 5m
+  timeout: 5m
   dependsOn:
     - name: external-secrets-stores

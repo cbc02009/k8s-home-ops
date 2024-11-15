@@ -18,6 +18,6 @@ spec:
     kind: GitRepository
     name: k8s-home-ops
   interval: 30m
-    timeout: 5m
+  timeout: 5m
   dependsOn:
     - name: external-secrets-stores
