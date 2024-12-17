@@ -52,3 +52,5 @@ spec:
       kind: HelmRelease
       name: rook-ceph-operator
       namespace: rook-ceph
+  dependsOn:
+    - name: external-secrets-stores
