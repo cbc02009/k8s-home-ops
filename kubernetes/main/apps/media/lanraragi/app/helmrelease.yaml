@@ -71,4 +71,4 @@ spec:
         server: ${NAS_HOST}
         path: /tank/media/manga/lanraragi
         globalMounts:
-          - path: /home/koyomi/lanraragi/content
+          - path: /home/koyomi/lanraragi
