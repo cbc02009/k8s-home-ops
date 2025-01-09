@@ -36,7 +36,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://cnpg/
       endpointURL: https://${CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-      serverName: &currentCluster postgres-v59
+      serverName: &currentCluster postgres-v60
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg
