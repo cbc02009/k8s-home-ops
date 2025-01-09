@@ -6,7 +6,8 @@ metadata:
   name: rook-ceph-operator
   namespace: rook-ceph
 spec:
-  interval: 5m
+  interval: 30m
+  timeout: 15m
   releaseName: rook-ceph
   chart:
     spec:
