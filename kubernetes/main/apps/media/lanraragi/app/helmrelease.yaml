@@ -69,6 +69,13 @@ spec:
         enabled: true
         type: nfs
         server: ${NAS_HOST}
-        path: /tank/media/manga/lanraragi
+        path: /tank/media/manga/lanraragi/content
         globalMounts:
-          - path: /home/koyomi/lanraragi
+          - path: /home/koyomi/lanraragi/content
+      thumbs:
+        enabled: true
+        type: nfs
+        server: ${NAS_HOST}
+        path: /tank/media/manga/lanraragi/thumb
+        globalMounts:
+          - path: /home/koyomi/lanraragi/thumb
