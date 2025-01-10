@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
+      theme-park:
         replicas: 2
         strategy: RollingUpdate
         pod:
@@ -39,7 +39,7 @@ spec:
                 matchLabels:
                   app.kubernetes.io/name: *app
         containers:
-          theme-park:
+          main:
             image:
               repository: ghcr.io/onedr0p/theme-park
               tag: 1.18.0@sha256:6d6ad5a1c3b55b83f7441ba0346cbd60939c776a5038d34c7fb4ac1136bfa271
