@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     controllers:
-      theme-park:
+      main:
         replicas: 2
         strategy: RollingUpdate
         pod:
@@ -52,7 +52,7 @@ spec:
 
     service:
       main:
-        controller: *app
+        controller: main
         ports:
           http:
             port: 8080
