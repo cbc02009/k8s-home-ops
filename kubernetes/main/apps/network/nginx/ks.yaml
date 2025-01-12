@@ -42,7 +42,7 @@ spec:
     name: k8s-home-ops
   wait: false
   interval: 30m
-  timeout: 5m
+  timeout: 15m
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -64,4 +64,4 @@ spec:
     name: k8s-home-ops
   wait: false
   interval: 30m
-  timeout: 5m
+  timeout: 15m
