@@ -78,8 +78,8 @@ controlPlane:
     customization:
       systemExtensions:
         officialExtensions:
+          - siderolabs/i915
           - siderolabs/intel-ucode
-          - siderolabs/i915-ucode
 
   patches:
     # ETCD configuration

@@ -118,7 +118,7 @@ controlPlane:
     customization:
       systemExtensions:
           officialExtensions:
-              - siderolabs/i915-ucode
+              - siderolabs/i915
               - siderolabs/intel-ucode
               - siderolabs/nut-client
   patches:
