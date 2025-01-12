@@ -3,9 +3,9 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: devbu-io
+  name: kokoro-wtf
 spec:
-  secretName: devbu-io-tls
+  secretName: kokoro-wtf-tls
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
