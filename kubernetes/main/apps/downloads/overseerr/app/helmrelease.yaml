@@ -65,7 +65,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: main
+                  identifier: app
                   port: http
           - host: &customHost requests.${EXTERNAL_DOMAIN}
             paths:
