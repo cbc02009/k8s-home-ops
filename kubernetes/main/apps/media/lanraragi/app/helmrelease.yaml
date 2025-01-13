@@ -63,8 +63,8 @@ spec:
     persistence:
       config:
         existingClaim: *app
-        # globalMounts:
-        #   - path: /home/koyomi
+        globalMounts:
+          - path: /home/koyomi/lanraragi/database
 
       media:
         enabled: true
