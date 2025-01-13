@@ -121,11 +121,6 @@ spec:
                 service:
                   identifier: main
                   port: http
-        tls:
-          - hosts: [*host]
-          - secretName: *host
-            hosts:
-              - *host
 
     persistence:
       config:
