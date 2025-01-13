@@ -7,7 +7,8 @@ metadata:
 spec:
   secretName: kokoro-wtf-tls
   issuerRef:
-    name: letsencrypt-production
+    name: letsencrypt-staging
+    # name: letsencrypt-production
     kind: ClusterIssuer
   commonName: kokoro.wtf
   dnsNames:
