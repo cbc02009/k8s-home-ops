@@ -123,6 +123,9 @@ spec:
                   port: http
         tls:
           - hosts: [*host]
+          - secretName: *host
+            hosts:
+              - *host
 
     persistence:
       config:
