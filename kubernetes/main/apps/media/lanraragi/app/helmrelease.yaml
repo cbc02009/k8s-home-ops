@@ -62,8 +62,9 @@ spec:
 
     persistence:
       config:
-        enabled: true
         existingClaim: *app
+        globalMounts:
+          - path: /home/koyomi
 
       media:
         enabled: true
