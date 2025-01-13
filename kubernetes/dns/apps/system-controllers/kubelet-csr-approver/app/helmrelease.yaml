@@ -15,7 +15,6 @@ spec:
         kind: HelmRepository
         name: postfinance
         namespace: flux-system
-  maxHistory: 2
   install:
     remediation:
       retries: 3

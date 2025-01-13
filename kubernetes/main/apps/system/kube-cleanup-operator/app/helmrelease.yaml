@@ -16,7 +16,6 @@ spec:
         name: lwolf-charts
         namespace: flux-system
       interval: 5m
-  maxHistory: 2
   install:
     remediation:
       retries: 3
