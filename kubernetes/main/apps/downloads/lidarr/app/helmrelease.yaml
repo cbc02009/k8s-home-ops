@@ -83,7 +83,7 @@ spec:
               limits:
                 memory: 2000Mi
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:
@@ -92,19 +92,19 @@ spec:
       main:
         enabled: true
         className: internal
-        annotations:
-          # authentik.home.arpa/enabled: "true"
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            proxy_set_header Accept-Encoding "";
-            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/lidarr/dracula.css"></head>';
-            sub_filter_once on;
+        # annotations:
+        #   # authentik.home.arpa/enabled: "true"
+        #   nginx.ingress.kubernetes.io/configuration-snippet: |
+        #     proxy_set_header Accept-Encoding "";
+        #     sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.${EXTERNAL_DOMAIN}/css/base/lidarr/dracula.css"></head>';
+        #     sub_filter_once on;
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:
               - path: /
                 pathType: Prefix
                 service:
-                  identifier: main
+                  identifier: app
                   port: http
         tls:
           - hosts: [*host]
