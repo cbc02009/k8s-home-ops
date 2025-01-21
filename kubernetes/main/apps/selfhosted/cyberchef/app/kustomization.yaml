@@ -5,4 +5,4 @@ kind: Kustomization
 namespace: selfhosted
 resources:
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../components/gatus/guarded

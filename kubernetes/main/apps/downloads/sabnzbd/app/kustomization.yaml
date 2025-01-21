@@ -6,8 +6,8 @@ namespace: downloads
 resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
-  - ../../../../templates/gatus/guarded
-  - ../../../../templates/volsync
+  - ../../../../components/gatus/guarded
+  - ../../../../components/volsync
 commonLabels:
   app.kubernetes.io/name: sabnzbd
   app.kubernetes.io/instance: sabnzbd

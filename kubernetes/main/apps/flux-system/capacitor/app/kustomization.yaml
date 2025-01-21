@@ -6,4 +6,4 @@ namespace: default
 resources:
   - ./helmrelease.yaml
   - ./rbac.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../components/gatus/guarded

@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: dev
 resources:
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../components/gatus/guarded
 metadata:
   namespace: dev

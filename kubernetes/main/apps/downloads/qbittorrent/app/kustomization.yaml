@@ -5,8 +5,8 @@ namespace: downloads
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
-  - ../../../../templates/volsync
+  - ../../../../components/gatus/guarded
+  - ../../../../components/volsync
 configMapGenerator:
   - name: qbittorrent-dnsdist
     files:

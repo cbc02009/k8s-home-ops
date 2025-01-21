@@ -6,4 +6,4 @@ namespace: selfhosted
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../components/gatus/guarded

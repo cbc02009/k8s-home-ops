@@ -6,6 +6,6 @@ namespace: flux-system
 resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
-  - ../../../../templates/gatus/guarded
+  - ../../../../components/gatus/guarded
 metadata:
   namespace: flux-system

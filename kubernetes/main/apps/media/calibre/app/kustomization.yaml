@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: media
 resources:
   - ./helmrelease.yaml
-  - ../../../../templates/volsync
+  - ../../../../components/volsync
 commonLabels:
   app.kubernetes.io/name: calibre
   app.kubernetes.io/instance: calibre
