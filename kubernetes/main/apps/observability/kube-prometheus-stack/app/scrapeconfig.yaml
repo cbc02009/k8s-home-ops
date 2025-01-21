@@ -20,7 +20,7 @@ metadata:
   name: &name blocky
 spec:
   staticConfigs:
-    - targets: ["10.4.0.7"]
+    - targets: ["10.4.0.7:4000"]
   metricsPath: /metrics
   relabelings:
     - action: replace
