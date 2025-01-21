@@ -16,5 +16,5 @@ resources:
   - ./prometheus-operator-crds/ks.yaml
   - ./promtail/ks.yaml
   - ./unpoller/ks.yaml
-  - ./silencer-operator/ks.yaml
+  - ./silence-operator/ks.yaml
   - ./vector/ks.yaml
