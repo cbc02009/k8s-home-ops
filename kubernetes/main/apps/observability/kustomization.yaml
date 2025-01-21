@@ -6,7 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./alertmanager-silencer/ks.yaml
+  # - ./alertmanager-silencer/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./gatus/ks.yaml
   # - ./grafana/ks.yaml
@@ -16,4 +16,5 @@ resources:
   - ./prometheus-operator-crds/ks.yaml
   - ./promtail/ks.yaml
   - ./unpoller/ks.yaml
+  - ./silencer-operator/ks.yaml
   - ./vector/ks.yaml

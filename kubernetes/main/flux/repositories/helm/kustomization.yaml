@@ -12,6 +12,7 @@ resources:
   - ./cilium.yaml
   - ./cloudnative-pg.yaml
   - ./coder.yaml
+  - ./controlplaneio.yaml
   - ./coredns.yaml
   - ./democratic-csi.yaml
   - ./emqx.yaml
@@ -41,3 +42,4 @@ resources:
   - ./stevehipwell.yaml
   - ./tf-controller.yaml
   - ./vector-charts.yaml
+  - ./wiremind.yaml
