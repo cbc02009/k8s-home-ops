@@ -43,7 +43,7 @@ spec:
           app:
             image:
               repository: ghcr.io/benbusby/whoogle-search
-              tag: 0.9.1
+              tag: 0.9.3
             env:
               # WHOOGLE_ALT_TW: nitter.${EXTERNAL_DOMAIN}
               # WHOOGLE_ALT_YT: piped.${EXTERNAL_DOMAIN}
