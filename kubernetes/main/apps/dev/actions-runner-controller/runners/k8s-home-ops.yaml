@@ -27,15 +27,37 @@ spec:
     runnerScaleSetName: arc-runner-set-k8s-home-ops
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
     minRunners: 1
-    maxRunners: 10
+    maxRunners: 3
     containerMode:
-      type: dind
+      type: kubernetes
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: openebs-hostpath
+        resources:
+          requests:
+            storage: 25Gi
     template:
       spec:
         containers:
           - name: runner
-            image: ghcr.io/onedr0p/actions-runner:2.321.0@sha256:a7539dc157f3f0129f49459826576ab53a529580916bb8a09a395e61e38354c0
+            image: ghcr.io/onedr0p/actions-runner:2.322.0@sha256:34aa045b8b0b82469bcb5951e244fd2bd41b8abbd493f956092497fcdcd29209
             command: ["/home/runner/run.sh"]
+            env:
+              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                value: "false"
+              - name: NODE_IP
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.hostIP
+            volumeMounts:
+              - mountPath: /var/run/secrets/talos.dev
+                name: talos
+                readOnly: true
+        serviceAccountName: *name
+        volumes:
+          - name: talos
+            secret:
+              secretName: *name
   valuesFrom:
     - kind: Secret
       name: actions-runner-controller
