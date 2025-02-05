@@ -29,37 +29,30 @@ module "cf_domain_ingress" {
       type     = "TXT"
     },
     {
-      id       = "protonmail_mx_1"
-      name     = "@"
-      priority = 10
-      value    = "mail.protonmail.ch"
-      type     = "MX"
+      id      = "fastmail_dkim_1"
+      name    = "fm1._domainkey"
+      value   = "fm1.kokoro.wtf.dkim.fmhosted.com"
+      type    = "CNAME"
+      proxied = false
     },
     {
-      id       = "protonmail_mx_2"
-      name     = "@"
-      priority = 20
-      value    = "mailsec.protonmail.ch"
-      type     = "MX"
+      id      = "fastmail_dkim_2"
+      name    = "fm2._domainkey"
+      value   = "fm2.kokoro.wtf.dkim.fmhosted.com"
+      type    = "CNAME"
+      proxied = false
     },
     {
-      id = "postmark_dkim"
-      name = "20240325183423pm._domainkey"
-      value = "k=rsa;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLKLwt/yo4MWJcDqMUerhYz6LA5aA7rhtGYI/8HmWBf/j1a7kCkczyMVs2OAwTVZgwZs/EhWYlVw2ksk5oQzN1vzg3asgGUbGiqtSjY5M+RHzCQngTYGAgscNKXD00I/9aVIZoD9zKlxEvQBU6dBe0moIelOIVLRJDN+yrBUI9gwIDAQAB"
-      type = "TXT"
-      proxied = "false"
+      id      = "fastmail_dkim_3"
+      name    = "fm3._domainkey"
+      value   = "fm3.kokoro.wtf.dkim.fmhosted.com"
+      type    = "CNAME"
+      proxied = false
     },
     {
-      id = "postmark_return_path"
-      name = "pm-bounces"
-      value = "pm.mtasv.net"
-      type = "CNAME"
-      proxied = "false"
-    },
-    {
-      id    = "protonmail_spf"
+      id    = "fastmail_spf"
       name  = "@"
-      value = "v=spf1 include:_spf.protonmail.ch mx ~all"
+      value = "v=spf1 include:spf.messagingengine.com ?all"
       type  = "TXT"
     }
   ]
