@@ -45,15 +45,42 @@ spec:
 
             env:
               TZ: ${TZ}
-              PUID: '568'
-              PGID: '568'
+              PUID: "${APP_UID}"
+              PGID: "${APP_GID}"
+              CACHE_DIR: /cache
+              CALIBRE_PORT: &port 8083
+              DOCKER_MODS: >-
+                {{- $items := list
+                  "// renovate: lsio-docker-mod"
+                  "ghcr.io/linuxserver/mods:universal-calibre-v7.16.0"
+                -}}
+                {{- $filtered := list -}}
+                {{- range $item := $items -}}
+                  {{- if not (hasPrefix "//" $item) -}}
+                    {{- $filtered = append $filtered $item -}}
+                  {{- end -}}
+                {{- end -}}
+                {{- $filtered | join "|" -}}
+
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  initialDelaySeconds: 60
+                  failureThreshold: 45
+                  periodSeconds: 5
 
             resources:
               requests:
-                cpu: 15m
-                memory: 249M
+                cpu: 10m
+                memory: 128Mi
               limits:
-                memory: 299M
+                memory: 768Mi
+
     service:
       main:
         controller: *app
@@ -68,6 +95,11 @@ spec:
         # annotations:
         #   authentik.home.arpa/enabled: "true"
         className: internal
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: "0"
+          nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+          nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+          nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
         hosts:
           - host: &host cwa.${EXTERNAL_DOMAIN}
             paths:
@@ -86,13 +118,13 @@ spec:
         enabled: true
         type: nfs
         server: &nas ${NAS_HOST}
-        path: /tank/media/cwa-ingest
-        globalMounts:
-          - path: /cwa-book-ingest
-      library:
-        enabled: true
-        type: nfs
-        server: &nas ${NAS_HOST}
-        path: /tank/media/calibre
+        path: /tank/media/
         globalMounts:
           - path: /calibre-library
+            subPath: calibre
+          - path: /cwa-book-ingest
+            subPath: cwa-ingest
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /cache
