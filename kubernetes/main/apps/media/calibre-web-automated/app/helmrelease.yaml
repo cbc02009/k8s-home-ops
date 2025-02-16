@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app calibre-web-automated
+  namespace: media
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+          - 1010
+
+    controllers:
+      calibre-web:
+        type: statefulset
+        strategy: RollingUpdate
+
+        containers:
+          app:
+            image:
+              repository: docker.io/crocodilestick/calibre-web-automated
+              tag: V3.0.4@sha256:bdf3dbf10be5a22cea09dd05f4d9ac4e7bdba4c411fef3e15c512ca723ee393d
+
+            env:
+              TZ: ${TZ}
+
+            resources:
+              requests:
+                cpu: 15m
+                memory: 249M
+              limits:
+                memory: 299M
+    service:
+      main:
+        controller: *app
+        ports:
+          http:
+            port: 8083
+
+    ingress:
+      main:
+        enabled: true
+        # className: external
+        # annotations:
+        #   authentik.home.arpa/enabled: "true"
+        className: internal
+        hosts:
+          - host: &host cwa.${EXTERNAL_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts: [*host]
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: *app
+      ingest:
+        enabled: true
+        type: nfs
+        server: &nas ${NAS_HOST}
+        path: /tank/media/cwa-ingest
+        globalMounts:
+          - path: /cwa-book-ingest
+      library:
+        enabled: true
+        type: nfs
+        server: &nas ${NAS_HOST}
+        path: /tank/media/calibre
+        globalMounts:
+          - path: /calibre-library
