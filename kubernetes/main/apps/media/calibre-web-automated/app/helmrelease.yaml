@@ -33,7 +33,7 @@ spec:
           - 1010
 
     controllers:
-      calibre-web:
+      calibre-web-automated:
         type: statefulset
         strategy: RollingUpdate
 
