@@ -14,10 +14,10 @@
       "matchPackagePatterns": ["frigate"]
     },
     {
-      "description": "Custom versioning for lanraragi",
+      "description": "Custom versioning for lanraragi, cwa",
       "matchDatasources": ["docker"],
       "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      "matchPackagePatterns": ["lanraragi"]
+      "matchPackagePatterns": ["lanraragi", "calibre-web-automated"]
     },
     {
       "description": ["Custom schedule for frequently updated packages"],
