@@ -51,11 +51,11 @@ releases:
       - kube-system/coredns
 
   - name: external-secrets
-    namespace: security
+    namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.13.0
     values:
-      - ../apps/security/external-secrets/app/values.yaml
+      - ../apps/external-secrets/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
 

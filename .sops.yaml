@@ -1,21 +1,21 @@
 ---
 keys:
   - &shinobu age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  
 creation_rules:
   - # IMPORTANT: Keep this rule first
-    path_regex: kubernetes/.+/talos/.+\.sops\.ya?ml
-    input_type: yaml
+    path_regex: kubernetes/.*/talos/.*\.sops\.ya?ml$
     key_groups:
       - age:
           - *shinobu
-  - path_regex: kubernetes/.+\.secret(\.sops)?\.ya?ml
-    input_type: yaml
-    encrypted_regex: ^(data|stringData)$
+          
+  - path_regex: kubernetes/.*\.sops\.ya?ml$
+    encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
           - *shinobu
-  - path_regex: kubernetes/.+\.secret(\.sops)?\.env
-    input_type: env
+
+  - path_regex: .*\.sops\.ya?ml$
     key_groups:
       - age:
           - *shinobu

@@ -1,14 +1,14 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/notification.toolkit.fluxcd.io/receiver_v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/notification.toolkit.fluxcd.io/receiver_v1.json
 apiVersion: notification.toolkit.fluxcd.io/v1
 kind: Receiver
 metadata:
-  name: home-ops
+  name: flux-system
 spec:
   type: github
   events:
-    - ping
-    - push
+    - "ping"
+    - "push"
   secretRef:
     name: github-webhook-token-secret
   resources:
@@ -18,5 +18,5 @@ spec:
       namespace: flux-system
     - apiVersion: kustomize.toolkit.fluxcd.io/v1
       kind: Kustomization
-      name: flux-system
+      name: cluster-apps
       namespace: flux-system

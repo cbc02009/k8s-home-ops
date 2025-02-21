@@ -4,9 +4,9 @@ kind: Ingress
 metadata:
   name: webhook-receiver
 spec:
-  ingressClassName: external
+  ingressClassName: "external"
   rules:
-    - host: flux-webhook.devbu.io
+    - host: &host "flux-receiver.kokoro.wtf"
       http:
         paths:
           - path: /hook/
