@@ -16,7 +16,8 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   healthChecks:
@@ -42,7 +43,8 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   dependsOn:

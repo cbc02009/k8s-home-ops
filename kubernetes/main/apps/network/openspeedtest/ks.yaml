@@ -15,5 +15,6 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   wait: false

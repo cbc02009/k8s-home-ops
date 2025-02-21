@@ -13,7 +13,8 @@ spec:
   path: "./kubernetes/main/apps/system/intel-device-plugins/operator"
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   interval: 10m
   prune: true
   wait: true
@@ -35,7 +36,8 @@ spec:
   path: "./kubernetes/main/apps/system/intel-device-plugins/gpu"
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   interval: 30m
   prune: true
   wait: true

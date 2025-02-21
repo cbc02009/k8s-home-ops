@@ -6,15 +6,16 @@ metadata:
   name: &app external-secrets
   namespace: flux-system
 spec:
-  targetNamespace: security
+  targetNamespace: external-secrets
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/main/apps/security/external-secrets/app
+  path: ./kubernetes/main/apps/external-secrets/external-secrets/app
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -26,17 +27,18 @@ metadata:
   name: &app external-secrets-stores
   namespace: flux-system
 spec:
-  targetNamespace: security
+  targetNamespace: external-secrets
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
-  path: ./kubernetes/main/apps/security/external-secrets/stores
+  path: ./kubernetes/main/apps/external-secrets/external-secrets/stores
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
