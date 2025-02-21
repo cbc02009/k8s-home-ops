@@ -24,6 +24,9 @@ spec:
       kind: HelmRelease
       name: pgadmin
       namespace: databases
+  components:
+    - ../../../../../flux/components/gatus/guarded
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app

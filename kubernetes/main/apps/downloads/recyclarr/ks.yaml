@@ -21,6 +21,8 @@ spec:
   dependsOn:
     - name: volsync
     - name: rook-ceph-cluster
+  components:
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app

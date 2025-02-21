@@ -5,8 +5,6 @@ kind: Kustomization
 namespace: media
 resources:
   - ./helmrelease.yaml
-  - ../../../../components/gatus/guarded
-  - ../../../../components/volsync
 commonLabels:
   app.kubernetes.io/name: tautulli
   app.kubernetes.io/instance: tautulli

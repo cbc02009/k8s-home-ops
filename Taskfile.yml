@@ -1,52 +1,72 @@
 ---
 version: "3"
 
-vars:
-  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
-  TERRAFORM_DIR: "{{.ROOT_DIR}}/infrastructure/terraform"
-  CLUSTER: '{{.CLUSTER | default "main"}}'
-  CLUSTER_DIR: '{{.ROOT_DIR}}/kubernetes/{{.CLUSTER}}'
-
-env:
-  KUBECONFIG: '{{.CLUSTER_DIR}}/kubeconfig'
-  TALOSCONFIG: '{{.CLUSTER_DIR}}/talosconfig'
-  SOPS_AGE_KEY_FILE: '{{.ROOT_DIR}}/age.key'
+set:
+  - pipefail
+shopt:
+  - globstar
 
 includes:
-  fx:
-    dir: .taskfiles/Flux
-    taskfile: .taskfiles/Flux
-    vars: &vars
-      KUBECTL: kubectl --context {{.cluster}}
-      FLUXCTL: flux --context {{.cluster}}
-  bs:
-    dir: .taskfiles/Bootstrap
-    taskfile: .taskfiles/Bootstrap
-  ro:
-    dir: .taskfiles/Rook
-    taskfile: .taskfiles/Rook
-  ta:
-    dir: .taskfiles/Talos
-    taskfile: .taskfiles/Talos
-  es:
-    dir: .taskfiles/ExternalSecrets
-    taskfile: .taskfiles/ExternalSecrets
-  vs:
-    dir: .taskfiles/VolSync
-    taskfile: .taskfiles/VolSync
-    vars: *vars
-  tf:
-    dir: .taskfiles/Terraform
-    taskfile: .taskfiles/Terraform
-  pc:
-    dir: .taskfiles/PreCommit
-    taskfile: .taskfiles/PreCommit
-  pg:
-    dir: .taskfiles/Postgresql
-    taskfile: .taskfiles/Postgresql
-  cluster: .taskfiles/cluster.yml
+  flux: .taskfiles/flux/Taskfile.yaml
+  k8s: .taskfiles/k8s/Taskfile.yaml
+  k8s-bootstrap: .taskfiles/k8s-bootstrap/Taskfile.yaml
+  sops: .taskfiles/sops/Taskfile.yaml
+  talos: .taskfiles/talos/Taskfile.yaml
+  volsync: .taskfiles/volsync/Taskfile.yaml
+  
+vars:
+  CLUSTER: '{{.CLUSTER | default "main"}}'
+  K8S_DIR: "{{.ROOT_DIR}}/kubernetes/{{.CLUSTER}}"
+  KUBECONFIG: "{{.K8S_DIR}}/kubeconfig"
+  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
+  TALOSCONFIG: "{{.K8S_DIR}}/talos/clusterconfig/talosconfig"
+
+env:
+  KUBECONFIG: "{{.KUBECONFIG}}"
+  MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
+  TALOSCONFIG: "{{.TALOSCONFIG}}"
+  SOPS_AGE_KEY_FILE: '{{.ROOT_DIR}}/age.key'
+
+# includes:
+#   fx:
+#     dir: .taskfiles/Flux
+#     taskfile: .taskfiles/Flux
+#     vars: &vars
+#       KUBECTL: kubectl --context {{.cluster}}
+#       FLUXCTL: flux --context {{.cluster}}
+#   bs:
+#     dir: .taskfiles/Bootstrap
+#     taskfile: .taskfiles/Bootstrap
+#   ro:
+#     dir: .taskfiles/Rook
+#     taskfile: .taskfiles/Rook
+#   ta:
+#     dir: .taskfiles/Talos
+#     taskfile: .taskfiles/Talos
+#   es:
+#     dir: .taskfiles/ExternalSecrets
+#     taskfile: .taskfiles/ExternalSecrets
+#   vs:
+#     dir: .taskfiles/VolSync
+#     taskfile: .taskfiles/VolSync
+#     vars: *vars
+#   tf:
+#     dir: .taskfiles/Terraform
+#     taskfile: .taskfiles/Terraform
+#   pc:
+#     dir: .taskfiles/PreCommit
+#     taskfile: .taskfiles/PreCommit
+#   pg:
+#     dir: .taskfiles/Postgresql
+#     taskfile: .taskfiles/Postgresql
+#   cluster: .taskfiles/cluster.yml
 
 tasks:
   default:
     silent: true
     cmds: ['task -l']
+
+  noop:
+    internal: true
+    silent: true
+    cmd: noop() { :; }

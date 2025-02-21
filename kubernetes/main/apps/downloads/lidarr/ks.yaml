@@ -27,6 +27,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets-stores
+  components:
+    - ../../../../../flux/components/gatus/guarded
   postBuild:
     substitute:
       APP: *app

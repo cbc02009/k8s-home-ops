@@ -24,6 +24,9 @@ spec:
       kind: HelmRelease
       name: sabnzbd
       namespace: downloads
+  components:
+    - ../../../../../flux/components/gatus/guarded
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app

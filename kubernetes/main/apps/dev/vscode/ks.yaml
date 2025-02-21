@@ -22,6 +22,9 @@ spec:
     name: k8s-home-ops
   interval: 30m
   timeout: 5m
+  components:
+    - ../../../../../flux/components/gatus/guarded
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app

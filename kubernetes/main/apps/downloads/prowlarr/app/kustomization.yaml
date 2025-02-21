@@ -6,4 +6,3 @@ namespace: downloads
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../components/gatus/guarded

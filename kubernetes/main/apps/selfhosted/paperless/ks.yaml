@@ -20,6 +20,9 @@ spec:
   dependsOn:
     - name: volsync
     - name: external-secrets-stores
+  components:
+    - ../../../../../flux/components/gatus/guarded
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *appname

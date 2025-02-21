@@ -26,6 +26,8 @@ spec:
       namespace: selfhosted
   dependsOn:
     - name: external-secrets-stores
+  components:
+    - ../../../../../flux/components/gatus/guarded
   postBuild:
     substitute:
       APP: *app

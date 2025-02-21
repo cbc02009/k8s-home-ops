@@ -24,6 +24,8 @@ spec:
       kind: HelmRelease
       name: teddit
       namespace: selfhosted
+  components:
+    - ../../../../../flux/components/gatus/guarded
   postBuild:
     substitute:
       APP: *app

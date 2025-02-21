@@ -6,8 +6,6 @@ namespace: media
 resources:
   - ./helmrelease.yaml
   - ./pvc.yaml
-  - ../../../../components/gatus/external
-  - ../../../../components/volsync
 commonLabels:
   app.kubernetes.io/name: plex
   app.kubernetes.io/instance: plex

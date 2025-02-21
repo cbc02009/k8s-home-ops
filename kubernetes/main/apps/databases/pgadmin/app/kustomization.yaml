@@ -6,7 +6,6 @@ namespace: databases
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../../../components/volsync
 configMapGenerator:
   - name: servers-json
     files:

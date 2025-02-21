@@ -20,6 +20,9 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg-cluster
+  components:
+    - ../../../../../flux/components/gatus/external
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *appname

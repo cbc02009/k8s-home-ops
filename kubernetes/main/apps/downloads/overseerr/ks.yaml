@@ -27,6 +27,9 @@ spec:
   dependsOn:
     - name: volsync
     - name: rook-ceph-cluster
+  components:
+    - ../../../../../flux/components/gatus/external
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app

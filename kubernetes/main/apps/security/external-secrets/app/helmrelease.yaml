@@ -16,24 +16,13 @@ spec:
         name: external-secrets
         namespace: flux-system
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  values:
-    installCRDs: true
-    replicaCount: 3
-    leaderElect: true
-    serviceMonitor:
-      enabled: true
-      interval: 1m
-    webhook:
-      serviceMonitor:
-        enabled: true
-        interval: 1m
-    certController:
-      serviceMonitor:
-        enabled: true
-        interval: 1m
+  valuesFrom:
+    - kind: ConfigMap
+      name: external-secrets-helm-values

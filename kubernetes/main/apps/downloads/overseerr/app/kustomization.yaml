@@ -5,5 +5,3 @@ kind: Kustomization
 namespace: downloads
 resources:
   - ./helmrelease.yaml
-  - ../../../../components/gatus/external
-  - ../../../../components/volsync

@@ -24,6 +24,9 @@ spec:
       kind: HelmRelease
       name: calibre-web
       namespace: media
+  components:
+    - ../../../../../flux/components/gatus/external
+    - ../../../../../flux/components/volsync
   postBuild:
     substitute:
       APP: *app
