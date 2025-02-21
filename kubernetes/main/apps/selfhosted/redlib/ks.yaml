@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   components:
-    - ../../../../../flux/components/gatus/guarded
+    - ../../../../../components/gatus/guarded
   postBuild:
     substitute:
       APP: *app

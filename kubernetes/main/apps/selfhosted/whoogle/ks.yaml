@@ -26,7 +26,7 @@ spec:
       name: whoogle
       namespace: selfhosted
   components:
-    - ../../../../../flux/components/gatus/external
+    - ../../../../../components/gatus/external
   postBuild:
     substitute:
       APP: *app

@@ -26,8 +26,8 @@ spec:
       name: calibre-web
       namespace: media
   components:
-    - ../../../../../flux/components/gatus/external
-    - ../../../../../flux/components/volsync
+    - ../../../../../components/gatus/external
+    - ../../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

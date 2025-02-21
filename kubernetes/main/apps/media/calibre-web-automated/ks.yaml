@@ -25,6 +25,9 @@ spec:
       kind: HelmRelease
       name: calibre-web-automated
       namespace: media
+  components:
+    - ../../../../../components/gatus/guarded
+    - ../../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

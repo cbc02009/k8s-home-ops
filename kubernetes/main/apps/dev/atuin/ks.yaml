@@ -23,7 +23,7 @@ spec:
   timeout: 5m
   wait: false
   components:
-    - ../../../../flux/components/gatus/guarded
+    - ../../../../components/gatus/guarded
   postBuild:
     substitute:
       APP: *app

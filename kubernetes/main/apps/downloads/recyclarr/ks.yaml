@@ -23,7 +23,7 @@ spec:
     - name: volsync
     - name: rook-ceph-cluster
   components:
-    - ../../../../../flux/components/volsync
+    - ../../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

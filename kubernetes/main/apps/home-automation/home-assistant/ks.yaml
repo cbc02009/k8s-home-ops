@@ -25,8 +25,8 @@ spec:
   interval: 30m
   timeout: 5m
   components:
-    - ../../../../../flux/components/gatus/guarded
-    - ../../../../../flux/components/volsync
+    - ../../../../../components/gatus/guarded
+    - ../../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

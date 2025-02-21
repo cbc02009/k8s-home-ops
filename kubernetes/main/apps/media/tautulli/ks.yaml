@@ -26,8 +26,8 @@ spec:
       name: tautulli
       namespace: media
   components:
-    - ../../../../../flux/components/gatus/guarded
-    - ../../../../../flux/components/volsync
+    - ../../../../../components/gatus/guarded
+    - ../../../../../components/volsync
   postBuild:
     substitute:
       APP: *app
