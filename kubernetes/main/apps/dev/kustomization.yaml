@@ -3,11 +3,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # Pre Flux-Kustomizations
-  - ./namespace.yaml
-  # Flux-Kustomizations
-  - ./actions-runner-controller/ks.yaml
   - ./atuin/ks.yaml
-  # - ./coder/ks.yaml
   - ./kubernetes-schemas/ks.yaml
   - ./vscode/ks.yaml
+components:
+  - ../../components/namespace
+  - ../../components/flux/alerts
