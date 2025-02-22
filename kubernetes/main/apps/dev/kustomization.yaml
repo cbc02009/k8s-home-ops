@@ -2,10 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./atuin/ks.yaml
-  - ./kubernetes-schemas/ks.yaml
-  - ./vscode/ks.yaml
-components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts
+resources: []
+#   - ./atuin/ks.yaml
+#   - ./kubernetes-schemas/ks.yaml
+#   - ./vscode/ks.yaml
+# components:
+#   - ../../../shared/components/namespace
+#   - ../../../shared/components/flux/alerts
