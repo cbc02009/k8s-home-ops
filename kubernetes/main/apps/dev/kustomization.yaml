@@ -7,5 +7,5 @@ resources:
   - ./kubernetes-schemas/ks.yaml
   - ./vscode/ks.yaml
 components:
-  - ../../../components/namespace
-  - ../../../components/flux/alerts
+  - ../../../../shared/components/namespace
+  - ../../../../shared/components/flux/alerts

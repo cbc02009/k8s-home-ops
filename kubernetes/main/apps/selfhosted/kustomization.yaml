@@ -13,5 +13,5 @@ resources:
   - ./theme-park/ks.yaml
   - ./whoogle/ks.yaml
 components:
-  - ../../../components/namespace
-  - ../../../components/flux/alerts
+  - ../../../../shared/components/namespace
+  - ../../../../shared/components/flux/alerts
