@@ -8,8 +8,6 @@ helmDefaults:
   waitForJobs: true
 
 repositories:
-  - name: coredns
-    url: https://coredns.github.io/helm
   - name: cilium
     url: https://helm.cilium.io
   - name: jetstack
@@ -26,7 +24,7 @@ releases:
   - name: cilium
     namespace: kube-system
     chart: cilium/cilium
-    version: 1.16.5
+    version: 1.17.1
     values: 
       - ../apps/kube-system/cilium/app/values.yaml
     needs:
@@ -34,8 +32,8 @@ releases:
 
   - name: coredns
     namespace: kube-system
-    chart: coredns/coredns
-    version: 1.37.3
+    chart: oci://ghcr.io/coredns/charts/coredns
+    version: 1.39.0
     values: 
       - ../apps/kube-system/coredns/app/values.yaml
     needs:
@@ -53,7 +51,7 @@ releases:
   - name: external-secrets
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.13.0
+    version: 0.14.2
     values:
       - ../apps/external-secrets/external-secrets/app/values.yaml
     needs:
@@ -71,7 +69,7 @@ releases:
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.13.0
+    version: 0.15.0
     values:
       - ../apps/flux-system/flux-operator/app/values.yaml
     needs:
@@ -80,7 +78,7 @@ releases:
   - name: flux-instance
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.13.0
+    version: 0.15.0
     wait: false
     values:
       - ../apps/flux-system/flux-operator/instance/values.yaml

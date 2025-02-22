@@ -31,14 +31,6 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-    name: cluster-secrets
-    namespace: flux-system
-stringData:
-    CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID: {{ ENV.CLOUDFLARE_ACCOUNT_ID }}
----
-apiVersion: v1
-kind: Secret
-metadata:
   name: sops-age
   namespace: flux-system
 stringData:

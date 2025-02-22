@@ -17,7 +17,6 @@ resources:
   - ./lwolf.yaml
   - ./mayastor.yaml
   - ./piraeus.yaml
-  - ./postfinance.yaml
   - ./rook-ceph.yaml
   - ./stevehipwell.yaml
   - ./tf-controller.yaml
