@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app authentik
+  name: &appname authentik
   namespace: flux-system
 spec:
   targetNamespace: security
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   interval: 30m
   path: "./kubernetes/main/apps/security/authentik/app"
   prune: true
@@ -24,4 +24,4 @@ spec:
     - name: cloudnative-pg-cluster
   postBuild:
     substitute:
-      APP: *app
+      APP: *appname

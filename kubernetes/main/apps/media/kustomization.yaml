@@ -2,6 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: media
+components:
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts
 resources:
   - ./calibre/ks.yaml
   - ./calibre-web/ks.yaml
@@ -9,6 +13,3 @@ resources:
   - ./lanraragi/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
-components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts

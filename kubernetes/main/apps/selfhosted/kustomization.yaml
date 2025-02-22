@@ -2,6 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: selfhosted
+components:
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts
 resources:
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
@@ -12,6 +16,3 @@ resources:
   - ./teddit/ks.yaml
   - ./theme-park/ks.yaml
   - ./whoogle/ks.yaml
-components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts

@@ -2,6 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: observability
+components:
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts
 resources:
   # - ./alertmanager-silencer/ks.yaml
   - ./blackbox-exporter/ks.yaml
@@ -15,6 +19,3 @@ resources:
   - ./unpoller/ks.yaml
   - ./silence-operator/ks.yaml
   - ./vector/ks.yaml
-components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts

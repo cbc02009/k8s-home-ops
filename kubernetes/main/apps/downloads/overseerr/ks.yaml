@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app overseerr
+  name: &appname overseerr
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: downloads
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/downloads/overseerr/app/'
   prune: true
   sourceRef:
@@ -33,6 +33,6 @@ spec:
     - ../../../../shared/components/volsync
   postBuild:
     substitute:
-      APP: *app
+      APP: *appname
       GATUS_SUBDOMAIN: requests
       VOLSYNC_CAPACITY: 5Gi

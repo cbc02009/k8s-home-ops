@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app postgres-backup
+  name: &appname postgres-backup
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: databases
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/databases/postgres-backup/app/'
   prune: true
   sourceRef:

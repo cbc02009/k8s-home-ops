@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app whoogle
+  name: &appname whoogle
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: selfhosted
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/selfhosted/whoogle/app/'
   prune: true
   sourceRef:
@@ -29,4 +29,4 @@ spec:
     - ../../../../shared/components/gatus/external
   postBuild:
     substitute:
-      APP: *app
+      APP: *appname

@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vscode
+  name: &appname vscode
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: dev
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets-stores
@@ -28,5 +28,5 @@ spec:
     - ../../../../shared/components/volsync
   postBuild:
     substitute:
-      APP: *app
+      APP: *appname
       VOLSYNC_CAPACITY: 30Gi

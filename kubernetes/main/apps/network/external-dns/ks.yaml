@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app externaldns-shared
+  name: &appname externaldns-shared
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: network
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/network/external-dns/shared/'
   prune: true
   sourceRef:
@@ -25,7 +25,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app externaldns-external
+  name: &appname externaldns-external
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -33,7 +33,7 @@ spec:
   targetNamespace: network
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/network/external-dns/external/'
   prune: true
   sourceRef:
@@ -49,7 +49,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app externaldns-internal
+  name: &appname externaldns-internal
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -57,7 +57,7 @@ spec:
   targetNamespace: network
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *app
+      app.kubernetes.io/name: *appname
   path: './kubernetes/main/apps/network/external-dns/internal/'
   prune: true
   sourceRef:
