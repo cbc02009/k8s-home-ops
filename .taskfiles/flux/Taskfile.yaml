@@ -33,3 +33,13 @@ tasks:
       - which flux kubectl
     cmds:
       - kubectl get ns -o jsonpath='{.items[*].metadata.name}' | xargs -n1 flux {{.STATE}} ks --all --namespace
+
+  gr-sync:
+    desc: Sync Flux GitRepositories
+    cmds:
+      - |
+        kubectl get gitrepositories --context={{.cluster}} --all-namespaces --no-headers | awk '{print $1, $2}' \
+          | xargs --max-procs=4 -l bash -c \
+            'kubectl --context={{.cluster}} -n $0 annotate gitrepository/$1 reconcile.fluxcd.io/requestedAt=$(date +%s) --field-manager=flux-client-side-apply --overwrite'
+    vars:
+      cluster: '{{.cluster | default "main"}}'
