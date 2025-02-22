@@ -10,5 +10,5 @@ resources:
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
 components:
-  - ../../../../shared/components/namespace
-  - ../../../../shared/components/flux/alerts
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts

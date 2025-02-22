@@ -7,5 +7,5 @@ resources:
   # - ./home-assistant/ks.yaml
   - ./rtlamr2mqtt/ks.yaml
 components:
-  - ../../../../shared/components/namespace
-  - ../../../../shared/components/flux/alerts
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts

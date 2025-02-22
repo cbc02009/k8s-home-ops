@@ -26,8 +26,8 @@ spec:
       name: frigate
       namespace: home-automation
   components:
-    - ../../../../../shared/components/gatus/external
-    - ../../../../../shared/components/volsync
+    - ../../../../shared/components/gatus/external
+    - ../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app
