@@ -9,5 +9,5 @@ resources:
   - ./snapshot-controller/ks.yaml
   # - ./system-upgrade-controller/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../../components/namespace
+  - ../../../components/flux/alerts

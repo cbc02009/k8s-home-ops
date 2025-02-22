@@ -8,5 +8,5 @@ resources:
   - ./descheduler/ks.yaml
   - ./metrics-server/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../../components/namespace
+  - ../../../components/flux/alerts

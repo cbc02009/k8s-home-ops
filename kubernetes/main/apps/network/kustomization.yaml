@@ -8,5 +8,5 @@ resources:
   - ./nginx/ks.yaml
   - ./openspeedtest/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../../components/namespace
+  - ../../../components/flux/alerts

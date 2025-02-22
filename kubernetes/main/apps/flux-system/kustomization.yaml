@@ -6,6 +6,6 @@ resources:
   - ./flux-operator/ks.yaml
   # - ./tf-controller/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../../components/namespace
+  - ../../../components/flux/alerts
   - ../../components/flux/sops
