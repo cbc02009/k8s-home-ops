@@ -3,8 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: actions-runner-controller
-  namespace: actions-runner-system
+  name: &name actions-runner-controller
 spec:
   interval: 30m
   chart:
@@ -27,4 +26,4 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    fullnameOverride: gha-runner-scale-set-controller
+    fullnameOverride: *name

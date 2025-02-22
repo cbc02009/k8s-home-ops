@@ -4,11 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app actions-runner-controller
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace actions-runner-system
 spec:
-  targetNamespace: actions-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -20,24 +17,17 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
+  targetNamespace: *namespace
   timeout: 5m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: actions-runner-controller
-      namespace: actions-runner-system
+  wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app actions-runner-runners
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  name: &app actions-runner-controller-runners
+  namespace: &namespace actions-runner-system
 spec:
-  targetNamespace: actions-runner-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -47,7 +37,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
+  targetNamespace: *namespace
   timeout: 5m
-  dependsOn:
-    - name: actions-runner-controller
+  wait: false
