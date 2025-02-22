@@ -3,9 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: vector
+  name: lwolf
   namespace: flux-system
 spec:
   interval: 2h
-  url: https://helm.vector.dev
+  url: https://charts.lwolf.org
   timeout: 15m

@@ -3,9 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: vector
+  name: rook-ceph
   namespace: flux-system
 spec:
   interval: 2h
-  url: https://helm.vector.dev
+  url: https://charts.rook.io/release
   timeout: 15m

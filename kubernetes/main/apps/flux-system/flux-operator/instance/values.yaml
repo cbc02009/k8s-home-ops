@@ -2,7 +2,7 @@
 instance:
   distribution:
     # renovate: datasource=github-releases depName=fluxcd/flux2
-    version: 2.4.0
+    version: 2.5.0
   cluster:
     networkPolicy: false
   components:
@@ -15,6 +15,7 @@ instance:
     url: https://github.com/cbc02009/k8s-home-ops
     ref: refs/heads/main
     path: kubernetes/main/flux/cluster
+    interval: 1h
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux

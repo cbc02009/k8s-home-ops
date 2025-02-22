@@ -4,41 +4,22 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-  - ./actions-runner-controller-charts.yaml
+  - ./actions-runner-controller.yaml
   - ./authentik.yaml
   - ./backube.yaml
-  - ./bjw-s.yaml
-  - ./cilium.yaml
   - ./cloudnative-pg.yaml
   - ./coder.yaml
   - ./controlplaneio.yaml
-  - ./coredns.yaml
   - ./democratic-csi.yaml
   - ./emqx.yaml
-  - ./external-dns.yaml
-  - ./external-secrets.yaml
-  - ./fairwinds-charts.yaml
-  - ./gabe565-charts.yaml
   - ./grafana.yaml
   - ./intel.yaml
-  - ./kyverno.yaml
-  - ./jetstack.yaml
-  - ./k8tz.yaml
-  - ./descheduler.yaml
-  - ./metrics-server.yaml
-  - ./kubernetes-sigs-nfd.yaml
-  - ./lwolf-charts.yaml
+  - ./lwolf.yaml
   - ./mayastor.yaml
-  - ./openebs.yaml
-  - ./piraeus-charts.yaml
-  - ./postfinance-charts.yaml
-  - ./prometheus-community.yaml
-  - ./rook-ceph-charts.yaml
-  - ./bitnami-charts.yaml
-  - ./ingress-nginx-charts.yaml
-  - ./spegel.yaml
-  - ./stakater.yaml
+  - ./piraeus.yaml
+  - ./postfinance.yaml
+  - ./rook-ceph.yaml
   - ./stevehipwell.yaml
   - ./tf-controller.yaml
-  - ./vector-charts.yaml
+  - ./vector.yaml
   - ./wiremind.yaml
