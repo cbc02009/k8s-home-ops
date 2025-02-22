@@ -22,8 +22,8 @@ spec:
     - name: external-secrets-stores
     - name: cloudnative-pg-cluster
   components:
-    - ../../../../../components/gatus/external
-    - ../../../../../components/volsync
+    - ../../../../../shared/components/gatus/external
+    - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *appname

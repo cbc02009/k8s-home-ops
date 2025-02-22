@@ -26,8 +26,8 @@ spec:
       name: calibre-web-automated
       namespace: media
   components:
-    - ../../../../../components/gatus/guarded
-    - ../../../../../components/volsync
+    - ../../../../../shared/components/gatus/guarded
+    - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app

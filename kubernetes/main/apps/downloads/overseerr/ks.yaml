@@ -29,8 +29,8 @@ spec:
     - name: volsync
     - name: rook-ceph-cluster
   components:
-    - ../../../../../components/gatus/external
-    - ../../../../../components/volsync
+    - ../../../../../shared/components/gatus/external
+    - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app
