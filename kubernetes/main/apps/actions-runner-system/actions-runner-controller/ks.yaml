@@ -6,9 +6,12 @@ metadata:
   name: &app actions-runner-controller
   namespace: &namespace actions-runner-system
 spec:
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/actions-runner-system/actions-runner-controller/app/'
   dependsOn:
     - name: external-secrets-stores
@@ -17,8 +20,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: *namespace
-  timeout: 5m
   wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -28,6 +29,7 @@ metadata:
   name: &app actions-runner-controller-runners
   namespace: &namespace actions-runner-system
 spec:
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -38,6 +40,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
-  targetNamespace: *namespace
   wait: false
