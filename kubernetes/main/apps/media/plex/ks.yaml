@@ -23,7 +23,7 @@ spec:
     - name: volsync
       namespace: system
   components:
-    - ../../../../shared/components/gatus/external
+    - ../../../../../shared/components/gatus/external
     - ../../../../../shared/components/volsync
   postBuild:
     substitute:

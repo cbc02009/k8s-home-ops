@@ -25,7 +25,7 @@ spec:
     - name: cloudnative-pg-cluster
       namespace: databases
   components:
-    - ../../../../shared/components/gatus/external
+    - ../../../../../shared/components/gatus/external
     - ../../../../../shared/components/volsync
   postBuild:
     substitute:

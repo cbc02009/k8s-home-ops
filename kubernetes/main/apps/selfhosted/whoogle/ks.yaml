@@ -20,7 +20,7 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../shared/components/gatus/external
+    - ../../../../../shared/components/gatus/external
   postBuild:
     substitute:
       APP: *app
