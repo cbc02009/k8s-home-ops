@@ -4,42 +4,47 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app intel-device-plugins-operator
-  namespace: flux-system
+  namespace: &namespace system
 spec:
-  targetNamespace: system
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/main/apps/system/intel-device-plugins/operator"
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 10m
-  prune: true
-  wait: true
+  wait: false
   dependsOn:
     - name: cert-manager
+      namespace: cert-manager
     - name: node-feature-rules
+      namespace: system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app intel-device-plugins-gpu
-  namespace: flux-system
+  namespace: &namespace system
 spec:
-  targetNamespace: system
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/main/apps/system/intel-device-plugins/gpu"
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  prune: true
-  wait: true
+  wait: false
   dependsOn:
     - name: intel-device-plugins-operator
+      namespace: system

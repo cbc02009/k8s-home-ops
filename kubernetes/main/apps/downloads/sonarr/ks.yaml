@@ -4,30 +4,26 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app sonarr
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace downloads
 spec:
-  targetNamespace: downloads
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/downloads/sonarr/app/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  timeout: 5m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: sonarr
-      namespace: downloads
+  wait: false
   dependsOn:
     - name: cloudnative-pg-cluster
+      namespace: databases
     - name: external-secrets-stores
+      namespace: external-secrets
   components:
     - ../../../../shared/components/gatus/guarded
   postBuild:

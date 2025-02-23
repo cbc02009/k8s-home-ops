@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app emqx
-  namespace: &namespace databases
+  name: &app vector-aggregator
+  namespace: &namespace observability
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/databases/emqx/operator
+  path: './kubernetes/main/apps/observability/vector/aggregator'
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,15 +20,15 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: external-secrets-stores
-      namespace: external-secrets
+    - name: loki
+      namespace: observability
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app emqx-cluster
-  namespace: &namespace databases
+  name: &app vector-agent
+  namespace: &namespace observability
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -36,15 +36,11 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/databases/emqx/cluster
+  path: './kubernetes/main/apps/observability/vector/agent'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: true
   dependsOn:
-    - name: emqx-operator
-      namespace: databases
-    - name: onepassword-store
-      namespace: external-secrets
+    - name: vector-aggregator

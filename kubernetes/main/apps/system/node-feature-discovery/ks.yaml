@@ -4,48 +4,42 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app node-feature-discovery
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace system
 spec:
-  targetNamespace: system
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/system/node-feature-discovery/app/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  timeout: 5m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: node-feature-discovery
-      namespace: system
+  wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app node-feature-rules
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace system
 spec:
-  targetNamespace: system
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/system/node-feature-discovery/rules/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  timeout: 5m
+  wait: false
   dependsOn:
     - name: node-feature-discovery
+      namespace: system

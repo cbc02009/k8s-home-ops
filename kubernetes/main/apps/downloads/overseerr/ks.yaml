@@ -4,30 +4,24 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app overseerr
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace downloads
 spec:
-  targetNamespace: downloads
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/downloads/overseerr/app/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  timeout: 5m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: overseerr
-      namespace: downloads
+  wait: false
   dependsOn:
     - name: volsync
-    - name: rook-ceph-cluster
+      namespace: system
   components:
     - ../../../../shared/components/gatus/external
     - ../../../../shared/components/volsync

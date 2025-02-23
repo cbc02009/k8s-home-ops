@@ -4,19 +4,18 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app prometheus-rules
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace observability
 spec:
-  targetNamespace: observability
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/main/apps/observability/prometheus-rules/app/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  interval: 30m
-  timeout: 5m
+  wait: false

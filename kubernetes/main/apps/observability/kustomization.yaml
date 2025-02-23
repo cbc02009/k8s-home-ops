@@ -7,15 +7,12 @@ components:
   - ../../../shared/components/namespace
   - ../../../shared/components/flux/alerts
 resources:
-  # - ./alertmanager-silencer/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./gatus/ks.yaml
   # - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
-  - ./prometheus-rules/ks.yaml
   - ./prometheus-operator-crds/ks.yaml
   - ./promtail/ks.yaml
   - ./unpoller/ks.yaml
   - ./silence-operator/ks.yaml
-  - ./vector/ks.yaml

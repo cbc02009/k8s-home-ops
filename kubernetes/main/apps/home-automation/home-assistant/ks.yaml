@@ -4,17 +4,14 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app home-assistant
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace home-automation
 spec:
-  targetNamespace: home-automation
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: cloudnative-pg-cluster
-    - name: external-secrets-stores
+  interval: 30m
+  timeout: 5m
   path: ./kubernetes/main/apps/home-automation/home-assistant/app
   prune: true
   sourceRef:
@@ -22,8 +19,13 @@ spec:
     name: flux-system
     namespace: flux-system
   wait: false
-  interval: 30m
-  timeout: 5m
+  dependsOn:
+    - name: cloudnative-pg-cluster
+      namespace: databases
+    - name: external-secrets-stores
+      namespace: external-secrets
+    - name: volsync
+      namespace: system
   components:
     - ../../../../shared/components/gatus/guarded
     - ../../../../shared/components/volsync

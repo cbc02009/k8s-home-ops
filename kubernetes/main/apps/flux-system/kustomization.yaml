@@ -9,4 +9,4 @@ components:
   - ../../components/flux/sops
 resources:
   - ./flux-operator/ks.yaml
-  # - ./tf-controller/ks.yaml
+  - ./tf-controller/ks.yaml

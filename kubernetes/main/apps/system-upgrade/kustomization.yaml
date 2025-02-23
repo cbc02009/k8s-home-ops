@@ -2,9 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: dev
+namespace: system-upgrade
 components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts
-resources:
-  - ./kubernetes-schemas/ks.yaml
+  - ../../components/namespace
+  - ../../components/flux/alerts
+resources: []
+  # - ./system-upgrade-controller/ks.yaml
