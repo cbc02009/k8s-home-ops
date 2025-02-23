@@ -27,7 +27,7 @@ data:
 
   LB_RANGE: 10.6.0.0/24
 
-  #Pre-defined IP addresses
+  # Pre-defined IP addresses
 
   LB_HASS: 10.6.0.8
   LB_QBT_GUI: 10.6.0.9
