@@ -2,12 +2,13 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: databases
+components:
+  - ../../../shared/components/namespace
+  - ../../../shared/components/flux/alerts
 resources:
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly/ks.yaml
   - ./emqx/ks.yaml
   - ./postgres-backup/ks.yaml
   - ./pgadmin/ks.yaml
-components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts
