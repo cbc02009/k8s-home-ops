@@ -4,8 +4,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: network
 components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts
+  - ../../../shared/components/common
 resources:
   - ./cloudflared/ks.yaml
   - ./external-dns/ks.yaml

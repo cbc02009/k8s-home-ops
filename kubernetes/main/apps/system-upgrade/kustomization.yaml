@@ -4,7 +4,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: system-upgrade
 components:
-  - ../../../shared/components/namespace
-  - ../../../shared/components/flux/alerts
+  - ../../../shared/components/common
 resources: []
   # - ./system-upgrade-controller/ks.yaml
