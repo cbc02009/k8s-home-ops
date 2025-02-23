@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname rook-ceph-cluster
+  name: &app rook-ceph-cluster
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: rook-ceph
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *appname
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/rook-ceph/rook-ceph/cluster/'
   prune: true
   sourceRef:
@@ -32,7 +32,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname rook-ceph-operator
+  name: &app rook-ceph-operator
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -40,7 +40,7 @@ spec:
   targetNamespace: rook-ceph
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *appname
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/rook-ceph/rook-ceph/operator/'
   prune: true
   sourceRef:

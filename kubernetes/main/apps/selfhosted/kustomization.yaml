@@ -7,6 +7,7 @@ components:
   - ../../../shared/components/namespace
   - ../../../shared/components/flux/alerts
 resources:
+  - ./atuin/ks.yaml
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
   # - ./ocis/ks.yaml

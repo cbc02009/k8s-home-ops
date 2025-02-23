@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname cyberchef
+  name: &app cyberchef
   namespace: flux-system
   labels:
     substitution.flux.home.arpa/enabled: 'true'
@@ -11,7 +11,7 @@ spec:
   targetNamespace: selfhosted
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *appname
+      app.kubernetes.io/name: *app
   path: './kubernetes/main/apps/selfhosted/cyberchef/app/'
   prune: true
   sourceRef:
@@ -29,4 +29,4 @@ spec:
     - ../../../../shared/components/gatus/guarded
   postBuild:
     substitute:
-      APP: *appname
+      APP: *app
