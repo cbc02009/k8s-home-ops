@@ -25,8 +25,8 @@ spec:
     - name: volsync
       namespace: system
   components:
-    - ../../../../shared/components/gatus/guarded
-    - ../../../../shared/components/volsync
+    - ../../../../../shared/components/gatus/guarded
+    - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app

@@ -24,7 +24,7 @@ spec:
       namespace: system
   components:
     - ../../../../shared/components/gatus/external
-    - ../../../../shared/components/volsync
+    - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app
