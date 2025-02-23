@@ -13,6 +13,7 @@ resources:
   - ./democratic-csi.yaml
   - ./emqx.yaml
   - ./grafana.yaml
+  - ./kubernetes-sigs-nfd.yaml
   - ./intel.yaml
   - ./lwolf.yaml
   - ./mayastor.yaml
