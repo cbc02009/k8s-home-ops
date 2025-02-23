@@ -116,10 +116,10 @@ controlPlane:
   schematic:
     customization:
       systemExtensions:
-          officialExtensions:
-              - siderolabs/i915
-              - siderolabs/intel-ucode
-              - siderolabs/nut-client
+        officialExtensions:
+          - siderolabs/i915
+          - siderolabs/intel-ucode
+          - siderolabs/nut-client
   patches:
     # Disable default API server admission plugins.
     - |-
@@ -271,16 +271,3 @@ patches:
           # Google Coral USB Accelerator
           - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a6e", ATTRS{idProduct}=="089a", GROUP="20", MODE="0660"
           - SUBSYSTEMS=="usb", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="9302", GROUP="20", MODE="0660"
-
-
-  # Misc Machine values
-  - |-
-    machine:
-      logging:
-        destinations:
-          - endpoint: udp://vector.kokoro.wtf:6051/
-            format: json_lines
-
-      install:
-        extraKernelArgs:
-        - talos.logging.kernel=udp://vector.kokoro.wtf:6050/
