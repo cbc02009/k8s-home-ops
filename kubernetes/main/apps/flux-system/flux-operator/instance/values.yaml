@@ -13,7 +13,7 @@ instance:
   sync:
     kind: GitRepository
     name: flux-system
-    url: https://github.com/joryirving/home-ops.git
+    url: https://github.com/cbc02009/k8s-home-ops.git
     ref: refs/heads/main
     path: kubernetes/main/flux/cluster
     interval: 1h
