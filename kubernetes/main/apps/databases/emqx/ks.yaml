@@ -46,5 +46,5 @@ spec:
   dependsOn:
     - name: emqx-operator
       namespace: databases
-    - name: onepassword-store
+    - name: external-secrets-stores
       namespace: external-secrets
