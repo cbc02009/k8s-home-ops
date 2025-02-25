@@ -6,7 +6,7 @@ metadata:
   namespace: databases
   annotations:
     external-dns.alpha.kubernetes.io/hostname: postgres.kokoro.wtf
-    io.cilium/lb-ipam-ips: ${LB_POSTGRES}
+    lbipam.cilium.io/ips: ${LB_POSTGRES}
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
