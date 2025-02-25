@@ -15,5 +15,4 @@ resources:
   - ./redlib/ks.yaml
   - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
-  - ./theme-park/ks.yaml
   - ./whoogle/ks.yaml

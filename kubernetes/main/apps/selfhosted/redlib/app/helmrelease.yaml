@@ -83,8 +83,6 @@ spec:
       main:
         enabled: true
         className: internal
-        # annotations:
-        #   authentik.home.arpa/enabled: "true"
         hosts:
           - host: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
             paths:

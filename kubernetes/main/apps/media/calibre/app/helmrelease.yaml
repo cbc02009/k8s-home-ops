@@ -82,8 +82,6 @@ spec:
       main:
         enabled: true
         className: internal
-        # annotations:
-        #   authentik.home.arpa/enabled: "true"
         hosts:
           - host: &host 'calibre.${EXTERNAL_DOMAIN}'
             paths:
