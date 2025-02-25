@@ -31,3 +31,4 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CLAIM: tandoor-data
+      GATUS_SUBDOMAIN: recipes
