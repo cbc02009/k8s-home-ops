@@ -8,4 +8,4 @@ components:
   - ../../../shared/components/common
 resources:
   - ./flux-operator/ks.yaml
-  - ./tf-controller/ks.yaml
+  # - ./tf-controller/ks.yaml
