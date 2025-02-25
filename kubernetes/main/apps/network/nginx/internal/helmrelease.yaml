@@ -74,7 +74,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: cert-manager/kokoro-wtf-tls
+        default-ssl-certificate: network/kokoro-wtf-tls
         publish-status-address: *hostname
       terminationGracePeriodSeconds: 120
       publishService:
