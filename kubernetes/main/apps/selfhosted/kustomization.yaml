@@ -11,6 +11,7 @@ resources:
   - ./cyberchef/ks.yaml
   - ./immich/ks.yaml
   # - ./ocis/ks.yaml
+  - ./openspeedtest/ks.yaml
   - ./paperless/ks.yaml
   - ./redlib/ks.yaml
   - ./tandoor/ks.yaml
