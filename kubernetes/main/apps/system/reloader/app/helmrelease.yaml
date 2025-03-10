@@ -1,48 +1,30 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: reloader
-  namespace: system
 spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: reloader
-      version: 1.3.0
-      sourceRef:
-        kind: HelmRepository
-        name: stakater
-        namespace: flux-system
-      interval: 5m
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: reloader
+    namespace: flux-system
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
+    remediation:
       retries: 3
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
-    nameOverride: reloader
-
     fullnameOverride: reloader
-
     reloader:
-      reloadStrategy: annotations
-      reloadOnCreate: false
+      enableHA: true
       deployment:
-        image:
-          name: ghcr.io/cbc02009/reloader
+        replicas: 1
+      readOnlyRootFileSystem: true
       podMonitor:
         enabled: true
-        namespace: system
-
-    resources:
-      requests:
-        cpu: 15m
-        memory: 64M
-      limits:
-        memory: 64M
+        namespace: "{{ .Release.Namespace }}"
