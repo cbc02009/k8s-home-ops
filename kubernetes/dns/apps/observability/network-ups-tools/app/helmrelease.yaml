@@ -46,8 +46,8 @@ spec:
         controller: *app
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${SVC_NUT_ADDR}
-          external-dns.alpha.kubernetes.io/hostname: network-nut.${SECRET_DOMAIN}
+          lbipam.cilium.io/ips: ${LB_NUT}
+          external-dns.alpha.kubernetes.io/hostname: nut.${EXTERNAL_DOMAIN}
         externalTrafficPolicy: Cluster
         ports:
           http:
@@ -71,7 +71,7 @@ spec:
             LISTEN 0.0.0.0
           upsd.users: |-
             [monuser]
-              password = "bacon"
+              password = "whatever"
               actions = SET
               instcmds = ALL
               upsmon master
@@ -84,7 +84,7 @@ spec:
               productid = "0002"
               serial = "4B2217P19326"
           upsmon.conf: |-
-            MONITOR ups@localhost:3493 1 upsmon "bacon" master
+            MONITOR ups@localhost:3493 1 upsmon "whatever" master
             SHUTDOWNCMD "/sbin/shutdown -h +0"
             POWERDOWNFLAG /etc/killpower
             POLLFREQ 15

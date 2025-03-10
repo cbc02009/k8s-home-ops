@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: network
   dependsOn:
-    - name: external-secrets-stores
+    - name: external-secrets
     - name: dragonfly-cluster
   interval: 30m
   path: ./kubernetes/dns/apps/network/blocky/app

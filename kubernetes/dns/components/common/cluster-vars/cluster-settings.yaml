@@ -18,3 +18,4 @@ data:
   LB_SMTP: 10.4.0.11
   LB_OPC: 10.4.0.12
   LB_UNIFI: 10.4.0.5
+  LB_NUT: 10.4.0.6

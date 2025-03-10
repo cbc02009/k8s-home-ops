@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app external-secrets
+  namespace: flux-system
+  labels:
+    substitution.flux.home.arpa/enabled: 'true'
+spec:
+  targetNamespace: external-secrets
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: './kubernetes/dns/apps/external-secrets/external-secrets/app/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-home-ops
+  interval: 30m
+  timeout: 5m
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: external-secrets
+      namespace: external-secrets
+  dependsOn:
+    - name: cert-manager
+      namespace: cert-manager
+    - name: onepassword-connect
+      namespace: external-secrets

@@ -18,4 +18,4 @@ spec:
     name: k8s-home-ops
   wait: true
   dependsOn:
-    - name: external-secrets-stores
+    - name: external-secrets

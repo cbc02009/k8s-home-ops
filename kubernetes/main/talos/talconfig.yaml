@@ -58,7 +58,7 @@ nodes:
       - name: nut-client
         configFiles:
           - content: |-
-              MONITOR ${UPSMON_HOST} 1 observer ${UPSMON_PASS} secondary
+              MONITOR nut.cutil.dev 1 observer whatever secondary
               SHUTDOWNCMD "/sbin/poweroff"
             mountPath: /usr/local/etc/nut/upsmon.conf
 

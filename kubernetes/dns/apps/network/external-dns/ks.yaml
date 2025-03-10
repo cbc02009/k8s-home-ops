@@ -41,7 +41,7 @@ spec:
 #   interval: 30m
 #   timeout: 5m
 #   dependsOn:
-#     - name: external-secrets-stores
+#     - name: external-secrets
 #     - name: externaldns-shared
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -65,5 +65,5 @@ spec:
   interval: 30m
   timeout: 5m
   dependsOn:
-    - name: external-secrets-stores
+    - name: external-secrets
     - name: externaldns-shared
