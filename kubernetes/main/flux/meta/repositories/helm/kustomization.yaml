@@ -9,7 +9,6 @@ resources:
   - ./backube.yaml
   - ./cloudnative-pg.yaml
   - ./coder.yaml
-  - ./controlplaneio.yaml
   - ./democratic-csi.yaml
   - ./emqx.yaml
   - ./grafana.yaml
