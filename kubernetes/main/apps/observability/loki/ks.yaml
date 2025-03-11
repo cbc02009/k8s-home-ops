@@ -22,5 +22,5 @@ spec:
   dependsOn:
     - name: kube-prometheus-stack
       namespace: observability
-    - name: external-secrets-stores
+    - name: external-secrets
       namespace: external-secrets

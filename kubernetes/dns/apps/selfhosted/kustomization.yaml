@@ -6,5 +6,8 @@ components:
   - ../../components/common
   - ../../../shared/components/common
 resources:
+  - ./bind/ks.yaml
+  - ./blocky/ks.yaml
+  - ./dnsdist/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./unifi/ks.yaml

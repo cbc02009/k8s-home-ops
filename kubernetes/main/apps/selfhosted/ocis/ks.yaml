@@ -22,7 +22,7 @@ spec:
   dependsOn:
     - name: volsync
       namespace: system
-    - name: external-secrets-stores
+    - name: external-secrets
       namespace: external-secrets
   components:
     - ../../../../../shared/components/gatus/guarded

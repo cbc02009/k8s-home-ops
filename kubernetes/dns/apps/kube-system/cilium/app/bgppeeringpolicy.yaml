@@ -6,7 +6,7 @@ kind: CiliumBGPPeeringPolicy
 # "CiliumBGPPeeringPolicy" Custom Resource will replace the old MetalLB BGP's "bgp-config" ConfigMap
 # "CiliumBGPPeeringPolicy" is used with `bgpControlPlane.enabled: true` which uses GoBGP, NOT the old `bgp.enabled: true` which uses MetalLB
 metadata:
-  name: bgp-loadbalancer-ip-main
+  name: bgp-loadbalancer-ip-dns
 spec:
   nodeSelector:
     matchLabels:

@@ -4,47 +4,44 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cert-manager
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace cert-manager
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/dns/apps/cert-manager/cert-manager/app/'
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
-  interval: 30m
-  timeout: 5m
-  healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
-      kind: HelmRelease
-      name: cert-manager
-      namespace: cert-manager
+    name: flux-system
+    namespace: flux-system
+  wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cert-manager-issuers
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace cert-manager
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/dns/apps/cert-manager/cert-manager/issuers/'
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
-  interval: 30m
-  timeout: 5m
+    name: flux-system
+    namespace: flux-system
+  wait: true
   dependsOn:
     - name: cert-manager
+      namespace: cert-manager
     - name: external-secrets
+      namespace: external-secrets

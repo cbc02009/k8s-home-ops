@@ -43,5 +43,5 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: external-secrets-stores
+    - name: external-secrets
       namespace: external-secrets

@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/certificates
+  path: ./kubernetes/dns/apps/network/nginx/certificates
   prune: false
   sourceRef:
     kind: GitRepository
@@ -22,32 +22,32 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app nginx-external
-  namespace: &namespace network
-spec:
-  targetNamespace: *namespace
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  interval: 30m
-  timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/external
-  prune: false
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: nginx-certificates
-      namespace: network
-    - name: external-secrets
-      namespace: external-secrets
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app nginx-external
+#   namespace: &namespace network
+# spec:
+#   targetNamespace: *namespace
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   interval: 30m
+#   timeout: 5m
+#   path: ./kubernetes/dns/apps/network/nginx/external
+#   prune: false
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   wait: false
+#   dependsOn:
+#     - name: nginx-certificates
+#       namespace: network
+#     - name: external-secrets
+#       namespace: external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -62,7 +62,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/internal
+  path: ./kubernetes/dns/apps/network/nginx/internal
   prune: false
   sourceRef:
     kind: GitRepository

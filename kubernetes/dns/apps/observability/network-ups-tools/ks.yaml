@@ -13,9 +13,6 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/dns/apps/observability/network-ups-tools/app
-  postBuild:
-    substitute:
-      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository

@@ -4,66 +4,66 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app externaldns-shared
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace network
 spec:
-  targetNamespace: network
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/dns/apps/network/external-dns/shared/'
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
+    name: flux-system
+    namespace: flux-system
+  wait: false
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app externaldns-external
+  namespace: &namespace network
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-# ---
-# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: &app externaldns-external
-#   namespace: flux-system
-#   labels:
-#     substitution.flux.home.arpa/enabled: 'true'
-# spec:
-#   targetNamespace: network
-#   commonMetadata:
-#     labels:
-#       app.kubernetes.io/name: *app
-#   path: './kubernetes/dns/apps/network/external-dns/external/'
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: k8s-home-ops
-#   interval: 30m
-#   timeout: 5m
-#   dependsOn:
-#     - name: external-secrets
-#     - name: externaldns-shared
+  path: './kubernetes/dns/apps/network/external-dns/external/'
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: false
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app externaldns-internal
-  namespace: flux-system
-  labels:
-    substitution.flux.home.arpa/enabled: 'true'
+  namespace: &namespace network
 spec:
-  targetNamespace: network
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
   path: './kubernetes/dns/apps/network/external-dns/internal/'
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-home-ops
-  interval: 30m
-  timeout: 5m
+    name: flux-system
+    namespace: flux-system
+  wait: false
   dependsOn:
     - name: external-secrets
-    - name: externaldns-shared
+      namespace: external-secrets
