@@ -10,6 +10,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: reloader
+    namespace: flux-system
   install:
     createNamespace: true
     remediation: # perform remediation when helm install fails
