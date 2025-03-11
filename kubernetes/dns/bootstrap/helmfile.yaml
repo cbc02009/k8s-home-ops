@@ -64,7 +64,7 @@ releases:
     values:
       - ../apps/flux-system/flux-operator/app/values.yaml
     needs:
-      - kube-system/wipe-rook
+      - kube-system/coredns
 
   - name: flux-instance
     namespace: flux-system
