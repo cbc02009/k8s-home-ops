@@ -10,7 +10,6 @@ spec:
     spec:
       chart: openebs
       version: 4.2.0
-      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: openebs
@@ -25,9 +24,54 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    localprovisioner:
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: false
+          keep: false
+    localpv-provisioner:
       hostpathClass:
         enabled: true
         name: openebs-hostpath
         isDefaultClass: false
         basePath: /var/openebs/local
+    zfs-localpv:
+      enabled: false
+    lvm-localpv:
+      enabled: false
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+      replicated:
+        mayastor:
+          enabled: false
+    mayastor:
+      csi:
+        node:
+          initContainers:
+            enabled: false
+      etcd:
+        localpvScConfig:
+          enabled: false
+        persistence:
+          storageClass: openebs-hostpath
+      io_engine:
+        cpuCount: "1"
+        coreList: [7]
+        envcontext: "iova-mode=pa"
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 500m
+      loki-stack:
+        enabled: false
+        localpvScConfig:
+          enabled: false
+      promtail:
+        enabled: false
+      storageClass:
+        enabled: false
