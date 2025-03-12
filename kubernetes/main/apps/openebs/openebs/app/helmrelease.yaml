@@ -24,20 +24,29 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    localpv-provisioner:
+      localpv:
+        image:
+          registry: quay.io/
+        basePath: &hostPath /var/openebs/local
+      hostpathClass:
+        enabled: true
+        name: openebs-hostpath
+        isDefaultClass: true
+        basePath: *hostPath
+      helperPod:
+        image:
+          registry: quay.io/
     openebs-crds:
       csi:
         volumeSnapshots:
           enabled: false
           keep: false
-    localpv-provisioner:
-      hostpathClass:
-        enabled: true
-        name: openebs-hostpath
-        isDefaultClass: false
-        basePath: /var/openebs/local
     zfs-localpv:
       enabled: false
     lvm-localpv:
+      enabled: false
+    mayastor:
       enabled: false
     engines:
       local:
@@ -48,30 +57,3 @@ spec:
       replicated:
         mayastor:
           enabled: false
-    mayastor:
-      csi:
-        node:
-          initContainers:
-            enabled: false
-      etcd:
-        localpvScConfig:
-          enabled: false
-        persistence:
-          storageClass: openebs-hostpath
-      io_engine:
-        cpuCount: "1"
-        coreList: [7]
-        envcontext: "iova-mode=pa"
-        resources:
-          requests:
-            cpu: 100m
-          limits:
-            cpu: 500m
-      loki-stack:
-        enabled: false
-        localpvScConfig:
-          enabled: false
-      promtail:
-        enabled: false
-      storageClass:
-        enabled: false
