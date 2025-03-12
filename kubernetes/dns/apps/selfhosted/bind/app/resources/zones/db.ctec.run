@@ -22,18 +22,18 @@ gateway                    IN  A  10.0.0.1
 ; Trusted
 shinobu                    IN  A 10.0.1.5
 yuzu                       IN  A 10.0.1.50
-Poro                       IN  A 10.0.1.119
+poro                       IN  A 10.0.1.119
 himari                     IN  A 10.0.1.120
 petra                      IN  A 10.0.1.121
 
 ; Servers
-nut-server                 IN  A  10.0.2.3
 shana                      IN  A  10.0.2.4
 rem                        IN  A  10.0.2.5
 ram                        IN  A  10.0.2.6
 uiharu                     IN  A  10.0.2.10
 sakura                     IN  A  10.0.2.12
 miri                       IN  A  10.0.2.11
+anya                       IN  A  10.0.2.13
 
 ; IOT
 prusa                      IN  A  10.0.3.110

@@ -22,6 +22,10 @@ tasks:
     vars:
       CLUSTERCONFIG_FILES:
         sh: ls {{.K8S_DIR}}/talos/clusterconfig/*.yaml
+      CLUSTER: "{{.CLUSTER}}"
+    requires:
+      vars:
+        - CLUSTER
     preconditions:
       - which ls
       - test -f "${TALOSCONFIG}"
@@ -32,7 +36,7 @@ tasks:
         vars:
           FILENAME: "{{.ITEM}}"
           HOSTNAME: |-
-            {{ trimPrefix (printf "main-") (base .ITEM) | trimSuffix ".yaml" }}
+            {{ trimPrefix (printf "{{.CLUSTER}}-") (base .ITEM) | trimSuffix ".yaml" }}
           DRY_RUN: "{{ .DRY_RUN }}"
           INSECURE: "{{ .INSECURE }}"
 
@@ -45,9 +49,10 @@ tasks:
     requires:
       vars:
         - NODE
+        - CLUSTER
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/talos/clusterconfig/home-ops-{{.NODE}}*.yaml
+        sh: ls {{.K8S_DIR}}/talos/clusterconfig/{{.CLUSTER}}-{{.NODE}}*.yaml
     cmds:
       - task: _apply-machineconfig
         vars:
