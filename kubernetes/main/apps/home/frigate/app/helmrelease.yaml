@@ -20,13 +20,7 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-  dependsOn:
-    - name: intel-device-plugins-gpu
-      namespace: system
-    - name: emqx-cluster
-      namespace: databases
-    - name: volsync
-      namespace: system
+
   values:
 
     defaultPodOptions:
