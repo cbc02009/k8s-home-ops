@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app authentik
-  namespace: &namespace security
+  namespace: &namespace authentik
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/main/apps/security/authentik/app"
+  path: "./kubernetes/main/apps/authentik/authentik/app"
   prune: true
   sourceRef:
     kind: GitRepository
