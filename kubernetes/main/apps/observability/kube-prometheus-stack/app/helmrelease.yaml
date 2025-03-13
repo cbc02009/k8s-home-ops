@@ -5,50 +5,43 @@ kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
 spec:
-  interval: 30m
-  timeout: 15m
-  chart:
-    spec:
-      chart: kube-prometheus-stack
-      version: 69.8.2
-      sourceRef:
-        kind: HelmRepository
-        name: prometheus-community
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: kube-prometheus-stack
   install:
-    crds: CreateReplace
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: openebs
-      namespace: openebs
-
   values:
-
     crds:
-      enabled: false
-
+      enabled: true
+      upgradeJob:
+        enabled: true
+        forceConflicts: true
     cleanPrometheusOperatorObjectNames: true
 
     alertmanager:
-      ingress:
-        enabled: true
+      route:
+        main:
+          enabled: true
         pathType: Prefix
-        ingressClassName: internal
-        hosts:
+        hostnames:
           - &am-host alertmanager.${EXTERNAL_DOMAIN}
-        tls:
-          - hosts: [*am-host]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
       alertmanagerSpec:
-        replicas: 3
-        useExistingSecret: true
-        configSecret: alertmanager-secret
+        alertmanagerConfiguration:
+          name: alertmanager
+          global:
+            resolveTimeout: 5m
+        externalUrl: https://alertmanager.${EXTERNAL_DOMAIN}
         storage:
           volumeClaimTemplate:
             spec:
@@ -56,58 +49,25 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-    kubelet:
-      enabled: true
-      serviceMonitor:
-        metricRelabelings:
-          # Drop high cardinality labels
-          - action: labeldrop
-            regex: (uid)
-          - action: labeldrop
-            regex: (id|name)
-          - action: drop
-            sourceLabels: ["__name__"]
-            regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
-    kubeApiServer:
-      enabled: true
-      serviceMonitor:
-        metricRelabelings:
-          # Drop high cardinality labels
-          - action: drop
-            sourceLabels: ["__name__"]
-            regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
-          - action: drop
-            sourceLabels: ["__name__"]
-            regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
-    kubeControllerManager:
-      enabled: true
-      endpoints: &cp
-        - 10.0.2.10
-        - 10.0.2.11
-        - 10.0.2.12
     kubeEtcd:
-      enabled: true
-      endpoints: *cp
-    kubeScheduler:
-      enabled: true
-      endpoints: *cp
-    kubeProxy:
-      enabled: false
+      service:
+        selector:
+          component: kube-apiserver # etcd runs on control plane nodes
     ###
     ### Prometheus instance values
     ###
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: internal
-        pathType: Prefix
-        hosts:
-          - &host prometheus.${EXTERNAL_DOMAIN}
-        tls:
-          - hosts: [*host]
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - &host prometheus.${EXTERNAL_DOMAIN}
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
 
       prometheusSpec:
-        scrapeInterval: 1m # Must match interval in Grafana Helm chart
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
@@ -116,16 +76,14 @@ spec:
         enableAdminAPI: true
         walCompression: true
         enableFeatures:
-          - auto-gomemlimit
           - memory-snapshot-on-shutdown
-          - new-service-discovery-manager
         retention: 14d
         retentionSize: 70GB
         resources:
           requests:
             cpu: 100m
           limits:
-            memory: 1500Mi
+            memory: 2000Mi
         storageSpec:
           volumeClaimTemplate:
             spec:

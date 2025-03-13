@@ -8,5 +8,6 @@ resources:
   - ./external-secrets.yaml
   - ./flux-instance.yaml
   - ./flux-operator.yaml
+  - ./kube-prometheus-stack.yaml
   - ./reloader.yaml
   - ./spegel.yaml
