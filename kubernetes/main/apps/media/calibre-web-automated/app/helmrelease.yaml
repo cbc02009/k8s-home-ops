@@ -84,23 +84,23 @@ spec:
     ingress:
       main:
         enabled: true
-        className: external
-        # className: internal
+        # className: external
+        className: internal
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "0"
           nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
           nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
           nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
-          nginx.ingress.kubernetes.io/auth-response-headers:
-            Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
-          nginx.ingress.kubernetes.io/auth-snippet:
-            proxy_set_header X-Forwarded-Host $http_host;
-          nginx.ingress.kubernetes.io/auth-url:
-            http://ak-outpost-proxy-outpost.authentik.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx
-          nginx.ingress.kubernetes.io/auth-signin:
-            /outpost.goauthentik.io/start?rd=$escaped_request_uri
-          nginx.ingress.kubernetes.io/whitelist-source-range:
-            "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+          # nginx.ingress.kubernetes.io/auth-response-headers:
+          #   Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+          # nginx.ingress.kubernetes.io/auth-snippet:
+          #   proxy_set_header X-Forwarded-Host $http_host;
+          # nginx.ingress.kubernetes.io/auth-url:
+          #   http://ak-outpost-proxy-outpost.authentik.svc.cluster.local:9000/outpost.goauthentik.io/auth/nginx
+          # nginx.ingress.kubernetes.io/auth-signin:
+          #   /outpost.goauthentik.io/start?rd=$escaped_request_uri
+          # nginx.ingress.kubernetes.io/whitelist-source-range:
+          #   "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
         hosts:
           - host: &host calibre-web.${EXTERNAL_DOMAIN}
             paths:
@@ -108,8 +108,6 @@ spec:
                 service:
                   identifier: main
                   port: http
-        tls:
-          - hosts: [*host]
 
     persistence:
       config:
