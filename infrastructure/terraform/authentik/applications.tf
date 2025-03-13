@@ -99,7 +99,7 @@ module "proxy-calibre-web" {
   source             = "./proxy_application"
   name               = "Calibre Web"
   description        = "Books"
-  slug               = "calibre-web"
+  slug               = "cwa"
   domain             = module.secret_authentik.fields["domain"]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   group              = "Media"
@@ -184,17 +184,17 @@ module "oauth2-paperless" {
   redirect_uris = ["https://paperless.${module.secret_authentik.fields["domain"]}/accounts/oidc/authentik/login/callback/"]
 }
 
-# module "oauth2-forgejo" {
+# module "oauth2-pgadmin" {
 #   source = "./oauth2_application"
-#   name = "Forgejo"
+#   name = "PGadmin"
 #   icon_url = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/public/assets/img/forgejo.svg"
 #   launch_url = "https://git.${module.secret_authentik.fields["domain"]}"
-#   description = "Git"
+#   description = "Database Access"
 #   newtab = true
 #   group = "Infrastructure"
 #   auth_groups = [authentik_group.infrastructure.id]
 #   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   client_id          = data.doppler_secrets.this.map.FORGEJO_OIDC_ID
-#   client_secret      = data.doppler_secrets.this.map.FORGEJO_OIDC_SECRET
+#   client_id          = module.secret_pgadmin.fields["oidc_id"]
+#   client_secret      = module.secret_pgadmin.fields["oidc_secret"]
 #   redirect_uris = ["https://git.${module.secret_authentik.fields["domain"]}/accounts/oidc/authentik/login/callback/"]
 # }
