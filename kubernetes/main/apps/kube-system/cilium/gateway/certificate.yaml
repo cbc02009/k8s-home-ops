@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kokoro-wtf
+spec:
+  secretName: kokoro-wtf-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: kokoro.wtf
+  dnsNames: ["kokoro.wtf", "*.kokoro.wtf"]
