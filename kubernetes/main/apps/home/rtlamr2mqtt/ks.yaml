@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app home-assistant
-  namespace: &namespace home-automation
+  name: &app rtlamr2mqtt
+  namespace: &namespace home
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/home-automation/home-assistant/app
+  path: ./kubernetes/main/apps/home/rtlamr2mqtt/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,17 +20,7 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: cloudnative-pg-cluster
-      namespace: databases
     - name: external-secrets
       namespace: external-secrets
-    - name: volsync
+    - name: node-feature-rules
       namespace: system
-  components:
-    - ../../../../../shared/components/gatus/guarded
-    - ../../../../../shared/components/volsync
-  postBuild:
-    substitute:
-      APP: *app
-      GATUS_SUBDOMAIN: hass
-      VOLSYNC_CAPACITY: 5Gi

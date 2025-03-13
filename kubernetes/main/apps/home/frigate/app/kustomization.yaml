@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-namespace: home-automation
+namespace: home
 configMapGenerator:
   - name: frigate
     files:
@@ -15,4 +15,4 @@ generatorOptions:
   # annotations:
   #   kustomize.toolkit.fluxcd.io/substitute: disabled
 metadata:
-  namespace: home-automation
+  namespace: home

@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app frigate
-  namespace: &namespace home-automation
+  name: &app home-assistant
+  namespace: &namespace home
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: './kubernetes/main/apps/home-automation/frigate/app/'
+  path: ./kubernetes/main/apps/home/home-assistant/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,12 +20,17 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
+    - name: cloudnative-pg-cluster
+      namespace: databases
+    - name: external-secrets
+      namespace: external-secrets
     - name: volsync
       namespace: system
   components:
-    - ../../../../../shared/components/gatus/external
+    - ../../../../../shared/components/gatus/guarded
     - ../../../../../shared/components/volsync
   postBuild:
     substitute:
       APP: *app
+      GATUS_SUBDOMAIN: hass
       VOLSYNC_CAPACITY: 5Gi
