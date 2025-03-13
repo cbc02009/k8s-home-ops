@@ -30,13 +30,12 @@ spec:
       route:
         main:
           enabled: true
-        pathType: Prefix
-        hostnames:
-          - &am-host alertmanager.${EXTERNAL_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+          hostnames:
+            - &am-host alertmanager.${EXTERNAL_DOMAIN}
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
