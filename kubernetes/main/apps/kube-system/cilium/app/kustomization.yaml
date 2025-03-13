@@ -13,7 +13,3 @@ configMapGenerator:
 
 configurations:
   - kustomizeconfig.yaml
-labels:
-  - pairs:
-      app.kubernetes.io/name: cilium
-      app.kubernetes.io/instance: cilium
