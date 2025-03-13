@@ -29,36 +29,28 @@ spec:
   values:
 
     hubble:
+      enabled: true
       metrics:
+        enabled:
+          - dns:query
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - http
         serviceMonitor:
-          enabled: false
-      dashboards:
-        enabled: true
-        label: grafana_dashboard
-        namespace: monitoring
-        labelValue: "1"
-        annotations: {}
+          enabled: true
+        dashboards:
+          enabled: true
       relay:
         enabled: true
+        rollOutPods: true
+        prometheus:
+          serviceMonitor:
+            enabled: true
       ui:
         enabled: true
         rollOutPods: true
-        ingress:
-          enabled: true
-          className: "internal"
-          annotations:
-          hosts:
-            - &host "hubble.${EXTERNAL_DOMAIN}"
-          tls:
-            - secretName: *host
-              hosts:
-                - *host
-
-    prometheus:
-      serviceMonitor:
-        enabled: true
-
     operator:
-      prometheus:
-        serviceMonitor:
-          enabled: true
+      tolerations: []
