@@ -1,11 +1,10 @@
 ---
+originRequest:
+  originServerName: external.kokoro.wtf
+
 ingress:
+  - hostname: kokoro.wtf
+    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.kokoro.wtf"
-    service: https://nginx-external-controller.network.svc.cluster.local:443
-    originRequest:
-      originServerName: external.kokoro.wtf
-  - hostname: "kokoro.wtf"
-    service: https://nginx-external-controller.network.svc.cluster.local:443
-    originRequest:
-      originServerName: external.kokoro.wtf
+    service: *svc
   - service: http_status:404

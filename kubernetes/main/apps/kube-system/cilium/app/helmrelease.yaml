@@ -27,7 +27,6 @@ spec:
       name: cilium-values
 
   values:
-
     hubble:
       enabled: true
       metrics:

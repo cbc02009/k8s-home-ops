@@ -42,7 +42,7 @@ cluster:
   # -- (int) Unique ID of the cluster. Must be unique across all connected
   # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
   # may be 0 if Cluster Mesh is not used.
-  id: 1
+  id: 2
 
 endpointRoutes:
   # -- Enable use of per endpoint routes instead of routing via

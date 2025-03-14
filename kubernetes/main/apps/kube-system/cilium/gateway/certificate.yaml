@@ -11,4 +11,6 @@ spec:
     name: letsencrypt-staging
     kind: ClusterIssuer
   commonName: kokoro.wtf
-  dnsNames: ["kokoro.wtf", "*.kokoro.wtf"]
+  dnsNames:
+    - "kokoro.wtf"
+    - "*.kokoro.wtf"

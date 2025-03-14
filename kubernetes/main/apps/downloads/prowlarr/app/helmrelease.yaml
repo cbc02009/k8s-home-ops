@@ -28,7 +28,6 @@ spec:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
-          setGateway: 'true'
 
         initContainers:
           init-db:

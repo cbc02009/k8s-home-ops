@@ -7,6 +7,9 @@ bandwidthManager:
   enabled: true
   bbr: true
 
+bgpControlPlane:
+  enabled: true
+
 bpf:
   datapathMode: netkit
   masquerade: true
@@ -24,20 +27,9 @@ bgp:
     # -- Enable announcement of node pod CIDR
     podCIDR: false
 
-bgpControlPlane:
-  enabled: true
-
-# -- Configure cgroup related configuration
 cgroup:
-  automount:
-    # -- Enable auto mount of cgroup2 filesystem.
-    # When `autoMount` is enabled, cgroup2 filesystem is mounted at
-    # `cgroup.hostRoot` path on the underlying host and inside the cilium agent pod.
-    # If users disable `autoMount`, it's expected that users have mounted
-    # cgroup2 filesystem at the specified `cgroup.hostRoot` volume, and then the
-    # volume will be mounted inside the cilium agent pod at the same path.
+  autoMount:
     enabled: false
-  # -- Configure cgroup root where cgroup2 filesystem is mounted on the host (see also: `cgroup.autoMount`)
   hostRoot: /sys/fs/cgroup
 
 cluster:
@@ -46,10 +38,15 @@ cluster:
   # -- (int) Unique ID of the cluster. Must be unique across all connected
   # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
   # may be 0 if Cluster Mesh is not used.
-  id: 0
+  id: 1
 
 cni:
   exclusive: false
+
+dashboards:
+  enabled: true
+  annotations:
+    grafana_folder: Cilium
 
 enableIPv4BIGTCP: true
 
@@ -59,6 +56,7 @@ endpointRoutes:
   enabled: true
 
 envoy:
+  enabled: true
   rollOutPods: true
 
 gatewayAPI:
@@ -103,6 +101,9 @@ kubeProxyReplacement: true
 # By default it is disabled.
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 
+l2announcements:
+  enabled: false
+
 # -- Configure service load balancing
 loadBalancer:
   # -- algorithm is the name of the load balancing algorithm for backend
@@ -119,12 +120,21 @@ localRedirectPolicy: true
 operator:
   dashboards:
     enabled: true
+    annotations:
+      grafana_folder: Cilium
   prometheus:
     enabled: true
     serviceMonitor:
       enabled: true
   replicas: 2
   rollOutPods: true
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+
+rollOutCiliumPods: true
 
 # -- Enable native-routing mode or tunneling mode.
 # Possible values:
