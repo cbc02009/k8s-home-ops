@@ -78,13 +78,53 @@ spec:
         apiVersion: 1
         providers:
           - name: default
-            orgId: 1
+            disableDeletion: false
+            editable: true
             folder: ""
+            options:
+              path: /var/lib/grafana/dashboards/default
+            orgId: 1
+            type: file
+          - name: ceph
+            orgId: 1
+            folder: Ceph
             type: file
             disableDeletion: false
             editable: true
             options:
-              path: /var/lib/grafana/dashboards/default
+              path: /var/lib/grafana/dashboards/ceph
+          - name: flux
+            orgId: 1
+            folder: Flux
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/flux
+          - name: kubernetes
+            orgId: 1
+            folder: Kubernetes
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/kubernetes
+          - name: postgres
+            orgId: 1
+            folder: Postgres
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/postgres
+          - name: unpoller
+            disableDeletion: false
+            editable: true
+            folder: "UniFi Poller"
+            options:
+              path: /var/lib/grafana/dashboards/unpoller
+            orgId: 1
+            type: file
 
     datasources:
       datasources.yaml:
