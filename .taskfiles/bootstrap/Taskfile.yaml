@@ -38,6 +38,7 @@ tasks:
       ROOK_DISK: nvme-Samsung_SSD_970_EVO_Plus_1TB
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
+      - kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/experimental-install.yaml
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
       - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
       - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml destroy --selector name=wipe-rook
