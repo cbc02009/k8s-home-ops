@@ -8,7 +8,7 @@ components:
   - ../../../shared/components/common
 resources:
   - ./calibre/ks.yaml
-  - ./calibre-web-automated/ks.yaml
+  - ./calibre-web/ks.yaml
   - ./lanraragi/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml

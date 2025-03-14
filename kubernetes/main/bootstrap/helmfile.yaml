@@ -25,20 +25,28 @@ releases:
     namespace: kube-system
     chart: cilium/cilium
     version: 1.17.1
-    values: 
+    values:
       - ../apps/kube-system/cilium/app/values.yaml
     needs:
       - observability/prometheus-operator-crds
+    hooks:
+      - # Wait for cilium CRDs to be available
+        events: ['postsync']
+        command: bash
+        args:
+          - -c
+          - until kubectl get crd ciliumbgppeeringpolicies.cilium.io ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 10; done
+        showlogs: true
 
   - name: coredns
     namespace: kube-system
     chart: oci://ghcr.io/coredns/charts/coredns
     version: 1.39.1
-    values: 
+    values:
       - ../apps/kube-system/coredns/app/values.yaml
     needs:
       - kube-system/cilium
-  
+
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
@@ -56,6 +64,14 @@ releases:
       - ../apps/external-secrets/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
+    hooks:
+      - # Wait for external-secrets CRDs to be available
+        events: ['postsync']
+        command: bash
+        args:
+          - -c
+          - until kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do sleep 10; done
+        showlogs: true
 
   - name: wipe-rook
     namespace: kube-system
@@ -89,7 +105,7 @@ releases:
     namespace: system-controllers
     chart: postfinance/kubelet-csr-approver
     version: 1.2.6
-    values: 
+    values:
       - ../apps/system-controllers/kubelet-csr-approver/app/helm-values.yaml
     needs:
       - observability/prometheus-operator-crds
@@ -100,7 +116,7 @@ releases:
     namespace: system
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
     version: v0.0.30
-    values: 
+    values:
       - ../apps/system/spegel/app/helm-values.yaml
     needs:
       - observability/prometheus-operator-crds

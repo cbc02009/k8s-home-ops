@@ -36,7 +36,7 @@ tasks:
         vars:
           FILENAME: "{{.ITEM}}"
           HOSTNAME: |-
-            {{ trimPrefix (printf "{{.CLUSTER}}-") (base .ITEM) | trimSuffix ".yaml" }}
+            {{ trimPrefix (printf "main-") (base .ITEM) | trimSuffix ".yaml" }}
           DRY_RUN: "{{ .DRY_RUN }}"
           INSECURE: "{{ .INSECURE }}"
 

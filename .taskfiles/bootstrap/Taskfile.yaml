@@ -8,6 +8,7 @@ tasks:
     vars:
       TALOS_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
+      CLUSTER: "{{.CLUSTER}}"
     preconditions:
       - which jq minijinja-cli sops talosctl
       - test -f "${TALOSCONFIG}"
@@ -16,6 +17,7 @@ tasks:
       - task: :talos:apply-clusterconfig
         vars:
           INSECURE: "true"
+          CLUSTER: "{{.CLUSTER}}"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
       - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "main" "${KUBECONFIG}"
 
