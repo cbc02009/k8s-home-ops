@@ -61,7 +61,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - &host prometheus.${EXTERNAL_DOMAIN}
+            - &host prometheus.kokoro.wtf
           parentRefs:
             - name: internal
               namespace: kube-system

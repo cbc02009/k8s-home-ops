@@ -51,23 +51,19 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
-      main:
-        enabled: true
-        className: external
-        hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-          - host: &customHost requests.${EXTERNAL_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+        parentRefs:
+          - name: internal # MAKE EXTERNAL
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
     persistence:
       config:

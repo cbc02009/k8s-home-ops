@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: autobrr
+  name: &app autobrr
 spec:
   interval: 30m
   chartRef:
@@ -72,20 +72,24 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       app:
-        controller: autobrr
+        controller: *app
         ports:
           http:
             port: *port
-    ingress:
+
+    route:
       app:
-        className: internal
-        hosts:
-          - host: "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+
     persistence:
       tmp:
         type: emptyDir

@@ -18,23 +18,22 @@ spec:
         name: rook-ceph
         namespace: flux-system
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
-      retries: 5
+    remediation:
+      retries: 3
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 5
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
-  dependsOn:
-    - name: snapshot-controller
-      namespace: system-controllers
+    remediation:
+      strategy: rollback
+      retries: 3
   values:
     csi:
       cephFSKernelMountOptions: ms_mode=prefer-crc
       enableLiveness: true
       serviceMonitor:
         enabled: true
+    enableDiscoveryDaemon: true
+    image:
+      repository: ghcr.io/rook/ceph
     monitoring:
       enabled: true
     resources:

@@ -122,24 +122,25 @@ spec:
 
     service:
       app:
-        controller: qbittorrent
+        controller: *app
         type: LoadBalancer
         loadBalancerIP: ${LB_QBT_GUI}
         ports:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        enabled: true
-        className: internal
-        hosts:
-          - host: &host "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
     persistence:
       config:

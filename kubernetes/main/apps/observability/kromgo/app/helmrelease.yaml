@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kromgo
+  name: &app kromgo
 spec:
   interval: 30m
   chartRef:
@@ -32,8 +32,8 @@ spec:
               tag: v0.5.0@sha256:2ab429f5276e1cd2b306701588a7b5cdbf968c5a4298058a29a4d1e37ed9b97c
             env:
               PROMETHEUS_URL: http://prometheus-operated.observability.svc.cluster.local:9090
-              SERVER_PORT: &serverPort 80
-              HEALTH_PORT: &healthPort 8080
+              SERVER_PORT: &port 80
+              HEALTH_PORT: &hport 8080
             probes:
               liveness: &probes
                 enabled: true
@@ -41,7 +41,7 @@ spec:
                 spec:
                   httpGet:
                     path: /readyz
-                    port: *healthPort
+                    port: *hport
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -67,19 +67,21 @@ spec:
         ports:
           http:
             primary: true
-            port: *serverPort
+            port: *port
           health:
-            port: *healthPort
-    ingress:
+            port: *hport
+    route:
       app:
-        className: external
-        hosts:
-          - host: "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config-file:
         type: configMap

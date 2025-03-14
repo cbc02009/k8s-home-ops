@@ -67,22 +67,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 2Gi
-          code-server:
-            image:
-              repository: ghcr.io/coder/code-server
-              tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
-            args: [
-              "--auth", "none",
-              "--user-data-dir", "/config/.vscode",
-              "--extensions-dir", "/config/.vscode",
-              "--port", "12321",
-              "/config"
-            ]
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 512Mi
 
     defaultPodOptions:
       securityContext:
@@ -99,31 +83,20 @@ spec:
         controller: *app
         ports:
           http:
-            port: 8123
-          code-server:
-            port: 12321
+            port: &port 8123
 
-    ingress:
+    route:
       app:
-        className: "internal"
-        annotations:
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        hosts:
-          - host: &host "hass.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-      code-server:
-        className: internal
-        hosts:
-          - host: &code-host "hass-code.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: code-server
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
     persistence:
       config:
