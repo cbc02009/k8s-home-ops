@@ -54,7 +54,7 @@ spec:
       enabled: true
 
     sources:
-      - ingress
+      - gateway-httproute
       - service
 
     txtPrefix: "k8s."
