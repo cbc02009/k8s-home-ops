@@ -38,6 +38,16 @@ spec:
   timeout: 5m
   path: "./kubernetes/main/apps/system/intel-device-plugins/gpu"
   prune: true
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: *app
+      namespace: *namespace
+  healthCheckExprs:
+    - apiVersion: deviceplugin.intel.com/v1
+      kind: GpuDevicePlugin
+      failed: status.desiredNumberScheduled != status.numberReady
+      current: status.desiredNumberScheduled == status.numberReady
   sourceRef:
     kind: GitRepository
     name: flux-system

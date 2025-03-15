@@ -18,12 +18,9 @@ spec:
       priorityClassName: system-node-critical
 
     controllers:
-      recyclarr:
+      generic-device-plugin:
         type: daemonset
         strategy: RollingUpdate
-        annotations:
-          reloader.stakater.com/auto: "true"
-
         containers:
           app:
             image:
@@ -48,7 +45,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: generic-device-plugin-configmap
+        name: generic-device-plugin
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
