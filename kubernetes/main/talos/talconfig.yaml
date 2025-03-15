@@ -5,7 +5,7 @@ clusterName: &clusterName main
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
 talosVersion: v1.9.4
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
-kubernetesVersion: v1.31.1
+kubernetesVersion: v1.32.3
 
 # endpoint: https://10.5.0.2:6443
 endpoint: https://10.0.2.9:6443
