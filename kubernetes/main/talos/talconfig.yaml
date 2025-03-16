@@ -31,6 +31,7 @@ nodes:
   - hostname: uiharu.ctec.run
     nodeLabels: &nodeLabels
       openebs.io/engine: mayastor
+      intel.feature.node.kubernetes.io/gpu: "true"
     ipAddress: 10.0.2.10
     installDiskSelector:
       model: Samsung SSD 870
