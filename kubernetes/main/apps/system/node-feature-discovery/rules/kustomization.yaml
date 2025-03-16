@@ -6,5 +6,5 @@ resources:
   - ./10gb-nic.yaml
   - ./aeotec-zwave-device.yaml
   - ./google-coral-device.yaml
-  - ./intel-gpu.yaml
+  # - ./intel-gpu.yaml
   - ./nesdr-rtl-sdr-device.yaml

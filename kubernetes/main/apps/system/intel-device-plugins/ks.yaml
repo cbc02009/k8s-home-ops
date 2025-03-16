@@ -56,3 +56,5 @@ spec:
   dependsOn:
     - name: intel-device-plugins-operator
       namespace: system
+    - name: node-feature-discovery
+      namespace: system
