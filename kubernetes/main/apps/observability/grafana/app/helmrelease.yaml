@@ -159,11 +159,6 @@ spec:
 
     dashboards:
       default:
-        apc-ups:
-          # renovate: depName="APC UPS (SNMP)"
-          gnetId: 12340
-          revision: 1
-          datasource: Prometheus
         # renovate: depName="authentik"
         authentik:
           gnetId: 14837
@@ -297,7 +292,7 @@ spec:
           gnetId: 11454
           revision: 14
           datasource: Prometheus
-      unifi:
+      unpoller:
         unifi-insights:
           # renovate: depName="UniFi-Poller: Client Insights - Prometheus"
           gnetId: 11315
