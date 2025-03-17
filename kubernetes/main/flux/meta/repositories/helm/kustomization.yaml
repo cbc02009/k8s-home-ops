@@ -13,6 +13,7 @@ resources:
   - ./emqx.yaml
   - ./grafana.yaml
   - ./kubernetes-sigs-nfd.yaml
+  - ./immich.yaml
   - ./intel.yaml
   - ./lwolf.yaml
   - ./mayastor.yaml
