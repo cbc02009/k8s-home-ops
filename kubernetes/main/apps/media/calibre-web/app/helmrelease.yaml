@@ -38,8 +38,8 @@ spec:
 
             env:
               TZ: ${TZ}
-              PUID: '568' # "${APP_UID}"
-              PGID: '568' # "${APP_GID}"
+              PUID: '2000' # "${APP_UID}"
+              PGID: '2000' # "${APP_GID}"
               CACHE_DIR: /cache
               CALIBRE_PORT: &port 8083
               DOCKER_MODS: >-
