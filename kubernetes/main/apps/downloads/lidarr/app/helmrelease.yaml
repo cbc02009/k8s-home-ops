@@ -46,14 +46,13 @@ spec:
                   name: *app
 
             image:
-              repository: ghcr.io/onedr0p/postgres-init
+              repository: ghcr.io/home-operations/postgres-init
               tag: '16.8'
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/lidarr-develop
-              tag:
-                2.5.2.4316@sha256:6b1b51ca85dad4f0376b6f86df4cb24d1d6c621ba9d47c1bde26cdb940f2aeb6
+              repository: FROM ghcr.io/home-operations/lidarr
+              tag: 2.10.1.4589
 
             envFrom:
               - secretRef:

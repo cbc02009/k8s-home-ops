@@ -27,7 +27,7 @@ spec:
       replicas: 1
       initContainers:
         - name: init-db
-          image: ghcr.io/onedr0p/postgres-init:16.8
+          image: ghcr.io/home-operations/postgres-init:16.8
           envFrom:
             - secretRef:
                 name: *secret

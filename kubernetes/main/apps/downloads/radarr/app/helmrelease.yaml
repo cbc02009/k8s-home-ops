@@ -36,12 +36,12 @@ spec:
                   name: *app
 
             image:
-              repository: ghcr.io/onedr0p/postgres-init
+              repository: ghcr.io/home-operations/postgres-init
               tag: '16.8'
         containers:
           app:
             image:
-              repository: ghcr.io/onedr0p/radarr-develop
+              repository: ghcr.io/home-operations/radarr-develop
               tag:
                 5.19.3.9730@sha256:dd64f1786f50ae79013822ce196e3e7bd20db369bd51d63d63c42f7821b77317
 
