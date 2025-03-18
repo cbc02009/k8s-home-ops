@@ -39,9 +39,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/sonarr-develop
-              tag:
-                4.0.13.2933@sha256:12427949df13731d802514d5f417e2d302f2d7c026be1903ae287921b4a60ac7
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.14.2938
 
             env:
               TZ: ${TZ}
