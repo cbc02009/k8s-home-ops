@@ -8,13 +8,15 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: external-secrets
+    name: spegel
     namespace: flux-system
-  valuesFrom:
-    - kind: ConfigMap
-      name: spegel-helm-values
   values:
-    grafanaDashboard:
-      enabled: true
+    spegel:
+      appendMirrors: true
+      containerdSock: /run/containerd/containerd.sock
+      containerdRegistryConfigPath: /etc/cri/conf.d/hosts
+    service:
+      registry:
+        hostPort: 29999
     serviceMonitor:
       enabled: true
