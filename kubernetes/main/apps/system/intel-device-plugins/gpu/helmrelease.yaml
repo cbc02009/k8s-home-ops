@@ -14,5 +14,5 @@ spec:
       namespace: system
   values:
     name: i915
-    nodeFeatureRule: true
+    nodeFeatureRule: false
     sharedDevNum: 99
