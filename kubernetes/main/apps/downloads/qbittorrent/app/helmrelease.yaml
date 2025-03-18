@@ -112,11 +112,6 @@ spec:
                 drop:
                   - ALL
 
-          dnsdist:
-            image:
-              repository: docker.io/powerdns/dnsdist-19
-              tag: 1.9.8
-
           port-forward:
             image:
               repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
@@ -188,14 +183,22 @@ spec:
             app:
               - path: /media
         path: /tank/media
-      dnsdist:
-        type: configMap
-        name: qbittorrent-dnsdist
+      gluetun-auth:
+        type: secret
+        name: qbittorrent-gluetun-secret
         advancedMounts:
           qbittorrent:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
+            gluetun:
+              - path: *gluetunAuthPath
+                subPath: auth.toml
+      coredns:
+        type: configMap
+        name: qbittorrent-coredns
+        advancedMounts:
+          qbittorrent:
+            coredns:
+              - path: /etc/coredns/Corefile
+                subPath: Corefile
                 readOnly: true
       torrents:
         enabled: true
