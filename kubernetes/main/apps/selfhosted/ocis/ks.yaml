@@ -26,7 +26,7 @@ spec:
       namespace: external-secrets
   components:
     - ../../../../../shared/components/gatus/guarded
-    - ../../../../../shared/components/volsync
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *app
