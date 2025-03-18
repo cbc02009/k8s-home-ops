@@ -17,8 +17,7 @@ spec:
       qbittorrent:
         type: statefulset
         annotations:
-          configmap.reloader.stakater.com/reload: qbittorrent-dnsdist
-          secret.reloader.stakater.com/reload: qbittorrent-secret
+          secret.reloader.stakater.com/reload: qbittorrent-secret,qbittorrent-gluetun-secret
 
         pod:
           securityContext:
