@@ -51,7 +51,7 @@ spec:
         containers:
           app:
             image:
-              repository: FROM ghcr.io/home-operations/lidarr
+              repository: ghcr.io/home-operations/lidarr
               tag: 2.10.1.4589
 
             envFrom:
