@@ -34,8 +34,8 @@ spec:
           init-config:
             dependsOn: init-db
             image:
-              repository: ghcr.io/kiwigrid/k8s-sidecar
-              tag: 1.30.1@sha256:439c5ac985827e6a85ad4490a66320b62aefd9e8c6d06fdb1d9c83d582f8a902
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '17.4.0'
             env:
               FOLDER: /config
               LABEL: gatus.io/enabled
