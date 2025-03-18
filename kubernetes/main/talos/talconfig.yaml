@@ -36,10 +36,6 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
     nameservers:
       - 10.4.0.4
     networkInterfaces:
@@ -68,10 +64,6 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
     nameservers:
       - 10.4.0.4
     networkInterfaces:
@@ -93,10 +85,6 @@ nodes:
       model: Samsung SSD 850
     controlPlane: true
     disableSearchDomain: true
-    kernelModules:
-      - name: br_netfilter
-        parameters:
-          - nf_conntrack_max=131072
     nameservers:
       - 10.4.0.4
     networkInterfaces:
@@ -163,6 +151,7 @@ controlPlane:
           extraArgs:
             runtime-config: admissionregistration.k8s.io/v1alpha1=true
             feature-gates: MutatingAdmissionPolicy=true
+            enable-aggregator-routing: true
 
     # Configure cluster
     - |-
@@ -245,14 +234,8 @@ patches:
         - op: create
           path: /etc/cri/conf.d/20-customization.part
           content: |
-            [plugins]
-              [plugins."io.containerd.grpc.v1.cri"]
-                enable_unprivileged_ports = true
-                enable_unprivileged_icmp = true
-              [plugins."io.containerd.grpc.v1.cri".containerd]
-                discard_unpacked_layers = false
-              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-                discard_unpacked_layers = false
+            [plugins."io.containerd.cri.v1.images"]
+              discard_unpacked_layers = false
 
   # Configure nfs mount options
   - |-
@@ -265,11 +248,8 @@ patches:
             [ NFSMount_Global_Options ]
             nfsvers=4.2
             hard=True
-            noatime=True
-            nodiratime=True
-            rsize=131072
-            wsize=131072
             nconnect=16
+            noatime=True
 
   # Kubelet configuration
   - |-
