@@ -50,7 +50,6 @@ spec:
               VPN_SERVICE_PROVIDER: protonvpn
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: 8080,9999 # Kube probes
@@ -59,6 +58,7 @@ spec:
               HEALTH_SUCCESS_WAIT_DURATION: 10s
               PORT_FORWARD_ONLY: 'on'
               SERVER_COUNTRIES: 'United States'
+              UPDATER_VPN_SERVICE_PROVIDERS: protonvpn
               UPDATER_PERIOD: 24h
             envFrom:
               - secretRef:
