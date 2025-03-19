@@ -55,7 +55,7 @@ spec:
     sources: ["crd", "gateway-httproute"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["devbu.io"]
+    domainFilters: ["kokoro.wtf"]
     serviceMonitor:
       enabled: true
     podAnnotations:
