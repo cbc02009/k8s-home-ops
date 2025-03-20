@@ -66,27 +66,27 @@ spec:
             resources:
               limits:
                 squat.ai/tun: "1"
-            probes:
-              liveness: &gluetun-probe
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /bin/sh
-                      - -c
-                      - >-
-                        [ $(wget -O - -q --header="X-API-KEY: $GLUETUN_CONTROL_SERVER_API_KEY" http://localhost:8000/v1/openvpn/portforwarded) != '{"port":0}' ]
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /bin/sh
-                      - -c
-                      - >-
-                        wget -O - -q --header="X-API-KEY: $GLUETUN_CONTROL_SERVER_API_KEY" http://localhost:8000/v1/publicip/ip
+            # probes:
+            #   liveness: &gluetun-probe
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       exec:
+            #         command:
+            #           - /bin/sh
+            #           - -c
+            #           - >-
+            #             [ $(wget -O - -q --header="X-API-KEY: $GLUETUN_CONTROL_SERVER_API_KEY" http://localhost:8000/v1/openvpn/portforwarded) != '{"port":0}' ]
+            #   startup:
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       exec:
+            #         command:
+            #           - /bin/sh
+            #           - -c
+            #           - >-
+            #             wget -O - -q --header="X-API-KEY: $GLUETUN_CONTROL_SERVER_API_KEY" http://localhost:8000/v1/publicip/ip
             lifecycle:
               postStart:
                 exec:
