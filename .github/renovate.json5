@@ -10,7 +10,6 @@
     ":timezone(America/New_York)",
     "github>cbc02009/k8s-home-ops//.github/renovate/allowedVersions.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/autoMerge.json5",
-    "github>cbc02009/k8s-home-ops//.github/renovate/clusters.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/commitMessage.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/customManagers.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/grafanaDashboards.json5",
@@ -34,12 +33,12 @@
     "**/recyclarr.yml"
   ],
   flux: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"]
+    fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
   "helm-values": {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"]
+    fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
   kubernetes: {
-    fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"]
-  },
+    fileMatch: ["^kubernetes/.+\\.ya?ml$"],
+  }
 }
