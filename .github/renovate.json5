@@ -17,7 +17,6 @@
     "github>cbc02009/k8s-home-ops//.github/renovate/labels.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/packageRules.json5",
     "github>cbc02009/k8s-home-ops//.github/renovate/semanticCommits.json5",
-    "github>cbc02009/k8s-home-ops//.github/renovate/generic-regex-manager.json5"
   ],
   "onboarding": false,
   "requireConfig": "optional",
