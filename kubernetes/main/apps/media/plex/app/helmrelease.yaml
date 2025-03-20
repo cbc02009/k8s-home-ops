@@ -38,24 +38,24 @@ spec:
               tag: 1.41.5.9522
             env:
               TZ: ${TZ}
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /identity
-                    port: &port 32400
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /identity
+            #         port: &port 32400
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+            #   readiness: *probes
+            #   startup:
+            #     enabled: true
+            #     spec:
+            #       failureThreshold: 30
+            #       periodSeconds: 10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
