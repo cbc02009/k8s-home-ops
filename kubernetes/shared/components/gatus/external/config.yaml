@@ -1,6 +1,6 @@
 endpoints:
   - name: "${APP}"
-    group: ${CLUSTER}-external
+    group: external
     url: "https://${GATUS_SUBDOMAIN:=${APP}}.${EXTERNAL_DOMAIN}${GATUS_PATH:=/}"
     interval: 1m
     client:

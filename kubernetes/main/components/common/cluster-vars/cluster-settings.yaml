@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
   name: cluster-settings
 data:
-  CLUSTER_NAME: cluster
+  CLUSTER_NAME: main
   CLUSTER_ID: "0"
 
   CLUSTER_CERT: letsencrypt
