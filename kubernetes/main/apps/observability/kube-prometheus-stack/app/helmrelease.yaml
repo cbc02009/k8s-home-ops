@@ -53,6 +53,8 @@ spec:
       service:
         selector:
           component: kube-apiserver # etcd runs on control plane nodes
+    kubeProxy:
+      enabled: false
     ###
     ### Prometheus instance values
     ###
@@ -78,7 +80,7 @@ spec:
         enableFeatures:
           - memory-snapshot-on-shutdown
         retention: 14d
-        retentionSize: 70GB
+        retentionSize: 50GB
         resources:
           requests:
             cpu: 100m
@@ -87,10 +89,10 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: openebs-hostpath
+              storageClassName: ceph-block
               resources:
                 requests:
-                  storage: 75Gi
+                  storage: 50Gi
     prometheus-node-exporter:
       fullnameOverride: node-exporter
       prometheus:
