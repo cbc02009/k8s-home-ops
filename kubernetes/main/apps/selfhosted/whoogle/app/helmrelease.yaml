@@ -76,6 +76,7 @@ spec:
       app:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
+          - "search.kokoro.wtf"
         parentRefs:
           - name: internal # MAKE EXTERNAL
             namespace: kube-system
