@@ -8,7 +8,7 @@ components:
   - ../../../shared/components/common
 resources:
   - ./animarr/ks.yaml
-  # - ./autobrr/ks.yaml
+  - ./autobrr/ks.yaml
   - ./lidarr/ks.yaml
   - ./overseerr/ks.yaml
   - ./prowlarr/ks.yaml
