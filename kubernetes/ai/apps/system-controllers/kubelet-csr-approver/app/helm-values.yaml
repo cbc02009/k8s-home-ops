@@ -1,0 +1,5 @@
+---
+providerRegex: |
+  ^(uiharu|sakura|miri)$
+
+bypassDnsResolution: true

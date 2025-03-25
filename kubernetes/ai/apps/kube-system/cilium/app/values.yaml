@@ -38,7 +38,7 @@ cluster:
   # -- (int) Unique ID of the cluster. Must be unique across all connected
   # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
   # may be 0 if Cluster Mesh is not used.
-  id: 1
+  id: 2
 
 cni:
   exclusive: false
@@ -126,7 +126,7 @@ operator:
     enabled: true
     serviceMonitor:
       enabled: true
-  replicas: 2
+  replicas: 1
   rollOutPods: true
 prometheus:
   enabled: true
