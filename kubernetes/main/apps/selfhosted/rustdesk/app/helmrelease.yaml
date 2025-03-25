@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app rustdesk
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      sourceRef:
+        name: bjw-s-charts
+        kind: HelmRepository
+        namespace: flux-system
+      interval: 30m
+  values:
+    controllers:
+      rustdesk:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/rustdesk/rustdesk-server
+              tag: 1.1.12@sha256:9b1197d116f7bb4d3ad93a50bc1bc59ddb388de267df221a351f5ce10fac3dcf
+            command:
+              - hbbs
+              - -r ${LB_RUSTDESK}:21117
+            probes:
+              startup:
+                enabled: false
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 256Mi
+          relay:
+            image:
+              repository: ghcr.io/rustdesk/rustdesk-server
+              tag: 1.1.12@sha256:9b1197d116f7bb4d3ad93a50bc1bc59ddb388de267df221a351f5ce10fac3dcf
+            command:
+              - hbbr
+            probes:
+              startup:
+                enabled: false
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+    service:
+      rustdesk:
+        controller: rustdesk
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_RUSTDESK}
+          external-dns.alpha.kubernetes.io/hostname: rd.${EXTERNAL_DOMAIN}
+        ports:
+          # server
+          rustdesk-nat:
+            port: 21115
+          rustdesk-id-tcp:
+            port: 21116
+          rustdesk-id-udp:
+            port: 21116
+            protocol: UDP
+          rustdesk-ws:
+            port: 21118
+          # relay
+          rustdesk-relay:
+            port: 21117
+          rustdesk-relay-ws:
+            port: 21119
+    persistence:
+      data:
+        enabled: true
+        existingClaim: *app
+        globalMounts:
+          - path: /db
