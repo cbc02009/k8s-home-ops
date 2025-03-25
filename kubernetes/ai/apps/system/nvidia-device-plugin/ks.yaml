@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: node-feature-discovery
-  path: ./kubernetes/main/apps/system/nvidia-device-plugin/app
+  path: ./kubernetes/ai/apps/system/nvidia-device-plugin/app
   prune: true
   sourceRef:
     kind: GitRepository

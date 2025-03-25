@@ -1,5 +1,5 @@
 ---
 providerRegex: |
-  ^(uiharu|sakura|miri)$
+  ^(ponyo)$
 
 bypassDnsResolution: true
