@@ -6,14 +6,4 @@ namespace: selfhosted
 components:
   - ../../components/common
   - ../../../shared/components/common
-resources:
-  - ./atuin/ks.yaml
-  - ./cyberchef/ks.yaml
-  - ./immich/ks.yaml
-  # - ./ocis/ks.yaml
-  - ./openspeedtest/ks.yaml
-  - ./paperless/ks.yaml
-  - ./redlib/ks.yaml
-  - ./tandoor/ks.yaml
-  - ./teddit/ks.yaml
-  - ./whoogle/ks.yaml
+resources: []
