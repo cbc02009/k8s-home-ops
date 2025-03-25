@@ -5,39 +5,18 @@ metadata:
   namespace: flux-system
   name: cluster-settings
 data:
-  CLUSTER_NAME: cluster
-  CLUSTER_ID: "0"
+  CLUSTER_NAME: ai
+  CLUSTER_ID: "2"
 
   CLUSTER_CERT: letsencrypt
 
   CLUSTER_CLOUDFLARE_TUNNEL_ID: "4a2f8fbf-1e9b-4d2a-90ff-86ade4da689e"
 
-  EXTERNAL_DOMAIN: kokoro.wtf
+  EXTERNAL_DOMAIN: cnas.dev
   INTERNAL_DOMAIN: ctec.run
-
-  NETWORK_K8S_POD_CIDR: 10.11.0.0/16
-  NETWORK_K8S_SERVICE_CIDR: 10.10.0.0/16
-  NETWORK_SERVERS_CIDR: 10.0.3.0/24
 
   TZ: America/New_York
 
   CONTROL_IP: cluster.ctec.run
 
-  NAS_HOST: 10.0.2.4
-
-  LB_RANGE: 10.6.0.0/24
-
   # Pre-defined IP addresses
-
-  LB_HASS: 10.6.0.8
-  LB_QBT_GUI: 10.6.0.9
-  LB_PLEX: 10.6.0.12
-  LB_VECTOR: 10.6.0.13
-  LB_GITEA: 10.6.0.14
-  LB_EMQX: 10.6.0.15
-  LB_MQTT: 10.6.0.16
-  LB_JELLYFIN: 10.6.0.17
-  LB_CALIBRE: 10.6.0.18
-  LB_POSTGRES: 10.6.0.20
-  LB_FORGEJO: 10.6.0.21
-  LB_VSCODE: 10.6.0.22

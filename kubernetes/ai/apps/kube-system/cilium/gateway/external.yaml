@@ -5,14 +5,14 @@ kind: Gateway
 metadata:
   name: external
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname external.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: &hostname external.cnas.dev
   labels:
     gateway: external
 spec:
   gatewayClassName: cilium
   addresses:
     - type: IPAddress
-      value: 10.6.0.1
+      value: 10.7.0.1
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
@@ -20,18 +20,18 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: "*.kokoro.wtf"
+      hostname: "*.cnas.dev"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.kokoro.wtf"
+      hostname: "*.cnas.dev"
       allowedRoutes:
         namespaces:
           from: All
       tls:
         certificateRefs:
           - kind: Secret
-            name: kokoro-wtf-tls
+            name: cnas-dev-tls

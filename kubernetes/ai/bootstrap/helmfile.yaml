@@ -73,14 +73,14 @@ releases:
           - until kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do sleep 10; done
         showlogs: true
 
-  - name: wipe-rook
-    namespace: kube-system
-    chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.2
-    values:
-      - ./templates/wipe-rook.yaml.gotmpl
-    needs:
-      - kube-system/coredns
+  # - name: wipe-rook
+  #   namespace: kube-system
+  #   chart: oci://ghcr.io/bjw-s/helm/app-template
+  #   version: 3.7.2
+  #   values:
+  #     - ./templates/wipe-rook.yaml.gotmpl
+  #   needs:
+  #     - kube-system/coredns
 
   - name: flux-operator
     namespace: flux-system
@@ -89,7 +89,8 @@ releases:
     values:
       - ../apps/flux-system/flux-operator/app/values.yaml
     needs:
-      - kube-system/wipe-rook
+      - kube-system/coredns
+    #   - kube-system/wipe-rook
 
   - name: flux-instance
     namespace: flux-system
