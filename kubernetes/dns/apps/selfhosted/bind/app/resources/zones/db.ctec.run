@@ -36,6 +36,9 @@ sakura                     IN  A  10.0.2.12
 miri                       IN  A  10.0.2.11
 anya                       IN  A  10.0.2.13
 ponyo                      IN  A  10.0.2.15
+
+ai-ponyo                   IN CNAME ponyo.ctec.run.
+
 ; IOT
 prusa                      IN  A  10.0.3.110
 printer                    IN  A  10.0.3.51
