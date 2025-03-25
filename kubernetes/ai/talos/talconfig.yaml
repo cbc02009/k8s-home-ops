@@ -237,5 +237,3 @@ patches:
         net.ipv4.tcp_wmem: 4096 65536 33554432
         net.ipv4.tcp_window_scaling: 1
         vm.nr_hugepages: 1024
-      sysfs:
-        devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
