@@ -2,8 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: system
 resources:
-  - ./helmrepository.yaml
+  # - github.com/kubernetes-sigs/node-feature-discovery//deployment/base/nfd-crds?ref=v0.11.2
   - ./helmrelease.yaml
-  - ./runtimeclass.yaml
+  - ./helmrepository.yaml
+metadata:
+  namespace: system

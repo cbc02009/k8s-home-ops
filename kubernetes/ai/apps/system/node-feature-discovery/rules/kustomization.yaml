@@ -2,8 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: system
 resources:
-  - ./helmrepository.yaml
-  - ./helmrelease.yaml
-  - ./runtimeclass.yaml
+  - ./10gb-nic.yaml
+  - ./aeotec-zwave-device.yaml
+  - ./google-coral-device.yaml
+  # - ./intel-gpu.yaml
+  - ./nesdr-rtl-sdr-device.yaml

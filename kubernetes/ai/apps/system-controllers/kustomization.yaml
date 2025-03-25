@@ -3,7 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: system
+components:
+  - ../../components/common
+  - ../../../shared/components/common
 resources:
-  - ./helmrepository.yaml
-  - ./helmrelease.yaml
-  - ./runtimeclass.yaml
+  - ./kubelet-csr-approver/ks.yaml
