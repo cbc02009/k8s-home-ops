@@ -14,7 +14,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kubernetes-sigs-nfd
-        namespace: flux-system
       interval: 5m
   install:
     createNamespace: true
