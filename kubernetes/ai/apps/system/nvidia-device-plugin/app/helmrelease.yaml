@@ -37,18 +37,18 @@ spec:
                   replicas: 6
 
 
-    gfd:
-      enabled: true
+    # gfd:
+    #   enabled: true
 
-    nfd:
-      enabled: true
+    # nfd:
+    #   enabled: true
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: feature.node.kubernetes.io/pci-10de.present
-                  operator: In
-                  values:
-                    - "true"
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #             - key: feature.node.kubernetes.io/pci-10de.present
+    #               operator: In
+    #               values:
+    #                 - "true"
