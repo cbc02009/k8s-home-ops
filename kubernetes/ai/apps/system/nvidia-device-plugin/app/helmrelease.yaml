@@ -37,11 +37,11 @@ spec:
                   replicas: 6
 
 
-    # gfd:
-    #   enabled: true
+    gfd:
+      enabled: true
 
-    # nfd:
-    #   enabled: true
+    nfd:
+      enabled: true
 
     # affinity:
     #   nodeAffinity:
