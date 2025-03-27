@@ -6,20 +6,18 @@ metadata:
   name: &app plex
   namespace: media
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
     - name: intel-device-plugins-gpu
       namespace: system

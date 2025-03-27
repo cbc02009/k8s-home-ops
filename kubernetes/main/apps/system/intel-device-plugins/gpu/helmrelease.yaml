@@ -5,13 +5,17 @@ kind: HelmRelease
 metadata:
   name: intel-device-plugins-gpu
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: intel-device-plugins-gpu
-  dependsOn:
-    - name: intel-device-plugins-operator
-      namespace: system
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
     name: i915
     nodeFeatureRule: true

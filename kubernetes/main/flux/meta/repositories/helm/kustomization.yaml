@@ -5,21 +5,8 @@ kind: Kustomization
 namespace: flux-system
 resources:
   - ./actions-runner-controller.yaml
-  - ./authentik.yaml
-  - ./backube.yaml
-  - ./cloudnative-pg.yaml
-  - ./coder.yaml
-  - ./democratic-csi.yaml
-  - ./emqx.yaml
-  - ./grafana.yaml
-  - ./kubernetes-sigs-nfd.yaml
   - ./immich.yaml
-  - ./intel.yaml
-  - ./lwolf.yaml
-  - ./mayastor.yaml
   - ./piraeus.yaml
   - ./rook-ceph.yaml
-  - ./stevehipwell.yaml
   - ./tf-controller.yaml
-  - ./vector.yaml
   - ./wiremind.yaml

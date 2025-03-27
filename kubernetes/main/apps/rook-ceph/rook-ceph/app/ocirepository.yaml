@@ -3,15 +3,15 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: intel-device-plugins-operator
+  name: rook-ceph
 spec:
   interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.32.0
-  url: oci://ghcr.io/home-operations/charts-mirror/intel-device-plugins-operator
+    tag: v1.16.5
+  url: oci://ghcr.io/home-operations/charts-mirror/rook-ceph
   verify:
     provider: cosign
     matchOIDCIdentity:

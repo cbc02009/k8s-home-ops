@@ -5,26 +5,17 @@ kind: HelmRelease
 metadata:
   name: &app emqx-operator
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: emqx-operator
-      version: 2.2.28
-      sourceRef:
-        kind: HelmRepository
-        name: emqx
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: emqx-operator
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
-      strategy: rollback
       retries: 3
-  dependsOn:
-    - name: cert-manager
-      namespace: cert-manager
   values:
     fullnameOverride: emqx-operator
     image:

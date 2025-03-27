@@ -3,6 +3,30 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: &app rook-ceph-operator
+  namespace: &namespace rook-ceph
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
+  path: './kubernetes/main/apps/rook-ceph/rook-ceph/app/'
+  prune: false # Never delete this
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: false
+  dependsOn:
+    - name: onepassword-store
+      namespace: external-secrets
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: &app rook-ceph-cluster
   namespace: &namespace rook-ceph
 spec:
@@ -21,27 +45,3 @@ spec:
   dependsOn:
     - name: rook-ceph-operator
       namespace: rook-ceph
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app rook-ceph-operator
-  namespace: &namespace rook-ceph
-spec:
-  targetNamespace: *namespace
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  interval: 30m
-  timeout: 5m
-  path: './kubernetes/main/apps/rook-ceph/rook-ceph/operator/'
-  prune: false # Never delete this
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: onepassword-store
-      namespace: external-secrets

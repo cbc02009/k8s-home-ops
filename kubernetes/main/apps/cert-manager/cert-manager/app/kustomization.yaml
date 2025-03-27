@@ -6,6 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./issuers.yaml
+  - ./ocirepository.yaml
   - ./prometheusrule.yaml
 configMapGenerator:
   - name: cert-manager-helm-values

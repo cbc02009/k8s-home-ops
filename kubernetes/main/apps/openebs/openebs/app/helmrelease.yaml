@@ -5,24 +5,19 @@ kind: HelmRelease
 metadata:
   name: openebs
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: openebs
-      version: 4.2.0
-      sourceRef:
-        kind: HelmRepository
-        name: openebs
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: openebs
   install:
+    disableHooks: true
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
+    disableHooks: true
     remediation:
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
     localpv-provisioner:
       localpv:

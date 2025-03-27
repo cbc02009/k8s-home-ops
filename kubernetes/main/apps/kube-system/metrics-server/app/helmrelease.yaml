@@ -4,34 +4,27 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app metrics-server
-  namespace: kube-system
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: *app
-      version: 3.12.2
-      sourceRef:
-        kind: HelmRepository
-        name: *app
-        namespace: flux-system
-      interval: 30m
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: metrics-server
+    namespace: flux-system
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
-      retries: 3
+    remediation:
+      retries: -1
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    remediation:
+      retries: 3
   values:
-    image:
-      repository: registry.k8s.io/metrics-server/metrics-server
-      tag: v0.7.2
-    resources:
-      requests:
-        cpu: 15m
-        memory: 64M
-      limits:
-        memory: 64M
+    args:
+      - --kubelet-insecure-tls
+      - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+      - --kubelet-use-node-status-port
+      - --metric-resolution=10s
+      - --kubelet-request-timeout=2s
+    metrics:
+      enabled: true
+    serviceMonitor:
+      enabled: true

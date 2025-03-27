@@ -5,6 +5,4 @@ namespace: authentik
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-commonLabels:
-  app.kubernetes.io/name: authentik
-  app.kubernetes.io/instance: authentik
+  - ./helmrepository.yaml
