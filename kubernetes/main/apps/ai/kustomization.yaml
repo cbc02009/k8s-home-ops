@@ -6,6 +6,6 @@ namespace: ai
 components:
   - ../../components/common
   - ../../../shared/components/common
-resources: []
-  # - ./ollama/ks.yaml
+resources:
+  - ./ollama/ks.yaml
   # - ./swarmui/ks.yaml
