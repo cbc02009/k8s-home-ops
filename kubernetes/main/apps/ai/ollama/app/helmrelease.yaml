@@ -29,16 +29,12 @@ spec:
               repository: docker.io/ollama/ollama
               tag: 0.6.2
             env:
-              - name: OLLAMA_HOST
-                value: 0.0.0.0
-              - name: OLLAMA_ORIGINS
-                value: "*"
-              - name: OLLAMA_MODELS
-                value: &modelPath "/models"
-              - name: OLLAMA_KEEP_ALIVE
-                value: "24h"
-              - name: OLLAMA_LOAD_TIMEOUT
-                value: "600"
+              TZ: ${TZ}
+              OLLAMA_HOST: 0.0.0.0
+              OLLAMA_ORIGINS: "*"
+              OLLAMA_MODELS: &modelPath "/models"
+              OLLAMA_KEEP_ALIVE: "24h"
+              OLLAMA_LOAD_TIMEOUT: "600"
             resources:
               requests:
                 cpu: 500m
