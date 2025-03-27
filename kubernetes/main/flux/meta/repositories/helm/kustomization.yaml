@@ -6,7 +6,6 @@ namespace: flux-system
 resources:
   - ./actions-runner-controller.yaml
   - ./immich.yaml
-  - ./piraeus.yaml
   - ./rook-ceph.yaml
   - ./tf-controller.yaml
   - ./wiremind.yaml
