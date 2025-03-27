@@ -40,9 +40,11 @@ spec:
                 - name: nvidia.com/gpu
                   replicas: 6
 
+    nodeSelector:
+      feature.node.kubernetes.io/pci-10de.present: "true"
 
     gfd:
-      enabled: true
-
-    nfd:
       enabled: false
+
+    nfd: {}
+      # enabled: false
