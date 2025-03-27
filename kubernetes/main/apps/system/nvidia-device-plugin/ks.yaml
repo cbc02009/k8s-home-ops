@@ -19,6 +19,6 @@ spec:
     name: flux-system
     namespace: flux-system
   wait: false
-  # dependsOn:
-  #   - name: node-feature-discovery
-  #     namespace: system
+  dependsOn:
+    - name: node-feature-discovery
+      namespace: system
