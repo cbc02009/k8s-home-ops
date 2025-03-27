@@ -116,7 +116,6 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
-        vip: *vip
     extensionServices: *nut-service
     schematic:
       customization:
