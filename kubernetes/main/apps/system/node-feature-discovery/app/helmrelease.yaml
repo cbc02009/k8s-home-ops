@@ -24,10 +24,10 @@ spec:
       config:
         core:
           labelSources: ["pci", "system", "usb", "custom"]
-        # sources:
-        #   usb:
-        #     deviceClassWhitelist: ["02", "03", "0e", "ef", "fe", "ff"]
-        #     deviceLabelFields: ["class", "vendor", "device"]
-        #   pci:
-        #     deviceClassWhitelist: ["02", "03", "0200", "0207", "0300", "0302"]
-        #     deviceLabelFields: ["vendor"]
+        sources:
+          usb:
+            deviceClassWhitelist: ["02", "03", "0e", "ef", "fe", "ff"]
+            deviceLabelFields: ["class", "vendor", "device"]
+          pci:
+            deviceClassWhitelist: ["02", "03", "0200", "0207", "0300", "0302"]
+            deviceLabelFields: ["vendor"]
