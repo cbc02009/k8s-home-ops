@@ -6,3 +6,4 @@ namespace: system
 resources:
   - ./helmrepository.yaml
   - ./helmrelease.yaml
+  - ./runtimeclass.yaml
