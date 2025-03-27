@@ -42,7 +42,7 @@ spec:
 
 
     gfd:
-      enabled: false
+      enabled: true
 
     nfd:
       enabled: false
