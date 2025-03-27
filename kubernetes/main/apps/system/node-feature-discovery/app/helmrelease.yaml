@@ -6,30 +6,24 @@ metadata:
   name: node-feature-discovery
   namespace: system
 spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: node-feature-discovery
-      version: 0.17.2
-      sourceRef:
-        kind: HelmRepository
-        name: kubernetes-sigs-nfd
-        namespace: flux-system
-      interval: 5m
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: node-feature-discovery
   install:
-    createNamespace: true
-    remediation: # perform remediation when helm install fails
-      retries: 3
+    crds: CreateReplace
+    remediation:
+      retries: -1
   upgrade:
-    remediation: # perform remediation when helm upgrade fails
-      retries: 3
-      remediateLastFailure: true # remediate the last failure, when no retries remain
     cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
   values:
     worker:
       config:
         core:
-          sources: ["pci", "system", "usb", "custom"]
+          labelSources: ["pci", "system", "usb", "custom"]
         sources:
           usb:
             deviceClassWhitelist: ["02", "03", "0e", "ef", "fe", "ff"]
