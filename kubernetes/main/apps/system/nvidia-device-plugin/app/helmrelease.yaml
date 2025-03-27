@@ -41,7 +41,7 @@ spec:
                   replicas: 6
 
     gfd:
-      enabled: true
+      enabled: false
 
     nfd:
       enabled: false
