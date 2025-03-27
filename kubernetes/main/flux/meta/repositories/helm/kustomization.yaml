@@ -7,4 +7,3 @@ resources:
   - ./actions-runner-controller.yaml
   - ./immich.yaml
   - ./tf-controller.yaml
-  - ./wiremind.yaml
