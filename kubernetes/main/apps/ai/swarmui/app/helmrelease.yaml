@@ -3,79 +3,48 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app paperless-ai
+  name: &app swarmui
 spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.3
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-      strategy: rollback
   values:
     controllers:
-      paperless-ai:
+      swarmui:
+        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: docker.io/clusterzx/paperless-ai
-              tag: 2.7.6
+              repository: docker.io/eedev/swarmui-docker
+              tag: latest@sha256:3b722bc65d9bd46a067933132d9ade8cf557480fcf9a3b4a747ceaa1909566d9
             env:
-              PAPERLESS_API_URL: http://paperless.selfhosted.svc.cluster.local:8000/api
-              AI_PROVIDER: ollama
-              SCAN_INTERVAL: "*/30 * * * *"
-              PROCESS_PREDEFINED_DOCUMENTS: yes
-              ADD_AI_PROCESSED_TAG: yes
-              AI_PROCESSED_TAG_NAME: ai-processed
-              USE_PROMPT_TAGS: no
-              OLLAMA_API_URL: http://${LB_OLLAMA}:11434
-              OLLAMA_MODEL: llama3.2:3b
-            envFrom:
-              - secretRef:
-                  name: paperless-ai
+              TZ: ${TZ}
             resources:
               requests:
                 cpu: 500m
-                memory: 512Mi
-              limits:
-                cpu: 700m
                 memory: 2Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-      affinity:
-        # Image not yet built for arm64
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
+                nvidia.com/gpu: 1
+              limits:
+                memory: 16Gi
+                nvidia.com/gpu: 1
     service:
       app:
-        controller: paperless-ai
+        controller: *app
         ports:
           http:
-            port: &port 3000
+            port: &port 7801
+
     route:
       app:
         hostnames:
@@ -88,17 +57,17 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
+
     persistence:
-      config:
+      models:
         enabled: true
-        existingClaim: paperless-ai
+        existingClaim: swarmui-models
+        advancedMounts:
+          swarmui:
+            app:
+              - path: /app/models
+      data:
+        enabled: true
+        existingClaim: *app
         globalMounts:
           - path: /app/data
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /app/logs
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
