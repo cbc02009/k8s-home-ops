@@ -25,7 +25,7 @@ spec:
       namespace: system
   values:
     controllers:
-      plex:
+      plex2:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
