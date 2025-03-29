@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app plex
+  name: &app plex2
   namespace: media
 spec:
   interval: 1h
@@ -119,7 +119,7 @@ spec:
         existingClaim: *app
       # Separate PVC for cache to avoid backing up cache files
       plex-cache:
-        existingClaim: plex-cache
+        existingClaim: plex-cache2
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
       tmp:
