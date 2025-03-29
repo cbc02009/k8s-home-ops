@@ -95,7 +95,7 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
         rules:
