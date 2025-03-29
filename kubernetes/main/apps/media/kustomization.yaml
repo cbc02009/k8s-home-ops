@@ -11,4 +11,5 @@ resources:
   - ./calibre-web/ks.yaml
   - ./lanraragi/ks.yaml
   - ./plex/ks.yaml
+  - ./plex2/ks.yaml
   - ./tautulli/ks.yaml
