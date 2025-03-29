@@ -61,6 +61,7 @@ spec:
             resources:
               requests:
                 cpu: 100m
+                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 16Gi
@@ -84,9 +85,9 @@ spec:
     service:
       main:
         controller: *app
-        # type: LoadBalancer
-        # annotations:
-        #   lbipam.cilium.io/ips: ${LB_PLEX}
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: ${LB_PLEX}
         ports:
           http:
             port: &port 32400
