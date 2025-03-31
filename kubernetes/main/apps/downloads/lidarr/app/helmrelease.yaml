@@ -50,7 +50,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/lidarr
-              tag: 2.10.1.4589
+              tag: 2.10.3.4602
 
             envFrom:
               - secretRef:
