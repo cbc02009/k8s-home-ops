@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/tandoorrecipes/recipes
-              tag: 1.5.33
+              tag: 1.5.34
             env:
               TZ: ${TZ}
               COMMENT_PREF_DEFAULT: 0
