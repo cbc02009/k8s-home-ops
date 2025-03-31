@@ -86,7 +86,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: paperless-ai
+        existingClaim: *app
         globalMounts:
           - path: /app/data
       logs:

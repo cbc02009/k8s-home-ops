@@ -15,7 +15,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: "$swarmui-models-bootstrap"
+  name: "swarmui-models-bootstrap"
 spec:
   trigger:
     manual: restore-once
@@ -84,7 +84,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: "$swarmui-output-bootstrap"
+  name: "swarmui-output-bootstrap"
 spec:
   trigger:
     manual: restore-once
