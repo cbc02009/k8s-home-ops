@@ -19,9 +19,6 @@ spec:
     name: flux-system
     namespace: flux-system
   wait: false
-  dependsOn:
-    - name: paperless
-      namespace: selfhosted
   components:
     - ../../../../../shared/components/gatus/guarded
     - ../../../../components/volsync
