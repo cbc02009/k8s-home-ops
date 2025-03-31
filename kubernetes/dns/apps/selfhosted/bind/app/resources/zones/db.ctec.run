@@ -19,6 +19,7 @@ $ORIGIN ctec.run.
 ; LAN
 gateway                    IN  A  10.0.0.1
 pikvm                      IN  A  10.0.0.50
+pikvm2                     IN  A  10.0.0.51
 
 ; Trusted
 shinobu                    IN  A 10.0.1.5
@@ -36,8 +37,6 @@ sakura                     IN  A  10.0.2.12
 miri                       IN  A  10.0.2.11
 anya                       IN  A  10.0.2.13
 ponyo                      IN  A  10.0.2.15
-
-ai-ponyo                   IN CNAME ponyo.ctec.run.
 
 ; IOT
 prusa                      IN  A  10.0.3.110
