@@ -1,72 +1,72 @@
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: swarmui-models
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 400Gi
-  storageClassName: ceph-block
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationdestination_v1alpha1.json
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationDestination
-metadata:
-  name: "swarmui-models-bootstrap"
-spec:
-  trigger:
-    manual: restore-once
-  restic:
-    accessModes:
-      - "ReadWriteOnce"
-    cacheAccessModes:
-      - "ReadWriteOnce"
-    cacheCapacity: "10Gi"
-    cacheStorageClassName: "openebs-hostpath"
-    capacity: "200Gi"
-    cleanupCachePVC: true
-    cleanupTempPVC: true
-    enableFileDeletion: true
-    copyMethod: "Snapshot"
-    moverSecurityContext:
-      runAsUser: ${APP_UID:-2000}
-      runAsGroup: ${APP_UID:-2000}
-      fsGroup: ${APP_UID:-2000}
-    repository: "swarmui-models-volsync-nfs"
-    storageClassName: "ceph-block"
-    volumeSnapshotClassName: "csi-ceph-blockpool"
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
-apiVersion: volsync.backube/v1alpha1
-kind: ReplicationSource
-metadata:
-  name: swarmui-models-nfs
-spec:
-  sourcePVC: "swarmui-models"
-  trigger:
-    schedule: "0 * * * *"
-  restic:
-    accessModes:
-      - "ReadWriteOnce"
-    cacheAccessModes:
-      - "ReadWriteOnce"
-    cacheCapacity: "10Gi"
-    cacheStorageClassName: "openebs-hostpath"
-    copyMethod: "Snapshot"
-    moverSecurityContext:
-      runAsUser: ${APP_UID:-2000}
-      runAsGroup: ${APP_GID:-2000}
-      fsGroup: ${APP_GID:-2000}
-    pruneIntervalDays: 7
-    repository: swarmui-models-volsync-nfs
-    retain:
-      hourly: 24
-      daily: 7
-    storageClassName: "ceph-block"
-    volumeSnapshotClassName: "csi-ceph-blockpool"
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: swarmui-models
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 400Gi
+#   storageClassName: ceph-block
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationdestination_v1alpha1.json
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: "swarmui-models-bootstrap"
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     accessModes:
+#       - "ReadWriteOnce"
+#     cacheAccessModes:
+#       - "ReadWriteOnce"
+#     cacheCapacity: "10Gi"
+#     cacheStorageClassName: "openebs-hostpath"
+#     capacity: "200Gi"
+#     cleanupCachePVC: true
+#     cleanupTempPVC: true
+#     enableFileDeletion: true
+#     copyMethod: "Snapshot"
+#     moverSecurityContext:
+#       runAsUser: ${APP_UID:-2000}
+#       runAsGroup: ${APP_UID:-2000}
+#       fsGroup: ${APP_UID:-2000}
+#     repository: "swarmui-models-volsync-nfs"
+#     storageClassName: "ceph-block"
+#     volumeSnapshotClassName: "csi-ceph-blockpool"
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationSource
+# metadata:
+#   name: swarmui-models-nfs
+# spec:
+#   sourcePVC: "swarmui-models"
+#   trigger:
+#     schedule: "0 * * * *"
+#   restic:
+#     accessModes:
+#       - "ReadWriteOnce"
+#     cacheAccessModes:
+#       - "ReadWriteOnce"
+#     cacheCapacity: "10Gi"
+#     cacheStorageClassName: "openebs-hostpath"
+#     copyMethod: "Snapshot"
+#     moverSecurityContext:
+#       runAsUser: ${APP_UID:-2000}
+#       runAsGroup: ${APP_GID:-2000}
+#       fsGroup: ${APP_GID:-2000}
+#     pruneIntervalDays: 7
+#     repository: swarmui-models-volsync-nfs
+#     retain:
+#       hourly: 24
+#       daily: 7
+#     storageClassName: "ceph-block"
+#     volumeSnapshotClassName: "csi-ceph-blockpool"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

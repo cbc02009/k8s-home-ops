@@ -59,13 +59,12 @@ spec:
                 port: *port
 
     persistence:
-      models:
-        enabled: true
-        existingClaim: swarmui-models
-        advancedMounts:
-          swarmui:
-            app:
-              - path: /app/models
+      media:
+        type: nfs
+        server: &nas ${NAS_HOST}
+        path: /tank/k8s/apps/swarmui/models
+        globalMounts:
+          - path: /app/models
       data:
         enabled: true
         existingClaim: *app
