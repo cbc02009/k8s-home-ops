@@ -72,9 +72,14 @@ spec:
         server: &nas ${NAS_HOST}
         path: /tank/k8s/apps/swarmui/models
         globalMounts:
-          - path: /app/models
+          - path: /app/Models
+      output:
+        enabled: true
+        existingClaim: swarmui-output
+        globalMounts:
+          - path: /app/Output
       data:
         enabled: true
         existingClaim: *app
         globalMounts:
-          - path: /app/data
+          - path: /app/Data
