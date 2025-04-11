@@ -38,6 +38,14 @@ spec:
               limits:
                 memory: 16Gi
                 nvidia.com/gpu: 2
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups: [1010]
     service:
       app:
         controller: *app
