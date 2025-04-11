@@ -39,6 +39,7 @@ spec:
                 memory: 16Gi
                 nvidia.com/gpu: 2
         pod:
+          runtimeClassName: nvidia
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
