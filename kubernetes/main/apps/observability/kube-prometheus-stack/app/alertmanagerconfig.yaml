@@ -26,7 +26,8 @@ spec:
           - name: alertname
             value: Watchdog
             matchType: =
-      - receiver: discord
+      # - receiver: discord
+      - receiver: "null"
         matchers:
           - name: severity
             value: critical
