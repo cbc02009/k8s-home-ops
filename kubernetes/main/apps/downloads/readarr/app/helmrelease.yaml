@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/readarr
-              tag: 0.4.14.2782
+              tag: 0.4.15.2787
 
             env:
               TZ: ${TZ}
