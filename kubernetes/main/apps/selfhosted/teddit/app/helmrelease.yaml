@@ -37,7 +37,7 @@ spec:
           app:
             image:
               repository: ghcr.io/cbc02009/teddit
-              tag: latest@sha256:9a825311531cd65f8305e778e54de5726403f6092eb7b62915a28363a0ab6ba0
+              tag: latest@sha256:a3f74061b10b54152a0ba56b70b00b00542bd96469ae7a2ab29ecd48d5f40104
 
             env:
               DOMAIN: &host '{{ .Release.Name }}.${EXTERNAL_DOMAIN}'
