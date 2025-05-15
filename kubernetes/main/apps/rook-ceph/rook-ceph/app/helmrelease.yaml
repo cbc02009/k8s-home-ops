@@ -10,7 +10,7 @@ spec:
   timeout: 15m
   chartRef:
     kind: OCIRepository
-    name: rook-ceph-operator
+    name: rook-ceph
   install:
     remediation:
       retries: -1
