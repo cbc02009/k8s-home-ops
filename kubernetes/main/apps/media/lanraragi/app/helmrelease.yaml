@@ -32,8 +32,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/cbc02009/lanraragi
-              tag: v0.9.31
+              repository: docker.io/difegue/lanraragi
+              tag: v0.9.40
 
     service:
       main:
