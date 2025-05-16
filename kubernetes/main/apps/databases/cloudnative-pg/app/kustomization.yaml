@@ -6,4 +6,4 @@ namespace: databases
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./helmrepository.yaml
+  - ./ocirepository.yaml
