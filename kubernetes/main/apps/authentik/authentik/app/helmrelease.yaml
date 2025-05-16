@@ -6,15 +6,9 @@ metadata:
   name: &app authentik
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: authentik
-      version: 2025.4.0
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: authentik
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: authentik
   values:
 
     global:
@@ -41,18 +35,18 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-      ingress:
-        enabled: true
-        ingressClassName: external
-        annotations:
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        hosts:
-          - &host auth.${EXTERNAL_DOMAIN}
-        paths:
-          - /
-        tls: [hosts: [*host]]
+      # ingress:
+      #   enabled: true
+      #   ingressClassName: external
+      #   annotations:
+      #     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      #     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      #     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      #   hosts:
+      #     - &host auth.${EXTERNAL_DOMAIN}
+      #   paths:
+      #     - /
+      #   tls: [hosts: [*host]]
 
     authentik:
       log_level: info
