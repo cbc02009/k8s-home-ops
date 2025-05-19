@@ -120,16 +120,6 @@ spec:
         ports:
           http:
             port: *apiPort
-    ingress:
-      app:
-        className: internal
-        hosts:
-          - host: "opc.${EXTERNAL_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
     persistence:
       config:
         type: emptyDir
