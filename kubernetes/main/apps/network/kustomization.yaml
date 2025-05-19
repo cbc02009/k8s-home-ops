@@ -7,5 +7,7 @@ components:
   - ../../components/common
   - ../../../shared/components/common
 resources:
+  - ./cloudflare-dns/ks.yaml
   - ./cloudflared/ks.yaml
   - ./external-dns/ks.yaml
+  - ./unifi-dns/ks.yaml
