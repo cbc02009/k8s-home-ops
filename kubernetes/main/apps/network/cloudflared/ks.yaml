@@ -22,5 +22,3 @@ spec:
   dependsOn:
     - name: onepassword-store
       namespace: external-secrets
-    - name: externaldns-shared
-      namespace: network
