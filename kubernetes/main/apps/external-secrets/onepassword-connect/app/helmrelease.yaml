@@ -113,10 +113,10 @@ spec:
     service:
       app:
         controller: onepassword-connect
-        # type: LoadBalancer
-        # annotations:
-        #   io.cilium/lb-ipam-ips: ${LB_OPC}
-        #   external-dns.alpha.kubernetes.io/hostname: opc.kokoro.wtf
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${LB_OPC}
+          external-dns.alpha.kubernetes.io/hostname: opc.kokoro.wtf
         ports:
           http:
             port: *apiPort
