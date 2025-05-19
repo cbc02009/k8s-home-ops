@@ -210,7 +210,7 @@ spec:
               - path: /config
       media:
         type: nfs
-        server: "nas.ctec.run"
+        server: "${NAS_HOST}"
         advancedMounts:
           qbittorrent:
             app:
@@ -236,7 +236,7 @@ spec:
       torrents:
         enabled: true
         type: nfs
-        server: "nas.ctec.run"
+        server: "${NAS_HOST}"
         path: /smoltank/torrents
         advancedMounts:
           qbittorrent:

@@ -78,7 +78,7 @@ spec:
       backup:
         enabled: true
         type: nfs
-        server: nas.ctec.run
+        server: ${NAS_HOST}
         path: /tank/backup/kubernetes/apps/postgres
         globalMounts:
           - path: /backups
