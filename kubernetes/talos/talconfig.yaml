@@ -1,0 +1,351 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+clusterName: &clusterName main
+
+# renovate: depName=ghcr.io/siderolabs/installer datasource=docker
+talosVersion: v1.9.5
+# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+kubernetesVersion: v1.32.3
+
+# endpoint: https://10.5.0.2:6443
+endpoint: https://10.0.2.9:6443
+
+allowSchedulingOnMasters: true
+
+additionalApiServerCertSans: &san
+  - "127.0.0.1"
+  - "10.0.2.9"
+  - main.ctec.run
+
+additionalMachineCertSans: *san
+
+clusterPodNets:
+  - 10.11.0.0/16
+clusterSvcNets:
+  - 10.10.0.0/16
+cniConfig:
+  name: none
+
+nodes:
+
+  - hostname: uiharu.ctec.run
+    nodeLabels: &nodeLabels
+      openebs.io/engine: mayastor
+      intel.feature.node.kubernetes.io/gpu: "true"
+    ipAddress: 10.0.2.10
+    installDiskSelector:
+      model: Samsung SSD 870
+    controlPlane: true
+    disableSearchDomain: true
+    nameservers:
+      - 10.4.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:73:bd:aa
+        addresses:
+          - 10.0.2.10/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        vip: &vip
+          ip: 10.0.2.9
+    extensionServices: &nut-service
+      - name: nut-client
+        configFiles:
+          - content: |-
+              MONITOR nut.cutil.dev 1 observer whatever secondary
+              SHUTDOWNCMD "/sbin/poweroff"
+            mountPath: /usr/local/etc/nut/upsmon.conf
+
+  - hostname: miri.ctec.run
+    nodeLabels: *nodeLabels
+    ipAddress: 10.0.2.11
+    installDiskSelector:
+      model: Samsung SSD 870
+    controlPlane: true
+    disableSearchDomain: true
+    nameservers:
+      - 10.4.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:71:c1:b2
+        addresses:
+          - 10.0.2.11/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        vip: *vip
+    extensionServices: *nut-service
+
+  - hostname: sakura.ctec.run
+    nodeLabels: *nodeLabels
+    ipAddress: 10.0.2.12
+    installDiskSelector:
+      model: Samsung SSD 850
+    controlPlane: true
+    disableSearchDomain: true
+    nameservers:
+      - 10.4.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:71:c5:02
+        addresses:
+          - 10.0.2.12/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        vip: *vip
+    extensionServices: *nut-service
+
+  - hostname: ponyo.ctec.run
+    ipAddress: 10.0.2.15
+    installDiskSelector:
+      model: CX2-8B256-Q11 NVMe LITEON 256GB
+    controlPlane: false
+    disableSearchDomain: true
+    nameservers:
+      - 10.4.0.4
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 9c:6b:00:14:7f:22
+        addresses:
+          - 10.0.2.15/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+    extensionServices: *nut-service
+    schematic:
+      customization:
+        extraKernelArgs:
+          - apparmor=0 # Less security, more speed
+          - init_on_alloc=0 # Less security, more speed
+          - init_on_free=0 # Less security, more speed
+          - intel_iommu=on # PCI Passthrough
+          - iommu=pt # PCI Passthrough
+          - mitigations=off # Less security, more speed
+          - security=none # Less security, more speed
+          - net.ifnames=1 # Enable predictable NIC naming
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/nut-client
+            - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/nvidia-container-toolkit-production
+    patches:
+      - |-
+        machine:
+          kernel:
+            modules:
+              - name: nvidia
+              - name: nvidia_uvm
+              - name: nvidia_drm
+              - name: nvidia_modeset
+          sysctls:
+            net.core.bpf_jit_harden: 1
+
+controlPlane:
+  nodeLabels:
+    topology.kubernetes.io/region: *clusterName
+    topology.kubernetes.io/zone: m
+  schematic:
+    customization:
+      extraKernelArgs:
+        - apparmor=0 # Less security, more speed
+        - init_on_alloc=0 # Less security, more speed
+        - init_on_free=0 # Less security, more speed
+        - intel_iommu=on # PCI Passthrough
+        - iommu=pt # PCI Passthrough
+        - mitigations=off # Less security, more speed
+        - security=none # Less security, more speed
+        - net.ifnames=1 # Enable predictable NIC naming
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/i915
+          - siderolabs/intel-ucode
+          - siderolabs/nut-client
+  patches:
+    # Disable default API server admission plugins.
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl
+
+    # ETCD configuration
+    - |-
+      cluster:
+        etcd:
+          advertisedSubnets:
+            - 10.0.2.0/24
+
+    # Enable K8s Talos API Access
+    - |-
+      machine:
+        features:
+          kubernetesTalosAPIAccess:
+            enabled: true
+            allowedRoles:
+              - os:admin
+            allowedKubernetesNamespaces:
+              - actions-runner-system
+              - system-upgrade
+
+    # Enable MutatingAdmissionPolicy
+    - |-
+      cluster:
+        apiServer:
+          extraArgs:
+            runtime-config: admissionregistration.k8s.io/v1alpha1=true
+            feature-gates: MutatingAdmissionPolicy=true
+            enable-aggregator-routing: true
+
+    # Configure cluster
+    - |-
+      cluster:
+        allowSchedulingOnControlPlanes: true
+        coreDNS:
+            disabled: true
+        proxy:
+          disabled: true
+        scheduler:
+          config:
+            apiVersion: kubescheduler.config.k8s.io/v1
+            kind: KubeSchedulerConfiguration
+            profiles:
+              - schedulerName: default-scheduler
+                pluginConfig:
+                  - name: PodTopologySpread
+                    args:
+                      defaultingType: List
+                      defaultConstraints:
+                        - maxSkew: 1
+                          topologyKey: kubernetes.io/hostname
+                          whenUnsatisfiable: ScheduleAnyway
+    # Configure udev rules
+    - |-
+      machine:
+        udev:
+          rules:
+            # Intel GPU
+            - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+            # Coral Edge M.2 TPU
+            - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
+        sysfs:
+          devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
+worker:
+  nodeLabels:
+    topology.kubernetes.io/region: *clusterName
+    topology.kubernetes.io/zone: m
+
+patches:
+  # Enable hostDNS
+  - |-
+    machine:
+      features:
+        hostDNS:
+          enabled: true
+          resolveMemberNames: true
+          forwardKubeDNSToHost: false
+
+  # Disable search domain everywhere
+  - |-
+    machine:
+      network:
+        disableSearchDomain: true
+
+  # Configure NTP
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - time.cloudflare.com
+
+  # Enable KubePrism
+  - |-
+    machine:
+      features:
+        kubePrism:
+          enabled: true
+          port: 7445
+
+  # Configure cluster loopback
+  - |-
+    machine:
+      network:
+        extraHostEntries:
+          - ip: 10.0.2.9
+            aliases:
+              - main.ctec.run
+
+  # Cluster configuration
+  - |-
+    cluster:
+      allowSchedulingOnMasters: true
+      proxy:
+        disabled: true
+      coreDNS:
+        disabled: true
+
+  # Configure containerd
+  - |-
+    machine:
+      files:
+        - op: create
+          path: /etc/cri/conf.d/20-customization.part
+          content: |
+            [plugins."io.containerd.cri.v1.images"]
+              discard_unpacked_layers = false
+
+  # Configure nfs mount options
+  - |-
+    machine:
+      files:
+        - op: overwrite
+          path: /etc/nfsmount.conf
+          permissions: 0o644
+          content: |
+            [ NFSMount_Global_Options ]
+            nfsvers=4.2
+            hard=True
+            nconnect=16
+            noatime=True
+
+  # Kubelet configuration
+  - |-
+    machine:
+      kubelet:
+        extraArgs:
+          rotate-server-certificates: "true"
+        extraConfig:
+          maxPods: 150
+        extraMounts:
+          - destination: /var/openebs/local
+            type: bind
+            source: /var/openebs/local
+            options:
+              - bind
+              - rshared
+              - rw
+        nodeIP:
+          validSubnets:
+            - 10.0.2.0/24
+
+  # Custom sysctls
+  - |-
+    machine:
+      sysctls:
+        fs.inotify.max_user_watches: 1048576
+        fs.inotify.max_user_instances: 8192
+        net.core.default_qdisc: fq
+        net.core.rmem_max: 67108864
+        net.core.wmem_max: 67108864
+        net.ipv4.tcp_congestion_control: bbr
+        net.ipv4.tcp_fastopen: 3
+        net.ipv4.tcp_mtu_probing: 1
+        net.ipv4.tcp_rmem: 4096 87380 33554432
+        net.ipv4.tcp_wmem: 4096 65536 33554432
+        net.ipv4.tcp_window_scaling: 1
+        vm.nr_hugepages: 1024

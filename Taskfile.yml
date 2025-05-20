@@ -15,8 +15,7 @@ includes:
   volsync: .taskfiles/volsync/Taskfile.yaml
   
 vars:
-  CLUSTER: '{{.CLUSTER | default "main"}}'
-  K8S_DIR: "{{.ROOT_DIR}}/kubernetes/{{.CLUSTER}}"
+  K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
   KUBECONFIG: "{{.K8S_DIR}}/kubeconfig"
   MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
   TALOSCONFIG: "{{.K8S_DIR}}/talos/clusterconfig/talosconfig"

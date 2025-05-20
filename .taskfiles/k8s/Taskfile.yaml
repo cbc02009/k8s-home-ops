@@ -16,19 +16,6 @@ tasks:
               - Succeeded
         cmd: kubectl delete pods --field-selector status.phase={{.ITEM.PHASE}} -A --ignore-not-found=true
 
-  browse-pvc:
-    desc: Mount a PVC to an temp container [NS=default] [CLAIM=required]
-    interactive: true
-    cmd: kubectl browse-pvc --namespace {{.NS}} --image docker.io/library/alpine:latest {{.CLAIM}}
-    vars:
-      NS: '{{.NS | default "default"}}'
-    requires:
-      vars: [CLAIM]
-    preconditions:
-      - kubectl --namespace {{.NS}} get persistentvolumeclaims {{.CLAIM}}
-      - kubectl browse-pvc --version
-      - which kubectl
-
   sync-externalsecrets:
     desc: Force sync all ExternalSecret resources
     preconditions:

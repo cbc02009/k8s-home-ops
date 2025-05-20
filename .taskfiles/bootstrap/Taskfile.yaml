@@ -8,7 +8,6 @@ tasks:
     vars:
       TALOS_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
-      CLUSTER: "{{.CLUSTER}}"
     preconditions:
       - which jq minijinja-cli sops talosctl
       - test -f "${TALOSCONFIG}"
@@ -17,9 +16,8 @@ tasks:
       - task: :talos:apply-clusterconfig
         vars:
           INSECURE: "true"
-          CLUSTER: "{{.CLUSTER}}"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
-      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "{{ .CLUSTER }}" "${KUBECONFIG}"
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "home-ops" "${KUBECONFIG}"
 
   apps:
     desc: Bootstrap Apps
@@ -30,16 +28,15 @@ tasks:
       - test -f {{.K8S_DIR}}/bootstrap/helmfile.yaml
       - test -f {{.K8S_DIR}}/bootstrap/bootstrap.env
       - test -f {{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2
+      - test -f {{.K8S_DIR}}/bootstrap/templates/wipe-rook.yaml.gotmpl
       - op user get --me
       - talosctl config info
     env:
       NODE_COUNT:
         sh: talosctl config info --output json | jq --raw-output '.nodes | length'
-      ROOK_DISK: nvme-Samsung_SSD_970_EVO_Plus_1TB
+      ROOK_DISK: nvme-Samsung_SSD_990_PRO_1TB
     cmds:
-      # - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
-      - kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/experimental-install.yaml
-      - kubectl apply --server-side -f https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.16.0/docs/sources/crd/crd-manifest.yaml
+      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
-      - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
-      # - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml destroy --selector name=wipe-rook
+      - helmfile --quiet --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - helmfile --quiet --file {{.K8S_DIR}}/bootstrap/helmfile.yaml destroy --selector name=wipe-rook
