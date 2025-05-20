@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app externaldns-external
+  name: &app cloudflare-dns
   namespace: network
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: external-dns
+    name: cloudflare-dns
   install:
     disableSchemaValidation: true # Ref: https://github.com/kubernetes-sigs/external-dns/issues/5206
     remediation:
