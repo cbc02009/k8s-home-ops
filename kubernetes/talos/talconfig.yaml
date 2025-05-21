@@ -38,7 +38,7 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:73:bd:aa
@@ -66,7 +66,7 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c1:b2
@@ -87,7 +87,7 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c5:02
@@ -107,7 +107,7 @@ nodes:
     controlPlane: false
     disableSearchDomain: true
     nameservers:
-      - 10.4.0.4
+      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 9c:6b:00:14:7f:22
