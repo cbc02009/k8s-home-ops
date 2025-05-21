@@ -90,7 +90,7 @@ spec:
               value: Object.spec.template.spec.volumes{
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
-                  server: "shana.ctec.run",
+                  server: "10.0.2.4",
                   path: "/tank/k8s/volsync/main"
                 }
               }
