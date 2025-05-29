@@ -37,17 +37,10 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    nameservers:
-      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:73:bd:aa
-        addresses:
-          - 10.0.2.10/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
+        dhcp: true
         vip: &vip
           ip: 10.0.2.9
     extensionServices: &nut-service
@@ -65,17 +58,10 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    nameservers:
-      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c1:b2
-        addresses:
-          - 10.0.2.11/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
+        dhcp: true
         vip: *vip
     extensionServices: *nut-service
 
@@ -86,17 +72,10 @@ nodes:
       model: Samsung SSD 850
     controlPlane: true
     disableSearchDomain: true
-    nameservers:
-      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 58:47:ca:71:c5:02
-        addresses:
-          - 10.0.2.12/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
+        dhcp: true
         vip: *vip
     extensionServices: *nut-service
 
@@ -106,17 +85,10 @@ nodes:
       model: CX2-8B256-Q11 NVMe LITEON 256GB
     controlPlane: false
     disableSearchDomain: true
-    nameservers:
-      - 10.0.2.1
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: 9c:6b:00:14:7f:22
-        addresses:
-          - 10.0.2.15/24
-        mtu: 1500
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.0.2.1
+        dhcp: true
     extensionServices: *nut-service
     schematic:
       customization:

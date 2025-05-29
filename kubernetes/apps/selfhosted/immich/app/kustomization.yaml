@@ -9,4 +9,4 @@ resources:
   - ./nfs-pvc.yaml
   - ./server
   - ./microservices
-  # - ./machine-learning
+  - ./machine-learning
