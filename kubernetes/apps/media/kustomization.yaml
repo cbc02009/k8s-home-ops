@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: media
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./calibre/ks.yaml
   - ./calibre-web/ks.yaml

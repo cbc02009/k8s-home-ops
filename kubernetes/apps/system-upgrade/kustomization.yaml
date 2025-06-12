@@ -5,6 +5,5 @@ kind: Kustomization
 namespace: system-upgrade
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources: []
   # - ./system-upgrade-controller/ks.yaml

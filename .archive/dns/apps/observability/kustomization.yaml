@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: observability
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   # - ./gatus/ks.yaml
   - ./network-ups-tools/ks.yaml

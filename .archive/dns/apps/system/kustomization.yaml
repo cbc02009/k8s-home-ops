@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: system
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./reloader/ks.yaml
   # - ./spegel/ks.yaml

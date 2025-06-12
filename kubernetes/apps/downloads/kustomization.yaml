@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: downloads
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./animarr/ks.yaml
   - ./autobrr/ks.yaml

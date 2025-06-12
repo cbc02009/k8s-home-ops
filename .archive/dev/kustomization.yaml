@@ -5,6 +5,5 @@ kind: Kustomization
 namespace: dev
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./kubernetes-schemas/ks.yaml

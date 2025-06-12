@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: home
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./frigate/ks.yaml
   - ./home-assistant/ks.yaml

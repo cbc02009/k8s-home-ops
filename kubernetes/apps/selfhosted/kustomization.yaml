@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: selfhosted
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./atuin/ks.yaml
   - ./cyberchef/ks.yaml

@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: system
 components:
   - ../../components/common
-  - ../../../shared/components/common
 resources:
   - ./fstrim/ks.yaml
   - ./generic-device-plugin/ks.yaml
