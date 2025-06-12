@@ -8,7 +8,6 @@ components:
   - ../../../shared/components/common
 resources:
   - ./k8tz/ks.yaml
-  - ./kubelet-csr-approver/ks.yaml
   - ./snapshot-controller/ks.yaml
 patches:
   - patch: |
