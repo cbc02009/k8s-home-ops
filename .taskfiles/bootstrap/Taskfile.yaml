@@ -17,7 +17,7 @@ tasks:
         vars:
           INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
-      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "home-ops" "${KUBECONFIG}"
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name "main" "${KUBECONFIG}"
 
   apps:
     desc: Bootstrap Apps
