@@ -57,6 +57,15 @@ releases:
       - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/kube-system/coredns/app/values.yaml'
     needs:
       - kube-system/cilium
+  
+  # - name: spegel
+  #   namespace: kube-system
+  #   chart: oci://ghcr.io/spegel-org/helm-charts/spegel
+  #   version: 0.3.0
+  #   values: 
+  #     - '../kubernetes/apps/kube-system/spegel/app/helm/values.yaml'
+  #   needs: 
+  #     - 'kube-system/coredns'
 
   - name: cert-manager
     namespace: cert-manager
@@ -67,6 +76,28 @@ releases:
       - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/cert-manager/cert-manager/app/values.yaml'
     needs:
       - kube-system/coredns
+
+  # - name: external-secrets
+  #   namespace: external-secrets
+  #   chart: oci://ghcr.io/external-secrets/charts/external-secrets
+  #   version: 0.17.0
+  #   values: 
+  #     - '../kubernetes/apps/external-secrets/external-secrets/app/helm/values.yaml'
+  #   hooks:
+  #     - # Apply cluster secret store
+  #       events: ['postsync']
+  #       command: kubectl
+  #       args:
+  #         - apply
+  #         - --namespace=external-secrets
+  #         - --server-side
+  #         - --field-manager=kustomize-controller
+  #         - --filename
+  #         - ../kubernetes/apps/external-secrets/external-secrets/app/clustersecretstore.yaml
+  #         - --wait=true
+  #       showlogs: true
+  #   needs: 
+  #     - 'cert-manager/cert-manager'
 
   - name: wipe-rook
     namespace: kube-system
