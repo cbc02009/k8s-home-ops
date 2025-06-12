@@ -11,7 +11,7 @@ spec:
     secretRef:
       name: sops-age
   interval: 30m
-  path: ./kubernetes/main/flux/meta
+  path: ./kubernetes/flux/meta
   prune: true
   sourceRef:
     kind: GitRepository
@@ -35,9 +35,8 @@ spec:
       name: sops-age
   dependsOn:
     - name: cluster-meta
-    - name: cluster-shared-meta
   interval: 30m
-  path: ./kubernetes/main/apps
+  path: ./kubernetes/apps
   prune: true
   sourceRef:
     kind: GitRepository

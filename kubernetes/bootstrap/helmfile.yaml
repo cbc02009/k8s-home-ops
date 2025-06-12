@@ -14,12 +14,14 @@ repositories:
 
 releases:
   - name: prometheus-operator-crds
+    atomic: true
     namespace: observability
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
     version: 21.0.0
 
   - name: cilium
     namespace: kube-system
+    atomic: true
     chart: cilium/cilium
     version: 1.17.4
     values:
@@ -48,6 +50,7 @@ releases:
 
   - name: coredns
     namespace: kube-system
+    atomic: true
     chart: oci://ghcr.io/coredns/charts/coredns
     version: 1.42.2
     values:
@@ -67,6 +70,7 @@ releases:
 
   - name: wipe-rook
     namespace: kube-system
+    atomic: true
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
     version: 4.1.1
     values:
