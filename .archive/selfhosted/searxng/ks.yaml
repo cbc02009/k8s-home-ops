@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/selfhosted/searxng/app/'
+  path: './kubernetes/apps/selfhosted/searxng/app/'
   prune: true
   sourceRef:
     kind: GitRepository

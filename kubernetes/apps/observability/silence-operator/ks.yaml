@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/observability/silence-operator/app
+  path: ./kubernetes/apps/observability/silence-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -33,7 +33,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/observability/silence-operator/crds
+  path: ./kubernetes/apps/observability/silence-operator/crds
   prune: true
   sourceRef:
     kind: GitRepository

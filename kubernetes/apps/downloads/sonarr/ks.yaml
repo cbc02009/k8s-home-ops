@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: './kubernetes/main/apps/downloads/sonarr/app/'
+  path: './kubernetes/apps/downloads/sonarr/app/'
   prune: true
   sourceRef:
     kind: GitRepository

@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/dev/coder/app/'
+  path: './kubernetes/apps/dev/coder/app/'
   prune: true
   sourceRef:
     kind: GitRepository

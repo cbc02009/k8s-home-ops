@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/security/vaultwarden/app/'
+  path: './kubernetes/apps/security/vaultwarden/app/'
   prune: true
   sourceRef:
     kind: GitRepository

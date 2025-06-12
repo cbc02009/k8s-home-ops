@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
-  path: "./kubernetes/main/apps/system-controllers/system-upgrade-controller/app"
+  path: "./kubernetes/apps/system-controllers/system-upgrade-controller/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -31,7 +31,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
-  path: "./kubernetes/main/apps/system-controllers/system-upgrade-controller/plans"
+  path: "./kubernetes/apps/system-controllers/system-upgrade-controller/plans"
   prune: true
   sourceRef:
     kind: GitRepository

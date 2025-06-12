@@ -8,7 +8,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: 'true'
 spec:
-  path: './kubernetes/main/apps/services/obico/app/'
+  path: './kubernetes/apps/services/obico/app/'
   prune: true
   sourceRef:
     kind: GitRepository

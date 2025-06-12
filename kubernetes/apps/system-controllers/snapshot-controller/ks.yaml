@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: './kubernetes/main/apps/system-controllers/snapshot-controller/app/'
+  path: './kubernetes/apps/system-controllers/snapshot-controller/app/'
   prune: true
   sourceRef:
     kind: GitRepository

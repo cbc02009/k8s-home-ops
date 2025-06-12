@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/openebs/openebs/app
+  path: ./kubernetes/apps/openebs/openebs/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -29,7 +29,7 @@ spec:
 #   labels:
 #     substitution.flux.home.arpa/enabled: 'true'
 # spec:
-#   path: './kubernetes/main/apps/openebs/openebs/config/'
+#   path: './kubernetes/apps/openebs/openebs/config/'
 #   prune: true
 #   sourceRef:
 #     kind: GitRepository

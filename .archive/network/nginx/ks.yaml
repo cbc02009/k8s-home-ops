@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/certificates
+  path: ./kubernetes/apps/network/nginx/certificates
   prune: false
   sourceRef:
     kind: GitRepository
@@ -36,7 +36,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/external
+  path: ./kubernetes/apps/network/nginx/external
   prune: false
   sourceRef:
     kind: GitRepository
@@ -62,7 +62,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/network/nginx/internal
+  path: ./kubernetes/apps/network/nginx/internal
   prune: false
   sourceRef:
     kind: GitRepository

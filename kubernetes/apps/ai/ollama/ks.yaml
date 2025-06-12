@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: './kubernetes/main/apps/ai/ollama/app/'
+  path: './kubernetes/apps/ai/ollama/app/'
   prune: true
   sourceRef:
     kind: GitRepository

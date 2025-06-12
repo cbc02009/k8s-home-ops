@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: "./kubernetes/main/apps/system/democratic-csi/app"
+  path: "./kubernetes/apps/system/democratic-csi/app"
   sourceRef:
     kind: GitRepository
     name: flux-system

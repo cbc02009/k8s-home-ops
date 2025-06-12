@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: './kubernetes/main/apps/media/calibre-web/app/'
+  path: './kubernetes/apps/media/calibre-web/app/'
   prune: true
   sourceRef:
     kind: GitRepository

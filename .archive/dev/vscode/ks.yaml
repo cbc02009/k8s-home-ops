@@ -15,7 +15,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets-stores
-  path: './kubernetes/main/apps/dev/vscode/app/'
+  path: './kubernetes/apps/dev/vscode/app/'
   prune: true
   sourceRef:
     kind: GitRepository

@@ -15,7 +15,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg-cluster
     - name: external-secrets
-  path: './kubernetes/main/apps/dev/forgejo/app/'
+  path: './kubernetes/apps/dev/forgejo/app/'
   prune: true
   sourceRef:
     kind: GitRepository

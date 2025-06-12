@@ -12,7 +12,7 @@ spec:
   components:
     - ../../../../components/gatus/external
   interval: 30m
-  path: ./kubernetes/main/apps/observability/kromgo/app
+  path: ./kubernetes/apps/observability/kromgo/app
   postBuild:
     substitute:
       APP: *app

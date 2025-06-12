@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: './kubernetes/main/apps/vpn/downloads-gateway/app/'
+  path: './kubernetes/apps/vpn/downloads-gateway/app/'
   prune: true
   sourceRef:
     kind: GitRepository

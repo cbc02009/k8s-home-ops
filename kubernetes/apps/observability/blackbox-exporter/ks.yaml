@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/main/apps/observability/blackbox-exporter/app
+  path: ./kubernetes/apps/observability/blackbox-exporter/app
   prune: true
   sourceRef:
     kind: GitRepository

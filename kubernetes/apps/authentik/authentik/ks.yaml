@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/main/apps/authentik/authentik/app"
+  path: "./kubernetes/apps/authentik/authentik/app"
   prune: true
   sourceRef:
     kind: GitRepository
