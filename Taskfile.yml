@@ -21,6 +21,7 @@ vars:
   TALOSCONFIG: "{{.K8S_DIR}}/talos/clusterconfig/talosconfig"
 
 env:
+  ROOT_DIR: "{{ .ROOT_DIR }}"
   KUBECONFIG: "{{.KUBECONFIG}}"
   MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
   TALOSCONFIG: "{{.TALOSCONFIG}}"

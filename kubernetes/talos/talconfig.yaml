@@ -3,7 +3,7 @@
 clusterName: &clusterName main
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.4
+talosVersion: v1.10.3
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.1
 
@@ -81,45 +81,45 @@ nodes:
           ip: *talosControlplaneVip
     extensionServices: *nut-service
 
-  - hostname: ponyo.ctec.run
-    ipAddress: 10.0.2.15
-    installDiskSelector:
-      model: CX2-8B256-Q11 NVMe LITEON 256GB
-    controlPlane: false
-    disableSearchDomain: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 9c:6b:00:14:7f:22
-        dhcp: true
-    extensionServices: *nut-service
-    schematic:
-      customization:
-        extraKernelArgs:
-          - apparmor=0 # Less security, more speed
-          - init_on_alloc=0 # Less security, more speed
-          - init_on_free=0 # Less security, more speed
-          - intel_iommu=on # PCI Passthrough
-          - iommu=pt # PCI Passthrough
-          - mitigations=off # Less security, more speed
-          - security=none # Less security, more speed
-          - net.ifnames=1 # Enable predictable NIC naming
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/amd-ucode
-            - siderolabs/nut-client
-            - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/nvidia-container-toolkit-production
-    patches:
-      - |-
-        machine:
-          kernel:
-            modules:
-              - name: nvidia
-              - name: nvidia_uvm
-              - name: nvidia_drm
-              - name: nvidia_modeset
-          sysctls:
-            net.core.bpf_jit_harden: 1
+  # - hostname: ponyo.ctec.run
+  #   ipAddress: 10.0.2.15
+  #   installDiskSelector:
+  #     model: CX2-8B256-Q11 NVMe LITEON 256GB
+  #   controlPlane: false
+  #   disableSearchDomain: true
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: 9c:6b:00:14:7f:22
+  #       dhcp: true
+  #   extensionServices: *nut-service
+  #   schematic:
+  #     customization:
+  #       extraKernelArgs:
+  #         - apparmor=0 # Less security, more speed
+  #         - init_on_alloc=0 # Less security, more speed
+  #         - init_on_free=0 # Less security, more speed
+  #         - intel_iommu=on # PCI Passthrough
+  #         - iommu=pt # PCI Passthrough
+  #         - mitigations=off # Less security, more speed
+  #         - security=none # Less security, more speed
+  #         - net.ifnames=1 # Enable predictable NIC naming
+  #       systemExtensions:
+  #         officialExtensions:
+  #           - siderolabs/amd-ucode
+  #           - siderolabs/nut-client
+  #           - siderolabs/nonfree-kmod-nvidia-production
+  #           - siderolabs/nvidia-container-toolkit-production
+  #   patches:
+  #     - |-
+  #       machine:
+  #         kernel:
+  #           modules:
+  #             - name: nvidia
+  #             - name: nvidia_uvm
+  #             - name: nvidia_drm
+  #             - name: nvidia_modeset
+  #         sysctls:
+  #           net.core.bpf_jit_harden: 1
 
 controlPlane:
   nodeLabels:
