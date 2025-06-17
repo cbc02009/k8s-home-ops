@@ -33,7 +33,7 @@ spec:
           app:
             image:
               repository: docker.io/difegue/lanraragi
-              tag: v.0.9.40
+              tag: v.0.9.41
 
     service:
       main:
