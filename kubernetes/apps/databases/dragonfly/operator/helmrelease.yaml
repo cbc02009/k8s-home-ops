@@ -108,7 +108,6 @@ spec:
           metrics:
             port: 8080
     serviceAccount:
-      create: true
       name: *app
     serviceMonitor:
       app:
