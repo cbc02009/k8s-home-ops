@@ -3,7 +3,7 @@
 clusterName: &clusterName main
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.3
+talosVersion: v1.10.4
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.1
 
@@ -229,13 +229,13 @@ patches:
       network:
         disableSearchDomain: true
 
-  # Configure NTP
-  - |-
-    machine:
-      time:
-        disabled: false
-        servers:
-          - time.cloudflare.com
+  # # Configure NTP
+  # - |-
+  #   machine:
+  #     time:
+  #       disabled: false
+  #       servers:
+  #         - time.cloudflare.com
 
   # Enable KubePrism
   - |-
