@@ -12,18 +12,21 @@ spec:
     namespace: flux-system
   values:
     controllers:
-      rustdesk:
+      *app :
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/rustdesk/rustdesk-server
               tag: 1.1.12@sha256:9b1197d116f7bb4d3ad93a50bc1bc59ddb388de267df221a351f5ce10fac3dcf
             command:
               - hbbs
               - -r ${LB_RUSTDESK}:21117
+            env:
+              ENCRYPTED_ONLY: "1"
+              DB_URL: /db/db_v2.sqlite3
             probes:
               startup:
                 enabled: false
@@ -36,7 +39,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 256Mi
-          relay:
+          &relay relay:
             image:
               repository: ghcr.io/rustdesk/rustdesk-server
               tag: 1.1.12@sha256:9b1197d116f7bb4d3ad93a50bc1bc59ddb388de267df221a351f5ce10fac3dcf
@@ -56,25 +59,33 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: ${LB_RUSTDESK}
           external-dns.alpha.kubernetes.io/hostname: rd.${EXTERNAL_DOMAIN}
+
+
+    service:
+      *app :
+        controller: *app
         ports:
-          # server
-          rustdesk-nat:
+          rustdesk-1:
+            port: 21114
+          rustdesk-2:
             port: 21115
-          rustdesk-id-tcp:
-            port: 21116
-          rustdesk-id-udp:
-            port: 21116
+          rustdesk-3:
+            port: &port 21116
+          rustdesk-4:
+            port: *port
             protocol: UDP
-          rustdesk-ws:
-            port: 21118
-          # relay
-          rustdesk-relay:
+          rustdesk-5-relay:
             port: 21117
-          rustdesk-relay-ws:
+          rustdesk-6:
+            port: 21118
+          rustdesk-7-relay:
             port: 21119
+
     persistence:
-      data:
-        enabled: true
+      db:
         existingClaim: *app
         globalMounts:
           - path: /db
+            subPath: hbbs
+          - path: /root
+            subPath: root

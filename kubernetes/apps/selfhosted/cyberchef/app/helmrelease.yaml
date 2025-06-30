@@ -30,6 +30,9 @@ spec:
         ports:
           http:
             port: &port 80
+            targetPort: 8000
+            protocol: HTTP
+            appProtocol: http
     route:
       app:
         hostnames:
