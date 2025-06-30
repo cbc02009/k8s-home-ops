@@ -53,17 +53,12 @@ spec:
               readiness:
                 enabled: false
     service:
-      rustdesk:
-        controller: rustdesk
+      *app :
+        controller: *app
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${LB_RUSTDESK}
           external-dns.alpha.kubernetes.io/hostname: rd.${EXTERNAL_DOMAIN}
-
-
-    service:
-      *app :
-        controller: *app
         ports:
           rustdesk-1:
             port: 21114
