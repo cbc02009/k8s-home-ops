@@ -4,12 +4,12 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: volume-debugger
-  namespace: media
+  namespace: selfhosted
 spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: plex
+        claimName: rustdesk
   containers:
     - name: volume-debugger
       image: ubuntu
