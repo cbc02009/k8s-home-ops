@@ -92,7 +92,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: nas.${INTERNAL_DOMAIN}
+        server: 10.0.2.4
         path: /tank/media
         globalMounts:
           - path: /media
