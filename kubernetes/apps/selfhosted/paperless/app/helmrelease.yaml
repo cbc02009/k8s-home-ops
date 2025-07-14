@@ -100,7 +100,7 @@ spec:
           redis:
             image:
               repository: public.ecr.aws/docker/library/redis
-              tag: 7.4.4
+              tag: 7.4.5
             securityContext:
               runAsUser: 999
               runAsGroup: 999
