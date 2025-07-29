@@ -113,7 +113,7 @@ releases:
     namespace: flux-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.25.0
+    version: 0.26.0
     values:
       - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/flux-system/flux-operator/app/values.yaml'
     needs:
@@ -123,7 +123,7 @@ releases:
     namespace: flux-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.25.0
+    version: 0.26.0
     wait: false
     values:
       - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/flux-system/flux-operator/instance/values.yaml'
