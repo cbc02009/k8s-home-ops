@@ -103,7 +103,7 @@ releases:
     namespace: kube-system
     atomic: true
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
-    version: 4.1.2
+    version: 4.2.0
     values:
       - ./templates/wipe-rook.yaml.gotmpl
     needs:
