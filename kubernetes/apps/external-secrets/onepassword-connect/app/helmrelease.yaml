@@ -70,7 +70,7 @@ spec:
           sync:
             image:
               repository: ghcr.io/cbc02009/onepassword-sync
-              tag: 1.7.3
+              tag: 1.7.4
             env:
               XDG_DATA_HOME: *configDir
               OP_HTTP_PORT: &syncPort 8081
