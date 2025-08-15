@@ -20,6 +20,8 @@ spec:
       retries: 3
   values:
     localpv-provisioner:
+      rbac:
+        create: true
       localpv:
         image:
           registry: quay.io/
