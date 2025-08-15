@@ -44,12 +44,12 @@ spec:
               # SMTP_USER: mealie@holthome.net
               # OPENAI_BASE_URL: https://openrouter.ai/api/v1
             envFrom: *envFrom
-            resources:
-              requests:
-                memory: 250Mi
-                cpu: 50m
-              limits:
-                memory: 500Mi
+            # resources:
+            #   requests:
+            #     memory: 250Mi
+            #     cpu: 50m
+            #   limits:
+            #     memory: 500Mi
 
     service:
       main:
