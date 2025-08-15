@@ -2,19 +2,19 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: "Bulk Merge PRs"
 
-on:
-  workflow_dispatch:
-    inputs:
-      dryRun:
-        description: Dry Run
-        default: "false"
-        required: false
-      labels:
-        description: Labels
-        default: "any"
-        required: false
-  schedule:
-    - cron: "0 0 * * 1"
+on: {}
+  # workflow_dispatch:
+  #   inputs:
+  #     dryRun:
+  #       description: Dry Run
+  #       default: "false"
+  #       required: false
+  #     labels:
+  #       description: Labels
+  #       default: "any"
+  #       required: false
+  # schedule:
+  #   - cron: "0 0 * * 1"
 
 jobs:
   bulk-merge-prs:
