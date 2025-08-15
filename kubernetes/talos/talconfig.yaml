@@ -229,13 +229,13 @@ patches:
       network:
         disableSearchDomain: true
 
-  # # Configure NTP
-  # - |-
-  #   machine:
-  #     time:
-  #       disabled: false
-  #       servers:
-  #         - time.cloudflare.com
+  # Configure NTP
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - time.cloudflare.com
 
   # Enable KubePrism
   - |-
