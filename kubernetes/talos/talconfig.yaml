@@ -43,13 +43,13 @@ nodes:
         dhcp: true
         vip:
           ip: *talosControlplaneVip
-    extensionServices: &nut-service
-      - name: nut-client
-        configFiles:
-          - content: |-
-              MONITOR nut.cutil.dev 1 observer whatever secondary
-              SHUTDOWNCMD "/sbin/poweroff"
-            mountPath: /usr/local/etc/nut/upsmon.conf
+    # extensionServices: &nut-service
+    #   - name: nut-client
+    #     configFiles:
+    #       - content: |-
+    #           MONITOR nut.cutil.dev 1 observer whatever secondary
+    #           SHUTDOWNCMD "/sbin/poweroff"
+    #         mountPath: /usr/local/etc/nut/upsmon.conf
 
   - hostname: miri.ctec.run
     nodeLabels: *nodeLabels
@@ -64,7 +64,7 @@ nodes:
         dhcp: true
         vip:
           ip: *talosControlplaneVip
-    extensionServices: *nut-service
+    # extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
     nodeLabels: *nodeLabels
@@ -79,7 +79,7 @@ nodes:
         dhcp: true
         vip:
           ip: *talosControlplaneVip
-    extensionServices: *nut-service
+    # extensionServices: *nut-service
 
   # - hostname: ponyo.ctec.run
   #   ipAddress: 10.0.2.15
@@ -140,7 +140,7 @@ controlPlane:
         officialExtensions:
           - siderolabs/i915
           - siderolabs/intel-ucode
-          - siderolabs/nut-client
+          # - siderolabs/nut-client
   patches:
     # Disable default API server admission plugins.
     - |-
