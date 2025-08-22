@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -25,12 +25,12 @@ spec:
           envFrom:
             - secretRef:
                 name: *secret
-      resources:
-        requests:
-          cpu: 50m
-          memory: 500Mi
-        limits:
-          memory: 800Mi
+      # resources:
+      #   requests:
+      #     cpu: 50m
+      #     memory: 500Mi
+      #   limits:
+      #     memory: 800Mi
       metrics:
         enabled: true
         serviceMonitor:
@@ -69,14 +69,14 @@ spec:
         host: "dragonfly.databases.svc.cluster.local"
         password: ""
 
-    worker:
-      replicas: 1
-      resources:
-        requests:
-          cpu: 50m
-          memory: 500Mi
-        limits:
-          memory: 1200Mi
+    # worker:
+    #   replicas: 1
+    #   resources:
+    #     requests:
+    #       cpu: 50m
+    #       memory: 500Mi
+    #     limits:
+    #       memory: 1200Mi
 
     postgresql:
       enabled: false
