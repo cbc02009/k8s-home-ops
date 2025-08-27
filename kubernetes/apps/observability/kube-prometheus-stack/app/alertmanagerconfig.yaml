@@ -9,8 +9,8 @@ spec:
     groupBy: ["alertname", "job"]
     groupInterval: 10m
     groupWait: 1m
-    # receiver: discord
-    receiver: "null"
+    receiver: discord
+    # receiver: "null"
     repeatInterval: 12h
     routes:
       - receiver: "null"
@@ -26,8 +26,8 @@ spec:
           - name: alertname
             value: Watchdog
             matchType: =
-      # - receiver: discord
-      - receiver: "null"
+      - receiver: discord
+      # - receiver: "null"
         matchers:
           - name: severity
             value: critical
