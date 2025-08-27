@@ -16,6 +16,6 @@ resources:
   - ./redlib/ks.yaml
   - ./rustdesk/ks.yaml
   - ./smtp-relay/ks.yaml
-  - ./tandoor/ks.yaml
+  # - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
   - ./whoogle/ks.yaml
