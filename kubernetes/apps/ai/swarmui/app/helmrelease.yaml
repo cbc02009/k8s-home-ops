@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: docker.io/eedev/swarmui-docker
-              tag: latest@sha256:b6d96b420765092bc26376f1de6487ceba074a657b37d04ecec3972164226ea5
+              tag: latest@sha256:7834bbed04aebc16ad811ba069b7465cf564d645e4ec3e27013010ee2a9b055a
             env:
               TZ: ${TZ}
             resources:
