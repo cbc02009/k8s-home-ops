@@ -39,9 +39,9 @@ spec:
       crashCollector:
         disable: false
 
-      csi:
-        readAffinity:
-          enabled: true
+      # csi:
+      #   readAffinity:
+      #     enabled: true
 
       dashboard:
         enabled: true
