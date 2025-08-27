@@ -27,6 +27,7 @@ spec:
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/volsync
+    - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
       APP: *app

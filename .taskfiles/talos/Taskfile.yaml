@@ -97,3 +97,30 @@ tasks:
         --mode="{{.MODE}}"
         {{ if eq "true" .INSECURE }}--insecure{{ end }}
         {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
+
+  reset-node:
+    desc: Reset Talos on a single node [NODE=required]
+    prompt: Reset Talos node '{{.NODE}}' ... continue?
+    vars:
+      MODE: >-
+        {{.MODE}}
+    requires:
+      vars:
+        - NODE
+    preconditions:
+      - talosctl config info
+      - talosctl --nodes {{.NODE}} get machineconfig
+      - which talosctl
+    cmd: talosctl --nodes {{.NODE}} reset --graceful=false {{if eq .MODE "reboot"}}--reboot{{end}}
+
+  reset-cluster:
+    desc: Reset Talos across the whole cluster
+    prompt: Reset the Talos cluster ... continue?
+    preconditions:
+      - talosctl config info
+      - talosctl --nodes {{.NODES}} get machineconfig
+      - which jq talosctl
+    vars:
+      NODES:
+        sh: talosctl config info --output json | jq --join-output '[.nodes[]] | join(",")'
+    cmd: talosctl --nodes {{.NODES}} reset --graceful=false {{if eq .MODE "reboot"}}--reboot{{end}}

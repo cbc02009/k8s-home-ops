@@ -11,15 +11,19 @@ spec:
   targets:
     staticConfig:
       static:
-        - expanse.internal
-        - garage-door.internal
-        - hdhomerun.internal
-        - idrac.internal
-        - kiosk.internal
-        - kvm.internal
-        - pikvm.internal
-        - receiver.internal
-        - ups.internal
-        - vacuum.internal
-        - zigbee-controller.internal
-        - zwave-controller.internal
+        - shana.ctec.run
+        - pikvm.ctec.run
+---
+# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: nfs
+spec:
+  module: tcp_connect
+  prober:
+    url: blackbox-exporter.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - shana.ctec.run:2049

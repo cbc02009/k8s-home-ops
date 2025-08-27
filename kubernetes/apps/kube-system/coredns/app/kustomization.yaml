@@ -5,9 +5,3 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
-configMapGenerator:
-  - name: coredns-helm-values
-    files:
-      - values.yaml=./values.yaml
-configurations:
-  - kustomizeconfig.yaml

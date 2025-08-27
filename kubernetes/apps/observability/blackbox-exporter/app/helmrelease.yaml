@@ -19,43 +19,29 @@ spec:
       retries: 3
   values:
     fullnameOverride: blackbox-exporter
-    ingress:
-      enabled: true
-      className: internal
-      hosts:
-        - host: blackbox-exporter.${EXTERNAL_DOMAIN}
-          paths:
-            - path: /
-              pathType: Prefix
-    securityContext:
-      readOnlyRootFilesystem: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        add: ["NET_RAW"]
+    image:
+      registry: quay.io
     config:
       modules:
         http_2xx:
           prober: http
           timeout: 5s
           http:
-            valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+            valid_http_versions:
+              - HTTP/1.1
+              - HTTP/2.0
             follow_redirects: true
-            preferred_ip_protocol: ipv4
+            preferred_ip_protocol: ip4
         icmp:
           prober: icmp
           timeout: 5s
           icmp:
-            preferred_ip_protocol: ipv4
+            preferred_ip_protocol: ip4
         tcp_connect:
           prober: tcp
           timeout: 5s
           tcp:
-            preferred_ip_protocol: ipv4
-    serviceMonitor:
-      enabled: true
-      defaults:
-        interval: 1m
-        scrapeTimeout: 10s
+            preferred_ip_protocol: ip4
     prometheusRule:
       enabled: true
       rules:
@@ -67,3 +53,14 @@ spec:
           annotations:
             summary: |-
               The host {{ $labels.target }} is currently unreachable
+    securityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        add:
+          - NET_RAW
+    serviceMonitor:
+      enabled: true
+      defaults:
+        interval: 1m
+        scrapeTimeout: 10s
