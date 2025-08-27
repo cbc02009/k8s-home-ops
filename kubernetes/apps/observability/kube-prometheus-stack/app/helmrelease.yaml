@@ -153,3 +153,13 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
+
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - prometheus.${EXTERNAL_DOMAIN}
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
