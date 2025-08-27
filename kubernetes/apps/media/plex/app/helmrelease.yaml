@@ -23,6 +23,8 @@ spec:
       namespace: system
     - name: volsync
       namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   values:
     controllers:
       plex:
@@ -36,6 +38,7 @@ spec:
               tag: 1.42.1.10060
             env:
               TZ: ${TZ}
+              PLEX_ADVERTISE_URL: https://${LB_PLEX}:32400,https://plex.${EXTERNAL_DOMAIN}:443
             # probes:
             #   liveness: &probes
             #     enabled: true
