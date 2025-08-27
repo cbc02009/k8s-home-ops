@@ -54,6 +54,7 @@ spec:
               requests:
                 cpu: 10m
                 memory: 1000Mi
+                gpu.intel.com/i915: "1"
               limits:
                 gpu.intel.com/i915: "1"
                 memory: 8000Mi
@@ -96,6 +97,15 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
+      go2rtc:
+        hostnames:
+          - "go2rtc.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs: [{}]
 
     persistence:
       data:

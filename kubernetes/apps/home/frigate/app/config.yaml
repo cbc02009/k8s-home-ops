@@ -2,8 +2,8 @@
 # yaml-language-server: $schema=https://frigate.kokoro.wtf/api/config/schema.json
 logger:
   default: info
-  logs:
-    frigate.record: debug
+  # logs:
+  #   frigate.record: debug
 
 mqtt:
   host: emqx-listeners.databases.svc.cluster.local
@@ -46,6 +46,8 @@ record:
 objects:
   track:
     - person
+    - cat
+    - dog
   filters:
     person:
       min_area: 5000
