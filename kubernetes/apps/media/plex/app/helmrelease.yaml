@@ -27,8 +27,7 @@ spec:
       namespace: rook-ceph
   values:
     controllers:
-      plex:
-        type: statefulset
+      *app :
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -119,15 +118,23 @@ spec:
                 port: *port
     persistence:
       config:
-        enabled: true
         existingClaim: *app
       # Separate PVC for cache to avoid backing up cache files
       plex-cache:
         existingClaim: plex-cache
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Cache
-      tmp:
+        advancedMounts:
+          *app :
+            app:
+              - path: /config/Library/Application Support/Plex Media Server/Cache
+      tmpfs:
         type: emptyDir
+        advancedMounts:
+          *app :
+            app:
+              - path: /config/Library/Application Support/Plex Media Server/Logs
+                subPath: log
+              - path: /transcode
+                subPath: transcode
       transcode:
         type: emptyDir
       media:

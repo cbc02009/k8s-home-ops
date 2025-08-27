@@ -20,7 +20,6 @@ spec:
   values:
     controllers:
       autobrr:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:

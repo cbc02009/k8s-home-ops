@@ -28,7 +28,6 @@ spec:
 
     controllers:
       tautulli:
-        type: statefulset
 
         containers:
           app:

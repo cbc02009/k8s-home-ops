@@ -23,7 +23,6 @@ spec:
 
     controllers:
       radarr:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
 

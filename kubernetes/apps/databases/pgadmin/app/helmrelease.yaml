@@ -30,7 +30,6 @@ spec:
 
     controllers:
       pgadmin:
-        type: statefulset
         containers:
           app:
             image:

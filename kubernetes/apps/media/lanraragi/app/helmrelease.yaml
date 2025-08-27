@@ -28,7 +28,6 @@ spec:
 
     controllers:
       lanraragi:
-        type: statefulset
         containers:
           app:
             image:

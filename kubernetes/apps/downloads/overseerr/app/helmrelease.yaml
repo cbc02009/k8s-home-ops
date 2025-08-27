@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       overseerr:
-        type: statefulset
 
         containers:
           app:

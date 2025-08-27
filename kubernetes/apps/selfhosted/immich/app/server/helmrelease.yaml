@@ -37,7 +37,6 @@ spec:
               app.kubernetes.io/name: *app
     controllers:
       immich-server:
-        type: statefulset
         annotations:
           configmap.reloader.stakater.com/reload: &configMap immich-configmap
           secret.reloader.stakater.com/reload: &secret immich

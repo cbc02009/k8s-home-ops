@@ -21,7 +21,6 @@ spec:
   values:
     controllers:
       sonarr:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
 

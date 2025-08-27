@@ -18,7 +18,6 @@ spec:
   values:
     controllers:
       *app :
-        type: statefulset
         pod:
           securityContext:
             runAsUser: 1000

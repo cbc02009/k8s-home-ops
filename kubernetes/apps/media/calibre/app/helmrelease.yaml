@@ -25,7 +25,6 @@ spec:
 
     controllers:
       calibre:
-        type: statefulset
 
         containers:
           app:

@@ -21,7 +21,6 @@ spec:
   values:
     controllers:
       smtp-relay:
-        type: statefulset
         replicas: 2
         strategy: RollingUpdate
         annotations:

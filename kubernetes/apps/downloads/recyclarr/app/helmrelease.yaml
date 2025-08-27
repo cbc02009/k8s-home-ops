@@ -27,7 +27,6 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       recyclarr:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:

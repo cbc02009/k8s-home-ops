@@ -40,7 +40,6 @@ spec:
         intel.feature.node.kubernetes.io/gpu: 'true'
     controllers:
       immich-microservices:
-        type: statefulset
         annotations:
           configmap.reloader.stakater.com/reload: &configMap immich-configmap
           secret.reloader.stakater.com/reload: &secret immich

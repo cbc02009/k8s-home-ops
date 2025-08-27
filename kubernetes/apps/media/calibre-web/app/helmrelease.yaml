@@ -27,7 +27,6 @@ spec:
 
     controllers:
       *app :
-        type: statefulset
         strategy: RollingUpdate
 
         containers:

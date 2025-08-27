@@ -22,7 +22,6 @@ spec:
   values:
     controllers:
       animarr:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
 

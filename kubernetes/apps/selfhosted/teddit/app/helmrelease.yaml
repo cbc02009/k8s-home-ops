@@ -29,7 +29,6 @@ spec:
               app.kubernetes.io/name: *app
     controllers:
       teddit:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: 'true'
 

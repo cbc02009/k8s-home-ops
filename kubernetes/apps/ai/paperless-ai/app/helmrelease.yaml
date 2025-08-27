@@ -20,7 +20,6 @@ spec:
   values:
     controllers:
       paperless-ai:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
         containers:

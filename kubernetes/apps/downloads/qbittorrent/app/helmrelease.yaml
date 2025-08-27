@@ -21,7 +21,6 @@ spec:
 
     controllers:
       qbittorrent:
-        type: statefulset
         annotations:
           secret.reloader.stakater.com/reload: qbittorrent-secret,qbittorrent-gluetun-secret
 

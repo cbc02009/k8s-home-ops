@@ -16,7 +16,6 @@ spec:
 
     controllers:
       unpoller:
-        type: statefulset
 
         containers:
           app:
