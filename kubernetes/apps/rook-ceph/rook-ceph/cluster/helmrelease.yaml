@@ -12,7 +12,7 @@ spec:
     kind: OCIRepository
     name: rook-ceph-cluster
   dependsOn:
-    - name: rook-ceph
+    - name: rook-ceph-operator
       namespace: rook-ceph
     - name: snapshot-controller
       namespace: system-controllers
