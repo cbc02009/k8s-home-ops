@@ -68,22 +68,6 @@ spec:
 
     persistence:
       config:
-        enabled: true
         existingClaim: *app
-
-      add-ons:
-        enabled: true
-        type: emptyDir
-
-    sidecars:
-      jbops:
-        image: registry.k8s.io/git-sync/git-sync:v4.4.2
-        imagePullPolicy: IfNotPresent
-        args:
-          - --repo=https://github.com/blacktwin/JBOPS.git
-          - --branch=master
-          - --depth=1
-          - --wait=21600 # 6 hours
-          - --root=/add-ons/jbops
-        volumeMounts:
-          - {name: add-ons, mountPath: /add-ons}
+        globalMounts:
+          - path: /config
