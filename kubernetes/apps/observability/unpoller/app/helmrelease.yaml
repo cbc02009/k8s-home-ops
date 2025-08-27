@@ -26,16 +26,33 @@ spec:
 
             env:
               UP_UNIFI_DEFAULT_ROLE: home-ops
-              UP_UNIFI_DEFAULT_URL: https://unifi.cutil.dev
+              UP_UNIFI_DEFAULT_URL: https://10.0.2.1/
               UP_UNIFI_DEFAULT_VERIFY_SSL: false
-              UP_UNIFI_DEFAULT_USER: unifipoller
-              UP_UNIFI_DEFAULT_PASS:
+              UP_UNIFI_DEFAULT_API_KEY:
                 valueFrom:
                   secretKeyRef:
                     name: *app
-                    key: DEFAULT_PASSWORD
+                    key: API_KEY
               UP_INFLUXDB_DISABLE: true
 
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 9130
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
