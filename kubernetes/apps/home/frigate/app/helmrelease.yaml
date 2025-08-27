@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: ghcr.io/blakeblackshear/frigate
-              tag: 0.15.2
+              tag: 0.16.0
 
             env:
               TZ: ${TZ}
@@ -66,7 +66,6 @@ spec:
                   httpGet:
                     path: /api/version
                     port: &port 5000
-
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -84,6 +83,12 @@ spec:
         ports:
           http:
             port: *port
+          go2rtc:
+            enabled: true
+            port: &apiPort 1984
+          rtsp:
+            enabled: true
+            port: 8554
 
     route:
       app:
@@ -105,7 +110,9 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
-          - backendRefs: [{}]
+          - backendRefs:
+              - name: *app
+                port: *apiPort
 
     persistence:
       data:
