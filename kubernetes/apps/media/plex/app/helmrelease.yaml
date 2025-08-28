@@ -135,8 +135,6 @@ spec:
                 subPath: log
               - path: /transcode
                 subPath: transcode
-      transcode:
-        type: emptyDir
       media:
         type: nfs
         server: &nas ${NAS_HOST}
