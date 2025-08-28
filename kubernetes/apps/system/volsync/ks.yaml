@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   # components:
-    # - ../../../../components/keda/nas-nfs-scaler
+  #   - ../../../../components/keda/nas-nfs-scaler
   interval: 30m
   timeout: 5m
   path: './kubernetes/apps/system/volsync/app/'
