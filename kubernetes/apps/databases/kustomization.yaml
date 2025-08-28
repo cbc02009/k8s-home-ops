@@ -8,6 +8,5 @@ components:
 resources:
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly/ks.yaml
-  - ./emqx/ks.yaml
   - ./postgres-backup/ks.yaml
-  # - ./pgadmin/ks.yaml
+  - ./pgadmin/ks.yaml

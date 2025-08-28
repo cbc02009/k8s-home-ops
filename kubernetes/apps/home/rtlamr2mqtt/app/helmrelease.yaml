@@ -17,16 +17,19 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
+  dependsOn:
+    - name: mosquitto
+      namespace: home
   values:
     controllers:
-      rtlamr2mqtt:
+      *app :
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: docker.io/allangood/rtlamr2mqtt
-              tag: 2025.6.6
+              tag: 2025.6.6@sha256:9458419acca5f95d438b3a04f10291d19c37244e16c0286ee2033eb4465ad0a0
             securityContext:
               privileged: true
             # env:
@@ -43,7 +46,7 @@ spec:
             nesdr.feature.node.kubernetes.io/rtlamr: "true"
     service:
       main:
-        controller: rtlamr2mqtt
+        controller: *app
         enabled: false
     persistence:
       config-file:
