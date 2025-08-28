@@ -18,4 +18,3 @@ resources:
   - ./smtp-relay/ks.yaml
   # - ./tandoor/ks.yaml
   - ./teddit/ks.yaml
-  - ./whoogle/ks.yaml
