@@ -3,7 +3,7 @@ general:
   sleep_for: 0
   verbosity: debug
   tickle_rtl_tcp: false
-  device_id: 0bda:2838
+  # device_id: 0bda:2838
 
 mqtt:
   host: mosquitto.home.svc.cluster.local
