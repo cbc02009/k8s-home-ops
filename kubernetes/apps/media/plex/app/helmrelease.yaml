@@ -133,6 +133,8 @@ spec:
             app:
               - path: /transcode
                 subPath: transcode
+              - path: /tmp
+                subPath: tmp
       media:
         type: nfs
         server: &nas ${NAS_HOST}
