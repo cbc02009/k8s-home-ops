@@ -4,16 +4,22 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: volume-debugger
-  namespace: selfhosted
+  namespace: media
 spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: rustdesk
+        claimName: plex
   containers:
     - name: volume-debugger
-      image: ubuntu
+      image: ubuntu:latest
       command: ['sleep', '3600']
       volumeMounts:
         - mountPath: "/mnt/volume"
           name: debug-volume
+      stdin: true
+      stdinOnce: true
+      tty: true
+      securityContext:
+        allowPrivilegeEscalation: true
+        privileged: true

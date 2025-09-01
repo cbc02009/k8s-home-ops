@@ -6,23 +6,16 @@ metadata:
   name: &name arc-home-ops-runner
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: gha-runner-scale-set
-      version: 0.11.0
-      sourceRef:
-        kind: HelmRepository
-        name: actions-runner-controller
-        namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  chartRef:
+    kind: OCIRepository
+    name: gha-runner-scale-set
+  driftDetection:
+    mode: enabled
+  dependsOn:
+    - name: actions-runner-controller
+      namespace: actions-runner-system
+    - name: openebs
+      namespace: openebs
   values:
     runnerScaleSetName: arc-runner-set-k8s-home-ops
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops

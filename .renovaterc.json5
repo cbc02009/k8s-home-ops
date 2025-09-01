@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "docker:enableMajor",
+    "helpers:pinGitHubActionDigests",
+    ":automergeBranch",
+    ":disableRateLimiting",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":timezone(America/New_York)",
+    "github>cbc02009/k8s-home-ops//.renovate/autoMerge.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/customManagers.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/groups.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/labels.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/packageRules.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/semanticCommits.json5",
+    "github>cbc02009/k8s-home-ops//.renovate/overrides.json5",
+  ],
+  "onboarding": false,
+  "requireConfig": "optional",
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
+  "rebaseWhen": "conflicted",
+  "assigneesFromCodeOwners": true,
+  "reviewersFromCodeOwners": true,
+  "ignorePaths": [
+    "**/*.sops.*",
+    "**/.archive/**",
+    "**/resources/**",
+  ],
+  flux: {
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
+  },
+  kubernetes: {
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
+  },
+}
