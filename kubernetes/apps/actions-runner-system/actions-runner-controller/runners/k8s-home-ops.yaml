@@ -17,9 +17,8 @@ spec:
     - name: openebs
       namespace: openebs
   values:
-    runnerScaleSetName: arc-runner-set-k8s-home-ops
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
-    minRunners: 1
+    minRunners: 0
     maxRunners: 3
     containerMode:
       type: kubernetes
@@ -46,7 +45,7 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
-        serviceAccountName: *name
+        serviceAccountName: actions-runner
         volumes:
           - name: talos
             secret:
