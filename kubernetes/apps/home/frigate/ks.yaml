@@ -22,8 +22,8 @@ spec:
   dependsOn:
     - name: intel-device-plugins-gpu
       namespace: system
-    - name: emqx-cluster
-      namespace: databases
+    - name: mosquitto
+      namespace: home
   components:
     - ../../../../components/gatus/external
     - ../../../../components/volsync

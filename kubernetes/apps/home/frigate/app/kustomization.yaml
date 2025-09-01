@@ -9,7 +9,7 @@ namespace: home
 configMapGenerator:
   - name: frigate
     files:
-      - config.yaml
+      - resources/config.yaml
 generatorOptions:
   disableNameSuffixHash: true
   # annotations:
