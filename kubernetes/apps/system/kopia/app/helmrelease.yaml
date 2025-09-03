@@ -30,9 +30,9 @@ spec:
               KOPIA_WEB_ENABLED: true
               KOPIA_WEB_PORT: &port 80
               TZ: ${TZ}
-            # envFrom:
-            #   - secretRef:
-            #       name: kopia-secret
+            envFrom:
+              - secretRef:
+                  name: kopia-secret
             args:
               - --without-password
             probes:
