@@ -121,6 +121,7 @@ spec:
 
     prometheus:
       prometheusSpec:
+        externalUrl: "https://prometheus.kokoro.wtf/"
         image:
           registry: docker.io
           repository: prompp/prompp
