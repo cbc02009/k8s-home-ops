@@ -98,7 +98,7 @@ spec:
         type: LoadBalancer
         sessionAffinity: ClientIP
         annotations:
-          lbipam.cilium.io/ips: 1${LB_HASS}
+          lbipam.cilium.io/ips: ${LB_HASS}
         ports:
           http:
             port: &port 8123
