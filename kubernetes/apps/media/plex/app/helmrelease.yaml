@@ -101,18 +101,19 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
             filters:
               - type: RequestHeaderModifier
                 requestHeaderModifier:
-                  remove: ["Range"]
+                  remove:
+                    - Range
             matches:
               - path:
                   type: PathPrefix
                   value: /library/streams
-          - backendRefs:
-              - name: *app
-                port: *port
     persistence:
       config:
         existingClaim: *app
