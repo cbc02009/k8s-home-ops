@@ -1,0 +1,146 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app tandoor
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+
+  values:
+    controllers:
+      tandoor:
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        initContainers:
+          01-init-db:
+            envFrom:
+              - secretRef:
+                  name: *app
+
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '17.6.0'
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/tandoorrecipes/recipes
+              tag: 2.0.3
+            env:
+              TZ: ${TZ}
+              COMMENT_PREF_DEFAULT: 0
+              DEBUG: 1
+              ENABLE_SIGNUP: 1
+              FRACTION_PREF_DEFAULT: 0
+              GUNICORN_MEDIA: 0
+              MAX_OWNED_SPACES_PREF_DEFAULT: 1
+              SHOPPING_MIN_AUTOSYNC_INTERVAL: 5
+              TANDOOR_PORT: &tandoorPort 8000
+              SOCIAL_PROVIDERS: allauth.socialaccount.providers.openid_connect
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /accounts/login/
+                    port: *tandoorPort
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /accounts/login/
+                    port: *tandoorPort
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+          nginx:
+            image:
+              repository: ghcr.io/nginxinc/nginx-unprivileged
+              tag: 1.27.4
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: &port 8080
+
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+          - "recipes.kokoro.wtf"
+        parentRefs:
+          - name: internal # MAKE EXTERNAL
+            namespace: kube-system
+            sectionName: https
+
+
+    persistence:
+      files:
+        existingClaim: tandoor-data
+        advancedMounts:
+          tandoor:
+            app:
+              - path: /opt/recipes/mediafiles
+                subPath: mediafiles
+              - path: /opt/recipes/staticfiles
+                subPath: staticfiles
+            nginx:
+              - path: /media
+                subPath: mediafiles
+              - path: /static
+                subPath: staticfiles
+      nginx-config:
+        type: configMap
+        name: tandoor-nginx
+        advancedMounts:
+          tandoor:
+            nginx:
+              - path: /etc/nginx/nginx.conf
+                subPath: nginx-config
+      temp:
+        type: emptyDir
+        advancedMounts:
+          tandoor:
+            app:
+              - path: /tmp
+                subPath: app-tmp
+              - path: /opt/recipes/cookbook/static/django_js_reverse
+                subPath: django_js_reverse
