@@ -161,8 +161,6 @@ spec:
                 subPath: logs
               - path: /config/tts
                 subPath: tts
-              - path: /tmp
-                subPath: tmp
             code-server:
               - path: /tmp
                 subPath: code-server-tmp
