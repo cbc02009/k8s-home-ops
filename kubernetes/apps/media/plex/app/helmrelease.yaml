@@ -114,6 +114,9 @@ spec:
               - path:
                   type: PathPrefix
                   value: /library/streams
+          - backendRefs:
+              - identifier: app
+                port: *port
     persistence:
       config:
         existingClaim: *app
