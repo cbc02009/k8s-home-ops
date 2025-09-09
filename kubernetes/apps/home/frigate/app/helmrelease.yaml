@@ -98,10 +98,7 @@ spec:
           - name: internal # MAKE EXTERNAL
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+
       go2rtc:
         hostnames:
           - "go2rtc.kokoro.wtf"
@@ -130,7 +127,7 @@ spec:
         server: ${NAS_HOST}
         path: /tank/k8s/apps/frigate
         globalMounts:
-          - path: /media
+          - path: /media/frigate
       cache:
         enabled: true
         type: emptyDir
