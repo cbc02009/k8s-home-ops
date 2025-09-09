@@ -31,10 +31,6 @@ spec:
       #     memory: 500Mi
       #   limits:
       #     memory: 800Mi
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
       route:
         main:
           enabled: true
@@ -69,6 +65,11 @@ spec:
         host: "dragonfly.databases.svc.cluster.local"
         password: ""
 
+    worker:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
     # worker:
     #   replicas: 1
     #   resources:
