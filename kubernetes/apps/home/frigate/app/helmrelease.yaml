@@ -98,6 +98,10 @@ spec:
           - name: internal # MAKE EXTERNAL
             namespace: kube-system
             sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
       go2rtc:
         hostnames:
