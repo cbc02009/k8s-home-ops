@@ -79,10 +79,10 @@ spec:
 
     service:
       main:
-        controller: *app
         ports:
           http:
             port: *port
+            primary: true
           go2rtc:
             enabled: true
             port: &apiPort 1984

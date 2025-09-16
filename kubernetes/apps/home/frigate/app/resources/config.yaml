@@ -75,11 +75,11 @@ cameras:
   reolink:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/doorbell?video=copy&audio=aac
+        - path: rtsp://127.0.0.1:8554/doorbell
           input_args: preset-rtsp-restream
           roles:
             - record
-        - path: rtsp://127.0.0.1:8554/doorbell_sub?video=copy
+        - path: rtsp://127.0.0.1:8554/doorbell_sub
           input_args: preset-rtsp-restream
           roles:
             - detect
