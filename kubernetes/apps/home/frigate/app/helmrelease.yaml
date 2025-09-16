@@ -45,7 +45,7 @@ spec:
 
             env:
               TZ: ${TZ}
-              LIBVA_DRIVER_NAME: i965
+              # LIBVA_DRIVER_NAME: i965
             envFrom:
               - secretRef:
                   name: *app
