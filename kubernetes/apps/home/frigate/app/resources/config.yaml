@@ -37,8 +37,8 @@ snapshots:
   retain:
     default: 7
 
-detect:
-  enabled: true
+# detect:
+#   enabled: true
 
 record:
   enabled: true
@@ -64,22 +64,22 @@ objects:
       max_area: 100000
       threshold: 0.7
 
-go2rtc:
-  streams:
-    doorbell:
-      - "ffmpeg:http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}#video=copy#audio=copy#audio=opus"
-    doorbell_sub:
-      - "ffmpeg:http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
+# go2rtc:
+#   streams:
+#     doorbell:
+#       - "ffmpeg:http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}#video=copy#audio=copy#audio=opus"
+#     doorbell_sub:
+#       - "ffmpeg:http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}"
 
 cameras:
   reolink:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/doorbell
-          input_args: preset-rtsp-restream
+        - path: http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}#video=copy#audio=copy#audio=opus
+          input_args: preset-http-reolink
           roles:
             - record
-        - path: rtsp://127.0.0.1:8554/doorbell_sub
-          input_args: preset-rtsp-restream
+        - path: http://192.168.4.100/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={FRIGATE_RTSP_USER}&password={FRIGATE_RTSP_PASSWORD}
+          input_args: preset-http-reolink
           roles:
             - detect
