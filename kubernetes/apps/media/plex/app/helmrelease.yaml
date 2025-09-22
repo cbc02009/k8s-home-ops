@@ -85,7 +85,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             supplementalGroups: [1010]
     service:
-      main:
+      app:
         controller: *app
         type: LoadBalancer
         annotations:
