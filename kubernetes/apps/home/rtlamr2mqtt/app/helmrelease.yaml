@@ -45,7 +45,7 @@ spec:
           nodeSelector:
             nesdr.feature.node.kubernetes.io/rtlamr: "true"
     service:
-      main:
+      app:
         controller: *app
         enabled: false
     persistence:

@@ -78,7 +78,7 @@ spec:
               privileged: true
 
     service:
-      main:
+      app:
         ports:
           http:
             port: *port

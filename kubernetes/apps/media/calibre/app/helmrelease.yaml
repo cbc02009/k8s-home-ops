@@ -52,7 +52,7 @@ spec:
                   initialDelaySeconds: 60
                   failureThreshold: 160
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:

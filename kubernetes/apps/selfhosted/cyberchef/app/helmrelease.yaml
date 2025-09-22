@@ -24,7 +24,7 @@ spec:
             env:
               TZ: ${TZ}
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:

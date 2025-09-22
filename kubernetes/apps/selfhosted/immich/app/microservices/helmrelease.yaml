@@ -62,7 +62,7 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 6000Mi
     service:
-      main:
+      app:
         controller: *app
         enabled: false
     persistence:

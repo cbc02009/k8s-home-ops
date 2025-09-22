@@ -52,7 +52,7 @@ spec:
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
         controller: *app
         enabled: false
     persistence:

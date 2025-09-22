@@ -6,6 +6,14 @@ namespace: media
 resources:
   - ./helmrelease.yaml
   - ./pvc.yaml
-commonLabels:
-  app.kubernetes.io/name: plex
-  app.kubernetes.io/instance: plex
+configMapGenerator:
+  - name: plex-loki-rules
+    files:
+      - plex.yaml=./lokirule.yaml
+    options:
+      labels:
+        loki_rule: "true"
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

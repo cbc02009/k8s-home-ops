@@ -90,7 +90,7 @@ spec:
                   periodSeconds: 10
 
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:

@@ -46,7 +46,7 @@ spec:
                 memory: 300M
 
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:

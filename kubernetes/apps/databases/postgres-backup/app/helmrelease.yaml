@@ -71,7 +71,7 @@ spec:
                 value: --clean
             command: [/backup.sh]
     service:
-      main:
+      app:
         controller: *app
         enabled: false
     persistence:

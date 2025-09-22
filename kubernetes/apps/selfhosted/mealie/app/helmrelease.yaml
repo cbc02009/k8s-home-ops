@@ -52,7 +52,7 @@ spec:
             #     memory: 500Mi
 
     service:
-      main:
+      app:
         controller: *app
         ports:
           http:
