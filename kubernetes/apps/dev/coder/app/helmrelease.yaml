@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -13,7 +13,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: coder-v2
-        namespace: flux-system
   maxHistory: 3
   install:
     createNamespace: true
@@ -60,9 +59,6 @@ spec:
         enableDeployments: true
 
       service:
-        type: ClusterIP
-
-      ingress:
-        enable: true
-        className: internal
-        host: &host 'coder.${EXTERNAL_DOMAIN}'
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: coder.${EXTERNAL_DOMAIN}
+          lbipam.cilium.io/ips: ${LB_CODER}
