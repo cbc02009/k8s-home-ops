@@ -1,20 +1,22 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: actions-runner-controller
+  name: &name actions-runner-controller
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set-controller
-  driftDetection:
-    mode: enabled
   install:
     crds: CreateReplace
+    remediation:
+      retries: -1
   upgrade:
+    cleanupOnFail: true
     crds: CreateReplace
+    remediation:
+      retries: 3
   values:
-    fullnameOverride: actions-runner-controller
-    replicaCount: 1
+    fullnameOverride: *name
