@@ -28,7 +28,7 @@ spec:
           api:
             image:
               repository: ghcr.io/cbc02009/onepassword-connect-api
-              tag: 1.7.4
+              tag: 1.8.1
             env:
               XDG_DATA_HOME: &configDir /config
               OP_HTTP_PORT: &apiPort 80
