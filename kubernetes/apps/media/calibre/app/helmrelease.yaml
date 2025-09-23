@@ -58,19 +58,6 @@ spec:
           http:
             port: &port 8080
 
-      webserver:
-        controller: *app
-        primary: false
-        ports:
-          webserver:
-            enabled: true
-            port: 8081
-            protocol: TCP
-            targetPort: 8081
-        type: LoadBalancer
-        externalTrafficPolicy: Cluster
-        loadBalancerIP: ${LB_CALIBRE}
-
     route:
       app:
         hostnames:
