@@ -19,7 +19,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: volume-migration
-          image: ubuntu:xenial
+          image: ubuntu:noble
           tty: true
           command: ["/bin/sh"]
           args: ["-c", "cp -av /mnt/old/. /mnt/new/"]
