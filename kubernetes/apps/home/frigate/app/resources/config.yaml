@@ -37,8 +37,8 @@ snapshots:
   retain:
     default: 7
 
-# detect:
-#   enabled: true
+detect:
+  enabled: true
 
 record:
   enabled: true
