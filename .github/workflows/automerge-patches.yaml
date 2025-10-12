@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Bulk Merge PRs"
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: Dry Run
+        default: "false"
+        required: false
+      labels:
+        description: Labels
+        default: "any"
+        required: false
+  schedule:
+    - cron: "0 * * * 1"
+
+jobs:
+  bulk-merge-prs:
+    name: Bulk Merge PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Merge
+        shell: bash
+        env:
+          GITHUB_TOKEN: "${{ steps.app-token.outputs.token }}"
+        run: |
+          args=()
+          args+=(--state open)
+          args+=(--search "-label:hold")
+          args+=(--search "label:type/patch")
+          if [ "${{ github.event.inputs.labels }}" != "any" ]; then
+              IFS=',' read -ra labels <<< "${{ github.event.inputs.labels }}"
+              for label in "${labels[@]}"; do
+                  args+=(--label "${label}")
+              done
+          fi
+          for id in $(gh pr list "${args[@]}" --jq '.[].number' --json number); do
+              if [ "${{ github.event.inputs.dryRun }}" = "true" ]; then
+                  echo "Dry run: gh pr merge $id --squash"
+                  continue
+              fi
+              gh pr merge "${id}" --squash
+              sleep 2
+          done
