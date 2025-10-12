@@ -26,7 +26,7 @@ spec:
       shared_buffers: 512MB
     shared_preload_libraries:
       - "vectors.so"
-      - "vchord.so"
+      # - "vchord.so"
   monitoring:
     enablePodMonitor: true
   backup:
