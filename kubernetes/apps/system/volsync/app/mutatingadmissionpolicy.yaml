@@ -12,36 +12,32 @@ apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingAdmissionPolicy
 metadata:
   name: volsync-mover-jitter
-  namespace: system
 spec:
   matchConstraints:
     resourceRules:
       - apiGroups:
-          - batch
+          - "batch"
         apiVersions:
-          - v1
+          - "v1"
         operations:
-          - CREATE
-          - UPDATE
+          - "CREATE"
+          - "UPDATE"
         resources:
-          - jobs
+          - "jobs"
   matchConditions:
     - name: has-volsync-job-name-prefix
       expression: >-
         object.metadata.name.startsWith("volsync-src-")
-
     - name: has-volsync-created-by-labels
       expression: >-
-        object.metadata.labels["app.kubernetes.io/created-by"] == "volsync"
-
+        object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   mutations:
-    - patchType: JSONPatch
+    - patchType: "JSONPatch"
       jsonPatch:
-        expression: >-
+        expression: >
           [
-
             JSONPatch{
               op: "add", path: "/spec/template/spec/initContainers",
               value: []
@@ -50,13 +46,12 @@ spec:
               op: "add", path: "/spec/template/spec/initContainers/-",
               value: Object.spec.template.spec.initContainers{
                 name: "jitter",
-                image: "ghcr.io/home-operations/busybox:1.37.0@sha256:026ed7273270ec08f6902b4ae8334c23b473e5394bec3bbbdbfe580c710d50bc",
+                image: "docker.io/library/busybox:latest",
                 imagePullPolicy: "IfNotPresent",
                 command: ["sh", "-c", "sleep $(shuf -i 0-30 -n 1)"]
               }
             }
           ]
-
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/mutatingadmissionpolicybinding-admissionregistration-v1beta1.json
 apiVersion: admissionregistration.k8s.io/v1beta1
@@ -75,31 +70,29 @@ spec:
   matchConstraints:
     resourceRules:
       - apiGroups:
-          - batch
+          - "batch"
         apiVersions:
-          - v1
+          - "v1"
         operations:
-          - CREATE
-          - UPDATE
+          - "CREATE"
+          - "UPDATE"
         resources:
-          - jobs
+          - "jobs"
   matchConditions:
     - name: has-volsync-job-name-prefix
       expression: >-
         object.metadata.name.startsWith("volsync-")
-
     - name: has-volsync-created-by-labels
       expression: >-
-        object.metadata.labels["app.kubernetes.io/created-by"] == "volsync"
-
+        object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
     - name: repository-volume-does-not-exist
       expression: >-
+        !has(object.spec.template.spec.volumes) ||
         !object.spec.template.spec.volumes.exists(item, item.name == "repository")
-
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   mutations:
-    - patchType: JSONPatch
+    - patchType: "JSONPatch"
       jsonPatch:
         expression: >-
           [
@@ -108,8 +101,8 @@ spec:
               value: Object.spec.template.spec.volumes{
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
-                  server: "10.0.2.4",
-                  path: "/tank/k8s/volsync/main"
+                  server: "shana.ctec.run",
+                  path: "/tank/backup/volsync"
                 }
               }
             },

@@ -10,13 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: volsync
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     fullnameOverride: volsync # Required for volsync-perfectra1n fork
     image: &image
@@ -28,7 +21,7 @@ spec:
     rsync: *image
     rsync-tls: *image
     syncthing: *image
-    replicaCount: 2
+    manageCRDs: true
     metrics:
       disableAuth: true
     podSecurityContext:
