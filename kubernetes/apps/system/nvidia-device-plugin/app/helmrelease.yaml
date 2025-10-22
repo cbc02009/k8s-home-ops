@@ -22,7 +22,7 @@ spec:
 
     image:
       repository: nvcr.io/nvidia/k8s-device-plugin
-      tag: v0.17.4
+      tag: v0.18.0
 
     runtimeClassName: nvidia
 
