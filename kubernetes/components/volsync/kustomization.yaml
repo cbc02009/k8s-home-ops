@@ -5,5 +5,5 @@ kind: Component
 resources:
   # - ./remote
   - ./kopia
-  # - ./nfs
+  - ./nfs
   - ./pvc.yaml
