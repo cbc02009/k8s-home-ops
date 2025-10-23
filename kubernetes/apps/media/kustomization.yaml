@@ -9,6 +9,6 @@ resources:
   - ./calibre/ks.yaml
   - ./calibre-web/ks.yaml
   - ./lanraragi/ks.yaml
-  - ./maintainerr/ks.yaml
+  # - ./maintainerr/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
