@@ -88,7 +88,7 @@ spec:
       repository:
         type: nfs
         server: shana.ctec.run
-        path: /tank/k8s/kopia
+        path: /tank/backup/volsync
         globalMounts:
           - path: /repository
       tmpfs:
