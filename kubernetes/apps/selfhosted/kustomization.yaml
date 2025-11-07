@@ -9,7 +9,7 @@ resources:
   - ./atuin/ks.yaml
   - ./cyberchef/ks.yaml
   - ./mealie/ks.yaml
-  # - ./immich/ks.yaml
+  - ./immich/ks.yaml
   # - ./ocis/ks.yaml
   - ./openspeedtest/ks.yaml
   # - ./paperless/ks.yaml
