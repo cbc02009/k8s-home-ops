@@ -57,9 +57,9 @@ spec:
         enabled: true
         isWALArchiver: true
         name: barman-cloud.cloudnative-pg.io
-      parameters:
-        barmanObjectName: cloudflare
-        serverName: postgres-82
+        parameters:
+          barmanObjectName: cloudflare
+          serverName: postgres-82
 
   # bootstrap:
   #   recovery:
