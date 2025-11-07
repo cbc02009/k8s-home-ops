@@ -1,0 +1,252 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app immich
+  namespace: selfhosted
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  values:
+    controllers:
+      server:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: *app
+          configmap.reloader.stakater.com/reload: &configmap immich-configmap
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: 17.6
+              pullPolicy: IfNotPresent
+            envFrom:
+              - secretRef:
+                  name: *app
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: *app
+                  app.kubernetes.io/controller: server
+        containers:
+          server:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v2.2.3
+            envFrom:
+              - secretRef:
+                  name: *app
+              - configMapRef:
+                  name: *configmap
+            env:
+              # IMMICH_CONFIG_FILE: /config/immich.config.json
+              IMMICH_WORKERS_INCLUDE: api
+            resources:
+              requests:
+                cpu: 100m
+                memory: 250Mi
+              limits:
+                memory: 2000Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/server/ping
+                    port: &serverport 2283
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 5
+              readiness: *probes
+              startup:
+                enabled: false
+
+      microservices:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: *app
+          configmap.reloader.stakater.com/reload: *configmap
+        pod:
+          # resourceClaims:
+          #   - name: gpu
+          #     resourceClaimTemplateName: immich-gpu
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: *app
+                  app.kubernetes.io/controller: microservices
+        containers:
+          microservices:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v2.2.3
+            envFrom:
+              - secretRef:
+                  name: *app
+              - configMapRef:
+                  name: *configmap
+            env:
+              # IMMICH_CONFIG_FILE: /config/immich.config.json
+              IMMICH_WORKERS_EXCLUDE: api
+            resources:
+              # claims:
+              #   - name: gpu
+              requests:
+                gpu.intel.com/i915: 1
+                cpu: 100m
+                memory: 250Mi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 2500Mi
+
+      machine-learning:
+        strategy: RollingUpdate
+        annotations:
+          configmap.reloader.stakater.com/reload: *configmap
+        pod:
+          enableServiceLinks: false
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: *app
+                  app.kubernetes.io/controller: machine-learning
+        containers:
+          machine-learning:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v2.2.3
+            env:
+              MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-B-16-SigLIP__webli
+              MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-16-SigLIP__webli
+              MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
+              MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION: buffalo_l
+            resources:
+              requests:
+                cpu: 100m
+                memory: 250Mi
+              limits:
+                memory: 4000Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: &mlport 3003
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 5
+              readiness: *probes
+              startup:
+                enabled: false
+
+    service:
+      server:
+        controller: server
+        ports:
+          http:
+            port: *serverport
+          metrics:
+            port: 8081
+      microservices:
+        controller: microservices
+        ports:
+          metrics:
+            port: 8081
+      machine-learning:
+        controller: machine-learning
+        ports:
+          http:
+            port: *mlport
+
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.kokoro.wtf"
+          - "photos.kokoro.wtf"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: server
+                port: *serverport
+
+    persistence:
+      # config:
+      #   type: secret
+      #   name: immich-config-secret
+      #   advancedMounts:
+      #     server:
+      #       server:
+      #         - path: /config
+      #     microservices:
+      #       microservices:
+      #         - path: /config
+      library:
+        existingClaim: immich-nfs
+        advancedMounts:
+          server:
+            server:
+              - path: /usr/src/app/upload
+          microservices:
+            microservices:
+              - path: /usr/src/app/upload
+      geoname-dump:
+        type: emptyDir
+        advancedMounts:
+          microservices:
+            microservices:
+              - path: /usr/src/app/node_modules/local-reverse-geocoder/geonames_dump
+      transformers-cache:
+        type: emptyDir
+        advancedMounts:
+          server:
+            server:
+              - path: /usr/src/app/.transformers_cache
+          microservices:
+            microservices:
+              - path: /usr/src/app/.transformers_cache
+      model-cache:
+        existingClaim: immich-ml-cache
+        advancedMounts:
+          machine-learning:
+            machine-learning:
+              - path: /cache
+                subPath: cache
+              - path: /.cache
+                subPath: dotCache
