@@ -22,6 +22,7 @@ spec:
   values:
     crds:
       create: true
+    replicaCount: 2
     config:
       data:
         INHERITED_LABELS: app.kubernetes.io/*
