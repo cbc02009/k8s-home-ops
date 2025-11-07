@@ -20,9 +20,9 @@ spec:
   bootstrap:
     recovery:
       source: &previousCluster postgres-v81
-    initdb:
-      postInitSQL:
-        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+    # initdb:
+    #   postInitSQL:
+    #     - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
   postgresql:
     parameters:
       max_connections: "600"
