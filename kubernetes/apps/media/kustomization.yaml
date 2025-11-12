@@ -5,10 +5,10 @@ kind: Kustomization
 namespace: media
 components:
   - ../../components/common
-resources:
-  - ./calibre/ks.yaml
-  - ./calibre-web/ks.yaml
-  - ./lanraragi/ks.yaml
+resources: []
+  # - ./calibre/ks.yaml
+  # - ./calibre-web/ks.yaml
+  # - ./lanraragi/ks.yaml
   # - ./maintainerr/ks.yaml
-  - ./plex/ks.yaml
-  - ./tautulli/ks.yaml
+  # - ./plex/ks.yaml
+  # - ./tautulli/ks.yaml
