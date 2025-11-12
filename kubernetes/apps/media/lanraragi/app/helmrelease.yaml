@@ -33,10 +33,6 @@ spec:
             image:
               repository: docker.io/difegue/lanraragi
               tag: v.0.9.60
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:
