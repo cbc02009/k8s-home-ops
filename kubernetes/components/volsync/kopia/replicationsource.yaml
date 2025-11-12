@@ -3,7 +3,7 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: ${APP}
+  name: ${APP}-kopia
 spec:
   sourcePVC: "${VOLSYNC_CLAIM:=${APP}}"
   trigger:

@@ -21,7 +21,8 @@ spec:
   wait: false
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync
+    - ../../../../components/volsync/kopia
+    - ../../../../components/volsync/r2
   postBuild:
     substitute:
       APP: *app

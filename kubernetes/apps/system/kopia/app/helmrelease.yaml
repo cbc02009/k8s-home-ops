@@ -90,7 +90,7 @@ spec:
       repository:
         type: nfs
         server: shana.ctec.run
-        path: /tank/backup/volsync
+        path: /tank/backup/volsync/kopia
         globalMounts:
           - path: /repository
       tmpfs:
