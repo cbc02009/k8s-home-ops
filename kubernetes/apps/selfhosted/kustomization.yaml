@@ -8,12 +8,12 @@ components:
 resources:
   - ./atuin/ks.yaml
   - ./cyberchef/ks.yaml
-  # - ./mealie/ks.yaml
+  - ./mealie/ks.yaml
   - ./immich/ks.yaml
   # - ./ocis/ks.yaml
   - ./openspeedtest/ks.yaml
   # - ./paperless/ks.yaml
   - ./redlib/ks.yaml
-  # - ./rustdesk/ks.yaml
+  - ./rustdesk/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./teddit/ks.yaml
