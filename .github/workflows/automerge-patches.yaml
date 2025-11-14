@@ -14,7 +14,7 @@ on:
         default: "any"
         required: false
   schedule:
-    - cron: "0 * * * 1"
+    - cron: "0 0 * * 0"
 
 jobs:
   bulk-merge-prs:
