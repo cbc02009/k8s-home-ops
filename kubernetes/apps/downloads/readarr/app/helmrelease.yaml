@@ -91,8 +91,8 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking
             sectionName: https
 
 

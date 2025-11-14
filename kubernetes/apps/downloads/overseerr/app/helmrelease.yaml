@@ -55,8 +55,8 @@ spec:
           - "{{ .Release.Name }}.kokoro.wtf"
           - "requests.kokoro.wtf"
         parentRefs:
-          - name: external
-            namespace: kube-system
+          - name: envoy-external
+            namespace: networking
             sectionName: https
 
 

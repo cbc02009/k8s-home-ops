@@ -133,8 +133,8 @@ spec:
         hostnames:
           - esphome.bjw-s.dev
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking
             sectionName: https
         rules:
           - matches:

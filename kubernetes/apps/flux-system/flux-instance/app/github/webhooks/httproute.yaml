@@ -7,7 +7,7 @@ metadata:
 spec:
   hostnames: ["flux-receiver.kokoro.wtf"]
   parentRefs:
-    - name: external
+    - name: envoy-external
       namespace: kube-system
       sectionName: https
   rules:

@@ -32,7 +32,7 @@ spec:
           hostnames:
             - &am-host alertmanager.${EXTERNAL_DOMAIN}
           parentRefs:
-            - name: internal
+            - name: envoy-internal
               namespace: kube-system
               sectionName: https
       alertmanagerSpec:
@@ -161,6 +161,6 @@ spec:
           hostnames:
             - prometheus.${EXTERNAL_DOMAIN}
           parentRefs:
-            - name: internal
+            - name: envoy-internal
               namespace: kube-system
               sectionName: https

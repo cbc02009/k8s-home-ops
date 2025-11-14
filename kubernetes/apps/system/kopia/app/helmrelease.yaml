@@ -76,8 +76,8 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.${EXTERNAL_DOMAIN}"
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking
             sectionName: https
     persistence:
       config-file:

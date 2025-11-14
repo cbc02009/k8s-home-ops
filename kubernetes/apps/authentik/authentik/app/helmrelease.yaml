@@ -37,7 +37,7 @@ spec:
           hostnames:
             - "auth.kokoro.wtf"
           parentRefs:
-            - name: internal
+            - name: envoy-internal
               namespace: kube-system
               sectionName: https
       # ingress:
