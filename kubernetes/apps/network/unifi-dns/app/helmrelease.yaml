@@ -57,20 +57,3 @@ spec:
       enabled: true
     podAnnotations:
       secret.reloader.stakater.com/reload: *secret
-    resources:
-      requests:
-        cpu: 16m
-        memory: 90M
-      limits:
-        memory: 90M
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              version: v1
-              kind: Deployment
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/template/spec/enableServiceLinks
-                value: false
