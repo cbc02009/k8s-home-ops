@@ -12,6 +12,11 @@ helmDefaults:
     - yq ea --exit-status 'select(.kind == "CustomResourceDefinition")' -
 
 releases:
+  - name: envoy-gateway
+    namespace: networking
+    chart: oci://docker.io/envoyproxy/gateway-helm
+    version: 1.6.0
+
   - name: external-dns
     namespace: network
     chart: oci://ghcr.io/home-operations/charts-mirror/external-dns
