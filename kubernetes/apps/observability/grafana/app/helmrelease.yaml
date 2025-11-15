@@ -338,7 +338,7 @@ spec:
           - grafana.kokoro.wtf
         parentRefs:
           - name: envoy-internal
-            namespace: networking
+            namespace: network
             sectionName: https
     persistence:
       enabled: false

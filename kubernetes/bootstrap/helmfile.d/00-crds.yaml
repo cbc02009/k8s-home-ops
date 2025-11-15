@@ -13,7 +13,7 @@ helmDefaults:
 
 releases:
   - name: envoy-gateway
-    namespace: networking
+    namespace: network
     chart: oci://docker.io/envoyproxy/gateway-helm
     version: 1.6.0
 

@@ -114,7 +114,7 @@ spec:
           - "hass.kokoro.wtf"
         parentRefs:
           - name: envoy-internal
-            namespace: networking
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:

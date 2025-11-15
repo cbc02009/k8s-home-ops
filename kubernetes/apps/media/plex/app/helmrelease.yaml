@@ -98,7 +98,7 @@ spec:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
           - name: envoy-external
-            namespace: networking
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:
