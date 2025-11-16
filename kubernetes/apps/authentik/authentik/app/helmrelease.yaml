@@ -38,7 +38,7 @@ spec:
             - "auth.kokoro.wtf"
           parentRefs:
             - name: envoy-internal
-              namespace: kube-system
+              namespace: network
               sectionName: https
       # ingress:
       #   enabled: true
