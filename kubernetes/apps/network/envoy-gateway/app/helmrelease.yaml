@@ -5,17 +5,19 @@ kind: HelmRelease
 metadata:
   name: envoy-gateway
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: envoy-gateway
   install:
     crds: CreateReplace
+  interval: 30m
   upgrade:
     crds: CreateReplace
   values:
     config:
       envoyGateway:
+        extensionApis:
+          enableEnvoyPatchPolicy: true
         provider:
           type: Kubernetes
           kubernetes:

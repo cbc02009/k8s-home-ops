@@ -5,10 +5,10 @@ kind: OCIRepository
 metadata:
   name: envoy-gateway
 spec:
-  interval: 10m
+  interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 1.5.1
+    tag: 1.6.0
   url: oci://docker.io/envoyproxy/gateway-helm
