@@ -1,0 +1,45 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
+    {
+      description: "Changelog URL for 1Password Connect",
+      matchPackageNames: ["/1password/"],
+      changelogUrl: "https://github.com/1Password/connect/blob/main/CHANGELOG.md",
+    },
+    {
+      description: "Changelog URL for Spegel",
+      matchPackageNames: ["/spegel/"],
+      changelogUrl: "https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md",
+    },
+    {
+      description: "Changelog for Envoy",
+      matchPackageNames: ["/envoy/"],
+      sourceUrl: "https://github.com/envoyproxy/envoy",
+    },
+    {
+      description: "Changelog for Talos",
+      matchPackageNames: ["/installer/"],
+      sourceUrl: "https://github.com/siderolabs/talos",
+    },
+    {
+      description: "Changelog for atuin",
+      matchPackageNames: ["/atuin/"],
+      changelogUrl: "https://github.com/atuinsh/atuin/blob/main/CHANGELOG.md",
+    },
+    {
+      description: "Changelog for thanos",
+      matchPackageNames: ["/thanos/"],
+      sourceUrl: "https://github.com/thanos-io/thanos",
+    },
+    {
+      description: "Changelog for authentik",
+      matchPackageNames: ["/authentik/"],
+      sourceUrl: "https://github.com/goauthentik/authentik",
+    },
+    {
+      description: "Changelog for ollama",
+      matchPackageNames: ["/ollama/"],
+      sourceUrl: "https://github.com/ollama/ollama",
+    },
+  ],
+}
