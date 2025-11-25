@@ -8,7 +8,7 @@ spec:
   hostnames: ["flux-receiver.kokoro.wtf"]
   parentRefs:
     - name: envoy-external
-      namespace: kube-system
+      namespace: network
       sectionName: https
   rules:
     - backendRefs:
