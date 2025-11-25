@@ -24,23 +24,23 @@ spec:
   timeout: 5m
 ---
 # yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: tuppr-upgrades
-# spec:
-#   commonMetadata:
-#     labels:
-#       app.kubernetes.io/name: tuppr
-#   dependsOn:
-#     - name: tuppr
-#   interval: 1h
-#   path: "./kubernetes/apps/system-upgrade/tuppr/upgrades"
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#     namespace: flux-system
-#   targetNamespace: system-upgrade
-#   timeout: 5m
-#   wait: false
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tuppr-upgrades
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: tuppr
+  dependsOn:
+    - name: tuppr
+  interval: 1h
+  path: "./kubernetes/apps/system-upgrade/tuppr/upgrades"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: system-upgrade
+  timeout: 5m
+  wait: false
