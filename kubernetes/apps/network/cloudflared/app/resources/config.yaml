@@ -4,7 +4,7 @@ originRequest:
 
 ingress:
   - hostname: kokoro.wtf
-    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
+    service: &svc https://envoy-external.network.svc.cluster.local
   - hostname: "*.kokoro.wtf"
     service: *svc
   - service: http_status:404
