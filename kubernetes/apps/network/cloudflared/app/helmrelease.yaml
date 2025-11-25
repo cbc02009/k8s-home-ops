@@ -9,7 +9,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
-
+  interval: 30m
   values:
     configMaps:
       config:
