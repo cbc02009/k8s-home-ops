@@ -2,19 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: network
 resources:
+  - ./ocirepository.yaml
+  - ./dnsEndpoint.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./dnsendpoint.yaml
-configMapGenerator:
-  - name: cloudflared-configmap
-    files:
-      - resources/config.yaml
-generatorOptions:
-  disableNameSuffixHash: true
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-commonLabels:
-  app.kubernetes.io/name: cloudflared
-  app.kubernetes.io/instance: cloudflared

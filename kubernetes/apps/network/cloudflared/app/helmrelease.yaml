@@ -3,119 +3,88 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloudflared
-  namespace: network
+  name: cloudflared
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: flux-system
 
   values:
-    defaultPodOptions:
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: cloudflared
-
+    configMaps:
+      config:
+        data:
+          config.yaml: |-
+            ingress:
+              - hostname: "*.kokoro.wtf"
+                originRequest:
+                  http2Origin: true
+                  originServerName: external.kokoro.wtf
+                service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
+              - service: http_status:404
     controllers:
       cloudflared:
         replicas: 2
         strategy: RollingUpdate
-        annotations:
-          reloader.stakater.com/auto: 'true'
-
+        pod:
+          securityContext:
+            runAsGroup: 2000
+            runAsNonRoot: true
+            runAsUser: 2000
         containers:
           app:
             image:
-              repository: ghcr.io/cbc02009/cloudflared
+              repository: docker.io/cloudflare/cloudflared
               tag: 2025.11.1
-
             args:
               - tunnel
-              - --config
-              - /etc/cloudflared/config/config.yaml
               - run
-              - ${CLUSTER_CLOUDFLARE_TUNNEL_ID}
-
             env:
-              TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
-              NO_AUTOUPDATE: true
+              NO_AUTOUPDATE: "true"
               TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_ORIGIN_ENABLE_HTTP2: true
               TUNNEL_POST_QUANTUM: true
               TUNNEL_TRANSPORT_PROTOCOL: quic
-
+            envFrom:
+              - secretRef:
+                  name: cloudflared
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ready
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
-                cpu: 5m
-                memory: 30Mi
+                cpu: 10m
               limits:
                 memory: 128Mi
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ready
-                    port: 8080
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ready
-                    port: 8080
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ready
-                    port: 8080
-                  failureThreshold: 30
-                  periodSeconds: 10
-
-    service:
-      app:
-        controller: *app
-        ports:
-          http:
-            port: 8080
-
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
     persistence:
       config:
-        enabled: true
         type: configMap
-        name: cloudflared-configmap
+        identifier: config
         globalMounts:
-          - path: /etc/cloudflared/config/config.yaml
+          - path: /etc/cloudflared/config.yaml
             subPath: config.yaml
-      creds:
-        enabled: true
-        type: secret
-        name: *app
-
-        globalMounts:
-          - path: /etc/cloudflared/creds/credentials.json
-            subPath: credentials.json
+    service:
+      app:
+        ports:
+          http:
+            port: *port
     serviceMonitor:
-      cloudflared:
-        serviceName: main
-        enabled: true
+      app:
         endpoints:
           - port: http
             scheme: http
