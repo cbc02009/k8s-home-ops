@@ -6,3 +6,4 @@ variable "public_domain" {
 variable "private_domain" {
   type    = string
   default = "ctec.run"
+}

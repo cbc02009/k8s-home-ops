@@ -97,18 +97,18 @@ module "proxy-calibre-web" {
   access_token_validity = "weeks=20"
 }
 
-module "proxy-mealie" {
-  source             = "./proxy_application"
-  name               = "Mealie"
-  description        = "Recipes"
-  # icon_url           = "https://raw.githubusercontent.com/mealieRecipes/recipes/develop/docs/logo_color.svg"
-  slug               = "mealie"
-  domain             = var.public_domain
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  auth_groups        = [authentik_group.users.id]
-  access_token_validity = "weeks=20"
-}
+# module "proxy-mealieproxy" {
+#   source             = "./proxy_application"
+#   name               = "Mealie Proxy"
+#   description        = "Recipes"
+#   icon_url           = "https://raw.githubusercontent.com/mealie-recipes/mealie/refs/heads/mealie-next/frontend/static/icons/icon-x64.png"
+#   slug               = "mealie"
+#   domain             = var.public_domain
+#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+#   auth_groups        = [authentik_group.users.id]
+#   access_token_validity = "weeks=20"
+# }
 
 module "oauth2-immich" {
   source             = "./oauth2_application"
@@ -148,7 +148,7 @@ module "oauth2-grafana" {
 module "oauth2-Mealie" {
   source             = "./oauth2_application"
   name               = "Mealie"
-  icon_url           = "https://raw.githubusercontent.com/TandoorRecipes/recipes/develop/docs/logo_color.svg"
+  icon_url           = "https://raw.githubusercontent.com/mealie-recipes/mealie/refs/heads/mealie-next/frontend/static/icons/icon-x64.png"
   launch_url         = "https://mealie.${var.public_domain}"
   description        = "Recipes"
   newtab             = true
@@ -156,9 +156,12 @@ module "oauth2-Mealie" {
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  client_id          = module.secret_tandoor.fields["oidc_id"]
-  client_secret      = module.secret_tandoor.fields["oidc_secret"]
-  redirect_uris      = ["https://recipes.${var.public_domain}/accounts/oidc/authentik/login/callback/"]
+  client_id          = module.secret_mealie.fields["oidc_id"]
+  client_secret      = module.secret_mealie.fields["oidc_secret"]
+  redirect_uris = [
+    "https://mealie.${var.public_domain}/login",
+    "https://mealie.${var.public_domain}/login?direct=1"
+  ]
 }
 
 module "oauth2-paperless" {

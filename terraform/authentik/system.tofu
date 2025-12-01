@@ -24,14 +24,14 @@ resource "authentik_outpost" "proxyoutpost" {
   protocol_providers = [
     module.proxy-frigate.id,
     module.proxy-calibre-web.id,
-    module.proxy-mealie.id
+    # module.proxy-mealieproxy.id
   ]
   config = jsonencode({
     authentik_host         = "https://auth.${var.public_domain}",
     log_level              = "warning",
     object_naming_template = "ak-outpost-%(name)s",
     kubernetes_replicas    = 1,
-    kubernetes_namespace   = "security",
+    kubernetes_namespace   = "authentik",
     kubernetes_httproute_parent_refs = [{
       group       = "gateway.networking.k8s.io"
       kind        = "Gateway"

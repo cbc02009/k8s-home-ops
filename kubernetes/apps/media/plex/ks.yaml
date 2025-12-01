@@ -25,7 +25,6 @@ spec:
   components:
     - ../../../../components/gatus/external
     - ../../../../components/volsync/kopia
-    - ../../../../components/volsync/r2
     - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:

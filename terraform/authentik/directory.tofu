@@ -28,3 +28,8 @@ resource "authentik_group" "home" {
 resource "authentik_group" "downloads" {
   name = "downloads"
 }
+
+resource "authentik_group" "infrastructure" {
+  name         = "infrastructure"
+  is_superuser = false
+}
