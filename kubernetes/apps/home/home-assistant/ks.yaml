@@ -28,7 +28,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync/kopia
+    - ../../../../components/volsync/restic
     - ../../../../components/volsync/r2
   postBuild:
     substitute:
