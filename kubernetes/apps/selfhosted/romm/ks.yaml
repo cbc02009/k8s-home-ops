@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync/restic
-    - ../../../../components/volsync/r2
+    # - ../../../../components/volsync/r2
   dependsOn:
     - name: postgres-cluster
       namespace: databases
