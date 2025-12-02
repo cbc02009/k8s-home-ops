@@ -36,7 +36,10 @@ spec:
       frigate:
         annotations:
           reloader.stakater.com/auto: 'true'
-
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: frigate-gpu
         containers:
           app:
             image:
@@ -51,12 +54,12 @@ spec:
                   name: *app
 
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 10m
                 memory: 1000Mi
-                gpu.intel.com/i915: "1"
               limits:
-                gpu.intel.com/i915: "1"
                 memory: 8000Mi
             probes:
               liveness: &probes
@@ -74,13 +77,11 @@ spec:
               startup:
                 enabled: false
 
-            securityContext:
-              privileged: true
-
     service:
       app:
         ports:
           http:
+            appProtocol: kubernetes.io/wss
             port: *port
             primary: true
           go2rtc:
@@ -89,13 +90,19 @@ spec:
           rtsp:
             enabled: true
             port: 8554
+          webrtc-tcp:
+            port: 8555
+            protocol: TCP
+          webrtc-udp:
+            port: 8555
+            protocol: UDP
 
     route:
       app:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: internal # MAKE EXTERNAL
+          - name: envoy-internal # MAKE EXTERNAL
             namespace: kube-system
             sectionName: https
         rules:
@@ -119,13 +126,13 @@ spec:
       data:
         enabled: true
         existingClaim: *app
-      config:
-        enabled: true
-        type: configMap
-        name: frigate
-        globalMounts:
-          - path: /config/config.yml
-            subPath: config.yaml
+      # config:
+      #   enabled: true
+      #   type: configMap
+      #   name: frigate
+      #   globalMounts:
+      #     - path: /config/config.yml
+      #       subPath: config.yaml
       media:
         type: nfs
         server: ${NAS_HOST}

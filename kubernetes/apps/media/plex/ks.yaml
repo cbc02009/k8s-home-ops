@@ -26,6 +26,7 @@ spec:
     - ../../../../components/gatus/external
     - ../../../../components/volsync/kopia
     - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/gpu
   postBuild:
     substitute:
       APP: *app

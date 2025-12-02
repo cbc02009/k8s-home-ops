@@ -25,10 +25,11 @@ spec:
     - name: mosquitto
       namespace: home
   components:
+    - ../../../../components/authentik-proxy
     - ../../../../components/gatus/external
+    - ../../../../components/gpu
     - ../../../../components/volsync/kopia
     - ../../../../components/keda/nas-nfs-scaler
-    - ../../../../components/authentik-proxy
   postBuild:
     substitute:
       APP: *app
