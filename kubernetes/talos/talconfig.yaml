@@ -2,12 +2,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 clusterName: &clusterName main
 
-# renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.7
-# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.33.1
+# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+talosVersion: v1.11.5
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.34.2
 
-# endpoint: https://10.5.0.2:6443
 endpoint: https://10.0.2.9:6443
 
 allowSchedulingOnMasters: true
@@ -31,7 +30,7 @@ nodes:
   - hostname: uiharu.ctec.run
     nodeLabels: &nodeLabels
       openebs.io/engine: mayastor
-      intel.feature.node.kubernetes.io/gpu: "true"
+      node.kubernetes.io/gpu: "true"
     ipAddress: 10.0.2.10
     installDiskSelector:
       model: Samsung SSD 870
