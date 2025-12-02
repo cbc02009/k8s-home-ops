@@ -20,25 +20,17 @@ tasks:
       - talosctl kubeconfig --nodes {{.RANDOM_CONTROLLER}} --force {{.KUBERNETES_DIR}}
 
   apps:
-    desc: Bootstrap Kubernetes Apps
-    prompt: Bootstrap Kubernetes Apps ...?
+    desc: Bootstrap Apps
+    prompt: Bootstrap apps into Talos cluster?
     preconditions:
-      - which helmfile yq jq kubectl op talosctl
-      - test -f {{.K8S_DIR}}/bootstrap/helmfile.d/00-crds.yaml
-      - test -f {{.K8S_DIR}}/bootstrap/helmfile.d/01-apps.yaml
-      - test -f {{.K8S_DIR}}/bootstrap/resources.yaml.j2
+      - which op helmfile kubectl
+      - test -f "${KUBECONFIG}"
+      - test -d {{.BOOTSTRAP_DIR}}/helmfile.d
+      - test -d {{.BOOTSTRAP_DIR}}/helmfile.d/templates
       - op user get --me
       - talosctl config info
-      - talosctl --nodes {{.RANDOM_CONTROLLER}} get machineconfig
-    env:
-      CONTEXT:
-        sh: talosctl config info --output json | jq --raw-output '.context'
-      RANDOM_CONTROLLER:
-        sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
     cmds:
-      # - kubectl config set-cluster {{.CONTEXT}} --server https://{{.RANDOM_CONTROLLER}}:6443
-      # - defer: talosctl kubeconfig --nodes {{.RANDOM_CONTROLLER}} --force {{.KUBERNETES_DIR}}
-      # - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
-      - minijinja-cli {{.K8S_DIR}}/bootstrap/resources.yaml.j2 | op inject | kubectl apply --server-side --filename -
-      - helmfile --quiet --file {{.K8S_DIR}}/bootstrap/helmfile.d/00-crds.yaml template | kubectl apply --server-side --filename -
-      - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.d/01-apps.yaml sync --hide-notes
+      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
+      - op inject --in-file {{.BOOTSTRAP_DIR}}/helmfile.d/templates/secrets.yaml.tpl | op inject | kubectl apply --server-side --filename -
+      - helmfile --file {{.BOOTSTRAP_DIR}}/helmfile.d/00-crds.yaml template  | kubectl apply --server-side --filename -
+      - helmfile --file {{.BOOTSTRAP_DIR}}/helmfile.d/01-apps.yaml sync --hide-notes

@@ -6,12 +6,6 @@ namespace: system-controllers
 components:
   - ../../components/common
 resources:
+  - ./namespace.yaml
   - ./k8tz/ks.yaml
   - ./snapshot-controller/ks.yaml
-patches:
-  - patch: |
-      - op: add
-        path: /metadata/labels/k8tz.io~1controller-namespace
-        value: "true"
-    target:
-      kind: Namespace

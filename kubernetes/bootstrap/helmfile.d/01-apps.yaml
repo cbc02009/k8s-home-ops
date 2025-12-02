@@ -12,17 +12,11 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.4
     values:
-      - templates/values.yaml.gotmpl
+      - templates/values.yaml.gotmpl"
     hooks:
-      - # Wait for Cilium CRDs to be available
-        command: bash
-        args:
-          - -c
-          - until kubectl get crd ciliumloadbalancerippools.cilium.io ciliumbgpadvertisements.cilium.io ciliumbgppeerconfigs.cilium.io ciliumbgpclusterconfigs.cilium.io &>/dev/null; do sleep 5; done
-        events:
+      # Apply cilium network configuration
+      - events:
           - postsync
-        showlogs: true
-      - # Apply cilium network configuration
         command: kubectl
         args:
           - apply
@@ -31,8 +25,6 @@ releases:
           - --field-manager=kustomize-controller
           - --kustomize
           - ../../apps/kube-system/cilium/config/
-        events:
-          - postsync
         showlogs: true
 
   - name: coredns
@@ -45,16 +37,15 @@ releases:
       - kube-system/cilium
 
   - name: spegel
-    namespace: system
+    namespace: kube-system
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
     version: 0.5.1
-    values:
-      - ../templates/values.yaml.gotmpl
-    needs:
-      - kube-system/coredns
+    values: ["templates/values.yaml.gotmpl"]
+    needs: ["kube-system/cilium"]
 
   - name: cert-manager
     namespace: cert-manager
+    atomic: true
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.19.1
     values:
@@ -65,7 +56,7 @@ releases:
   - name: flux-operator
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.33.0
+    version: 0.35.0
     values:
       - ../templates/values.yaml.gotmpl
     needs:
@@ -74,7 +65,7 @@ releases:
   - name: flux-instance
     namespace: flux-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.33.0
+    version: 0.35.0
     wait: false
     values:
       - ../templates/values.yaml.gotmpl

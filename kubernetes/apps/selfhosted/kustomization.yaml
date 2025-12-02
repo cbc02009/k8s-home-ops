@@ -6,6 +6,7 @@ namespace: selfhosted
 components:
   - ../../components/common
 resources:
+  - ./namespace.yaml
   - ./atuin/ks.yaml
   - ./cyberchef/ks.yaml
   - ./mealie/ks.yaml

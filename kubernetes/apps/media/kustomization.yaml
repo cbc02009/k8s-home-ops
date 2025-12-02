@@ -6,6 +6,7 @@ namespace: media
 components:
   - ../../components/common
 resources:
+  - ./namespace.yaml
   - ./calibre/ks.yaml
   - ./calibre-web/ks.yaml
   - ./lanraragi/ks.yaml

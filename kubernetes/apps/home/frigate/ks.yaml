@@ -20,8 +20,6 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: intel-device-plugins-gpu
-      namespace: system
     - name: mosquitto
       namespace: home
   components:

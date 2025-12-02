@@ -6,6 +6,7 @@ namespace: system
 components:
   - ../../components/common
 resources:
+  - ./namespace.yaml
   - ./fstrim/ks.yaml
   - ./generic-device-plugin/ks.yaml
   - ./keda/ks.yaml

@@ -13,10 +13,11 @@ includes:
   sops: .taskfiles/sops/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
   volsync: .taskfiles/volsync/Taskfile.yaml
-  
+
 vars:
   K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
   KUBECONFIG: "{{.K8S_DIR}}/kubeconfig"
+  BOOTSTRAP_DIR: "{{.K8S_DIR}}/bootstrap"
   MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
   TALOSCONFIG: "{{.K8S_DIR}}/talos/clusterconfig/talosconfig"
 

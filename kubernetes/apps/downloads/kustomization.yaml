@@ -6,6 +6,7 @@ namespace: downloads
 components:
   - ../../components/common
 resources:
+  - ./namespace.yaml
   - ./animarr/ks.yaml
   - ./autobrr/ks.yaml
   - ./lidarr/ks.yaml
