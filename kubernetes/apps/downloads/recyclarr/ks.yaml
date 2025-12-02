@@ -24,7 +24,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/volsync/restic
-    # - ../../../../components/volsync/r2
+    - ../../../../components/volsync/r2
   postBuild:
     substitute:
       APP: *app
