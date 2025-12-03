@@ -1,27 +1,35 @@
 ---
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
+
 web:
   port: ${CUSTOM_WEB_PORT}
+
 storage:
   type: postgres
   path: postgres://${INIT_POSTGRES_USER}:${INIT_POSTGRES_PASS}@${INIT_POSTGRES_HOST}:5432/${INIT_POSTGRES_DBNAME}?sslmode=disable
   caching: true
+
 metrics: true
+
 debug: false
+
 ui:
   title: Status | Gatus
   header: Status
+
 alerting:
   discord:
     webhook-url: ${DISCORD_WEBHOOK}
     default-alert:
       description: health-check failed
+      failure-threshold: 3
+      minimum-reminder-interval: 1h
       send-on-resolved: true
-      failure-threshold: 5
       success-threshold: 2
-connectivity:
-  checker:
-    target: 1.1.1.1:53
-    interval: 1m
+
 endpoints:
   - name: flux-webhook
     group: external
@@ -33,3 +41,24 @@ endpoints:
       - "[STATUS] == 404"
     alerts:
       - type: discord
+
+  - name: Cloudflare
+    group: connectivity
+    url: icmp://1.1.1.1
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google
+    group: connectivity
+    url: icmp://8.8.8.8
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Quad9
+    group: connectivity
+    url: icmp://9.9.9.9
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
