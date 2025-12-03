@@ -26,4 +26,4 @@ spec:
     repository: "${APP}-volsync-r2"
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
-    restoreAsOf: "2025-12-01T01:01:00-04:00"
+    # restoreAsOf: "2025-12-02T01:05:00-04:00"
