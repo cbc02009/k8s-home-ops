@@ -171,7 +171,7 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
               value: Object.spec.template.spec.containers.volumeMounts{
-                name: "repository",
+                name: "repository2",
                 mountPath: "/repository2"
               }
             }
