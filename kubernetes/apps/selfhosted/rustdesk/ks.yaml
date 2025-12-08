@@ -22,6 +22,7 @@ spec:
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/volsync/restic
+    - ../../../../components/volsync/kopia
     - ../../../../components/volsync/r2
   postBuild:
     substitute:
