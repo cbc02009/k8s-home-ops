@@ -43,7 +43,7 @@ spec:
         object.metadata.name.startsWith("kopia-maint-")
     - name: repository-volume-does-not-exist
       expression: >
-        !object.spec.template.spec.volumes.exists(item, item.name == "repository")
+        !object.spec.template.spec.volumes.exists(item, item.name == "repository_kopia")
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
   mutations:
@@ -54,7 +54,7 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/template/spec/volumes/-",
               value: Object.spec.template.spec.volumes{
-                name: "repository",
+                name: "repository_kopia",
                 nfs: Object.spec.template.spec.volumes.nfs{
                   server: "shana.ctec.run",
                   path: "/tank/backup/volsync/kopia"
@@ -64,8 +64,8 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
               value: Object.spec.template.spec.containers.volumeMounts{
-                name: "repository",
-                mountPath: "/repository"
+                name: "repository_kopia",
+                mountPath: "/repository_kopia"
               }
             }
           ]
