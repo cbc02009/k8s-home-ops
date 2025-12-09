@@ -54,7 +54,7 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/template/spec/volumes/-",
               value: Object.spec.template.spec.volumes{
-                name: "repository_kopia",
+                name: "repository-kopia",
                 nfs: Object.spec.template.spec.volumes.nfs{
                   server: "shana.ctec.run",
                   path: "/tank/backup/volsync/kopia"
@@ -64,7 +64,7 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
               value: Object.spec.template.spec.containers.volumeMounts{
-                name: "repository_kopia",
+                name: "repository-kopia",
                 mountPath: "/repository_kopia"
               }
             }
