@@ -23,7 +23,7 @@ tasks:
     desc: List snapshots for an app [NS=default] [APP=required]
     preconditions:
       - which kubectl minijinja-cli
-      - kubectl --namespace {{.NS}} get replicationsources {{.APP}}
+      # - kubectl --namespace {{.NS}} get replicationsources {{.APP}}
       - test -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2"
     requires:
       vars:
@@ -67,7 +67,7 @@ tasks:
     vars:
       ALL_APPS:
         sh: |
-          kubectl get replicationsources -A --no-headers -o jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}' | grep -v '\-r2'
+          kubectl get replicationsources -A --no-headers -o jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
     cmds:
       - for:
           var: ALL_APPS
