@@ -3,7 +3,7 @@
 clusterName: &clusterName main
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.11.5
+talosVersion: v1.11.3
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.34.2
 
@@ -36,21 +36,12 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces: &networkInterfaces
-      - interface: bond0
-        bond:
-          deviceSelectors:
-            - hardwareAddr: 58:47:ca:*
-          mode: active-backup
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:73:bd:aa
         dhcp: true
         vip:
           ip: *talosControlplaneVip
-        mtu: 9000
-        vlans:
-          - # VPN
-            vlanId: 50
-            dhcp: false
-            mtu: 1500
     # extensionServices: &nut-service
     #   - name: nut-client
     #     configFiles:
@@ -66,7 +57,12 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces: *networkInterfaces
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:71:c1:b2
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
     # extensionServices: *nut-service
 
   - hostname: sakura.ctec.run
@@ -76,7 +72,12 @@ nodes:
       model: Samsung SSD 850
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces: *networkInterfaces
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:71:c5:02
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
     # extensionServices: *nut-service
 
   # - hostname: ponyo.ctec.run
@@ -86,20 +87,9 @@ nodes:
   #   controlPlane: false
   #   disableSearchDomain: true
   #   networkInterfaces:
-  #     - interface: bond0
-  #       bond:
-  #         deviceSelectors:
-  #           - hardwareAddr: 9c:6b:00:*
-  #         mode: active-backup
+  #     - deviceSelector:
+  #         hardwareAddr: 9c:6b:00:14:7f:22
   #       dhcp: true
-  #       vip:
-  #         ip: *talosControlplaneVip
-  #       mtu: 9000
-  #       vlans:
-  #         - # VPN
-  #           vlanId: 50
-  #           dhcp: false
-  #           mtu: 1500
   #   extensionServices: *nut-service
   #   schematic:
   #     customization:
