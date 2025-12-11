@@ -26,7 +26,7 @@ spec:
     - ../../../../components/authentik-proxy
     - ../../../../components/gatus/external
     - ../../../../components/gpu
-    - ../../../../components/volsync/restic
+    - ../../../../components/volsync/kopia
     - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
