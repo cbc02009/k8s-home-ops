@@ -10,7 +10,7 @@ resources:
   - ./fstrim/ks.yaml
   - ./generic-device-plugin/ks.yaml
   - ./keda/ks.yaml
-  # - ./kopia/ks.yaml
+  - ./kopia/ks.yaml
   - ./node-feature-discovery/ks.yaml
   # - ./nvidia-device-plugin/ks.yaml
   - ./reloader/ks.yaml
