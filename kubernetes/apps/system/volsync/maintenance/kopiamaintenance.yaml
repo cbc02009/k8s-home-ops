@@ -8,6 +8,10 @@ metadata:
 spec:
   repository:
     repository: volsync-secret
+  podSecurityContext:
+    runAsUser: 2000
+    fsGroup: 2000
+    runAsNonRoot: true
   trigger:
     schedule: "30 3 * * *"
   enabled: true
