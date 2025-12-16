@@ -23,9 +23,7 @@ spec:
     - name: volsync
       namespace: system
   components:
-    # - ../../../../components/volsync/restic
     - ../../../../components/volsync/kopia
-    - ../../../../components/volsync/r2
   postBuild:
     substitute:
       APP: *app
