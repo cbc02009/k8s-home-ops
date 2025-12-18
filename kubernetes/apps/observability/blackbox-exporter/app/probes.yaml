@@ -11,7 +11,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - shana.ctec.run
+        - shana.ctec.internal
         - pikvm.ctec.run
 ---
 # yaml-language-server: $schema=https://k8s-schemas.bjw-s.dev/monitoring.coreos.com/probe_v1.json
@@ -26,4 +26,4 @@ spec:
   targets:
     staticConfig:
       static:
-        - shana.ctec.run:2049
+        - shana.ctec.internal:2049

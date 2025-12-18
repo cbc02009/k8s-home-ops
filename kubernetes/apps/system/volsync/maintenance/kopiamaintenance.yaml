@@ -60,7 +60,7 @@ spec:
               value: Object.spec.template.spec.volumes{
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
-                  server: "shana.ctec.run",
+                  server: "shana.ctec.internal",
                   path: "/tank/backup/volsync/kopia"
                 }
               }

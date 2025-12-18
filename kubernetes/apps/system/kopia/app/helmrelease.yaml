@@ -89,7 +89,7 @@ spec:
             readOnly: true
       repository:
         type: nfs
-        server: shana.ctec.run
+        server: shana.ctec.internal
         path: /tank/backup/volsync/kopia
         globalMounts:
           - path: /repository
