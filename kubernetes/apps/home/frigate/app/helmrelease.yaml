@@ -123,8 +123,7 @@ spec:
                 port: *apiPort
 
     persistence:
-      data:
-        enabled: true
+      config:
         existingClaim: *app
       # config:
       #   enabled: true

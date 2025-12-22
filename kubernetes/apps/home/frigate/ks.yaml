@@ -22,6 +22,12 @@ spec:
   dependsOn:
     - name: mosquitto
       namespace: home
+    - name: intel-gpu-resource-driver
+      namespace: kube-system
+    - name: multus-networks
+      namespace: network
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   components:
     - ../../../../components/authentik-proxy
     - ../../../../components/gatus/external
