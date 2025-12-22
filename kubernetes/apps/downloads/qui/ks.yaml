@@ -4,25 +4,27 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app qui
+  namespace: &namespace downloads
 spec:
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ../../../../components/volsync/kopia
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  interval: 1h
-  path: "./kubernetes/apps/downloads/qui/app"
-  postBuild:
-    substitute:
-      APP: *app
+  interval: 30m
+  timeout: 5m
+  path: './kubernetes/apps/downloads/qui/app/'
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: downloads
-  timeout: 5m
   wait: false
+  dependsOn:
+    - name: volsync
+      namespace: system
+  components:
+    - ../../../../components/gatus/guarded
+    - ../../../../components/volsync/kopia
+  postBuild:
+    substitute:
+      APP: *app
