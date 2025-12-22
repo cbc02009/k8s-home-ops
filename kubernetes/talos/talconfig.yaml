@@ -14,7 +14,7 @@ allowSchedulingOnMasters: true
 additionalApiServerCertSans: &san
   - "127.0.0.1"
   - &talosControlplaneVip 10.0.2.9
-  - main.ctec.run
+  - main.ctec.internal
 
 additionalMachineCertSans: *san
 
@@ -27,7 +27,7 @@ cniConfig:
 
 nodes:
 
-  - hostname: uiharu.ctec.run
+  - hostname: uiharu.ctec.internal
     nodeLabels: &nodeLabels
       openebs.io/engine: mayastor
       node.kubernetes.io/gpu: "true"
@@ -36,12 +36,21 @@ nodes:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:73:bd:aa
+    networkInterfaces: &networkInterfaces
+      - interface: bond0
+        bond:
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:*
+          mode: active-backup
         dhcp: true
         vip:
           ip: *talosControlplaneVip
+        mtu: 9000
+        vlans:
+          - # VPN
+            vlanId: 50
+            dhcp: false
+            mtu: 1500
     # extensionServices: &nut-service
     #   - name: nut-client
     #     configFiles:
@@ -50,46 +59,47 @@ nodes:
     #           SHUTDOWNCMD "/sbin/poweroff"
     #         mountPath: /usr/local/etc/nut/upsmon.conf
 
-  - hostname: miri.ctec.run
+  - hostname: miri.ctec.internal
     nodeLabels: *nodeLabels
     ipAddress: 10.0.2.11
     installDiskSelector:
       model: Samsung SSD 870
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:71:c1:b2
-        dhcp: true
-        vip:
-          ip: *talosControlplaneVip
+    networkInterfaces: *networkInterfaces
     # extensionServices: *nut-service
 
-  - hostname: sakura.ctec.run
+  - hostname: sakura.ctec.internal
     nodeLabels: *nodeLabels
     ipAddress: 10.0.2.12
     installDiskSelector:
       model: Samsung SSD 850
     controlPlane: true
     disableSearchDomain: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:71:c5:02
-        dhcp: true
-        vip:
-          ip: *talosControlplaneVip
+    networkInterfaces: *networkInterfaces
     # extensionServices: *nut-service
 
-  # - hostname: ponyo.ctec.run
+  # - hostname: ponyo.ctec.internal
   #   ipAddress: 10.0.2.15
   #   installDiskSelector:
   #     model: CX2-8B256-Q11 NVMe LITEON 256GB
   #   controlPlane: false
   #   disableSearchDomain: true
   #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: 9c:6b:00:14:7f:22
+  #     - interface: bond0
+  #       bond:
+  #         deviceSelectors:
+  #           - hardwareAddr: 9c:6b:00:*
+  #         mode: active-backup
   #       dhcp: true
+  #       vip:
+  #         ip: *talosControlplaneVip
+  #       mtu: 9000
+  #       vlans:
+  #         - # VPN
+  #           vlanId: 50
+  #           dhcp: false
+  #           mtu: 1500
   #   extensionServices: *nut-service
   #   schematic:
   #     customization:
@@ -257,7 +267,7 @@ patches:
         extraHostEntries:
           - ip: 10.0.2.9
             aliases:
-              - main.ctec.run
+              - main.ctec.internal
 
   # Cluster configuration
   - |-

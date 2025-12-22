@@ -42,6 +42,7 @@ spec:
       enabled: true
       annotations:
         grafana_folder: Cilium
+    devices: bond+
     endpointRoutes:
       enabled: true
     envoy:
