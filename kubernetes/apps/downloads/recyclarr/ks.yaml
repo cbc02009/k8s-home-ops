@@ -23,7 +23,7 @@ spec:
     - name: volsync
       namespace: system
   components:
-    - ../../../../components/volsync/kopia
+    - ../../../../components/volsync/garage
   postBuild:
     substitute:
       APP: *app
