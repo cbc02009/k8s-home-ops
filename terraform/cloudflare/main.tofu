@@ -1,12 +1,13 @@
 terraform {
-  # cloud {
-  #   organization = "kokoro-wtf"
-  #   workspaces {
-  #     name = "arpa-home-cloudflare"
-  #   }
-  # }
+#   backend "s3" {
+#     bucket                      = "terraform"
+#     key                         = "cloudflare/state.tfstate"
+#     skip_credentials_validation = true
+#     skip_metadata_api_check     = true
+#     skip_region_validation      = true
+#   }
 
-  backend "pg" {
+    backend "pg" {
     conn_str = "postgres://10.6.0.20/terraform"
     schema_name = "cloudflare"
   }
@@ -14,7 +15,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "5.12.0"
+      version = "4.52.5"
     }
     http = {
       source  = "hashicorp/http"
@@ -30,7 +31,7 @@ module "secret_cf" {
   item   = "cloudflare"
 }
 
-# Obtain current home IP address
-data "http" "ipv4_lookup_raw" {
-  url = "http://ipv4.icanhazip.com"
+provider "cloudflare" {
+  email   = module.secret_cf.fields.email
+  api_key = module.secret_cf.fields.api_key
 }
