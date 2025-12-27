@@ -24,7 +24,7 @@ spec:
       namespace: selfhosted
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync/kopia
+    - ../../../../components/volsync/garage
   postBuild:
     substitute:
       APP: *app

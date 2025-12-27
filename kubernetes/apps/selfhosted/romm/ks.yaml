@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync/kopia
+    - ../../../../components/volsync/garage
   dependsOn:
     - name: postgres-cluster
       namespace: databases
