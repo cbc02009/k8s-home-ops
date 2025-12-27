@@ -1,14 +1,15 @@
 terraform {
-  # cloud {
-  #   organization = "kokoro-wtf"
-  #   workspaces {
-  #     name = "arpa-home-authentik"
-  #   }
+  #   backend "pg" {
+  #   conn_str = "postgres://10.6.0.20/terraform"
+  #   schema_name = "authentik"
   # }
 
-    backend "pg" {
-    conn_str = "postgres://10.6.0.20/terraform"
-    schema_name = "authentik"
+  backend "s3" {
+    bucket                      = "terraform"
+    key                         = "terraform/authentik/state.tfstate"
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_region_validation      = true
   }
 
   required_providers {
