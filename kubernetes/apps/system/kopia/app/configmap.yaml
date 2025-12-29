@@ -12,8 +12,8 @@ data:
           "bucket": "volsync",
           "endpoint": "garage.ctec.internal:3900",
           "doNotUseTLS": true,
-          "accessKeyID": "{{ .access_key }}",
-          "secretAccessKey": "{{ .secret_key }}",
+          "accessKeyID": "{{ .gui_access_key }}",
+          "secretAccessKey": "{{ .gui_secret_key }}",
           "region": "garage"
         }
       },
