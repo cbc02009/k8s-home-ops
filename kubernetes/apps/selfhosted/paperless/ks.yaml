@@ -26,7 +26,7 @@ spec:
       namespace: external-secrets
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync/garage
+    - ../../../../components/volsync
     - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:

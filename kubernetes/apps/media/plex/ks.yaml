@@ -24,8 +24,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/gatus/external
-    - ../../../../components/volsync/garage
-    # - ../../../../components/volsync/r2
+    - ../../../../components/volsync
     - ../../../../components/keda/nas-nfs-scaler
     - ../../../../components/gpu
   postBuild:

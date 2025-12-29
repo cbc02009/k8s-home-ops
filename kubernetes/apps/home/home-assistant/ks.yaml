@@ -28,7 +28,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/gatus/guarded
-    - ../../../../components/volsync/garage
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

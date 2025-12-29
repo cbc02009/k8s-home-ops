@@ -37,11 +37,8 @@ nodes:
     controlPlane: true
     disableSearchDomain: true
     networkInterfaces: &networkInterfaces
-      - interface: bond0
-        bond:
-          deviceSelectors:
-            - hardwareAddr: 58:47:ca:*
-          mode: active-backup
+      - deviceSelector:
+          busPath: "0*"
         dhcp: true
         vip:
           ip: *talosControlplaneVip
