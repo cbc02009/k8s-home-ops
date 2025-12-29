@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: repository-config-tpl
+  name: kopia-config-tpl
 data:
   repository.config: |
     {
