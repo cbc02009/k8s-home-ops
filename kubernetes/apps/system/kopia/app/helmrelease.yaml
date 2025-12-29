@@ -81,18 +81,12 @@ spec:
             sectionName: https
     persistence:
       config-file:
-        type: configMap
-        name: kopia-repository-configmap
+        type: secret
+        name: kopia-config
         globalMounts:
           - path: /config/repository.config
             subPath: repository.config
             readOnly: true
-      repository:
-        type: nfs
-        server: shana.ctec.internal
-        path: /tank/backup/volsync/kopia
-        globalMounts:
-          - path: /repository
       tmpfs:
         type: emptyDir
         advancedMounts:

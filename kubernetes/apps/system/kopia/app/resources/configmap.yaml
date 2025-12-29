@@ -1,0 +1,24 @@
+# define your template in a config map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repository-config-tpl
+data:
+  repository.config: |
+    {
+      "storage": {
+        "type": "s3",
+        "config": {
+          "bucket": "volsync",
+          "endpoint": "garage.ctec.internal:3900",
+          "doNotUseTLS": true,
+          "accessKeyID": "{{ .access_key }}",
+          "secretAccessKey": "{{ .secret_key }}",
+          "region": "garage"
+        }
+      },
+      "hostname": "volsync.system.svc.cluster.local",
+      "username": "volsync",
+      "description": "volsync",
+      "enableActions": false
+    }
