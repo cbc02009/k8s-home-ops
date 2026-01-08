@@ -26,6 +26,7 @@ spec:
       namespace: databases
   components:
     - ../../../../components/gatus/guarded
+    - ../../../../components/gpu
   postBuild:
     substitute:
       APP: *app
