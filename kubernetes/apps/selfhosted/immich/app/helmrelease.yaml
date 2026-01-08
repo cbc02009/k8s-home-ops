@@ -113,7 +113,7 @@ spec:
               IMMICH_WORKERS_EXCLUDE: api
             resources:
               claims:
-                - name: immich-gpu
+                - name: gpu
               requests:
                 cpu: 100m
                 memory: 250Mi
