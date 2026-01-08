@@ -56,8 +56,8 @@ spec:
     authentik:
       log_level: info
       email:
+        host: smtp-relay.kokoro.wtf
         port: 25
-        use_tls: false
       error_reporting:
         enabled: false
         send_pii: false
@@ -70,14 +70,6 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-    # worker:
-    #   replicas: 1
-    #   resources:
-    #     requests:
-    #       cpu: 50m
-    #       memory: 500Mi
-    #     limits:
-    #       memory: 1200Mi
 
     postgresql:
       enabled: false
