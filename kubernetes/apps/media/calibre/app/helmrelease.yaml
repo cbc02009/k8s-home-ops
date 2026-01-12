@@ -76,6 +76,6 @@ spec:
         enabled: true
         type: nfs
         server: 10.0.2.4
-        path: /tank/media
+        path: /mnt/tank/media
         globalMounts:
           - path: /media

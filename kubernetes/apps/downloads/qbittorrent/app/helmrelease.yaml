@@ -114,12 +114,12 @@ spec:
           qbittorrent:
             app:
               - path: /media
-        path: /tank/media
+        path: /mnt/tank/media
       torrents:
         enabled: true
         type: nfs
         server: "${NAS_HOST}"
-        path: /smoltank/torrents
+        path: /mnt/smoltank/torrents
         advancedMounts:
           qbittorrent:
             app:

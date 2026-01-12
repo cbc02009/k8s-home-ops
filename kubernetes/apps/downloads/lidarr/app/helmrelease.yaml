@@ -99,6 +99,6 @@ spec:
         enabled: true
         type: nfs
         server: &nas ${NAS_HOST}
-        path: /tank/media
+        path: /mnt/tank/media
         globalMounts:
           - path: /media
