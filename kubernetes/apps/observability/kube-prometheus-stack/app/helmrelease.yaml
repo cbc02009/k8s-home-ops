@@ -98,6 +98,10 @@ spec:
     grafana:
       enabled: false
       forceDeployDashboards: true
+      sidecar:
+        dashboards:
+          annotations:
+            grafana_folder: Kubernetes
 
     ###
     ### Prometheus operator values
@@ -119,13 +123,17 @@ spec:
           limits:
             memory: 32M
 
+    ###
+    ### Prometheus instance values
+    ###
     prometheus:
       prometheusSpec:
         externalUrl: "https://prometheus.kokoro.wtf/"
+        version: v2.55.1 # override 'unsupported Prometheus version' error
         image:
           registry: docker.io
           repository: prompp/prompp
-          tag: 2.53.2-0.4.0
+          tag: 0.7.3
         securityContext:
           runAsNonRoot: true
           runAsUser: 64535
@@ -133,27 +141,24 @@ spec:
           fsGroup: 64535
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
-        ruleSelectorNilUsesHelmValues: false
-        scrapeConfigSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
-        enableAdminAPI: true
-        walCompression: true
-        enableFeatures:
-          - memory-snapshot-on-shutdown
-        retention: 14d
-        retentionSize: 50GB
         resources:
           requests:
             cpu: 100m
           limits:
-            memory: 2000Mi
+            memory: 2000M
+        retention: 14d
+        retentionSize: 50GB
+        ruleSelectorNilUsesHelmValues: false
+        scrapeConfigSelectorNilUsesHelmValues: false
+        scrapeInterval: 1m # Must match interval in Grafana Helm chart
+        serviceMonitorSelectorNilUsesHelmValues: false
         storageSpec:
           volumeClaimTemplate:
             spec:
               storageClassName: ceph-block
               resources:
                 requests:
-                  storage: 50Gi
+                  storage: 55Gi
 
       route:
         main:

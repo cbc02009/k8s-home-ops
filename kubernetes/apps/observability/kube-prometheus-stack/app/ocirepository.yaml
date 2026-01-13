@@ -5,10 +5,10 @@ kind: OCIRepository
 metadata:
   name: kube-prometheus-stack
 spec:
-  interval: 10m
+  interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 78.5.0
+    tag: 80.14.0
   url: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
