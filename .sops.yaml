@@ -1,24 +1,32 @@
 ---
 keys:
-  - &shinobu age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
-  
+  - &user_cbc02009 age1ayu5h4m5gqfchewyk6vqm2ts95n3q947lldcwf4cjclqx0kec5fq5dha7q
+  - &user_truenas age1wvrp8pv8l8f55ught8w5ntc5mu2zjxcc8t05q5z2907zef9ax4qsww2zg4
+  - &user_flux age1cv38ga8yzk2v035gvtqxkf6vzgy5smy6cjq0a303c75ffxtxpauq9sasm8
+
 creation_rules:
-  - # IMPORTANT: Keep this rule first
-    path_regex: kubernetes/.*/talos/.*\.sops\.ya?ml$
+  - path_regex: docker/truenas/.*\.sops\.env$
     key_groups:
       - age:
-          - *shinobu
-          
+          - *user_cbc02009
+          - *user_truenas
+
+  - path_regex: kubernetes/.*/talos/.*\.sops\.ya?ml$
+    key_groups:
+      - age:
+          - *user_cbc02009
+
   - path_regex: kubernetes/.*\.sops\.ya?ml$
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
-          - *shinobu
+          - *user_cbc02009
+          - *user_flux
 
   - path_regex: .*\.sops\.ya?ml$
     key_groups:
       - age:
-          - *shinobu
+          - *user_cbc02009
 stores:
   yaml:
     indent: 2

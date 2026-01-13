@@ -24,4 +24,4 @@ metadata:
   name: sops-age
   namespace: flux-system
 stringData:
-  age.agekey: op://Homelab/flux/sops_private_key
+  age.agekey: op://Homelab/Flux AGE Key/private_key
