@@ -7,6 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
+  - ./booklore/ks.yaml
   - ./calibre/ks.yaml
   - ./calibre-web/ks.yaml
   - ./lanraragi/ks.yaml
