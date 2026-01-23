@@ -87,7 +87,7 @@ spec:
           booklore:
             image:
               repository: ghcr.io/booklore-app/booklore
-              tag: v1.18.1
+              tag: v1.18.3@sha256:9dfe7387d0cafaa4ab2e24e4006a4dafe94df5fe579cc4a3f67d27cf65fbb6bc
             command:
               - java
             args:
@@ -127,7 +127,7 @@ spec:
           nginx:
             image:
               repository: ghcr.io/booklore-app/booklore
-              tag: v1.18.1
+              tag: v1.18.3@sha256:9dfe7387d0cafaa4ab2e24e4006a4dafe94df5fe579cc4a3f67d27cf65fbb6bc
             command:
               - nginx
             args:
