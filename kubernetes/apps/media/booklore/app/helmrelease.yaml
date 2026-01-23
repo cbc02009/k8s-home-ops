@@ -167,7 +167,7 @@ spec:
                 subPath: mysql
       nfs-nas-media:
         type: nfs
-        server: shana.ctec.internal
+        server: 10.0.2.4
         path: /mnt/tank/media
         advancedMounts:
           booklore:
