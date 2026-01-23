@@ -127,7 +127,7 @@ spec:
           nginx:
             image:
               repository: ghcr.io/booklore-app/booklore
-              tag: v1.18.1@sha256:b7b2b043177c10127fb2109eb0c60725bd9f5f4f743aa6c65a83897f904d0a8a
+              tag: v1.18.1
             command:
               - nginx
             args:
