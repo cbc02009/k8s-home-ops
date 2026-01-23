@@ -28,6 +28,8 @@ data:
   LB_RANGE: 10.6.0.0/24
 
   # Pre-defined IP addresses
+  LB_APISERVER: 10.6.0.5
+  LB_BOOKLORE: 10.6.0.6
   LB_RUSTDESK: 10.6.0.7
   LB_HASS: 10.6.0.8
   LB_QBT_GUI: 10.6.0.9
@@ -35,7 +37,6 @@ data:
   LB_SMTP: 10.6.0.11
   LB_PLEX: 10.6.0.12
   LB_CODER: 10.6.0.13
-  LB_GITEA: 10.6.0.14
   LB_MQTT: 10.6.0.16
   LB_JELLYFIN: 10.6.0.17
   LB_CALIBRE: 10.6.0.18
