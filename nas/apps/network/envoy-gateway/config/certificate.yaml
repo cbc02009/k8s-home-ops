@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ctec-run
+spec:
+  secretName: ctec-run-tls
+  issuerRef:
+    # name: letsencrypt-production
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  commonName: ctec.run
+  dnsNames:
+    - "ctec.run"
+    - "*.ctec.run"

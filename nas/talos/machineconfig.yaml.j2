@@ -1,0 +1,178 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/siderolabs/talos/refs/heads/release-1.10/website/content/v1.10/schemas/config.schema.json
+version: v1alpha1
+machine:
+  type: controlplane
+  ca:
+    crt: op://Homelab/talos - nas/cert_os_crt
+    key: op://Homelab/talos - nas/cert_os_key
+  features:
+    apidCheckExtKeyUsage: true
+    diskQuotaSupport: true
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: true
+      resolveMemberNames: true
+    kubePrism:
+      enabled: true
+      port: 7445
+  files:
+    - op: overwrite
+      path: /etc/nfsmount.conf
+      permissions: 0o644
+      content: |
+        [ NFSMount_Global_Options ]
+        nfsvers=4.2
+        hard=True
+        noatime=True
+        nconnect=16
+  install:
+    disk: /dev/vda
+    image: factory.talos.dev/metal-installer/4d2f14467f85468b6b5ff0ba1747f7f0bcb97d351d516db0197885247093d6fd:v1.12.1
+  kubelet:
+    defaultRuntimeSeccompProfileEnabled: true
+    disableManifestsDirectory: true
+    extraConfig:
+      maxPods: 150
+      serializeImagePulls: false
+    image: ghcr.io/siderolabs/kubelet:v1.35.0
+    nodeIP:
+      validSubnets:
+        - 10.0.2.0/24
+  sysctls:
+    fs.inotify.max_user_instances: "8192"
+    fs.inotify.max_user_watches: "1048576"
+    net.core.rmem_max: "67108864"
+    net.core.wmem_max: "67108864"
+    net.ipv4.neigh.default.gc_thresh1: "4096"
+    net.ipv4.neigh.default.gc_thresh2: "8192"
+    net.ipv4.neigh.default.gc_thresh3: "16384"
+    net.ipv4.tcp_fastopen: "3"
+    user.max_user_namespaces: "11255"
+  token: op://Homelab/talos - nas/trustdinfo_token
+cluster:
+  aggregatorCA:
+    crt: op://Homelab/talos - nas/cert_k8saggregator_crt
+    key: op://Homelab/talos - nas/cert_k8saggregator_key
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    image: registry.k8s.io/kube-apiserver:v1.35.0
+    extraArgs:
+      enable-aggregator-routing: "true"
+      feature-gates: MutatingAdmissionPolicy=true
+      runtime-config: admissionregistration.k8s.io/v1beta1=true
+    certSANs:
+      - 127.0.0.1 # KubePrism
+      - 10.0.2.17
+      - nas-k8s.ctec.internal
+    disablePodSecurityPolicy: true
+  controllerManager:
+    image: registry.k8s.io/kube-controller-manager:v1.35.0
+    extraArgs:
+      bind-address: 0.0.0.0
+  coreDNS:
+    disabled: true
+  etcd:
+    advertisedSubnets:
+      - 10.0.2.0/24
+    ca:
+      crt: op://Homelab/talos - nas/cert_etcd_crt
+      key: op://Homelab/talos - nas/cert_etcd_key
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+  proxy:
+    disabled: true
+    image: registry.k8s.io/kube-proxy:v1.35.0
+  scheduler:
+    config:
+      apiVersion: kubescheduler.config.k8s.io/v1
+      kind: KubeSchedulerConfiguration
+      profiles:
+        - pluginConfig:
+            - args:
+                defaultConstraints:
+                  - maxSkew: 1
+                    topologyKey: kubernetes.io/hostname
+                    whenUnsatisfiable: ScheduleAnyway
+                defaultingType: List
+              name: PodTopologySpread
+          plugins:
+            score:
+              disabled:
+                - name: ImageLocality
+          schedulerName: default-scheduler
+    extraArgs:
+      bind-address: 0.0.0.0
+    image: registry.k8s.io/kube-scheduler:v1.35.0
+  secretboxEncryptionSecret: op://Homelab/talos - nas/secretboxencryptionsecret
+  serviceAccount:
+    key: op://Homelab/talos - nas/cert_k8sserviceaccount_key
+  ca:
+    crt: op://Homelab/talos - nas/cert_k8s_crt
+    key: op://Homelab/talos - nas/cert_k8s_key
+  controlPlane:
+    endpoint: https://10.0.2.17:6443
+  clusterName: nas
+  discovery:
+    enabled: true
+    registries:
+      kubernetes: { disabled: true }
+      service: { disabled: false }
+  id: op://Homelab/talos - nas/cluster_id
+  network:
+    cni:
+      name: none
+    dnsDomain: cluster.local
+    podSubnets:
+      - 10.13.0.0/16
+    serviceSubnets:
+      - 10.12.0.0/16
+  secret: op://Homelab/talos - nas/cluster_secret
+  token: op://Homelab/talos - nas/bootstraptoken
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: jade
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net0
+selector:
+    match: link.driver == "virtio_net"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - net0
+bondMode: active-backup
+mtu: 9000
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0
+clientIdentifier: mac
+---
+apiVersion: v1alpha1
+kind: WatchdogTimerConfig
+device: /dev/watchdog0
+timeout: 5m
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 50GiB
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 1GB
+  grow: true
+filesystem:
+  type: xfs
