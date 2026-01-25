@@ -103,13 +103,6 @@ spec:
             securityContext:
               runAsUser: 999
               runAsGroup: 999
-          tika:
-            image:
-              repository: ghcr.io/paperless-ngx/tika
-              tag: 2.9.1-full
-            securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
     service:
       app:
         controller: *app
