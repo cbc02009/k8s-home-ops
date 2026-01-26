@@ -133,6 +133,8 @@ spec:
             identifier: gatus
           subjects:
             - identifier: gatus
+    serviceAccount:
+      gatus: {}
     persistence:
       config:
         type: emptyDir
