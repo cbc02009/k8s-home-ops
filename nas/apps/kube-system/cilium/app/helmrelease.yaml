@@ -32,14 +32,12 @@ spec:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cluster:
-      name: cluster
+      name: nas
       id: 2
     cni:
       exclusive: false
     dashboards:
-      enabled: true
-      annotations:
-        grafana_folder: Cilium
+      enabled: false
     devices: bond0+
     endpointRoutes:
       enabled: true
@@ -68,15 +66,15 @@ spec:
     localRedirectPolicy: true
     operator:
       dashboards:
-        enabled: true
-        annotations:
-          grafana_folder: Cilium
+        enabled: false
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
       replicas: 1
       rollOutPods: true
+    pmtuDiscovery:
+      enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
@@ -104,3 +102,6 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+    socketLB:
+      enabled: true
+      hostNamespaceOnly: true
