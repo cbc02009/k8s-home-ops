@@ -22,6 +22,8 @@ spec:
     bandwidthManager:
       enabled: true
       bbr: true
+    bgpControlPlane:
+      enabled: true
     bpf:
       datapathMode: netkit
       masquerade: true
@@ -55,11 +57,7 @@ spec:
     kubeProxyReplacement: true
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     l2announcements:
-      enabled: true
-      interface: bond0
-    l2podAnnouncements:
-      enabled: true
-      interface: bond0
+      enabled: false
     loadBalancer:
       algorithm: maglev
       mode: dsr
