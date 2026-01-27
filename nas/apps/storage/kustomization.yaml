@@ -6,3 +6,4 @@ namespace: storage
 resources:
   - ./namespace.yaml
   - ./democratic-csi/ks.yaml
+  - ./snapshot-controller/ks.yaml
