@@ -14,14 +14,14 @@ releases:
     values:
       - templates/values.yaml.gotmpl
     hooks:
-      # - # Wait for Cilium CRDs to be available
-      #   command: bash
-      #   args:
-      #     - -c
-      #     - until kubectl get crd ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 5; done
-      #   events:
-      #     - postsync
-      #   showlogs: true
+      - # Wait for Cilium CRDs to be available
+        command: bash
+        args:
+          - -c
+          - until kubectl get crd ciliumloadbalancerippools.cilium.io ciliumbgpadvertisements.cilium.io ciliumbgppeerconfigs.cilium.io ciliumbgpclusterconfigs.cilium.io &>/dev/null; do sleep 5; done
+        events:
+          - postsync
+        showlogs: true
       - # Apply cilium network configuration
         command: kubectl
         args:

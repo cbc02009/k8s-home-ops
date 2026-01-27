@@ -115,7 +115,7 @@ spec:
         controller: onepassword-connect
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: 10.0.2.142
+          io.cilium/lb-ipam-ips: 10.7.0.3
           external-dns.alpha.kubernetes.io/hostname: opc.ctec.run
         ports:
           http:

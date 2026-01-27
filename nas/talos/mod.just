@@ -3,11 +3,12 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 
 kubernetes_dir := justfile_dir() + '/nas'
 talos_dir := kubernetes_dir + '/talos'
-controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
-nodes := `talosctl config info -o yaml | yq -e '.nodes | join (",")'`
 
 export TALOSCONFIG := talos_dir + '/clusterconfig/talosconfig'
 export KUBECONFIG := kubernetes_dir + '/kubeconfig'
+
+controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
+nodes := `talosctl config info -o yaml | yq -e '.nodes | join (",")'`
 
 [private]
 default:
@@ -16,12 +17,12 @@ default:
 [doc('Apply Talos config to a node')]
 apply-node node *args:
   just log info "Applying Talos machineconfig" "node" "{{ node }}";
-  just talos render-config "{{ node }}" | talosctl -n "{{ node }}" apply-config -f /dev/stdin {{ args }}
+  just nas-talos render-config "{{ node }}" | talosctl -n "{{ node }}" apply-config -f /dev/stdin {{ args }}
 
 [doc('Apply Talos config to all nodes in the cluster')]
 apply-cluster *args:
   kubectl get nodes --no-headers | while read -r node _; do \
-    just talos apply-node ${node} {{ args }}; \
+    just nas-talos apply-node ${node} {{ args }}; \
   done
 
 [doc('Generate schematic ID from Talos schematic')]
@@ -40,11 +41,11 @@ reboot-node node:
 [doc('Reset a node')]
 reset-node node mode="reboot":
   gum confirm "Reset node {{ node }}?" && \
-    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --graceful=false {{ if mode == "reboot" { "--reboot" } else { "" } }} || exit 0
+    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local --graceful=false {{ if mode == "reboot" { "--reboot" } else { "" } }} || exit 0
 
 [doc('Reset all nodes in the cluster')]
 reset-cluster mode="reboot":
-  just talos reset-node {{ nodes }} {{ mode }};\
+  just nas-talos reset-node {{ nodes }} {{ mode }};\
 
 [doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
@@ -52,7 +53,7 @@ upgrade-k8s version:
 
 [doc('Upgrade Talos version on a node')]
 upgrade-node node:
-  talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image {{ node }})" -m powercycle --timeout=10m
+  talosctl -n "{{ node }}" upgrade -i "$(just nas-talos machine-image {{ node }})" -m powercycle --timeout=10m
 
 [doc('Download Talos machine image')]
 download-image version schematic:
