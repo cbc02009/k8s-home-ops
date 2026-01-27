@@ -211,7 +211,7 @@ spec:
           qbittorrent:
             app:
               - path: /media
-        path: /tank/media
+        path: /mnt/tank/media
       gluetun-auth:
         type: secret
         name: qbittorrent-gluetun-secret
@@ -233,7 +233,7 @@ spec:
         enabled: true
         type: nfs
         server: "${NAS_HOST}"
-        path: /smoltank/torrents
+        path: /mnt/smoltank/torrents
         advancedMounts:
           qbittorrent:
             app:
