@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &release dcsi-iscsi
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: democratic-csi-iscsi
+  dependsOn:
+    - name: snapshot-controller
+  interval: 30m
+  values:
+    nameOverride: *release
+    controller:
+      replicaCount: 2
+      podAnnotations:
+        secret.reloader.stakater.com/reload: &secret dcsi-iscsi-secret
+      driver:
+        image: &image
+          tag: v1.9.5@sha256:5b607d63a270330b4cdaa70ae961fc1484f0dda3d164d940e69e1faa213682fd
+        # imagePullPolicy: Always
+      priorityClassName: system-cluster-critical
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "kubernetes.io/hostname"
+          whenUnsatisfiable: "DoNotSchedule"
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/csi-role: controller
+              app.kubernetes.io/instance: *release
+    node:
+      podAnnotations:
+        secret.reloader.stakater.com/reload: *secret
+      hostPID: true
+      driver:
+        image: *image
+        # imagePullPolicy: Always
+        extraEnv:
+          - name: ISCSIADM_HOST_STRATEGY
+            value: nsenter
+          - name: ISCSIADM_HOST_PATH
+            value: /usr/local/sbin/iscsiadm
+        iscsiDirHostPath: /var/iscsi
+        iscsiDirHostPathType: ""
+      priorityClassName: system-node-critical
+    csiDriver:
+      name: &driver org.dcsi.iscsi
+    storageClasses:
+      - name: &class dcsi-iscsi
+        defaultClass: true
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+        allowVolumeExpansion: true
+        parameters:
+          fsType: ext4
+          detachedVolumesFromSnapshots: true
+          detachedVolumesFromVolumes: true
+        mountOptions: []
+    volumeSnapshotClasses:
+      - name: *class
+        driver: *driver
+        annotations:
+          snapshot.storage.kubernetes.io/is-default-class: "true"
+        deletionPolicy: Delete
+        parameters:
+          detachedSnapshots: false
+    driver:
+      config:
+        driver: freenas-api-iscsi
+      existingConfigSecret: *secret

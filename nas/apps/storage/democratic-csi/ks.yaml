@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app dcsi-iscsi
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+    - name: snapshot-controller
+      namespace: storage
+  interval: 1h
+  path: "./nas/apps/storage/democratic-csi/iscsi"
+  postBuild:
+    substitute:
+      NAS_HOSTNAME: shana.ctec.internal
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: storage
+  timeout: 5m
+  wait: false
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app dcsi-nvmeof
+# spec:
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   dependsOn:
+#     - name: external-secrets
+#       namespace: external-secrets
+#     - name: snapshot-controller
+#       namespace: storage
+#   interval: 1h
+#   path: "./nas/apps/storage/democratic-csi/nvmeof"
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   targetNamespace: storage
+#   timeout: 5m
+#   wait: false
