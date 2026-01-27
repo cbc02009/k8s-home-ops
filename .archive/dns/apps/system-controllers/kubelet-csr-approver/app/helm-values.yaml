@@ -1,7 +1,0 @@
----
-providerRegex: |
-  ^(rem|ram|anya)$
-
-bypassDnsResolution: true
-
-replicas: 1

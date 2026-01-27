@@ -1,5 +1,0 @@
----
-providerRegex: |
-  ^(nas|shana)$
-
-bypassDnsResolution: true
