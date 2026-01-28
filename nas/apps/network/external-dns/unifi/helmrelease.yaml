@@ -49,8 +49,8 @@ spec:
     sources:
       - gateway-httproute
       - service
-    txtOwnerId: main
-    txtPrefix: "k8s."
+    txtOwnerId: nas
+    txtPrefix: "k8s-nas."
     domainFilters:
       - "ctec.run"
     serviceMonitor:
