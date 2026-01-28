@@ -7,8 +7,8 @@ metadata:
 spec:
   secretName: ctec-run-tls
   issuerRef:
-    # name: letsencrypt-production
-    name: letsencrypt-staging
+    name: letsencrypt-production
+    # name: letsencrypt-staging
     kind: ClusterIssuer
   commonName: ctec.run
   dnsNames:
