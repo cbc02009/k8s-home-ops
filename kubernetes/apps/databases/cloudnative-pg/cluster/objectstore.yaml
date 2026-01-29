@@ -20,3 +20,25 @@ spec:
         name: cloudnative-pg
         key: aws-secret-access-key
   retentionPolicy: 14d
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: garage
+spec:
+  configuration:
+    data:
+      compression: bzip2
+    wal:
+      compression: bzip2
+      maxParallel: 8
+    destinationPath: s3://postgres/
+    endpointURL: https://s3.ctec.run
+    s3Credentials:
+      accessKeyId:
+        name: cloudnative-pg
+        key: garage-access-key-id
+      secretAccessKey:
+        name: cloudnative-pg
+        key: garage-secret-access-key
+  retentionPolicy: 14d
