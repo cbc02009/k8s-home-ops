@@ -7,7 +7,14 @@ data:
   repository.config: |
     {
       "storage": {
-        "type": "s3"
+        "type": "s3",
+        "config": {
+          "bucket": "volsync",
+          "endpoint": "s3.ctec.run",
+          "accessKeyID": "{{ .gui_access_key }}",
+          "secretAccessKey": "{{ .gui_secret_key }}",
+          "region": "garage"
+        }
       },
       "hostname": "volsync.system.svc.cluster.local",
       "username": "volsync",
