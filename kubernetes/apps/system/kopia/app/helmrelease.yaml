@@ -20,7 +20,7 @@ spec:
     controllers:
       kopia:
         annotations:
-          reloader.stakater.com/auto: "true"
+          reloader.stakater.com/auto: "kopia-config"
         containers:
           app:
             image:
