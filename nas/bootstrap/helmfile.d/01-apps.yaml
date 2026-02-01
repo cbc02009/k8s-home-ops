@@ -22,15 +22,14 @@ releases:
         events:
           - postsync
         showlogs: true
-      - # Apply cilium network configuration
+      - # Apply Cilium Resources
         command: kubectl
         args:
           - apply
           - --namespace=kube-system
           - --server-side
           - --field-manager=kustomize-controller
-          - --kustomize
-          - ../../apps/kube-system/cilium/config/
+          - --filename=../../kubernetes/apps/kube-system/cilium/app/networking.yaml
         events:
           - postsync
         showlogs: true
