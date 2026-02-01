@@ -34,7 +34,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyPatchPolicy
 metadata:
-  name: envoy-external
+  name: envoy-internal
 spec:
   jsonPatches:
     - type: type.googleapis.com/envoy.config.listener.v3.Listener
