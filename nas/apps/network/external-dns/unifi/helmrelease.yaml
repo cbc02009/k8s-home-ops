@@ -27,11 +27,9 @@ spec:
         env:
           - name: UNIFI_HOST
             value: https://10.0.2.1
-          - name: UNIFI_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: externaldns-unifi
-                key: UNIFI_API_KEY
+        envFrom:
+          - secretRef:
+              name: *app
         livenessProbe:
           httpGet:
             path: /healthz
