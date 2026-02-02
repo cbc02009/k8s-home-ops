@@ -14,9 +14,22 @@ spec:
     logLevel: info
     domainFilters:
       - ctec.run
-    envFrom:
-      - secretRef:
-          name: externaldns-cloudflare
+    env:
+      - name: CF_API_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: &secret externaldns-cloudflare
+            key: CF_API_EMAIL
+      - name: CF_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: *secret
+            key: CF_API_KEY
+      - name: CF_ZONE_ID
+        valueFrom:
+          secretKeyRef:
+            name: *secret
+            key: CF_ZONE_ID
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --cloudflare-proxied
