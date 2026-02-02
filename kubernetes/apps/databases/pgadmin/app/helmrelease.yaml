@@ -33,17 +33,17 @@ spec:
         containers:
           app:
             image:
-              repository: dpage/pgadmin4
-              tag: 9.11.0@sha256:50700ac17936d0227f9e3e4bb086a91efb67064debc4b4737c35545bf1564088
+              repository: mirror.gcr.io/dpage/pgadmin4
+              tag: 9.11@sha256:50700ac17936d0227f9e3e4bb086a91efb67064debc4b4737c35545bf1564088
             envFrom:
               - secretRef:
                   name: *app
             resources:
               requests:
                 cpu: 15m
-                memory: 164M
+                memory: 200M
               limits:
-                memory: 236M
+                memory: 300M
         pod:
           securityContext:
             runAsUser: 5050
@@ -53,10 +53,9 @@ spec:
 
     service:
       app:
-        controller: *app
         ports:
           http:
-            port: &port 80
+            port: 80
 
     route:
       app:
@@ -73,10 +72,3 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /var/lib/pgadmin
-      server-json:
-        enabled: true
-        type: configMap
-        name: servers-json
-        globalMounts:
-          - path: /pgadmin4/servers.json
-            subPath: servers.json

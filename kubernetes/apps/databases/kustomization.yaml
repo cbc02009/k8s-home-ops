@@ -10,4 +10,4 @@ resources:
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly/ks.yaml
   # - ./postgres-backup/ks.yaml
-  # - ./pgadmin/ks.yaml
+  - ./pgadmin/ks.yaml

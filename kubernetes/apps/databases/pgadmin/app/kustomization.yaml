@@ -6,13 +6,3 @@ namespace: databases
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-configMapGenerator:
-  - name: servers-json
-    files:
-      - config/servers.json
-generatorOptions:
-  disableNameSuffixHash: true
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-metadata:
-  namespace: databases
