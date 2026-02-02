@@ -16,7 +16,7 @@ spec:
       - ctec.run
     envFrom:
       - secretRef:
-          name: externaldns-cloudflare-secrets
+          name: externaldns-cloudflare
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --cloudflare-proxied
