@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app unifi-dns
+  name: &app externaldns-unifi
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: unifi-dns
+    name: externaldns-unifi
   install:
     remediation:
       retries: -1
@@ -27,11 +27,9 @@ spec:
         env:
           - name: UNIFI_HOST
             value: https://10.0.2.1
-          - name: UNIFI_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: &secret unifi-dns-secret
-                key: UNIFI_API_KEY
+        envFrom:
+          - secretRef:
+              name: *app
         livenessProbe:
           httpGet:
             path: /healthz
@@ -56,4 +54,4 @@ spec:
     serviceMonitor:
       enabled: true
     podAnnotations:
-      secret.reloader.stakater.com/reload: *secret
+      secret.reloader.stakater.com/reload: *app
