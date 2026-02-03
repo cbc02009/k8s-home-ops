@@ -27,7 +27,7 @@ spec:
         containers:
           api:
             image:
-              repository: ghcr.io/cbc02009/onepassword-connect-api
+              repository: ghcr.io/1password/connect-api
               tag: 1.8.1
             env:
               XDG_DATA_HOME: &configDir /config
@@ -69,7 +69,7 @@ spec:
                 memory: 256M
           sync:
             image:
-              repository: ghcr.io/cbc02009/onepassword-sync
+              repository: ghcr.io/1password/connect-sync
               tag: 1.8.1
             env:
               XDG_DATA_HOME: *configDir

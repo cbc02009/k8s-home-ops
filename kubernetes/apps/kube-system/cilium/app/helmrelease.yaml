@@ -42,7 +42,7 @@ spec:
       enabled: true
       annotations:
         grafana_folder: Cilium
-    devices: enp+
+    devices: bond+
     endpointRoutes:
       enabled: true
     envoy:
@@ -75,6 +75,8 @@ spec:
           enabled: true
       replicas: 2
       rollOutPods: true
+    pmtuDiscovery:
+      enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
@@ -102,3 +104,6 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+    socketLB:
+      enabled: true
+      hostNamespaceOnly: true

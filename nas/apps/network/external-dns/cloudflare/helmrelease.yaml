@@ -53,7 +53,7 @@ spec:
       - gateway-httproute
       - crd
     triggerLoopOnEvent: true
-    txtOwnerId: main
+    txtOwnerId: nas
     txtPrefix: "k8s-nas."
 
   postRenderers:

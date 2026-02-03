@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app unifi-dns
+  name: &app externaldns-unifi
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: unifi-dns
+    name: externaldns-unifi
   install:
     remediation:
       retries: -1
@@ -30,7 +30,7 @@ spec:
           - name: UNIFI_API_KEY
             valueFrom:
               secretKeyRef:
-                name: &secret unifi-dns-secret
+                name: &secret externaldns-unifi
                 key: UNIFI_API_KEY
         livenessProbe:
           httpGet:
