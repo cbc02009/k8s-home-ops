@@ -22,7 +22,7 @@ spec:
   components:
     - ../../../../components/gatus/guarded
   dependsOn:
-    - name: onepassword-store
+    - name: external-secrets
       namespace: external-secrets
     - name: cloudnative-pg-cluster
       namespace: databases

@@ -22,7 +22,7 @@ spec:
   dependsOn:
     - name: volsync
       namespace: system
-    - name: onepassword-store
+    - name: external-secrets
       namespace: external-secrets
   components:
     - ../../../../components/gatus/guarded
