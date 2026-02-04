@@ -13,6 +13,10 @@ spec:
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/network/cloudflared/app"
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cloudflare-tunnel-id-secret
   prune: true
   sourceRef:
     kind: GitRepository
