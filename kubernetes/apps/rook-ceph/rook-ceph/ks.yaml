@@ -14,7 +14,7 @@ spec:
       name: rook-ceph
       namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/rook-ceph/rook-ceph/operator
+  path: ./kubernetes/apps/rook-ceph/rook-ceph/app
   prune: true
   sourceRef:
     kind: GitRepository
