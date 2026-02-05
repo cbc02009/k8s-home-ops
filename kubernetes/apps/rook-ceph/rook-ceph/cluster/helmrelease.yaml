@@ -11,19 +11,12 @@ spec:
   chartRef:
     kind: OCIRepository
     name: rook-ceph-cluster
-  dependsOn:
-    - name: rook-ceph-operator
-      namespace: rook-ceph
-    - name: snapshot-controller
-      namespace: system-controllers
   values:
-    toolbox:
-      enabled: false
-
     monitoring:
       enabled: true
       createPrometheusRules: true
-
+    toolbox:
+      enabled: false
     cephClusterSpec:
       cephConfig:
         global:
@@ -31,50 +24,20 @@ spec:
           bdev_async_discard_threads: "1" # quote
           osd_class_update_on_start: "false" # quote
           device_failure_prediction_mode: local # requires mgr module
-        # mgr:
-        #   mgr/crash/warn_recent_interval: "7200" # 2h
+        mgr:
+          mgr/crash/warn_recent_interval: "7200" # 2h
       cleanupPolicy:
         wipeDevicesFromOtherClusters: true
       crashCollector:
         disable: false
-
       csi:
         readAffinity:
-          enabled: true
-          crushLocationLabels: ["kubernetes.io/hostname"]
-
+          enabled: false
       dashboard:
         enabled: true
         urlPrefix: /
         ssl: false
         prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
-
-      resources:
-        mgr:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            memory: 2Gi
-        mon:
-          requests:
-            cpu: 50m
-            memory: 512Mi
-          limits:
-            memory: 1Gi
-        osd:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            memory: 6Gi
-        mgr-sidecar:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            memory: 256Mi
-
       mgr:
         modules:
           - name: diskprediction_local
@@ -85,11 +48,22 @@ spec:
             enabled: true
           - name: rook
             enabled: true
-
       network:
         provider: host
+        addressRanges:
+          public:
+            - 169.254.255.0/24
+          cluster:
+            - 169.254.255.0/24
         connections:
           requireMsgr2: true
+      resources:
+        mgr:
+          limits:
+            memory: 2Gi
+        osd:
+          limits:
+            memory: 8Gi
 
       storage:
         useAllNodes: true
@@ -111,9 +85,9 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
-          mountOptions: ["discard"]
+          mountOptions:
+            - discard
           parameters:
-            # TODO: Consider enabling compression on cluster rebuild
             compression_mode: aggressive
             compression_algorithm: zstd
             imageFormat: "2"
