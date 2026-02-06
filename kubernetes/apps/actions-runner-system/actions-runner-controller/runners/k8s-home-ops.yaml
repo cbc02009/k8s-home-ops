@@ -9,13 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
     githubConfigSecret: home-ops-runner-secret
@@ -43,16 +36,4 @@ spec:
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
-              - name: NODE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: status.hostIP
-            volumeMounts:
-              - mountPath: /var/run/secrets/talos.dev
-                name: talos
-                readOnly: true
         serviceAccountName: *name
-        volumes:
-          - name: talos
-            secret:
-              secretName: *name
