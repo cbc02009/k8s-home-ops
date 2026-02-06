@@ -35,9 +35,9 @@ spec:
         ports:
           http:
             port: 80
-    # persistence:
-    #   config:
-    #     existingClaim: *app
+    persistence:
+      data:
+        existingClaim: *app
     route:
       app:
         hostnames:
