@@ -40,6 +40,8 @@ spec:
         ports:
           http:
             port: 80
+          iperf:
+            port: 5201
     # persistence:
     #   data:
     #     existingClaim: *app
