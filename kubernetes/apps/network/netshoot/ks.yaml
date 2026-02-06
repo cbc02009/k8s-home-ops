@@ -3,16 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: test-pod
+  name: netshoot
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: test-pod
+      app.kubernetes.io/name: netshoot
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/selfhosted/test-pod/app"
+  path: "./kubernetes/apps/selfhosted/netshoot/app"
   prune: true
   sourceRef:
     kind: GitRepository

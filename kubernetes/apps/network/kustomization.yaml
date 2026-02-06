@@ -11,3 +11,4 @@ resources:
   - ./envoy-gateway/ks.yaml
   - ./external-dns/ks.yaml
   - ./multus/ks.yaml
+  - ./netshoot/ks.yaml
