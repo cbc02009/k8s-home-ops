@@ -12,12 +12,12 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/downloads/test-pod/app"
+  path: "./kubernetes/apps/selfhosted/test-pod/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: self-hosted
+  targetNamespace: selfhosted
   timeout: 5m
   wait: false
