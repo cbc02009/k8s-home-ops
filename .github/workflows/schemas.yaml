@@ -1,55 +1,49 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "Schemas"
+name: Schemas
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 0 * * *" # Every day at midnight
-  # push:
-  #   branches: ["master"]
-  #   paths: [".github/workflows/schemas.yaml"]
-
-env:
-  UV_SYSTEM_PYTHON: "1"
+  schedule:
+    - cron: 0 0 * * *
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/schemas.yaml
+      - .github/schemas-index.html
 
 jobs:
-  publish:
+  main:
     name: Schemas
-    runs-on: arc-homelab
-    permissions:
-      contents: read
-      packages: write
+    runs-on: home-ops-runner
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@v6
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@776406bce94f63e41d621b960d78ee25c8b76ede # v4.0.1
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7.2.1
+        uses: azure/setup-kubectl@v4
 
       - name: Setup Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@v6
         with:
           python-version: 3.14.x
 
-      - name: Setup Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
-        with:
-          node-version: 24.x
-
       - name: Install Python Dependencies
-        run: uv pip install pyyaml
+        run: pip install pyyaml
 
       - name: Run crd-extractor
-        run: curl -fsSL https://raw.githubusercontent.com/datreeio/CRDs-catalog/43e4407642d4c37683c88711f37caa6c9c20ca40/Utilities/crd-extractor.sh | bash
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/Utilities/crd-extractor.sh | bash
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.1
+      - name: Generate index.html
+        run: |
+          cd /home/runner/.datree/crdSchemas
+          # ... generate browsable index ...
+
+      - name: Publish Schemas
+        uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: "${{ secrets.CLOUDFLARE_API_TOKEN }}"
-          accountId: "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: /home/runner/.datree/crdSchemas
-          command: pages deploy --project-name=homelab-schema --branch master .
+          command: pages deploy --project-name=kubernetes-schemas --branch main .
