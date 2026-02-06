@@ -19,3 +19,4 @@ resources:
   - ./rustdesk/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./teddit/ks.yaml
+  - ./test-pod/ks.yaml

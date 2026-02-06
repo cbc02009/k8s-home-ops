@@ -1,0 +1,47 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app test-pod
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 30m
+  values:
+    controllers:
+      *app :
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 2000
+            runAsNonRoot: true
+            runAsUser: 2000
+        containers:
+          app:
+            image:
+              repository: ghcr.io/nicolaka/netshoot
+              tag: v0.15
+    service:
+      *app :
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.6.0.50
+        ports:
+          http:
+            port: 80
+    # persistence:
+    #   config:
+    #     existingClaim: *app
+    route:
+      app:
+        hostnames:
+          - test-pod.kokoro.wtf
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
