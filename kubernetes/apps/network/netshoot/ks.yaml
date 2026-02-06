@@ -12,7 +12,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/selfhosted/netshoot/app"
+  path: "./kubernetes/apps/network/netshoot/app"
   prune: true
   sourceRef:
     kind: GitRepository
