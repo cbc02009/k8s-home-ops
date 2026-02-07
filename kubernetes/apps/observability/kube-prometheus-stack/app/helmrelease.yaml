@@ -5,46 +5,39 @@ kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: kube-prometheus-stack
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  interval: 30m
+  timeout: 15m
   values:
     crds:
       enabled: true
-      upgradeJob:
-        enabled: true
-        forceConflicts: true
     cleanPrometheusOperatorObjectNames: true
 
+    ###
+    ### Component values
+    ###
     alertmanager:
       route:
         main:
           enabled: true
           hostnames:
-            - &am-host alertmanager.${EXTERNAL_DOMAIN}
+            - alertmanager.kokoro.wtf
           parentRefs:
             - name: envoy-internal
-              namespace: kube-system
-              sectionName: https
+              namespace: network
+
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
           global:
             resolveTimeout: 5m
-        externalUrl: https://alertmanager.${EXTERNAL_DOMAIN}
+        externalUrl: https://alertmanager.kokoro.wtf
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: openebs-hostpath
+              storageClassName: ceph-block
               resources:
                 requests:
                   storage: 1Gi
@@ -128,7 +121,7 @@ spec:
     ###
     prometheus:
       prometheusSpec:
-        externalUrl: "https://prometheus.kokoro.wtf/"
+        externalUrl: https://prometheus.kokoro.wtf
         version: v2.55.1 # override 'unsupported Prometheus version' error
         image:
           registry: docker.io
@@ -164,8 +157,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - prometheus.${EXTERNAL_DOMAIN}
+            - prometheus.kokoro.wtf
           parentRefs:
             - name: envoy-internal
-              namespace: kube-system
-              sectionName: https
+              namespace: network
