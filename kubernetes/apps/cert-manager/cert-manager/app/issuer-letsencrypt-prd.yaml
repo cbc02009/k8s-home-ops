@@ -17,7 +17,6 @@ spec:
             - ${EXTERNAL_DOMAIN}
         dns01:
           cloudflare:
-            email: postmaster@kokoro.wtf
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cert-manager
-              key: CLOUDFLARE_APIKEY
+              key: api-token
