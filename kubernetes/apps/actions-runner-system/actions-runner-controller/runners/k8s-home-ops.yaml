@@ -9,11 +9,16 @@ spec:
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set
+  driftDetection:
+    mode: enabled
   values:
+
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
     githubConfigSecret: home-ops-runner-secret
+
     minRunners: 1
     maxRunners: 3
+
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -23,9 +28,11 @@ spec:
         resources:
           requests:
             storage: 25Gi
+
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
+
     template:
       spec:
         containers:
