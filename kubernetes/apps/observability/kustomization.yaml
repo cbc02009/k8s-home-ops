@@ -10,8 +10,10 @@ resources:
   - ./blackbox-exporter/ks.yaml
   - ./gatus/ks.yaml
   - ./grafana/ks.yaml
+  - ./headlamp/ks.yaml
   - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
+  - ./kube-state-metrics/ks.yaml
   - ./silence-operator/ks.yaml
   - ./unpoller/ks.yaml
   - ./victoria-logs/ks.yaml
