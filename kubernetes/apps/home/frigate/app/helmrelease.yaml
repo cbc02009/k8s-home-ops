@@ -102,7 +102,7 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: envoy-internal # MAKE EXTERNAL
+          - name: envoy-external # MAKE EXTERNAL
             namespace: kube-system
             sectionName: https
         rules:
