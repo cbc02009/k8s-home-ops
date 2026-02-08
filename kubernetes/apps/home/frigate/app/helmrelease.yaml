@@ -102,7 +102,7 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: envoy-external # MAKE EXTERNAL
+          - name: envoy-internal # MAKE EXTERNAL
             sectionName: https
         rules:
           - backendRefs:
