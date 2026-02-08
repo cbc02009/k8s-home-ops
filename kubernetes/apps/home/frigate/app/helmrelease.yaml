@@ -104,6 +104,7 @@ spec:
           - cameras.kokoro.wtf
         parentRefs:
           - name: envoy-internal # MAKE EXTERNAL
+            namespace: network
             sectionName: https
         rules:
           - backendRefs:
