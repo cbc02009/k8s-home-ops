@@ -100,7 +100,8 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
+          # - "{{ .Release.Name }}.kokoro.wtf"
+          - cameras.kokoro.wtf
         parentRefs:
           - name: envoy-internal # MAKE EXTERNAL
             sectionName: https
