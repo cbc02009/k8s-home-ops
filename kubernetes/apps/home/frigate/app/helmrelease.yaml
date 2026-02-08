@@ -103,7 +103,6 @@ spec:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
           - name: envoy-external # MAKE EXTERNAL
-            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
