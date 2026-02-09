@@ -6,11 +6,13 @@ kubernetes_dir := justfile_dir() + '/nas'
 talos_dir := kubernetes_dir + '/talos'
 bootstrap_dir := kubernetes_dir + '/bootstrap'
 
+export TALOSCONFIG := talos_dir + '/clusterconfig/talosconfig'
+
 controller := `talosctl --context nas config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
-nodes := `talosctl --context nas config info -o yaml | yq -e '.nodes | join (" ")'`
+nodes := 'jade'
 
 [private]
-default: kubernetes (kubeconfig "node") wait namespaces resources crds apps
+default: kubernetes (kubeconfig "node") wait namespaces resources crds apps kubeconfig
 
 [doc('Install Talos')]
 talos:

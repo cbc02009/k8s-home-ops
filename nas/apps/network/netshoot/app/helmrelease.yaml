@@ -36,7 +36,8 @@ spec:
       *app :
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.7.0.50
+          # lbipam.cilium.io/ips: 10.7.0.50
+          lbipam.cilium.io/ips: 10.0.2.149
         ports:
           http:
             port: 80
