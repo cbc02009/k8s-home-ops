@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/gateway_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/gateway.networking.k8s.io/gateway_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -11,8 +11,8 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      # lbipam.cilium.io/ips: 10.7.0.1
-      lbipam.cilium.io/ips: 10.0.2.141
+      lbipam.cilium.io/ips: 10.7.0.1
+      # lbipam.cilium.io/ips: 10.0.2.141
   listeners:
     - name: http
       protocol: HTTP
@@ -31,7 +31,7 @@ spec:
           - kind: Secret
             name: ctec-run-tls
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.k8s.io/envoypatchpolicy_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/gateway.envoyproxy.k8s.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyPatchPolicy
 metadata:
