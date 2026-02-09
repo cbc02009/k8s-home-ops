@@ -6,14 +6,11 @@ kubernetes_dir := justfile_dir() + '/nas'
 talos_dir := kubernetes_dir + '/talos'
 bootstrap_dir := kubernetes_dir + '/bootstrap'
 
-export TALOSCONFIG := talos_dir + '/clusterconfig/talosconfig'
-export KUBECONFIG := kubernetes_dir + '/kubeconfig'
-
 controller := `talosctl --context nas config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
 nodes := `talosctl --context nas config info -o yaml | yq -e '.nodes | join (" ")'`
 
 [private]
-default: kubernetes wait namespaces resources crds apps
+default: kubernetes (kubeconfig "node") wait namespaces resources crds apps
 
 [doc('Install Talos')]
 talos:
@@ -39,11 +36,11 @@ kubernetes:
 [doc('Fetch kubeconfig')]
 kubeconfig lb="cilium":
   just log info "Running stage..." "stage" "$0"
-  # if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name home-ops {{ justfile_dir() }}; then \
-  #   just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
-  # fi
+  if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name nas {{ justfile_dir() }}; then \
+    just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
+  fi
   if [[ "{{ lb }}" != "cilium" ]]; then \
-    if ! kubectl config set-cluster home-ops --server "https://{{ controller }}:6443"; then \
+    if ! kubectl config set-cluster nas --server "https://{{ controller }}:6443"; then \
       just log fatal "Failed to set kubectl cluster server address" "stage" "$0"; \
     fi; \
   fi
