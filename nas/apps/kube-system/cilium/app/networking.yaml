@@ -8,8 +8,8 @@ spec:
   # allowFirstLastIPs: "No"
   blocks:
     - cidr: 10.7.0.0/24
-    # - start: "10.0.2.140"
-    #   stop: "10.0.2.150"
+    - start: "10.0.2.140"
+      stop: "10.0.2.150"
 ---
 # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/cilium.io/ciliumbgpadvertisement_v2.json
 apiVersion: cilium.io/v2
