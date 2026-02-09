@@ -8,6 +8,8 @@ spec:
   allowFirstLastIPs: "No"
   blocks:
     - cidr: 10.6.0.0/24
+    - start: "10.0.2.151"
+      stop: "10.0.2.160"
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgpadvertisement_v2.json
 apiVersion: cilium.io/v2
@@ -76,3 +78,12 @@ spec:
       port: 6443
       protocol: TCP
       targetPort: 6443
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2-announcement-policy
+spec:
+  interfaces:
+    - bond0
+  loadBalancerIPs: true
