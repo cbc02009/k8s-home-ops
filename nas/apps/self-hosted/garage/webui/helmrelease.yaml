@@ -24,7 +24,7 @@ spec:
               TZ: ${TZ}
               # API_BASE_URL: http://garage.self-hosted.svc.cluster.local:3903
               # S3_ENDPOINT_URL: http://garage.self-hosted.svc.cluster.local:3900
-              API_BASE_URL: http://garage.ctec.internal:3903
+              API_BASE_URL: http://garage.ctec.internal:3093
               S3_ENDPOINT_URL: http://garage.ctec.internal:3900
             securityContext:
               allowPrivilegeEscalation: false
