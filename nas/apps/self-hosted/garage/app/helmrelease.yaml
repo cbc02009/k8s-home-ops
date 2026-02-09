@@ -43,8 +43,8 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.7.0.4
-          # lbipam.cilium.io/ips: 10.0.2.144
+          # lbipam.cilium.io/ips: 10.7.0.4
+          lbipam.cilium.io/ips: 10.0.2.144
         ports:
           s3:
             port: 3900
