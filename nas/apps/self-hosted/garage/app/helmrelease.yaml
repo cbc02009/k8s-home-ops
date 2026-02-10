@@ -57,7 +57,6 @@ spec:
         #     conditions: ["[STATUS] == 403"]
         hostnames:
           - "s3.ctec.run"
-          - "*.s3.ctec.run"
         parentRefs:
           - name: envoy-internal
             namespace: network
