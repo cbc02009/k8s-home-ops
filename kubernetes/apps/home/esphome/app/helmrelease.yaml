@@ -131,7 +131,7 @@ spec:
     route:
       app:
         hostnames:
-          - esphome.bjw-s.dev
+          - esphome.kokoro.wtf
         parentRefs:
           - name: envoy-internal
             namespace: network

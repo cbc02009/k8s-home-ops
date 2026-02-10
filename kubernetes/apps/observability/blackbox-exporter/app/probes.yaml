@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/probe_v1.json
 ---
 kind: Probe
 apiVersion: monitoring.coreos.com/v1
@@ -14,7 +14,7 @@ spec:
         - shana.ctec.internal
         - pikvm.ctec.internal
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
