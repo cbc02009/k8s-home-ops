@@ -1,0 +1,5 @@
+machine:
+  network:
+    disableSearchDomain: true
+    nameservers:
+      - 10.0.2.1

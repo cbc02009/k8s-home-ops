@@ -5,10 +5,10 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 kubernetes_dir := justfile_dir() + '/kubernetes'
 bootstrap_dir := kubernetes_dir + '/bootstrap'
 controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
-nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
+nodes := 'uiharu miri sakura'
 
 [private]
-default: talos kubernetes (kubeconfig "node") wait namespaces resources crds apps kubeconfig
+default: talos kubernetes wait namespaces resources crds apps kubeconfig
 
 [doc('Install Talos')]
 talos:

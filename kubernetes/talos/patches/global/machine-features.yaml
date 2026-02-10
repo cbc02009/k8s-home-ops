@@ -1,0 +1,19 @@
+machine:
+  features:
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:admin
+      allowedKubernetesNamespaces:
+        - actions-runner-system
+        - system-upgrade
+    apidCheckExtKeyUsage: true
+    diskQuotaSupport: true
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: true # Requires Cilium socketLB features
+      resolveMemberNames: true
+    kubePrism:
+      enabled: true
+      port: 7445
+    rbac: true

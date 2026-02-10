@@ -1,0 +1,6 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net0
+selector:
+  match: link.driver == "igc" && mac(link.permanent_addr).startsWith("58:47:ca:")

@@ -6,3 +6,6 @@ talosconfig
 main-uiharu.ctec.internal.yaml
 main-miri.ctec.internal.yaml
 main-sakura.ctec.internal.yaml
+home-ops-uiharu.yaml
+home-ops-miri.yaml
+home-ops-sakura.yaml

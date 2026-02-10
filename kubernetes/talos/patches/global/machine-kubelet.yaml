@@ -1,0 +1,9 @@
+machine:
+  kubelet:
+    defaultRuntimeSeccompProfileEnabled: true
+    disableManifestsDirectory: true
+    extraConfig:
+      serializeImagePulls: false
+    nodeIP:
+      validSubnets:
+        - 10.0.2.0/24
