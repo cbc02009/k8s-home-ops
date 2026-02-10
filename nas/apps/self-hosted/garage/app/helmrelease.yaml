@@ -57,6 +57,7 @@ spec:
         #     conditions: ["[STATUS] == 403"]
         hostnames:
           - "s3.ctec.run"
+          - "*.s3.ctec.run"
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -64,6 +65,16 @@ spec:
           - backendRefs:
               - identifier: app
                 port: s3
+      api:
+        hostnames:
+          - "s3-api.ctec.run"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: api
     persistence:
       config:
         type: secret
