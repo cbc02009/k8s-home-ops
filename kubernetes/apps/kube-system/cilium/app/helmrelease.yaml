@@ -43,6 +43,7 @@ spec:
       annotations:
         grafana_folder: Cilium
     devices: bond+
+    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
@@ -70,14 +71,12 @@ spec:
     localRedirectPolicy: true
     operator:
       dashboards:
-        enabled: true
-        annotations:
-          grafana_folder: Cilium
+        enabled: false
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 2
+      replicas: 1
       rollOutPods: true
     pmtuDiscovery:
       enabled: true
@@ -108,6 +107,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
