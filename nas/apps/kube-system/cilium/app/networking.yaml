@@ -62,6 +62,11 @@ spec:
           peerAddress: 10.0.2.1
           peerConfigRef:
             name: l3-bgp-peer-config
+        - name: backbone
+          peerASN: 64514
+          peerAddress: 10.0.2.24
+          peerConfigRef:
+            name: l3-bgp-peer-config
 ---
 apiVersion: "cilium.io/v2alpha1"
 kind: CiliumL2AnnouncementPolicy

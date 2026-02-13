@@ -41,6 +41,7 @@ spec:
     dashboards:
       enabled: false
     devices: bond0+
+    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
@@ -104,6 +105,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
