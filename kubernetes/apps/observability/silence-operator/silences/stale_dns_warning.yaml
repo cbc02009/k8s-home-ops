@@ -3,7 +3,7 @@
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
-  name: staleDNSWarning
+  name: stalednswarning
 spec:
   matchers:
     - name: alertname
