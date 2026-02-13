@@ -63,7 +63,7 @@ spec:
           peerConfigRef:
             name: l3-bgp-peer-config
         - name: backbone
-          peerASN: 64514
+          peerASN: 64515
           peerAddress: 10.0.2.24
           peerConfigRef:
             name: l3-bgp-peer-config
