@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/gateway.envoyproxy.k8s.io/envoyproxy_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/gateway.envoyproxy.io/envoyproxy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
@@ -78,22 +78,15 @@ metadata:
 spec:
   clientIPDetection:
     xForwardedFor:
-      numTrustedHops: 1
-  connection:
-    bufferLimit: 8Mi
-    maxAcceptPerSocketEvent: 0
+      trustedCIDRs:
+        - 10.11.0.0/16
   http2:
-    initialStreamWindowSize: 2Mi
-    initialConnectionWindowSize: 32Mi
     onInvalidMessage: TerminateStream
   http3: {}
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
   tcpKeepalive: {}
-  timeout:
-    http:
-      requestReceivedTimeout: 0s
   tls:
     minVersion: "1.2"
     alpnProtocols:
@@ -109,10 +102,10 @@ metadata:
     external-dns.alpha.kubernetes.io/controller: none
 spec:
   parentRefs:
-    - name: envoy-internal
+    - name: envoy-external
       namespace: network
       sectionName: http
-    - name: envoy-external
+    - name: envoy-internal
       namespace: network
       sectionName: http
   rules:
