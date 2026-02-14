@@ -1,0 +1,49 @@
+---
+# This file is not managed by doco-cd because it can't manage itself
+# Instead it is deployed through the TrueNAS SCALE UI
+
+configs:
+  poll-config.yml:
+    content: |
+      - interval: 3600
+        url: https://github.com/cbc02009/k8s-home-ops.git
+secrets:
+  1pw_token:
+    file: /home/truenas_admin/.config/doco-cd/1pw_token
+  # webhook_secret:
+  #   file: /home/truenas_admin/.config/doco-cd/webhook_secret
+services:
+  app:
+    configs:
+      - source: poll-config.yml
+        target: /poll-config.yml
+    container_name: doco-cd
+    environment:
+      HTTP_PORT: 8080
+      LOG_LEVEL: info
+      POLL_CONFIG_FILE: /poll-config.yml
+      SECRET_PROVIDER: 1password
+      SECRET_PROVIDER_ACCESS_TOKEN_FILE: /run/secrets/1pw_token
+      # WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
+      DEPLOY_CONFIG_BASE_DIR: ./docker/truenas/
+    healthcheck:
+      test:
+        - CMD
+        - /doco-cd
+        - healthcheck
+      start_period: 15s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    image: ghcr.io/kimdre/doco-cd:0.64.0@sha256:379db0fd1fd5d185c9c39d70610f066e951d4503d2b2cd2b022a66f6d313b63e
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    secrets:
+      - 1pw_token
+      - webhook_secret
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/data
+volumes:
+  data: {}
