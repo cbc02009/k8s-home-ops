@@ -6,4 +6,4 @@ namespace: self-hosted
 resources:
   - ./namespace.yaml
   # - ./flexo/ks.yaml
-  - ./garage/ks.yaml
+  # - ./garage/ks.yaml
