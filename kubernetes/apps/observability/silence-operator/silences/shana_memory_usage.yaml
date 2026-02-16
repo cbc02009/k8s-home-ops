@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/observability.giantswarm.io/silence_v1alpha2.json
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: shana-memory-usage
+spec:
+  matchers:
+    - name: alertname
+      value: NodeMemoryHighUtilization
+    - name: instance
+      value: shana.ctec.internal:9100
