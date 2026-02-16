@@ -8,4 +8,4 @@ resources:
   - ./ocirepository.yaml
   - ./prometheusrule.yaml
   - ./helmrelease.yaml
-  # - ./scrapeconfig.yaml
+  - ./scrapeconfig.yaml

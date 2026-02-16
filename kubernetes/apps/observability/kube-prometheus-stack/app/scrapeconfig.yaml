@@ -6,7 +6,8 @@ metadata:
   name: &name smtp-relay
 spec:
   staticConfigs:
-    - targets: ["10.4.0.11:8080"]
+    - targets:
+        - "smtp-relay.kokoro.wtf:8080"
   metricsPath: /metrics
   relabelings:
     - action: replace
@@ -20,83 +21,54 @@ metadata:
   name: &name gatus
 spec:
   staticConfigs:
-    - targets: ["status.kokoro.wtf"]
+    - targets:
+        - "status.kokoro.wtf"
   metricsPath: /metrics
   relabelings:
     - action: replace
       targetLabel: job
       replacement: *name
-# ---
-# # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-# apiVersion: monitoring.coreos.com/v1alpha1
-# kind: ScrapeConfig
-# metadata:
-#   name: &name nas-smartctl
-# spec:
-#   staticConfigs:
-#     - targets: ["${NAS_HOST}"]
-#   metricsPath: /metrics
-#   relabelings:
-#     - action: replace
-#       targetLabel: job
-#       replacement: *name
-# ---
-# # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-# apiVersion: monitoring.coreos.com/v1alpha1
-# kind: ScrapeConfig
-# metadata:
-#   name: &name node-exporter
-# spec:
-#   staticConfigs:
-#     - targets:
-#         - gateway.ctec.run:9100
-#         - pikvm.ctec.run:9100
-#   metricsPath: /metrics
-#   relabelings:
-#     - action: replace
-#       targetLabel: job
-#       replacement: *name
 ---
 # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name pikvm
-spec:
-  staticConfigs:
-    - targets: ["pikvm.${INTERNAL_DOMAIN}"]
-  metricsPath: /api/export/prometheus/metrics
-  relabelings:
-    - action: replace
-      targetLabel: job
-      replacement: *name
----
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: ScrapeConfig
-metadata:
-  name: &name vyos-speedtest-exporter
-spec:
-  staticConfigs:
-    - targets: ["gateway.${INTERNAL_DOMAIN}:9798"]
-  metricsPath: /metrics
-  relabelings:
-    - action: replace
-      targetLabel: job
-      replacement: *name
-  scrapeInterval: 1h
----
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: ScrapeConfig
-metadata:
-  name: &name onepassword-connect
+  name: &name smartctl-exporter
 spec:
   staticConfigs:
     - targets:
-        - https://opc.cutil.dev
+        - shana.ctec.internal:9633
   metricsPath: /metrics
   relabelings:
     - action: replace
       targetLabel: job
       replacement: *name
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: &name node-exporter
+spec:
+  staticConfigs:
+    - targets:
+        - shana.ctec.internal:9100
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+# apiVersion: monitoring.coreos.com/v1alpha1
+# kind: ScrapeConfig
+# metadata:
+#   name: &name pikvm
+# spec:
+#   staticConfigs:
+#     - targets: ["pikvm.${INTERNAL_DOMAIN}"]
+#   metricsPath: /api/export/prometheus/metrics
+#   relabelings:
+#     - action: replace
+#       targetLabel: job
+#       replacement: *name
