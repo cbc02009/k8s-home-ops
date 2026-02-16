@@ -16,7 +16,7 @@ services:
       traefik.enable: "true"
       # S3
       traefik.http.services.garage-s3.loadbalancer.server.port: ${S3_PORT}
-      traefik.http.routers.garage-s3.entrypoints: https
+      traefik.http.routers.garage-s3.entrypoints: websecure
       traefik.http.routers.garage-s3.rule: Host(`${S3_HOST}`) || HostRegexp(`^.+\.${S3_HOST}$`)
       traefik.http.routers.garage-s3.tls.certresolver: cf
       traefik.http.routers.garage-s3.tls.domains[0].main: ${S3_HOST}
@@ -24,7 +24,7 @@ services:
       traefik.http.routers.garage-s3.service: garage-s3
       # API
       traefik.http.services.garage-api.loadbalancer.server.port: ${API_PORT}
-      traefik.http.routers.garage-api.entrypoints: https
+      traefik.http.routers.garage-api.entrypoints: websecure
       traefik.http.routers.garage-api.rule: Host(`${API_HOST}`)
       traefik.http.routers.garage-api.tls: true
       traefik.http.routers.garage-api.service: garage-api
@@ -44,7 +44,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.http.services.garage-ui.loadbalancer.server.port: ${UI_PORT}
-      traefik.http.routers.garage-ui.entrypoints: https
+      traefik.http.routers.garage-ui.entrypoints: websecure
       traefik.http.routers.garage-ui.rule: Host(`${UI_HOST}`)
       traefik.http.routers.garage-ui.tls: true
       traefik.http.routers.garage-ui.service: garage-ui
