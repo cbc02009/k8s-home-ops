@@ -32,5 +32,6 @@ services:
     volumes:
       - acme:/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/dynamic:/dynamic
 volumes:
   acme:

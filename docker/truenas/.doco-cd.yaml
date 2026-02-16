@@ -6,3 +6,6 @@ auto_discover_opts:
   delete: true
 external_secrets:
   TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_nas/truenas_traefik_api_token
+  GARAGE_ADMIN_TOKEN: op://k8s-home-ops/garage/admin_token
+  GARAGE_RPC_SECRET: op://k8s-home-ops/garage/rpc_secret
+  GARAGE_METRICS_TOKEN: op://k8s-home-ops/garage/metrics_token

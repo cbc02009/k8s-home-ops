@@ -1,0 +1,19 @@
+http:
+  routers:
+    dashboard:
+      rule: Host(`traefik.ctec.run`) # && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      entryPoints:
+        - https
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: ctec.run
+            sans:
+              - "*.ctec.run"
+    metrics:
+      rule: Host(`traefik.ctec.run`) && PathPrefix(`/metrics`)
+      service: prometheus@internal
+      entryPoints:
+        - https
+      tls: true
