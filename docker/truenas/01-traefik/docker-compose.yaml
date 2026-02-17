@@ -23,6 +23,6 @@ services:
       - ./config/dynamic:/dynamic
 configs:
   traefik-config:
-    file: ./config/traefik.yml
+    file: ./config/traefik.yaml
 volumes:
   acme:
