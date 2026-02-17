@@ -6,6 +6,10 @@ services:
     restart: unless-stopped
     networks:
       apps:
+    environment:
+      GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
+      GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
+      GARAGE_METRICS_TOKEN: ${GARAGE_METRICS_TOKEN}
     expose:
       - ${S3_PORT}
       - ${API_PORT}
