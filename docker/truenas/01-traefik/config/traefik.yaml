@@ -24,7 +24,7 @@ providers:
 certificatesResolvers:
   cloudflare:
     acme:
-      storage: /certs/acme.json
+      storage: /acme/acme.json
       caServer: https://acme-v02.api.letsencrypt.org/directory
       dnsChallenge:
         provider: cloudflare
