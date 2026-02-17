@@ -37,6 +37,7 @@ services:
     container_name: garage-ui
     restart: unless-stopped
     environment:
+      GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
       API_BASE_URL: "http://garage:${API_PORT}"
       S3_ENDPOINT_URL: "http://garage:${S3_PORT}"
     networks:
