@@ -6,7 +6,7 @@ http:
       entryPoints:
         - https
       tls:
-        certResolver: letsencrypt
+        certResolver: cloudflare
         domains:
           - main: ctec.run
             sans:
