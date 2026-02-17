@@ -33,7 +33,7 @@ spec:
       compression: bzip2
       maxParallel: 8
     destinationPath: s3://postgres/
-    endpointURL: https://s3.ctec.run
+    endpointURL: https://s3.cnas.dev
     s3Credentials:
       accessKeyId:
         name: cloudnative-pg
