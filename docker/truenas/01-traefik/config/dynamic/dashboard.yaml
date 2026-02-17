@@ -1,18 +1,18 @@
 http:
   routers:
     dashboard:
-      rule: Host(`traefik.ctec.run`) # && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      rule: Host(`traefik.cnas.dev`) # && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
       entryPoints:
         - https
       tls:
         certResolver: cloudflare
         domains:
-          - main: ctec.run
+          - main: cnas.dev
             sans:
-              - "*.ctec.run"
+              - "*.cnas.dev"
     metrics:
-      rule: Host(`traefik.ctec.run`) && PathPrefix(`/metrics`)
+      rule: Host(`traefik.cnas.dev`) && PathPrefix(`/metrics`)
       service: prometheus@internal
       entryPoints:
         - https

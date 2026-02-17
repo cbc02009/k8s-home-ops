@@ -37,9 +37,9 @@ tls:
       defaultGeneratedCert:
         resolver: cloudflare
         domain:
-          main: ctec.run
+          main: cnas.dev
           sans:
-            - "*.ctec.run"
+            - "*.cnas.dev"
 metrics:
   prometheus:
     entryPoint: metrics
