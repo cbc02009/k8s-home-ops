@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: system
 resources:
   - ./helmrelease.yaml
-  # - ./mutatingadmissionpolicy.yaml
+  - ./mutatingadmissionpolicy.yaml
   - ./ocirepository.yaml
   - ./prometheusrule.yaml
