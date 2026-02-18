@@ -10,9 +10,9 @@ data:
         "type": "s3",
         "config": {
           "bucket": "volsync",
-          "endpoint": "garage.ctec.internal",
-          "accessKeyID": "{{ .gui_access_key }}",
-          "secretAccessKey": "{{ .gui_secret_key }}",
+          "endpoint": "garage.cnas.dev",
+          "accessKeyID": "{{ .access_key }}",
+          "secretAccessKey": "{{ .secret_key }}",
           "region": "garage"
         }
       },
