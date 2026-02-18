@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/unpoller/unpoller
-              tag: v2.21.0
+              tag: v2.34.0
 
             env:
               UP_UNIFI_DEFAULT_ROLE: home-ops
