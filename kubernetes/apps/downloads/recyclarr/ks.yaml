@@ -24,6 +24,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/volsync
+    - ../../../../components/r2
   postBuild:
     substitute:
       APP: *app

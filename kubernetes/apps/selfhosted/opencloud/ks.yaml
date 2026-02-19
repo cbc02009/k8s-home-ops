@@ -1,13 +1,13 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: booklore
+  name: opencloud
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: booklore
+      app.kubernetes.io/name: opencloud
   components:
     - ../../../../components/volsync
     - ../../../../components/r2
@@ -15,18 +15,17 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/media/booklore/app"
+  path: "./kubernetes/apps/selfhosted/opencloud/app"
   postBuild:
     substitute:
-      APP: booklore
-      VOLSYNC_CLAIM: booklore
-      APP_UID: "1000"
-      APP_GID: "1000"
+      APP: opencloud
+      VOLSYNC_CLAIM: opencloud
+      VOLSYNC_CAPACITY: 15Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: media
+  targetNamespace: selfhosted
   timeout: 5m
   wait: false

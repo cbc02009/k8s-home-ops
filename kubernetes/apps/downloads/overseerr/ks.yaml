@@ -25,6 +25,7 @@ spec:
   components:
     - ../../../../components/gatus/external
     - ../../../../components/volsync
+    - ../../../../components/r2
   postBuild:
     substitute:
       APP: *app

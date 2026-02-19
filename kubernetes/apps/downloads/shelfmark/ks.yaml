@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: shelfmark
   components:
     - ../../../../components/volsync
+    - ../../../../components/r2
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
