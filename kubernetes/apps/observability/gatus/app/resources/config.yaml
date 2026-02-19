@@ -4,44 +4,7 @@ connectivity:
     target: 1.1.1.1:53
     interval: 1m
 
-web:
-  port: ${CUSTOM_WEB_PORT}
-
-storage:
-  type: postgres
-  path: postgres://${INIT_POSTGRES_USER}:${INIT_POSTGRES_PASS}@${INIT_POSTGRES_HOST}:5432/${INIT_POSTGRES_DBNAME}?sslmode=disable
-  caching: true
-
-metrics: true
-
-debug: false
-
-ui:
-  title: Status | Gatus
-  header: Status
-
-alerting:
-  discord:
-    webhook-url: ${DISCORD_WEBHOOK}
-    default-alert:
-      description: health-check failed
-      failure-threshold: 3
-      minimum-reminder-interval: 1h
-      send-on-resolved: true
-      success-threshold: 2
-
 endpoints:
-  - name: flux-webhook
-    group: external
-    url: https://flux-receiver.kokoro.wtf
-    interval: 1m
-    client:
-      dns-resolver: tcp://1.1.1.1:53
-    conditions:
-      - "[STATUS] == 404"
-    alerts:
-      - type: discord
-
   - name: Cloudflare
     group: connectivity
     url: icmp://1.1.1.1
@@ -62,3 +25,34 @@ endpoints:
     interval: 1m
     conditions:
       - "[CONNECTED] == true"
+
+metrics: true
+
+storage:
+  type: postgres
+  path: postgres://${INIT_POSTGRES_USER}:${INIT_POSTGRES_PASS}@${INIT_POSTGRES_HOST}:5432/${INIT_POSTGRES_DBNAME}?sslmode=disable
+  caching: true
+
+ui:
+  title: Status | Gatus
+  header: Status
+  logo: https://avatars.githubusercontent.com/u/213795
+  link: https://github.com/onedr0p
+  buttons:
+    - name: Github
+      link: https://github.com/onedr0p
+    - name: Homelab
+      link: https://github.com/onedr0p/home-ops
+
+web:
+  port: ${GATUS_WEB_PORT}
+
+alerting:
+  discord:
+    webhook-url: ${DISCORD_WEBHOOK}
+    default-alert:
+      description: health-check failed
+      failure-threshold: 3
+      minimum-reminder-interval: 1h
+      send-on-resolved: true
+      success-threshold: 2

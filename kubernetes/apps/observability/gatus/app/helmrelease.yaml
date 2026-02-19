@@ -3,24 +3,16 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app gatus
+  name: gatus
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+    name: gatus
+  interval: 1h
   values:
     controllers:
       gatus:
+        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -72,7 +64,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -85,7 +77,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-
     service:
       app:
         ports:
@@ -103,7 +94,6 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
-
     rbac:
       roles:
         gatus:
@@ -136,12 +126,11 @@ spec:
     serviceAccount:
       gatus: {}
     persistence:
-      config:
-        type: emptyDir
       config-file:
         type: configMap
         name: gatus-configmap
         globalMounts:
+          - path: /config/buddy.yaml
+            subPath: buddy.yaml
           - path: /config/config.yaml
             subPath: config.yaml
-            readOnly: true
