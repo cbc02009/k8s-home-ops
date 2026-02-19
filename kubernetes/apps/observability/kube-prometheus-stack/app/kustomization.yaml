@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./alertmanagerconfig.yaml
   - ./externalsecret.yaml
+  - ./grafanadashboard.yaml
   - ./ocirepository.yaml
   - ./prometheusrule.yaml
   - ./helmrelease.yaml
