@@ -85,9 +85,7 @@ spec:
           compress gzip
           log_response_payload false
     dashboards:
-      enabled: false
-      annotations:
-        grafana_folder: observability
-    logLevel: warn
+      enabled: true
     serviceMonitor:
       enabled: true
+    logLevel: warn
