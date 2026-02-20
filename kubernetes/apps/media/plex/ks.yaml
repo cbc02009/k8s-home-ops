@@ -32,4 +32,4 @@ spec:
     substitute:
       APP: *app
       GATUS_PATH: /web/index.html
-      VOLSYNC_CAPACITY: 70Gi
+      VOLSYNC_CAPACITY: 50Gi
