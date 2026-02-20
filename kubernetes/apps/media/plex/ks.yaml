@@ -23,10 +23,10 @@ spec:
     - name: volsync
       namespace: system
   components:
-    # - ../../../../components/gatus/external
+    - ../../../../components/gatus/external
     - ../../../../components/volsync
     # - ../../../../components/r2
-    # - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/keda/nas-nfs-scaler
     - ../../../../components/gpu
   postBuild:
     substitute:
