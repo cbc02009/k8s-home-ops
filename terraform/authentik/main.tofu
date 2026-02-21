@@ -1,16 +1,21 @@
 terraform {
-  #   backend "pg" {
-  #   conn_str = "postgres://10.6.0.20/terraform"
-  #   schema_name = "authentik"
-  # }
-
-  backend "s3" {
-    bucket                      = "terraform"
-    key                         = "terraform/authentik/state.tfstate"
-    skip_credentials_validation = true
-    skip_metadata_api_check     = true
-    skip_region_validation      = true
+    backend "pg" {
+    conn_str = "postgres://10.6.0.20/terraform"
+    schema_name = "authentik"
   }
+
+  # backend "s3" {
+  #   endpoints = {
+  #     s3                        = "https://s3.ctec.run/"
+  #   }
+  #   bucket                      = "terraform"
+  #   key                         = "garage/state.tfstate"
+  #   region                      = "garage"
+  #   use_path_style              = true
+  #   skip_credentials_validation = true
+  #   skip_metadata_api_check     = true
+  #   skip_region_validation      = true
+  # }
 
   required_providers {
     authentik = {

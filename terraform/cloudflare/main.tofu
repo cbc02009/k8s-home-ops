@@ -1,12 +1,4 @@
 terraform {
-#   backend "s3" {
-#     bucket                      = "terraform"
-#     key                         = "cloudflare/state.tfstate"
-#     skip_credentials_validation = true
-#     skip_metadata_api_check     = true
-#     skip_region_validation      = true
-#   }
-
     backend "pg" {
     conn_str = "postgres://10.6.0.20/terraform"
     schema_name = "cloudflare"
