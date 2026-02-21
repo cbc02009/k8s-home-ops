@@ -5,36 +5,28 @@ kind: HelmRelease
 metadata:
   name: cilium
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: cilium
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-
+  interval: 1h
   values:
     autoDirectNodeRoutes: true
     bandwidthManager:
       enabled: true
       bbr: true
-    bgpControlPlane:
-      enabled: true
     bpf:
       datapathMode: netkit
       masquerade: true
       preallocateMaps: true
     bpfClockProbe: true
+    bgpControlPlane:
+      enabled: true
     cgroup:
-      autoMount:
+      automount:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cluster:
-      name: cluster
+      name: home-ops
       id: 1
     cni:
       exclusive: false
@@ -48,8 +40,6 @@ spec:
       enabled: true
     envoy:
       enabled: false
-    gatewayAPI:
-      enabled: false
     hubble:
       enabled: false
     ipam:
@@ -60,23 +50,20 @@ spec:
     kubeProxyReplacement: true
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     l2announcements:
-      enabled: true
-      interface: bond0
-    l2podAnnouncements:
-      enabled: true
-      interface: bond0
+      enabled: false
     loadBalancer:
       algorithm: maglev
       mode: dsr
-    localRedirectPolicy: true
+    localRedirectPolicies:
+      enabled: true
     operator:
       dashboards:
-        enabled: false
+        enabled: true
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 1
+      replicas: 2
       rollOutPods: true
     pmtuDiscovery:
       enabled: true
@@ -107,8 +94,6 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
-          - PERFMON
-          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
