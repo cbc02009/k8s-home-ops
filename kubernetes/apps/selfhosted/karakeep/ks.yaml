@@ -18,6 +18,8 @@ spec:
   postBuild:
     substitute:
       APP: karakeep
+      HOSTNAME: karakeep.kokoro.wtf
+      AUTH_HOSTNAME: auth.kokoro.wtf
   prune: true
   sourceRef:
     kind: GitRepository
