@@ -28,6 +28,8 @@ spec:
       namespace: external-secrets
     - name: cloudnative-pg-cluster
       namespace: databases
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   postBuild:
     substitute:
       APP: *app
