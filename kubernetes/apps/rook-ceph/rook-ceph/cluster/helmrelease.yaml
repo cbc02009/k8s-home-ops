@@ -55,8 +55,8 @@ spec:
       #       - 10.0.2.0/24
       #     cluster:
       #       - 10.0.2.0/24
-        connections:
-          requireMsgr2: true
+        # connections:
+        #   requireMsgr2: true
       resources:
         mgr:
           limits:
