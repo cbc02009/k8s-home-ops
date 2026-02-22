@@ -10,6 +10,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/selfhosted/rustdesk/app
