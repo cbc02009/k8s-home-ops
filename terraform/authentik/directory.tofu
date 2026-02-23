@@ -16,13 +16,11 @@ resource "authentik_group" "users" {
 resource "authentik_group" "media" {
   name         = "media"
   is_superuser = false
-  parent       = resource.authentik_group.users.id
 }
 
 resource "authentik_group" "home" {
   name         = "Home"
   is_superuser = false
-  parent       = resource.authentik_group.users.id
 }
 
 resource "authentik_group" "downloads" {

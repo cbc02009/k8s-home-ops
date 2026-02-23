@@ -32,6 +32,12 @@ module "secret_authentik" {
   item   = "authentik"
 }
 
+module "secret_karakeep" {
+  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  vault  = "k8s-home-ops"
+  item   = "karakeep"
+}
+
 module "secret_immich" {
   source = "github.com/bjw-s/terraform-1password-item?ref=main"
   vault  = "k8s-home-ops"
