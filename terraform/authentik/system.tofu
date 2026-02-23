@@ -23,7 +23,6 @@ resource "authentik_outpost" "proxyoutpost" {
   service_connection = authentik_service_connection_kubernetes.local.id
   protocol_providers = [
     module.proxy-frigate.id,
-    module.proxy-calibre-web.id,
     # module.proxy-mealieproxy.id
   ]
   config = jsonencode({
