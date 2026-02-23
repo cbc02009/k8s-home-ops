@@ -1,75 +1,3 @@
-# module "proxy-prowlarr" {
-#   source             = "./proxy_application"
-#   name               = "Prowlarr"
-#   description        = "Torrent indexer"
-#   icon_url           = "https://raw.githubusercontent.com/Prowlarr/Prowlarr/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "prowlarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
-# module "proxy-radarr" {
-#   source             = "./proxy_application"
-#   name               = "Radarr"
-#   description        = "Movies"
-#   icon_url           = "https://github.com/Radarr/Radarr/raw/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "radarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
-# module "proxy-sonarr" {
-#   source             = "./proxy_application"
-#   name               = "Sonarr"
-#   description        = "TV"
-#   icon_url           = "https://github.com/Sonarr/Sonarr/raw/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "sonarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
-# module "proxy-animarr" {
-#   source             = "./proxy_application"
-#   name               = "Animarr"
-#   description        = "TV"
-#   icon_url           = "https://github.com/Sonarr/Sonarr/raw/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "animarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
-# module "proxy-lidarr" {
-#   source             = "./proxy_application"
-#   name               = "Lidarr"
-#   description        = "Music"
-#   icon_url           = "https://github.com/Lidarr/Lidarr/raw/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "lidarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
-# module "proxy-readarr" {
-#   source             = "./proxy_application"
-#   name               = "Readarr"
-#   description        = "Books"
-#   icon_url           = "https://github.com/Readarr/Readarr/raw/develop/Logo/128.png"
-#   group              = "Media"
-#   slug               = "readarr"
-#   domain             = var.public_domain
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   auth_groups        = [authentik_group.media.id]
-# }
-
 module "proxy-frigate" {
   source             = "./proxy_application"
   name               = "Frigate"
@@ -81,19 +9,6 @@ module "proxy-frigate" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   auth_groups        = [authentik_group.home.id]
-  access_token_validity = "weeks=20"
-}
-
-module "proxy-calibre-web" {
-  source             = "./proxy_application"
-  name               = "Calibre Web"
-  description        = "Books"
-  group              = "Selfhosted"
-  slug               = "cwa"
-  domain             = var.public_domain
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  auth_groups        = [authentik_group.users.id]
   access_token_validity = "weeks=20"
 }
 
@@ -197,42 +112,26 @@ module "oauth2-paperless" {
   redirect_uris      = ["https://documents.${var.private_domain}/accounts/oidc/authentik/login/callback/"]
 }
 
-module "oauth2-qui" {
-  source             = "./oauth2_application"
-  name               = "Qui"
-  icon_url           = "https://raw.githubusercontent.com/autobrr/qui/refs/heads/main/web/public/qui.png"
-  launch_url         = "https://qui.${var.private_domain}"
-  description        = "Torrent UI"
-  newtab             = true
-  group              = "Downloads"
-  auth_groups        = [authentik_group.downloads.id]
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  client_id          = module.secret_qui.fields["OIDC_CLIENT_ID"]
-  client_secret      = module.secret_qui.fields["OIDC_CLIENT_SECRET"]
-  redirect_uris      = ["https://qui.${var.private_domain}/api/auth/oidc/callback"]
-}
-
-module "oauth2-opencloud" {
-  source             = "./oauth2_application"
-  name               = "OpenCloud"
-  icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
-  launch_url         = "https://opencloud.${var.public_domain}"
-  description        = "OpenCloud"
-  newtab             = true
-  group              = "Selfhosted"
-  auth_groups        = [authentik_group.users.id]
-  client_type        = "public"
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  client_id          = "web"
-  # additional_property_mappings = formatlist(authentik_scope_mapping.openid-nextcloud.id)
-  redirect_uris = [
-    "https://opencloud.${var.public_domain}",
-    "https://opencloud.${var.public_domain}/oidc-callback.html",
-    "https://opencloud.${var.public_domain}/oidc-silent-redirect.html"
-  ]
-}
+# module "oauth2-opencloud" {
+#   source             = "./oauth2_application"
+#   name               = "OpenCloud"
+#   icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
+#   launch_url         = "https://opencloud.${var.public_domain}"
+#   description        = "OpenCloud"
+#   newtab             = true
+#   group              = "Selfhosted"
+#   auth_groups        = [authentik_group.users.id]
+#   client_type        = "public"
+#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+#   client_id          = "web"
+#   # additional_property_mappings = formatlist(authentik_scope_mapping.openid-nextcloud.id)
+#   redirect_uris = [
+#     "https://opencloud.${var.public_domain}",
+#     "https://opencloud.${var.public_domain}/oidc-callback.html",
+#     "https://opencloud.${var.public_domain}/oidc-silent-redirect.html"
+#   ]
+# }
 
 # module "oauth2-pgadmin" {
 #   source = "./oauth2_application"
