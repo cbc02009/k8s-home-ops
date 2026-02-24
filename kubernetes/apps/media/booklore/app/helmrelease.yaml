@@ -75,7 +75,7 @@ spec:
               DB_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: "{{ Release.Name }}"
+                    name: *app
                     key: booklore_mariadb_password
         containers:
           booklore:
@@ -176,7 +176,7 @@ spec:
     route:
       booklore:
         hostnames:
-          - booklore.kokoro.wtf
+          - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
           - name: envoy-internal
             namespace: network
