@@ -43,7 +43,7 @@ spec:
               OAUTH_WELLKNOWN_URL: https://${AUTH_HOSTNAME}/application/o/karakeep/.well-known/openid-configuration
               OAUTH_PROVIDER_NAME: authentik
               OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING: true
-              OPENAI_BASE_URL: https://generativelanguage.googleapis.com/
+              OPENAI_BASE_URL: https://generativelanguage.googleapis.com/v1beta
               OPENAI_API_KEY:
                 secretKeyRef:
                   name: karakeep-secret
