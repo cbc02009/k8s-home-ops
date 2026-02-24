@@ -43,6 +43,13 @@ spec:
               OAUTH_WELLKNOWN_URL: https://${AUTH_HOSTNAME}/application/o/karakeep/.well-known/openid-configuration
               OAUTH_PROVIDER_NAME: authentik
               OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING: true
+              OPENAI_BASE_URL: https://generativelanguage.googleapis.com/
+              OPENAI_API_KEY:
+                secretKeyRef:
+                  name: karakeep-secret
+                  key: openai_api_key
+              INFERENCE_TEXT_MODEL: gemini-2.0-flash
+              INFERENCE_IMAGE_MODEL: gemini-2.0-flash
               DISABLE_PASSWORD_AUTH: true
               DISABLE_SIGNUPS: false
               BROWSER_WEB_URL: http://karakeep-chrome.selfhosted.svc.cluster.local:9222
