@@ -13,7 +13,7 @@ data:
           "endpoint": "s3.cnas.dev",
           "accessKeyID": "{{ .access_key }}",
           "secretAccessKey": "{{ .secret_key }}",
-          "region": "garage"
+          "region": ""
 
         }
       },
