@@ -13,12 +13,8 @@ data:
           "endpoint": "s3.cnas.dev",
           "accessKeyID": "{{ .access_key }}",
           "secretAccessKey": "{{ .secret_key }}",
-          "sessionToken": "",
-          "roleARN": "",
-          "sessionName": "",
-          "duration": "0s",
-          "roleEndpoint": "",
-          "roleRegion": ""
+          "region": "garage"
+
         }
       },
       "hostname": "volsync.system.svc.cluster.local",
