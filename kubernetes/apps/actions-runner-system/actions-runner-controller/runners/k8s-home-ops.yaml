@@ -5,20 +5,16 @@ kind: HelmRelease
 metadata:
   name: &name home-ops-runner
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set
-  driftDetection:
-    mode: enabled
+  interval: 1h
   values:
 
     githubConfigUrl: https://github.com/cbc02009/k8s-home-ops
     githubConfigSecret: home-ops-runner-secret
-
     minRunners: 1
     maxRunners: 3
-
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -28,19 +24,29 @@ spec:
         resources:
           requests:
             storage: 25Gi
-
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
-
     template:
       spec:
         containers:
           - name: runner
-            image: ghcr.io/home-operations/actions-runner:2.331.0@sha256:17e4be4e4664067b9a5f2e43d0e66e0a249654f3783a0a3f17448844a5422be5
+            image: ghcr.io/home-operations/actions-runner:2.332.0@sha256:577ec3d514700203d07a8b14ac9238e2c8bf7565969f9d3bddf5dac1c60c43b7
             command:
               - /home/runner/run.sh
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
+              - name: NODE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.hostIP
+            volumeMounts:
+              - mountPath: /var/run/secrets/talos.dev
+                name: talos
+                readOnly: true
         serviceAccountName: *name
+        volumes:
+          - name: talos
+            secret:
+              secretName: *name
