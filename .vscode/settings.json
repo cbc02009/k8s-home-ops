@@ -16,6 +16,12 @@
     "*.tofu": "opentofu"
     },
     "files.trimTrailingWhitespace": true,
+    "opentofu.experimentalFeatures.prefillRequiredFields": true,
+    "[opentofu][opentofu-vars]": {
+      "editor.defaultFormatter": "opentofu.vscode-opentofu",
+      "editor.formatOnSave": true,
+      "editor.formatOnSaveMode": "file"
+    },
     "sops.defaults.ageKeyFile": "age.key",
     "yaml.schemaStore.enable": true,
     "yaml.schemas": {
