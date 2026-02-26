@@ -18,8 +18,8 @@ permissions:
 jobs:
   main:
     name: Label Sync - Sync Labels
-    # runs-on: ubuntu-latest
-    runs-on: home-ops-runner
+    runs-on: ubuntu-latest
+    # runs-on: home-ops-runner
     permissions:
       contents: read
       issues: write
