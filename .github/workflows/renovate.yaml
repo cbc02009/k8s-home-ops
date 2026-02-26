@@ -41,7 +41,8 @@ permissions:
 jobs:
   main:
     name: Renovate
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: home-ops-runner
     permissions:
       packages: read
     steps:
