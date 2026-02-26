@@ -152,9 +152,9 @@ spec:
           booklore:
             booklore:
               - path: /books
-                subPath: Library/Main/Books/Booklore/books
+                subPath: booklore/books
               - path: /bookdrop
-                subPath: Library/Main/Books/Booklore/bookdrop
+                subPath: booklore/bookdrop
       mysqld:
         type: emptyDir
         medium: Memory
