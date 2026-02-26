@@ -1,26 +1,18 @@
 ---
-# Area
-area/github:
-  - changed-files:
-      - any-glob-to-any-file: .github/**/*
-area/kubernetes:
-  - changed-files:
-      - any-glob-to-any-file: kubernetes/**/*
-area/taskfile:
-  - changed-files:
-      - any-glob-to-any-file: .taskfiles/**/*
-      - any-glob-to-any-file: Taskfile*
 area/terraform:
   - changed-files:
-      - any-glob-to-any-file: terraform/**/*
-# Cluster
-cluster/main:
+      - any-glob-to-any-file: "terraform/**/*"
+area/github:
   - changed-files:
-      - any-glob-to-any-file: kubernetes/main/**/*
-      - any-glob-to-any-file: terraform/main/**/*
-cluster/nas:
+      - any-glob-to-any-file: ".github/**/*"
+area/kubernetes:
   - changed-files:
-      - any-glob-to-any-file: kubernetes/nas/**/*
-cluster/dns:
+      - any-glob-to-any-file: "kubernetes/**/*"
+area/truenas:
   - changed-files:
-      - any-glob-to-any-file: kubernetes/dns/**/*
+      - any-glob-to-any-file: "truenas/**/*"
+area/taskfiles:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".taskfiles/**/*"
+          - "Taskfile.yaml"

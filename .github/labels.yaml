@@ -1,44 +1,70 @@
 ---
-# Areas
-- name: area/github
-  color: "0e8a16"
-- name: area/kubernetes
-  color: "0e8a16"
-- name: area/taskfile
-  color: "0e8a16"
+# Area
 - name: area/terraform
-  color: "0e8a16"
-# Clusters
-- name: cluster/main
-  color: "ffc300"
-- name: cluster/nas
-  color: "ffc300"
-- name: cluster/dns
-  color: "ffc300"
-# Renovate Types
+  color: "72ccf3"
+- name: area/github
+  color: "72ccf3"
+- name: area/kubernetes
+  color: "72ccf3"
+- name: area/truenas
+  color: "72ccf3"
+- name: area/taskfiles
+  color: "72ccf3"
+# Renovate
 - name: renovate/container
-  color: "027fa0"
+  color: "ffc300"
 - name: renovate/github-action
-  color: "027fa0"
-- name: renovate/grafana-dashboard
-  color: "027fa0"
+  color: "ffc300"
 - name: renovate/github-release
-  color: "027fa0"
+  color: "ffc300"
+- name: renovate/grafana-dashboard
+  color: "ffc300"
 - name: renovate/helm
-  color: "027fa0"
+  color: "ffc300"
 - name: renovate/terraform
-  color: "027fa0"
-# Semantic Types
-- name: type/digest
-  color: "ffeC19"
+  color: "ffc300"
+# Semantic Type
 - name: type/patch
-  color: "ffeC19"
+  color: "FFEC19"
 - name: type/minor
-  color: "ff9800"
+  color: "FF9800"
 - name: type/major
-  color: "f6412d"
+  color: "F6412D"
+# Size
+- name: size/XS
+  color: "009900"
+  description: >-
+    Denotes a PR that changes 0-9 lines, ignoring generated files.
+- name: size/S
+  color: "77bb00"
+  description: >-
+    Denotes a PR that changes 10-29 lines, ignoring generated files.
+- name: size/M
+  color: "eebb00"
+  description: >-
+    Denotes a PR that changes 30-99 lines, ignoring generated files.
+- name: size/L
+  color: "ee9900"
+  description: >-
+    Denotes a PR that changes 100-499 lines, ignoring generated files.
+- name: size/XL
+  color: "ee5500"
+  description: >-
+    Denotes a PR that changes 500-999 lines, ignoring generated files.
+- name: size/XXL
+  color: "ee0000"
+  description: >-
+    Denotes a PR that changes 1000+ lines, ignoring generated files.
 # Uncategorized
-- name: hold/upstream
+- name: bug
   color: "ee0701"
-- name: lint/lychee
-  color: "201e39"
+- name: do-not-merge
+  color: "ee0701"
+- name: docs
+  color: "F4D1B7"
+- name: enhancement
+  color: "84b6eb"
+- name: link-checker
+  color: "7B55D7"
+- name: question
+  color: "cc317c"
