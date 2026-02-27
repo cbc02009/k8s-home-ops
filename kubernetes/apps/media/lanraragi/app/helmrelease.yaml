@@ -41,20 +41,20 @@ spec:
     persistence:
       config:
         existingClaim: *app
-        globalMounts:
-          - path: /home/koyomi/lanraragi/database
+        advancedMounts:
+          lanraragi:
+            lanraragi:
+              - path: /home/koyomi/lanraragi/database
+                subPath: /database
+              - path: /home/koyomi/lanraragi/thumb
+                subPath: /thumb
 
       media:
-        enabled: true
         type: nfs
-        server: ${NAS_HOST}
-        path: /mnt/tank/media/manga/lanraragi/content
-        globalMounts:
-          - path: /home/koyomi/lanraragi/content
-      thumbs:
-        enabled: true
-        type: nfs
-        server: ${NAS_HOST}
-        path: /mnt/tank/media/manga/lanraragi/thumb
-        globalMounts:
-          - path: /home/koyomi/lanraragi/thumb
+        server: shana.ctec.internal
+        path: /mnt/tank/media
+        advancedMounts:
+          lanraragi:
+            lanrargi:
+              - path: /home/koyomi/lanraragi/content
+                subPath: lanraragi/content
