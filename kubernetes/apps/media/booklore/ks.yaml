@@ -19,7 +19,6 @@ spec:
   postBuild:
     substitute:
       APP: booklore
-      VOLSYNC_CLAIM: booklore
       APP_UID: "1000"
       APP_GID: "1000"
   prune: true

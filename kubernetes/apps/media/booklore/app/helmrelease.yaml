@@ -81,7 +81,7 @@ spec:
           booklore:
             image:
               repository: ghcr.io/booklore-app/booklore
-              tag: v2.0.1@sha256:e5c51133c0c50e97004bf711a34521c698e4b27b6847e54fe304c08ff4aa8ee1
+              tag: v2.0.3
             command:
               - java
             args:
@@ -146,15 +146,15 @@ spec:
                 subPath: mysql
       nfs-nas-media:
         type: nfs
-        server: shana.ctec.internal
+        server: gladius.bjw-s.internal
         path: /mnt/tank/media
         advancedMounts:
           booklore:
             booklore:
               - path: /books
-                subPath: booklore/books
+                subPath: Library/Main/Books/Booklore/books
               - path: /bookdrop
-                subPath: booklore/bookdrop
+                subPath: Library/Main/Books/Booklore/bookdrop
       mysqld:
         type: emptyDir
         medium: Memory
@@ -176,9 +176,9 @@ spec:
     route:
       booklore:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
+          - booklore.bjw-s.dev
         parentRefs:
-          - name: envoy-external
+          - name: envoy-internal
             namespace: network
     service:
       booklore:
