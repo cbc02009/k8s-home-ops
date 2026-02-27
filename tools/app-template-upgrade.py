@@ -159,7 +159,7 @@ def process(filepath, data):
     yaml.indent(mapping=2, sequence=4, offset=2)
     with open(filepath, 'w+') as f:
       f.write('---\n')
-      # f.write('# yaml-language-server: $schema=https://kubernetes-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json\n')
+      # f.write('# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json\n')
       yaml.dump(new, f)
 
 

@@ -3,9 +3,9 @@
 set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-mod bootstrap "kubernetes/bootstrap"
+mod bootstrap "bootstrap"
 mod k8s "kubernetes"
-mod talos "kubernetes/talos"
+mod talos "talos"
 
 [private]
 default:

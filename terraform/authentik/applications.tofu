@@ -1,14 +1,14 @@
 module "proxy-frigate" {
-  source             = "./proxy_application"
-  name               = "Frigate"
-  description        = "DVR"
-  icon_url           = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
-  group              = "Home"
-  slug               = "frigate"
-  domain             = var.public_domain
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  auth_groups        = [authentik_group.home.id]
+  source                = "./proxy_application"
+  name                  = "Frigate"
+  description           = "DVR"
+  icon_url              = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
+  group                 = "Home"
+  slug                  = "frigate"
+  domain                = var.public_domain
+  authorization_flow    = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow     = resource.authentik_flow.provider-invalidation.uuid
+  auth_groups           = [authentik_group.home.id]
   access_token_validity = "weeks=20"
 }
 
@@ -33,13 +33,12 @@ module "oauth2-karakeep" {
   description        = "bookmark managment"
   newtab             = true
   group              = "Selfhosted"
-  auth_groups        = [authentik_group.home.id]
+  auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_karakeep.fields["oidc_id"]
   client_secret      = module.secret_karakeep.fields["oidc_secret"]
-  redirect_uris = [
-    "https://karakeep.${var.public_domain}/api/auth/callback/custom"]
+  redirect_uris      = ["https://karakeep.${var.public_domain}/api/auth/callback/custom"]
 }
 
 module "oauth2-immich" {
@@ -49,7 +48,7 @@ module "oauth2-immich" {
   launch_url         = "https://photos.${var.public_domain}"
   description        = "Photo managment"
   newtab             = true
-  group              = "Selfhosted"
+  group              = "SelfHosted"
   auth_groups        = [authentik_group.home.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
@@ -74,7 +73,7 @@ module "oauth2-grafana" {
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_grafana.fields["oidc_id"]
   client_secret      = module.secret_grafana.fields["oidc_secret"]
-  redirect_uris      = ["https://grafana.${var.private_domain}/login/generic_oauth"]
+  redirect_uris      = ["https://grafana.${var.public_domain}/login/generic_oauth"]
 }
 
 module "oauth2-Mealie" {
@@ -96,20 +95,38 @@ module "oauth2-Mealie" {
   ]
 }
 
+module "oauth2-Booklore" {
+  source             = "./oauth2_application"
+  name               = "Booklore"
+  icon_url           = "https://raw.githubusercontent.com/booklore-app/booklore/refs/heads/develop/assets/logo.svg"
+  launch_url         = "https://booklore.${var.public_domain}"
+  description        = "Books"
+  newtab             = true
+  group              = "SelfHosted"
+  auth_groups        = [authentik_group.users.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_booklore.fields["oidc_id"]
+  # client_secret      = module.secret_booklore.fields["oidc_secret"]
+  client_type        = "public"
+  redirect_uris      = ["https://booklore.${var.public_domain}/oauth2-callback"]
+  regex_uris         = ["https://booklore.${var.public_domain}/*"]
+}
+
 module "oauth2-paperless" {
-  source = "./oauth2_application"
-  name = "Paperless"
+  source             = "./oauth2_application"
+  name               = "Paperless"
   icon_url           = "https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/Color%20logo%20-%20no%20background.svg"
-  launch_url         = "https://documents.${var.private_domain}"
+  launch_url         = "https://documents.${var.public_domain}"
   description        = "Documents"
   newtab             = true
-  group              = "Selfhosted"
+  group              = "SelfHosted"
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_paperless.fields["oidc_id"]
   client_secret      = module.secret_paperless.fields["oidc_secret"]
-  redirect_uris      = ["https://documents.${var.private_domain}/accounts/oidc/authentik/login/callback/"]
+  redirect_uris      = ["https://documents.${var.public_domain}/accounts/oidc/authentik/login/callback/"]
 }
 
 # module "oauth2-opencloud" {
@@ -119,7 +136,7 @@ module "oauth2-paperless" {
 #   launch_url         = "https://opencloud.${var.public_domain}"
 #   description        = "OpenCloud"
 #   newtab             = true
-#   group              = "Selfhosted"
+#   group              = "SelfHosted"
 #   auth_groups        = [authentik_group.users.id]
 #   client_type        = "public"
 #   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid

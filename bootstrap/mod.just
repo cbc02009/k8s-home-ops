@@ -2,8 +2,8 @@ set positional-arguments := true
 set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
+bootstrap_dir := justfile_dir() + '/bootstrap'
 kubernetes_dir := justfile_dir() + '/kubernetes'
-bootstrap_dir := kubernetes_dir + '/bootstrap'
 controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
 nodes := 'uiharu miri sakura'
 

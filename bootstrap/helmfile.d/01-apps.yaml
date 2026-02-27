@@ -9,8 +9,8 @@ helmDefaults:
 releases:
   - name: cilium
     namespace: kube-system
-    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
-    version: 1.18.6
+    chart: oci://quay.io/cilium/charts/cilium
+    version: 1.19.1
     values:
       - templates/values.yaml.gotmpl
     hooks:
@@ -22,14 +22,14 @@ releases:
         events:
           - postsync
         showlogs: true
-      - # Apply Cilium Resources
+      - # Apply cilium network configuration
         command: kubectl
         args:
           - apply
           - --namespace=kube-system
           - --server-side
           - --field-manager=kustomize-controller
-          - --filename=../../apps/kube-system/cilium/app/networking.yaml
+          - --filename=../../kubernetes/apps/kube-system/cilium/app/networking.yaml
         events:
           - postsync
         showlogs: true
@@ -54,11 +54,10 @@ releases:
 
   - name: cert-manager
     namespace: cert-manager
-    atomic: true
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.19.3
     values:
-      - templates/values.yaml.gotmpl
+      - ./templates/values.yaml.gotmpl
     needs:
       - system/spegel
 
@@ -92,7 +91,7 @@ releases:
           - apply
           - --server-side
           - --field-manager=kustomize-controller
-          - --filename=../../apps/external-secrets/onepassword-connect/app/clustersecretstore.yaml
+          - --filename=../../kubernetes/apps/external-secrets/onepassword-connect/app/clustersecretstore.yaml
         events:
           - postsync
         showlogs: true

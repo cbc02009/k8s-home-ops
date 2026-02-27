@@ -32,6 +32,10 @@ delete-ks ns ks:
   just k8s render-local-ks "{{ ns }}" "{{ ks }}" \
   | kubectl delete -f /dev/stdin
 
+[doc('Sync single Flux GitRepo')]
+sync-gr ns name:
+  kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite gitrepository "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
+
 [doc('Sync single Flux HelmRelease')]
 sync-hr ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite hr "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
@@ -48,6 +52,12 @@ sync-es ns name:
 sync-all-hr:
   kubectl get hr --no-headers -A | while read -r ns name _; do \
     just k8s sync-hr "$ns" "$name"; \
+  done
+
+[doc('Sync all Flux GitRepos')]
+sync-all-gr:
+  kubectl get gitrepository --no-headers -A | while read -r ns name _; do \
+    just k8s sync-gr "$ns" "$name"; \
   done
 
 [doc('Sync all Flux Kustomizations')]

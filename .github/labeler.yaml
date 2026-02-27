@@ -1,18 +1,26 @@
 ---
-area/terraform:
-  - changed-files:
-      - any-glob-to-any-file: "terraform/**/*"
-area/github:
-  - changed-files:
-      - any-glob-to-any-file: ".github/**/*"
-area/kubernetes:
-  - changed-files:
-      - any-glob-to-any-file: "kubernetes/**/*"
-area/truenas:
-  - changed-files:
-      - any-glob-to-any-file: "truenas/**/*"
-area/taskfiles:
+area/bootstrap:
   - changed-files:
       - any-glob-to-any-file:
-          - ".taskfiles/**/*"
-          - "Taskfile.yaml"
+          - bootstrap/**/*
+
+area/github:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+
+area/kubernetes:
+  - changed-files:
+      - any-glob-to-any-file:
+          - kubernetes/**/*
+
+area/renovate:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .renovate/**/*
+          - .renovaterc.json5
+
+area/talos:
+  - changed-files:
+      - any-glob-to-any-file:
+          - talos/**/*
