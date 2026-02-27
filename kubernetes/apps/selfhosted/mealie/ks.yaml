@@ -22,7 +22,6 @@ spec:
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/volsync
-    - ../../../../components/r2
   dependsOn:
     - name: onepassword-connect
       namespace: external-secrets
