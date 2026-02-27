@@ -146,15 +146,15 @@ spec:
                 subPath: mysql
       nfs-nas-media:
         type: nfs
-        server: gladius.bjw-s.internal
+        server: shana.ctec.internal
         path: /mnt/tank/media
         advancedMounts:
           booklore:
             booklore:
               - path: /books
-                subPath: Library/Main/Books/Booklore/books
+                subPath: booklore/books
               - path: /bookdrop
-                subPath: Library/Main/Books/Booklore/bookdrop
+                subPath: booklore/bookdrop
       mysqld:
         type: emptyDir
         medium: Memory
@@ -176,9 +176,9 @@ spec:
     route:
       booklore:
         hostnames:
-          - booklore.bjw-s.dev
+          - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
     service:
       booklore:
