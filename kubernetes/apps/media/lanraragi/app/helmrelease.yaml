@@ -16,20 +16,20 @@ spec:
     controllers:
       lanraragi:
         containers:
-          lanraragi:
+          app:
             image:
               repository: docker.io/difegue/lanraragi
               tag: v.0.9.60
 
     service:
-      lanraragi:
+      app:
         controller: *app
         ports:
           http:
             port: &port 3000
 
     route:
-      lanraragi:
+      app:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
         parentRefs:
@@ -43,9 +43,10 @@ spec:
         existingClaim: *app
         advancedMounts:
           lanraragi:
-            lanraragi:
+            database:
               - path: /home/koyomi/lanraragi/database
                 subPath: /database
+            thumbs:
               - path: /home/koyomi/lanraragi/thumb
                 subPath: /thumb
 
@@ -55,6 +56,6 @@ spec:
         path: /mnt/tank/media
         advancedMounts:
           lanraragi:
-            lanraragi:
+            manga:
               - path: /home/koyomi/lanraragi/content
                 subPath: lanraragi/content
