@@ -45,10 +45,10 @@ spec:
           lanraragi:
             database:
               - path: /home/koyomi/lanraragi/database
-                subPath: /database
+                subPath: database
             thumbs:
               - path: /home/koyomi/lanraragi/thumb
-                subPath: /thumb
+                subPath: thumb
 
       media:
         type: nfs
