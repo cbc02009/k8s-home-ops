@@ -17,9 +17,9 @@ spec:
       lanraragi:
         containers:
           app:
-            env:
-              PID: 2000
-              GID: 2000
+            # env:
+              # PID: 2000
+              # GID: 2000
             image:
               repository: docker.io/difegue/lanraragi
               tag: v.0.9.60
