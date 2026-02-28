@@ -46,7 +46,6 @@ spec:
             app:
               - path: /home/koyomi/lanraragi/database
                 subPath: database
-
               - path: /home/koyomi/lanraragi/thumb
                 subPath: thumb
 
