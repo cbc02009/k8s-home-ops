@@ -8,6 +8,6 @@ components:
 resources:
   - ./namespace.yaml
   - ./booklore/ks.yaml
-  - ./lanraragi/ks.yaml
+  # - ./lanraragi/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
