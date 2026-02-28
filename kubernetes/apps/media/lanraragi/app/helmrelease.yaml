@@ -17,14 +17,17 @@ spec:
       lanraragi:
         containers:
           app:
+            env:
+              PID: 2000
+              GID: 2000
             image:
               repository: docker.io/difegue/lanraragi
               tag: v.0.9.60
-        pod:
-          securityContext:
-            runAsUser: 9001
-            runAsGroup: 9001
-            fsGroup: 2000
+        # pod:
+        #   securityContext:
+        #     runAsUser: 9001
+        #     runAsGroup: 9001
+        #     fsGroup: 2000
 
     service:
       app:
