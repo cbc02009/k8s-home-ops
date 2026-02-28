@@ -43,10 +43,10 @@ spec:
         existingClaim: *app
         advancedMounts:
           lanraragi:
-            database:
+            app:
               - path: /home/koyomi/lanraragi/database
                 subPath: database
-            thumbs:
+
               - path: /home/koyomi/lanraragi/thumb
                 subPath: thumb
 
@@ -56,6 +56,6 @@ spec:
         path: /mnt/tank/media
         advancedMounts:
           lanraragi:
-            manga:
+            app:
               - path: /home/koyomi/lanraragi/content
                 subPath: lanraragi/content
