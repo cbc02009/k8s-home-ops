@@ -25,7 +25,6 @@ spec:
             runAsUser: 9001
             runAsGroup: 9001
             fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:
