@@ -34,19 +34,36 @@ spec:
               repository: ghcr.io/atuinsh/atuin
               tag: v18.12.0
             args:
-              - server
               - start
             env:
               ATUIN_HOST: 0.0.0.0
               ATUIN_PORT: &port 8888
               ATUIN_OPEN_REGISTRATION: true
-              RUST_LOG: info,atuin_server=debug
-              ATUIN_TLS__ENABLE: false
-              ATUIN_TLS__CERT_PATH: ""
-              ATUIN_TLS__PKEY_PATH: ""
             envFrom:
               - secretRef:
                   name: *app
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
                 cpu: 10m
