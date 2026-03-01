@@ -24,6 +24,8 @@ spec:
       namespace: external-secrets
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: cloudnative-pg
+      namespace: databases
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/volsync
