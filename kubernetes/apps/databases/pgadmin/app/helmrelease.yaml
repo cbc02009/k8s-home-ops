@@ -56,8 +56,8 @@ spec:
         enabled: true
         existingClaim: *app
         advancedMounts:
-          main:
-            main:
+          pgadmin:
+            app:
               - path: /var/lib/pgadmin
       server-json:
         enabled: true
