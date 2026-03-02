@@ -13,10 +13,10 @@ spec:
     podAntiAffinityType: required
   enableSuperuserAccess: true
   instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.13-standard-trixie
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-trixie@sha256:e4f9958296aac318d23c12e5f97369b47a925ee6f26eef4e2064affceb2ddf36
   plugins:
     - enabled: true
-      # isWALArchiver: true
+      isWALArchiver: true
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
         barmanObjectName: garage
@@ -25,11 +25,11 @@ spec:
     extensions:
       - name: vchord
         image:
-          reference: ghcr.io/tensorchord/vchord-scratch:pg16-v1.1.1
+          reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
         dynamic_library_path:
-          - /usr/lib/postgresql/16/lib
+          - /usr/lib/postgresql/18/lib
         extension_control_path:
-          - /usr/share/postgresql/16/
+          - /usr/share/postgresql/18/
     shared_preload_libraries: ["vchord.so"]
     parameters:
       autovacuum_vacuum_scale_factor: "0.1"
@@ -77,15 +77,16 @@ spec:
               type: LoadBalancer
           updateStrategy: patch
       disabledDefaultServices: ["r", "ro"]
-  bootstrap:
-    recovery:
-      source: source
-  externalClusters:
-    - name: source
-      plugin:
-        enabled: true
-        name: barman-cloud.cloudnative-pg.io
-        parameters: *barmanParameters
+  # bootstrap:
+  #   recovery:
+  #     source: source
+  # externalClusters:
+  #   - name: source
+  #     plugin:
+  #       enabled: true
+  #       isWALArchiver: true
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters: *barmanParameters
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
