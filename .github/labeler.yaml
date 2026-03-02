@@ -14,6 +14,11 @@ area/kubernetes:
       - any-glob-to-any-file:
           - kubernetes/**/*
 
+area/terraform:
+  - changed-files:
+      - any-glob-to-any-file:
+          - terraform/**/*
+
 area/renovate:
   - changed-files:
       - any-glob-to-any-file:
