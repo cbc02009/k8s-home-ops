@@ -27,9 +27,9 @@ spec:
         image:
           reference: ghcr.io/tensorchord/vchord-scratch:pg16-v1.1.1
         dynamic_library_path:
-          - /usr/lib/postgresql/18/lib
+          - /usr/lib/postgresql/16/lib
         extension_control_path:
-          - /usr/share/postgresql/18/
+          - /usr/share/postgresql/16/
     shared_preload_libraries: ["vchord.so"]
     parameters:
       autovacuum_vacuum_scale_factor: "0.1"
