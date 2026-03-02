@@ -42,8 +42,6 @@ spec:
       work_mem: 16MB
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
-  replica:
-    source: garage
   resources:
     requests:
       cpu: 200m
