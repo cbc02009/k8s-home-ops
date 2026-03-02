@@ -1,72 +1,81 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cloudnative-pg
-  namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+      namespace: &namespace databases
   interval: 30m
-  timeout: 5m
   path: ./kubernetes/apps/databases/cloudnative-pg/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: *namespace
   wait: true
-  dependsOn:
-    - name: onepassword-connect
-      namespace: external-secrets
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cloudnative-pg-barman-cloud
   namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: cert-manager
+      namespace: cert-manager
   interval: 30m
-  timeout: 5m
   path: ./kubernetes/apps/databases/cloudnative-pg/barman-cloud
   prune: true
+  retryInterval: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: *namespace
+  timeout: 5m
   wait: true
-  dependsOn:
-    - name: cert-manager
-      namespace: cert-manager
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cloudnative-pg-cluster
+  name: &app postgres-cluster
   namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: databases
+    - name: openebs
+      namespace: openebs
+    - name: external-secrets
+      namespace: external-secrets
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: postgres
+      namespace: databases
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: postgres-immich
+      namespace: databases
   interval: 30m
-  timeout: 5m
-  path: ./kubernetes/apps/databases/cloudnative-pg/cluster
+  path: ./kubernetes/apps/database/cloudnative-pg/cluster
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: *namespace
   wait: true
-  dependsOn:
-    - name: cloudnative-pg
-      namespace: databases
