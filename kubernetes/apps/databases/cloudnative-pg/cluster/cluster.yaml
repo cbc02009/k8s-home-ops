@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: &pgname postgres
+  name: postgres
   annotations:
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
@@ -13,25 +13,33 @@ spec:
     podAntiAffinityType: required
   enableSuperuserAccess: true
   instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-trixie@sha256:e4f9958296aac318d23c12e5f97369b47a925ee6f26eef4e2064affceb2ddf36
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.5.3
+  monitoring:
+    enablePodMonitor: true
   plugins:
     - enabled: true
       isWALArchiver: true
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
         barmanObjectName: garage
-        serverName: postgres-v1
+        serverName: postgres
   postgresql:
+    shared_preload_libraries: ["vchord.so"]
     parameters:
+      autovacuum_vacuum_scale_factor: "0.1"
+      autovacuum_analyze_scale_factor: "0.05"
+      autovacuum_vacuum_cost_limit: "1000"
+      effective_io_concurrency: "200"
+      random_page_cost: "1.2"
+      shared_buffers: 256MB
       max_connections: "300"
-      work_mem: 64MB
-      shared_buffers: 128MB
+      work_mem: 16MB
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   resources:
     requests:
       cpu: 200m
-      memory: 500Mi
+      memory: 1Gi
     limits:
       memory: 2Gi
   storage:
@@ -39,30 +47,17 @@ spec:
     storageClass: openebs-hostpath
   superuserSecret:
     name: cloudnative-pg
-  managed:
-    services:
-      additional:
-        - selectorType: rw
-          serviceTemplate:
-            metadata:
-              name: *pgname
-              annotations:
-                external-dns.alpha.kubernetes.io/hostname: postgres.kokoro.wtf
-                gatus.home-operations.com/enabled: "true"
-                gatus.home-operations.com/endpoint: |
-                  name: postgres
-                  conditions:
-                    - "[CONNECTED] == true"
-                  group: Services
-                  ui:
-                    hide-hostname: true
-                    hide-url: true
-                  alerts:
-                    - type: discord
-            spec:
-              type: LoadBalancer
-          updateStrategy: patch
-      disabledDefaultServices: ["r", "ro"]
+  bootstrap:
+    recovery:
+      source: source
+  externalClusters:
+    - name: source
+      plugin:
+        enabled: true
+        isWALArchiver: true
+        name: barman-cloud.cloudnative-pg.io
+        parameters: *barmanParameters
+
   # bootstrap:
   #   recovery:
   #     source: source
@@ -73,30 +68,19 @@ spec:
   #       isWALArchiver: true
   #       name: barman-cloud.cloudnative-pg.io
   #       parameters: *barmanParameters
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: &cluster postgres
-spec:
-  podMetricsEndpoints:
-    - port: metrics
-  selector:
-    matchLabels:
-      cnpg.io/cluster: *cluster
-      cnpg.io/podRole: instance
----
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/postgresql.cnpg.io/scheduledbackup_v1.json
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: &cluster postgres
-spec:
-  backupOwnerReference: self
-  cluster:
-    name: *cluster
-  immediate: true
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
-  schedule: "@daily"
+  # Note: externalClusters is needed when recovering from an existing cnpg cluster
+  # externalClusters:
+  #   - name: *previousCluster
+  #     barmanObjectStore:
+  #       wal:
+  #         compression: bzip2
+  #         maxParallel: 8
+  #       destinationPath: s3://cnpg/
+  #       endpointURL: https://${CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
+  #       s3Credentials:
+  #         accessKeyId:
+  #           name: cloudnative-pg
+  #           key: aws-access-key-id
+  #         secretAccessKey:
+  #           name: cloudnative-pg
+  #           key: aws-secret-access-key
