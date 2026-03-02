@@ -16,7 +16,7 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-trixie@sha256:e4f9958296aac318d23c12e5f97369b47a925ee6f26eef4e2064affceb2ddf36
   plugins:
     - enabled: true
-      isWALArchiver: true
+      # isWALArchiver: true
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
         barmanObjectName: garage
@@ -42,6 +42,8 @@ spec:
       work_mem: 16MB
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
+  replica:
+    source: garage
   resources:
     requests:
       cpu: 200m
@@ -84,7 +86,6 @@ spec:
     - name: source
       plugin:
         enabled: true
-        isWALArchiver: true
         name: barman-cloud.cloudnative-pg.io
         parameters: *barmanParameters
 ---
