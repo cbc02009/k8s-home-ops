@@ -20,7 +20,7 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
         barmanObjectName: garage
-        serverName: immich-v1
+        serverName: postgres
   postgresql:
     extensions:
       - name: vchord
@@ -77,16 +77,16 @@ spec:
               type: LoadBalancer
           updateStrategy: patch
       disabledDefaultServices: ["r", "ro"]
-  # bootstrap:
-  #   recovery:
-  #     source: source
-  # externalClusters:
-  #   - name: source
-  #     plugin:
-  #       enabled: true
-  #       isWALArchiver: true
-  #       name: barman-cloud.cloudnative-pg.io
-  #       parameters: *barmanParameters
+  bootstrap:
+    recovery:
+      source: source
+  externalClusters:
+    - name: source
+      plugin:
+        enabled: true
+        isWALArchiver: true
+        name: barman-cloud.cloudnative-pg.io
+        parameters: *barmanParameters
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
