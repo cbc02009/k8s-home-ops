@@ -24,7 +24,7 @@ spec:
         barmanObjectName: garage
         serverName: postgres
   postgresql:
-    shared_preload_libraries: ["vchord.so"]
+    # shared_preload_libraries: ["vchord.so"]
     parameters:
       autovacuum_vacuum_scale_factor: "0.1"
       autovacuum_analyze_scale_factor: "0.05"
