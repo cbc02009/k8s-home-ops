@@ -28,7 +28,7 @@ spec:
           key: AWS_SECRET_ACCESS_KEY
           name: dragonfly
     - name: AWS_REGION
-      value: ""
+      value: "garage"
   image: ghcr.io/dragonflydb/dragonfly:v1.37.0
   labels:
     dragonflydb.io/cluster: dragonfly
