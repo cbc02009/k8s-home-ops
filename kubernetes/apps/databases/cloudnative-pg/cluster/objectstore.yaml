@@ -19,7 +19,7 @@ spec:
       secretAccessKey:
         name: cloudnative-pg
         key: aws-secret-access-key
-  retentionPolicy: 14d
+  retentionPolicy: 7d
 ---
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
@@ -41,4 +41,4 @@ spec:
       secretAccessKey:
         name: cloudnative-pg
         key: garage-secret-access-key
-  retentionPolicy: 14d
+  retentionPolicy: 7d
