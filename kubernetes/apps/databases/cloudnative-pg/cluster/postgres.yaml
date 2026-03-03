@@ -57,30 +57,30 @@ spec:
         isWALArchiver: true
         name: barman-cloud.cloudnative-pg.io
         parameters: *barmanParameters
-
-  # bootstrap:
-  #   recovery:
-  #     source: source
-  # externalClusters:
-  #   - name: source
-  #     plugin:
-  #       enabled: true
-  #       isWALArchiver: true
-  #       name: barman-cloud.cloudnative-pg.io
-  #       parameters: *barmanParameters
-  # Note: externalClusters is needed when recovering from an existing cnpg cluster
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       wal:
-  #         compression: bzip2
-  #         maxParallel: 8
-  #       destinationPath: s3://cnpg/
-  #       endpointURL: https://${CLUSTER_SECRET_CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com
-  #       s3Credentials:
-  #         accessKeyId:
-  #           name: cloudnative-pg
-  #           key: aws-access-key-id
-  #         secretAccessKey:
-  #           name: cloudnative-pg
-  #           key: aws-secret-access-key
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &cluster postgres
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: *cluster
+      cnpg.io/podRole: instance
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: &cluster postgres
+spec:
+  backupOwnerReference: self
+  cluster:
+    name: *cluster
+  immediate: true
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  schedule: "@daily"
