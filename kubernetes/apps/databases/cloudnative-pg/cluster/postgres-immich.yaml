@@ -20,7 +20,7 @@ spec:
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
         barmanObjectName: garage
-        serverName: postgres
+        serverName: postgres-immich
   postgresql:
     extensions:
       - name: vchord
