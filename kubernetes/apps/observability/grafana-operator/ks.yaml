@@ -32,7 +32,7 @@ spec:
   dependsOn:
     - name: grafana-operator
       namespace: observability
-    - name: cloudnative-pg-cluster
+    - name: postgres-cluster
       namespace: databases
     - name: external-secrets
       namespace: external-secrets

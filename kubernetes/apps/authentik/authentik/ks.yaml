@@ -24,7 +24,7 @@ spec:
       namespace: external-secrets
     - name: dragonfly-cluster
       namespace: databases
-    - name: cloudnative-pg-cluster
+    - name: postgres-cluster
       namespace: databases
   postBuild:
     substitute:
