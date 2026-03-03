@@ -1,0 +1,102 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: &pgname postgres
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
+spec:
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+  enableSuperuserAccess: true
+  instances: 3
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-trixie@sha256:e4f9958296aac318d23c12e5f97369b47a925ee6f26eef4e2064affceb2ddf36
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters: &barmanParameters
+        barmanObjectName: garage
+        serverName: postgres
+  postgresql:
+    parameters:
+      max_connections: "300"
+      work_mem: 64MB
+      shared_buffers: 128MB
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
+  resources:
+    requests:
+      cpu: 200m
+      memory: 500Mi
+    limits:
+      memory: 2Gi
+  storage:
+    size: 20Gi
+    storageClass: openebs-hostpath
+  superuserSecret:
+    name: cloudnative-pg
+  managed:
+    services:
+      additional:
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: *pgname
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: postgres.kokoro.wtf
+                gatus.home-operations.com/enabled: "true"
+                gatus.home-operations.com/endpoint: |
+                  name: postgres
+                  conditions:
+                    - "[CONNECTED] == true"
+                  group: Services
+                  ui:
+                    hide-hostname: true
+                    hide-url: true
+                  alerts:
+                    - type: discord
+            spec:
+              type: LoadBalancer
+          updateStrategy: patch
+      disabledDefaultServices: ["r", "ro"]
+  # bootstrap:
+  #   recovery:
+  #     source: source
+  # externalClusters:
+  #   - name: source
+  #     plugin:
+  #       enabled: true
+  #       isWALArchiver: true
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters: *barmanParameters
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &cluster postgres
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: *cluster
+      cnpg.io/podRole: instance
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: &cluster postgres
+spec:
+  backupOwnerReference: self
+  cluster:
+    name: *cluster
+  immediate: true
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  schedule: "@daily"
