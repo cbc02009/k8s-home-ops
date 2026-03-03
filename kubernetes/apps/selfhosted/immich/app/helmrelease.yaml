@@ -253,16 +253,16 @@ spec:
           machine-learning:
             machine-learning:
               - path: /config/matplotlib
-      # model-cache:
-      #   suffix: mlcache
-      #   size: 10Gi
-      #   accessMode: ReadWriteMany
-      #   storageClass: dcsi-nfs
-      #   type: persistentVolumeClaim
-      #   advancedMounts:
-      #     machine-learning:
-      #       machine-learning:
-      #         - path: /cache
-      #           subPath: cache
-      #         - path: /.cache
-      #           subPath: dotCache
+      model-cache:
+        suffix: mlcache
+        size: 10Gi
+        accessMode: ReadWriteOnce
+        storageClass: ceph-block
+        type: persistentVolumeClaim
+        advancedMounts:
+          machine-learning:
+            machine-learning:
+              - path: /cache
+                subPath: cache
+              # - path: /.cache
+              #   subPath: dotCache
