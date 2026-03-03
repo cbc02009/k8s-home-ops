@@ -1,33 +1,37 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://crd.movishell.pl/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app immich
   namespace: &namespace selfhosted
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 30m
-  timeout: 5m
-  path: ./kubernetes/apps/selfhosted/immich/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: onepassword-connect
-      namespace: external-secrets
-    - name: cloudnative-pg-cluster
-      namespace: databases
   components:
-    - ../../../../components/gatus/guarded
     - ../../../../components/gpu
+  dependsOn:
+    - name: postgres-cluster
+      namespace: databases
+    - name: dragonfly-cluster
+      namespace: databases
+    - name: external-secrets
+      namespace: external-secrets
+    - name: rook-ceph
+      namespace: rook-ceph
+    - name: intel-gpu-resource-driver
+      namespace: kube-system
+  interval: 30m
+  path: ./kubernetes/apps/selfhosted/immich/app
   postBuild:
     substitute:
       APP: *app
-      GATUS_SUBDOMAIN: "photos"
+      HOSTNAME: photos.kokoro.wtf
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: homelab-ops
+    namespace: flux-system
+  targetNamespace: *namespace
+  wait: true
