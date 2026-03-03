@@ -5,21 +5,56 @@ kind: Dragonfly
 metadata:
   name: dragonfly
 spec:
-  image: ghcr.io/dragonflydb/dragonfly:v1.37.0
-  replicas: 3 # set to the number of nodes in the cluster
+  args:
+    - --maxmemory=$(MAX_MEMORY)Mi
+    - --proactor_threads=2
+    - --cluster_mode=emulated
+    - --default_lua_flags=allow-undeclared-keys
+    - --s3_endpoint=s3.cnas.dev
   env:
     - name: MAX_MEMORY
       valueFrom:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Mi
-  args:
-    - --maxmemory=$(MAX_MEMORY)Mi
-    - --proactor_threads=2
-    - --cluster_mode=emulated
-    - --default_lua_flags=allow-undeclared-keys
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          key: AWS_ACCESS_KEY_ID
+          name: dragonfly-secret
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          key: AWS_SECRET_ACCESS_KEY
+          name: dragonfly-secret
+  image: ghcr.io/dragonflydb/dragonfly:v1.37.0
+  labels:
+    dragonflydb.io/cluster: dragonfly
+  replicas: 3
   resources:
     requests:
       cpu: 100m
     limits:
       memory: 512Mi
+  snapshot:
+    dir: "s3://dragonfly"
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      whenUnsatisfiable: "DoNotSchedule"
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: dragonfly
+  serviceSpec:
+    annotations:
+      gatus.home-operations.com/enabled: "true"
+      gatus.home-operations.com/endpoint: |
+        conditions:
+          - "[CONNECTED] == true"
+        group: Services
+        ui:
+          hide-hostname: true
+          hide-url: true
+        alerts:
+          - type: pushover
+            send-on-resolved: true

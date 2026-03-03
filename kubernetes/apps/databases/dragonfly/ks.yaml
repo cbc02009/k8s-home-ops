@@ -6,19 +6,18 @@ metadata:
   name: &app dragonfly-operator
   namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
-  timeout: 5m
   path: ./kubernetes/apps/databases/dragonfly/operator
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
+  targetNamespace: *namespace
+  wait: true
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -27,19 +26,24 @@ metadata:
   name: &app dragonfly-cluster
   namespace: &namespace databases
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: dragonfly-operator
+      namespace: *namespace
+    - name: external-secrets
+      namespace: external-secrets
+  # healthCheckExprs:
+  #   - apiVersion: dragonflydb.io/v1alpha1
+  #     kind: Dragonfly
+  #     current: status.phase == 'ready'
   interval: 30m
-  timeout: 5m
   path: ./kubernetes/apps/databases/dragonfly/cluster
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: *namespace
   wait: true
-  dependsOn:
-    - name: dragonfly-operator
-      namespace: databases
