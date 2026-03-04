@@ -29,7 +29,7 @@ spec:
       PVC_CLAIM: authentik-media
       PVC_CAPACITY: "1Gi"
       PVC_STORAGECLASS: ceph-filesystem
-      PVC_ACCESSMODE: ReadWriteMany
+      PVC_ACCESSMODES: ReadWriteMany
       PVC_SNAPSHOTCLASS: csi-ceph-filesystem
   prune: true
   sourceRef:
