@@ -3,34 +3,44 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app authentik
+  name: authentik
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: authentik
+  interval: 30m
   values:
-
     global:
       deploymentAnnotations:
-        secret.reloader.stakater.com/reload: &secret authentik-secret
+        secret.reloader.stakater.com/reload: &secret authentik
       envFrom:
         - secretRef:
             name: *secret
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: authentik-media
+      volumeMounts:
+        - name: media
+          mountPath: /media
     server:
       replicas: 1
       initContainers:
         - name: init-db
-          image: ghcr.io/home-operations/postgres-init:17.6.0
+          image: ghcr.io/home-operations/postgres-init:18.3@sha256:6fa1f331cddd2eb0b6afa7b8d3685c864127a81ab01c3d9400bc3ff5263a51cf
           envFrom:
             - secretRef:
                 name: *secret
-      # resources:
-      #   requests:
-      #     cpu: 50m
-      #     memory: 500Mi
-      #   limits:
-      #     memory: 800Mi
+      resources:
+        requests:
+          cpu: 50m
+          memory: 500Mi
+        limits:
+          memory: 1200Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
       route:
         main:
           enabled: true
@@ -40,43 +50,18 @@ spec:
             - name: envoy-external
               namespace: network
               sectionName: https
-      # ingress:
-      #   enabled: true
-      #   ingressClassName: external
-      #   annotations:
-      #     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      #     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-      #     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      #   hosts:
-      #     - &host auth.${EXTERNAL_DOMAIN}
-      #   paths:
-      #     - /
-      #   tls: [hosts: [*host]]
-
     authentik:
-      log_level: info
       email:
         host: smtp-relay.kokoro.wtf
         port: 25
-      error_reporting:
-        enabled: false
-        send_pii: false
-      redis:
-        host: "dragonfly.databases.svc.cluster.local"
-        password: ""
-
     worker:
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-
-    postgresql:
-      enabled: false
-
+      replicas: 1
+      resources:
+        requests:
+          cpu: 50m
+          memory: 500Mi
+        limits:
+          memory: 1500Mi
     prometheus:
       rules:
         enabled: true
-
-    redis:
-      enabled: false
