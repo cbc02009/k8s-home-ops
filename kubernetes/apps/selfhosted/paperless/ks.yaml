@@ -23,7 +23,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: onepassword-connect
-      namespace: external-secrets
+      namespace: security
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/volsync

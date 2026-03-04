@@ -21,6 +21,6 @@ spec:
   wait: false
   dependsOn:
     - name: onepassword-connect
-      namespace: external-secrets
+      namespace: security
     - name: node-feature-rules
       namespace: system

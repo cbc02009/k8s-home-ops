@@ -23,7 +23,7 @@ spec:
     - name: postgres-cluster
       namespace: databases
     - name: onepassword-connect
-      namespace: external-secrets
+      namespace: security
   components:
     - ../../../../components/gatus/guarded
     - ../../../../components/keda/nas-nfs-scaler

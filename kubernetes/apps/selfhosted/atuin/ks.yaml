@@ -23,7 +23,7 @@ spec:
     - ../../../../components/gatus/guarded
   dependsOn:
     - name: onepassword-connect
-      namespace: external-secrets
+      namespace: security
     - name: postgres-cluster
       namespace: databases
   postBuild:

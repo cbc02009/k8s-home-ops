@@ -33,7 +33,7 @@ spec:
     - name: dragonfly-operator
       namespace: *namespace
     - name: external-secrets
-      namespace: external-secrets
+      namespace: security
   # healthCheckExprs:
   #   - apiVersion: dragonflydb.io/v1alpha1
   #     kind: Dragonfly

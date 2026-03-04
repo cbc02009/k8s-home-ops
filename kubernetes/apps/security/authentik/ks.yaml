@@ -1,10 +1,10 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app romm
-  namespace: &namespace selfhosted
+  name: &app authentik
+  namespace: &namespace security
 spec:
   commonMetadata:
     labels:
@@ -16,21 +16,20 @@ spec:
       namespace: databases
     - name: dragonfly-cluster
       namespace: databases
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
-    - name: volsync
-      namespace: storage
   interval: 30m
-  path: ./kubernetes/apps/selfhosted/romm/app
+  path: ./kubernetes/apps/security/authentik/app
   postBuild:
     substitute:
+      HOSTNAME: auth.kokoro.wtf
       APP: *app
-      APP_UID: "568"
-      APP_GID: "5000"
-      HOSTNAME: romm.${PRIVATE_DOMAIN}
-      AUTH_HOSTNAME: auth.${PUBLIC_DOMAIN}
-      PVC_CAPACITY: 10Gi
-      PVC_CLAIM: romm-config
+      APP_UID: "1000"
+      APP_GID: "1000"
+      PVC_CLAIM: authentik-media
+      PVC_ACCESSMODES: ReadWriteMany
+      PVC_STORAGECLASS: &nfs dcsi-nfs
+      VOLSYNC_SNAPSHOTCLASS: *nfs
   prune: true
   sourceRef:
     kind: GitRepository

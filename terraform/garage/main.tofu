@@ -1,7 +1,7 @@
 terraform {
-    backend "pg" {
-    conn_str = "postgres://10.6.0.20/terraform"
-    schema_name = "authentik"
+  backend "pg" {
+    conn_str    = "postgres://postgres.kokoro.wtf/terraform"
+    schema_name = "garage"
   }
 
   required_providers {
@@ -19,6 +19,6 @@ module "onepassword_item_garage" {
 }
 
 provider "garage" {
-  endpoint   = "https://s3-api.cnas.dev"
-  token     = module.onepassword_item_garage.fields.admin_token
+  endpoint = "https://s3-api.cnas.dev"
+  token    = module.onepassword_item_garage.fields.admin_token
 }

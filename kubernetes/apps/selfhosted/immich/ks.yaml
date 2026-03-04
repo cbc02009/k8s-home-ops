@@ -17,7 +17,7 @@ spec:
     - name: dragonfly-cluster
       namespace: databases
     - name: external-secrets
-      namespace: external-secrets
+      namespace: security
     - name: rook-ceph
       namespace: rook-ceph
     - name: intel-gpu-resource-driver

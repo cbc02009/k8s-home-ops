@@ -35,7 +35,7 @@ spec:
     - name: postgres-cluster
       namespace: databases
     - name: external-secrets
-      namespace: external-secrets
+      namespace: security
   interval: 30m
   path: ./kubernetes/apps/observability/grafana-operator/instance
   postBuild:

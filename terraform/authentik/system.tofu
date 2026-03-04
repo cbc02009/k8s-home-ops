@@ -30,11 +30,11 @@ resource "authentik_outpost" "proxyoutpost" {
     log_level              = "warning",
     object_naming_template = "ak-outpost-%(name)s",
     kubernetes_replicas    = 1,
-    kubernetes_namespace   = "authentik",
+    kubernetes_namespace   = "security",
     kubernetes_httproute_parent_refs = [{
       group       = "gateway.networking.k8s.io"
       kind        = "Gateway"
-      name        = "envoy-internal"
+      name        = "envoy-external"
       namespace   = "network"
       sectionName = "https"
     }]
