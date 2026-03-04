@@ -1,0 +1,44 @@
+---
+services:
+  scrutiny:
+    image: ghcr.io/starosdev/scrutiny:1.31.1-omnibus
+    container_name: scrutiny
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    restart: unless-stopped
+    networks:
+      apps:
+    environment:
+      TZ: America/New_York
+      COLLECTOR_CRON_SCHEDULE: "0 * * * *"
+    expose:
+      - ${APP_PORT}
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ${SCRUTINY_DATA_PATH}/config:/opt/scrutiny/config
+      - ${SCRUTINY_DATA_PATH}/influxdb:/opt/scrutiny/influxdb
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"
+      - "/dev/sdc"
+      - "/dev/sdd"
+      - "/dev/sde"
+      - "/dev/sdf"
+      - "/dev/sdg"
+      - "/dev/sdh"
+      - "/dev/sdi"
+      - "/dev/sdj"
+      - "/dev/nvme0n1"
+      - "/dev/nvme1n1"
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.scrutiny.loadbalancer.server.port: ${APP_PORT}
+      traefik.http.routers.scrutiny.entrypoints: https
+      traefik.http.routers.scrutiny.rule: Host(`${HOST}`)
+      traefik.http.routers.scrutiny.tls: true
+      traefik.http.routers.scrutiny.service: scrutiny
+
+networks:
+  apps:
+    external: true
