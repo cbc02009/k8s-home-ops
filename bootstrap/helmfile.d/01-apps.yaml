@@ -62,7 +62,7 @@ releases:
       - system/spegel
 
   - name: external-secrets
-    namespace: external-secrets
+    namespace: security
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 2.0.1
     values:
@@ -71,7 +71,7 @@ releases:
       - cert-manager/cert-manager
 
   - name: onepassword-connect
-    namespace: external-secrets
+    namespace: security
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
     version: 4.6.2
     values:
@@ -91,7 +91,7 @@ releases:
           - apply
           - --server-side
           - --field-manager=kustomize-controller
-          - --filename=../../kubernetes/apps/external-secrets/onepassword-connect/app/clustersecretstore.yaml
+          - --filename=../../kubernetes/apps/security/onepassword-connect/app/clustersecretstore.yaml
         events:
           - postsync
         showlogs: true
