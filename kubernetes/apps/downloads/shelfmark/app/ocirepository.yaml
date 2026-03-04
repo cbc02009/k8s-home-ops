@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: lidarr
+  name: shelfmark
 spec:
   interval: 1h
   layerSelector:

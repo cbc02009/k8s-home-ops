@@ -7,7 +7,7 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: cloudlared
+    name: cloudflared
   interval: 30m
   values:
     configMaps:
