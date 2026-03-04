@@ -33,43 +33,43 @@ delete-ks ns ks:
   | kubectl delete -f /dev/stdin
 
 [doc('Sync single Flux GitRepo')]
-sync-gr ns name:
+gr-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite gitrepository "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
 
 [doc('Sync single Flux HelmRelease')]
-sync-hr ns name:
+hr-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite hr "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
 
 [doc('Sync single Flux Kustomizations')]
-sync-ks ns name:
+ks-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite ks "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
 
 [doc('Sync single ExternalSecret')]
-sync-es ns name:
+es-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite es "{{ name }}" force-sync="$(date +%s)"; \
 
 [doc('Sync all Flux HelmReleases')]
-sync-all-hr:
+hr-sync-all:
   kubectl get hr --no-headers -A | while read -r ns name _; do \
-    just k8s sync-hr "$ns" "$name"; \
+    just k8s hr-sync "$ns" "$name"; \
   done
 
 [doc('Sync all Flux GitRepos')]
-sync-all-gr:
+gr-sync-all:
   kubectl get gitrepository --no-headers -A | while read -r ns name _; do \
-    just k8s sync-gr "$ns" "$name"; \
+    just k8s gr-sync "$ns" "$name"; \
   done
 
 [doc('Sync all Flux Kustomizations')]
-sync-all-ks:
+ks-sync-all:
   kubectl get ks --no-headers -A | while read -r ns name _; do \
-    just k8s sync-ks "$ns" "$name"; \
+    just k8s ks-sync "$ns" "$name"; \
   done
 
 [doc('Sync all ExternalSecrets')]
-sync-all-es:
+es-sync-all:
   kubectl get es --no-headers -A | while read -r ns name _; do \
-    just k8s sync-es "$ns" "$name"; \
+    just k8s es-sync "$ns" "$name"; \
   done
 
 [doc('Snapshot all VolSync ReplicationSource')]
