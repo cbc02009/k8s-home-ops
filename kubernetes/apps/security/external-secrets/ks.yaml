@@ -14,7 +14,7 @@ spec:
       name: external-secrets
       namespace: security
   interval: 30m
-  path: ./kubernetes/apps/external-secrets/external-secrets/app
+  path: ./kubernetes/apps/security/external-secrets/app
   prune: true
   sourceRef:
     kind: GitRepository
