@@ -8,4 +8,4 @@ components:
 resources:
   - ./authentik/ks.yaml
   - ./external-secrets/ks.yaml
-  - ./onepassword-connect/ks.yaml
+  - ./onepassword/ks.yaml

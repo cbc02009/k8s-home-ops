@@ -22,7 +22,7 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
   components:
     - ../../../../components/volsync

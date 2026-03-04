@@ -22,7 +22,7 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
     - name: postgres-cluster
       namespace: databases

@@ -20,7 +20,7 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
     - name: postgres-cluster
       namespace: databases

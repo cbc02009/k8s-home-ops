@@ -22,7 +22,7 @@ spec:
   dependsOn:
     - name: postgres-cluster
       namespace: databases
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
     - name: rook-ceph-cluster
       namespace: rook-ceph

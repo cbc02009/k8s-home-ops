@@ -5,6 +5,12 @@ helmDefaults:
     - --no-hooks
 
 releases:
+
+  - name: external-secrets
+    namespace: security
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 2.0.1
+
   - name: externaldns-cloudflare
     namespace: network
     chart: oci://ghcr.io/home-operations/charts-mirror/external-dns
@@ -34,3 +40,8 @@ releases:
     namespace: databases
     chart: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
     version: 0.27.1
+
+  - name: barman-cloud
+    namespace: database
+    chart: oci://ghcr.io/cloudnative-pg/charts/plugin-barman-cloud
+    version: 0.5.0

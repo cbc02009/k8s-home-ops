@@ -16,7 +16,7 @@ spec:
       namespace: databases
     - name: dragonfly-cluster
       namespace: databases
-    - name: onepassword-connect
+    - name: external-secrets
       namespace: security
     - name: volsync
       namespace: storage
