@@ -18,6 +18,9 @@ services:
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
       apps:
+    ports:
+      - 80:80
+      - 443:443
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yaml
