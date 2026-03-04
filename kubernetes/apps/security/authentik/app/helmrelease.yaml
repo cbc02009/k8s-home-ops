@@ -45,7 +45,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "auth.kokoro.wtf"
+            - ${HOSTNAME}
           parentRefs:
             - name: envoy-external
               namespace: network

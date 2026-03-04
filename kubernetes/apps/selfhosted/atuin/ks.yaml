@@ -27,5 +27,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CLAIM: atuin
-      VOLSYNC_CAPACITY: 5Gi
+      PVC_CLAIM: atuin
+      PVC_CAPACITY: 5Gi

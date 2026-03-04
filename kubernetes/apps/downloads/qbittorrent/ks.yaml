@@ -28,4 +28,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 1Gi
+      PVC_CAPACITY: 1Gi

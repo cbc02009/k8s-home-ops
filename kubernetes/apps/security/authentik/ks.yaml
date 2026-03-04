@@ -27,9 +27,7 @@ spec:
       APP_UID: "1000"
       APP_GID: "1000"
       PVC_CLAIM: authentik-media
-      PVC_ACCESSMODES: ReadWriteMany
-      PVC_STORAGECLASS: &nfs dcsi-nfs
-      VOLSYNC_SNAPSHOTCLASS: *nfs
+      PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:
     kind: GitRepository

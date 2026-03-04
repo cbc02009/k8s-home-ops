@@ -24,7 +24,6 @@ spec:
       namespace: databases
     - name: external-secrets
       namespace: security
-  components:
   postBuild:
     substitute:
       APP: *app

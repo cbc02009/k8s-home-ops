@@ -15,7 +15,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 5Gi
+      PVC_CAPACITY: 5Gi
 ```
 
 and then call the template in your applications `kustomization.yaml`
@@ -31,7 +31,7 @@ resources:
 ## Required `postBuild` vars:
 
 - `APP`: The application name
-- `VOLSYNC_CAPACITY`: The PVC size
+- `PVC_CAPACITY`: The PVC size
 
 ## Optional `postBuild` vars:
 

@@ -9,12 +9,12 @@ spec:
     manual: restore-once
   restic:
     accessModes:
-      - "${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"
+      - "${PVC_ACCESSMODES:-ReadWriteOnce}"
     cacheAccessModes:
       - "${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-5Gi}"
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-hostpath}"
-    capacity: "${VOLSYNC_CAPACITY:-1Gi}"
+    capacity: "${PVC_CAPACITY:-1Gi}"
     cleanupCachePVC: true
     cleanupTempPVC: true
     enableFileDeletion: true
@@ -24,6 +24,6 @@ spec:
       runAsGroup: ${APP_GID:-2000}
       fsGroup: ${APP_GID:-2000}
     repository: "${APP}-volsync-r2"
-    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
+    storageClassName: "${PVC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     # restoreAsOf: "2025-12-02T01:05:00-04:00"

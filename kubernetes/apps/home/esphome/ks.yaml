@@ -29,5 +29,5 @@ spec:
   postBuild:
     substitute:
       APP: *appname
-      VOLSYNC_CLAIM: esphome-config
-      VOLSYNC_CAPACITY: 5Gi
+      PVC_CLAIM: esphome-config
+      PVC_CAPACITY: 5Gi

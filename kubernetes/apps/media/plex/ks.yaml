@@ -30,4 +30,4 @@ spec:
     substitute:
       APP: *app
       GATUS_PATH: /web/index.html
-      VOLSYNC_CAPACITY: 50Gi
+      PVC_CAPACITY: 50Gi

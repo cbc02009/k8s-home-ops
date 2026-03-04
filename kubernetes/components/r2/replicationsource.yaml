@@ -5,7 +5,7 @@ kind: ReplicationSource
 metadata:
   name: ${APP}-r2
 spec:
-  sourcePVC: "${VOLSYNC_CLAIM:-${APP}}"
+  sourcePVC: "${PVC_CLAIM:-${APP}}"
   trigger:
     schedule: "0 0 * * *"
   restic:
@@ -14,7 +14,7 @@ spec:
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
-    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
+    storageClassName: "${PVC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     moverSecurityContext:
       runAsUser: ${APP_UID:-2000}
