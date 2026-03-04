@@ -15,7 +15,7 @@ spec:
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
     storageClassName: "${PVC_STORAGECLASS:-ceph-block}"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
+    volumeSnapshotClassName: "${PVC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     moverSecurityContext:
       runAsUser: ${APP_UID:-2000}
       runAsGroup: ${APP_GID:-2000}

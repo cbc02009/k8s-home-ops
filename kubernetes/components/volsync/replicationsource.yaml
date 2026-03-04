@@ -27,4 +27,4 @@ spec:
       hourly: 24
       daily: 7
     storageClassName: ${PVC_STORAGECLASS:=ceph-block}
-    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}
+    volumeSnapshotClassName: ${PVC_SNAPSHOTCLASS:=csi-ceph-blockpool}

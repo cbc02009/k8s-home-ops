@@ -253,9 +253,11 @@ spec:
             machine-learning:
               - path: /config/matplotlib
       model-cache:
-        type: nfs
-        server: ${NAS_HOST}
-        path: /mnt/smoltank/apps/immich-mlcache
+        suffix: mlcache
+        size: 10Gi
+        accessMode: ReadWriteMany
+        storageClass: ceph-filesystem
+        type: persistentVolumeClaim
         advancedMounts:
           machine-learning:
             machine-learning:
