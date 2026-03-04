@@ -60,7 +60,7 @@ spec:
   managed:
     services:
       additional:
-        - selectorType: r
+        - selectorType: rw
           serviceTemplate:
             metadata:
               name: *pgname
@@ -80,7 +80,7 @@ spec:
             spec:
               type: LoadBalancer
           updateStrategy: patch
-      disabledDefaultServices: ["rw", "ro"]
+      disabledDefaultServices: ["r", "ro"]
   # bootstrap:
   #   recovery:
   #     source: source
