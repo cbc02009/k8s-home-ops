@@ -14,7 +14,8 @@ spec:
     solvers:
       - selector:
           dnsZones:
-            - ${EXTERNAL_DOMAIN}
+            - kokoro.wtf
+            - ctec.run
         dns01:
           cloudflare:
             apiTokenSecretRef:
