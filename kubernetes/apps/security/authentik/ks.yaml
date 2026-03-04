@@ -26,8 +26,8 @@ spec:
       APP: *app
       APP_UID: "1000"
       APP_GID: "1000"
-      PVC_CLAIM: authentik-media
-      PVC_CAPACITY: "1Gi"
+      # PVC_CLAIM: authentik-media
+      # PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:
     kind: GitRepository
