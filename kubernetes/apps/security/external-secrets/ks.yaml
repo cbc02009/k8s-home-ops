@@ -4,6 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app external-secrets
+  namespace: &namespace security
 spec:
   commonMetadata:
     labels:
@@ -11,8 +12,16 @@ spec:
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
-      name: external-secrets
-      namespace: security
+      name: *app
+      namespace: *namespace
+    - apiVersion: external-secrets.io/v1
+      kind: ClusterSecretStore
+      name: onepassword
+  healthCheckExprs:
+    - apiVersion: external-secrets.io/v1
+      kind: ClusterSecretStore
+      failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
+      current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   interval: 30m
   path: ./kubernetes/apps/security/external-secrets/app
   prune: true
@@ -20,5 +29,5 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: security
-  timeout: 5m
+  targetNamespace: *namespace
+  wait: true
