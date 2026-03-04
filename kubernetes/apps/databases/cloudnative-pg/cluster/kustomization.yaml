@@ -9,5 +9,6 @@ resources:
   - ./objectstore.yaml
   - ./postgres.yaml
   - ./postgres-immich.yaml
+  - ./postgres-old.yaml
   - ./prometheusrule.yaml
   - ./service.yaml
