@@ -13,7 +13,6 @@ resources:
   - ./immich/ks.yaml
   - ./it-tools/ks.yaml
   # - ./opencloud/ks.yaml
-  - ./openspeedtest/ks.yaml
   # - ./paperless/ks.yaml
   - ./redlib/ks.yaml
   - ./rustdesk/ks.yaml

@@ -5,5 +5,6 @@ kind: Kustomization
 namespace: downloads
 resources:
   - ./externalsecret.yaml
-  - ./pvc.yaml
   - ./helmrelease.yaml
+  - ./ocirepository.yaml
+  - ./pvc.yaml

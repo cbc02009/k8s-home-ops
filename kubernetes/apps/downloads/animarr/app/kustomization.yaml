@@ -6,4 +6,5 @@ namespace: downloads
 resources:
   - ./helmrelease.yaml
   - ./externalsecret.yaml
+  - ./ocirepository.yaml
   - ./pvc.yaml
