@@ -23,7 +23,6 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../components/gatus/guarded
     - ../../../../components/volsync
   postBuild:
     substitute:

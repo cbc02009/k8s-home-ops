@@ -20,7 +20,6 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../components/gatus/guarded
   dependsOn:
     - name: onepassword-connect
       namespace: security

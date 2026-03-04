@@ -20,7 +20,6 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../components/gatus/guarded
     - ../../../../components/volsync
   dependsOn:
     - name: onepassword-connect

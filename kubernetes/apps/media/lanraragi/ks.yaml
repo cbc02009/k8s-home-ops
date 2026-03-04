@@ -23,7 +23,6 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   components:
-    - ../../../../components/gatus/guarded
     - ../../../../components/volsync
   postBuild:
     substitute:

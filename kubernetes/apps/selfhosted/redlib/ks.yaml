@@ -23,7 +23,6 @@ spec:
     - name: onepassword-connect
       namespace: security
   components:
-    - ../../../../components/gatus/guarded
   postBuild:
     substitute:
       APP: *app
