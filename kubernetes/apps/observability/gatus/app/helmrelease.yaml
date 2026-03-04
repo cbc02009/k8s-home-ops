@@ -8,21 +8,21 @@ spec:
   chartRef:
     kind: OCIRepository
     name: gatus
-  interval: 1h
+  interval: 30m
   values:
     controllers:
       gatus:
-        type: statefulset
         annotations:
-          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: &secret gatus-secret
+          configmap.reloader.stakater.com/reload: &configmap gatus-configmap
         initContainers:
           init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: '17.6.0'
-            envFrom: &envFrom
+              tag: 18.3@sha256:6fa1f331cddd2eb0b6afa7b8d3685c864127a81ab01c3d9400bc3ff5263a51cf
+            envFrom: &envfrom
               - secretRef:
-                  name: gatus-secret
+                  name: *secret
           gatus-sidecar:
             image:
               repository: ghcr.io/home-operations/gatus-sidecar
@@ -43,11 +43,13 @@ spec:
               repository: ghcr.io/twin/gatus
               tag: v5.35.0@sha256:21609f31be8c4e680ce3004b24276305666239c99aff58391503f3fb6142f39d
             env:
-              TZ: America/New_York
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
-              CUSTOM_WEB_PORT: &port 80
-            envFrom: *envFrom
+              GATUS_WEB_PORT: &port 80
+              TZ: ${CONFIG_TIMEZONE}
+              PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
+              PRIVATE_DOMAIN: ${PRIVATE_DOMAIN}
+            envFrom: *envfrom
             probes:
               liveness: &probes
                 enabled: true
@@ -68,33 +70,46 @@ spec:
             resources:
               requests:
                 cpu: 100m
+                memory: 100Mi
               limits:
-                memory: 256Mi
+                memory: 250Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+        runAsUser: 65534
+        runAsGroup: 65534
     service:
       app:
+        controller: gatus
         ports:
           http:
             port: *port
     serviceMonitor:
       app:
+        serviceName: gatus
         endpoints:
           - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
-          - "status.kokoro.wtf"
+          - "${HOSTNAME}"
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
+            sectionName: https
     rbac:
+      bindings:
+        gatus:
+          type: ClusterRoleBinding
+          roleRef:
+            kind: ClusterRole
+            name: gatus
+          subjects:
+            - identifier: gatus
       roles:
         gatus:
           type: ClusterRole
@@ -102,35 +117,29 @@ spec:
             - apiGroups:
                 - ""
               resources:
-                - services
+                - "services"
               verbs:
-                - get
-                - watch
-                - list
+                - "get"
+                - "watch"
+                - "list"
             - apiGroups:
-                - gateway.networking.k8s.io
+                - "gateway.networking.k8s.io"
               resources:
-                - gateways
-                - httproutes
+                - "gateways"
+                - "httproutes"
               verbs:
-                - get
-                - watch
-                - list
-      bindings:
-        gatus:
-          type: ClusterRoleBinding
-          roleRef:
-            identifier: gatus
-          subjects:
-            - identifier: gatus
+                - "get"
+                - "watch"
+                - "list"
     serviceAccount:
       gatus: {}
     persistence:
+      config:
+        type: emptyDir
       config-file:
         type: configMap
-        name: gatus-configmap
+        name: *configmap
         globalMounts:
-          - path: /config/buddy.yaml
-            subPath: buddy.yaml
           - path: /config/config.yaml
             subPath: config.yaml
+            readOnly: true
