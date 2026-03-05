@@ -26,11 +26,11 @@ spec:
       APP: *app
       APP_UID: "1000"
       APP_GID: "1000"
-      PVC_CLAIM: authentik-media
-      PVC_CAPACITY: "1Gi"
-      PVC_STORAGECLASS: ceph-filesystem
-      PVC_ACCESSMODES: ReadWriteMany
-      PVC_SNAPSHOTCLASS: csi-ceph-filesystem
+      # PVC_CLAIM: authentik-media
+      # PVC_CAPACITY: "1Gi"
+      # PVC_STORAGECLASS: ceph-filesystem
+      # PVC_ACCESSMODES: ReadWriteMany
+      # PVC_SNAPSHOTCLASS: csi-ceph-filesystem
   prune: true
   sourceRef:
     kind: GitRepository
