@@ -50,10 +50,6 @@ spec:
             - name: envoy-external
               namespace: network
               sectionName: https
-    authentik:
-      email:
-        host: smtp-relay.kokoro.wtf
-        port: 25
     worker:
       replicas: 1
       resources:
