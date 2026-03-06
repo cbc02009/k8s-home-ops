@@ -29,6 +29,8 @@ services:
       - "/dev/sdh"
       - "/dev/sdi"
       - "/dev/sdj"
+      - "/dev/sdk"
+      - "/dev/sdl"
       - "/dev/nvme0n1"
       - "/dev/nvme1n1"
     labels:
