@@ -56,6 +56,6 @@ spec:
         enabled: true
         type: nfs
         server: ${NAS_HOST}
-        path: /mnt/tank/k8s/apps/postgres-backup
+        path: /mnt/tank/k8s/postgres-backup
         globalMounts:
           - path: /backups
