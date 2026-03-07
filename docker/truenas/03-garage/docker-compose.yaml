@@ -10,12 +10,15 @@ services:
       GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
       GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
       GARAGE_METRICS_TOKEN: ${GARAGE_METRICS_TOKEN}
+      PUID: ${PUID}
+      PGID: ${PGID}
     expose:
       - ${S3_PORT}
       - ${API_PORT}
     volumes:
       - ./config/config.toml:/etc/garage.toml
       - ${DATA_PATH}:/data
+      - ${META_PATH}:/meta
     labels:
       traefik.enable: "true"
       # S3
@@ -40,6 +43,8 @@ services:
       API_ADMIN_KEY: ${GARAGE_ADMIN_TOKEN}
       API_BASE_URL: "http://garage:${API_PORT}"
       S3_ENDPOINT_URL: "http://garage:${S3_PORT}"
+      PUID: ${PUID}
+      PGID: ${PGID}
     networks:
       apps:
     expose:

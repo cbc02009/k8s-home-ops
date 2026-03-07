@@ -1,5 +1,6 @@
 metadata_dir = "/data/meta"
-data_dir = "/data/data"
+data_dir = "/data"
+metadata_dir = "/meta"
 db_engine = "lmdb"
 metadata_auto_snapshot_interval = "6h"
 
