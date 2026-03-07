@@ -1,4 +1,3 @@
-metadata_dir = "/data/meta"
 data_dir = "/data"
 metadata_dir = "/meta"
 db_engine = "lmdb"
