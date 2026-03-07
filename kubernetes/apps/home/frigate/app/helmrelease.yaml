@@ -135,7 +135,7 @@ spec:
       media:
         type: nfs
         server: ${NAS_HOST}
-        path: /mnt/tank/k8s/apps/frigate
+        path: /mnt/tank/k8s/frigate
         globalMounts:
           - path: /media/frigate
       cache:
