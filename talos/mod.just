@@ -12,10 +12,10 @@ default:
   just -l talos
 
 talhelper-genconfig *args:
-  op run --env-file {{ kubernetes_dir }}/talos/talhelper-secrets.env --no-masking -- talhelper genconfig \
-        --secret-file {{ kubernetes_dir }}/talos/talsecret.yaml \
-        --config-file {{ kubernetes_dir }}/talos/talconfig.yaml \
-        --out-dir {{ kubernetes_dir }}/talos/clusterconfig
+  op run --env-file {{ talos_dir }}/talhelper-secrets.env --no-masking -- talhelper genconfig \
+        --secret-file {{ talos_dir }}/talsecret.yaml \
+        --config-file {{ talos_dir }}/talconfig.yaml \
+        --out-dir {{ talos_dir }}/clusterconfig
 
 # [doc('Apply Talos config to a node')]
 # apply-node node *args:
