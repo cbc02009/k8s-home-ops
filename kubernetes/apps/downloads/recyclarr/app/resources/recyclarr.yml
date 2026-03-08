@@ -8,9 +8,11 @@ sonarr:
     delete_old_custom_formats: true
 
     include:
-      - template: sonarr-quality-definition-anime
       - template: sonarr-v4-quality-profile-anime
       - template: sonarr-v4-custom-formats-anime
+
+    quality_definition:
+      type: anime
 
     # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
     custom_formats:
