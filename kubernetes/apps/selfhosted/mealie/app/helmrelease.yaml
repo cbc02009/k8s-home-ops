@@ -35,13 +35,11 @@ spec:
               TZ: "America/New_York"
               BASE_URL: https://mealie.${EXTERNAL_DOMAIN}
               DB_ENGINE: postgres
-              # SMTP_HOST: smtp.mailgun.org
-              # SMTP_PORT: 587
-              # SMTP_FROM_NAME: Mealie
-              # SMTP_FROM_EMAIL: noreply@holthome.net
-              # SMTP_AUTH_STRATEGY: TLS
-              # SMTP_USER: mealie@holthome.net
-              # OPENAI_BASE_URL: https://openrouter.ai/api/v1
+              SMTP_HOST: smtp-relay.kokoro.wtf
+              SMTP_PORT: 587
+              SMTP_FROM_NAME: Mealie
+              SMTP_FROM_EMAIL: noreply@kokoro.wtf
+              SMTP_USER: mealie@kokoro.wtf
             envFrom: *envFrom
             # resources:
             #   requests:
