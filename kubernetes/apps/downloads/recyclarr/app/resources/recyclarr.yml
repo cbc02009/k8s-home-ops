@@ -11,7 +11,8 @@ sonarr:
       type: anime
 
     quality_profiles:
-      - trash_id: 20e0fc959f1f1704bed501f23bdae76f  # [Anime] Remux-1080p
+      - name: Remux-1080p - Anime
+        trash_id: 20e0fc959f1f1704bed501f23bdae76f  # [Anime] Remux-1080p
         reset_unmatched_scores:
           enabled: true
 
