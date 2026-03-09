@@ -63,16 +63,16 @@ spec:
               type: LoadBalancer
           updateStrategy: patch
       disabledDefaultServices: ["r", "ro"]
-  bootstrap:
-    recovery:
-      source: source
-  externalClusters:
-    - name: source
-      plugin:
-        enabled: true
-        isWALArchiver: true
-        name: barman-cloud.cloudnative-pg.io
-        parameters: *barmanParameters
+  # bootstrap:
+  #   recovery:
+  #     source: source
+  # externalClusters:
+  #   - name: source
+  #     plugin:
+  #       enabled: true
+  #       isWALArchiver: true
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters: *barmanParameters
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
