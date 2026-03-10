@@ -3,7 +3,7 @@
 clusterName: &clusterName home-ops
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.12.4
+talosVersion: v1.12.5
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.35.1
 
