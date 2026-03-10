@@ -16,7 +16,7 @@ spec:
     podAnnotations:
       k8s.v1.cni.cncf.io/networks: |-
         [{
-          "name": "vpn",
+          "name": "multus-vpn",
           "namespace": "kube-system",
           "ips": ["192.168.99.13/24"],
           "mac": "3e:d0:83:c0:8e:13"
