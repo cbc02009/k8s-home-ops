@@ -35,11 +35,10 @@ spec:
               TZ: "America/New_York"
               BASE_URL: https://mealie.${EXTERNAL_DOMAIN}
               DB_ENGINE: postgres
-              SMTP_HOST: smtp-relay.kokoro.wtf
+              SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
               SMTP_PORT: 587
               SMTP_FROM_NAME: Mealie
               SMTP_FROM_EMAIL: noreply@kokoro.wtf
-              SMTP_USER: mealie@kokoro.wtf
               SMTP_AUTH_STRATEGY: NONE
             envFrom: *envFrom
             # resources:
