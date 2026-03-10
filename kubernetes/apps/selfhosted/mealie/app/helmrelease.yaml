@@ -40,6 +40,7 @@ spec:
               SMTP_FROM_NAME: Mealie
               SMTP_FROM_EMAIL: noreply@kokoro.wtf
               SMTP_USER: mealie@kokoro.wtf
+              SMTP_AUTH_STRATEGY: NONE
             envFrom: *envFrom
             # resources:
             #   requests:
