@@ -68,7 +68,7 @@ module "oauth2-grafana" {
   description        = "Infrastructure graphs"
   newtab             = true
   group              = "Infrastructure"
-  auth_groups        = [authentik_group.infrastructure.id]
+  auth_groups        = [data.authentik_group.admins.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_grafana.fields["oidc_id"]
@@ -158,7 +158,7 @@ module "oauth2-paperless" {
 #   description = "Database Access"
 #   newtab = true
 #   group = "Infrastructure"
-#   auth_groups = [authentik_group.infrastructure.id]
+#   auth_groups = [authentik_group.admins.id]
 #   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
 #   client_id          = module.secret_pgadmin.fields["oidc_id"]
 #   client_secret      = module.secret_pgadmin.fields["oidc_secret"]
