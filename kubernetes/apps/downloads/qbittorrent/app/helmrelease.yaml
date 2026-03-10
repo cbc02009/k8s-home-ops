@@ -31,15 +31,15 @@ spec:
               - 1010 # shana:zfswrite
           terminationGracePeriodSeconds: 120
 
-        initContainers:
-          coredns:
-            image:
-              repository: mirror.gcr.io/coredns/coredns
-              tag: 1.14.1
-            args:
-              - -conf
-              - /etc/coredns/Corefile
-            restartPolicy: Always
+        # initContainers:
+        #   coredns:
+        #     image:
+        #       repository: mirror.gcr.io/coredns/coredns
+        #       tag: 1.14.1
+        #     args:
+        #       - -conf
+        #       - /etc/coredns/Corefile
+        #     restartPolicy: Always
 
         containers:
           app:
