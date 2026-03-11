@@ -11,7 +11,7 @@ networks:
     driver: ipvlan
     name: traefik_macvlan
     driver_opts:
-      parent: br1
+      parent: vlan60
     ipam:
       driver: default
       config:
