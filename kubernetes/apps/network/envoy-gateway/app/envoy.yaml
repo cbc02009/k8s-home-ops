@@ -140,7 +140,7 @@ metadata:
 spec:
   clientIPDetection:
     xForwardedFor:
-      numTrustedHops: 1
+      numTrustedHops: 2
   path:
     disableMergeSlashes: true
     escapedSlashesAction: KeepUnchanged
