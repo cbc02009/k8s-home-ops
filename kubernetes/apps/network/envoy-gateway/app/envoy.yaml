@@ -112,21 +112,15 @@ kind: BackendTrafficPolicy
 metadata:
   name: envoy
 spec:
-  compressor:
-    - type: Zstd
-      zstd: {}
-    - type: Brotli
-      brotli: {}
-    - type: Gzip
-      gzip: {}
-  retry:
-    numRetries: 2
-    retryOn:
-      triggers:
-        - reset
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
+  compression:
+    - type: Brotli
+    - type: Gzip
+    - type: Zstd
+  connection:
+    bufferLimit: 8Mi
   tcpKeepalive: {}
   timeout:
     http:
@@ -140,7 +134,7 @@ metadata:
 spec:
   clientIPDetection:
     xForwardedFor:
-      numTrustedHops: 1
+      numTrustedHops: 3
   path:
     disableMergeSlashes: true
     escapedSlashesAction: KeepUnchanged
