@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     networks:
       traefik_macvlan:
-        ipv4_address: 192.168.5.243
+        ipv4_address: 192.168.5.244
     environment:
       GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
       GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
