@@ -5,6 +5,7 @@ configs:
     file: ./config/traefik.yaml
 
 networks:
+  apps:
   traefik_macvlan:
     driver: ipvlan
     name: traefik_macvlan
