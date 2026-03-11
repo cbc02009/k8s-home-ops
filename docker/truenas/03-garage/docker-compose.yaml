@@ -5,7 +5,8 @@ services:
     container_name: garage
     restart: unless-stopped
     networks:
-      apps:
+      traefik_macvlan:
+        ipv4_address: 192.168.5.243
     environment:
       GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
       GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
@@ -60,5 +61,14 @@ services:
       traefik.http.routers.garage-ui.service: garage-ui
 
 networks:
-  apps:
-    external: true
+  traefik_macvlan:
+    driver: ipvlan
+    name: traefik_macvlan
+    driver_opts:
+      parent: br1
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.5.0/24
+          ip_range: 192.168.5.240/28
+          gateway: 192.168.5.1

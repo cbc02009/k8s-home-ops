@@ -5,20 +5,14 @@ configs:
     file: ./config/traefik.yaml
 
 networks:
-  apps:
-    name: apps
   traefik_macvlan:
     driver: ipvlan
     name: traefik_macvlan
     driver_opts:
-      # parent: br0
       parent: br1
     ipam:
       driver: default
       config:
-        # - subnet: 10.0.2.0/24
-        #   ip_range: 10.0.2.240/28
-        #   gateway: 10.0.2.1
         - subnet: 192.168.5.0/24
           ip_range: 192.168.5.240/28
           gateway: 192.168.5.1
