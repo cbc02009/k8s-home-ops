@@ -11,13 +11,13 @@ networks:
     driver: ipvlan
     name: traefik_macvlan
     driver_opts:
-      parent: br0
+      parent: br1
     ipam:
       driver: default
       config:
-        - subnet: 10.0.2.0/24
-          ip_range: 10.0.2.240/28
-          gateway: 10.0.2.1
+        - subnet: 192.168.5.0/24
+          ip_range: 192.168.5.240/28
+          gateway: 192.168.5.1
 services:
   traefik:
     image: traefik:v3.6.10@sha256:c549d482c55d7a797398562064f35428cc53e748d84d7190997930e7b31bcc32
@@ -28,7 +28,7 @@ services:
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
       traefik_macvlan:
-        ipv4_address: 10.0.2.241
+        ipv4_address: 192.168.5.241
       apps:
     configs:
       - source: traefik-config
