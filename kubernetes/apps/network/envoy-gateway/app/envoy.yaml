@@ -12,7 +12,7 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyDeployment:
-        replicas: 2
+        replicas: 1
         container:
           image: mirror.gcr.io/envoyproxy/envoy:v1.37.0
           # imageRepository: mirror.gcr.io/envoyproxy/envoy
@@ -134,7 +134,9 @@ metadata:
 spec:
   clientIPDetection:
     xForwardedFor:
-      numTrustedHops: 3
+      numTrustedHops: 1
+      # trustedCIDRs:
+      #   - 10.11.0.0/16
   path:
     disableMergeSlashes: true
     escapedSlashesAction: KeepUnchanged
@@ -163,6 +165,7 @@ spec:
   tcpKeepalive: {}
   timeout:
     http:
+      idleTimeout: 60s
       requestReceivedTimeout: 0s
   tls:
     minVersion: "1.2"
