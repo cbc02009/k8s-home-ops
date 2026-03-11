@@ -47,8 +47,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
     networks:
-      traefik_macvlan:
-        ipv4_address: 192.168.5.244
+      apps:
     expose:
       - ${UI_PORT}
     volumes:
@@ -62,6 +61,7 @@ services:
       traefik.http.routers.garage-ui.service: garage-ui
 
 networks:
+  apps:
   traefik_macvlan:
     driver: ipvlan
     name: traefik_macvlan
