@@ -15,7 +15,7 @@ networks:
       driver: default
       config:
         - subnet: 192.168.5.0/24
-          ip_range: 192.168.5.127/5
+          ip_range: 192.168.5.127/25
           gateway: 192.168.5.1
 services:
   traefik:
