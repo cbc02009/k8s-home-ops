@@ -9,7 +9,6 @@ services:
     restart: unless-stopped
     networks:
       app_ipvlan:
-        ipv4_address: 192.168.5.245
     environment:
       TZ: America/New_York
       COLLECTOR_CRON_SCHEDULE: "0 * * * *"

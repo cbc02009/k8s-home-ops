@@ -6,7 +6,6 @@ services:
     restart: unless-stopped
     networks:
       app_ipvlan:
-        ipv4_address: 192.168.5.243
     environment:
       GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
       GARAGE_ADMIN_TOKEN: ${GARAGE_ADMIN_TOKEN}
