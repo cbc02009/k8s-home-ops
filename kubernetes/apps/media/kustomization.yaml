@@ -7,7 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  # - ./booklore/ks.yaml
+  - ./booklore/ks.yaml
   - ./lanraragi/ks.yaml
   - ./plex/ks.yaml
   - ./tautulli/ks.yaml
