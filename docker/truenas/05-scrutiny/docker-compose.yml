@@ -8,7 +8,7 @@ services:
       - SYS_ADMIN
     restart: unless-stopped
     networks:
-      traefik_macvlan:
+      apps_ipvlan:
         ipv4_address: 192.168.5.245
     environment:
       TZ: America/New_York
@@ -43,14 +43,5 @@ services:
       traefik.http.routers.scrutiny.service: scrutiny
 
 networks:
-  traefik_macvlan:
-    driver: ipvlan
-    name: traefik_macvlan
-    driver_opts:
-      parent: br1
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.5.0/24
-          ip_range: 192.168.5.240/28
-          gateway: 192.168.5.1
+  apps_ipvlan:
+    external: true

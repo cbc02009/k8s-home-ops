@@ -5,14 +5,10 @@ configs:
     file: ./config/traefik.yaml
 
 networks:
+  apps:
   apps_ipvlan:
     driver: ipvlan
     name: apps_ipvlan
-    driver_opts:
-      parent: br1
-  traefik_macvlan:
-    driver: ipvlan
-    name: traefik_macvlan
     driver_opts:
       parent: br1
     ipam:
@@ -30,9 +26,9 @@ services:
       TZ: America/New_York
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
-      traefik_macvlan:
-        ipv4_address: 192.168.5.241
       apps_ipvlan:
+        ipv4_address: 192.168.5.241
+      apps:
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yaml
