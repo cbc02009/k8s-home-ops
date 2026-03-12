@@ -5,7 +5,7 @@ services:
     container_name: garage
     restart: unless-stopped
     networks:
-      apps_ipvlan:
+      app_ipvlan:
         ipv4_address: 192.168.5.243
     environment:
       GARAGE_RPC_SECRET: ${GARAGE_RPC_SECRET}
