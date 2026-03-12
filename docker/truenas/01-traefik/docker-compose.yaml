@@ -27,7 +27,7 @@ services:
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
       apps_ipvlan:
-        ipv4_address: 192.168.5.129
+        ipv4_address: 192.168.5.130
       apps:
     configs:
       - source: traefik-config
