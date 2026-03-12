@@ -8,7 +8,7 @@ services:
       - SYS_ADMIN
     restart: unless-stopped
     networks:
-      apps_ipvlan:
+      app_ipvlan:
         ipv4_address: 192.168.5.245
     environment:
       TZ: America/New_York
@@ -43,5 +43,5 @@ services:
       traefik.http.routers.scrutiny.service: scrutiny
 
 networks:
-  apps_ipvlan:
+  app_ipvlan:
     external: true

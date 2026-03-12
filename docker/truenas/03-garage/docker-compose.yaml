@@ -47,7 +47,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
     networks:
-      apps_ipvlan:
+      app_ipvlan:
     expose:
       - ${UI_PORT}
     volumes:
@@ -62,5 +62,5 @@ services:
 
 networks:
   apps:
-  apps_ipvlan:
+  app_ipvlan:
     external: true

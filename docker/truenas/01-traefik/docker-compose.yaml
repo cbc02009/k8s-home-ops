@@ -6,7 +6,7 @@ configs:
 
 networks:
   apps:
-  apps_ipvlan:
+  app_ipvlan:
     driver: ipvlan
     name: apps_ipvlan
     driver_opts:
@@ -26,8 +26,8 @@ services:
       TZ: America/New_York
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
-      apps_ipvlan:
-        ipv4_address: 192.168.5.130
+      app_ipvlan:
+        ipv4_address: 192.168.5.129
       apps:
     configs:
       - source: traefik-config
