@@ -8,7 +8,7 @@ networks:
   apps:
   app_ipvlan:
     driver: ipvlan
-    name: apps_ipvlan
+    name: app_ipvlan
     driver_opts:
       parent: br1
     ipam:
