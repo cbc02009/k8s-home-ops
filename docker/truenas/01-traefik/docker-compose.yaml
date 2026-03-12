@@ -6,6 +6,7 @@ configs:
 
 networks:
   apps_ipvlan:
+    driver: ipvlan
     name: apps_ipvlan
     driver_opts:
       parent: br1
