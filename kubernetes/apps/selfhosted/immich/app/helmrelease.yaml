@@ -224,7 +224,7 @@ spec:
       library:
         type: nfs
         server: ${NAS_HOST}
-        path: /mnt/tank/k8s/apps/immich
+        path: /mnt/tank/k8s/immich
         advancedMounts:
           server:
             server:
