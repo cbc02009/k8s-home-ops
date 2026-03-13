@@ -68,7 +68,7 @@ module "oauth2-grafana" {
   description        = "Infrastructure graphs"
   newtab             = true
   group              = "Infrastructure"
-  auth_groups        = [data.authentik_group.admins.id]
+  auth_groups        = [authentik_group.infrastructure.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_grafana.fields["oidc_id"]
@@ -129,26 +129,26 @@ module "oauth2-paperless" {
   redirect_uris      = ["https://documents.${var.public_domain}/accounts/oidc/authentik/login/callback/"]
 }
 
-# module "oauth2-opencloud" {
-#   source             = "./oauth2_application"
-#   name               = "OpenCloud"
-#   icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
-#   launch_url         = "https://opencloud.${var.public_domain}"
-#   description        = "OpenCloud"
-#   newtab             = true
-#   group              = "SelfHosted"
-#   auth_groups        = [authentik_group.users.id]
-#   client_type        = "public"
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-#   client_id          = "web"
-#   # additional_property_mappings = formatlist(authentik_scope_mapping.openid-nextcloud.id)
-#   redirect_uris = [
-#     "https://opencloud.${var.public_domain}",
-#     "https://opencloud.${var.public_domain}/oidc-callback.html",
-#     "https://opencloud.${var.public_domain}/oidc-silent-redirect.html"
-#   ]
-# }
+module "oauth2-opencloud" {
+  source             = "./oauth2_application"
+  name               = "OpenCloud"
+  icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
+  launch_url         = "https://opencloud.${var.public_domain}"
+  description        = "OpenCloud"
+  newtab             = true
+  group              = "SelfHosted"
+  auth_groups        = [authentik_group.users.id]
+  client_type        = "public"
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = "web"
+  # additional_property_mappings = formatlist(authentik_scope_mapping.openid-nextcloud.id)
+  redirect_uris = [
+    "https://opencloud.${var.public_domain}",
+    "https://opencloud.${var.public_domain}/oidc-callback.html",
+    "https://opencloud.${var.public_domain}/oidc-silent-redirect.html"
+  ]
+}
 
 # module "oauth2-pgadmin" {
 #   source = "./oauth2_application"

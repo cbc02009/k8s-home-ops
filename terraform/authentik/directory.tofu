@@ -1,8 +1,3 @@
-data "authentik_group" "admins" {
-  name = "authentik Admins"
-}
-
-
 resource "authentik_group" "users" {
   name = "users"
   attributes = jsonencode({
@@ -11,6 +6,11 @@ resource "authentik_group" "users" {
 }
 
 resource "authentik_group" "home" {
-  name         = "Home"
+  name         = "home"
+  is_superuser = false
+}
+
+resource "authentik_group" "infrastructure" {
+  name         = "infrastructure"
   is_superuser = false
 }
