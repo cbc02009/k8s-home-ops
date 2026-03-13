@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+helmDefaults:
+  args:
+    - --include-crds
+    - --no-hooks
+
+releases:
+  # - name: envoy-gateway
+  #   namespace: networking
+  #   chart: oci://docker.io/envoyproxy/gateway-helm
+  #   version: 1.7.0
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 2.0.0
+
+  - name: external-dns
+    namespace: network
+    chart: oci://ghcr.io/home-operations/charts-mirror/external-dns
+    version: 1.20.0
+
+  - name: kube-prometheus-stack
+    namespace: observability
+    chart: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+    version: 81.6.9

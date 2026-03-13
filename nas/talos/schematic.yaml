@@ -1,0 +1,16 @@
+---
+customization:
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/amd-ucode
+      - siderolabs/iscsi-tools
+      - siderolabs/qemu-guest-agent
+---
+customization:
+    extraKernelArgs:
+        - console=ttyS0,115200
+    systemExtensions:
+        officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/iscsi-tools
+            - siderolabs/qemu-guest-agent
