@@ -26,42 +26,52 @@ prune-pods:
 
 [doc('Apply local Flux Kustomization')]
 apply-ks ns ks:
-  just k8s render-local-ks "{{ ns }}" "{{ ks }}" \
+  just nas-k8s render-local-ks "{{ ns }}" "{{ ks }}" \
   | kubectl apply --server-side --force-conflicts --field-manager=kustomize-controller -f /dev/stdin
 
 [doc('Delete local Flux Kustomization')]
 delete-ks ns ks:
-  just k8s render-local-ks "{{ ns }}" "{{ ks }}" \
+  just nas-k8s render-local-ks "{{ ns }}" "{{ ks }}" \
   | kubectl delete -f /dev/stdin
 
+[doc('Sync single Flux GitRepo')]
+gr-sync ns name:
+  kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite gitrepository "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
+
 [doc('Sync single Flux HelmRelease')]
-sync-hr ns name:
+hr-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite hr "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
 
 [doc('Sync single Flux Kustomizations')]
-sync-ks ns name:
+ks-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite ks "{{ name }}" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
 
 [doc('Sync single ExternalSecret')]
-sync-es ns name:
+es-sync ns name:
   kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite es "{{ name }}" force-sync="$(date +%s)"; \
 
 [doc('Sync all Flux HelmReleases')]
-sync-all-hr:
+hr-sync-all:
   kubectl get hr --no-headers -A | while read -r ns name _; do \
-    just k8s sync-hr "$ns" "$name"; \
+    just nas-k8s hr-sync "$ns" "$name"; \
+  done
+
+[doc('Sync all Flux GitRepos')]
+gr-sync-all:
+  kubectl get gitrepository --no-headers -A | while read -r ns name _; do \
+    just nas-k8s gr-sync "$ns" "$name"; \
   done
 
 [doc('Sync all Flux Kustomizations')]
-sync-all-ks:
+ks-sync-all:
   kubectl get ks --no-headers -A | while read -r ns name _; do \
-    just k8s sync-ks "$ns" "$name"; \
+    just nas-k8s ks-sync "$ns" "$name"; \
   done
 
 [doc('Sync all ExternalSecrets')]
-sync-all-es:
+es-sync-all:
   kubectl get es --no-headers -A | while read -r ns name _; do \
-    just k8s sync-es "$ns" "$name"; \
+    just nas-k8s es-sync "$ns" "$name"; \
   done
 
 [doc('Snapshot all VolSync ReplicationSource')]
@@ -71,7 +81,7 @@ snapshot ns name:
 [doc('Snapshot all VolSync ReplicationSources')]
 snapshot-all:
   kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
-    just k8s snapshot "$ns" "$name"; \
+    just nas-k8s snapshot "$ns" "$name"; \
   done
 
 [doc('Suspend or resume Keda ScaledObjects')]
@@ -81,7 +91,7 @@ keda state ns name:
 [doc('Suspend or resume Keda ScaledObjects')]
 keda-all state:
   kubectl get scaledobjects --no-headers -A | while read -r ns name _; do \
-    just k8s keda "{{ state }}" "$ns" "$name"; \
+    just nas-k8s keda "{{ state }}" "$ns" "$name"; \
   done
 
 [private]
