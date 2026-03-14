@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: multus-vpn
+spec:
+  config: |-
+    {
+      "cniVersion": "1.1.0",
+      "name": "multus-nas",
+      "plugins": [
+        {
+          "type": "macvlan",
+          "master": "bond1",
+          "mode": "bridge",
+          "ipam": {
+            "type": "static",
+            "routes": [
+              {"dst": "10.0.2.4/32"}
+            ]
+          }
+        }
+      ]
+    }
