@@ -11,10 +11,10 @@ releases:
   #   chart: oci://docker.io/envoyproxy/gateway-helm
   #   version: 1.7.0
 
-  - name: external-secrets
-    namespace: external-secrets
-    chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 2.0.0
+  # - name: external-secrets
+  #   namespace: external-secrets
+  #   chart: oci://ghcr.io/external-secrets/charts/external-secrets
+  #   version: 2.0.0
 
   - name: external-dns
     namespace: network

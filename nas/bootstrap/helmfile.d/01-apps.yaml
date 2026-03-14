@@ -80,7 +80,7 @@ releases:
           - apply
           - --server-side
           - --field-manager=kustomize-controller
-          - --filename=../../kubernetes/apps/security/onepassword-connect/app/clustersecretstore.yaml
+          - --filename=../../apps/external-secrets/onepassword-connect/app/clustersecretstore.yaml
         events:
           - postsync
         showlogs: true
