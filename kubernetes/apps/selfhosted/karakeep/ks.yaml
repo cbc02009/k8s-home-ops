@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: karakeep
+  name: &app karakeep
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: karakeep
-  # components:
-  #   - ../../../../components/volsync
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -17,7 +17,7 @@ spec:
   path: "./kubernetes/apps/selfhosted/karakeep/app"
   postBuild:
     substitute:
-      APP: karakeep
+      APP: *app
       HOSTNAME: karakeep.kokoro.wtf
       AUTH_HOSTNAME: auth.kokoro.wtf
   prune: true
