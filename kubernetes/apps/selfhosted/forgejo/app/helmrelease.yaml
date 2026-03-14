@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app forgejo
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  values:
+
+    httpRoute:
+      enabled: true
+      hostnames:
+        - ${HOSTNAME}
+      parentRefs:
+        - name: envoy-internal
+          namespace: network
+
+    persistence:
+      create: false
+      claimName: *app
+
+    gitea:
+
+      # See https://forgejo.org/docs/latest/admin/config-cheat-sheet/
+      config:
+        admin:
+          DISABLE_REGULAR_ORG_CREATION: true
+        cache:
+          ADAPTER: redis
+        mailer:
+          ENABLED: true
+          SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
+          SMTP_PORT: 25
+          PROTOCOL: smtp
+          FROM: "forgejo@kokoro.wtf"
+          USER: ""
+          PASSWD: ""
+        openid:
+          ENABLE_OPENID_SIGNIN: false
+        oauth2_client:
+          ENABLE_AUTO_REGISTRATION: true
+          ACCOUNT_LINKING: auto
+          USERNAME: preferred_username
+          UPDATE_AVATAR: true
+          OPENID_CONNECT_SCOPES: openid email profile groups
+        queue:
+          TYPE: redis
+        repository:
+          DEFAULT_BRANCH: main
+          DEFAULT_PRIVATE: true
+        security:
+          PASSWORD_COMPLEXITY: spec
+        server:
+          DOMAIN: ${HOSTNAME}
+          SSH_PORT: 22
+          SSH_LISTEN_PORT: 2222
+          ROOT_URL: https://${HOSTNAME}
+          LANDING_PAGE: explore
+        service:
+          ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+          DEFAULT_KEEP_EMAIL_PRIVATE: true
+          DISABLE_REGISTRATION: true
+          ENABLE_PASSKEY_AUTHENTICATION: false
+          SHOW_REGISTRATION_BUTTON: false
+        session:
+          PROVIDER: redis
+        time:
+          DEFAULT_UI_LOCATION: ${TZ}
+      oauth:
+        - name: Authentik
+          provider: openidConnect
+          existingSecret: forgejo-authentik
+          autoDiscoverUrl: https://${AUTH_HOST}/application/o/forgejo/.well-known/openid-configuration
+          groupClaimName: users
+          adminGroup: infrastructure
+          iconUrl: https://${AUTH_HOST}/static/dist/assets/icons/icon.png
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: 'observability'
+    postgresql:
+      enabled: false
+    memcached:
+      enabled: false
+      additionalConfigSources:
+        - secret:
+            secretName: forgejo-secret
+
+    serviceAccount:
+      create: true

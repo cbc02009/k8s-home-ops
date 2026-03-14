@@ -3,27 +3,31 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app atuin
+  name: &app forgejo
   namespace: &namespace selfhosted
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: external-secrets
+      namespace: security
   interval: 30m
-  timeout: 5m
-  path: ./kubernetes/apps/selfhosted/atuin/app
+  path: ./kubernetes/apps/selfhosted/forgejo/app
+  postBuild:
+    substitute:
+      AUTH_HOST: auth.kokoro.wtf
+      HOSTNAME: git.kokoro.wtf
+      APP: *app
+      APP_UID: "2000"
+      APP_GID: "2000"
+      PVC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: external-secrets
-      namespace: security
-    - name: postgres-cluster
-      namespace: databases
-  postBuild:
-    substitute:
-      APP: *app
+  targetNamespace: *namespace
+  wait: true

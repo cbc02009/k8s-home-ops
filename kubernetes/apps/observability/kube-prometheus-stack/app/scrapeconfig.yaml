@@ -7,7 +7,7 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - "smtp-relay.kokoro.wtf:8080"
+        - "smtp-relay.selfhosted.svc.cluster.local:8080"
   metricsPath: /metrics
   relabelings:
     - action: replace
