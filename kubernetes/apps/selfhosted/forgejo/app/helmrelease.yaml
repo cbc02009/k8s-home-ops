@@ -26,6 +26,9 @@ spec:
       claimName: *app
 
     gitea:
+      additionalConfigSources:
+        - secret:
+            secretName: forgejo-secret
       admin:
         existingSecret: forgejo-admin
       # See https://forgejo.org/docs/latest/admin/config-cheat-sheet/
@@ -93,9 +96,7 @@ spec:
       enabled: false
     memcached:
       enabled: false
-      # additionalConfigSources:
-      #   - secret:
-      #       secretName: forgejo-secret
+
 
     serviceAccount:
       create: true
