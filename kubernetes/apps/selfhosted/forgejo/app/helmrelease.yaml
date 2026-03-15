@@ -18,7 +18,7 @@ spec:
         type: LoadBalancer
         port: 22
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ssh.git.kokoro.wtf"
+          external-dns.alpha.kubernetes.io/hostname: "ssh.${HOSTNAME}"
           lbipam.cilium.io/ips: ${LB_FORGEJO}
 
     httpRoute:
@@ -46,6 +46,8 @@ spec:
         cache:
           ADAPTER: redis
           HOST: &redis redis://dragonfly.databases.svc.cluster.local:6379/8
+        cron:
+          ENABLED: true
         mailer:
           ENABLED: true
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
@@ -74,6 +76,7 @@ spec:
           DOMAIN: ${HOSTNAME}
           SSH_PORT: 22
           SSH_LISTEN_PORT: 2222
+          SSH_DOMAIN: ssh.${HOSTNAME}
           ROOT_URL: https://${HOSTNAME}
           LANDING_PAGE: explore
         service:
