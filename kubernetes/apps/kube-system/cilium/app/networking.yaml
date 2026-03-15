@@ -52,7 +52,7 @@ spec:
       kubernetes.io/os: linux
   bgpInstances:
     - name: cilium
-      localASN: 64512
+      localASN: 64513
       peers:
         - name: unifi
           peerASN: 64512
@@ -78,12 +78,12 @@ spec:
 #       port: 6443
 #       protocol: TCP
 #       targetPort: 6443
----
-apiVersion: "cilium.io/v2alpha1"
-kind: CiliumL2AnnouncementPolicy
-metadata:
-  name: l2-announcement-policy
-spec:
-  interfaces:
-    - bond0
-  loadBalancerIPs: true
+# ---
+# apiVersion: "cilium.io/v2alpha1"
+# kind: CiliumL2AnnouncementPolicy
+# metadata:
+#   name: l2-announcement-policy
+# spec:
+#   interfaces:
+#     - bond0
+#   loadBalancerIPs: true
