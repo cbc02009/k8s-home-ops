@@ -93,9 +93,9 @@ spec:
       enabled: false
     memcached:
       enabled: false
-      additionalConfigSources:
-        - secret:
-            secretName: forgejo-secret
+      # additionalConfigSources:
+      #   - secret:
+      #       secretName: forgejo-secret
 
     serviceAccount:
       create: true
