@@ -34,6 +34,7 @@ spec:
           DISABLE_REGULAR_ORG_CREATION: true
         cache:
           ADAPTER: redis
+          HOST: &redis redis://dragonfly.databases.svc.cluster.local:6379/8
         mailer:
           ENABLED: true
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
@@ -52,6 +53,7 @@ spec:
           OPENID_CONNECT_SCOPES: openid email profile groups
         queue:
           TYPE: redis
+          CONN_STR: *redis
         repository:
           DEFAULT_BRANCH: main
           DEFAULT_PRIVATE: true
@@ -71,6 +73,7 @@ spec:
           SHOW_REGISTRATION_BUTTON: false
         session:
           PROVIDER: redis
+          PROVIDER_CONFIG: *redis
         time:
           DEFAULT_UI_LOCATION: ${TZ}
       oauth:
