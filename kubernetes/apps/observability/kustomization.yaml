@@ -11,7 +11,6 @@ resources:
   - ./fluent-bit/ks.yaml
   # - ./gatus/ks.yaml
   - ./grafana-operator/ks.yaml
-  - ./headlamp/ks.yaml
   - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./kube-state-metrics/ks.yaml
