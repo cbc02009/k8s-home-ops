@@ -90,6 +90,8 @@ spec:
           PROVIDER_CONFIG: *redis
         time:
           DEFAULT_UI_LOCATION: ${TZ}
+        webhook:
+          ALLOWED_HOST_LIST: "*.cnas.dev"
       oauth:
         - name: Authentik
           provider: openidConnect
