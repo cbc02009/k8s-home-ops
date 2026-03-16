@@ -53,6 +53,7 @@ spec:
     txtPrefix: "k8s."
     domainFilters:
       - "kokoro.wtf"
+      - "ctec.run"
     serviceMonitor:
       enabled: true
     podAnnotations:
