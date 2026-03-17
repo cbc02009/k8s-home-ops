@@ -3,6 +3,8 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 
 kubernetes_dir := justfile_dir() + '/kubernetes'
 
+export KUBECONFIG := kubernetes_dir + '/kubeconfig'
+
 [private]
 default:
   just -l talos

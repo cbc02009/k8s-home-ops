@@ -10,7 +10,7 @@ data:
         "type": "s3",
         "config": {
           "bucket": "volsync",
-          "endpoint": "s3.cnas.dev",
+          "endpoint": "s3.nas.cnas.dev",
           "accessKeyID": "{{ .access_key }}",
           "secretAccessKey": "{{ .secret_key }}",
           "region": ""
