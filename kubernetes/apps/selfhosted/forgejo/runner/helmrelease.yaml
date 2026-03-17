@@ -13,10 +13,21 @@ spec:
     controllers:
       forgejo-runner:
         type: statefulset
-        podDisruptionBudget:
-          minAvailable: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
+        replicas: 1
+
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+
+        statefulset:
+          volumeClaimTemplates:
+            - name: data
+              globalMounts:
+                - path: /data
+              accessMode: "ReadWriteOnce"
+              size: 1Gi
+
         initContainers:
           register:
             image:
@@ -46,15 +57,15 @@ spec:
           daemon:
             image:
               repository: docker
-              tag: 29.3.0-dind-rootless@sha256:7b90623a6a8d610e766d0dda84f20c7fbafeefe68a83ba01ecb4d6921b777b49
-            securityContext:
-              privileged: true
+              tag: 29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
             resources:
               requests:
                 cpu: 10m
-                memory: 1Gi
+                memory: 194Mi
               limits:
-                memory: 4Gi
+                memory: 194Mi
+            securityContext:
+              privileged: true
             env:
               - name: DOCKER_TLS_CERTDIR
                 value: /certs
@@ -65,9 +76,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 384Mi
+                memory: 100Mi
               limits:
-                memory: 768Mi
+                memory: 100Mi
             command:
               - "sh"
               - "-c"
@@ -79,71 +90,26 @@ spec:
                 value: /certs/client
               - name: DOCKER_TLS_VERIFY
                 value: "1"
-        statefulset:
-          volumeClaimTemplates:
-            - name: data
-              globalMounts:
-                - path: /data
-              accessMode: "ReadWriteOnce"
-              size: 10Gi
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+        annotations:
+          reloader.stakater.com/auto: "true"
+
     service:
       app:
         controller: *app
         ports:
           http:
             port: 45315
-    configMaps:
-      config:
-        data:
-          config.yaml: |
-            log:
-              level: info
-
-            runner:
-              file: .runner
-              capacity: 1
-              envs:
-                CLEEB: true
-                DOCKER_HOST: tcp://127.0.0.1:2376
-                DOCKER_TLS_VERIFY: 1
-                DOCKER_CERT_PATH: /certs/client
-              env_file: .env
-              timeout: 3h
-              insecure: false
-              fetch_timeout: 5s
-              fetch_interval: 2s
-              labels: []
-
-            cache:
-              enabled: true
-              dir: ""
-              host: ""
-              port: 0
-
-            container:
-              network: "host"
-              enable_ipv6: false
-              privileged: false
-              options: "-v /certs/client:/certs/client"
-              workdir_parent:
-              valid_volumes:
-                - /certs/client
-              docker_host: ""
-
-            host:
-              workdir_parent:
 
     persistence:
       config:
         type: configMap
-        identifier: config
+        name: forgejo-runner-configmap
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
             readOnly: true
+
       certs:
+        type: emptyDir
+      cache:
         type: emptyDir
