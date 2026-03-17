@@ -6,3 +6,9 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+configMapGenerator:
+  - name: forgejo-runner-configmap
+    files:
+      - ./resources/config.yaml
+configurations:
+  - ./resources/kustomizeconfig.yaml
