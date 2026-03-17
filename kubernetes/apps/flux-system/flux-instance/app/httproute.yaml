@@ -5,9 +5,11 @@ kind: HTTPRoute
 metadata:
   name: github-webhook
 spec:
-  hostnames: ["flux-receiver.kokoro.wtf"]
+  hostnames:
+    - flux-receiver.kokoro.wtf
+    - flux-receiver.ctec.run
   parentRefs:
-    - name: envoy-external
+    - name: envoy-internal
       namespace: network
       sectionName: https
   rules:
