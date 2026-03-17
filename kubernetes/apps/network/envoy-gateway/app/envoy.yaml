@@ -105,6 +105,8 @@ spec:
         certificateRefs:
           - kind: Secret
             name: kokoro-wtf-tls
+          - kind: Secret
+            name: ctec-run-tls
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/backendtrafficpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
