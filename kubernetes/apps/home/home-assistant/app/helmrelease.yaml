@@ -109,8 +109,8 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
-          - "hass.kokoro.wtf"
+          - "{{ .Release.Name }}.ctec.run"
+          - "hass.ctec.run"
         parentRefs:
           - name: envoy-internal
             namespace: network

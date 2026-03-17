@@ -96,7 +96,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
+          - ${HOSTNAME}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -106,7 +106,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: sonarr-config-v1
+        existingClaim: *app
 
       tmp:
         type: emptyDir

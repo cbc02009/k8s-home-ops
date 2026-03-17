@@ -6,26 +6,30 @@ metadata:
   name: &app sonarr
   namespace: &namespace downloads
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/pvc
+    - ../../../../components/keda/nas-nfs-scaler
+  dependsOn:
+    - name: volsync
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: external-secrets
+      namespace: security
   interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/downloads/sonarr/app/'
+  path: ./kubernetes/apps/downloads/sonarr/app
+  postBuild:
+    substitute:
+      HOSTNAME: qbt.${EXTERNAL_DOMAIN}
+      APP: *app
+      PVC_CAPACITY: "5Gi"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: postgres-cluster
-      namespace: databases
-    - name: external-secrets
-      namespace: security
-  components:
-    - ../../../../components/keda/nas-nfs-scaler
-  postBuild:
-    substitute:
-      APP: *app
+  targetNamespace: *namespace
+  wait: true

@@ -60,7 +60,7 @@ spec:
     route:
       app:
         hostnames:
-          - it-tools.kokoro.wtf
+          - it-tools.ctec.run
         parentRefs:
           - name: envoy-internal
             namespace: network

@@ -13,6 +13,9 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/selfhosted/smtp-relay/app
+  postBuild:
+    substitute:
+      HOSTNAME: smtp-relay.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

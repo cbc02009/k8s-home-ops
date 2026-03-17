@@ -6,24 +6,24 @@ metadata:
   name: &app prowlarr
   namespace: &namespace downloads
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/downloads/prowlarr/app/'
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: false
   dependsOn:
     - name: postgres-cluster
       namespace: databases
     - name: external-secrets
       namespace: security
+  interval: 30m
+  path: ./kubernetes/apps/downloads/prowlarr/app
   postBuild:
     substitute:
+      HOSTNAME: prowlarr.${EXTERNAL_DOMAIN}
       APP: *app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  wait: true

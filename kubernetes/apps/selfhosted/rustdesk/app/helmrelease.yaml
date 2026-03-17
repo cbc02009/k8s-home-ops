@@ -60,7 +60,7 @@ spec:
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${LB_RUSTDESK}
-          external-dns.alpha.kubernetes.io/hostname: rd.${EXTERNAL_DOMAIN}
+          external-dns.alpha.kubernetes.io/hostname: rd.ctec.run
         ports:
           rustdesk-1:
             port: 21114

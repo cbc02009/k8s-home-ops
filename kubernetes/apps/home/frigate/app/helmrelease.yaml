@@ -99,8 +99,8 @@ spec:
     route:
       app:
         hostnames:
-          # - "{{ .Release.Name }}.kokoro.wtf"
-          - cameras.kokoro.wtf
+          - "{{ .Release.Name }}.ctec.run"
+          - cameras.ctec.run
         parentRefs:
           - name: envoy-internal # MAKE EXTERNAL
             namespace: network
@@ -112,7 +112,7 @@ spec:
 
       go2rtc:
         hostnames:
-          - "go2rtc.kokoro.wtf"
+          - "go2rtc.ctec.run"
         parentRefs:
           - name: envoy-internal
             namespace: network

@@ -82,7 +82,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
+          - ${HOSTNAME}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -92,12 +92,12 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: lidarr-config-v1
+        existingClaim: *app
 
       media:
         enabled: true
         type: nfs
-        server: &nas ${NAS_HOST}
+        server: ${NAS_HOST}
         path: /mnt/tank/media
         globalMounts:
           - path: /media

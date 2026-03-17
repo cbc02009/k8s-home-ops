@@ -57,6 +57,12 @@ module "secret_grafana" {
   item   = "grafana"
 }
 
+module "secret_forgejo" {
+  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  vault  = "k8s-home-ops"
+  item   = "forgejo"
+}
+
 module "secret_mealie" {
   source = "github.com/bjw-s/terraform-1password-item?ref=main"
   vault  = "k8s-home-ops"

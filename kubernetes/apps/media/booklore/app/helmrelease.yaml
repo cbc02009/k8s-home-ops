@@ -176,6 +176,7 @@ spec:
       booklore:
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
+          - "{{ .Release.Name }}.ctec.run"
         parentRefs:
           - name: envoy-external
             namespace: network

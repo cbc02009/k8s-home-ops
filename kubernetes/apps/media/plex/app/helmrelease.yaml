@@ -86,6 +86,7 @@ spec:
             conditions: ["[STATUS] == 401"]
         hostnames:
           - "{{ .Release.Name }}.kokoro.wtf"
+          - "{{ .Release.Name }}.ctec.run"
         parentRefs:
           - name: envoy-external
             namespace: network

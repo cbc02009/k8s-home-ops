@@ -6,26 +6,30 @@ metadata:
   name: &app animarr
   namespace: &namespace downloads
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/pvc
+    - ../../../../components/keda/nas-nfs-scaler
+  dependsOn:
+    - name: postgres-cluster
+      namespace: databases
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: external-secrets
+      namespace: security
   interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/downloads/animarr/app/'
+  path: ./kubernetes/apps/downloads/animarr/app
+  postBuild:
+    substitute:
+      HOSTNAME: animarr.${EXTERNAL_DOMAIN}
+      APP: *app
+      PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: postgres-cluster
-      namespace: databases
-    - name: external-secrets
-      namespace: security
-  components:
-    - ../../../../components/keda/nas-nfs-scaler
-  postBuild:
-    substitute:
-      APP: *app
+  targetNamespace: *namespace
+  wait: true

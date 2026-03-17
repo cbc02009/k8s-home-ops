@@ -48,8 +48,8 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
-          - "requests.kokoro.wtf"
+          - ${HOSTNAME}
+          - requests.kokoro.wtf #REMOVE
         parentRefs:
           - name: envoy-external
             namespace: network

@@ -21,7 +21,7 @@ spec:
   postBuild:
     substitute:
       AUTH_HOST: auth.kokoro.wtf
-      HOSTNAME: git.kokoro.wtf
+      HOSTNAME: git.ctec.run
       APP: *app
       APP_UID: "2000"
       APP_GID: "2000"

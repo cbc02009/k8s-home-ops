@@ -6,26 +6,29 @@ metadata:
   name: &app overseerr
   namespace: &namespace downloads
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+  dependsOn:
+    - name: volsync
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: external-secrets
+      namespace: security
   interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/downloads/overseerr/app/'
+  path: ./kubernetes/apps/downloads/overseerr/app
+  postBuild:
+    substitute:
+      HOSTNAME: requests.${EXTERNAL_DOMAIN}
+      APP: *app
+      PVC_CAPACITY: "5Gi"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  components:
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *app
-      GATUS_SUBDOMAIN: requests
-      PVC_CAPACITY: 5Gi
+  targetNamespace: *namespace
+  wait: true

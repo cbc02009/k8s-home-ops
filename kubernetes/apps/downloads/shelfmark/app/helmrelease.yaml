@@ -83,7 +83,7 @@ spec:
     route:
       app:
         hostnames:
-          - shelfmark.kokoro.wtf
+          - shelfmark.ctec.run
         parentRefs:
           - name: envoy-internal
             namespace: network

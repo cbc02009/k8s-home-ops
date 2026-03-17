@@ -6,26 +6,30 @@ metadata:
   name: &app sabnzbd
   namespace: &namespace downloads
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync
+    - ../../../../components/keda/nas-nfs-scaler
+  dependsOn:
+    - name: volsync
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: external-secrets
+      namespace: security
   interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/downloads/sabnzbd/app/'
+  path: ./kubernetes/apps/downloads/sabnzbd/app
+  postBuild:
+    substitute:
+      HOSTNAME: sab.${EXTERNAL_DOMAIN}
+      APP: *app
+      PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  components:
-    - ../../../../components/volsync
-    - ../../../../components/keda/nas-nfs-scaler
-  postBuild:
-    substitute:
-      APP: *app
-      PVC_CAPACITY: 1Gi
+  targetNamespace: *namespace
+  wait: true

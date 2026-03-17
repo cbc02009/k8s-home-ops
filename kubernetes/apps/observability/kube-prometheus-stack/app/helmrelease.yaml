@@ -23,7 +23,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - alertmanager.kokoro.wtf
+            - alertmanager.ctec.run
           parentRefs:
             - name: envoy-internal
               namespace: network
@@ -33,7 +33,7 @@ spec:
           name: alertmanager
           global:
             resolveTimeout: 5m
-        externalUrl: https://alertmanager.kokoro.wtf
+        externalUrl: https://alertmanager.ctec.run
         storage:
           volumeClaimTemplate:
             spec:
@@ -121,7 +121,7 @@ spec:
     ###
     prometheus:
       prometheusSpec:
-        externalUrl: https://prometheus.kokoro.wtf
+        externalUrl: https://prometheus.ctec.run
         version: v2.55.1 # override 'unsupported Prometheus version' error
         image:
           registry: docker.io
@@ -157,7 +157,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - prometheus.kokoro.wtf
+            - prometheus.ctec.run
           parentRefs:
             - name: envoy-internal
               namespace: network

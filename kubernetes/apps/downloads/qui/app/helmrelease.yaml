@@ -68,7 +68,7 @@ spec:
     route:
       app:
         hostnames:
-          - qui.kokoro.wtf
+          - qui.ctec.run
         parentRefs:
           - name: envoy-internal
             namespace: network
