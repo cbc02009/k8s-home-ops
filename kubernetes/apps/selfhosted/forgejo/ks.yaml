@@ -42,7 +42,7 @@ metadata:
   namespace: &namespace selfhosted
 spec:
   components:
-    - ../../../../components/volsync
+    - ../../../../components/pvc
   dependsOn:
     - name: forgejo
   interval: 1h
