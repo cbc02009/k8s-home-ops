@@ -5,7 +5,6 @@ configs:
     file: ./config/traefik.yaml
 
 networks:
-  apps:
   app_ipvlan:
     driver: ipvlan
     name: app_ipvlan

@@ -60,6 +60,5 @@ services:
       traefik.http.routers.garage-ui.service: garage-ui
 
 networks:
-  apps:
   app_ipvlan:
     external: true
