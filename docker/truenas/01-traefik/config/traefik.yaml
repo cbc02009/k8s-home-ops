@@ -17,7 +17,7 @@ entryPoints:
     # http3:
 providers:
   docker:
-    network: apps
+    network: app_ipvlan
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
   file:

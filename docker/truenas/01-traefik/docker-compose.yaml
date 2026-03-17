@@ -27,7 +27,6 @@ services:
     networks:
       app_ipvlan:
         ipv4_address: 192.168.5.129
-      apps:
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yaml
