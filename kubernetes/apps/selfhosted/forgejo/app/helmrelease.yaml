@@ -14,6 +14,8 @@ spec:
       reloader.stakater.com/auto: "true"
 
     service:
+      http:
+        port: 3000
       ssh:
         type: LoadBalancer
         port: 22
