@@ -8,10 +8,6 @@ metadata:
 spec:
   accessModes:
     - "${PVC_ACCESSMODES:-ReadWriteOnce}"
-  dataSourceRef:
-    kind: ReplicationDestination
-    apiGroup: volsync.backube
-    name: "${APP}-dst"
   resources:
     requests:
       storage: "${PVC_CAPACITY:-5Gi}"
