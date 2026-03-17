@@ -87,7 +87,6 @@ spec:
               accessMode: "ReadWriteOnce"
               size: 10Gi
     defaultPodOptions:
-      priorityClassName: cluster-low
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
