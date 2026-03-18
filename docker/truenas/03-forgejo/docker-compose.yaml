@@ -1,0 +1,31 @@
+---
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:14.0.3@sha256:8f4b1f86750e206824c669e1af17b6c6e8da9ed1a8ebda615db7526ee86d3eb2
+    container_name: forgejo
+    restart: unless-stopped
+    networks:
+      app_ipvlan:
+    env_file:
+      - .env
+    environment:
+      USER_UID: 2000
+      USER_GID: 2000
+      TZ: America/New_York
+    expose:
+      - 3000
+      - 22
+    volumes:
+      - ./mnt/smoltank/apps/forgejo:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.forgejo.loadbalancer.server.port: 3000
+      traefik.http.routers.forgejo.entrypoints: https
+      traefik.http.routers.forgejo.rule: Host(`forgejo.nas.cnas.dev`)
+      traefik.http.routers.forgejo.tls: true
+      traefik.http.routers.forgejo.service: forgejo
+
+networks:
+  app_ipvlan:
+    external: true

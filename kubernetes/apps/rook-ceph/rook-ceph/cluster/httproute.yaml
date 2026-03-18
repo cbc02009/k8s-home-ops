@@ -5,7 +5,7 @@ kind: HTTPRoute
 metadata:
   name: rook-ceph-dashboard
 spec:
-  hostnames: ["rook.kokoro.wtf"]
+  hostnames: ["rook.ctec.run"]
   parentRefs:
     - name: envoy-internal
       namespace: kube-system

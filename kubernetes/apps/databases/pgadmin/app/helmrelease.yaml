@@ -45,7 +45,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
+          - ${HOSTNAME}
         parentRefs:
           - name: envoy-internal
             namespace: network

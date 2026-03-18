@@ -18,11 +18,11 @@ spec:
   path: ./kubernetes/apps/observability/gatus/app
   postBuild:
     substitute:
-      HOSTNAME: status.kokoro.wtf
+      HOSTNAME: status.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  wait: true
+  wait: false

@@ -20,7 +20,7 @@ spec:
       route:
         enabled: true
         hostnames:
-          - victoria-logs.kokoro.wtf
+          - victoria-logs.ctec.run
         parentRefs:
           - name: envoy-internal
             namespace: network

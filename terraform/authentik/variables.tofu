@@ -1,9 +1,9 @@
 variable "public_domain" {
   type    = string
-  default = "kokoro.wtf"
+  default = "ctec.run"
 }
 
 variable "private_domain" {
   type    = string
-  default = "ctec.run"
+  default = "ctec.internal"
 }

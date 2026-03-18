@@ -65,7 +65,7 @@ namespaces:
 [doc('Apply Kubernetes resources')]
 resources:
   just log info "Running stage..." "stage" "$0"
-  if ! just template "{{ bootstrap_dir }}/resources.yaml.j2" | kubectl apply --server-side -f -; then \
+  if ! just template "{{ bootstrap_dir }}/resources.yaml.j2" | kubectl apply --server-side --force-conflicts -f -; then \
     just log fatal "Failed to apply resources" "stage" "$0"; \
   fi;
 

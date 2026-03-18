@@ -74,6 +74,8 @@ spec:
         certificateRefs:
           - kind: Secret
             name: kokoro-wtf-tls
+          - kind: Secret
+            name: ctec-run-tls
 ---
 # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/gateway.networking.k8s.io/gateway_v1.json
 apiVersion: gateway.networking.k8s.io/v1

@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/security/authentik/app
   postBuild:
     substitute:
-      HOSTNAME: auth.kokoro.wtf
+      HOSTNAME: auth.${EXTERNAL_DOMAIN}
       APP: *app
       APP_UID: "1000"
       APP_GID: "1000"
@@ -37,4 +37,4 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  wait: true
+  wait: false

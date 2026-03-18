@@ -25,7 +25,7 @@ spec:
       auth_url: https://${AUTH_HOSTNAME}/application/o/authorize/
       enabled: "true"
       icon: signin
-      name: kokoro.wtf
+      name: ctec.run
       role_attribute_path: contains(groups[*], 'infrastructure') && 'Admin' || 'Viewer'
       scopes: openid email profile offline_access
       signout_redirect_url: https://${AUTH_HOSTNAME}/application/o/grafana/end-session/

@@ -35,7 +35,7 @@ spec:
                   name: postgres-backup
             env:
               - name: POSTGRES_HOST
-                value: postgres.kokoro.wtf
+                value: postgres.ctec.run
               - name: POSTGRES_DB
                 value: "postgres"
               - name: POSTGRES_CLUSTER

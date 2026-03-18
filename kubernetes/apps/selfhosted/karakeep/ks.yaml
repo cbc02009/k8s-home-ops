@@ -18,8 +18,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: karakeep.kokoro.wtf
-      AUTH_HOSTNAME: auth.kokoro.wtf
+      HOSTNAME: karakeep.${EXTERNAL_DOMAIN}
+      AUTH_HOSTNAME: auth.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

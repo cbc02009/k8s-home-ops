@@ -6,10 +6,10 @@ metadata:
   name: cloudflared
   namespace: network
   annotations:
-    external-dns.alpha.kubernetes.io/target: external.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: external.ctec.run
 spec:
   endpoints:
-    - dnsName: external.kokoro.wtf
+    - dnsName: external.ctec.run
       recordType: CNAME
       targets:
         - ${CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com

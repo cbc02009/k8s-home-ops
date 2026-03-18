@@ -20,6 +20,7 @@ spec:
       APP: booklore
       APP_UID: "1000"
       APP_GID: "1000"
+      HOSTNAME: booklore.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

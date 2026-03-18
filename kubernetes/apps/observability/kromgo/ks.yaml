@@ -14,6 +14,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      HOSTNAME: kromgo.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

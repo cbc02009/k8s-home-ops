@@ -61,7 +61,7 @@ spec:
             metadata:
               name: *pgname
               annotations:
-                external-dns.alpha.kubernetes.io/hostname: postgres-immich.kokoro.wtf
+                external-dns.alpha.kubernetes.io/hostname: postgres-immich.ctec.run
                 gatus.home-operations.com/enabled: "true"
                 gatus.home-operations.com/endpoint: |
                   name: postgres-immich

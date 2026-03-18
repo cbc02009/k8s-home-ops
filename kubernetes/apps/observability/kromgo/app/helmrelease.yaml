@@ -82,7 +82,7 @@ spec:
     route:
       app:
         hostnames:
-          - kromgo.kokoro.wtf
+          - ${HOSTNAME}
         parentRefs:
           - name: envoy-external
             namespace: network

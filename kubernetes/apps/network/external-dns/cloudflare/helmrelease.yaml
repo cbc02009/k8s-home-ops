@@ -32,10 +32,13 @@ spec:
       - --gateway-name=envoy-external
     triggerLoopOnEvent: true
     policy: sync
-    sources: ["crd", "gateway-httproute"]
+    sources:
+      - crd
+      - gateway-httproute
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["kokoro.wtf"]
+    domainFilters:
+      - ctec.run
     serviceMonitor:
       enabled: true
     podAnnotations:

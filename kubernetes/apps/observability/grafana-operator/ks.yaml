@@ -40,12 +40,12 @@ spec:
   path: ./kubernetes/apps/observability/grafana-operator/instance
   postBuild:
     substitute:
-      HOSTNAME: grafana.kokoro.wtf
-      AUTH_HOSTNAME: auth.kokoro.wtf
+      HOSTNAME: grafana.${EXTERNAL_DOMAIN}
+      AUTH_HOSTNAME: auth.${EXTERNAL_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  wait: true
+  wait: false

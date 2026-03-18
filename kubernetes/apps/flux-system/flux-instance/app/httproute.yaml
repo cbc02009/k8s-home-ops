@@ -7,7 +7,7 @@ metadata:
 spec:
   hostnames:
     - flux-receiver.kokoro.wtf
-    - flux-receiver.ctec.run
+    - flux-receiver.${EXTERNAL_DOMAIN}
   parentRefs:
     - name: envoy-internal
       namespace: network

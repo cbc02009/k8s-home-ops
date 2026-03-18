@@ -6,28 +6,29 @@ metadata:
   name: &app plex
   namespace: &namespace media
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/gpu
+    - ../../../../components/volsync
+  dependsOn:
+    - name: volsync
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 30m
-  timeout: 5m
-  path: './kubernetes/apps/media/plex/app/'
+  path: ./kubernetes/apps/media/plex/app
+  postBuild:
+    substitute:
+      HOSTNAME: plex.${EXTERNAL_DOMAIN}
+      APP: *app
+      PVC_CAPACITY: "50Gi"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: *namespace
   wait: false
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  components:
-    - ../../../../components/volsync
-    - ../../../../components/keda/nas-nfs-scaler
-    - ../../../../components/gpu
-  postBuild:
-    substitute:
-      APP: *app
-      GATUS_PATH: /web/index.html
-      PVC_CAPACITY: 50Gi

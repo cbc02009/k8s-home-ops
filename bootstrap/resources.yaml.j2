@@ -5,6 +5,11 @@ metadata:
   name: security
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: network
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: onepassword-secret
@@ -32,4 +37,4 @@ metadata:
   name: cloudflare-tunnel-id-secret
   namespace: network
 stringData:
-  CLOUDFLARE_TUNNEL_ID: op://k8s-home-ops/cloudflare/tunnel_id
+  CLOUDFLARE_TUNNEL_ID: op://k8s-home-ops/cloudflare/tunnel_id_new

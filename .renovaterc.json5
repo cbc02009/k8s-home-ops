@@ -18,8 +18,6 @@
     "github>cbc02009/k8s-home-ops//.renovate/semanticCommits.json5",
     "github>cbc02009/k8s-home-ops//.renovate/overrides.json5",
   ],
-  "onboarding": false,
-  "requireConfig": "optional",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
   "rebaseWhen": "conflicted",
