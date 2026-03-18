@@ -49,7 +49,6 @@ spec:
       app:
         hostnames:
           - ${HOSTNAME}
-          - requests.kokoro.wtf #REMOVE
         parentRefs:
           - name: envoy-external
             namespace: network

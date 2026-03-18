@@ -175,7 +175,6 @@ spec:
     route:
       booklore:
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
           - ${HOSTNAME}
         parentRefs:
           - name: envoy-external

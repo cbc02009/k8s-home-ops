@@ -50,7 +50,7 @@ kind: Gateway
 metadata:
   name: envoy-external
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname external.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: &hostname external.ctec.run
 spec:
   gatewayClassName: envoy
   infrastructure:
@@ -83,7 +83,7 @@ kind: Gateway
 metadata:
   name: envoy-internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname internal.kokoro.wtf
+    external-dns.alpha.kubernetes.io/target: &hostname internal.ctec.run
 spec:
   gatewayClassName: envoy
   infrastructure:

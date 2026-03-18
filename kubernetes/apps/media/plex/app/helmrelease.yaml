@@ -85,7 +85,6 @@ spec:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 401"]
         hostnames:
-          - "{{ .Release.Name }}.kokoro.wtf"
           - ${HOSTNAME}
         parentRefs:
           - name: envoy-external
