@@ -6,10 +6,9 @@ metadata:
   name: github-webhook
 spec:
   hostnames:
-    - flux-receiver.kokoro.wtf
-    - flux-receiver.${EXTERNAL_DOMAIN}
+    - flux-receiver.ctec.run
   parentRefs:
-    - name: envoy-internal
+    - name: envoy-external
       namespace: network
       sectionName: https
   rules:
