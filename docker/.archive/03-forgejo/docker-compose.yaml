@@ -16,7 +16,7 @@ services:
       - 3000
       - 22
     volumes:
-      - ./mnt/smoltank/apps/forgejo:/data
+      - /mnt/smoltank/apps/forgejo:/data
       - /etc/localtime:/etc/localtime:ro
     labels:
       traefik.enable: "true"
