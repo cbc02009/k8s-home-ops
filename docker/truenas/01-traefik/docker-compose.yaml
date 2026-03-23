@@ -14,7 +14,7 @@ networks:
       driver: default
       config:
         - subnet: 192.168.5.0/24
-          ip_range: 192.168.5.250/25
+          ip_range: 192.168.5.128/25
           gateway: 192.168.5.1
 services:
   traefik:
@@ -26,7 +26,7 @@ services:
       CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
     networks:
       app_ipvlan:
-        ipv4_address: 192.168.5.129
+        ipv4_address: 192.168.5.250
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yaml
