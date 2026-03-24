@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app overseerr
+  name: &app seerr
   namespace: &namespace downloads
 spec:
   commonMetadata:
@@ -19,7 +19,7 @@ spec:
     - name: external-secrets
       namespace: security
   interval: 30m
-  path: ./kubernetes/apps/downloads/overseerr/app
+  path: ./kubernetes/apps/downloads/seerr/app
   postBuild:
     substitute:
       HOSTNAME: requests.${EXTERNAL_DOMAIN}

@@ -10,7 +10,7 @@ resources:
   - ./animarr/ks.yaml
   - ./autobrr/ks.yaml
   - ./lidarr/ks.yaml
-  - ./overseerr/ks.yaml
+  - ./seerr/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   # - ./qui/ks.yaml
