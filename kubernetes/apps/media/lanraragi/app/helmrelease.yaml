@@ -21,7 +21,7 @@ spec:
               LRR_GID: 2000
             image:
               repository: docker.io/difegue/lanraragi
-              tag: v.0.9.60
+              tag: v.0.9.70
 
     service:
       app:
