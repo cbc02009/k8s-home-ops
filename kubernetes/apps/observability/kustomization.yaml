@@ -8,7 +8,7 @@ components:
 resources:
   - ./namespace.yaml
   - ./blackbox-exporter/ks.yaml
-  - ./fluent-bit/ks.yaml
+  # - ./fluent-bit/ks.yaml
   # - ./gatus/ks.yaml
   - ./grafana-operator/ks.yaml
   - ./kromgo/ks.yaml
@@ -16,4 +16,4 @@ resources:
   - ./kube-state-metrics/ks.yaml
   - ./silence-operator/ks.yaml
   - ./unpoller/ks.yaml
-  - ./victoria-logs/ks.yaml
+  # - ./victoria-logs/ks.yaml
