@@ -3,18 +3,23 @@
 apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
-  name: kopia-daily-maintenance
-  namespace: volsync
+  name: daily
 spec:
-  repository:
-    repository: volsync-secret
+  enabled: true
+  trigger:
+    schedule: 30 3,15 * * *
+  moverVolumes:
+    - mountPath: repository
+      volumeSource:
+        nfs:
+          path: /mnt/tank/k8s/kopia
+          server: shana.ctec.internal
   podSecurityContext:
     runAsUser: 2000
     fsGroup: 2000
-    runAsNonRoot: true
-  trigger:
-    schedule: "30 3 * * *"
-  enabled: true
+  repository:
+    repository: volsync-secret
+
 # ---
 # # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/mutatingadmissionpolicybinding-admissionregistration-v1beta1.json
 # apiVersion: admissionregistration.k8s.io/v1beta1
