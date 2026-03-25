@@ -24,6 +24,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      HOSTNAME: kopia.${EXTERNAL_DOMAIN}
   prune: true
   retryInterval: 2m
   sourceRef:
