@@ -14,6 +14,7 @@ resources:
   - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./kube-state-metrics/ks.yaml
+  - ./node-exporter/ks.yaml
   - ./silence-operator/ks.yaml
   - ./unpoller/ks.yaml
   # - ./victoria-logs/ks.yaml
