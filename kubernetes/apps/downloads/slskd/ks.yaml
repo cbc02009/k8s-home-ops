@@ -24,6 +24,6 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: homelab-ops
+    name: hflux-system
     namespace: flux-system
   targetNamespace: *namespace
