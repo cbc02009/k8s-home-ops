@@ -24,6 +24,6 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: hflux-system
+    name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
