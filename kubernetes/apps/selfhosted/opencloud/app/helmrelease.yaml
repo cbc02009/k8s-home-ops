@@ -37,7 +37,7 @@ spec:
               repository: docker.io/opencloudeu/opencloud-rolling
               tag: 5.2.0@sha256:c840de29b7287da070ffc9d5eb52a1b291a046877402bf70f387ccf56c820aee
             command:
-              ["/bin/sh", "-c", "opencloud init || true; opencloud server"]
+              ["/bin/sh", "-c", "opencloud init --force-overwrite || true; opencloud server"]
             envFrom:
               - secretRef:
                   name: *secret
