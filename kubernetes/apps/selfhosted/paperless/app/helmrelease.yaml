@@ -38,7 +38,7 @@ spec:
             env:
               # Configure application
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
-              PAPERLESS_URL: https://paperless.${EXTERNAL_DOMAIN}
+              PAPERLESS_URL: https://paperless.${PUBLIC_DOMAIN}
               PAPERLESS_PORT: "8000"
               PAPERLESS_TIME_ZONE: ${TZ}
               PAPERLESS_WEBSERVER_WORKERS: "2"

@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/observability/gatus/app
   postBuild:
     substitute:
-      HOSTNAME: status.${EXTERNAL_DOMAIN}
+      HOSTNAME: status.${PUBLIC_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

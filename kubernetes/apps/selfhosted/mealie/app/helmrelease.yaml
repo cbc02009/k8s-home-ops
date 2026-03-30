@@ -33,7 +33,7 @@ spec:
               tag: v3.13.1@sha256:4ee2b9e807627fac79eb7509bbf6577271747346e3d16208a0de939276ccaac2
             env:
               TZ: "America/New_York"
-              BASE_URL: https://mealie.${EXTERNAL_DOMAIN}
+              BASE_URL: https://mealie.${PUBLIC_DOMAIN}
               DB_ENGINE: postgres
               SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
               SMTP_PORT: 25

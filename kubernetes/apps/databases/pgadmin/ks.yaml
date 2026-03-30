@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/databases/pgadmin/app
   postBuild:
     substitute:
-      HOSTNAME: pgadmin.${EXTERNAL_DOMAIN}
+      HOSTNAME: pgadmin.${PUBLIC_DOMAIN}
       APP: *app
       PVC_CAPACITY: "1Gi"
   prune: true

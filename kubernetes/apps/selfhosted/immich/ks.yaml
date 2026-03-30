@@ -27,7 +27,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: photos.${EXTERNAL_DOMAIN}
+      HOSTNAME: photos.${PUBLIC_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

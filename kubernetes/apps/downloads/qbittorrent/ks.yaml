@@ -23,7 +23,7 @@ spec:
   path: ./kubernetes/apps/downloads/qbittorrent/app
   postBuild:
     substitute:
-      HOSTNAME: qbt.${EXTERNAL_DOMAIN}
+      HOSTNAME: qbt.${PUBLIC_DOMAIN}
       APP: *app
       PVC_CAPACITY: "5Gi"
   prune: true

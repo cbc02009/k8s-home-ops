@@ -40,8 +40,8 @@ spec:
   path: ./kubernetes/apps/observability/grafana-operator/instance
   postBuild:
     substitute:
-      HOSTNAME: grafana.${EXTERNAL_DOMAIN}
-      AUTH_HOSTNAME: auth.${EXTERNAL_DOMAIN}
+      HOSTNAME: grafana.${PUBLIC_DOMAIN}
+      AUTH_HOSTNAME: auth.${PUBLIC_DOMAIN}
   prune: true
   sourceRef:
     kind: GitRepository

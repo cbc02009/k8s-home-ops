@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/downloads/seerr/app
   postBuild:
     substitute:
-      HOSTNAME: requests.${EXTERNAL_DOMAIN}
+      HOSTNAME: requests.${PUBLIC_DOMAIN}
       APP: *app
       PVC_CAPACITY: "5Gi"
   prune: true

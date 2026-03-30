@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/security/authentik/app
   postBuild:
     substitute:
-      HOSTNAME: auth.${EXTERNAL_DOMAIN}
+      HOSTNAME: auth.${PUBLIC_DOMAIN}
       APP: *app
       APP_UID: "1000"
       APP_GID: "1000"

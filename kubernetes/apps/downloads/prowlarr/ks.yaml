@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/downloads/prowlarr/app
   postBuild:
     substitute:
-      HOSTNAME: prowlarr.${EXTERNAL_DOMAIN}
+      HOSTNAME: prowlarr.${PUBLIC_DOMAIN}
       APP: *app
   prune: true
   sourceRef:

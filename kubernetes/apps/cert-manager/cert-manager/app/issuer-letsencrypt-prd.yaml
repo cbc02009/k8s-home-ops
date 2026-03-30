@@ -14,7 +14,7 @@ spec:
     solvers:
       - selector:
           dnsZones:
-            - ${EXTERNAL_DOMAIN}
+            - ${PUBLIC_DOMAIN}
         dns01:
           cloudflare:
             apiTokenSecretRef:

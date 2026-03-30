@@ -56,13 +56,13 @@ nodes:
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: 128GiB
+          maxSize: 200GiB
     userVolumes: &userVolumes
       - name: local-hostpath
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: 256GiB
+          minSize: 100GiB
     # extensionServices: &nut-service
     #   - name: nut-client
     #     configFiles:

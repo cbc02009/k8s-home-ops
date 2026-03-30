@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/media/plex/app
   postBuild:
     substitute:
-      HOSTNAME: plex.${EXTERNAL_DOMAIN}
+      HOSTNAME: plex.${PUBLIC_DOMAIN}
       APP: *app
       PVC_CAPACITY: "50Gi"
   prune: true

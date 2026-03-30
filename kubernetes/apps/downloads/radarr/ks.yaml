@@ -21,7 +21,7 @@ spec:
   path: ./kubernetes/apps/downloads/radarr/app
   postBuild:
     substitute:
-      HOSTNAME: radarr.${EXTERNAL_DOMAIN}
+      HOSTNAME: radarr.${PUBLIC_DOMAIN}
       APP: *app
       PVC_CAPACITY: "1Gi"
   prune: true
