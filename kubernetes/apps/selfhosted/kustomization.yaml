@@ -13,7 +13,7 @@ resources:
   - ./mealie/ks.yaml
   - ./immich/ks.yaml
   - ./it-tools/ks.yaml
-  # - ./opencloud/ks.yaml
+  - ./opencloud/ks.yaml
   # - ./paperless/ks.yaml
   - ./redlib/ks.yaml
   - ./rustdesk/ks.yaml
