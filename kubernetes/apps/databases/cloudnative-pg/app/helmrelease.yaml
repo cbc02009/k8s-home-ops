@@ -21,6 +21,6 @@ spec:
         cpu: 15m
         memory: 150Mi
       limits:
-        memory: 200Mi
+        memory: 250Mi
     monitoring:
       podMonitorEnabled: true
