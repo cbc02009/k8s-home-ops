@@ -32,7 +32,7 @@ module "oauth2-Booklore" {
   launch_url         = "https://booklore.${var.public_domain}"
   description        = "Books"
   newtab             = true
-  group              = "SelfHosted"
+  group              = "Selfhosted"
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
@@ -82,7 +82,7 @@ module "oauth2-immich" {
   launch_url         = "https://photos.${var.public_domain}"
   description        = "Photo managment"
   newtab             = true
-  group              = "SelfHosted"
+  group              = "Selfhosted"
   auth_groups        = [authentik_group.home.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
@@ -117,7 +117,7 @@ module "oauth2-Mealie" {
   launch_url         = "https://mealie.${var.public_domain}"
   description        = "Recipes"
   newtab             = true
-  group              = "SelfHosted"
+  group              = "Selfhosted"
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
@@ -136,7 +136,7 @@ module "oauth2-opencloud" {
   launch_url         = "https://opencloud.${var.public_domain}"
   description        = "OpenCloud"
   newtab             = true
-  group              = "SelfHosted"
+  group              = "Selfhosted"
   auth_groups        = [authentik_group.users.id]
   client_type        = "public"
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
@@ -150,6 +150,45 @@ module "oauth2-opencloud" {
   ]
 }
 
+module "oauth2-opencloud-desktop" {
+  source             = "./oauth2_application"
+  name               = "OpenCloudDesktop"
+  launch_url         = "blank://blank"
+  auth_groups        = [authentik_group.users.id]
+  client_type        = "public"
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = "OpenCloudDesktop"
+  redirect_uris = [
+    { matching_mode = "regex", url = "http://127.0.0.1(:.*)?" },
+    { matching_mode = "regex", url = "http://localhost(:.*)?" }
+  ]
+}
+
+module "oauth2-opencloud-android" {
+  source             = "./oauth2_application"
+  name               = "OpenCloudAndroid"
+  launch_url         = "blank://blank"
+  auth_groups        = [authentik_group.users.id]
+  client_type        = "public"
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = "OpenCloudAndroid"
+  redirect_uris      = ["oc://android.opencloud.eu"]
+}
+
+module "oauth2-opencloud-ios" {
+  source             = "./oauth2_application"
+  name               = "OpenCloudIOS"
+  launch_url         = "blank://blank"
+  auth_groups        = [authentik_group.users.id]
+  client_type        = "public"
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = "OpenCloudIOS"
+  redirect_uris      = ["oc://ios.opencloud.eu"]
+}
+
 module "oauth2-paperless" {
   source             = "./oauth2_application"
   name               = "Paperless"
@@ -157,7 +196,7 @@ module "oauth2-paperless" {
   launch_url         = "https://documents.${var.public_domain}"
   description        = "Documents"
   newtab             = true
-  group              = "SelfHosted"
+  group              = "Selfhosted"
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid

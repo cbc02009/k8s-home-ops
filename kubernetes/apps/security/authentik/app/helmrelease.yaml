@@ -46,6 +46,7 @@ spec:
           enabled: true
           hostnames:
             - ${HOSTNAME}
+            - auth.kokoro.wtf # REMOVE AFTER FIXING TERRAFORM
           parentRefs:
             - name: envoy-external
               namespace: network
