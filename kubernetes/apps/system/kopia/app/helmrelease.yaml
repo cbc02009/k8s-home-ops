@@ -96,7 +96,7 @@ spec:
       repository:
         type: nfs
         path: /mnt/tank/k8s/kopia
-        server: shana.ctec.internal
+        server: ${NAS_HOST}
         globalMounts:
           - path: /repository
       tmpfs:
@@ -113,7 +113,7 @@ spec:
     route:
       app:
         hostnames:
-          - ${HOSTNAME}
+          - kopia.bjw-s.dev
         parentRefs:
           - name: envoy-internal
             namespace: network
