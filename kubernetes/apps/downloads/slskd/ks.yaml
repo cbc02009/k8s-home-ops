@@ -13,8 +13,6 @@ spec:
     - ../../../../components/pvc
         - ../../../../components/nfs-scaler
   dependsOn:
-    - name: multus-networks
-      namespace: kube-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: external-secrets
