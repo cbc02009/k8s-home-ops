@@ -80,6 +80,9 @@ spec:
   bootstrap:
     recovery:
       source: source
+      recoveryTarget:
+        # Time base target for the recovery
+        targetTime: "2026-04-01 08:00:00.00000-05"
   externalClusters:
     - name: source
       plugin:
