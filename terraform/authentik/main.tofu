@@ -32,11 +32,11 @@ module "secret_authentik" {
   item   = "authentik"
 }
 
-module "secret_booklore" {
+module "secret_grimmory" {
   # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
   source = "github.com/bjw-s/terraform-1password-item?ref=main"
   vault  = "k8s-home-ops"
-  item   = "booklore"
+  item   = "grimmory"
 }
 
 module "secret_karakeep" {

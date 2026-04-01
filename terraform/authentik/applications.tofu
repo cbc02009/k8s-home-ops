@@ -25,22 +25,22 @@ module "proxy-frigate" {
 #   access_token_validity = "weeks=20"
 # }
 
-module "oauth2-Booklore" {
+module "oauth2-Grimmory" {
   source             = "./oauth2_application"
-  name               = "Booklore"
-  icon_url           = "https://raw.githubusercontent.com/booklore-app/booklore/refs/heads/develop/assets/logo.svg"
-  launch_url         = "https://booklore.${var.public_domain}"
+  name               = "Grimmory"
+  icon_url           = "https://raw.githubusercontent.com/grimmory-tools/grimmory/refs/heads/develop/assets/logo.svg"
+  launch_url         = "https://grimmory.${var.public_domain}"
   description        = "Books"
   newtab             = true
   group              = "Selfhosted"
   auth_groups        = [authentik_group.users.id]
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  client_id          = module.secret_booklore.fields["oidc_id"]
-  # client_secret      = module.secret_booklore.fields["oidc_secret"]
+  client_id          = module.secret_grimmory.fields["oidc_id"]
+  # client_secret      = module.secret_grimmory.fields["oidc_secret"]
   client_type        = "public"
-  redirect_uris      = ["https://booklore.${var.public_domain}/oauth2-callback"]
-  regex_uris         = ["https://booklore.${var.public_domain}/*"]
+  redirect_uris      = ["https://grimmory.${var.public_domain}/oauth2-callback"]
+  regex_uris         = ["https://grimmory.${var.public_domain}/*"]
 }
 
 module "oauth2-forgejo" {
