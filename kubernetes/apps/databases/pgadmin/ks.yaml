@@ -24,6 +24,8 @@ spec:
     substitute:
       HOSTNAME: pgadmin.${PUBLIC_DOMAIN}
       APP: *app
+      APP_UID: "5050"
+      APP_GID: "5050"
       PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:
