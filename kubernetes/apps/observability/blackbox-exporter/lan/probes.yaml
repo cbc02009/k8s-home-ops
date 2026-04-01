@@ -12,7 +12,7 @@ spec:
     staticConfig:
       static:
         - shana.ctec.internal
-        - pikvm.ctec.internal
+        # - pikvm.ctec.internal
   metricRelabelings:
     - targetLabel: service
       replacement: blackbox-exporter-lan
