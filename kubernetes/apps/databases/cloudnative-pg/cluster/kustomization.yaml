@@ -8,6 +8,6 @@ resources:
   - ./grafanadashboard.yaml
   - ./objectstore.yaml
   - ./postgres.yaml
-  - ./postgres-immich.yaml
+  # - ./postgres-immich.yaml
   - ./prometheusrule.yaml
   - ./service.yaml

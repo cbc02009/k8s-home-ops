@@ -66,10 +66,10 @@ spec:
       kind: Cluster
       name: postgres
       namespace: databases
-    - apiVersion: postgresql.cnpg.io/v1
-      kind: Cluster
-      name: postgres-immich
-      namespace: databases
+    # - apiVersion: postgresql.cnpg.io/v1
+    #   kind: Cluster
+    #   name: postgres-immich
+    #   namespace: databases
   interval: 30m
   path: ./kubernetes/apps/databases/cloudnative-pg/cluster
   prune: true
