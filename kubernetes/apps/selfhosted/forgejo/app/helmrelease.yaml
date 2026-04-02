@@ -13,6 +13,22 @@ spec:
     podAnnotations:
       reloader.stakater.com/auto: "true"
 
+    podSecurityContext:
+      fsGroup: 2000
+
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+        add:
+          - SYS_CHROOT
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 2000
+
     service:
       http:
         port: 3000
