@@ -10,46 +10,6 @@ spec:
     kind: OCIRepository
     name: *app
   values:
-    podAnnotations:
-      reloader.stakater.com/auto: "true"
-
-    podSecurityContext:
-      fsGroup: 2000
-
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-        add:
-          - SYS_CHROOT
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsGroup: 2000
-      runAsNonRoot: true
-      runAsUser: 2000
-
-    service:
-      http:
-        port: 3000
-      ssh:
-        type: LoadBalancer
-        port: 22
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ssh.${HOSTNAME}"
-          lbipam.cilium.io/ips: ${LB_FORGEJO}
-
-    httpRoute:
-      enabled: true
-      hostnames:
-        - ${HOSTNAME}
-      parentRefs:
-        - name: envoy-internal
-          namespace: network
-
-    persistence:
-      create: false
-      claimName: *app
 
     gitea:
       additionalConfigSources:
@@ -64,8 +24,16 @@ spec:
         cache:
           ADAPTER: redis
           HOST: &redis redis://dragonfly.databases.svc.cluster.local:6379/8
-        cron:
+        cron.archive_cleanup:
           ENABLED: true
+          RUN_AT_START: true
+          SCHEDULE: "@every 1h"
+          OLDER_THAN: 2h
+        indexer:
+          ISSUE_INDEXER_TYPE: bleve
+          REPO_INDEXER_ENABLED: true
+        lfs:
+          PATH: /data/git/lfs
         mailer:
           ENABLED: true
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
@@ -76,6 +44,7 @@ spec:
           PASSWD: ""
         openid:
           ENABLE_OPENID_SIGNIN: false
+          ENABLE_OPENID_SIGNUP: false
         oauth2_client:
           ENABLE_AUTO_REGISTRATION: true
           ACCOUNT_LINKING: auto
@@ -86,17 +55,31 @@ spec:
           TYPE: redis
           CONN_STR: *redis
         repository:
-          DEFAULT_BRANCH: main
-          DEFAULT_PRIVATE: true
+          DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
+          DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+          ROOT: /data/git/repositories
+        repository.pull-request:
+          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
+          DEFAULT_MERGE_STYLE: squash
         security:
           PASSWORD_COMPLEXITY: spec
+        repository.signing:
+          FORMAT: ssh
+          SIGNING_KEY: /data/signing/ed25519.pub
+          SIGNING_NAME: git.ctec.run Instance
+          SIGNING_EMAIL: noreply@git.ctec.run
+          INITIAL_COMMIT: pubkey
+          CRUD_ACTIONS: pubkey, parentsigned
+          WIKI: never
+          MERGES: pubkey
         server:
+          APP_DATA_PATH: /data/gitea
           DOMAIN: ${HOSTNAME}
-          SSH_PORT: 22
+          SSH_PORT: &sshPort 22
           SSH_LISTEN_PORT: 2222
           SSH_DOMAIN: ssh.${HOSTNAME}
           ROOT_URL: https://${HOSTNAME}
-          LANDING_PAGE: explore
+          SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
         service:
           ALLOW_ONLY_EXTERNAL_REGISTRATION: true
           DEFAULT_KEEP_EMAIL_PRIVATE: true
@@ -109,7 +92,7 @@ spec:
         time:
           DEFAULT_UI_LOCATION: ${TZ}
         webhook:
-          ALLOWED_HOST_LIST: "*.cnas.dev"
+          ALLOWED_HOST_LIST: "*"
       oauth:
         - name: Authentik
           provider: openidConnect
@@ -118,16 +101,56 @@ spec:
           groupClaimName: users
           adminGroup: infrastructure
           iconUrl: https://${AUTH_HOST}/static/dist/assets/icons/icon.png
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          namespace: 'observability'
-    postgresql:
-      enabled: false
-    memcached:
-      enabled: false
-
-
-    serviceAccount:
-      create: true
+    extraContainerVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
+    extraInitVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
+    extraVolumes:
+      - name: signing-key
+        secret:
+          secretName: forgejo-signing-key
+          defaultMode: 0400
+    image:
+      rootless: true
+      registry: code.forgejo.org
+      repository: forgejo/forgejo
+      tag: 14.0.3-rootless
+    httpRoute:
+      enabled: true
+      hostnames:
+        - ${HOSTNAME}
+      parentRefs:
+        - name: envoy-internal
+          namespace: network
+    persistence:
+      create: false
+      claimName: *app
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    podSecurityContext:
+      fsGroup: 2000
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+        add:
+          - SYS_CHROOT
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 2000
+    service:
+      http:
+        port: 3000
+      ssh:
+        type: LoadBalancer
+        port: 22
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "ssh.${HOSTNAME}"
+          lbipam.cilium.io/ips: ${LB_FORGEJO}
