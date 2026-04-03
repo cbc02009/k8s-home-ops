@@ -145,6 +145,8 @@ spec:
       runAsGroup: 2000
       runAsNonRoot: true
       runAsUser: 2000
+    serviceAccount:
+      create: true
     service:
       http:
         port: 3000
