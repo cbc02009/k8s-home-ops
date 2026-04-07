@@ -1,31 +1,59 @@
----
+# docker-compose.yaml
+
 services:
-  forgejo:
-    image: codeberg.org/forgejo/forgejo:14.0.3@sha256:8f4b1f86750e206824c669e1af17b6c6e8da9ed1a8ebda615db7526ee86d3eb2
-    container_name: forgejo
+  server:
+    image: codeberg.org/forgejo/forgejo:14.0.3@sha256:3bde16a366e57f37c09599b77ceb83ed05b1934f8224072f8140bc66cf243608
+    container_name: forgejo-server
     restart: unless-stopped
     networks:
       app_ipvlan:
-    env_file:
-      - .env
+      forgejo:
     environment:
       USER_UID: 2000
       USER_GID: 2000
       TZ: America/New_York
-    expose:
-      - 3000
-      - 22
-    volumes:
-      - /mnt/smoltank/apps/forgejo:/data
-      - /etc/localtime:/etc/localtime:ro
+      FORGEJO__admin__DISABLE_REGULAR_ORG_CREATION: true
+      FORGEJO__database__DB_TYPE: postgres
+      FORGEJO__database__HOST: database:5432
+      FORGEJO__database__NAME: forgejo
+      FORGEJO__database__USER: forgejo
+      FORGEJO__database__PASSWD: ${FORGEJO_DATABASE_PASSWORD}
+      FORGEJO__indexer__ISSUE_INDEXER_TYPE: bleve
+      FORGEJO__indexer__REPO_INDXER_ENABLED: true
+      FORGEJO__repository__DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
+      FORGEJO__repository__DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+      FORGEJO__security__INTERNAL_TOKEN: "${FORGEJO_INTERNAL_TOKEN}"
+      FORGEJO__security__SECRET_KEY: "${FORGEJO_SECRET_KEY}"
     labels:
       traefik.enable: "true"
       traefik.http.services.forgejo.loadbalancer.server.port: 3000
       traefik.http.routers.forgejo.entrypoints: https
-      traefik.http.routers.forgejo.rule: Host(`forgejo.nas.cnas.dev`)
+      traefik.http.routers.forgejo.rule: Host(`git.nas.cnas.dev`)
       traefik.http.routers.forgejo.tls: true
       traefik.http.routers.forgejo.service: forgejo
+    volumes:
+      # replace the left-hand side from the ':' with your own path
+      - /mnt/smoltank/apps/forgejo/data:/var/lib/gitea
+    expose:
+      - 3000
+    depends_on:
+      - database
+  database:
+    image: postgres:17.5@sha256:864831322bf2520e7d03d899b01b542de6de9ece6fe29c89f19dc5e1d5568ccf
+    container_name: forgejo-database
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=forgejo
+      - POSTGRES_USER=forgejo
+      - POSTGRES_PASSWORD=${FORGEJO_DATABASE_PASSWORD}
+    networks:
+      forgejo:
+    volumes:
+      # replace the left-hand side from the ':' with your own path
+      - /mnt/smoltank/apps/forgejo/database:/var/lib/postgresql/data
 
 networks:
   app_ipvlan:
     external: true
+  forgejo:
+    external: false
