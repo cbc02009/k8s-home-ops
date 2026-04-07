@@ -2,18 +2,20 @@
 
 services:
   server:
-    image: codeberg.org/forgejo/forgejo:12.0.1@sha256:f5ee3fc67479c4015002b6b756ad7980cd8642f45376fc9cd073969c3292530b
+    image: codeberg.org/forgejo/forgejo:14.0.3@sha256:8f4b1f86750e206824c669e1af17b6c6e8da9ed1a8ebda615db7526ee86d3eb2
     container_name: forgejo-server
     restart: unless-stopped
     networks:
       app_ipvlan:
     environment:
-      - TZ=America/New_York
-      - FORGEJO__database__DB_TYPE=postgres
-      - FORGEJO__database__HOST=database:5432
-      - FORGEJO__database__NAME=forgejo
-      - FORGEJO__database__USER=forgejo
-      - FORGEJO__database__PASSWD=${FORGEJO_DATABASE_PASSWORD}
+      USER_UID: 2000
+      USER_GID: 2000
+      TZ: America/New_York
+      FORGEJO__database__DB_TYPE: postgres
+      FORGEJO__database__HOST: database:5432
+      FORGEJO__database__NAME: forgejo
+      FORGEJO__database__USER: forgejo
+      FORGEJO__database__PASSWD: ${FORGEJO_DATABASE_PASSWORD}
     labels:
       traefik.enable: "true"
       traefik.http.services.forgejo.loadbalancer.server.port: 3000
