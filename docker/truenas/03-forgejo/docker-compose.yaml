@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     networks:
       app_ipvlan:
+      03-forgejo-default:
     environment:
       USER_UID: 2000
       USER_GID: 2000
@@ -39,11 +40,13 @@ services:
       - POSTGRES_USER=forgejo
       - POSTGRES_PASSWORD=${FORGEJO_DATABASE_PASSWORD}
     networks:
-      app_ipvlan:
+      03-forgejo-default:
     volumes:
       # replace the left-hand side from the ':' with your own path
       - /mnt/smoltank/apps/forgejo/database:/var/lib/postgresql/data
 
 networks:
   app_ipvlan:
+    external: true
+  03-forgejo-default:
     external: true
