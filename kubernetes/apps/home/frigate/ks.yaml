@@ -27,7 +27,6 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   components:
-    - ../../../../components/authentik-proxy
     - ../../../../components/gpu
     - ../../../../components/volsync
     - ../../../../components/keda/nas-nfs-scaler
