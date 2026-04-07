@@ -1,0 +1,45 @@
+# docker-compose.yaml
+
+services:
+  server:
+    image: codeberg.org/forgejo/forgejo:12.0.1@sha256:f5ee3fc67479c4015002b6b756ad7980cd8642f45376fc9cd073969c3292530b
+    container_name: forgejo-server
+    restart: unless-stopped
+    networks:
+      app_ipvlan:
+    environment:
+      - TZ=America/New_York
+      - FORGEJO__database__DB_TYPE=postgres
+      - FORGEJO__database__HOST=database:5432
+      - FORGEJO__database__NAME=forgejo
+      - FORGEJO__database__USER=forgejo
+      - FORGEJO__database__PASSWD=${FORGEJO_DATABASE_PASSWORD}
+    labels:
+      traefik.enable: "true"
+      traefik.http.services.forgejo.loadbalancer.server.port: 3000
+      traefik.http.routers.forgejo.entrypoints: https
+      traefik.http.routers.forgejo.rule: Host(`git.nas.cnas.dev`)
+      traefik.http.routers.forgejo.tls: true
+      traefik.http.routers.forgejo.service: forgejo
+    volumes:
+      # replace the left-hand side from the ':' with your own path
+      - /mnt/smoltank/apps/forgejo/data:/data
+    expose:
+      - 3000
+    depends_on:
+      - database
+  database:
+    image: postgres:17.5@sha256:864831322bf2520e7d03d899b01b542de6de9ece6fe29c89f19dc5e1d5568ccf
+    container_name: forgejo-database
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=forgejo
+      - POSTGRES_USER=forgejo
+      - POSTGRES_PASSWORD=${FORGEJO_DATABASE_PASSWORD}
+    volumes:
+      # replace the left-hand side from the ':' with your own path
+      - /mnt/smoltank/apps/forgejo/database:/var/lib/postgresql/data
+
+networks:
+  app_ipvlan:
+    external: true

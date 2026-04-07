@@ -9,5 +9,6 @@ external_secrets:
   GARAGE_ADMIN_TOKEN: op://Homelab/garage/admin_token
   GARAGE_RPC_SECRET: op://Homelab/garage/rpc_secret
   GARAGE_METRICS_TOKEN: op://Homelab/garage/metrics_token
-  # FORGEJO_INTERNAL_TOKEN:
-  # FORGEJO_SECRET_KEY:
+  FORGEJO_INTERNAL_TOKEN: op://Homelab/forgejo-homelab/internal_token
+  FORGEJO_SECRET_KEY: op://Homelab/forgejo-homelab/secret_key
+  FORGEJO_DATABASE_PASSWORD: op://Homelab/forgejo-homelab/pg_pass
