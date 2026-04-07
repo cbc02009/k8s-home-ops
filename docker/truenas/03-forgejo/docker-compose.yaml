@@ -38,6 +38,8 @@ services:
       - POSTGRES_DB=forgejo
       - POSTGRES_USER=forgejo
       - POSTGRES_PASSWORD=${FORGEJO_DATABASE_PASSWORD}
+    networks:
+      app_ipvlan:
     volumes:
       # replace the left-hand side from the ':' with your own path
       - /mnt/smoltank/apps/forgejo/database:/var/lib/postgresql/data
