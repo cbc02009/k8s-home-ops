@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/plex
-              tag: 1.43.0.10492
+              tag: 1.43.1.10611
             env:
               TZ: ${TZ}
               PLEX_ADVERTISE_URL: https://${LB_PLEX}:32400,https://plex.${PUBLIC_DOMAIN}:443
