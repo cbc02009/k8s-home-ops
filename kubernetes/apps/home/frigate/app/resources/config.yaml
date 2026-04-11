@@ -35,16 +35,15 @@ snapshots:
   timestamp: false
   bounding_box: true
   retain:
-    default: 7
+    default: 30
 
 detect:
   enabled: true
 
 record:
-  enabled: true
-  retain:
-    days: 3
-    mode: motion
+  enabled: True
+  motion:
+    days: 7
   alerts:
     retain:
       days: 30
