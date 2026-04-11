@@ -1,6 +1,6 @@
 terraform {
   backend "pg" {
-    conn_str    = "postgres://postgres.kokoro.wtf/terraform"
+    conn_str    = "postgres://postgres.ctec.run/terraform"
     schema_name = "garage"
   }
 

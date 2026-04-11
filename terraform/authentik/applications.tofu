@@ -1,16 +1,16 @@
-module "proxy-frigate" {
-  source                = "./proxy_application"
-  name                  = "Frigate"
-  description           = "DVR"
-  icon_url              = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
-  group                 = "Home"
-  slug                  = "frigate"
-  domain                = var.public_domain
-  authorization_flow    = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow     = resource.authentik_flow.provider-invalidation.uuid
-  auth_groups           = [authentik_group.home.id]
-  access_token_validity = "weeks=20"
-}
+# module "proxy-frigate" {
+#   source                = "./proxy_application"
+#   name                  = "Frigate"
+#   description           = "DVR"
+#   icon_url              = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
+#   group                 = "Home"
+#   slug                  = "frigate"
+#   domain                = var.public_domain
+#   authorization_flow    = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+#   invalidation_flow     = resource.authentik_flow.provider-invalidation.uuid
+#   auth_groups           = [authentik_group.home.id]
+#   access_token_validity = "weeks=20"
+# }
 
 # module "proxy-mealieproxy" {
 #   source             = "./proxy_application"

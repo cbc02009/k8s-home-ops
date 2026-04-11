@@ -24,18 +24,24 @@ services:
       FORGEJO__repository__DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
       FORGEJO__security__INTERNAL_TOKEN: "${FORGEJO_INTERNAL_TOKEN}"
       FORGEJO__security__SECRET_KEY: "${FORGEJO_SECRET_KEY}"
+      FORGEJO__server__ROOT_URL: ${HOSTNAME}
     labels:
       traefik.enable: "true"
       traefik.http.services.forgejo.loadbalancer.server.port: 3000
       traefik.http.routers.forgejo.entrypoints: https
-      traefik.http.routers.forgejo.rule: Host(`git.nas.cnas.dev`)
+      traefik.http.routers.forgejo.rule: Host(`${HOSTNAME}`)
       traefik.http.routers.forgejo.tls: true
-      traefik.http.routers.forgejo.service: forgejo
+      traefik.http.routers.forgejo.service:
+      traefik.tcp.routers.forgejo-ssh.rule: HostSNI('*')
+      traefik.tcp.routers.forgejo-ssh.service: forgejo-ssh
+      traefik.tcp.routers.forgejo-ssh.entrypoints: ssh-forgejo
+      traefik.tcp.services.forgejo-ssh.loadbalancer.server.port: 22
     volumes:
       # replace the left-hand side from the ':' with your own path
       - /mnt/smoltank/apps/forgejo/data:/var/lib/gitea
     expose:
       - 3000
+      - 22
     depends_on:
       - database
   database:
