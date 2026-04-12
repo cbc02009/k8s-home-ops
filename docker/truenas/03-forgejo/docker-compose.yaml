@@ -3,6 +3,7 @@
 services:
   server:
     image: codeberg.org/forgejo/forgejo:14.0.4-rootless@sha256:bca6943cdd8a50f5befaf1d654bec32c9a3b6da400d23a77a829bd41f88a7263
+    container_name: forgejo-server
     restart: unless-stopped
     user: 2000:2000
     networks:
