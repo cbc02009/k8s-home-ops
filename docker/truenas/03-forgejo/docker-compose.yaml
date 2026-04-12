@@ -36,7 +36,7 @@ services:
       traefik.http.routers.forgejo.rule: Host(`${HOSTNAME}`)
       traefik.http.routers.forgejo.tls: true
       traefik.http.routers.forgejo.service:
-      traefik.tcp.routers.forgejo-ssh.rule: HostSNI('*')
+      traefik.tcp.routers.forgejo-ssh.rule: HostSNI(`*`)
       traefik.tcp.routers.forgejo-ssh.service: forgejo-ssh
       traefik.tcp.routers.forgejo-ssh.entrypoints: ssh-forgejo
       traefik.tcp.services.forgejo-ssh.loadbalancer.server.port: 2222
