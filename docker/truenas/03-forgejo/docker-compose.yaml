@@ -26,6 +26,8 @@ services:
       FORGEJO__security__INTERNAL_TOKEN: "${FORGEJO_INTERNAL_TOKEN}"
       FORGEJO__security__SECRET_KEY: "${FORGEJO_SECRET_KEY}"
       FORGEJO__server__ROOT_URL: https://${HOSTNAME}
+      FORGEJO__server__SSH_PORT: 22
+      FORGEJO__server__SSH_LISTEN_PORT: 2222
     labels:
       traefik.enable: "true"
       traefik.http.services.forgejo.loadbalancer.server.port: 3000
