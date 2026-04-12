@@ -2,9 +2,9 @@
 
 services:
   server:
-    image: codeberg.org/forgejo/forgejo:14.0.3@sha256:3bde16a366e57f37c09599b77ceb83ed05b1934f8224072f8140bc66cf243608
-    container_name: forgejo-server
+    image: codeberg.org/forgejo/forgejo:14.0.4-rootless@sha256:bca6943cdd8a50f5befaf1d654bec32c9a3b6da400d23a77a829bd41f88a7263
     restart: unless-stopped
+    user: 2000:2000
     networks:
       app_ipvlan:
       forgejo:
@@ -35,13 +35,15 @@ services:
       traefik.tcp.routers.forgejo-ssh.rule: HostSNI('*')
       traefik.tcp.routers.forgejo-ssh.service: forgejo-ssh
       traefik.tcp.routers.forgejo-ssh.entrypoints: ssh-forgejo
-      traefik.tcp.services.forgejo-ssh.loadbalancer.server.port: 22
+      traefik.tcp.services.forgejo-ssh.loadbalancer.server.port: 2222
     volumes:
       # replace the left-hand side from the ':' with your own path
       - /mnt/smoltank/apps/forgejo/data:/var/lib/gitea
+      - /mnt/smoltank/apps/forgejo/conf:/etc/gitea
+      - /etc/localtime:/etc/localtime:ro
     expose:
       - 3000
-      - 22
+      - 2222
     depends_on:
       - database
   database:
