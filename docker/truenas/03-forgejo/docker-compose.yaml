@@ -28,6 +28,7 @@ services:
       FORGEJO__server__ROOT_URL: https://${HOSTNAME}
       FORGEJO__server__SSH_PORT: 22
       FORGEJO__server__SSH_LISTEN_PORT: 2222
+      FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
     labels:
       traefik.enable: "true"
       traefik.http.services.forgejo.loadbalancer.server.port: 3000
