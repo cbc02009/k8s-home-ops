@@ -20,7 +20,7 @@ spec:
               dir: /data/cache
             container:
               docker_host: "-"
-              workdir_parent: /workspace
+              workdir_parent: shared/workdir
             kubernetes:
               namespace: selfhosted
               poll_timeout: 10m
