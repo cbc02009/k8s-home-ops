@@ -22,7 +22,7 @@ spec:
               docker_host: "-"
               workdir_parent: shared/workdir
             kubernetes:
-              namespace: dev
+              namespace: selfhosted
               poll_timeout: 10m
             log:
               level: info
