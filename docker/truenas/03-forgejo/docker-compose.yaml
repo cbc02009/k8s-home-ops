@@ -68,4 +68,4 @@ networks:
   app_ipvlan:
     external: true
   forgejo:
-    external: false
+    internal: true
