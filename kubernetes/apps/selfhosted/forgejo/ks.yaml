@@ -41,8 +41,6 @@ metadata:
   name: &app forgejo-runner
   namespace: &namespace selfhosted
 spec:
-  components:
-    - ../../../../components/pvc
   dependsOn:
     - name: forgejo
   interval: 1h
@@ -50,7 +48,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      PVC_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository
