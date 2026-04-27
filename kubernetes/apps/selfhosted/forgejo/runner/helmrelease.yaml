@@ -21,30 +21,38 @@ spec:
             container:
               docker_host: "-"
               workdir_parent: shared/workdir
+            host:
+              workdir_parent: /data/act
             kubernetes:
               namespace: selfhosted
               poll_timeout: 10m
             log:
               level: info
+            pluginsv2:
+              k8s:
+                path: /plugins/forgejo-runner-k8s
+                options:
+                  namespace: selfhosted
+                  poll_timeout: 10m
             runner:
-              capacity: 4
+              capacity: 2
               file: /persistent/.runner
               labels:
-                - ubuntu-latest:k8spod:/config/podspec-default.yaml
-                - ubuntu-24.04:k8spod:/config/podspec-default.yaml
-                - default:k8spod:/config/podspec-default.yaml
-                - docker:k8spod:/config/podspec-dind.yaml
+                - ubuntu-latest:k8s:/config/podspec-default.yaml
+                - default:k8s:/config/podspec-default.yaml
+                - docker:k8s:/config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
             containers:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:36808ea38bd13448ee632ed3ecfc3eac7530fc0044d49b9988f8aff1e952480b
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:cbcf25eee3ccd1b5491cd74ec3ae57a5c1dbcf7012ae1bbf53723f08c79676e2
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
                   limits:
+                    cpu: 500m
                     memory: 2Gi
                   requests:
                     cpu: 100m
@@ -65,6 +73,7 @@ spec:
                     cpu: 100m
                     memory: 256Mi
                   limits:
+                    cpu: 500m
                     memory: 4Gi
                 volumeMounts:
                   - name: docker-storage
@@ -89,11 +98,12 @@ spec:
                     value: "1"
                   - name: DOCKER_CERT_PATH
                     value: /certs/client
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:36808ea38bd13448ee632ed3ecfc3eac7530fc0044d49b9988f8aff1e952480b
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:cbcf25eee3ccd1b5491cd74ec3ae57a5c1dbcf7012ae1bbf53723f08c79676e2
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
                   limits:
+                    cpu: 500m
                     memory: 2Gi
                   requests:
                     cpu: 100m
@@ -112,13 +122,15 @@ spec:
       forgejo-runner:
         type: statefulset
         replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
         statefulset:
           volumeClaimTemplates:
-            - accessMode: ReadWriteOnce
+            - name: persistent
+              size: 1Gi
+              accessMode: ReadWriteOnce
               globalMounts:
                 - path: /persistent
-              name: persistent
-              size: 1Gi
         pod:
           labels:
             app.kubernetes.io/component: forgejo-runner
@@ -128,13 +140,25 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
-        annotations:
-          reloader.stakater.com/auto: "true"
         initContainers:
+          copy-k8s-plugin:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin-v2
+              tag: sha-f7ab06b75887e5497c9f9f9bef641aafb2ae3e1c
+            command:
+              - sh
+              - -c
+              - cp /usr/local/bin/forgejo-runner-k8s /plugins/forgejo-runner-k8s
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
           register-runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest@sha256:a5327b1240794494a5a5b95c0e5f9a2e29b65e40322f4633056fce7a5bcf8407
+              tag: sha-63d5504927ba6b9d511c0972beaf4ff5b3705f82
             command:
               - sh
               - -c
@@ -154,8 +178,9 @@ spec:
               - name: RUNNER_TOKEN
                 valueFrom:
                   secretKeyRef:
-                    key: token
                     name: forgejo-runner-secret
+                    key: token
+
         containers:
           runner:
             image:
@@ -169,35 +194,16 @@ spec:
             resources:
               requests:
                 cpu: 5m
-                memory: 32Mi
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-              readOnlyRootFilesystem: true
-    persistence:
-      config:
-        type: configMap
-        identifier: config
-        globalMounts:
-          - path: /config
-      tmpfs:
-        type: emptyDir
-        sizeLimit: 10Gi
-        globalMounts:
-          - path: /data
-            subPath: data
-          - path: /tmp
-            subPath: tmp
+    serviceAccount:
+      forgejo-runner: {}
     rbac:
-      bindings:
-        forgejo-runner:
-          type: RoleBinding
-          roleRef:
-            identifier: forgejo-runner
-          subjects:
-            - identifier: forgejo-runner
       roles:
         forgejo-runner:
           type: Role
@@ -205,27 +211,49 @@ spec:
             - apiGroups:
                 - ""
               resources:
-                - pods
+                - "pods"
               verbs:
-                - list
-                - watch
-                - create
-                - get
-                - delete
+                - "list"
+                - "watch"
+                - "create"
+                - "get"
+                - "delete"
             - apiGroups:
                 - ""
               resources:
-                - pods/exec
+                - "pods/exec"
               verbs:
-                - create
-                - get
+                - "create"
+                - "get"
             - apiGroups:
                 - ""
               resources:
-                - pods/log
+                - "pods/log"
               verbs:
-                - list
-                - watch
-                - get
-    serviceAccount:
-      forgejo-runner: {}
+                - "list"
+                - "watch"
+                - "get"
+      bindings:
+        forgejo-runner:
+          type: RoleBinding
+          roleRef:
+            identifier: forgejo-runner
+          subjects:
+            - identifier: forgejo-runner
+    persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config
+      plugins:
+        type: emptyDir
+        globalMounts:
+          - path: /plugins
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+            subPath: data
+          - path: /tmp
+            subPath: tmp
