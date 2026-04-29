@@ -59,7 +59,6 @@ spec:
           DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
           ROOT: /data/git/repositories
         repository.pull-request:
-          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
           DEFAULT_MERGE_STYLE: squash
         security:
           PASSWORD_COMPLEXITY: spec
