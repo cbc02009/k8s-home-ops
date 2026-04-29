@@ -33,25 +33,25 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   wait: false
-# ---
-# # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: &app forgejo-runner
-#   namespace: &namespace selfhosted
-# spec:
-#   dependsOn:
-#     - name: forgejo
-#   interval: 1h
-#   path: ./kubernetes/apps/selfhosted/forgejo/runner
-#   postBuild:
-#     substitute:
-#       APP: *app
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#     namespace: flux-system
-#   targetNamespace: *namespace
-#   wait: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app forgejo-runner
+  namespace: &namespace selfhosted
+spec:
+  dependsOn:
+    - name: forgejo
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/forgejo/runner
+  postBuild:
+    substitute:
+      APP: *app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  wait: false
