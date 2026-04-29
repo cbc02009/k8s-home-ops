@@ -43,8 +43,6 @@ metadata:
 spec:
   # components:
   #   - ../../../../components/pvc
-  dependsOn:
-    - name: forgejo
   interval: 1h
   path: ./kubernetes/apps/selfhosted/forgejo/runner
   postBuild:
