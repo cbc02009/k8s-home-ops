@@ -47,7 +47,7 @@ spec:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:cbcf25eee3ccd1b5491cd74ec3ae57a5c1dbcf7012ae1bbf53723f08c79676e2
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:948d7ddd4f9f05b09f814b7bb7fdb876da80dcabebd7b9b01feaffb8af1ef87c
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
@@ -98,7 +98,7 @@ spec:
                     value: "1"
                   - name: DOCKER_CERT_PATH
                     value: /certs/client
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:cbcf25eee3ccd1b5491cd74ec3ae57a5c1dbcf7012ae1bbf53723f08c79676e2
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:948d7ddd4f9f05b09f814b7bb7fdb876da80dcabebd7b9b01feaffb8af1ef87c
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
@@ -135,11 +135,11 @@ spec:
           labels:
             app.kubernetes.io/component: forgejo-runner
           securityContext:
-            fsGroup: 2000
+            fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 2000
+            runAsGroup: 1000
             runAsNonRoot: true
-            runAsUser: 2000
+            runAsUser: 1000
         initContainers:
           copy-k8s-plugin:
             image:
@@ -169,8 +169,8 @@ spec:
                 fi
                 echo "Registering runner..."
                 cd /persistent && forgejo-runner register \
-                  --instance https://git.cnas.dev \
-                  --token "$(RUNNER_TOKEN)" \
+                  --instance http://forgejo-http:3000 \
+                  --token "${RUNNER_TOKEN}" \
                   --name k8s-runner \
                   --labels "default:k8spod:/config/podspec-default.yaml" \
                   --no-interactive
@@ -185,7 +185,7 @@ spec:
           runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest@sha256:a5327b1240794494a5a5b95c0e5f9a2e29b65e40322f4633056fce7a5bcf8407
+              tag: sha-63d5504927ba6b9d511c0972beaf4ff5b3705f82
             command:
               - /bin/forgejo-runner
               - daemon
