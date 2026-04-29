@@ -170,7 +170,7 @@ spec:
                 echo "Registering runner..."
                 cd /persistent && forgejo-runner register \
                   --instance http://forgejo-http:3000 \
-                  --token "${RUNNER_TOKEN}" \
+                  --token "$(RUNNER_TOKEN)" \
                   --name k8s-runner \
                   --labels "default:k8spod:/config/podspec-default.yaml" \
                   --no-interactive
