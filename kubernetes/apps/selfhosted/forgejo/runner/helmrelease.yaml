@@ -129,13 +129,13 @@ spec:
         replicas: 1
         annotations:
           reloader.stakater.com/auto: "true"
-        statefulset:
-          volumeClaimTemplates:
-            - name: persistent
-              size: 1Gi
-              accessMode: ReadWriteOnce
-              globalMounts:
-                - path: /persistent
+        # statefulset:
+        #   volumeClaimTemplates:
+        #     - name: persistent
+        #       size: 1Gi
+        #       accessMode: ReadWriteOnce
+        #       globalMounts:
+        #         - path: /persistent
         pod:
           labels:
             app.kubernetes.io/component: forgejo-runner
@@ -246,6 +246,10 @@ spec:
           subjects:
             - identifier: forgejo-runner
     persistence:
+      persistent:
+        existingClaim: *app
+        globalMounts:
+          - path: /persistent
       config:
         type: configMap
         identifier: config
