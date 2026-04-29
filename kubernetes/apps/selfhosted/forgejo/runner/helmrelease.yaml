@@ -185,7 +185,7 @@ spec:
           runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest@sha256:a5327b1240794494a5a5b95c0e5f9a2e29b65e40322f4633056fce7a5bcf8407
+              tag: latest@sha256:0557f1197f92b260f4527869de30aee3676e6db988d4ad2729bffcd1cb0b16a1
             command:
               - /bin/forgejo-runner
               - daemon
