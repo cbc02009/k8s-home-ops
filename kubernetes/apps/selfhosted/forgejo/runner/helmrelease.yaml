@@ -129,13 +129,13 @@ spec:
         replicas: 1
         annotations:
           reloader.stakater.com/auto: "true"
-        # statefulset:
-        #   volumeClaimTemplates:
-        #     - name: persistent
-        #       size: 1Gi
-        #       accessMode: ReadWriteOnce
-        #       globalMounts:
-        #         - path: /persistent
+        statefulset:
+          volumeClaimTemplates:
+            - name: persistent
+              size: 1Gi
+              accessMode: ReadWriteOnce
+              globalMounts:
+                - path: /persistent
         pod:
           labels:
             app.kubernetes.io/component: forgejo-runner
@@ -174,7 +174,7 @@ spec:
                 fi
                 echo "Registering runner..."
                 cd /persistent && forgejo-runner register \
-                  --instance http://forgejo-http:3000 \
+                  --instance https://git.cnas.dev \
                   --token "$(RUNNER_TOKEN)" \
                   --name k8s-runner \
                   --labels "default:k8spod:/config/podspec-default.yaml" \
@@ -246,10 +246,10 @@ spec:
           subjects:
             - identifier: forgejo-runner
     persistence:
-      persistent:
-        existingClaim: *app
-        globalMounts:
-          - path: /persistent
+      # persistent:
+      #   existingClaim: *app
+      #   globalMounts:
+      #     - path: /persistent
       config:
         type: configMap
         identifier: config
