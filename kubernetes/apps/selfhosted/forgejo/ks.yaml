@@ -65,7 +65,7 @@ metadata:
   namespace: &namespace selfhosted
 spec:
   interval: 1h
-  path: ./kubernetes/apps/selfhosted/forgejo/runner
+  path: ./kubernetes/apps/selfhosted/forgejo/runner-old
   postBuild:
     substitute:
       APP: *app
