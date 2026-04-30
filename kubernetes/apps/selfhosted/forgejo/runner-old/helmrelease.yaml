@@ -53,7 +53,7 @@ spec:
               # If it's empty, $HOME/.cache/act/ will be used.
               workdir_parent:
     controllers:
-      forgejo-runner:
+      forgejo-runner-old:
         type: statefulset
         replicas: 1
 
