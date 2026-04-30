@@ -93,7 +93,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: forgejo-runner-secret
-                    key: token
+                    key: token2
               - name: LABELS
                 value: "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest"
         containers:
