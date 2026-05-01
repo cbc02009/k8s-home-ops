@@ -14,7 +14,7 @@ spec:
       config:
         suffix: config
         data:
-          runner.yaml: |-
+          config.yaml: |-
             log:
               level: info
 
