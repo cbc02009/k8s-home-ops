@@ -76,26 +76,26 @@ spec:
               repository: code.forgejo.org/forgejo/runner
               tag: 12.7.2@sha256:5be962a66390e54f0e56c89aafee48f521538d996df7c4e61af77915a4c2bd86
             command:
-              - "sh"
-              - "-c"
-              - >
-                if [ ! -f /data/.runner ]; then
-                  echo "Registering runner...";
-                  forgejo-runner register --no-interactive \
+              - sh
+              - -c
+              - |
+                if [ -f /data/.runner ]; then
+                  echo "Runner already registered, skipping"
+                  exit 0
+                fi
+                echo "Registering runner...";
+                forgejo-runner register \
+                  --labels "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest"
+                  --no-interactive \
                   --instance https://git.cnas.dev \
                   --token "$(RUNNER_TOKEN)" \
-                  --name k8s-runner-rooted \
-                else
-                  echo "Runner already registered, skipping.";
-                fi
+                  --name k8s-runner-rooted
             env:
               - name: RUNNER_TOKEN
                 valueFrom:
                   secretKeyRef:
                     name: forgejo-runner-secret
                     key: token2
-              - name: LABELS
-                value: "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest"
         containers:
           daemon:
             image:
