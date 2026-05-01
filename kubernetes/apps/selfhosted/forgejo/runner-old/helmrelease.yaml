@@ -85,7 +85,7 @@ spec:
                 fi
                 echo "Registering runner...";
                 forgejo-runner register \
-                  --labels "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest"
+                  --labels "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest" \
                   --no-interactive \
                   --instance https://git.cnas.dev \
                   --token "$(RUNNER_TOKEN)" \
