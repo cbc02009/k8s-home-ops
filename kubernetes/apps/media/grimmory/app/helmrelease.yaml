@@ -93,6 +93,7 @@ spec:
                     key: grimmory_mariadb_password
               DATABASE_URL: jdbc:mariadb://localhost:3306/grimmory
               DATABASE_USERNAME: *app
+              JDK_JAVA_OPTIONS: "--enable-preview --enable-native-access=ALL-UNNAMED"
             probes:
               liveness:
                 enabled: true
