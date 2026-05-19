@@ -2,7 +2,7 @@
 
 services:
   server:
-    image: codeberg.org/forgejo/forgejo:14.0.5-rootless@sha256:e32e77e27940177b7d39929d157f701935cbcdff65c622542403b3ce8fbb7c0f
+    image: codeberg.org/forgejo/forgejo:15.0.2-rootless@sha256:cc2d74fb4c30385a8ee34de8c8f83344f7316cec70bd2cc7eb82b2802fa28e0b
     container_name: forgejo-server
     restart: unless-stopped
     user: 2000:2000
