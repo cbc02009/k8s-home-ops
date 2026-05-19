@@ -19,18 +19,18 @@ spec:
     fsGroup: 2000
   repository:
     repository: volsync-secret
----
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/volsync.backube/kopiamaintenance_v1alpha1.json
-apiVersion: volsync.backube/v1alpha1
-kind: KopiaMaintenance
-metadata:
-  name: weekly-b2
-spec:
-  enabled: true
-  trigger:
-    schedule: 5 12 * * 1
-  podSecurityContext:
-    runAsUser: 2000
-    fsGroup: 2000
-  repository:
-    repository: volsync-secret
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/volsync.backube/kopiamaintenance_v1alpha1.json
+# apiVersion: volsync.backube/v1alpha1
+# kind: KopiaMaintenance
+# metadata:
+#   name: weekly-b2
+# spec:
+#   enabled: true
+#   trigger:
+#     schedule: 5 12 * * 1
+#   podSecurityContext:
+#     runAsUser: 2000
+#     fsGroup: 2000
+#   repository:
+#     repository: volsync-secret
