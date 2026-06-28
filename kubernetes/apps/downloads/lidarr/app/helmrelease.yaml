@@ -30,10 +30,6 @@ spec:
               repository: ghcr.io/home-operations/lidarr
               tag: 3.1.3.4968
 
-            envFrom:
-              - secretRef:
-                  name: *app
-
             env:
               TZ: ${TZ}
               LIDARR__APP__INSTANCENAME: Lidarr
@@ -44,8 +40,34 @@ spec:
               LIDARR__LOG__LEVEL: info
               LIDARR__SERVER__PORT: &port 80
               LIDARR__UPDATE__BRANCH: develop
+            envFrom: *envFrom
 
-
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
