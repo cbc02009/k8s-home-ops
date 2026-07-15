@@ -10,7 +10,7 @@ releases:
   - name: cilium
     namespace: kube-system
     chart: oci://quay.io/cilium/charts/cilium
-    version: 1.19.4
+    version: 1.19.5
     values:
       - templates/values.yaml.gotmpl
     hooks:
@@ -46,7 +46,7 @@ releases:
   - name: spegel
     namespace: system
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
-    version: 0.7.1
+    version: 0.7.3
     values:
       - templates/values.yaml.gotmpl
     needs:
@@ -55,7 +55,7 @@ releases:
   - name: cert-manager
     namespace: cert-manager
     chart: oci://quay.io/jetstack/charts/cert-manager
-    version: v1.20.2
+    version: v1.21.0
     values:
       - ./templates/values.yaml.gotmpl
     needs:
