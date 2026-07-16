@@ -25,7 +25,7 @@ spec:
     - name: external-secrets
       namespace: security
   components:
-    - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/zeroscaler
   postBuild:
     substitute:
       APP: *app
