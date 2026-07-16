@@ -47,7 +47,7 @@ module "oauth2-forgejo" {
   source             = "./oauth2_application"
   name               = "Forgejo"
   icon_url           = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
-  launch_url         = "https://git.${var.public_domain}"
+  launch_url         = "https://git.cnas.dev"
   description        = "Git Repo"
   newtab             = true
   group              = "Infrastructure"
@@ -56,7 +56,7 @@ module "oauth2-forgejo" {
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_forgejo.fields["oidc_id"]
   client_secret      = module.secret_forgejo.fields["oidc_secret"]
-  redirect_uris      = ["https://git.${var.public_domain}/user/oauth2/authentik/callback"]
+  redirect_uris      = ["https://git.cnas.dev/user/oauth2/authentik/callback"]
 }
 
 module "oauth2-grafana" {

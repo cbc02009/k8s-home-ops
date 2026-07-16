@@ -25,6 +25,7 @@ metadata:
   name: lan-tcp
 spec:
   module: tcp_connect
+  jobName: nfs_probe
   prober:
     url: blackbox-exporter-lan.observability.svc.cluster.local:9115
   targets:
