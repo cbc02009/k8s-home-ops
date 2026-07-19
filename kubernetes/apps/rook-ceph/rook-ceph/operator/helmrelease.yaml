@@ -4,37 +4,27 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: rook-ceph
-  namespace: rook-ceph
 spec:
-  interval: 1h
-  timeout: 1h
   chartRef:
     kind: OCIRepository
     name: rook-ceph
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
+  timeout: 10m
   values:
-    crds:
-      enabled: true
     csi:
-      cephFSKernelMountOptions: ms_mode=prefer-crc
-      enableCephfsDriver: false
-      enableCephfsSnapshotter: false
-      enableLiveness: true
       serviceMonitor:
         enabled: true
-    # enableDiscoveryDaemon: true
+    deleteUnusedCrushRules: false
+    enableDiscoveryDaemon: true
     image:
       repository: ghcr.io/rook/ceph
+    cephCommandsTimeoutSeconds: "20"
     monitoring:
       enabled: true
     resources:
       requests:
-        memory: 128Mi # unchangable
-        cpu: 100m # unchangable
-      limits: {}
+        cpu: 50m
+        memory: 224Mi
+      limits:
+        cpu: 500m
+        memory: 480Mi

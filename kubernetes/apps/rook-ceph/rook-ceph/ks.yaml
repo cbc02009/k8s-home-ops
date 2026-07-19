@@ -28,6 +28,28 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: rook-ceph-csi-drivers
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: rook-ceph
+  dependsOn:
+    - name: rook-ceph-operator
+  interval: 1h
+  path: ./kubernetes/apps/rook-ceph/rook-ceph/ceph-csi-drivers
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: rook-ceph
+  timeout: 1h
+  wait: true
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: rook-ceph-cluster
 spec:
   commonMetadata:
