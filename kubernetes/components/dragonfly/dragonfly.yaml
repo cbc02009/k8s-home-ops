@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/dragonflydb.io/dragonfly_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/dragonflydb.io/dragonfly_v1alpha1.json
 apiVersion: dragonflydb.io/v1alpha1
 kind: Dragonfly
 metadata:
@@ -13,6 +13,18 @@ spec:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Mi
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          key: AWS_ACCESS_KEY_ID
+          name: ${APP}-dragonfly-secret
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          key: AWS_SECRET_ACCESS_KEY
+          name: ${APP}-dragonfly-secret
+    # - name: AWS_REGION
+    #   value: "garage"
   args:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --cluster_mode=emulated
@@ -23,10 +35,11 @@ spec:
     - --version_check=false
   resources:
     requests:
-      cpu: 25m
-      memory: 128Mi
+      cpu: 100m
     limits:
       memory: 512Mi
+  # snapshot:
+  #   dir: "s3://dragonfly"
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: kubernetes.io/hostname
