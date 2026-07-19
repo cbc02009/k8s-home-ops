@@ -34,7 +34,7 @@ spec:
     labels:
       app.kubernetes.io/name: rook-ceph
   dependsOn:
-    - name: rook-ceph-operator
+    - name: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/rook-ceph/rook-ceph/ceph-csi-drivers
   prune: true
