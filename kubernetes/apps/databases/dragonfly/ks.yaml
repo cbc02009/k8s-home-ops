@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app dragonfly-operator
+  name: &app dragonfly
   namespace: &namespace databases
 spec:
   commonMetadata:
@@ -17,33 +17,33 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  wait: false
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app dragonfly-cluster
-  namespace: &namespace databases
-spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  dependsOn:
-    - name: dragonfly-operator
-      namespace: *namespace
-    - name: external-secrets
-      namespace: security
-  # healthCheckExprs:
-  #   - apiVersion: dragonflydb.io/v1alpha1
-  #     kind: Dragonfly
-  #     current: status.phase == 'ready'
-  interval: 30m
-  path: ./kubernetes/apps/databases/dragonfly/cluster
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: *namespace
-  wait: false
+  wait: true
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app dragonfly-cluster
+#   namespace: &namespace databases
+# spec:
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   dependsOn:
+#     - name: dragonfly-operator
+#       namespace: *namespace
+#     - name: external-secrets
+#       namespace: security
+#   # healthCheckExprs:
+#   #   - apiVersion: dragonflydb.io/v1alpha1
+#   #     kind: Dragonfly
+#   #     current: status.phase == 'ready'
+#   interval: 30m
+#   path: ./kubernetes/apps/databases/dragonfly/cluster
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   targetNamespace: *namespace
+#   wait: false

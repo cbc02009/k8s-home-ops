@@ -11,10 +11,11 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/gpu
+    - ../../../../components/dragonfly
   dependsOn:
     - name: postgres-cluster
       namespace: databases
-    - name: dragonfly-cluster
+    - name: dragonfly
       namespace: databases
     - name: external-secrets
       namespace: security
