@@ -38,7 +38,7 @@ spec:
               SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM_NAME: Mealie
-              SMTP_FROM_EMAIL: noreply@kokoro.wtf
+              SMTP_FROM_EMAIL: noreply@ctec.run
               SMTP_AUTH_STRATEGY: NONE
             envFrom: *envFrom
             # resources:
