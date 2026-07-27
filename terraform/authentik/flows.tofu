@@ -1,4 +1,5 @@
 ## Authenticator setup
+#
 
 resource "authentik_flow" "authenticator-totp-setup" {
   name           = "authenticator-totp-setup"
@@ -6,6 +7,7 @@ resource "authentik_flow" "authenticator-totp-setup" {
   slug           = "authenticator-totp-setup"
   designation    = "stage_configuration"
   authentication = "require_authenticated"
+  # background     = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "authenticator-totp-setup-binding-00" {
@@ -20,6 +22,7 @@ resource "authentik_flow" "authenticator-webauthn-setup" {
   slug           = "authenticator-webauthn-setup"
   designation    = "stage_configuration"
   authentication = "require_authenticated"
+  # background     = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "authenticator-webauthn-setup-binding-00" {
@@ -36,6 +39,7 @@ resource "authentik_flow" "authentication" {
   slug               = "authentication-flow"
   designation        = "authentication"
   policy_engine_mode = "all"
+  # background         = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "authentication-flow-binding-00" {
@@ -62,6 +66,7 @@ resource "authentik_flow" "passwordless_authentication" {
   slug               = "passwordless-flow"
   designation        = "authentication"
   policy_engine_mode = "all"
+  # background         = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "passwordless_authentication-binding-00" {
@@ -86,6 +91,7 @@ resource "authentik_flow" "invalidation" {
   policy_engine_mode = "any"
   designation        = "invalidation"
   denied_action      = "continue"
+  # background         = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "invalidation-flow-binding-00" {
@@ -102,6 +108,7 @@ resource "authentik_flow" "provider-invalidation" {
   policy_engine_mode = "any"
   designation        = "invalidation"
   denied_action      = "continue"
+  # background         = local.default_flow_background
 }
 
 ## Password recovery flow
@@ -111,6 +118,7 @@ resource "authentik_flow" "recovery" {
   slug               = "password-recovery"
   designation        = "recovery"
   compatibility_mode = true
+  # background         = local.default_flow_background
 }
 
 resource "authentik_flow_stage_binding" "recovery-flow-binding-00" {
@@ -137,37 +145,59 @@ resource "authentik_flow_stage_binding" "recovery-flow-binding-30" {
   order  = 30
 }
 
-## Invitation flow
-resource "authentik_flow" "enrollment-invitation" {
-  name               = "enrollment-invitation-flow"
-  title              = "Enrollment invitation"
-  slug               = "enrollmment-invitation"
+## Invitation flow with email verification
+resource "authentik_flow" "enrollment-invitation-verify" {
+  name               = "enrollment-invitation-verify-flow"
+  title              = "Welcome to Movishell"
+  slug               = "enrollment-invitation-verify"
   designation        = "enrollment"
+  authentication     = "require_unauthenticated"
   compatibility_mode = true
+  # background         = local.default_flow_background
 }
 
-resource "authentik_flow_stage_binding" "enrollment-invitation-flow-binding-00" {
-  target = authentik_flow.enrollment-invitation.uuid
-  stage  = authentik_stage_invitation.enrollment-invitation.id
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-00" {
+  target = authentik_flow.enrollment-invitation-verify.uuid
+  stage  = authentik_stage_invitation.enrollment-invitation-verify.id
   order  = 0
 }
 
-resource "authentik_flow_stage_binding" "enrollment-invitation-flow-binding-10" {
-  target = authentik_flow.enrollment-invitation.uuid
-  stage  = authentik_stage_prompt.source-enrollment-prompt.id
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-10" {
+  target = authentik_flow.enrollment-invitation-verify.uuid
+  stage  = authentik_stage_prompt.source-enrollment-verify-prompt.id
   order  = 10
 }
 
-resource "authentik_flow_stage_binding" "enrollment-invitation-flow-binding-20" {
-  target = authentik_flow.enrollment-invitation.uuid
-  stage  = authentik_stage_user_write.enrollment-user-write.id
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-20" {
+  target = authentik_flow.enrollment-invitation-verify.uuid
+  stage  = authentik_stage_user_write.enrollment-verify-user-write.id
   order  = 20
 }
 
-resource "authentik_flow_stage_binding" "enrollment-invitation-flow-binding-30" {
-  target = authentik_flow.enrollment-invitation.uuid
-  stage  = authentik_stage_user_login.source-enrollment-login.id
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-30" {
+  target = authentik_flow.enrollment-invitation-verify.uuid
+  stage  = authentik_stage_email.enrollment-verify-email.id
   order  = 30
+}
+
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-40" {
+  target               = authentik_flow.enrollment-invitation-verify.uuid
+  stage                = authentik_stage_user_write.enrollment-verify-confirmed-write.id
+  order                = 40
+  evaluate_on_plan     = false
+  re_evaluate_policies = true
+}
+
+resource "authentik_policy_binding" "enrollment-invitation-verify-binding-40-set-email-verified" {
+  target = authentik_flow_stage_binding.enrollment-invitation-verify-binding-40.id
+  policy = authentik_policy_expression.enrollment-set-email-verified.id
+  order  = 0
+}
+
+resource "authentik_flow_stage_binding" "enrollment-invitation-verify-binding-50" {
+  target = authentik_flow.enrollment-invitation-verify.uuid
+  stage  = authentik_stage_user_login.source-enrollment-verify-login.id
+  order  = 50
 }
 
 ## User settings flow

@@ -37,6 +37,10 @@ spec:
               - -b
               - 0.0.0.0:8084
               - shelfmark.main:app
+            env:
+              HIDE_LOCAL_AUTH: true    # Hide the local login form
+              DISABLE_LOCAL_AUTH: true # Disable username/password login
+              OIDC_AUTO_REDIRECT: true
             probes:
               liveness:
                 enabled: true

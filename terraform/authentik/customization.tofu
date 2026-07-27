@@ -17,6 +17,11 @@ resource "authentik_policy_expression" "user-settings-authorization" {
   expression = file("./expressions/user-settings-authorization.py")
 }
 
+resource "authentik_policy_expression" "enrollment-set-email-verified" {
+  name       = "enrollment-set-email-verified"
+  expression = file("./expressions/enrollment-set-email-verified.py")
+}
+
 resource "authentik_property_mapping_provider_scope" "profile" {
   name       = "OAuth Mapping: OpenID 'profile'"
   scope_name = "profile"
@@ -27,10 +32,4 @@ resource "authentik_property_mapping_provider_scope" "email" {
   name       = "OAuth Mapping: OpenID 'email'"
   scope_name = "email"
   expression = file("./expressions/openid-scope-email.py")
-}
-
-resource "authentik_property_mapping_provider_scope" "openid-nextcloud" {
-  name       = "OAuth Mapping: OpenID 'nextcloud'"
-  scope_name = "nextcloud"
-  expression = file("./expressions/openid-scope-nextcloud.py")
 }

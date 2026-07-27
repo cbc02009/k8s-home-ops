@@ -27,56 +27,62 @@ terraform {
 
 module "secret_authentik" {
   # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "authentik"
 }
 
 module "secret_grimmory" {
   # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "grimmory"
 }
 
 module "secret_karakeep" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "karakeep"
 }
 
 module "secret_immich" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "immich"
 }
 
 module "secret_grafana" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "grafana"
 }
 
-module "secret_forgejo" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
-  vault  = "k8s-home-ops"
-  item   = "forgejo"
-}
+# module "secret_forgejo" {
+#   source = "./modules/1password-item"
+#   vault  = "k8s-home-ops"
+#   item   = "forgejo"
+# }
 
 module "secret_mealie" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "mealie"
 }
 
 module "secret_paperless" {
-  source = "github.com/bjw-s/terraform-1password-item?ref=main"
+  source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "paperless"
 }
 
+module "secret_shelfmark" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "shelfmark"
+}
+
 # module "secret_ocis" {
-#   source = "github.com/bjw-s/terraform-1password-item?ref=main"
+#   source = "./modules/1password-item"
 #   vault  = "k8s-home-ops"
 #   item   = "ocis"
 # }

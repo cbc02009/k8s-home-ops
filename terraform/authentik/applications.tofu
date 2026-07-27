@@ -1,5 +1,5 @@
 # module "proxy-frigate" {
-#   source                = "./proxy_application"
+#   source                = "./modules/proxy_application"
 #   name                  = "Frigate"
 #   description           = "DVR"
 #   icon_url              = "https://raw.githubusercontent.com/blakeblackshear/frigate/dev/web/images/favicon-32x32.png"
@@ -13,7 +13,7 @@
 # }
 
 # module "proxy-mealieproxy" {
-#   source             = "./proxy_application"
+#   source             = "./modules/proxy_application"
 #   name               = "Mealie Proxy"
 #   description        = "Recipes"
 #   icon_url           = "https://raw.githubusercontent.com/mealie-recipes/mealie/refs/heads/mealie-next/frontend/static/icons/icon-x64.png"
@@ -26,7 +26,7 @@
 # }
 
 module "oauth2-Grimmory" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Grimmory"
   icon_url           = "https://raw.githubusercontent.com/grimmory-tools/grimmory/refs/heads/develop/assets/logo.svg"
   launch_url         = "https://grimmory.${var.public_domain}"
@@ -43,24 +43,24 @@ module "oauth2-Grimmory" {
   regex_uris         = ["https://grimmory.${var.public_domain}/*"]
 }
 
-module "oauth2-forgejo" {
-  source             = "./oauth2_application"
-  name               = "Forgejo"
-  icon_url           = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
-  launch_url         = "https://git.cnas.dev"
-  description        = "Git Repo"
-  newtab             = true
-  group              = "Infrastructure"
-  auth_groups        = [authentik_group.infrastructure.id]
-  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-  client_id          = module.secret_forgejo.fields["oidc_id"]
-  client_secret      = module.secret_forgejo.fields["oidc_secret"]
-  redirect_uris      = ["https://git.cnas.dev/user/oauth2/authentik/callback"]
-}
+# module "oauth2-forgejo" {
+#   source             = "./modules/oauth2_application"
+#   name               = "Forgejo"
+#   icon_url           = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
+#   launch_url         = "https://git.cnas.dev"
+#   description        = "Git Repo"
+#   newtab             = true
+#   group              = "Infrastructure"
+#   auth_groups        = [authentik_group.infrastructure.id]
+#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+#   client_id          = module.secret_forgejo.fields["oidc_id"]
+#   client_secret      = module.secret_forgejo.fields["oidc_secret"]
+#   redirect_uris      = ["https://git.cnas.dev/user/oauth2/authentik/callback"]
+# }
 
 module "oauth2-grafana" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Grafana"
   icon_url           = "https://raw.githubusercontent.com/grafana/grafana/main/public/img/icons/mono/grafana.svg"
   launch_url         = "https://grafana.${var.public_domain}"
@@ -76,7 +76,7 @@ module "oauth2-grafana" {
 }
 
 module "oauth2-immich" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Immich"
   icon_url           = "https://github.com/immich-app/immich/raw/main/docs/static/img/favicon.png"
   launch_url         = "https://photos.${var.public_domain}"
@@ -95,7 +95,7 @@ module "oauth2-immich" {
 }
 
 module "oauth2-karakeep" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Karakeep"
   icon_url           = "https://raw.githubusercontent.com/karakeep-app/karakeep/refs/heads/main/docs/static/img/favicon.ico"
   launch_url         = "https://karakeep.${var.public_domain}"
@@ -111,7 +111,7 @@ module "oauth2-karakeep" {
 }
 
 module "oauth2-Mealie" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Mealie"
   icon_url           = "https://raw.githubusercontent.com/mealie-recipes/mealie/refs/heads/mealie-next/frontend/static/icons/icon-x64.png"
   launch_url         = "https://mealie.${var.public_domain}"
@@ -130,7 +130,7 @@ module "oauth2-Mealie" {
 }
 
 module "oauth2-opencloud" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "OpenCloud"
   icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
   launch_url         = "https://opencloud.${var.public_domain}"
@@ -151,7 +151,7 @@ module "oauth2-opencloud" {
 }
 
 module "oauth2-opencloud-desktop" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "OpenCloudDesktop"
   launch_url         = "blank://blank"
   auth_groups        = [authentik_group.users.id]
@@ -166,7 +166,7 @@ module "oauth2-opencloud-desktop" {
 }
 
 module "oauth2-opencloud-android" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "OpenCloudAndroid"
   launch_url         = "blank://blank"
   auth_groups        = [authentik_group.users.id]
@@ -178,7 +178,7 @@ module "oauth2-opencloud-android" {
 }
 
 module "oauth2-opencloud-ios" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "OpenCloudIOS"
   launch_url         = "blank://blank"
   auth_groups        = [authentik_group.users.id]
@@ -190,7 +190,7 @@ module "oauth2-opencloud-ios" {
 }
 
 module "oauth2-paperless" {
-  source             = "./oauth2_application"
+  source             = "./modules/oauth2_application"
   name               = "Paperless"
   icon_url           = "https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/dev/resources/logo/web/svg/Color%20logo%20-%20no%20background.svg"
   launch_url         = "https://documents.${var.public_domain}"
@@ -205,8 +205,24 @@ module "oauth2-paperless" {
   redirect_uris      = ["https://documents.${var.public_domain}/accounts/oidc/authentik/login/callback/"]
 }
 
+module "oauth2-Shelfmark" {
+  source             = "./modules/oauth2_application"
+  name               = "Shelfmark"
+  icon_url           = "https://raw.githubusercontent.com/calibrain/shelfmark/refs/heads/main/src/frontend/public/favicon.ico"
+  launch_url         = "https://shelfmark.${var.public_domain}"
+  description        = "Books"
+  newtab             = true
+  group              = "Selfhosted"
+  auth_groups        = [authentik_group.users.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_shelfmark.fields["oidc_id"]
+  client_secret      = module.secret_shelfmark.fields["oidc_secret"]
+  redirect_uris      = ["https://shelfmark.${var.public_domain}/api/auth/oidc/callback"]
+}
+
 # module "oauth2-pgadmin" {
-#   source = "./oauth2_application"
+#   source = "./modules/oauth2_application"
 #   name = "PGadmin"
 #   icon_url = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/public/assets/img/forgejo.svg"
 #   launch_url = "https://git.${var.public_domain}"

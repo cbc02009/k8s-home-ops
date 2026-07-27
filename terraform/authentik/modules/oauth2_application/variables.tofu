@@ -17,6 +17,11 @@ variable "description" {
   default = ""
 }
 
+variable "meta_hide" {
+  type    = bool
+  default = false
+}
+
 variable "newtab" {
   type    = bool
   default = true
@@ -83,6 +88,11 @@ variable "access_token_validity" {
   default = "hours=1"
 }
 
+variable "grant_types" {
+  type    = list(string)
+  default = ["authorization_code", "refresh_token"]
+}
+
 variable "additional_property_mappings" {
   type    = list(string)
   default = []
@@ -116,12 +126,13 @@ locals {
 
   allowed_redirect_uris = concat(
     [
-      for uri in var.redirect_uris : (
-        can(uri.url) ? {
+    for uri in var.redirect_uris : (
+      can(uri.url) ? {
           matching_mode = lookup(uri, "matching_mode", "strict")
           url           = uri.url
           } : {
           matching_mode = "strict"
+          redirect_uri_type = "authorization"
           url           = trim(uri, " ")
         }
       )
@@ -131,8 +142,9 @@ locals {
         can(uri.url) ? {
           matching_mode = lookup(uri, "matching_mode", "regex")
           url           = uri.url
-          } : {
+        } : {
           matching_mode = "regex"
+          redirect_uri_type = "authorization"
           url           = trim(uri, " ")
         }
       )
