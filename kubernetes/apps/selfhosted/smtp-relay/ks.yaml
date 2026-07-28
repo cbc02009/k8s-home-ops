@@ -16,6 +16,7 @@ spec:
   postBuild:
     substitute:
       HOSTNAME: smtp-relay.${PUBLIC_DOMAIN}
+      IP: 10.6.0.11
   prune: true
   sourceRef:
     kind: GitRepository

@@ -25,7 +25,7 @@ spec:
               tag: 1.1.16@sha256:8ecdab65deb7c84652a626380e31d11a8f1fbafd97916d57f95c20628f943c00
             command:
               - hbbs
-              - -r ${LB_RUSTDESK}:21117
+              - -r ${IP}:21117
             env:
               ENCRYPTED_ONLY: "1"
               DB_URL: /db/db_v2.sqlite3
@@ -59,7 +59,7 @@ spec:
         controller: *app
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: ${LB_RUSTDESK}
+          io.cilium/lb-ipam-ips: ${IP}
           external-dns.alpha.kubernetes.io/hostname: rd.ctec.run
         ports:
           rustdesk-1:

@@ -73,6 +73,8 @@ spec:
   interval: 30m
   path: ./kubernetes/apps/databases/cloudnative-pg/cluster
   postBuild:
+    substitute:
+      IP: 10.6.0.20
     substituteFrom:
       - kind: Secret
         name: cloudflare-account-id-secret

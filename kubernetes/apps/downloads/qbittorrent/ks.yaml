@@ -26,6 +26,7 @@ spec:
     substitute:
       HOSTNAME: qbt.${PUBLIC_DOMAIN}
       APP: *app
+      IP: 10.6.0.9
       PVC_CAPACITY: "5Gi"
   prune: true
   sourceRef:

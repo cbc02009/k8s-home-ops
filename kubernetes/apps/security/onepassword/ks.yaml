@@ -23,6 +23,9 @@ spec:
       current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   interval: 30m
   path: ./kubernetes/apps/security/onepassword/app
+  postBuild:
+    substitute:
+      IP: 10.6.0.10
   prune: true
   sourceRef:
     kind: GitRepository

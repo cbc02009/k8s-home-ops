@@ -81,7 +81,7 @@ spec:
       app:
         controller: *app
         type: LoadBalancer
-        loadBalancerIP: ${LB_QBT_GUI}
+        loadBalancerIP: ${IP}
         ports:
           http:
             port: *port

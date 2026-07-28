@@ -15,21 +15,7 @@ spec:
     namespace: flux-system
   timeout: 5m
   wait: false
-  postBuild:
-    substituteFrom:
-      - name: cluster-settings
-        kind: ConfigMap
-        optional: true
   patches:
-    - patch: |
-        - op: add
-          path: '/spec/postBuild/substituteFrom/-'
-          value:
-            name: cluster-settings
-            kind: ConfigMap
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
     - # Add Kustomization defaults for all child Kustomizations
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1

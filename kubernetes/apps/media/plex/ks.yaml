@@ -25,6 +25,7 @@ spec:
     substitute:
       HOSTNAME: plex.${PUBLIC_DOMAIN}
       APP: *app
+      IP: 10.6.0.12
       PVC_CAPACITY: "50Gi"
   prune: true
   sourceRef:

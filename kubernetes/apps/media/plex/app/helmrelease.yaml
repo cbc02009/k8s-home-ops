@@ -19,7 +19,7 @@ spec:
               tag: 1.43.3.10828
             env:
               TZ: ${TZ}
-              PLEX_ADVERTISE_URL: https://${LB_PLEX}:32400,https://plex.${PUBLIC_DOMAIN}:443
+              PLEX_ADVERTISE_URL: https://${IP}:32400,https://plex.${PUBLIC_DOMAIN}:443
             # probes:
             #   liveness: &probes
             #     enabled: true
@@ -74,7 +74,7 @@ spec:
         controller: *app
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${LB_PLEX}
+          lbipam.cilium.io/ips: ${IP}
         externalTrafficPolicy: Local
         ports:
           http:
