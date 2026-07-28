@@ -12,8 +12,8 @@ spec:
       path: /repo
       volume:
         nfs:
-          path: /mnt/drone/backup/kopiur
-          server: gladius.bjw-s.internal
+          path: /mnt/tank/k8s/kopiur
+          server: shana.ctec.internal
   credentialProjection:
     allowed: true
   encryption:
