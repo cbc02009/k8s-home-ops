@@ -14,4 +14,4 @@ resources:
   # - ./nvidia-device-plugin/ks.yaml
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
-  - ./volsync/ks.yaml
+  # - ./volsync/ks.yaml

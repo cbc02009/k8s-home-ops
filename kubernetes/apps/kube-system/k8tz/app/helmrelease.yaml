@@ -4,14 +4,12 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: k8tz
-  namespace: system-controllers
 spec:
   chartRef:
     kind: OCIRepository
     name: k8tz
   interval: 30m
   values:
-    namespace: system-controllers
 
     replicaCount: 2
 

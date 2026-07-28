@@ -12,7 +12,7 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
     - name: volsync
       namespace: system
