@@ -95,7 +95,7 @@ spec:
             subPath: repository.config
       repository:
         type: nfs
-        path: /mnt/tank/k8s/kopia
+        path: /mnt/tank/k8s/kopiur
         server: ${NAS_HOST}
         globalMounts:
           - path: /repository
