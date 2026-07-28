@@ -21,7 +21,7 @@ spec:
         kind: ConfigMap
         optional: true
   patches:
-    - patch: |-
+    - patch: |
         - op: add
           path: '/spec/postBuild/substituteFrom/-'
           value:
