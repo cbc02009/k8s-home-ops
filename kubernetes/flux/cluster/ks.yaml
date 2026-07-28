@@ -23,7 +23,7 @@ spec:
   patches:
     - patch: |
         - op: add
-          path: '/spec/postBuild/substituteFrom/0'
+          path: '/spec/postBuild/substituteFrom/-'
           value:
             name: cluster-settings
             kind: ConfigMap
