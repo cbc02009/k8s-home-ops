@@ -29,6 +29,7 @@ spec:
   components:
     - ../../../../components/gpu
     - ../../../../components/kopiur
+    - ../../../../components/volsync
     - ../../../../components/zeroscaler
   postBuild:
     substitute:

@@ -21,6 +21,7 @@ spec:
   wait: false
   components:
     - ../../../../components/kopiur
+    - ../../../../components/volsync
   dependsOn:
     - name: external-secrets
       namespace: security

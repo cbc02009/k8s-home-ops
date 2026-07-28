@@ -26,6 +26,7 @@ spec:
       namespace: security
   components:
     - ../../../../components/kopiur
+    - ../../../../components/volsync
     - ../../../../components/zeroscaler
   postBuild:
     substitute:

@@ -24,6 +24,7 @@ spec:
       namespace: system
   components:
     - ../../../../components/kopiur
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *app

@@ -11,6 +11,7 @@
 #       app.kubernetes.io/name: *app
 #   components:
 #     - ../../../../components/kopiur
+    # - ../../../../components/volsync
 #   dependsOn:
 #     - name: external-secrets
 #       namespace: security
