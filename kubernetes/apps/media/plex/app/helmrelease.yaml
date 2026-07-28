@@ -18,7 +18,7 @@ spec:
               repository: ghcr.io/home-operations/plex
               tag: 1.43.3.10828
             env:
-              TZ: ${TZ}
+              TZ: America/New_York
               PLEX_ADVERTISE_URL: https://${IP}:32400,https://plex.${PUBLIC_DOMAIN}:443
             # probes:
             #   liveness: &probes

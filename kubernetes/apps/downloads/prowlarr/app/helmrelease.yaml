@@ -33,7 +33,7 @@ spec:
               tag: 2.5.2.5491
 
             env:
-              TZ: ${TZ}
+              TZ: America/New_York
               PROWLARR__APP__INSTANCENAME: Prowlarr
               PROWLARR__APP__THEME: dark
               PROWLARR__AUTH__METHOD: External

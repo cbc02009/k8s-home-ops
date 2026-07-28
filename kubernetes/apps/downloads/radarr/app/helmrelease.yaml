@@ -45,7 +45,7 @@ spec:
                   name: *app
 
             env:
-              TZ: ${TZ}
+              TZ: America/New_York
               RADARR__APP__INSTANCENAME: Radarr
               RADARR__APP__THEME: dark
               RADARR__AUTH__METHOD: External

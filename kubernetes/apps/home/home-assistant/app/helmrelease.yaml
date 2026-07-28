@@ -37,7 +37,7 @@ spec:
               tag: 2026.7.4
             env:
               VENV_FOLDER: /venv
-              TZ: "${TZ}"
+              TZ: "America/New_York"
               POSTGRES_HOST: postgres-rw.databases.svc.cluster.local
               POSTGRES_DB: home_assistant
               HASS_HTTP_TRUSTED_PROXY_1: 10.0.0.0/8
