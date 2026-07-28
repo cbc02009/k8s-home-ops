@@ -102,7 +102,7 @@ spec:
 
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
-      name: csi-ceph-blockpool2
+      name: csi-ceph-blockpool
       isDefault: false
       deletionPolicy: Delete
 
