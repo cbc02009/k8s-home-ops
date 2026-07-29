@@ -96,7 +96,7 @@ spec:
       repository:
         type: nfs
         path: /mnt/tank/k8s/kopiur
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         globalMounts:
           - path: /repository
       tmpfs:

@@ -55,7 +55,7 @@ spec:
       backups:
         enabled: true
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /mnt/tank/k8s/postgres-backup
         globalMounts:
           - path: /backups

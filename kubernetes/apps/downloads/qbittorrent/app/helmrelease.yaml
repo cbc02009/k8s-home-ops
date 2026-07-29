@@ -112,7 +112,7 @@ spec:
               - path: /config
       media:
         type: nfs
-        server: "${NAS_HOST}"
+        server: "shana.ctec.internal"
         advancedMounts:
           qbittorrent:
             app:
@@ -121,7 +121,7 @@ spec:
       torrents:
         enabled: true
         type: nfs
-        server: "${NAS_HOST}"
+        server: "shana.ctec.internal"
         path: /mnt/smoltank/torrents
         advancedMounts:
           qbittorrent:

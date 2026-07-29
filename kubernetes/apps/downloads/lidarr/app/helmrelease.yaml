@@ -97,7 +97,7 @@ spec:
         existingClaim: *app
       media:
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /mnt/tank/media
         globalMounts:
           - path: /media

@@ -223,7 +223,7 @@ spec:
                 subPath: immich-config.yaml
       library:
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /mnt/tank/k8s/immich
         advancedMounts:
           server:
@@ -254,7 +254,7 @@ spec:
               - path: /config/matplotlib
       model-cache:
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /mnt/smoltank/apps/immich-mlcache
         advancedMounts:
           machine-learning:

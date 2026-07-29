@@ -128,7 +128,7 @@ spec:
               - path: /data/local
       nas:
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /tank/k8s/apps/paperless
         globalMounts:
           - path: /data/nas

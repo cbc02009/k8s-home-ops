@@ -120,7 +120,7 @@ spec:
                 subPath: tmp
       media:
         type: nfs
-        server: &nas ${NAS_HOST}
+        server: &nas shana.ctec.internal
         path: /mnt/tank/media
         globalMounts:
           - path: /media

@@ -138,7 +138,7 @@ spec:
       #       subPath: config.yaml
       media:
         type: nfs
-        server: ${NAS_HOST}
+        server: shana.ctec.internal
         path: /mnt/tank/k8s/frigate
         globalMounts:
           - path: /media/frigate
