@@ -62,16 +62,16 @@ spec:
           libation:
             app:
               - path: /config
-      accounts-settings:
-        enabled: true
-        type: secret
-        name: libation-secret
-        advancedMounts:
-          libation:
-            app:
-              - path: /config/AccountsSettings.json
-                subPath: AccountsSettings.json
-                readOnly: true
+      # accounts-settings:
+      #   enabled: true
+      #   type: secret
+      #   name: libation-secret
+      #   advancedMounts:
+      #     libation:
+      #       app:
+      #         - path: /config/AccountsSettings.json
+      #           subPath: AccountsSettings.json
+      #           readOnly: true
       settings:
         enabled: true
         type: configMap
