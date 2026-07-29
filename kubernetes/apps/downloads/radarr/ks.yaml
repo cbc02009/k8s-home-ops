@@ -23,7 +23,7 @@ spec:
     substitute:
       HOSTNAME: radarr.ctec.run
       APP: *app
-      PVC_CAPACITY: "1Gi"
+      PVC_CAPACITY: "5Gi"
   prune: true
   sourceRef:
     kind: GitRepository
