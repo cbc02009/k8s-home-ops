@@ -81,6 +81,6 @@ spec:
         enabled: true
         type: nfs
         server: shana.ctec.internal
-        path: /mnt/tank/grimmory/audiobooks # yes, this sucks, I'll fix it later
+        path: /mnt/tank/media/grimmory/library/audiobooks
         globalMounts:
           - path: /audiobooks
