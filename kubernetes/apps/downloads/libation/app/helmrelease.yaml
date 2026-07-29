@@ -56,12 +56,7 @@ spec:
 
     persistence:
       config:
-        enabled: true
-        existingClaim: libation-config
-        advancedMounts:
-          libation:
-            app:
-              - path: /config
+        existingClaim: *app
       # accounts-settings:
       #   enabled: true
       #   type: secret
