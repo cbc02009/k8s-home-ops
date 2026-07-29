@@ -40,8 +40,8 @@ spec:
   path: ./kubernetes/apps/observability/grafana-operator/instance
   postBuild:
     substitute:
-      HOSTNAME: grafana.${PUBLIC_DOMAIN}
-      AUTH_HOSTNAME: auth.${PUBLIC_DOMAIN}
+      HOSTNAME: grafana.ctec.run
+      AUTH_HOSTNAME: auth.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

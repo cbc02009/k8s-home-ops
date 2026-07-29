@@ -14,7 +14,7 @@ spec:
     solvers:
       - selector:
           dnsZones:
-            - ${PUBLIC_DOMAIN}
+            - ctec.run
         dns01:
           cloudflare:
             apiTokenSecretRef:

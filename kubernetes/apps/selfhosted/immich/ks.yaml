@@ -28,7 +28,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: photos.${PUBLIC_DOMAIN}
+      HOSTNAME: photos.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

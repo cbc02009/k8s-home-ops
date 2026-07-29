@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/observability/gatus/app
   postBuild:
     substitute:
-      HOSTNAME: status.${PUBLIC_DOMAIN}
+      HOSTNAME: status.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

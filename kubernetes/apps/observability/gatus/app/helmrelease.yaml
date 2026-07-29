@@ -47,7 +47,7 @@ spec:
               GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80
               TZ: ${CONFIG_TIMEZONE}
-              PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
+              PUBLIC_DOMAIN: ctec.run
               PRIVATE_DOMAIN: ${PRIVATE_DOMAIN}
             envFrom: *envfrom
             probes:

@@ -24,7 +24,7 @@ spec:
   path: ./kubernetes/apps/downloads/qbittorrent/app
   postBuild:
     substitute:
-      HOSTNAME: qbt.${PUBLIC_DOMAIN}
+      HOSTNAME: qbt.ctec.run
       APP: *app
       IP: 10.6.0.9
       PVC_CAPACITY: "5Gi"

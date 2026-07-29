@@ -23,7 +23,7 @@ spec:
   path: ./kubernetes/apps/databases/pgadmin/app
   postBuild:
     substitute:
-      HOSTNAME: pgadmin.${PUBLIC_DOMAIN}
+      HOSTNAME: pgadmin.ctec.run
       APP: *app
       APP_UID: "5050"
       APP_GID: "5050"

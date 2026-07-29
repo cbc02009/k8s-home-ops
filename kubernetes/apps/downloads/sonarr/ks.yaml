@@ -23,7 +23,7 @@ spec:
   path: ./kubernetes/apps/downloads/sonarr/app
   postBuild:
     substitute:
-      HOSTNAME: sonarr.${PUBLIC_DOMAIN}
+      HOSTNAME: sonarr.ctec.run
       APP: *app
       PVC_CAPACITY: "5Gi"
   prune: true

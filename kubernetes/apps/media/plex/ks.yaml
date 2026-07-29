@@ -23,7 +23,7 @@ spec:
   path: ./kubernetes/apps/media/plex/app
   postBuild:
     substitute:
-      HOSTNAME: plex.${PUBLIC_DOMAIN}
+      HOSTNAME: plex.ctec.run
       APP: *app
       IP: 10.6.0.12
       PVC_CAPACITY: "50Gi"

@@ -24,7 +24,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: kopia.${PUBLIC_DOMAIN}
+      HOSTNAME: kopia.ctec.run
   prune: true
   retryInterval: 2m
   sourceRef:

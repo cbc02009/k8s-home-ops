@@ -23,7 +23,7 @@ spec:
   path: ./kubernetes/apps/downloads/lidarr/app
   postBuild:
     substitute:
-      HOSTNAME: lidarr.${PUBLIC_DOMAIN}
+      HOSTNAME: lidarr.ctec.run
       APP: *app
       PVC_CAPACITY: "1Gi"
   prune: true

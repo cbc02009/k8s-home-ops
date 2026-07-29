@@ -21,7 +21,7 @@ spec:
       APP: grimmory
       APP_UID: "1000"
       APP_GID: "1000"
-      HOSTNAME: grimmory.${PUBLIC_DOMAIN}
+      HOSTNAME: grimmory.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

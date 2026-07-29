@@ -24,8 +24,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: opencloud.${PUBLIC_DOMAIN}
-      AUTH_HOSTNAME: auth.${PUBLIC_DOMAIN}
+      HOSTNAME: opencloud.ctec.run
+      AUTH_HOSTNAME: auth.ctec.run
       APP_UID: "1000"
       APP_GID: "1000"
       PVC_CLAIM: opencloud-data

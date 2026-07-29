@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/flux-system/konflate/app
   postBuild:
     substitute:
-      HOSTNAME: konflate.${PUBLIC_DOMAIN}
+      HOSTNAME: konflate.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

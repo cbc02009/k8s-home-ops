@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/selfhosted/smtp-relay/app
   postBuild:
     substitute:
-      HOSTNAME: smtp-relay.${PUBLIC_DOMAIN}
+      HOSTNAME: smtp-relay.ctec.run
       IP: 10.6.0.11
   prune: true
   sourceRef:
