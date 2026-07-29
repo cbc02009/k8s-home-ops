@@ -10,12 +10,13 @@ resources:
   - ./animarr/ks.yaml
   - ./autobrr/ks.yaml
   - ./lidarr/ks.yaml
-  - ./seerr/ks.yaml
+  - ./libation/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   # - ./qui/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
   - ./sabnzbd/ks.yaml
+  - ./seerr/ks.yaml
   - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
