@@ -7,8 +7,8 @@ metadata:
 spec:
   mover:
     securityContext:
-      runAsUser: ${KOPIUR_MOVER_UID:=2000}
-      runAsGroup: ${KOPIUR_MOVER_GID:=2000}
+      runAsUser: ${APP_UID:=2000}
+      runAsGroup: ${APP_GID:=2000}
   policy:
     onMissingSnapshot: Continue
   source:
