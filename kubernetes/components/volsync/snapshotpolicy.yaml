@@ -23,7 +23,7 @@ spec:
     keepHourly: 24
   sources:
     - pvc:
-        name: "${KOPIUR_CLAIM:-${APP}}"
+        name: "${PVC_CLAIM:-${APP}}"
   verification:
     deep:
       schedule:
