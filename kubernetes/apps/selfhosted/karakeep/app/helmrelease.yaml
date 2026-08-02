@@ -12,11 +12,11 @@ spec:
   values:
     defaultPodOptions:
       securityContext:
-        fsGroup: 1000
+        fsGroup: ${APP_GID}
         fsGroupChangePolicy: "OnRootMismatch"
-        runAsGroup: 1000
+        runAsGroup: ${APP_GID}
         runAsNonRoot: true
-        runAsUser: 1000
+        runAsUser: ${APP_UID}
 
     controllers:
       karakeep:

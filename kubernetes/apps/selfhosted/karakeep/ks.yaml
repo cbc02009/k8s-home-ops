@@ -20,6 +20,8 @@ spec:
       APP: *app
       HOSTNAME: karakeep.ctec.run
       AUTH_HOSTNAME: auth.ctec.run
+      APP_UID: "1000"
+      APP_GID: "1000"
   prune: true
   sourceRef:
     kind: GitRepository
