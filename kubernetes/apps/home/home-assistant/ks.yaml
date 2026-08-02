@@ -33,3 +33,5 @@ spec:
       APP: *app
       IP: 10.6.0.8
       PVC_CAPACITY: 5Gi
+      APP_UID: "1000"
+      APP_GID: "1000"
