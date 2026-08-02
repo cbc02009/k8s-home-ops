@@ -62,11 +62,6 @@ gr-sync-all:
     just k8s gr-sync "$ns" "$name"; \
   done
 
-retainl:
-  kubectl get pv --no-headers | while read -r name; do \
-    kubectl patch pv "$name" -p "{\"spec\":{\"persistentVolumeReclaimPolicy\":\"Retain\"}}"; \
-  done
-
 [doc('Sync all Flux Kustomizations')]
 ks-sync-all:
   kubectl get ks --no-headers -A | while read -r ns name _; do \

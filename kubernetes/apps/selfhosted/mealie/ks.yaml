@@ -20,7 +20,6 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../components/kopiur
     - ../../../../components/volsync
   dependsOn:
     - name: external-secrets

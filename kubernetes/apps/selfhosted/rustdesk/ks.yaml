@@ -23,7 +23,6 @@ spec:
     namespace: flux-system
   wait: false
   components:
-    - ../../../../components/kopiur
     - ../../../../components/volsync
   postBuild:
     substitute:

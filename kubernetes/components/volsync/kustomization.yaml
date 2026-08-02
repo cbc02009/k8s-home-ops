@@ -6,4 +6,6 @@ resources:
   - ./externalsecret.yaml
   - ./pvc.yaml
   - ./replicationdestination.yaml
-  # - ./replicationsource.yaml
+  - ./replicationsource.yaml
+  - ./snapshotpolicy.yaml
+  - ./snapshotschedule.yaml

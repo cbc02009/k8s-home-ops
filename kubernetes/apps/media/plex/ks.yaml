@@ -12,7 +12,6 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    - ../../../../components/kopiur
     - ../../../../components/volsync
   dependsOn:
     - name: kopiur

@@ -23,7 +23,6 @@ spec:
     - name: kopiur
       namespace: system
   components:
-    - ../../../../components/kopiur
     - ../../../../components/volsync
   postBuild:
     substitute:

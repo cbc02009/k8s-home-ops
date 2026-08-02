@@ -25,7 +25,6 @@ spec:
     - name: external-secrets
       namespace: security
   components:
-    - ../../../../components/kopiur
     - ../../../../components/volsync
     - ../../../../components/zeroscaler
   postBuild:
