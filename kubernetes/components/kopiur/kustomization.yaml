@@ -5,5 +5,5 @@ kind: Component
 resources:
   - ./snapshotpolicy.yaml
   - ./snapshotschedule.yaml
-  # - ./pvc.yaml UNCOMMENT ON NEXT RESET
+  - ./pvc.yaml
   - ./restore.yaml
