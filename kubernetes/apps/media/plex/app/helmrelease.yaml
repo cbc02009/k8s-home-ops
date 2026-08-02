@@ -63,12 +63,11 @@ spec:
                         values: ["frigate"]
                   topologyKey: kubernetes.io/hostname
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsUser: ${APP_UID}
+            runAsGroup: ${APP_GID}
             runAsNonRoot: true
-            fsGroup: 1000
+            fsGroup: ${APP_GID}
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [1010]
     service:
       app:
         controller: *app
