@@ -26,7 +26,7 @@ spec:
       HOSTNAME: qbt.ctec.run
       APP: *app
       IP: 10.6.0.9
-      PVC_CAPACITY: "5Gi"
+      PVC_CAPACITY: "10Gi"
   prune: true
   sourceRef:
     kind: GitRepository
