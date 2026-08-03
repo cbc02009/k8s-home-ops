@@ -10,29 +10,12 @@ spec:
   chartRef:
     kind: OCIRepository
     name: *app
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
 
   values:
 
     defaultPodOptions:
       nodeSelector:
         google.feature.node.kubernetes.io/coral: "true"
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #         - matchExpressions:
-      #             - key: google.feature.node.kubernetes.io/coral
-      #               operator: In
-      #               values:
-      #                 - 'true'
-
     controllers:
       frigate:
         annotations:
