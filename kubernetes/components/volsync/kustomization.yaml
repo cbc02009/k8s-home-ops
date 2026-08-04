@@ -7,5 +7,5 @@ resources:
   - ./pvc.yaml
   - ./replicationdestination.yaml
   - ./replicationsource.yaml
-  - ./snapshotpolicy.yaml
-  - ./snapshotschedule.yaml
+  # - ./snapshotpolicy.yaml
+  # - ./snapshotschedule.yaml
