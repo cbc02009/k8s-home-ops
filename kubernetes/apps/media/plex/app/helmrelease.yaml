@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/plex
-              tag: 1.43.3.10828
+              tag: 1.43.3.10861
             env:
               TZ: America/New_York
               PLEX_ADVERTISE_URL: https://${IP}:32400,https://plex.ctec.run:443
