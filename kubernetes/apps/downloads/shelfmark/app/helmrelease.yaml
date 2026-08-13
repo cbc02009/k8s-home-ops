@@ -82,6 +82,8 @@ spec:
         type: nfs
         server: shana.ctec.internal
         path: /mnt/tank/media
+        globalMounts:
+          - path: /media
         advancedMounts:
           shelfmark:
             shelfmark:
