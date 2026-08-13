@@ -18,6 +18,8 @@ spec:
   postBuild:
     substitute:
       APP: shelfmark
+      HOSTNAME: shelfmark.ctec.run
+      PROXY_HOSTNAME: shelfmark-proxy.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

@@ -95,7 +95,8 @@ spec:
     route:
       app:
         hostnames:
-          - shelfmark.ctec.run
+          - ${HOSTNAME}
+          - ${PROXY_HOSTNAME}
         parentRefs:
           - name: envoy-internal
             namespace: network

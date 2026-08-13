@@ -102,11 +102,6 @@ variable "redirect_uris" {
   type = list(any)
 }
 
-variable "regex_uris" {
-  type    = list(any)
-  default = []
-}
-
 variable "logout_method" {
   type    = string
   default = "backchannel"
@@ -124,30 +119,17 @@ locals {
     : null
   )
 
-  allowed_redirect_uris = concat(
-    [
+  allowed_redirect_uris = [
     for uri in var.redirect_uris : (
       can(uri.url) ? {
-          matching_mode = lookup(uri, "matching_mode", "strict")
-          url           = uri.url
-          } : {
-          matching_mode = "strict"
-          redirect_uri_type = "authorization"
-          url           = trim(uri, " ")
-        }
-      )
-    ],
-    [
-      for uri in var.regex_uris : (
-        can(uri.url) ? {
-          matching_mode = lookup(uri, "matching_mode", "regex")
-          url           = uri.url
+        matching_mode     = lookup(uri, "matching_mode", "strict")
+        redirect_uri_type = lookup(uri, "redirect_uri_type", "authorization")
+        url               = uri.url
         } : {
-          matching_mode = "regex"
-          redirect_uri_type = "authorization"
-          url           = trim(uri, " ")
-        }
-      )
-    ]
-  )
+        matching_mode     = "strict"
+        redirect_uri_type = "authorization"
+        url               = trim(uri, " ")
+      }
+    )
+  ]
 }

@@ -45,6 +45,13 @@ spec:
               target:
                 group: helm.toolkit.fluxcd.io
                 kind: HelmRelease
+          postBuild:
+            substitute:
+              PUBLIC_DOMAIN: ctec.run
+              PRIVATE_DOMAIN: ctec.internal
+              CONFIG_TRUENAS_HOST: shana.ctec.internal
+              CONFIG_TRUENAS_IP: 10.0.2.4
+              CONFIG_TZ: America/New_York
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization

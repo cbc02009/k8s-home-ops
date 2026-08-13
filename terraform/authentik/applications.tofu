@@ -25,6 +25,19 @@
 #   access_token_validity = "weeks=20"
 # }
 
+# module "proxy-shelfmarkproxy" {
+#   source             = "./modules/proxy_application"
+#   name               = "Shelfmark Proxy"
+#   description        = "Book Downloads"
+#   icon_url           = "https://raw.githubusercontent.com/calibrain/shelfmark/refs/heads/main/src/frontend/public/favicon.ico"
+#   group              = "Downloads"
+#   slug               = "shelfmark"
+#   domain             = var.public_domain
+#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+#   auth_groups        = [authentik_group.users.id]
+# }
+
 module "oauth2-Grimmory" {
   source             = "./modules/oauth2_application"
   name               = "Grimmory"
@@ -37,10 +50,12 @@ module "oauth2-Grimmory" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_grimmory.fields["oidc_id"]
-  # client_secret      = module.secret_grimmory.fields["oidc_secret"]
+  client_secret      = module.secret_grimmory.fields["oidc_secret"]
   client_type        = "public"
-  redirect_uris      = ["https://grimmory.${var.public_domain}/oauth2-callback"]
-  regex_uris         = ["https://grimmory.${var.public_domain}/*"]
+  redirect_uris = [
+    { matching_mode = "strict", url = "https://grimmory.${var.public_domain}/oauth2-callback" },
+    { matching_mode = "regex", url = "https://grimmory.${var.public_domain}/*" }
+  ]
 }
 
 # module "oauth2-forgejo" {
