@@ -84,11 +84,6 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /media
-        advancedMounts:
-          shelfmark:
-            shelfmark:
-              - path: /bookdrop
-                subPath: Library/Main/Books/grimmory/bookdrop
       tmpfs:
         type: emptyDir
         sizeLimit: 1Gi
