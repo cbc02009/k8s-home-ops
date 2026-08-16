@@ -7,15 +7,15 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  - ./animarr/ks.yaml
+  # - ./animarr/ks.yaml
   - ./autobrr/ks.yaml
-  - ./lidarr/ks.yaml
-  - ./prowlarr/ks.yaml
+  # - ./lidarr/ks.yaml
+  # - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   # - ./qui/ks.yaml
-  - ./radarr/ks.yaml
-  - ./recyclarr/ks.yaml
+  # - ./radarr/ks.yaml
+  # - ./recyclarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./seerr/ks.yaml
   - ./shelfmark/ks.yaml
-  - ./sonarr/ks.yaml
+  # - ./sonarr/ks.yaml
