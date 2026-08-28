@@ -1,31 +1,21 @@
-# https://github.com/NVIDIA/k8s-device-plugin
 # yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/helm.toolkit.fluxcd.io/helmrelease_v2.json
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nvidia-device-plugin
-  namespace: system
 spec:
-  interval: 30m
   chart:
     spec:
-      # renovate: registryUrl=https://nvidia.github.io/k8s-device-plugin
       chart: nvidia-device-plugin
-      version: 0.17.1
+      version: 0.19.3
       sourceRef:
         kind: HelmRepository
         name: nvdp
       interval: 30m
+  interval: 1h
   # https://github.com/NVIDIA/k8s-device-plugin/blob/main/deployments/helm/nvidia-device-plugin/values.yaml
   values:
-
-    image:
-      repository: nvcr.io/nvidia/k8s-device-plugin
-      tag: v0.19.3
-
     runtimeClassName: nvidia
-
     config:
       map:
         default: |-
@@ -39,9 +29,11 @@ spec:
               resources:
                 - name: nvidia.com/gpu
                   replicas: 6
-
-    gfd:
-      enabled: true
-
-    nfd:
-      enabled: false
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: topology.kubernetes.io
+                  operator: In
+                  values: ["dgpu"]

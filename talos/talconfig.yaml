@@ -93,7 +93,32 @@ nodes:
     userVolumes: *userVolumes
     # extensionServices: *nut-service
 
+  - hostname: mayne
+    nodeLabels:
+      topology.kubernetes.io: dgpu
+    ipAddress: 10.0.2.13
+    installDiskSelector:
+      model: Sabrent Rocket Q
+    controlPlane: false
+    networkInterfaces:
+      - interface: bond0
+        bond:
+          interfaces:
+            - enp6s0
+          mode: active-backup
+        dhcp: true
+        mtu: 9000
+        vlans:
+          - # VPN
+            vlanId: 50
+            dhcp: false
+            mtu: 1500
+    volumes: *volumes
+    userVolumes: *userVolumes
+    # extensionServices: *nut-service
+
 patches:
+  - ./patches/global/misc.yaml
   - ./patches/global/machine-features.yaml
   - ./patches/global/machine-files.yaml
   - ./patches/global/machine-kubelet.yaml
@@ -124,4 +149,25 @@ controlPlane:
   patches:
     - ./patches/controller/cluster.yaml
     - ./patches/controller/link-alias.yaml
-    - ./patches/controller/misc.yaml
+    - ./patches/controller/machine-features.yaml
+
+worker:
+  schematic:
+    customization:
+      extraKernelArgs:
+        - -init_on_alloc # Less security, faster puter
+        - -init_on_free # Less security, faster puter
+        - -selinux # Less security, faster puter
+        - apparmor=0 # Less security, faster puter
+        - init_on_alloc=0 # Less security, faster puter
+        - init_on_free=0 # Less security, faster puter
+        - intel_iommu=on # PCI Passthrough
+        - iommu=pt # PCI Passthrough
+        - mitigations=off # Less security, faster puter
+        - security=none # Less security, faster puter
+        - talos.auditd.disabled=1 # Less security, faster puter
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/amd-ucode
+          - siderolabs/nonfree-kmod-nvidia-production
+          - siderolabs/nvidia-container-toolkit-production

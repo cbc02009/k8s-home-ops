@@ -10,15 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: node-feature-discovery
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
   values:
     worker:
       config:
