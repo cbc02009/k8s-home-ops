@@ -115,6 +115,8 @@ nodes:
             mtu: 1500
     volumes: *volumes
     userVolumes: *userVolumes
+    patches:
+      - ./patches/worker/gpu.yaml
     # extensionServices: *nut-service
 
 patches:
@@ -169,5 +171,5 @@ worker:
       systemExtensions:
         officialExtensions:
           - siderolabs/amd-ucode
-          - siderolabs/nonfree-kmod-nvidia-production
+          - siderolabs/nvidia-open-gpu-kernel-modules-production
           - siderolabs/nvidia-container-toolkit-production
