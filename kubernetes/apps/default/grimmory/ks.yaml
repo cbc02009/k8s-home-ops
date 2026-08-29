@@ -9,23 +9,24 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-move
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/media/grimmory/app"
+  path: "./kubernetes/apps/default/grimmory/app"
   postBuild:
     substitute:
       APP: grimmory
       APP_UID: "1000"
       APP_GID: "1000"
       HOSTNAME: grimmory.ctec.run
+      MOVER_NAMESPACE: media
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: media
+  targetNamespace: default
   timeout: 5m
   wait: false

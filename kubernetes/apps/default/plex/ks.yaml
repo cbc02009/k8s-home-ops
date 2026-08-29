@@ -3,32 +3,35 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app seerr
-  namespace: &namespace default
+  name: &app plex
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync
+    - ../../../../components/zeroscaler
+    - ../../../../components/gpu
+    - ../../../../components/volsync-move
   dependsOn:
     - name: volsync
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: external-secrets
-      namespace: security
   interval: 30m
-  path: ./kubernetes/apps/default/seerr/app
+  path: ./kubernetes/apps/default/plex/app
   postBuild:
     substitute:
-      HOSTNAME: requests.ctec.run
+      HOSTNAME: plex.ctec.run
       APP: *app
-      PVC_CAPACITY: "5Gi"
+      IP: 10.6.0.12
+      PVC_CAPACITY: "50Gi"
+      APP_UID: "1000"
+      APP_GID: "1000"
+      MOVER_NAMESPACE: media
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: *namespace
+  targetNamespace: default
   wait: false

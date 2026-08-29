@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app qbittorrent
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+
+    controllers:
+      qbittorrent:
+        annotations:
+          secret.reloader.stakater.com/reload: qbittorrent-secret
+
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 1010 # shana:zfswrite
+          terminationGracePeriodSeconds: 120
+
+        containers:
+          app:
+            nameOverride: *app
+            image:
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.2.3
+            env:
+              TZ: "America/New_York"
+              UMASK: "002"
+              QBITTORRENT__PORT: &port 8080
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 150m
+                memory: 2048Mi
+              limits:
+                memory: 8192Mi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    defaultPodOptions:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [{
+            "name": "multus-vpn",
+            "namespace": "network",
+            "ips": ["192.168.99.100/24"],
+            "mac": "3e:d0:83:c0:8e:50"
+          }]
+
+    service:
+      app:
+        controller: *app
+        type: LoadBalancer
+        loadBalancerIP: ${IP}
+        ports:
+          http:
+            port: *port
+
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+
+
+    persistence:
+      config:
+        enabled: true
+        existingClaim: *app
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /config
+      media:
+        type: nfs
+        server: "shana.ctec.internal"
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /media
+        path: /mnt/tank/media
+      torrents:
+        enabled: true
+        type: nfs
+        server: "shana.ctec.internal"
+        path: /mnt/smoltank/torrents
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /torrents

@@ -8,14 +8,16 @@ components:
 resources:
   - ./namespace.yaml
   - ./animarr/ks.yaml
+  - ./grimmory/ks.yaml
   - ./karakeep/ks.yaml
   - ./lidarr/ks.yaml
+  - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
-  # - ./qbittorrent/ks.yaml
-  # - ./qui/ks.yaml
+  - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./seerr/ks.yaml
   - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
+  - ./tautulli/ks.yaml
