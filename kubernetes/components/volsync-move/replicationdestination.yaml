@@ -35,5 +35,6 @@ spec:
     # restoreAsOf: "2026-08-28T10:30:00Z"
     sourceIdentity:
       sourceName: ${APP}
+      sourceNamespace: ${MOVER_NAMESPACE}
     storageClassName: ${PVC_STORAGECLASS:=ceph-block}
     volumeSnapshotClassName: ${PVC_SNAPSHOTCLASS:=csi-ceph-blockpool}

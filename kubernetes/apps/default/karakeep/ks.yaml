@@ -9,18 +9,17 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/volsync
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: "./kubernetes/apps/default/karakeep/app"
+  path: "./kubernetes/apps/selfhosted/karakeep/app"
   postBuild:
     substitute:
       APP: *app
       HOSTNAME: karakeep.ctec.run
       AUTH_HOSTNAME: auth.ctec.run
-      MOVER_NAMESPACE: selfhosted
       APP_UID: "1000"
       APP_GID: "1000"
   prune: true
@@ -28,6 +27,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: default
+  targetNamespace: selfhosted
   timeout: 5m
   wait: false

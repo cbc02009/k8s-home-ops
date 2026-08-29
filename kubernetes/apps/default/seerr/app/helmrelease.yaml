@@ -24,7 +24,6 @@ spec:
               TZ: America/New_York
               LOG_LEVEL: "info"
               PORT: &port 80
-
             probes:
               liveness:
                 enabled: true
