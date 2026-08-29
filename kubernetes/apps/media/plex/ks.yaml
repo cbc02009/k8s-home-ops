@@ -18,7 +18,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 30m
-  path: ./kubernetes/apps/default/plex/app
+  path: ./kubernetes/apps/media/plex/app
   postBuild:
     substitute:
       HOSTNAME: plex.ctec.run
@@ -32,5 +32,5 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: default
+  targetNamespace: media
   wait: false
