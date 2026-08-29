@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/karakeep-app/karakeep
-              tag: 0.32.0@sha256:64d6a9bbf2d37b5c808cf06b5d87f1f1c7846fdd3844724145a9741aeb06fd31
+              tag: 0.33.2@sha256:b069e4307dec06ea06d16989c6861c30a1ff208568be44ed5fb5d422cd3e950c
             env:
               NEXTAUTH_URL: https://${HOSTNAME}
               OAUTH_CLIENT_ID:
@@ -89,8 +89,8 @@ spec:
         containers:
           app:
             image:
-              repository: gcr.io/zenika-hub/alpine-chrome
-              tag: 124@sha256:1a0046448e0bb6c275c88f86e01faf0de62b02ec8572901256ada0a8c08be23f
+              repository: docker.io/zenika/alpine-chrome
+              tag: 124@sha256:47da877e5622528039625218d15d7e1ccae4e426c6cc7671d165837ea98aacc8
             command:
               - chromium-browser
             args:
@@ -133,10 +133,10 @@ spec:
           app:
             image:
               repository: docker.io/getmeili/meilisearch
-              tag: v1.49.0@sha256:bdc7d7e7939911c40d88d6bcd01f9c72c81f7293135916d48bce241569f721bd
+              tag: v1.53.1@sha256:8d6643d86d71fad6ad3cba92cde7ccfce9e4d6c384bda67598eb553571c32431
             args:
               - /bin/meilisearch
-              - --experimental-dumpless-upgrade
+              - --upgrade-db
             env:
               MEILI_NO_ANALYTICS: true
               MEILI_MASTER_KEY:
