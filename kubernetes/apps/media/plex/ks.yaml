@@ -17,7 +17,7 @@ spec:
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 30m
+  interval: 1h
   path: ./kubernetes/apps/media/plex/app
   postBuild:
     substitute:
