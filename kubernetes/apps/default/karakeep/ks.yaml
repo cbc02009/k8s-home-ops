@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/volsync
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -20,7 +20,6 @@ spec:
       APP: *app
       HOSTNAME: karakeep.ctec.run
       AUTH_HOSTNAME: auth.ctec.run
-      MOVER_NAMESPACE: selfhosted
       APP_UID: "1000"
       APP_GID: "1000"
   prune: true
