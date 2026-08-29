@@ -7,14 +7,14 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  - ./actual/ks.yaml
-  - ./atuin/ks.yaml
+  # - ./actual/ks.yaml
+  # - ./atuin/ks.yaml
   - ./forgejo/ks.yaml
-  - ./karakeep/ks.yaml
-  - ./mealie/ks.yaml
+  # - ./karakeep/ks.yaml
+  # - ./mealie/ks.yaml
   - ./immich/ks.yaml
-  - ./it-tools/ks.yaml
+  # - ./it-tools/ks.yaml
   # - ./opencloud/ks.yaml
   # - ./paperless/ks.yaml
-  - ./rustdesk/ks.yaml
+  # - ./rustdesk/ks.yaml
   - ./smtp-relay/ks.yaml

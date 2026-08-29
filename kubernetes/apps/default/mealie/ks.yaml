@@ -1,9 +1,10 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.kokoro.wtf/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app karakeep
+  name: &app mealie
+  namespace: &namespace default
 spec:
   commonMetadata:
     labels:
@@ -11,23 +12,24 @@ spec:
   components:
     - ../../../../components/volsync-move
   dependsOn:
+    - name: postgres-cluster
+      namespace: databases
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
-  path: "./kubernetes/apps/default/karakeep/app"
+    - name: external-secrets
+      namespace: security
+  interval: 30m
+  path: ./kubernetes/apps/default/mealie/app
   postBuild:
     substitute:
+      HOSTNAME: mealie.ctec.run
       APP: *app
-      HOSTNAME: karakeep.ctec.run
-      AUTH_HOSTNAME: auth.ctec.run
+      PVC_CAPACITY: "15Gi"
       MOVER_NAMESPACE: selfhosted
-      APP_UID: "1000"
-      APP_GID: "1000"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: default
-  timeout: 5m
+  targetNamespace: *namespace
   wait: false

@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app mealie
+  namespace: default
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: *app
+
+  values:
+    controllers:
+      *app :
+        annotations:
+          reloader.stakater.com/auto: "true"
+
+        initContainers:
+          01-init-db:
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.4.0'
+
+        containers:
+          app:
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v3.20.1@sha256:9b680f5dad8618e69317a005e083a00a699845fb2a72c392a558a4e2898aed20
+            env:
+              TZ: "America/New_York"
+              BASE_URL: https://mealie.ctec.run
+              DB_ENGINE: postgres
+              SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
+              SMTP_PORT: 25
+              SMTP_FROM_NAME: Mealie
+              SMTP_FROM_EMAIL: noreply@ctec.run
+              SMTP_AUTH_STRATEGY: NONE
+            envFrom: *envFrom
+            # resources:
+            #   requests:
+            #     memory: 250Mi
+            #     cpu: 50m
+            #   limits:
+            #     memory: 500Mi
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: &port 9000
+
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.ctec.run"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+
+
+    persistence:
+      data:
+        enabled: true
+        existingClaim: *app
+        globalMounts:
+          - path: /app/data
