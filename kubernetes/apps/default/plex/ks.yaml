@@ -11,14 +11,14 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/volsync-move
   dependsOn:
     - name: volsync
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/media/plex/app
+  path: ./kubernetes/apps/default/plex/app
   postBuild:
     substitute:
       HOSTNAME: plex.ctec.run
@@ -32,5 +32,5 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: media
+  targetNamespace: default
   wait: false
