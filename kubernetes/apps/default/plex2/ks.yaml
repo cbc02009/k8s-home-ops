@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app plex
+  name: &app plex2
 spec:
   commonMetadata:
     labels:
@@ -18,12 +18,12 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: ./kubernetes/apps/default/plex/app
+  path: ./kubernetes/apps/default/plex2/app
   postBuild:
     substitute:
-      HOSTNAME: plex.ctec.run
+      HOSTNAME: plex2.ctec.run
       APP: *app
-      IP: 10.6.0.12
+      IP: 10.6.0.18
       PVC_CAPACITY: "50Gi"
       APP_UID: "2000"
       APP_GID: "2000"
