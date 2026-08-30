@@ -6,6 +6,7 @@ metadata:
   name: &app plex
 spec:
   interval: 1h
+  timeout: 20m
   chartRef:
     kind: OCIRepository
     name: *app
