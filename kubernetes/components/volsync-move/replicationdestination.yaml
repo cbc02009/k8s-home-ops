@@ -32,7 +32,7 @@ spec:
             path: /mnt/tank/k8s/kopia
             server: shana.ctec.internal
     repository: ${APP}-volsync
-    # restoreAsOf: "2026-08-28T10:30:00Z"
+    restoreAsOf: "2026-08-24T10:30:00Z"
     sourceIdentity:
       sourceName: ${APP}
       sourceNamespace: ${MOVER_NAMESPACE}
