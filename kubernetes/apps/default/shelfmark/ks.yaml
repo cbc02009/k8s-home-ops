@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: shelfmark
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-move
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -20,6 +20,7 @@ spec:
       APP: shelfmark
       HOSTNAME: shelfmark.ctec.run
       PROXY_HOSTNAME: shelfmark-proxy.ctec.run
+      MOVER_NAMESPACE: downloads
   prune: true
   sourceRef:
     kind: GitRepository

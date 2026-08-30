@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-move
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -22,6 +22,7 @@ spec:
       AUTH_HOSTNAME: auth.ctec.run
       APP_UID: "1000"
       APP_GID: "1000"
+      MOVER_NAMESPACE: selfhosted
   prune: true
   sourceRef:
     kind: GitRepository
