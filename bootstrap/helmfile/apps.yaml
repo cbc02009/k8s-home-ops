@@ -68,24 +68,26 @@ releases:
     needs:
       - cert-manager/cert-manager
 
-  - name: onepassword
+  - name: onepassword-connect
     namespace: security
     hooks:
-      - # Wait for ExternalSecrets CRDs to be available
-        command: bash
+      - # Wait for CRDs to be available
+        command: kubectl
         args:
-          - -c
-          - until kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do sleep 5; done
+          - wait
+          - --for=create
+          - crd/clustersecretstores.external-secrets.io
+          - --timeout=2m
         events:
           - postsync
         showlogs: true
-      - # Apply ExternalSecret Resources
+      - # Apply Resources
         command: kubectl
         args:
           - apply
           - --server-side
-          - --field-manager=kustomize-controller
-          - --filename=../../kubernetes/apps/security/onepassword/app/clustersecretstore.yaml
+          - --force-conflicts
+          - --filename=../../kubernetes/apps/{{ .Release.Namespace }}/{{ .Release.Name }}/app/clustersecretstore.yaml
         events:
           - postsync
         showlogs: true

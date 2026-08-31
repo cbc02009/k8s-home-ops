@@ -12,7 +12,7 @@ nodes := `talosctl config info -o yaml | yq -r -e '.nodes | join (" ")'`
 
 [confirm('Bootstrap cluster? [y|N]')]
 [doc('Bootstrap a Talos & Kubernetes cluster end-to-end')]
-cluster: k8s base apps kubeconfig
+cluster: k8s (kubeconfig "node") base apps kubeconfig
 
 [doc('Install Talos')]
 talos:

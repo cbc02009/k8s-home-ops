@@ -3,8 +3,6 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 
 kubernetes_dir := justfile_dir() + '/kubernetes'
 
-export KUBECONFIG := kubernetes_dir + '/kubeconfig'
-
 [private]
 default:
   just -l talos
@@ -26,12 +24,12 @@ prune-pods:
 
 [doc('Apply local Flux Kustomization')]
 apply-ks ns ks:
-  just k8s render-local-ks "{{ ns }}" "{{ ks }}" \
+  just kube render-local-ks "{{ ns }}" "{{ ks }}" \
   | kubectl apply --server-side --force-conflicts --field-manager=kustomize-controller -f /dev/stdin
 
 [doc('Delete local Flux Kustomization')]
 delete-ks ns ks:
-  just k8s render-local-ks "{{ ns }}" "{{ ks }}" \
+  just kube render-local-ks "{{ ns }}" "{{ ks }}" \
   | kubectl delete -f /dev/stdin
 
 [doc('Sync single Flux GitRepo')]
@@ -53,25 +51,25 @@ es-sync ns name:
 [doc('Sync all Flux HelmReleases')]
 hr-sync-all:
   kubectl get hr --no-headers -A | while read -r ns name _; do \
-    just k8s hr-sync "$ns" "$name"; \
+    just kube hr-sync "$ns" "$name"; \
   done
 
 [doc('Sync all Flux GitRepos')]
 gr-sync-all:
   kubectl get gitrepository --no-headers -A | while read -r ns name _; do \
-    just k8s gr-sync "$ns" "$name"; \
+    just kube gr-sync "$ns" "$name"; \
   done
 
 [doc('Sync all Flux Kustomizations')]
 ks-sync-all:
   kubectl get ks --no-headers -A | while read -r ns name _; do \
-    just k8s ks-sync "$ns" "$name"; \
+    just kube ks-sync "$ns" "$name"; \
   done
 
 [doc('Sync all ExternalSecrets')]
 es-sync-all:
   kubectl get es --no-headers -A | while read -r ns name _; do \
-    just k8s es-sync "$ns" "$name"; \
+    just kube es-sync "$ns" "$name"; \
   done
 
 [doc('Snapshot all VolSync ReplicationSource')]
@@ -81,7 +79,7 @@ snapshot ns name:
 [doc('Snapshot all VolSync ReplicationSources')]
 snapshot-all:
   kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
-    just k8s snapshot "$ns" "$name"; \
+    just kube snapshot "$ns" "$name"; \
   done
 
 [doc('Suspend or resume Keda ScaledObjects')]
@@ -91,7 +89,7 @@ keda state ns name:
 [doc('Suspend or resume Keda ScaledObjects')]
 keda-all state:
   kubectl get scaledobjects --no-headers -A | while read -r ns name _; do \
-    just k8s keda "{{ state }}" "$ns" "$name"; \
+    just kube keda "{{ state }}" "$ns" "$name"; \
   done
 
 [private]
