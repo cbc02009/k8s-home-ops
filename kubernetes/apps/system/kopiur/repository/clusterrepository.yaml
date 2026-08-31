@@ -12,8 +12,18 @@ spec:
       path: /repo
       volume:
         nfs:
-          path: /mnt/tank/k8s/kopiur
+          path: /mnt/tank/k8s/kopia
           server: shana.ctec.internal
+  catalog:
+    periodicRefresh: true # opt in to repeated re-scans (default false = scan once)
+    refreshInterval: 1h # cadence when periodicRefresh is on (default 1h, minimum 30s)
+    retain:
+      perIdentity: 100 # newest N rows per username@hostname:path
+      maxAgeDays: 90 # no rows for snapshots older than this
+  maintenance:
+    enabled: false
+  create:
+    enabled: false
   credentialProjection:
     allowed: true
   encryption:
