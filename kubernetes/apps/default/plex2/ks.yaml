@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    - ../../../../components/volsync-move
+    - ../../../../components/volsync
   dependsOn:
     - name: volsync
       namespace: system
@@ -27,7 +27,6 @@ spec:
       PVC_CAPACITY: "50Gi"
       APP_UID: "2000"
       APP_GID: "2000"
-      MOVER_NAMESPACE: media
   prune: true
   sourceRef:
     kind: GitRepository
