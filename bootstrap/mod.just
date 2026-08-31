@@ -8,10 +8,11 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 bootstrap_dir := justfile_dir() + '/bootstrap'
 kubernetes_dir := justfile_dir() + '/kubernetes'
 controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
-nodes := 'uiharu miri sakura'
+nodes := `talosctl config info -o yaml | yq -r -e '.nodes | join (" ")'`
 
-[private]
-default: kubernetes wait namespaces resources crds apps kubeconfig
+[confirm('Bootstrap cluster? [y|N]')]
+[doc('Bootstrap a Talos & Kubernetes cluster end-to-end')]
+cluster: k8s base apps kubeconfig
 
 [doc('Install Talos')]
 talos:
@@ -27,11 +28,11 @@ talos:
   done
 
 [doc('Install Kubernetes')]
-kubernetes:
-  just log info "Running stage..." "stage" "$0"
-  until op=$(talosctl -n "{{ controller }}" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do \
-    just log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "$0"; \
-    sleep 5; \
+k8s:
+  just log info "Running stage..." "stage" "{{ recipe_name() }}"
+  until op=$(talosctl -n "{{ controller }}" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do
+    just log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "{{ recipe_name() }}"
+    sleep 5
   done
 
 [doc('Fetch kubeconfig')]
@@ -57,7 +58,7 @@ wait:
   fi
 
 [private]
-base: api-ready nodes-ready
+base: nodes-ready
     just log info "Running stage..." "stage" "{{ recipe_name() }}"
     if ! kustomize build {{ source_directory() }}/kustomize/personal | just template - | kubectl apply --server-side --force-conflicts -f -; then
         just log fatal "Failed to apply personal manifests" "stage" "{{ recipe_name() }}"

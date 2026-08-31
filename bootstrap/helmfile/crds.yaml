@@ -24,17 +24,17 @@ releases:
   - name: envoy-gateway
     namespace: network
 
-  - name: externaldns-cloudflare
-    namespace: network
+  # - name: externaldns-cloudflare
+  #   namespace: network
 
   - name: grafana-operator
-    namespace: obersvability
+    namespace: observability
 
   - name: cloudnative-pg
     namespace: databases
 
   - name: kube-prometheus-stack
-    namespace: obersvability
+    namespace: observability
 
   - name: snapshot-controller
     namespace: kube-system
