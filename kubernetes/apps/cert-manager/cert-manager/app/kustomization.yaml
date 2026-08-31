@@ -7,7 +7,7 @@ resources:
   - ./externalsecret.yaml
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
-  - ./issuer-letsencrypt-prd.yaml
-  - ./issuer-letsencrypt-staging.yaml
+  # - ./issuer-letsencrypt-prd.yaml
+  # - ./issuer-letsencrypt-staging.yaml
   - ./ocirepository.yaml
   - ./prometheusrule.yaml

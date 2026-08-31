@@ -1,5 +1,8 @@
-set positional-arguments := true
-set quiet := true
+set default-list
+set default-script
+set no-exit-message
+set quiet
+set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
 bootstrap_dir := justfile_dir() + '/bootstrap'
@@ -53,32 +56,41 @@ wait:
     done \
   fi
 
-[doc('Apply Kubernetes namespaces')]
-namespaces:
-  just log info "Running stage..." "stage" "$0"
-  find "{{ kubernetes_dir }}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r ns; do \
-    if ! kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply --server-side -f -; then \
-      just log fatal "Failed to apply namespace" "stage" "create_namespaces" "namespace" "$ns"; \
-    fi; \
-  done
+[private]
+base: api-ready nodes-ready
+    just log info "Running stage..." "stage" "{{ recipe_name() }}"
+    if ! kustomize build {{ source_directory() }}/kustomize/personal | just template - | kubectl apply --server-side --force-conflicts -f -; then
+        just log fatal "Failed to apply personal manifests" "stage" "{{ recipe_name() }}"
+    fi
+    if ! helmfile -f "{{ source_directory() }}/helmfile/crds.yaml" template -q | yq ea -r -e 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --force-conflicts -f -; then
+        just log fatal "Failed to apply base crds" "stage" "{{ recipe_name() }}"
+    fi
 
-[doc('Apply Kubernetes resources')]
-resources:
-  just log info "Running stage..." "stage" "$0"
-  if ! just template "{{ bootstrap_dir }}/resources.yaml.j2" | kubectl apply --server-side --force-conflicts -f -; then \
-    just log fatal "Failed to apply resources" "stage" "$0"; \
-  fi;
-
-[doc('Apply Helmfile CRDs')]
-crds:
-  just log info "Running stage..." "stage" "$0"
-  if ! helmfile -f "{{ bootstrap_dir }}/helmfile.d/00-crds.yaml" template -q | yq ea -e 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then \
-      just log fatal "Failed to apply crds" "stage" "$0"; \
-  fi;
-
-[doc('Apply Helmfile Apps')]
+[private]
 apps:
-  just log info "Running stage..." "stage" "$0"
-  if ! helmfile -f "{{ bootstrap_dir }}/helmfile.d/01-apps.yaml" sync --hide-notes; then \
-    just log fatal "Failed to sync helmfile" "stage" "$0"; \
-  fi
+    just log info "Running stage..." "stage" "{{ recipe_name() }}"
+    if ! helmfile -f "{{ source_directory() }}/helmfile/apps.yaml" sync --hide-notes; then
+        just log fatal "Failed to sync helmfile" "stage" "{{ recipe_name() }}"
+    fi
+
+# Wait until every apiserver answers /readyz. Helm and kubectl calls after this stage are not retried.
+[private]
+api-ready:
+    just log info "Running stage..." "stage" "{{ recipe_name() }}"
+    for n in {{ nodes }}; do
+        until [[ "$(curl -ks -o /dev/null -w '%{http_code}' --connect-timeout 2 "https://${n}:6443/readyz")" == "200" ]]; do
+            just log info "Waiting for kube-apiserver. Retrying in 5 seconds..." "stage" "{{ recipe_name() }}" "node" "$n"
+            sleep 5
+        done
+    done
+
+# Wait until every node registers as Ready=False. They only become Ready=True once the CNI is healthy.
+[private]
+nodes-ready:
+    just log info "Running stage..." "stage" "{{ recipe_name() }}"
+    if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then
+        until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do
+            just log info "Nodes not available, waiting for nodes to be available. Retrying in 5 seconds..." "stage" "{{ recipe_name() }}"
+            sleep 5
+        done
+    fi
