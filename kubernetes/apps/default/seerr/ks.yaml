@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-move
   dependsOn:
     - name: volsync
       namespace: system
@@ -25,6 +25,7 @@ spec:
       HOSTNAME: requests.ctec.run
       APP: *app
       PVC_CAPACITY: "5Gi"
+      MOVER_NAMESPACE: downloads
   prune: true
   sourceRef:
     kind: GitRepository
