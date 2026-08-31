@@ -25,8 +25,8 @@ spec:
       APP: *app
       IP: 10.6.0.12
       PVC_CAPACITY: "50Gi"
-      APP_UID: "2000"
-      APP_GID: "2000"
+      APP_UID: "1000"
+      APP_GID: "1000"
       MOVER_NAMESPACE: media
   prune: true
   sourceRef:
