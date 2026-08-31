@@ -5,9 +5,9 @@ clusterName: &clusterName home-ops
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
 talosVersion: v1.13.9
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.36.1
+kubernetesVersion: v1.36.3
 
-endpoint: https://10.0.2.9:6443
+endpoint: https://k8s.internal:6443
 
 allowSchedulingOnMasters: true
 
@@ -15,7 +15,7 @@ additionalApiServerCertSans: &san
   - 127.0.0.1
   - 10.6.0.5
   - 10.0.2.9
-  - k8s.ctec.internal
+  - k8s.internal
 
 additionalMachineCertSans: *san
 
@@ -44,8 +44,8 @@ nodes:
           mode: active-backup
         dhcp: true
         mtu: 9000
-        vip:
-          ip: 10.0.2.9
+        # vip:
+        #   ip: 10.0.2.9
         vlans:
           - # VPN
             vlanId: 50
