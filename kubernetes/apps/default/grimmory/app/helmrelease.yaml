@@ -25,7 +25,7 @@ spec:
           mariadb:
             image:
               repository: docker.io/library/mariadb
-              tag: 12.3.2-noble
+              tag: 12.3.3-noble
             env:
               MARIADB_DATABASE: *app
               MARIADB_PASSWORD:
@@ -65,7 +65,7 @@ spec:
           wait-for-mariadb:
             image:
               repository: wait4x/wait4x
-              tag: 3.6.0
+              tag: 3.7.1
             args:
               - "mysql"
               - "grimmory:$(DB_PASSWORD)@tcp(localhost:3306)/grimmory"
@@ -79,7 +79,7 @@ spec:
           grimmory:
             image:
               repository: ghcr.io/grimmory-tools/grimmory
-              tag: v3.2.4
+              tag: v3.3.3
             command:
               - java
             args:

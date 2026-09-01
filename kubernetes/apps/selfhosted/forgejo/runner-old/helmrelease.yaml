@@ -100,7 +100,7 @@ spec:
           daemon:
             image:
               repository: docker
-              tag: 29.6.2-dind@sha256:bfec1f5159c63a81ca6fdedbd81404d2c0e16378ed0feec3bb3fbf3998847659
+              tag: 29.7.2-dind@sha256:3ef33f2e220b79ed3ef3b99d81746f06f306cd6340e2cb7331d17ae996e74cb6
             resources:
               requests:
                 cpu: 10m

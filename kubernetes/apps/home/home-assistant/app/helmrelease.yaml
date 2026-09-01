@@ -26,7 +26,7 @@ spec:
           01-init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: '18.4.0'
+              tag: '18.6.0'
             envFrom:
               - secretRef:
                   name: *app
@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.7.4
+              tag: 2026.8.3
             env:
               VENV_FOLDER: /venv
               TZ: "America/New_York"
@@ -56,7 +56,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.128.0@sha256:bd4a3a022ff016954bf9ae6ea0bce6c7eef96a69da4d2fe34552638f32d4820c
+              tag: 4.135.0@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
             args:
               - --auth
               - none
