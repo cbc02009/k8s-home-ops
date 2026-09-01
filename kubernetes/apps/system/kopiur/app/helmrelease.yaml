@@ -18,6 +18,9 @@ spec:
     extraVolumeMounts:
       - name: repo
         mountPath: /repo
+    features:
+      kopiaUi:
+        enabled: true
     monitoring:
       dashboards:
         enabled: true

@@ -34,3 +34,41 @@ spec:
   identityDefaults:
     hostnameExpr: namespace
     usernameExpr: policyName
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: b2
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    s3:
+      bucket: kopia-cbc02009
+      prefix: "" # match wherever the old tooling put the repo (often the root)
+      endpoint: s3.us-east-005.backblazeb2.com
+      region: us-east-1
+      auth:
+        secretRef:
+          name: kopiur-b2-secret
+  catalog:
+    periodicRefresh: true # opt in to repeated re-scans (default false = scan once)
+    refreshInterval: 1h # cadence when periodicRefresh is on (default 1h, minimum 30s)
+    retain:
+      perIdentity: 100 # newest N rows per username@hostname:path
+      maxAgeDays: 90 # no rows for snapshots older than this
+  maintenance:
+    enabled: false
+  create:
+    enabled: false
+  credentialProjection:
+    allowed: true
+  encryption:
+    passwordSecretRef:
+      name: kopiur-b2-secret
+      namespace: system
+      key: KOPIA_PASSWORD
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: policyName
