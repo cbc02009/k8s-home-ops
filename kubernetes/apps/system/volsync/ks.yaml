@@ -41,7 +41,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: kopiur
+    - name: kopia
   interval: 1h
   path: './kubernetes/apps/system/volsync/maintenance'
   prune: true
