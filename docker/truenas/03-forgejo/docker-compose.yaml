@@ -51,7 +51,7 @@ services:
     depends_on:
       - database
   database:
-    image: postgres:17.10@sha256:ebba4f4de37f08f138f97c1443c987a435e783177afedcc4aaf2da1930fbc37a
+    image: postgres:17.11@sha256:67f41722b7a8cbdb868a44a4995c846eddfdc2973bccb291ce937dce88ad5675
     container_name: forgejo-database
     restart: unless-stopped
     environment:
