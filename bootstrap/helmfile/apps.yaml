@@ -97,7 +97,7 @@ releases:
   - name: flux-operator
     namespace: flux-system
     needs:
-      - security/onepassword
+      - security/onepassword-connect
 
   - name: flux-instance
     namespace: flux-system

@@ -3,7 +3,24 @@ machine:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
     extraConfig:
+      crashLoopBackOff:
+        maxContainerRestartPeriod: 60s
+      imageMaximumGCAge: 168h
+      maxParallelImagePulls: 3
       serializeImagePulls: false
+      shutdownGracePeriod: 90s
+      shutdownGracePeriodCriticalPods: 60s
     nodeIP:
       validSubnets:
         - 10.0.2.0/24
+# ---
+# apiVersion: v1alpha1
+# kind: KubeAuthenticationConfig
+# configuration:
+#   anonymous:
+#     conditions:
+#       - path: /livez
+#       - path: /readyz
+#       - path: /healthz
+#     enabled: true
+#   jwt: []

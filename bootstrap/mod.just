@@ -38,7 +38,7 @@ k8s:
 [doc('Fetch kubeconfig')]
 kubeconfig lb="cilium":
   just log info "Running stage..." "stage" "$0"
-  if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name home-ops {{ justfile_dir() }}; then \
+  if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name home-ops; then \
     just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
   fi
   if [[ "{{ lb }}" != "cilium" ]]; then \
