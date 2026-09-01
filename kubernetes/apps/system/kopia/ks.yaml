@@ -12,7 +12,7 @@ spec:
   components:
     - ../../../../components/zeroscaler
   dependsOn:
-    - name: kopiur
+    - name: volsync
       namespace: system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2

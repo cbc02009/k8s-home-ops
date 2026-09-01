@@ -13,7 +13,7 @@ spec:
     - ../../../../components/pvc
     - ../../../../components/zeroscaler
   dependsOn:
-    - name: kopiur
+    - name: volsync
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
