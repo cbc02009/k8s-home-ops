@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "${KOPIUR_CLAIM:-${APP}}"
+  name: "${PVC_CLAIM:-${APP}}"
 spec:
   accessModes:
     - ${PVC_ACCESSMODES:=ReadWriteOnce}
@@ -35,6 +35,26 @@ spec:
       username: seerr
       hostname: downloads
       # sourcePath: /data
-      # snapshotID: k1f1ec0a8
+      snapshotID: k4ad403b2c7852ea739369d3587361b0c
   target:
     populator: {}
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: seerr
+spec:
+  repository:
+    name: nas
+  sources:
+    - pvc:
+        name: "${PVC_CLAIM:-${APP}}"
+  # CONTINUE the original lineage: keep writing under billing/postgres-data so the
+  # new cluster's snapshots dedup against the carried-over history. Remove this
+  # block to fork a fresh timeline under payments/postgres-data instead.
+  identity:
+    username: ${APP}
+    hostname: default
+  retention:
+    keepDaily: 14
+    keepWeekly: 6
