@@ -24,7 +24,7 @@ resources:
   # - ./recyclarr/ks.yaml
   - ./rustdesk/ks.yaml
   # - ./sabnzbd/ks.yaml
-  # - ./seerr/ks.yaml
+  - ./seerr/ks.yaml
   - ./searxng/ks.yaml
   # - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml

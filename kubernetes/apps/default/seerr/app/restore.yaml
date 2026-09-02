@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${KOPIUR_CLAIM:-${APP}}"
+spec:
+  accessModes:
+    - ${PVC_ACCESSMODES:=ReadWriteOnce}
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: ${APP}
+  resources:
+    requests:
+      storage: ${PVC_CAPACITY:=5Gi}
+  storageClassName: ${PVC_STORAGECLASS:=ceph-block}
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/restore_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: ${APP}
+spec:
+  mover:
+    securityContext:
+      runAsUser: ${APP_UID:=2000}
+      runAsGroup: ${APP_GID:=2000}
+  policy:
+    onMissingSnapshot: Fail
+  repository:
+    kind: ClusterRepository
+    name: nas
+  source:
+    identity:
+      username: seerr
+      hostname: downloads
+      sourcePath: /data
+      # snapshotID: k1f1ec0a8
+  target:
+    populator: {}

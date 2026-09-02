@@ -7,7 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  - ./descheduler/ks.yaml
+  # - ./descheduler/ks.yaml
   - ./generic-device-plugin/ks.yaml
   - ./kopia/ks.yaml
   - ./kopiur/ks.yaml

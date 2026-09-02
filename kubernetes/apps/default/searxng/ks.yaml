@@ -8,7 +8,7 @@ spec:
   components:
     - ../../../../components/dragonfly
   dependsOn:
-    - name: dragonfly-operator
+    - name: dragonfly
       namespace: databases
   interval: 1h
   path: "./kubernetes/apps/default/searxng/app"
