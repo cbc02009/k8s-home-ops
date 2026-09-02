@@ -34,8 +34,8 @@ spec:
     identity:
       username: seerr
       hostname: downloads
-      # sourcePath: /data
-      snapshotID: k4ad403b2c7852ea739369d3587361b0c
+      sourcePath: /pvc/${APP}
+      # snapshotID: k4ad403b2c7852ea739369d3587361b0c
   target:
     populator: {}
 ---
@@ -44,6 +44,7 @@ kind: SnapshotPolicy
 metadata:
   name: seerr
 spec:
+  adoption: Ignore
   repository:
     kind: ClusterRepository
     name: nas
