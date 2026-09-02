@@ -16,7 +16,3 @@ spec:
         - name: b2-kopia-ui
           namespace: system
           port: 80
-      matches:
-        - path:
-            type: PathPrefix
-            value: /hook/
