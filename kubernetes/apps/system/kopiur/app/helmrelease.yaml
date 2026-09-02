@@ -10,14 +10,14 @@ spec:
     name: kopiur
   interval: 30m
   values:
-    extraVolumes:
-      - name: repo
-        nfs:
-          path: /mnt/tank/k8s/kopia
-          server: shana.ctec.internal
-    extraVolumeMounts:
-      - name: repo
-        mountPath: /repo
+    # extraVolumes:
+    #   - name: repo
+    #     nfs:
+    #       path: /mnt/tank/k8s/kopia
+    #       server: shana.ctec.internal
+    # extraVolumeMounts:
+    #   - name: repo
+    #     mountPath: /repo
     features:
       kopiaUi:
         enabled: true
