@@ -16,7 +16,7 @@ resources:
   # - ./karakeep/ks.yaml
   - ./lidarr/ks.yaml
   # - ./mealie/ks.yaml
-  # - ./plex/ks.yaml
+  - ./plex/ks.yaml
   # - ./plex2/ks.yaml
   - ./prowlarr/ks.yaml
   # - ./qbittorrent/ks.yaml
