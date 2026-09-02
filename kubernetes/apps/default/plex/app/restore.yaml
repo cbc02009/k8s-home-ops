@@ -34,7 +34,8 @@ spec:
     identity:
       username: plex
       hostname: media
-      sourcePath: /pvc/${APP}
+      sourcePath: /data
+      asOf: "2026-08-28T23:30:00Z"
       # snapshotID: k4ad403b2c7852ea739369d3587361b0c
   target:
     populator: {}
