@@ -52,12 +52,7 @@ spec:
   sources:
     - pvc:
         name: "${PVC_CLAIM:-${APP}}"
-  # CONTINUE the original lineage: keep writing under billing/postgres-data so the
-  # new cluster's snapshots dedup against the carried-over history. Remove this
-  # block to fork a fresh timeline under payments/postgres-data instead.
-  identity:
-    username: ${APP}
-    hostname: default
+
   retention:
     keepDaily: 14
     keepWeekly: 6
