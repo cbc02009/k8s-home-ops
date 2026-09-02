@@ -45,6 +45,7 @@ metadata:
   name: seerr
 spec:
   repository:
+    kind: ClusterRepository
     name: nas
   sources:
     - pvc:
