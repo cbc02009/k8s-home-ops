@@ -34,7 +34,7 @@ spec:
     identity:
       username: seerr
       hostname: downloads
-      sourcePath: /data
+      # sourcePath: /data
       # snapshotID: k1f1ec0a8
   target:
     populator: {}
