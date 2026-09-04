@@ -65,7 +65,7 @@ spec:
       perIdentity: 100 # newest N rows per username@hostname:path
       maxAgeDays: 90 # no rows for snapshots older than this
   maintenance:
-    enabled: false
+    enabled: true
   create:
     enabled: false
   credentialProjection:
