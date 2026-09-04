@@ -7,25 +7,25 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  # - ./actual/ks.yaml
+  - ./actual/ks.yaml
   - ./animarr/ks.yaml
   - ./atuin/ks.yaml
-  # - ./grimmory/ks.yaml
+  - ./grimmory/ks.yaml
   - ./it-tools/ks.yaml
-  # - ./jellyfin/ks.yaml
-  # - ./karakeep/ks.yaml
+  - ./jellyfin/ks.yaml
+  - ./karakeep/ks.yaml
   - ./lidarr/ks.yaml
-  # - ./mealie/ks.yaml
+  - ./mealie/ks.yaml
   - ./plex/ks.yaml
   # - ./plex2/ks.yaml
   - ./prowlarr/ks.yaml
-  # - ./qbittorrent/ks.yaml
+  - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
-  # - ./recyclarr/ks.yaml
+  - ./recyclarr/ks.yaml
   - ./rustdesk/ks.yaml
-  # - ./sabnzbd/ks.yaml
+  - ./sabnzbd/ks.yaml
   - ./seerr/ks.yaml
   - ./searxng/ks.yaml
-  # - ./shelfmark/ks.yaml
+  - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
-  # - ./tautulli/ks.yaml
+  - ./tautulli/ks.yaml
