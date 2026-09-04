@@ -7,7 +7,7 @@ metadata:
 spec:
   components:
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
     - ../../../../components/zeroscaler
   dependsOn:
     - name: intel-gpu-resource-driver
@@ -19,6 +19,7 @@ spec:
       APP: jellyfin
       PVC_CAPACITY: 20Gi
       HOSTNAME: jellyfin.ctec.run
+      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    # - ../../../../components/kopiur
+    - ../../../../components/kopiur
   dependsOn:
     - name: kopiur
       namespace: system
@@ -27,6 +27,7 @@ spec:
       PVC_CAPACITY: "50Gi"
       APP_UID: "1000"
       APP_GID: "1000"
+      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

@@ -9,10 +9,10 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # components:
-  #   - ../../../../components/volsync-move
+  components:
+    - ../../../../components/kopiur
   dependsOn:
-    - name: volsync
+    - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -25,7 +25,7 @@ spec:
       HOSTNAME: requests.ctec.run
       APP: *app
       PVC_CAPACITY: "5Gi"
-      MOVER_NAMESPACE: downloads
+      OLD_NS: downloads
   prune: true
   sourceRef:
     kind: GitRepository

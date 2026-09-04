@@ -11,9 +11,17 @@ spec:
       runAsGroup: ${APP_GID:=2000}
   policy:
     onMissingSnapshot: Continue
+  repository:
+    kind: ClusterRepository
+    name: volsync
   source:
-    fromPolicy:
-      name: ${APP}
-      offset: 0
+    # fromPolicy:
+    #   name: ${APP}
+    #   offset: 0
+    identity:
+      username: ${APP}
+      hostname: ${OLD_NS:=default}
+      sourcePath: /data
+      asOf: "2026-08-28T23:30:00Z"
   target:
     populator: {}

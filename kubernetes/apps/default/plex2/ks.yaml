@@ -11,9 +11,9 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
-    - name: volsync
+    - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -27,6 +27,7 @@ spec:
       PVC_CAPACITY: "50Gi"
       APP_UID: "2000"
       APP_GID: "2000"
+      OLD_NS: default
   prune: true
   sourceRef:
     kind: GitRepository

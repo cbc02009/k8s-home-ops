@@ -3,7 +3,7 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: ClusterRepository
 metadata:
-  name: nas
+  name: volsync
 spec:
   allowedNamespaces:
     all: true
@@ -13,6 +13,50 @@ spec:
       volume:
         nfs:
           path: /mnt/tank/k8s/kopia
+          server: shana.ctec.internal
+  catalog:
+    periodicRefresh: true # opt in to repeated re-scans (default false = scan once)
+    refreshInterval: 1h # cadence when periodicRefresh is on (default 1h, minimum 30s)
+    retain:
+      perIdentity: 100 # newest N rows per username@hostname:path
+      maxAgeDays: 90 # no rows for snapshots older than this
+  maintenance:
+    enabled: false
+  create:
+    enabled: false
+  credentialProjection:
+    allowed: true
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: system
+      key: KOPIA_PASSWORD
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: policyName
+  server:
+    namespace: system
+    auth:
+      insecure:
+        acknowledgeInsecure: true
+    service:
+      port: 80
+      type: ClusterIP
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    filesystem:
+      path: /repo
+      volume:
+        nfs:
+          path: /mnt/tank/k8s/kopiur
           server: shana.ctec.internal
   catalog:
     periodicRefresh: true # opt in to repeated re-scans (default false = scan once)

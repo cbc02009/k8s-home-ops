@@ -52,30 +52,32 @@ reboot-node node:
   gum confirm "Reboot node {{ node }}?" && \
     talosctl -n {{ node }} reboot -m powercycle || exit 0
 
+[confirm('Reset node ' + node + ' [y|N] ?')]
 [doc('Reset a node')]
-reset-node node mode="reboot":
-  gum confirm "Reset node {{ node }}?" && \
-    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ if mode == "reboot" { "--reboot" } else { "" } }} || exit 0
+reset-node node *args:
+    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ args }}
 
 [doc('Reset all nodes in the cluster')]
 reset-cluster mode="reboot":
   just talos reset-node {{ nodes }} {{ mode }};\
 
+[confirm('Upgrade Kubernetes to ' + version + ' [y|N] ?')]
 [doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
-  talosctl -n "{{ controller }}" upgrade-k8s --to {{ version }}
+    talosctl -n "$(talosctl config info -o yaml | yq -r -e '.endpoints[0]')" upgrade-k8s --to {{ version }}
 
+[confirm('Upgrade node ' + node + ' [y|N] ?')]
 [doc('Upgrade Talos version on a node')]
-upgrade-node node:
-  talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image {{ node }})" -m powercycle --timeout=10m
+upgrade-node node *args:
+    talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image "{{ node }}")" -m powercycle --timeout=10m {{ args }}
 
 [doc('Download Talos machine image')]
-download-image version schematic:
-  gum spin --title "Downloading Talos {{ version }} ..." -- \
-  curl -sfL --remove-on-error --retry 5 --retry-delay 5 --retry-all-errors \
-      -o "{{ talos_dir }}/talos-{{ version }}-{{ replace_regex(schematic, '^(.{8}).*', '$1') }}.iso" \
-      "https://factory.talos.dev/image/{{ schematic }}/{{ version }}/metal-amd64.iso"
-  just log info "Downloaded Talos" version "{{ version }}" schematic "{{ schematic }}"
+download-image version node="":
+    export SCHEMATIC="$(just talos schematic-id "{{ node }}")"
+    curl -fL --remove-on-error --retry 5 --retry-delay 5 --retry-all-errors --progress-bar \
+        -o "{{ source_directory() }}/talos-{{ version }}-${SCHEMATIC:0:8}.iso" \
+        "https://factory.talos.dev/image/${SCHEMATIC}/{{ version }}/metal-amd64.iso"
+    just log info "Downloaded Talos" version "{{ version }}" schematic "${SCHEMATIC}"
 
 # [private]
 machine-controller node:

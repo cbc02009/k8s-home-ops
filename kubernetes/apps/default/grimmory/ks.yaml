@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/kopiur
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -21,7 +21,7 @@ spec:
       APP_UID: "1000"
       APP_GID: "1000"
       HOSTNAME: grimmory.ctec.run
-      MOVER_NAMESPACE: media
+      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/kopiur
   dependsOn:
     - name: postgres-cluster
       namespace: databases
@@ -25,7 +25,7 @@ spec:
       HOSTNAME: mealie.ctec.run
       APP: *app
       PVC_CAPACITY: "15Gi"
-      MOVER_NAMESPACE: selfhosted
+      OLD_NS: selfhosted
   prune: true
   sourceRef:
     kind: GitRepository

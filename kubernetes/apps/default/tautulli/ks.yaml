@@ -9,9 +9,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/kopiur
   dependsOn:
-    - name: volsync
+    - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -22,7 +22,7 @@ spec:
       HOSTNAME: tautulli.ctec.run
       APP: *app
       PVC_CAPACITY: "10Gi"
-      MOVER_NAMESPACE: media
+      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

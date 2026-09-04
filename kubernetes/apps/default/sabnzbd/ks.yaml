@@ -10,10 +10,10 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/kopiur
     - ../../../../components/zeroscaler
   dependsOn:
-    - name: volsync
+    - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -26,7 +26,7 @@ spec:
       HOSTNAME: sab.ctec.run
       APP: *app
       PVC_CAPACITY: "1Gi"
-      MOVER_NAMESPACE: downloads
+      OLD_NS: downloads
   prune: true
   sourceRef:
     kind: GitRepository

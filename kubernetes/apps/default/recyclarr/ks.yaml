@@ -23,8 +23,9 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   postBuild:
     substitute:
       APP: *app
       PVC_CAPACITY: 1Gi
+      OLD_NS: downloads

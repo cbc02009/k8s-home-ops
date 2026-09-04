@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync-move
+    - ../../../../components/kopiur
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -19,7 +19,7 @@ spec:
     substitute:
       APP: *app
       HOSTNAME: actual.ctec.run
-      MOVER_NAMESPACE: selfhosted
+      OLD_NS: selfhosted
   prune: true
   sourceRef:
     kind: GitRepository

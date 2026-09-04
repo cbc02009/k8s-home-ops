@@ -32,8 +32,8 @@ spec:
     name: nas
   source:
     identity:
-      username: seerr
-      hostname: downloads
+      username: ${APP}
+      hostname: ${OLD_NS}
       sourcePath: /data
       asOf: "2026-08-28T23:30:00Z"
       # snapshotID: k4ad403b2c7852ea739369d3587361b0c
@@ -43,7 +43,7 @@ spec:
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotPolicy
 metadata:
-  name: seerr
+  name: ${APP}
 spec:
   adoption: Ignore
   repository:
@@ -52,12 +52,19 @@ spec:
   sources:
     - pvc:
         name: "${PVC_CLAIM:-${APP}}"
-  # CONTINUE the original lineage: keep writing under billing/postgres-data so the
-  # new cluster's snapshots dedup against the carried-over history. Remove this
-  # block to fork a fresh timeline under payments/postgres-data instead.
-  identity:
-    username: ${APP}
-    hostname: default
+
   retention:
-    keepDaily: 14
-    keepWeekly: 6
+    keepWeekly: 3
+    keepDaily: 7
+    keepHourly: 24
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: ${APP}
+spec:
+  policyRef:
+    name: ${APP}
+  schedule:
+    cron: H * * * *

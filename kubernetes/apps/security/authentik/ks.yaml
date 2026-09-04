@@ -9,9 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # components:
-  #   - ../../../../components/kopiur
-  # - ../../../../components/volsync
+  components:
+    - ../../../../components/kopiur
   dependsOn:
     - name: postgres-cluster
       namespace: databases
