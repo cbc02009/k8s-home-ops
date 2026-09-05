@@ -12,7 +12,7 @@ resources:
   - ./atuin/ks.yaml
   - ./grimmory/ks.yaml
   - ./it-tools/ks.yaml
-  - ./jellyfin/ks.yaml
+  # - ./jellyfin/ks.yaml
   - ./karakeep/ks.yaml
   - ./lidarr/ks.yaml
   - ./mealie/ks.yaml
