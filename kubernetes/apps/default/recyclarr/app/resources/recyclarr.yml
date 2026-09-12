@@ -58,6 +58,7 @@ sonarr:
               - WEBRip-720p
               - WEBDL-720p
           - name: Bluray-720p
+          - name: Bluray-576p
           - name: HDTV-720p
           - name: WEB 480p
             qualities:
