@@ -54,9 +54,15 @@ sonarr:
           - name: Bluray-1080p
           - name: HDTV-1080p
           - name: WEB 720p
+            qualities:
+              - WEBRip-720p
+              - WEBDL-720p
           - name: Bluray-720p
           - name: HDTV-720p
           - name: WEB 480p
+            qualities:
+              - WEBRip-480p
+              - WEBDL-480p
           - name: DVD
       - name: WEB-2160p (Combined)
         trash_id: c4cadd6b35b95f62c3d47a408e53e2f7
