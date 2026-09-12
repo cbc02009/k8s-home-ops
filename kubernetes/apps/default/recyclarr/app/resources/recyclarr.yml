@@ -46,6 +46,18 @@ sonarr:
         trash_id: 9d142234e45d6143785ac55f5a9e8dc9
         reset_unmatched_scores:
           enabled: true
+        qualities:
+          - name: WEB 1080p
+            qualities:
+              - WEBRip-1080p
+              - WEBDL-1080p
+          - name: Bluray-1080p
+          - name: HDTV-1080p
+          - name: WEB 720p
+          - name: Bluray-720p
+          - name: HDTV-720p
+          - name: WEB 480p
+          - name: DVD
       - name: WEB-2160p (Combined)
         trash_id: c4cadd6b35b95f62c3d47a408e53e2f7
         reset_unmatched_scores:
@@ -57,15 +69,6 @@ sonarr:
         assign_scores_to:
           - name: WEB-2160p (Combined)
             score: 100
-      - # Unwanted
-        trash_ids:
-          - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
-          - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
-          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
-          - 06d66ab109d4d2eddb2794d21526d140 # Retags
-        assign_scores_to:
-          - name: WEB-1080p
-          - name: WEB-2160p (Combined)
 
 radarr:
   movies:
