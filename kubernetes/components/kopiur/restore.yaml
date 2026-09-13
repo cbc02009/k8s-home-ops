@@ -13,15 +13,15 @@ spec:
     onMissingSnapshot: Continue
   repository:
     kind: ClusterRepository
-    name: volsync
+    name: nas
   source:
-    # fromPolicy:
-    #   name: ${APP}
-    #   offset: 0
-    identity:
-      username: ${APP}
-      hostname: ${OLD_NS:=default}
-      sourcePath: /data
-      asOf: "2026-08-28T23:30:00Z"
+    fromPolicy:
+      name: ${APP}
+      offset: 0
+    # identity:
+    #   username: ${APP}
+    #   hostname: ${OLD_NS:=default}
+    #   sourcePath: /data
+    #   asOf: "2026-08-28T23:30:00Z"
   target:
     populator: {}

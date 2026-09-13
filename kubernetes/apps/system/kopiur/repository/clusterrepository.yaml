@@ -65,7 +65,24 @@ spec:
       perIdentity: 100 # newest N rows per username@hostname:path
       maxAgeDays: 90 # no rows for snapshots older than this
   maintenance:
-    enabled: true
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 3 * * *
+        jitter: 1h
+  moverDefaults:
+    cache:
+      # Every cache PVC is 5Gi or larger (KOPIUR_CAPACITY default). Kopia's own
+      # defaults are 5000 MiB per budget, larger than the whole PVC, so the
+      # sweeper never runs and the cache fills the volume. The metadata budget
+      # applies twice: kopia caps the index-blobs cache at the same size.
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
+  parameters:
+    epoch:
+      minDuration: 1h
   create:
     enabled: false
   credentialProjection:
