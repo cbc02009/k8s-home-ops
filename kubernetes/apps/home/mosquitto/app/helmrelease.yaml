@@ -46,7 +46,7 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: mosquitto.ctec.run
+          external-dns.kubernetes.io/hostname: mosquitto.ctec.run
           lbipam.cilium.io/ips: ${IP}
         ports:
           http:

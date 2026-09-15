@@ -5,7 +5,7 @@ metadata:
   name: postgres-lb
   namespace: databases
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: postgres.ctec.run
+    external-dns.kubernetes.io/hostname: postgres.ctec.run
     lbipam.cilium.io/ips: ${IP}
 spec:
   type: LoadBalancer
