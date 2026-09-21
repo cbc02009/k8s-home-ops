@@ -94,7 +94,7 @@ spec:
               DATABASE_URL: jdbc:mariadb://localhost:3306/grimmory
               DATABASE_USERNAME: *app
               JDK_JAVA_OPTIONS: "--enable-preview --enable-native-access=ALL-UNNAMED"
-              OIDC_ALLOW_UNSAFE_HOST: true
+              OIDC_ALLOW_UNSAFE_HOSTS: true
             probes:
               liveness:
                 enabled: true
