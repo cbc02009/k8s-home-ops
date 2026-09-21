@@ -78,6 +78,31 @@ spec:
                 VL-Time-Field: timestamp
                 VL-Stream-Fields: stream,kubernetes.pod_name,kubernetes.container_name,kubernetes.pod_namespace
                 VL-Msg-Field: message,msg,_msg,log.msg,log.message,log
+        sources:
+          k8s:
+            type: kubernetes_logs
+          internal_metrics:
+            type: internal_metrics
+          kubernetes_audit_logs:
+            type: file
+            include:
+              - /var/log/audit/kube/*.log
+          talos_kernel_logs:
+            address: 0.0.0.0:6050
+            type: socket
+            mode: udp
+            max_length: 102400
+            decoding:
+              codec: json
+            host_key: __host
+          talos_service_logs:
+            address: 0.0.0.0:6051
+            type: socket
+            mode: udp
+            max_length: 102400
+            decoding:
+              codec: json
+            host_key: __host
         transforms:
           parser:
             type: remap
