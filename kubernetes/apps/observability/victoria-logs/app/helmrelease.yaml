@@ -33,3 +33,110 @@ spec:
             namespace: network
       serviceMonitor:
         enabled: true
+    vector:
+      enabled: true
+      podHostNetwork: true # needed for the sockets created below
+      dnsPolicy: ClusterFirstWithHostNet # without this the Vector pods can't resolve the VL pods because they're running in hostNetworking mode
+      containerPorts:
+        - name: prom-exporter
+          containerPort: 9090
+          protocol: TCP
+        - name: talos-krnl-sckt
+          containerPort: 6050
+          protocol: UDP
+        - name: talos-svc-skct
+          containerPort: 6051
+          protocol: UDP
+      customConfig:
+        data_dir: /vector-data-dir
+        api:
+          enabled: false
+          address: 0.0.0.0:8686
+          playground: true
+        sinks:
+          exporter:
+            type: prometheus_exporter
+            address: 0.0.0.0:9090
+            inputs: [internal_metrics]
+          vlogs:
+            type: elasticsearch
+            inputs:
+              - parser
+              - audit_parser
+              - talos_service_logs_xform
+              - talos_kernel_logs_xform
+            endpoints: << include "vlogs.es.urls" . >> # this dynamically populates via helm the VL endpoints
+            encoding:
+              except_fields:
+                - __host # this is always 127.0.0.1 so it's useless
+            mode: bulk
+            api_version: v8
+            compression: gzip
+            healthcheck:
+              enabled: false
+            request:
+              headers:
+                VL-Time-Field: timestamp
+                VL-Stream-Fields: stream,kubernetes.pod_name,kubernetes.container_name,kubernetes.pod_namespace
+                VL-Msg-Field: message,msg,_msg,log.msg,log.message,log
+        transforms:
+          parser:
+            type: remap
+            inputs:
+              - k8s
+            source: |
+              .log = parse_json(.message) ?? .message
+              del(.message)
+          audit_parser:
+            type: remap
+            inputs:
+              - kubernetes_audit_logs
+            source: |
+              . = parse_json(.message) ?? .message
+              parsed_timestamp, err = parse_timestamp(.requestReceivedTimestamp, format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              if err == null {
+                .timestamp = to_unix_timestamp(parsed_timestamp)
+              } else {
+                .timestamp = to_unix_timestamp(now())
+              }
+              # multiline strings in VRL are weird; the escape char has to be inside an actual string and not an expression
+              composed_message, err = "User: " + .user.username + "; " + .verb + " \
+                " + .objectRef.apiGroup + "/" + .objectRef.apiVersion + ":\
+                " + .objectRef.resource + "; Decision: " + .annotations."authorization.k8s.io/decision" + "\
+                ; Reason: " + .annotations."authorization.k8s.io/reason"
+              if err == null {
+                .msg = composed_message
+              } else {
+                .msg = .message
+              }
+          talos_kernel_logs_xform:
+            type: remap
+            inputs: [talos_kernel_logs]
+            source: |
+              del(.clock)
+              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              if err == null {
+                .timestamp = to_unix_timestamp(parsed_timestamp)
+              } else {
+                .timestamp = to_unix_timestamp(now())
+              }
+              .message = parse_json(.msg) ?? .msg
+              del(.msg)
+              del(."talos-time")
+          talos_service_logs_xform:
+            type: remap
+            inputs: [talos_service_logs]
+            source: |
+              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              if err == null {
+                .timestamp = to_unix_timestamp(parsed_timestamp)
+              } else {
+                .timestamp = to_unix_timestamp(now())
+              }
+              .message = parse_json(.msg) ?? .msg
+              .level = ."talos-level"
+              .service = ."talos-service"
+              del(.msg)
+              del(."talos-time")
+              del(."talos-level")
+              del(."talos-service")
