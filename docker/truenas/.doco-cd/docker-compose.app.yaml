@@ -35,7 +35,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    image: ghcr.io/kimdre/doco-cd:0.117.1@sha256:9db114c98e4fffa2f88a5ded0d4f71356334310057398f31105cabb004077e28
+    image: ghcr.io/kimdre/doco-cd:0.121.0@sha256:c07f6d0b0df5026ce67708bfda7ff26e0e645c284914dd8be3a9b8277375603b
     ports:
       - 8080:8080
     restart: unless-stopped
