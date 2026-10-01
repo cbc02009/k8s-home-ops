@@ -9,10 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: *app
-  valuesFrom:
-    # Encryption key
-    - kind: Secret
-      name: *app
   values:
     controllers:
       *app :
