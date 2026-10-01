@@ -29,7 +29,7 @@ spec:
             env:
               ENCRYPTED_ONLY: "1"
               DB_URL: /db/db_v2.sqlite3
-            &envFrom envFrom:
+            envFrom: &envFrom
               - secretRef:
                   name: *app
 
