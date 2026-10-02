@@ -1,0 +1,7 @@
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.model == ("Samsung SSD 870")
+  wipe: false

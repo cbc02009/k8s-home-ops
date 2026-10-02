@@ -1,0 +1,6 @@
+# topf-generated client config — contains an admin private key
+/talosconfig
+# topf render output — machine configs contain secrets
+/output/
+# talhelper's generated configs, superseded by topf
+/clusterconfig/

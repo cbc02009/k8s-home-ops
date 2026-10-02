@@ -1,0 +1,6 @@
+---
+# v1.14 defaults this to true (sandboxd). Pinned false until gVisor, the NVIDIA
+# toolkit, the Intel GPU plugin and host-namespace agents are verified under it.
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: false

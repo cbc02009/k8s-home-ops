@@ -154,6 +154,8 @@ controlPlane:
     - ./patches/controller/machine-features.yaml
 
 worker:
+  patches:
+    - ./patches/worker/vlogs.yaml
   schematic:
     customization:
       extraKernelArgs:

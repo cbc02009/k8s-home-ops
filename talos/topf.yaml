@@ -1,0 +1,28 @@
+clusterName: home-ops
+
+clusterEndpoint: https://k8s.internal:6443
+
+# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+talosVersion: 1.14.1
+schematicId: "@schematics/control-plane.yaml"
+
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.3
+
+patchesDir: patches
+secretsPath: secrets.sops.yaml
+
+nodes:
+  - host: uiharu
+    ip: 10.0.2.10
+    role: control-plane
+  - host: miri
+    ip: 10.0.2.11
+    role: control-plane
+  - host: sakura
+    ip: 10.0.2.12
+    role: control-plane
+  - host: mayne
+    ip: 10.0.2.13
+    role: worker
+    schematicId: "@schematics/mayne.yaml"

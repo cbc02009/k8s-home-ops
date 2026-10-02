@@ -1,0 +1,6 @@
+---
+# Cilium is the CNI. Omitting this leaves the generated default in place and
+# Flannel starts alongside it.
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
