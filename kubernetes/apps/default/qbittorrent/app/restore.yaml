@@ -29,7 +29,7 @@ spec:
     onMissingSnapshot: Fail
   repository:
     kind: ClusterRepository
-    name: nas
+    name: b2
   source:
     identity:
       username: ${APP}
