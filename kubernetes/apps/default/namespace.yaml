@@ -7,3 +7,12 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
     resource.kubernetes.io/admin-access: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: downloads
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+  labels:
+    resource.kubernetes.io/admin-access: "true"

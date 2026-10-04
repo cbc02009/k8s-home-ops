@@ -29,7 +29,7 @@ spec:
     onMissingSnapshot: Fail
   repository:
     kind: ClusterRepository
-    name: b2
+    name: volsync
   source:
     identity:
       username: ${APP}
