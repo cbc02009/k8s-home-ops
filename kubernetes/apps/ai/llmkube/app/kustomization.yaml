@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
+  - ./llmkube-mayne-cache.yaml
   - ./resourceclaim.yaml

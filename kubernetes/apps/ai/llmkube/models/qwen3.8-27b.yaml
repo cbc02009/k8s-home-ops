@@ -1,0 +1,118 @@
+---
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3.8-27b
+spec:
+  source: "dbirks/Qwen3.8-27B-W4A16-AutoRound"
+  sourceSecretRef:
+    name: huggingface
+  format: safetensors
+  quantization: compressed-tensors
+  hardware:
+    accelerator: cuda
+    gpu:
+      enabled: true
+      vendor: nvidia
+      count: 1
+---
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3.8-27b
+  labels:
+    krr/ignore: "true"
+spec:
+  modelRef: qwen3.8-27b
+  runtime: vllm
+  image: ghcr.io/syv-ai/qwen38-27b-rtx3090@sha256:82b01c1f801b766e414b2af045091754dd0305ca1ab525c7047d80a0b795482d
+  command:
+    - bash
+    - docker/entrypoint.sh
+  args:
+    - single
+  skipModelInit: true
+  rolloutPolicy:
+    waitForIdle: true
+    idleTimeoutSeconds: 86400
+  runtimeClassName: nvidia
+  nodeSelector:
+    topology.kubernetes.io: egpu
+  env:
+    - name: MODEL
+      value: /app/models/Qwen3.8-27B-W4A16-AutoRound-fast
+    - name: BASE_MODEL_DIR
+      value: /app/models/Qwen3.8-27B-W4A16-AutoRound
+    - name: HF_REPO
+      value: dbirks/Qwen3.8-27B-W4A16-AutoRound
+    - name: FAST_VARIANT
+      value: "1"
+    - name: SPEC
+      value: mtp
+    - name: CTX
+      value: huge
+    - name: MAX_SEQS
+      value: "8"
+    - name: MAX_LEN
+      value: "147456"
+    - name: PREFIX_CACHE
+      value: "1"
+    - name: VERIFY
+      value: "0"
+    - name: EXTRA_ARGS
+      value: --kv-cache-memory=5462661530 --kv-offloading-size 16
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: compute,utility
+    - name: HF_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: huggingface
+          key: HF_TOKEN
+  resources:
+    gpu: 1
+    cpu: "2"
+    memory: 28Gi
+  extraVolumes:
+    - name: models
+      persistentVolumeClaim:
+        claimName: llmkube-mayne-cache
+    - name: shm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 24Gi
+  extraVolumeMounts:
+    - name: models
+      mountPath: /app/models
+      subPath: vllm-27b
+    - name: models
+      mountPath: /cache
+      subPath: vllm-27b-cache
+    - name: shm
+      mountPath: /dev/shm
+  endpoint:
+    port: 18020
+    type: ClusterIP
+  probeOverrides:
+    startup:
+      tcpSocket:
+        port: 18020
+      periodSeconds: 2
+      failureThreshold: 1800
+    liveness:
+      tcpSocket:
+        port: 18020
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      failureThreshold: 6
+    readiness:
+      httpGet:
+        path: /health
+        port: 18020
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 6
+  tolerations:
+    - key: "ai"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
