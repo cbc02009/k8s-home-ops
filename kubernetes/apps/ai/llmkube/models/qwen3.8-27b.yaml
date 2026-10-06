@@ -63,11 +63,11 @@ spec:
       value: --kv-cache-memory=5462661530 --kv-offloading-size 16
     - name: NVIDIA_DRIVER_CAPABILITIES
       value: compute,utility
-    # - name: HF_TOKEN
-    #   valueFrom:
-    #     secretKeyRef:
-    #       name: huggingface
-    #       key: HF_TOKEN
+    - name: HF_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: huggingface
+          key: HF_TOKEN
   resources:
     gpu: 1
     cpu: "2"
