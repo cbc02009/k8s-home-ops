@@ -11,6 +11,8 @@ spec:
   dependsOn:
     - name: searxng
       namespace: default
+    - name: dragonfly
+      namespace: databases
   healthCheckExprs:
     - apiVersion: dragonflydb.io/v1alpha1
       kind: Dragonfly
