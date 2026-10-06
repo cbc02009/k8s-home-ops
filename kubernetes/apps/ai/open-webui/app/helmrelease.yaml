@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: open-webui
+  interval: 30m
+  values:
+    controllers:
+      open-webui:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: v0.11.4@sha256:9591b13f13843c7721c2b8eaf7382846c81b3ffe126526d1888d1fed50c6a33f
+            env:
+              # Image Generation
+              ENABLE_OPENAI_API: false
+              ENABLE_OLLAMA_API: true
+              ENABLE_IMAGE_GENERATION: false
+              # IMAGE_GENERATION_ENGINE: comfyui
+              # IMAGE_GENERATION_MODEL: dreamshaper_8
+              # IMAGE_SIZE: 400x400
+              # IMAGE_STEPS: 8
+              # COMFYUI_BASE_URL: http://smurf-pc:8188
+              # Open-webui settings
+              OLLAMA_BASE_URL: http://llama-swap.llm:8080/v1
+              ENABLE_RAG_WEB_SEARCH: true
+              ENABLE_SEARCH_QUERY: true
+              RAG_WEB_SEARCH_ENGINE: searxng
+              SEARXNG_QUERY_URL: http://searxng.selfhosted.svc.cluster.local:8080/search?q=<query>
+              # Websockets
+              ENABLE_WEBSOCKET_SUPPORT: true
+              WEBSOCKET_MANAGER: redis
+              WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly-db:6379
+            # envFrom:
+            #   - secretRef:
+            #       name: "{{ .Release.Name }}"
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 2Gi
+    persistence:
+      config:
+        enabled: true
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /app/backend/data
+    route:
+      app:
+        hostnames:
+          - chat.ctec.run
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    service:
+      app:
+        ports:
+          http:
+            port: 8080
