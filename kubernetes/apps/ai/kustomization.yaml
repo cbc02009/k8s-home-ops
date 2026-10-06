@@ -7,6 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
+  - ./litellm/ks.yaml
   - ./litellm-operator/ks.yaml
   - ./llmkube/ks.yaml
   # - ./open-webui/ks.yaml
