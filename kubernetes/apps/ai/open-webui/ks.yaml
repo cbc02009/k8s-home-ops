@@ -19,7 +19,7 @@ spec:
       failed: status.phase != 'ready'
       current: status.phase == 'ready'
   interval: 1h
-  path: ./kubernetes/apps/ai/open-webui
+  path: ./kubernetes/apps/ai/open-webui/app
   postBuild:
     substitute:
       APP: *app
