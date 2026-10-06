@@ -37,7 +37,7 @@ spec:
     idleTimeoutSeconds: 86400
   runtimeClassName: nvidia
   nodeSelector:
-    topology.kubernetes.io: egpu
+    topology.kubernetes.io: dgpu
   env:
     - name: MODEL
       value: /app/models/Qwen3.8-27B-W4A16-AutoRound-fast
