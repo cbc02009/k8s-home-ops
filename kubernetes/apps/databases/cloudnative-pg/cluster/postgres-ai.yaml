@@ -78,8 +78,11 @@ spec:
           updateStrategy: patch
       disabledDefaultServices: ["r", "ro"]
   bootstrap:
-    recovery:
-      source: source
+    initdb:
+      secret:
+        name: cloudnative-pg
+    # recovery:
+    #   source: source
   externalClusters:
     - name: source
       plugin:
