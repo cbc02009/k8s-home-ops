@@ -7,13 +7,21 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: open-webui
+    name: &app open-webui
   interval: 30m
   values:
     controllers:
       open-webui:
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.6.0'
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
         containers:
           app:
             image:
@@ -39,9 +47,7 @@ spec:
               ENABLE_WEBSOCKET_SUPPORT: true
               WEBSOCKET_MANAGER: redis
               WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly-db:6379
-            # envFrom:
-            #   - secretRef:
-            #       name: "{{ .Release.Name }}"
+            envFrom: *envFrom
             resources:
               requests:
                 cpu: 500m
