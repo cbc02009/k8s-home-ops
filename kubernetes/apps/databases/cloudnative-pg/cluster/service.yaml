@@ -45,7 +45,7 @@ metadata:
   name: postgres-immich-lb
   namespace: databases
   annotations:
-    external-dns.kubernetes.io/hostname: postgres-ai.ctec.run
+    external-dns.kubernetes.io/hostname: postgres-immich.ctec.run
     lbipam.cilium.io/ips: 10.6.0.22
 spec:
   type: LoadBalancer
