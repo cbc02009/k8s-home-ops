@@ -18,3 +18,43 @@ spec:
   selector:
     cnpg.io/cluster: postgres
     role: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-ai-lb
+  namespace: databases
+  annotations:
+    external-dns.kubernetes.io/hostname: postgres-ai.ctec.run
+    lbipam.cilium.io/ips: 10.6.0.21
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: postgres-ai
+    role: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-immich-lb
+  namespace: databases
+  annotations:
+    external-dns.kubernetes.io/hostname: postgres-ai.ctec.run
+    lbipam.cilium.io/ips: 10.6.0.22
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: postgres-immich
+    role: primary
