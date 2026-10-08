@@ -84,12 +84,12 @@ spec:
           - name: rook
             enabled: false
       placement:
-        # all:
-        #   tolerations:
-        #     - key: "ai"
-        #       operator: "Equal"
-        #       value: "true"
-        #       effect: "NoSchedule"
+        all:
+          tolerations:
+            - key: "ai"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
         osd:
           tolerations:
             - key: "ai"
