@@ -4,12 +4,12 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: volume-debugger
-  namespace: selfhosted
+  namespace: default
 spec:
   volumes:
     - name: debug-volume
       persistentVolumeClaim:
-        claimName: stash
+        claimName: plex
   containers:
     - name: volume-debugger
       image: ubuntu:latest
