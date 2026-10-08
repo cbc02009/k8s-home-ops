@@ -96,6 +96,12 @@ spec:
               operator: "Equal"
               value: "true"
               effect: "NoSchedule"
+        prepareosd:
+          tolerations:
+            - key: "ai"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
       resources:
         mgr:
           limits:
