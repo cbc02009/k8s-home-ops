@@ -21,7 +21,6 @@ spec:
         enabled: true
     controllerManager:
       tolerations:
-        - key: "ai"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule

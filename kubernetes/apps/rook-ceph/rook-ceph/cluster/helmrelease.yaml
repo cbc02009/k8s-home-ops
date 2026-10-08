@@ -89,22 +89,19 @@ spec:
       placement:
         all:
           tolerations:
-            - key: "ai"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
         osd:
           tolerations:
-            - key: "ai"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
         prepareosd:
           tolerations:
-            - key: "ai"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
       resources:
         mgr:
           limits:

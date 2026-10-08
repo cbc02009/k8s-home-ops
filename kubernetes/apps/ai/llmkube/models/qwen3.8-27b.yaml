@@ -112,7 +112,6 @@ spec:
       periodSeconds: 10
       failureThreshold: 6
   tolerations:
-    - key: "ai"
-      operator: "Equal"
-      value: "true"
-      effect: "NoSchedule"
+    - key: llm-workload
+      operator: Exists
+      effect: NoSchedule
