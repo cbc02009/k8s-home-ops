@@ -13,6 +13,7 @@ spec:
     controller:
       leaderElection:
         enabled: true
+      logLevel: debug
     webhook:
       enabled: true
     llmkube:
