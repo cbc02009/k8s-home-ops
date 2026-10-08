@@ -5,7 +5,9 @@ kind: Kustomization
 resources:
   - ./embed.yaml
   - ./externalsecret.yaml
+  - ./grafanadashboard.yaml
   - ./litellmproxy.yaml
   - ./nvidia-pool.yaml
   - ./serviceMonitor.yaml
   # - ./models/
+  - ./dashboard

@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: litellm
+    files:
+      - litellm.json
+  - name: litellm-economics
+    files:
+      - litellm-economics.json
+  - name: litellm-selfhosted
+    files:
+      - litellm-selfhosted.json
+  - name: litellm-routing
+    files:
+      - litellm-routing.json
+  - name: llm-nvidia-node
+    files:
+      - llm-nvidia-node.json
+  - name: llama-server
+    files:
+      - llama-server.json
+  - name: vllm
+    files:
+      - vllm.json
+  - name: vllm-public
+    files:
+      - vllm-public.json
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
