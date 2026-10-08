@@ -20,7 +20,7 @@ spec:
           ms_mode: prefer-crc
         nodePlugin:
           tolerations: &pluginTolerations
-            - key: llm-workload
+            - key: ai
               operator: Exists
               effect: NoSchedule
       nfs:
