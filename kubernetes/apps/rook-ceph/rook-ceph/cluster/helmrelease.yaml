@@ -45,6 +45,9 @@ spec:
       isDefault: false
       deletionPolicy: Delete
     cephClusterSpec:
+      mon:
+        count: 3
+        allowMultiplePerNode: false
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
@@ -137,11 +140,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 3
+              size: 4
           dataPools:
             - failureDomain: host
               replicated:
-                size: 3
+                size: 4
               name: data0
           metadataServer:
             activeCount: 1
