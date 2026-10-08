@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: drm-exporter
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: drm-exporter
+  interval: 15m
+  dependsOn: []
+  values:
+    hostAccess:
+      devDri: ""
+      devCpu: ""
+    securityContext:
+      capabilities:
+        add: [PERFMON]
+    config:
+      logLevel: info
+    monitoring:
+      serviceMonitor:
+        enabled: true
+        relabelings:
+          - sourceLabels: [__meta_kubernetes_endpoint_node_name]
+            targetLabel: nodename
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          instanceSelector:
+            matchLabels:
+              grafana.internal/instance: grafana
+    resources:
+      claims:
+        - name: gpu
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 64Mi
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      # - key: llm-workload
+      #   operator: Exists
+      #   effect: NoSchedule
+      # Chart has no pod-level resourceClaims field; inject the DRA claim.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: drm-exporter
+            patch: |
+              - op: add
+                path: /spec/template/spec/resourceClaims
+                value:
+                  - name: gpu
+                    resourceClaimTemplateName: drm-exporter-gpu
