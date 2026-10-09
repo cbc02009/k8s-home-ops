@@ -7,7 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
-  - ./headroom/ks.yaml
+  # - ./headroom/ks.yaml
   - ./litellm/ks.yaml
   - ./litellm-operator/ks.yaml
   - ./llmkube/ks.yaml
