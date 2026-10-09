@@ -9,6 +9,7 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 30m
+  dependsOn: []
   values:
     controllers:
       server:
