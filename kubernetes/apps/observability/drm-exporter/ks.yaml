@@ -13,6 +13,9 @@ spec:
     - ../../../../components/gpu
   interval: 30m
   path: ./kubernetes/apps/observability/drm-exporter/app
+  postBuild:
+    substitute:
+      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository
