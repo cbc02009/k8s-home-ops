@@ -31,22 +31,26 @@ spec:
     - docker/entrypoint.sh
   args:
     - single
+  extraArgs:
+    - --chat-template-kwargs
+    - '{"enable_thinking": false}'
   skipModelInit: true
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
   runtimeClassName: nvidia
+  priorityClassName: gpu-preemptible
   nodeSelector:
     topology.kubernetes.io: dgpu
   env:
     - name: MODEL
-      value: /app/models/Qwen3.8-27B-W4A16-AutoRound-fast
+      value: /app/models/Qwen3.8-27B-W4A16-AutoRound
     - name: BASE_MODEL_DIR
       value: /app/models/Qwen3.8-27B-W4A16-AutoRound
     - name: HF_REPO
       value: dbirks/Qwen3.8-27B-W4A16-AutoRound
     - name: FAST_VARIANT
-      value: "1"
+      value: "0"
     - name: SPEC
       value: mtp
     - name: CTX
