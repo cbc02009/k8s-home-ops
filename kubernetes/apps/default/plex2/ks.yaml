@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/zeroscaler
     - ../../../../components/gpu
+    - ../../../../components/igpu-spread
     - ../../../../components/kopiur
   dependsOn:
     - name: kopiur

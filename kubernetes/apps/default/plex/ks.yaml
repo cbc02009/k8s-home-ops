@@ -10,7 +10,8 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/zeroscaler
-    - ../../../../components/gpu
+    - ../../../../components/igpu-spread
+    - ../../../../components/kopiur
     - ../../../../components/kopiur
   dependsOn:
     - name: kopiur

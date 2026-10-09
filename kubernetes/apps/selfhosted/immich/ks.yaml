@@ -12,6 +12,7 @@ spec:
   components:
     - ../../../../components/gpu
     - ../../../../components/dragonfly
+    - ../../../../components/igpu-spread
   dependsOn:
     - name: postgres-cluster
       namespace: databases

@@ -54,15 +54,6 @@ spec:
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: plex-gpu
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                      - key: app.kubernetes.io/name
-                        operator: In
-                        values: ["frigate"]
-                  topologyKey: kubernetes.io/hostname
           securityContext:
             runAsUser: ${APP_UID}
             runAsGroup: ${APP_GID}

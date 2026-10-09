@@ -7,4 +7,5 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
   - ./llmkube-mayne-cache.yaml
+  - ./priorityclass.yaml
   - ./resourceclaim.yaml
