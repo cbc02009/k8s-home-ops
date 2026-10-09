@@ -12,18 +12,16 @@ spec:
     name: *app
   dependsOn: []
   values:
-
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: frigate-gpu
       nodeSelector:
         google.feature.node.kubernetes.io/coral: "true"
     controllers:
       frigate:
         annotations:
           reloader.stakater.com/auto: 'true'
-        pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: frigate-gpu
         containers:
           app:
             image:

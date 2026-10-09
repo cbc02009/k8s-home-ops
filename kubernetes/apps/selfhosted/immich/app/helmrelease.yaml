@@ -11,6 +11,10 @@ spec:
   interval: 30m
   dependsOn: []
   values:
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: immich-gpu
     controllers:
       server:
         strategy: RollingUpdate
@@ -76,9 +80,6 @@ spec:
         annotations:
           secret.reloader.stakater.com/reload: *secret
         pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: immich-gpu
           securityContext:
             runAsUser: 2000
             runAsGroup: 2000
