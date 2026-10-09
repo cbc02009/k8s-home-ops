@@ -10,6 +10,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: *app
+  dependsOn: []
   values:
     defaultPodOptions:
       resourceClaims:
