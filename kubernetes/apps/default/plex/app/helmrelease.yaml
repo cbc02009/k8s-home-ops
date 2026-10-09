@@ -11,6 +11,10 @@ spec:
     kind: OCIRepository
     name: *app
   values:
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: plex-gpu
     controllers:
       *app :
         containers:
@@ -51,9 +55,6 @@ spec:
               limits:
                 memory: 16Gi
         pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: plex-gpu
           securityContext:
             runAsUser: ${APP_UID}
             runAsGroup: ${APP_GID}
