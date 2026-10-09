@@ -13,11 +13,11 @@ spec:
     - ../../../../components/igpu-spread
     - ../../../../components/gpu
     - ../../../../components/kopiur
-  dependsOn:
-    - name: kopiur
-      namespace: system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+  # dependsOn:
+  #   - name: kopiur
+  #     namespace: system
+  #   - name: rook-ceph-cluster
+  #     namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/default/plex/app
   postBuild:
