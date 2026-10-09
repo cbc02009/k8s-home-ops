@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: litellm
+spec:
+  groups:
+    - name: litellm.rules
+      rules:
+        - alert: LiteLLMFallbackChainExhausted
+          expr: |-
+            sum by (requested_model, exception_status, exception_class) (
+              increase(litellm_deployment_failed_fallbacks_total[15m])
+            ) > 0
+          annotations:
+            summary: >-
+              LiteLLM {{ $labels.requested_model }} fallback chain exhausted — no working deployment
+              ({{ $labels.exception_status }} {{ $labels.exception_class }})
+          labels:
+            severity: critical
+        - alert: LiteLLMModelFailover
+          expr: |-
+            sum by (requested_model, fallback_model, exception_status, exception_class) (
+              increase(litellm_deployment_successful_fallbacks_total[10m])
+            ) > 3
+          for: 5m
+          annotations:
+            summary: >-
+              LiteLLM {{ $labels.requested_model }} failing over to {{ $labels.fallback_model }}
+              ({{ $labels.exception_status }} {{ $labels.exception_class }})
+          labels:
+            severity: warning
+        - alert: LiteLLMDeploymentOutage
+          # deployment_state latches at 2 via the cooldown callback's pool label and
+          # never resets (success callbacks label by requested model). Require
+          # ongoing failures so a recovered deployment doesn't alert forever.
+          expr: |-
+            max by (litellm_model_name) (litellm_deployment_state) >= 2
+            and on (litellm_model_name)
+            sum by (litellm_model_name) (rate(litellm_deployment_failure_responses_total[15m])) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              LiteLLM {{ $labels.litellm_model_name }} out of rotation and still failing
+              (deployment_state >= 2)
+          labels:
+            severity: warning
+        - alert: LiteLLMAuthOrQuotaFailures
+          expr: |-
+            sum by (litellm_model_name, exception_status) (
+              increase(litellm_deployment_failure_responses_total{exception_status=~"403|429"}[15m])
+            ) > 5
+          for: 5m
+          annotations:
+            summary: >-
+              LiteLLM {{ $labels.litellm_model_name }} returning {{ $labels.exception_status }}
+              (auth/quota — check the upstream key or plan cap)
+          labels:
+            severity: warning
+    - name: llamacpp.rules
+      rules:
+        - alert: LlamaCppRequestsDeferred
+          # A llama-server defers a request when every slot is busy. Sustained
+          # deferral means the loop is serialising on that model rather than on
+          # agent capacity — qwen3.8-27b runs --parallel 1, so the coder lane
+          # queues here long before it queues anywhere else. This is the signal
+          # that settles whether to raise --parallel or lower the bridge's
+          # CODER_AGENT_SLOTS, rather than guessing at either.
+          expr: |-
+            max by (service) (llamacpp:requests_deferred) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              {{ $labels.service }} has had {{ $value }} request(s) queued behind its
+              inference slots for 10m — work is serialising on this model
+          labels:
+            severity: warning

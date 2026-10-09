@@ -8,6 +8,8 @@ resources:
   - ./grafanadashboard.yaml
   - ./litellmproxy.yaml
   - ./nvidia-pool.yaml
+  - ./prometheusrule.yaml
   - ./serviceMonitor.yaml
   # - ./models/
   - ./dashboard
+  - ./virtualkeys
