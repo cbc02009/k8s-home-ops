@@ -7,6 +7,7 @@ metadata:
 spec:
   components:
     - ../../../../components/dragonfly
+    - ../../../../components/kopiur
   dependsOn:
     - name: dragonfly
       namespace: databases
@@ -22,6 +23,11 @@ spec:
   postBuild:
     substitute:
       APP: litellm
+      HOSTNAME: litellm.ctec.run
+      PVC_CAPACITY: 1Gi
+      PVC_ACCESSMODES: ReadWriteMany
+      PVC_STORAGECLASS: ceph-filesystem
+      PVC_SNAPSHOTCLASS: csi-ceph-filesystem
   prune: true
   sourceRef:
     kind: GitRepository

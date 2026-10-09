@@ -13,7 +13,7 @@ spec:
     cache:
       capacity: ${PVC_CAPACITY:=5Gi}
       mode: Ephemeral
-      storageClassName: ceph-block
+      storageClassName: ${PVC_STORAGECLASS:=ceph-block}
     securityContext:
       runAsUser: ${APP_UID:=2000}
       runAsGroup: ${APP_GID:=2000}
