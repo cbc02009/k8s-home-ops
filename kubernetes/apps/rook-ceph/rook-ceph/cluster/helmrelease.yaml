@@ -86,7 +86,7 @@ spec:
             enabled: true
           - name: rook
             enabled: false
-      placement:
+      placement: []
         # all:
         #   tolerations:
         #     - key: llm-workload
