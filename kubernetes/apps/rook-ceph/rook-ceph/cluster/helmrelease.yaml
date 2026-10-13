@@ -92,16 +92,16 @@ spec:
             - key: llm-workload
               operator: Exists
               effect: NoSchedule
-        osd:
-          tolerations:
-            - key: llm-workload
-              operator: Exists
-              effect: NoSchedule
-        prepareosd:
-          tolerations:
-            - key: llm-workload
-              operator: Exists
-              effect: NoSchedule
+        # osd:
+        #   tolerations:
+        #     - key: llm-workload
+        #       operator: Exists
+        #       effect: NoSchedule
+        # prepareosd:
+        #   tolerations:
+        #     - key: llm-workload
+        #       operator: Exists
+        #       effect: NoSchedule
       resources:
         mgr:
           limits:
@@ -137,11 +137,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 4
+              size: 3
           dataPools:
             - failureDomain: host
               replicated:
-                size: 4
+                size: 3
               name: data0
           metadataServer:
             activeCount: 1
