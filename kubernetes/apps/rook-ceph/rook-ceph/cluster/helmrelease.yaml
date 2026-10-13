@@ -86,22 +86,22 @@ spec:
             enabled: true
           - name: rook
             enabled: false
-      placement: []
-        # all:
-        #   tolerations:
-        #     - key: llm-workload
-        #       operator: Exists
-        #       effect: NoSchedule
-        # osd:
-        #   tolerations:
-        #     - key: llm-workload
-        #       operator: Exists
-        #       effect: NoSchedule
-        # prepareosd:
-        #   tolerations:
-        #     - key: llm-workload
-        #       operator: Exists
-        #       effect: NoSchedule
+      # placement:
+      #   all:
+      #     tolerations:
+      #       - key: llm-workload
+      #         operator: Exists
+      #         effect: NoSchedule
+      #   osd:
+      #     tolerations:
+      #       - key: llm-workload
+      #         operator: Exists
+      #         effect: NoSchedule
+      #   prepareosd:
+      #     tolerations:
+      #       - key: llm-workload
+      #         operator: Exists
+      #         effect: NoSchedule
       resources:
         mgr:
           limits:
