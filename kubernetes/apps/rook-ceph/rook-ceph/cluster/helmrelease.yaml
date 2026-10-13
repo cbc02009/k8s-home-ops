@@ -87,11 +87,11 @@ spec:
           - name: rook
             enabled: false
       placement:
-        all:
-          tolerations:
-            - key: llm-workload
-              operator: Exists
-              effect: NoSchedule
+        # all:
+        #   tolerations:
+        #     - key: llm-workload
+        #       operator: Exists
+        #       effect: NoSchedule
         # osd:
         #   tolerations:
         #     - key: llm-workload
