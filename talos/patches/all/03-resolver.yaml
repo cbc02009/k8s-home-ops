@@ -9,3 +9,10 @@ hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features
   resolveMemberNames: true
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+enabled: true
+ntp:
+  servers: ["time.cloudflare.com"]
+  useNTS: true

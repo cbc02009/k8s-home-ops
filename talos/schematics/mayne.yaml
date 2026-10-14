@@ -1,3 +1,4 @@
+---
 customization:
   extraKernelArgs:
     - -init_on_alloc # Less security, faster puter
@@ -16,3 +17,4 @@ customization:
       - siderolabs/amd-ucode
       - siderolabs/nvidia-open-gpu-kernel-modules-production
       - siderolabs/nvidia-container-toolkit-production
+      - siderolabs/nfsrahead

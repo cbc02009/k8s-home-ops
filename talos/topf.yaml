@@ -3,11 +3,11 @@ clusterName: home-ops
 clusterEndpoint: https://k8s.internal:6443
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: 1.14.1
+talosVersion: 1.14.2
 schematicId: "@schematics/control-plane.yaml"
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.36.3
+kubernetesVersion: v1.37.1
 
 patchesDir: patches
 secretsPath: secrets.sops.yaml
