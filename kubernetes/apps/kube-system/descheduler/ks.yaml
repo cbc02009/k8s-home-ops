@@ -9,12 +9,12 @@ spec:
     labels:
       app.kubernetes.io/name: descheduler
   interval: 1h
-  path: "./kubernetes/apps/system/descheduler/app"
+  path: "./kubernetes/apps/kube-system/descheduler/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: system
+  targetNamespace: kube-system
   timeout: 5m
   wait: false
