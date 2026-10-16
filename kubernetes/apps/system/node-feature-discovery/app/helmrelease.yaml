@@ -22,3 +22,9 @@ spec:
           pci:
             deviceClassWhitelist: ["02", "03", "0200", "0207", "0300", "0302"]
             deviceLabelFields: ["vendor"]
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
+    prometheus:
+      enable: true
