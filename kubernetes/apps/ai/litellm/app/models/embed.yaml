@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: embed-pool-1
+spec:
+  modelName: embed
+  proxyRef: litellm
+  params:
+    model: openai/embed
+    apiBase: http://embed-1.ai:8080/v1
+    apiKey: sk-llmkube-noauth
+  info:
+    maxInputTokens: 32768
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: embed-pool-2
+spec:
+  modelName: embed
+  proxyRef: litellm
+  params:
+    model: openai/embed
+    apiBase: http://embed-2.ai:8080/v1
+    apiKey: sk-llmkube-noauth
+  info:
+    maxInputTokens: 32768
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: embed-pool-3
+spec:
+  modelName: embed
+  proxyRef: litellm
+  params:
+    model: openai/embed
+    apiBase: http://embed-3.ai:8080/v1
+    apiKey: sk-llmkube-noauth
+  info:
+    maxInputTokens: 32768
