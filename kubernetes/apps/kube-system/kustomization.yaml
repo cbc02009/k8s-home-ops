@@ -13,6 +13,6 @@ resources:
   - ./intel-gpu-resource-driver/ks.yaml
   - ./k8tz/ks.yaml
   - ./metrics-server/ks.yaml
-  - ./ocharted/ks.yaml
+  - ./multus/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./spegel/ks.yaml
