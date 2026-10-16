@@ -59,7 +59,7 @@ reset-node node *args:
 
 [doc('Reset all nodes in the cluster')]
 reset-cluster mode="reboot":
-  just talos reset-node {{ nodes }} {{ mode }};\
+  just talos reset-node {{ nodes }} --{{ mode }};\
 
 [confirm('Upgrade Kubernetes to ' + version + ' [y|N] ?')]
 [doc('Upgrade Kubernetes version on the cluster')]
