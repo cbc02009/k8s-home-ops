@@ -6,7 +6,7 @@ metadata:
   name: karakeep
 spec:
   proxyRef: litellm
-  keyAlias: Opencode
+  keyAlias: Karakeep
   secretName: litellm-key-karakeep
   secretKey: api-key
 ---

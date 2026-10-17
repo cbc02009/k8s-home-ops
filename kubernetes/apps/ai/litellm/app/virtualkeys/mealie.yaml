@@ -5,7 +5,7 @@ metadata:
   name: mealie
 spec:
   proxyRef: litellm
-  keyAlias: Opencode
+  keyAlias: Mealie
   secretName: litellm-key-mealie
   secretKey: api-key
 ---
