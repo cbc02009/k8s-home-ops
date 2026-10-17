@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./grafanadashboard.yaml
-  # - ./guardrail.yaml
+  - ./guardrail.yaml
   - ./litellmproxy.yaml
   - ./nvidia-pool.yaml
   - ./prometheusrule.yaml

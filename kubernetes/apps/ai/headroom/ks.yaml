@@ -6,7 +6,7 @@ metadata:
   name: &app headroom
 spec:
   interval: 1h
-  path: ./kubernetes/apps/ai/headroom
+  path: ./kubernetes/apps/ai/headroom/app
   postBuild:
     substitute:
       APP: *app
