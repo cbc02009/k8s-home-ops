@@ -44,8 +44,8 @@ spec:
     - ../../../../../components/dragonfly
     - ../../../../../components/gpu
   dependsOn:
-    - name: dragonfly-operator
-      namespace: database
+    - name: dragonfly
+      namespace: databases
     - name: litellm
     - name: toolhive
   healthCheckExprs:
