@@ -41,8 +41,8 @@ metadata:
     components.dragonfly/cluster-mode: non-cluster
 spec:
   components:
-    - ../../../../../components/dragonfly
-    - ../../../../../components/gpu
+    - ../../../../components/dragonfly
+    - ../../../../components/gpu
   dependsOn:
     - name: dragonfly
       namespace: databases
