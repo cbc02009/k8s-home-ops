@@ -15,7 +15,7 @@ spec:
     optimizer:
       embeddingModel: embed
       embeddingProvider: openai
-      embeddingService: http://litellm.llm:4000/v1
+      embeddingService: http://litellm.ai:4000/v1
       embeddingServiceTimeout: 180s
   incomingAuth:
     type: anonymous
@@ -37,7 +37,7 @@ spec:
             limits:
               memory: 2Gi
   sessionStorage:
-    address: toolhive-config-dragonfly.llm:6379
+    address: toolhive-config-dragonfly-db.ai:6379
     db: 0
     keyPrefix: "toolhive:vmcp:"
     passwordRef:
