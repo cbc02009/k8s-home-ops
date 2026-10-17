@@ -48,3 +48,9 @@ spec:
                   operator: In
                   values:
                     - "true"
+    tolerations:
+      - key: llm-workload
+        operator: Exists
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
