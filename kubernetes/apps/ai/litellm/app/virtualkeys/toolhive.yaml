@@ -27,4 +27,4 @@ spec:
       secretKey: api-key
       remoteRef:
         remoteKey: litellm
-        property: LITELLM_TOOLHIVE_API_KEY
+        property: toolhive_api_key
