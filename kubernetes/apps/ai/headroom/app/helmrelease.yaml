@@ -35,6 +35,9 @@ spec:
               HEADROOM_TELEMETRY: "off"
               HEADROOM_WORKSPACE_DIR: /data/headroom
               HF_HOME: /data/huggingface
+            envFrom:
+              - secretRef:
+                  name: headroom
             probes:
               liveness:
                 enabled: true
