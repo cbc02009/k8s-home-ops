@@ -62,6 +62,7 @@ spec:
               name: *pgname
               annotations:
                 external-dns.kubernetes.io/hostname: postgres-immich.ctec.run
+                lbipam.cilium.io/ips: 10.6.0.22
                 gatus.home-operations.com/enabled: "true"
                 gatus.home-operations.com/endpoint: |
                   name: postgres-immich

@@ -48,6 +48,7 @@ spec:
               name: *pgname
               annotations:
                 external-dns.kubernetes.io/hostname: postgres.ctec.run
+                lbipam.cilium.io/ips: ${IP}
                 gatus.home-operations.com/enabled: "true"
                 gatus.home-operations.com/endpoint: |
                   name: postgres
