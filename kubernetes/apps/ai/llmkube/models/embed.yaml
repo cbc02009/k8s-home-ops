@@ -48,8 +48,8 @@ spec:
   batchSize: 2048
   uBatchSize: 2048
   env:
-    # - name: GOMP_CPU_AFFINITY
-    #   value: "0-11"
+    - name: GOMP_CPU_AFFINITY
+      value: "0-11"
     - name: KMP_AFFINITY
       value: "granularity=fine,proc_list=[0-11],explicit"
   resources:
@@ -124,8 +124,8 @@ spec:
   batchSize: 2048
   uBatchSize: 2048
   env:
-    # - name: GOMP_CPU_AFFINITY
-    #   value: "0-11"
+    - name: GOMP_CPU_AFFINITY
+      value: "0-11"
     - name: KMP_AFFINITY
       value: "granularity=fine,proc_list=[0-11],explicit"
   resources:
@@ -200,8 +200,8 @@ spec:
   batchSize: 2048
   uBatchSize: 2048
   env:
-    # - name: GOMP_CPU_AFFINITY
-    #   value: "0-11"
+    - name: GOMP_CPU_AFFINITY
+      value: "0-11"
     - name: KMP_AFFINITY
       value: "granularity=fine,proc_list=[0-11],explicit"
   resources:
