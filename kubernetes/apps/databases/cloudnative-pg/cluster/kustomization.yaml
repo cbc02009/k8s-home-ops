@@ -11,4 +11,3 @@ resources:
   - ./postgres-ai.yaml
   - ./postgres-immich.yaml
   - ./prometheusrule.yaml
-  # - ./service.yaml
