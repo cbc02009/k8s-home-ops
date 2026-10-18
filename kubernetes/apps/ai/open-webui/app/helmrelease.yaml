@@ -28,6 +28,16 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: v0.12.3@sha256:a537bbe1e6b428820f52ed4a029d7fff97062e24d5cf32c365fba36fd0542def
             env:
+              # OAUTH
+              OAUTH_PROVIDER_NAME: authentik
+              OPENID_PROVIDER_URL: https://auth.ctec.run/application/o/open-webui/.well-known/openid-configuration
+              OPENID_REDIRECT_URI: https://chat.ctec.run/oauth/oidc/callback
+              WEBUI_URL: https://chat.ctec.run
+              ENABLE_OAUTH_SIGNUP: true
+              ENABLE_LOGIN_FORM: false
+              ENABLE_PASSWORD_AUTH: false
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_AUTO_REDIRECT: true
               # Image Generation
               ENABLE_OPENAI_API: false
               ENABLE_OLLAMA_API: true
