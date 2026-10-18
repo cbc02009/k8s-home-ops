@@ -115,3 +115,7 @@ spec:
       initialDelaySeconds: 0
       periodSeconds: 10
       failureThreshold: 6
+  tolerations:
+    - key: llm-workload
+      operator: Exists
+      effect: NoSchedule
