@@ -21,3 +21,7 @@ spec:
       credentialsName: onepassword-connect-credentials-secret
       sync:
         imageRepository: ghcr.io/1password/connect-sync
+      serviceType: LoadBalancer
+      serviceAnnotations:
+        - lbipam.cilium.io/ips: 10.6.0.25
+        - external-dns.kubernetes.io/hostname: opc.ctec.run
