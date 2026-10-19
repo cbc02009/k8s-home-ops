@@ -57,6 +57,15 @@ spec:
               ENABLE_WEBSOCKET_SUPPORT: true
               WEBSOCKET_MANAGER: redis
               WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly-db:6379
+              # MCP Servers
+              OPEN_WEBUI_MCP_SERVERS: |
+                [
+                  {
+                    "name": "talos",
+                    "type": "url",
+                    "url": "http://mcp-talos-mcp-proxy.ai"
+                  }
+                ]
             envFrom: *envFrom
             resources:
               requests:
