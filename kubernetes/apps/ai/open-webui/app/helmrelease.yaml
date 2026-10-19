@@ -63,7 +63,7 @@ spec:
                   {
                     "name": "talos",
                     "type": "http",
-                    "url": "http://mcp-talos-mcp-proxy.ai"
+                    "url": "http://mcp-talos-mcp-proxy.ai.svc.cluster.local"
                   }
                 ]
             envFrom: *envFrom
