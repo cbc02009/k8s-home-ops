@@ -1,0 +1,27 @@
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: toolhive-docs
+  namespace: toolhive-system
+spec:
+  image: ghcr.io/stackloklabs/toolhive-doc-mcp
+  transport: streamable-http
+  proxyPort: 8080
+  mcpPort: 8080
+  podTemplateSpec:
+    spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: mcp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+  resources:
+    limits:
+      cpu: '100m'
+      memory: '128Mi'
+    requests:
+      cpu: '50m'
+      memory: '64Mi'
