@@ -62,7 +62,7 @@ spec:
                 [
                   {
                     "name": "talos",
-                    "type": "url",
+                    "type": "http",
                     "url": "http://mcp-talos-mcp-proxy.ai"
                   }
                 ]
