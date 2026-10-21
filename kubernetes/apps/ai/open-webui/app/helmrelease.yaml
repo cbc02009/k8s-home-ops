@@ -63,7 +63,12 @@ spec:
                   {
                     "name": "talos",
                     "type": "http",
-                    "url": "http://mcp-talos-mcp-proxy.ai:8080"
+                    "url": "http://mcp-talos-mcp-proxy.ai"
+                  },
+                  {
+                    "name": "flux",
+                    "type": "http",
+                    "url": "http://mcp-flux-proxy.ai"
                   }
                 ]
             envFrom: *envFrom
