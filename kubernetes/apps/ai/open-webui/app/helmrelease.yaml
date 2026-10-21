@@ -64,7 +64,7 @@ spec:
                     "name": "talos",
                     "type": "http",
                     "url": "http://mcp-talos-mcp-proxy.ai:8080"
-                  },
+                  }
                 ]
             envFrom: *envFrom
             resources:
