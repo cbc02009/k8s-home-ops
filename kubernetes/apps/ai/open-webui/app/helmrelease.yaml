@@ -52,7 +52,7 @@ spec:
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: searxng
-              SEARXNG_QUERY_URL: http://searxng.selfhosted.svc.cluster.local:8080/search?q=<query>
+              SEARXNG_QUERY_URL: http://searxng.default.svc.cluster.local:8080/search?q=<query>
               # Websockets
               ENABLE_WEBSOCKET_SUPPORT: true
               WEBSOCKET_MANAGER: redis
@@ -64,7 +64,7 @@ spec:
                     "name": "talos",
                     "type": "http",
                     "url": "http://mcp-talos-mcp-proxy.ai:8080"
-                  }
+                  },
                 ]
             envFrom: *envFrom
             resources:
