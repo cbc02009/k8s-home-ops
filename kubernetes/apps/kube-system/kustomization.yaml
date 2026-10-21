@@ -14,5 +14,6 @@ resources:
   - ./k8tz/ks.yaml
   - ./metrics-server/ks.yaml
   - ./multus/ks.yaml
+  - ./nvidia-power-limit/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./spegel/ks.yaml
