@@ -5,5 +5,5 @@ resources:
   - ./embed.yaml
   - ./local-pool.yaml
   - ./muse-glimmer.yaml
+  - ./nvidia-pool.yaml
   - ./qwen3.8-27b.yaml
-  - ./qwen3.8-flash-next-chat.yaml
