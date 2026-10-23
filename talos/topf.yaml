@@ -1,9 +1,10 @@
+---
 clusterName: home-ops
 
 clusterEndpoint: https://k8s.internal:6443
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: 1.14.2
+talosVersion: 1.14.4
 schematicId: "@schematics/control-plane.yaml"
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet

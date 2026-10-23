@@ -54,14 +54,14 @@ releases:
       - kube-system/cilium
 
   - name: spegel
-    namespace: system
+    namespace: kube-system
     needs:
       - kube-system/coredns
 
   - name: cert-manager
     namespace: cert-manager
     needs:
-      - system/spegel
+      - kube-system/spegel
 
   - name: external-secrets
     namespace: security
