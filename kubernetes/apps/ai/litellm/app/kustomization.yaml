@@ -11,4 +11,3 @@ resources:
   - ./serviceMonitor.yaml
   - ./models
   - ./dashboard
-  - ./virtualkeys
