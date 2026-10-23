@@ -5,7 +5,7 @@ metadata:
   name: nvidia
 spec:
   nodeSelector:
-    topology.kubernetes.io: egpu
+    topology.kubernetes.io: dgpu
   gpu: 1
   swapPolicy: reclaim
   swapBudget: 240s

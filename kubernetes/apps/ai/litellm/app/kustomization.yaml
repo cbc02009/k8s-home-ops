@@ -7,7 +7,6 @@ resources:
   - ./grafanadashboard.yaml
   - ./guardrail.yaml
   - ./litellmproxy.yaml
-  - ./nvidia-pool.yaml
   - ./prometheusrule.yaml
   - ./serviceMonitor.yaml
   - ./models
