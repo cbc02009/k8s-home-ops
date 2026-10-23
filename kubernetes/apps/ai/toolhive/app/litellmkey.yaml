@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: toolhive
+spec:
+  proxyRef: litellm
+  keyAlias: ToolHive
+  secretName: litellm-key-toolhive
+  secretKey: api-key
+  models:
+  - embed
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: toolhive
+spec:
+  secretStoreRefs:
+  - name: onepassword-connect
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: litellm-key-toolhive
+  data:
+  - match:
+      secretKey: api-key
+      remoteRef:
+        remoteKey: litellm
+        property: toolhive_api_key
