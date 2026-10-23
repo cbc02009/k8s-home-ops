@@ -135,7 +135,7 @@ metadata:
 spec:
   dependsOn:
     - name: toolhive
-    - name: grafana
+    - name: grafana-operator
       namespace: observability
   interval: 1h
   path: ./kubernetes/apps/ai/toolhive/mcp-servers/grafana-mcp
