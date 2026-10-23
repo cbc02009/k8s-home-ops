@@ -27,6 +27,11 @@ spec:
     controller:
       excludedNamespaces:
         - kguardian
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
+
     database:
       persistence:
         storageClassName: ceph-block
