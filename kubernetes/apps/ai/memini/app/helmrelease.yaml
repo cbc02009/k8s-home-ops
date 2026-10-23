@@ -1,0 +1,133 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app memini
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 15m
+  dependsOn: []
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 20m
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      remediateLastFailure: false
+  values:
+    fullnameOverride: memini
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            env:
+              # MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
+              MEMINI_BACKEND: sqlite
+              MEMINI_DEFAULT_NAMESPACE: default
+              MEMINI_EMBED_BASE_URL: http://litellm.ai:4000/v1
+              MEMINI_EMBED_MODEL: embed # Qwen3-Embedding-0.6B, 1024-dim, 32k ctx
+              MEMINI_EMBED_DIMS: "1024"
+              MEMINI_EMBED_QUERY_PREFIX: "Instruct: Given a user message, retrieve relevant past memories\nQuery: "
+              MEMINI_EMBED_MAX_CONCURRENCY: 32
+              MEMINI_RECALL_EMBED_TIMEOUT: 15s
+              MEMINI_WRITE_EMBED_TIMEOUT: 30s
+              MEMINI_WRITE_DEDUP_SCORE: "0.80"
+              MEMINI_WRITE_DEDUP_ACTION: coalesce
+              MEMINI_DEDUP_TIERS: episodic,semantic,procedural
+              MEMINI_DEDUP_SIMILARITY: 0.80
+              MEMINI_SHORT_TERM_CAP: 300
+              MEMINI_ASSESS_BATCH: "5"
+              MEMINI_LLM_BASE_URL: http://litellm.ai:4000/v1
+              MEMINI_LLM_MODEL: muse-glimmer
+              # MEMINI_LLM_MODEL: qwen3.8-27b-chat
+              MEMINI_LLM_MAX_TOKENS: "24576"
+              MEMINI_DISTILL_TIMEOUT: 600s
+              MEMINI_DISTILL_ON_WRITE: false
+              MEMINI_ASSESSED_SALIENCE_WEIGHT: "0.6"
+              MEMINI_REEMBED_ON_MODEL_CHANGE: true
+              MEMINI_RERANK: http://litellm.ai:4000/v1
+              MEMINI_RERANK_MODEL: rerank
+              MEMINI_RERANK_MAX_CONCURRENCY: 2
+              MEMINI_RERANK_TIMEOUT: 45s
+              MEMINI_PROMOTE_MIN_ACCESS: "3"
+              MEMINI_DEMOTE_AFTER: 72h
+              MEMINI_RERANK_POOL: "5"
+              MEMINI_RERANK_MAX_DOC_CHARS: "4096"
+              # Must stay >= POOL * MAX_DOC_CHARS + query + envelope, else memini
+              # shards one recall into N *serial* requests and pays the query N times.
+              # 5 * 4096 + 512 + 44 = 21036. Paired with rerank contextSize 16384.
+              MEMINI_RERANK_MAX_BATCH_CHARS: "24000"
+              MEMINI_EMBED_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: litellm-key-memini
+                    key: api-key
+              MEMINI_LLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: litellm-key-memini
+                    key: api-key
+              MEMINI_RERANK_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: litellm-key-memini
+                    key: api-key
+              MEMINI_TIMEOUT_MS: "55000"
+            envFrom:
+              - secretRef:
+                  name: memini
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  failureThreshold: 180
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+      fsck:
+        enabled: true
+        cronjob:
+          schedule: "0 5 * * *"
+        containers:
+          fsck:
+            env:
+              MEMINI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: memini
+                    key: MEMINI_API_KEY
+    persistence:
+      data:
+        existingClaim: memini
+      api-keys:
+        enabled: true
+    route:
+      ui:
+        enabled: true
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+    serviceMonitor:
+      main:
+        enabled: true
+    grafanaDashboards:
+      enabled: true
+      folder: llm
