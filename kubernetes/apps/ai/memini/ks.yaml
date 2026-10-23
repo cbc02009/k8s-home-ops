@@ -12,7 +12,7 @@ spec:
     - name: litellm
     - name: llmkube
   interval: 1h
-  path: ./kubernetes/apps/ai/memini
+  path: ./kubernetes/apps/ai/memini/app
   postBuild:
     substitute:
       APP: *app
