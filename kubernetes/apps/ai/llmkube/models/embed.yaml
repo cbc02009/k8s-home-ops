@@ -21,7 +21,7 @@ metadata:
 spec:
   modelRef: embed
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server@sha256:e83cbdc66e692129e17aad70293366cb00e3acca94b9f197c91a8a56e92201c3
+  image: ghcr.io/ggml-org/llama.cpp:server@sha256:8c74db29f1a2bef3f0a331b52c4d6214601dfceed4bee0b94cc48b3b23ff257d
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
@@ -104,7 +104,7 @@ metadata:
 spec:
   modelRef: embed
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server@sha256:e83cbdc66e692129e17aad70293366cb00e3acca94b9f197c91a8a56e92201c3
+  image: ghcr.io/ggml-org/llama.cpp:server@sha256:8c74db29f1a2bef3f0a331b52c4d6214601dfceed4bee0b94cc48b3b23ff257d
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
@@ -180,7 +180,7 @@ metadata:
 spec:
   modelRef: embed
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server@sha256:e83cbdc66e692129e17aad70293366cb00e3acca94b9f197c91a8a56e92201c3
+  image: ghcr.io/ggml-org/llama.cpp:server@sha256:8c74db29f1a2bef3f0a331b52c4d6214601dfceed4bee0b94cc48b3b23ff257d
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
