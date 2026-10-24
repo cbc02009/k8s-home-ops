@@ -34,15 +34,9 @@ spec:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
-          matchLabelKeys:
-            - "embed-pool: true"
-      # preferredDuringSchedulingIgnoredDuringExecution:
-      #   - weight: 100
-      #     podAffinityTerm:
-      #       labelSelector:
-      #         matchLabels:
-      #           embed-pool: "true"
-      #       topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              embed-pool: "true"
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
@@ -117,8 +111,9 @@ spec:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
-          matchLabelKeys:
-            - "embed-pool: true"
+          labelSelector:
+            matchLabels:
+              embed-pool: "true"
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
@@ -193,8 +188,9 @@ spec:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
-          matchLabelKeys:
-            - "embed-pool: true"
+          labelSelector:
+            matchLabels:
+              embed-pool: "true"
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
