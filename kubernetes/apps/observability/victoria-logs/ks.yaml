@@ -17,6 +17,24 @@ spec:
     namespace: flux-system
   targetNamespace: observability
   wait: false
+  patches:
+    - target:
+        kind: DaemonSet
+        namespace: observability
+        labelSelector: app.kubernetes.io/name=vector
+      patch: |-
+        apiVersion: apps/v1
+        kind: DaemonSet
+        metadata:
+          name: not-used
+          namespace: observability
+        spec:
+          template:
+            spec:
+              tolerations:
+                - key: llm-workload
+                  operator: Exists
+                  effect: NoSchedule
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
