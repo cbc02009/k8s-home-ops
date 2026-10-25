@@ -2,12 +2,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: coder
+  name: &app coder
 spec:
   interval: 1h
   chart:
     spec:
-      chart: coder
+      chart: *app
       sourceRef:
         kind: HelmRepository
         name: coder-charts
@@ -19,7 +19,7 @@ spec:
         - name: CODER_PG_CONNECTION_URL
           valueFrom:
             secretKeyRef:
-              name: coder
+              name: *app
               key: CODER_PG_CONNECTION_URL
         - name: CODER_PROMETHEUS_ADDRESS
           value: "0.0.0.0:2112"
@@ -29,6 +29,14 @@ spec:
       #   secretNames:
       #     - coder-tls
       replicaCount: 2
+      initContainers:
+        01-init-db:
+          image:
+            repository: ghcr.io/home-operations/postgres-init
+            tag: '18.6.0'
+          envFrom:
+            - secretRef:
+                name: *app
       ingress:
         enabled: true
         className: internal
