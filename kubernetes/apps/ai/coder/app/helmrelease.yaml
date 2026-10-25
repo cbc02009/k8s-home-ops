@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: coder
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: coder
+      sourceRef:
+        kind: HelmRepository
+        name: coder-charts
+  values:
+    coder:
+      env:
+        - name: CODER_ACCESS_URL
+          value: "https://${HOSTNAME}"
+        - name: CODER_PG_CONNECTION_URL
+          valueFrom:
+            secretKeyRef:
+              name: coder
+              key: CODER_PG_CONNECTION_URL
+        - name: CODER_PROMETHEUS_ADDRESS
+          value: "0.0.0.0:2112"
+        - name: CODER_OAUTH2_GITHUB_DEFAULT_PROVIDER_ENABLE
+          value: "false"
+      tls:
+        secretNames:
+          - coder-tls
+      replicaCount: 2
+      ingress:
+        enabled: true
+        className: internal
+        hosts:
+          - host: ${HOSTNAME}
+            paths:
+              - path: /
+                pathType: Prefix
+  install:
+    createNamespace: false
+  upgrade:
+    crds: CreateReplace
