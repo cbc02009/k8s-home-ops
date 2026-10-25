@@ -25,9 +25,9 @@ spec:
           value: "0.0.0.0:2112"
         - name: CODER_OAUTH2_GITHUB_DEFAULT_PROVIDER_ENABLE
           value: "false"
-      tls:
-        secretNames:
-          - coder-tls
+      # tls:
+      #   secretNames:
+      #     - coder-tls
       replicaCount: 2
       ingress:
         enabled: true
