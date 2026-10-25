@@ -30,13 +30,13 @@ spec:
       #     - coder-tls
       replicaCount: 2
       initContainers:
-        - 01-init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: '18.6.0'
-            envFrom:
-              - secretRef:
-                  name: *app
+        - name: init-db
+          image:
+            repository: ghcr.io/home-operations/postgres-init
+            tag: '18.6.0'
+          envFrom:
+            - secretRef:
+                name: *app
       ingress:
         enabled: true
         className: internal
