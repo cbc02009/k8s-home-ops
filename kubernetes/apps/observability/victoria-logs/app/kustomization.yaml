@@ -5,3 +5,20 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+patches:
+  - target:
+      kind: DaemonSet
+      name: victoria-logs-vector
+    patch: |-
+      apiVersion: apps/v1
+      kind: DaemonSet
+      metadata:
+        name: victoria-logs-vector
+        namespace: observability
+      spec:
+        template:
+          spec:
+            tolerations:
+              - key: llm-workload
+                operator: Exists
+                effect: NoSchedule
