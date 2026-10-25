@@ -8,12 +8,13 @@ resources:
 patches:
   - target:
       kind: DaemonSet
-      name: victoria-logs-vector
+      namespace: observability
+      labelSelector: app.kubernetes.io/name=vector
     patch: |-
       apiVersion: apps/v1
       kind: DaemonSet
       metadata:
-        name: victoria-logs-vector
+        name: not-used
         namespace: observability
       spec:
         template:
