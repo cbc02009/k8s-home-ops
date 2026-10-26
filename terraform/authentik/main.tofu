@@ -1,6 +1,6 @@
 terraform {
     backend "pg" {
-    conn_str = "postgres://10.6.0.20/terraform"
+    conn_str = "postgres://postgres.ctec.run/terraform"
     schema_name = "authentik"
   }
 
@@ -57,6 +57,12 @@ module "secret_grafana" {
   item   = "grafana"
 }
 
+module "secret_hermes" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "hermes"
+}
+
 # module "secret_forgejo" {
 #   source = "./modules/1password-item"
 #   vault  = "k8s-home-ops"
@@ -67,6 +73,12 @@ module "secret_mealie" {
   source = "./modules/1password-item"
   vault  = "k8s-home-ops"
   item   = "mealie"
+}
+
+module "secret_openwebui" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "open-webui"
 }
 
 module "secret_paperless" {

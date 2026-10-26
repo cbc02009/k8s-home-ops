@@ -1,0 +1,193 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  interval: 15m
+  dependsOn: []
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.24"
+            env:
+              - name: LITELLM_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: LITELLM_API_KEY
+            command:
+              - sh
+              - -c
+              - |
+                set -euo pipefail
+                apk add --no-cache gettext >/dev/null
+                cp /tmp/config.yaml /opt/data/config.yaml
+                # Expand env-var references from the pod env before hermes
+                # reads the config. v0.21.5 stopped expanding LITELLM_API_KEY
+                # in provider values at config-load time, which broke model
+                # calls with 401s from LiteLLM. envsubst has access to the
+                # same env (LITELLM_API_KEY is injected via the hermes secret
+                # envFrom). No dollar-brace literals in this script on
+                # purpose: the hermes kustomization runs strict flux postBuild
+                # substitution and any unescaped one fails the whole build
+                # (configmap.yaml shows the double-dollar escape convention
+                # for values that must survive it).
+                envsubst < /opt/data/config.yaml > /opt/data/config.yaml.tmp
+                mv /opt/data/config.yaml.tmp /opt/data/config.yaml
+                chown 10000:10000 /opt/data/config.yaml
+                # Install the memini memory-provider plugin from the upstream
+                # standalone mirror eleboucher/memini-hermes (a release-synced
+                # copy of integrations/hermes/plugin/memini — the blessed
+                # owner/repo form). Pinned to a commit, guarded by a .ref
+                # marker so normal restarts stay offline and it only refetches
+                # when the pin changes. The mirror is untagged, so bump this
+                # SHA by hand. The handle_tool_call **kwargs fix landed in
+                # v0.7.29; revisit tag-tracking (renovate github-tags) only if
+                # the mirror ever starts cutting tags.
+                MEMINI_PLUGIN_REF=ad5e12b3ade70e0afaa011513aa97920d2b66b46
+                PLUGIN_DIR=/opt/data/plugins/memini
+                if [ "$(cat "$PLUGIN_DIR/.ref" 2>/dev/null)" != "$MEMINI_PLUGIN_REF" ]; then
+                  BASE="https://raw.githubusercontent.com/eleboucher/memini-hermes/$MEMINI_PLUGIN_REF"
+                  if wget -qO /tmp/memini-init.py "$BASE/__init__.py" && wget -qO /tmp/memini-plugin.yaml "$BASE/plugin.yaml"; then
+                    rm -rf "$PLUGIN_DIR"
+                    mkdir -p "$PLUGIN_DIR"
+                    mv /tmp/memini-init.py "$PLUGIN_DIR/__init__.py"
+                    mv /tmp/memini-plugin.yaml "$PLUGIN_DIR/plugin.yaml"
+                    printf '%s' "$MEMINI_PLUGIN_REF" > "$PLUGIN_DIR/.ref"
+                    chown -R 10000:10000 "$PLUGIN_DIR"
+                  else
+                    echo "WARN: memini plugin fetch failed; starting with whatever is present"
+                  fi
+                fi
+        containers:
+          app:
+            image: &image
+              repository: nousresearch/hermes-agent
+              tag: v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
+            args: ["gateway", "run"]
+            env:
+              MEMINI_URL: http://memini.ai:8080
+              MEMINI_NAMESPACE: hermes
+              HERMES_HOME: /opt/data
+              HOME: /opt/data
+              TZ: ${CONFIG_TZ}
+            envFrom:
+              - secretRef:
+                  name: hermes
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 2Gi
+            ports:
+              - containerPort: &port 8642
+                name: http
+                protocol: TCP
+          dashboard:
+            image: *image
+            env:
+              GATEWAY_HEALTH_URL: http://localhost:8642
+              TZ: ${CONFIG_TZ}
+            envFrom:
+              - secretRef:
+                  name: hermes-dashboard
+            args:
+              - dashboard
+              - --host
+              - "0.0.0.0"
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 1Gi
+            ports:
+              - containerPort: &dashboard_port 9119
+                name: http
+                protocol: TCP
+          codeserver:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.141.0@sha256:72ab24b5680ee597dd647b30d82625752f40109b5f61bef90ffbf1ea1f02dbb8
+            env:
+              TZ: ${CONFIG_TZ}
+            args:
+              [
+                "--auth",
+                "none",
+                "--user-data-dir",
+                "/home/node/.vscode",
+                "--extensions-dir",
+                "/home/node/.vscode",
+                "--port",
+                "12321",
+                "/opt/data",
+              ]
+            ports:
+              - containerPort: &codeserverPort 12321
+                name: codeserver
+                protocol: TCP
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+    service:
+      app:
+        controller: hermes
+        ports:
+          http:
+            port: *port
+          codeserver:
+            port: *codeserverPort
+      dashboard:
+        controller: hermes
+        ports:
+          http:
+            port: *dashboard_port
+    route:
+      app:
+        hostnames: ["hermes.ctec.run"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: dashboard
+                port: http
+      codeserver:
+        hostnames: ["hermes-code.ctec.run"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: codeserver
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /opt/data
+      configmap:
+        type: configMap
+        name: "{{ .Release.Name }}-config"
+        defaultMode: 0755
+        globalMounts:
+          - path: /tmp/config.yaml
+            subPath: config.yaml

@@ -50,7 +50,7 @@ module "oauth2-Grimmory" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_grimmory.fields["oidc_id"]
-  client_secret      = module.secret_grimmory.fields["oidc_secret"]
+  # client_secret      = module.secret_grimmory.fields["oidc_secret"]
   client_type        = "public"
   redirect_uris = [
     { matching_mode = "strict", url = "https://grimmory.${var.public_domain}/oauth2-callback" },
@@ -88,6 +88,23 @@ module "oauth2-grafana" {
   client_id          = module.secret_grafana.fields["oidc_id"]
   client_secret      = module.secret_grafana.fields["oidc_secret"]
   redirect_uris      = ["https://grafana.${var.public_domain}/login/generic_oauth"]
+}
+
+module "oauth2-hermes" {
+  source             = "./modules/oauth2_application"
+  name               = "Hermes Agent"
+  icon_url           = "https://raw.githubusercontent.com/NousResearch/hermes-agent/refs/heads/main/assets/icon-master-dark.svg"
+  launch_url         = "https://hermes.${var.public_domain}"
+  description        = "Learning Agent"
+  newtab             = true
+  group              = "Selfhosted"
+  auth_groups        = [authentik_group.users.id]
+  slug               = "hermes"
+  client_type        = "public"
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_hermes.fields["oidc_id"]
+  redirect_uris      = ["https://hermes.${var.public_domain}/auth/callback"]
 }
 
 module "oauth2-immich" {
@@ -202,6 +219,24 @@ module "oauth2-opencloud-ios" {
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = "OpenCloudIOS"
   redirect_uris      = ["oc://ios.opencloud.eu"]
+}
+
+module "oauth2-openwebui" {
+  source             = "./modules/oauth2_application"
+  name               = "Open-WebUI"
+  icon_url           = "https://raw.githubusercontent.com/opencloud-eu/docs/refs/heads/main/static/img/oc-favicon.svg"
+  launch_url         = "https://opencloud.${var.public_domain}"
+  description        = "OpenWebUI"
+  newtab             = true
+  group              = "Selfhosted"
+  auth_groups        = [authentik_group.users.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_openwebui.fields["oidc_id"]
+  client_secret      = module.secret_openwebui.fields["oidc_secret"]
+  redirect_uris = [
+    "https://chat.${var.public_domain}/oauth/oidc/callback"
+  ]
 }
 
 module "oauth2-paperless" {
