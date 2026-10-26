@@ -35,14 +35,13 @@ spec:
           envFrom:
             - secretRef:
                 name: *app
-      ingress:
-        enabled: true
-        className: internal
-        hosts:
-          - host: ${HOSTNAME}
-            paths:
-              - path: /
-                pathType: Prefix
+      route:
+        app:
+          hostnames:
+            - coder.ctec.run
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
   install:
     createNamespace: false
   upgrade:
