@@ -33,9 +33,9 @@ spec:
     - docker/entrypoint.sh
   args:
     - single
-  extraArgs:
-    - --chat-template-kwargs
-    - '{"enable_thinking": false}'
+  # extraArgs:
+  #   - --chat-template-kwargs
+  #   - '{"enable_thinking": false}'
   skipModelInit: true
   rolloutPolicy:
     waitForIdle: true
