@@ -12,11 +12,11 @@ spec:
       conflictResolution: prefix
       conflictResolutionConfig:
         prefixFormat: "{workload}_"
-    optimizer:
-      embeddingModel: embed
-      embeddingProvider: openai
-      embeddingService: http://litellm.ai:4000/v1
-      embeddingServiceTimeout: 180s
+    # optimizer:
+    #   embeddingModel: embed
+    #   embeddingProvider: openai
+    #   embeddingService: http://litellm.ai:4000/v1
+    #   embeddingServiceTimeout: 180s
   incomingAuth:
     type: anonymous
   outgoingAuth:
