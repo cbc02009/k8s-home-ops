@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app mcp-grafana
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mcp-grafana
+  interval: 15m
+  dependsOn: []
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+    controllers:
+      mcp-grafana:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: mcp/grafana
+              tag: latest
+              pullPolicy: Always
+            args:
+              - "run"
+              - "--rm"
+              - "-i"
+              - "-e"
+              - "GRAFANA_URL"
+              - "-e"
+              - "GRAFANA_AUTH"
+              - "mcp/grafana"
+              - "-t"
+              - "sse"
+              - "--allowed-hosts"
+              - "mcp-grafana.observability:8000"
+              - "--allowed-origins"
+              - "*"
+            env:
+              GRAFANA_URL: "http://grafana-service.observability:3000"
+            envFrom:
+              - secretRef:
+                  name: mcp-grafana
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    route:
+      app:
+        hostnames: ["grafana-mcp.jory.dev"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    service:
+      app:
+        ports:
+          http:
+            port: 8000
