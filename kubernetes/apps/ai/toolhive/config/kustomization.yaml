@@ -9,6 +9,6 @@ resources:
   - ./mcp-telemetry.yaml
   - ./mcpgroup.yaml
   - ./podmonitor.yaml
-  - ./securitypolicy.yaml
+  # - ./securitypolicy.yaml
   - ./virtualmcpserver.yaml
   - ./dashboard/
