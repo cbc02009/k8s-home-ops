@@ -28,7 +28,7 @@ spec:
       # tls:
       #   secretNames:
       #     - coder-tls
-      replicaCount: 2
+      replicaCount: 1
       initContainers:
         - name: init-db
           image: ghcr.io/home-operations/postgres-init:18.6.0
