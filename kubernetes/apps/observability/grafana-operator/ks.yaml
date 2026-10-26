@@ -61,6 +61,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      HOSTNAME: grafana-mcp.ctec.run
   wait: false
   prune: true
   sourceRef:
