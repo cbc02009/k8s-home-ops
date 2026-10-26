@@ -12,7 +12,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      KOPIUR_CAPACITY: 20Gi
+      PVC_CAPACITY: 20Gi
       APP_PGID: "10000"
       APP_PUID: "10000"
   wait: false
