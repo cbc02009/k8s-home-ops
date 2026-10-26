@@ -8,7 +8,7 @@ spec:
   components:
     - ../../../../components/kopiur
   interval: 1h
-  path: ./kubernetes/apps/ai/hermes
+  path: ./kubernetes/apps/ai/hermes/app
   postBuild:
     substitute:
       APP: *app
