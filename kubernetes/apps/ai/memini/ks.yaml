@@ -16,7 +16,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      KOPIUR_CAPACITY: 10Gi
+      PVC_CAPACITY: 10Gi
       HOSTNAME: memini.ctec.run
   wait: false
   prune: true
