@@ -9,9 +9,9 @@ metadata:
       conditions: ["[STATUS] == 401"]
 spec:
   hostnames:
-    - mcp.jory.dev
+    - mcp.ctec.run
   parentRefs:
-    - name: envoy-external
+    - name: envoy-internal
       namespace: network
   rules:
     - backendRefs:
