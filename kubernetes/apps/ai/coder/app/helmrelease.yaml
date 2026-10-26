@@ -35,13 +35,13 @@ spec:
           envFrom:
             - secretRef:
                 name: *app
-      route:
-        app:
-          hostnames:
-            - coder.ctec.run
-          parentRefs:
-            - name: envoy-internal
-              namespace: network
+      httproute:
+        enabled: true
+        hostnames:
+          - coder.ctec.run
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
   install:
     createNamespace: false
   upgrade:
