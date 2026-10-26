@@ -36,3 +36,55 @@ spec:
     - targetLabel: service
       replacement: blackbox-exporter-lan
       action: replace
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: vpn-icmp-external
+spec:
+  module: icmp
+  prober:
+    url: blackbox-exporter-vpn.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - 1.1.1.1
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter-vpn
+      action: replace
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: vpn-http-external
+spec:
+  module: http_2xx
+  prober:
+    url: blackbox-exporter-vpn.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - https://one.one.one.one
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter-vpn
+      action: replace
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: dns-kube-dns
+spec:
+  interval: 120s
+  jobName: dns_probe
+  module: dns_external
+  prober:
+    url: blackbox-exporter.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - 10.10.0.10:53

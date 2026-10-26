@@ -1,18 +1,17 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: blackbox-exporter-vpn
+  name: &app blackbox-exporter-vpn
 spec:
   chartRef:
     kind: OCIRepository
-    name: blackbox-exporter-vpn
-  interval: 1h
+    name: blackbox-exporter
+  interval: 15m
+  dependsOn: []
   values:
     fullnameOverride: blackbox-exporter-vpn
-    strategy:
-      type: Recreate
     podAnnotations:
       k8s.v1.cni.cncf.io/networks: |-
         [{
@@ -49,21 +48,29 @@ spec:
     prometheusRule:
       enabled: true
       rules:
-        - alert: VpnProbeFailed
+        - alert: VPNBlackboxProbeFailed
           expr: |-
-            probe_success{service="blackbox-exporter-vpn"} == 0
+            probe_success == 0
           for: 15m
           labels:
             severity: critical
           annotations:
             summary: |-
-              The probe targeting {{ $labels.instance }} is currently having connectivity issues
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              name: blackbox-exporter-vpn
-            patch: |-
-              - op: remove
-                path: /spec/strategy/rollingUpdate
+              The host {{ $labels.target }} is currently unreachable
+        - alert: VPNICMPProbeDown
+          expr: |-
+            probe_success{job="vpn-icmp-external"} == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: |-
+              ICMP probe to {{ $labels.target }} via the VPN has been failing for more than 15 minutes
+        - alert: VPNHTTPProbeDown
+          expr: probe_success{job="vpn-http-external"} == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: |-
+              HTTP probe to {{ $labels.target }} via the VPN has been failing for more than 15 minutes
