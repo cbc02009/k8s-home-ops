@@ -6,7 +6,7 @@ metadata:
   name: hermes
 spec:
   proxyRef: litellm
-  keyAlias: ToolHive
+  keyAlias: Hermes
   secretName: litellm-key-hermes
   secretKey: api-key
   models:
