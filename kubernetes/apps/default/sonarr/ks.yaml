@@ -13,8 +13,8 @@ spec:
     - ../../../../components/pvc
     - ../../../../components/zeroscaler
   dependsOn:
-    - name: kopiur
-      namespace: system
+    - name: postgres-cluster
+      namespace: databases
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: external-secrets

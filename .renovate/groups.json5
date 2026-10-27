@@ -69,5 +69,49 @@
         "commitMessageTopic": "{{{groupName}}} group"
       },
     },
+    {
+      description: "Toolhive group",
+      groupName: "Toolhive",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/toolhive-operator/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Memini Group",
+      groupName: "Memini",
+      matchPackageNames: [
+        "eleboucher/memini",
+        "registry.erwanleboucher.dev/eleboucher/charts/memini",
+        "@eleboucher/opencode-memini",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "LLMKube Group",
+      groupName: "LLMKube",
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "/defilantech\\/charts\\//",
+        "/llmkube/",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Kube Prometheus Stack Group",
+      groupName: "kube-prometheus-stack",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/kube-prometheus-stack/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
   ],
 }

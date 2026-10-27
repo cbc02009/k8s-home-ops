@@ -12,7 +12,7 @@ resources:
   - ./forgejo/ks.yaml
   # - ./karakeep/ks.yaml
   # - ./mealie/ks.yaml
-  - ./immich/ks.yaml
+  # - ./immich/ks.yaml
   # - ./it-tools/ks.yaml
   # - ./opencloud/ks.yaml
   # - ./paperless/ks.yaml

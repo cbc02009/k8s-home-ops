@@ -9,4 +9,4 @@ machine:
 apiVersion: v1alpha1
 kind: KmsgLogConfig
 name: remote-log
-url: tcp://host:6050/
+url: udp://127.0.0.1:6050/

@@ -109,18 +109,25 @@ spec:
           requests:
             cpu: 500m
             memory: 2Gi
-      security:
         cephx:
+          allowedCiphers: ["aes256k"]
           csi:
-            keyType: aes
+            keepPriorKeyCountMax: 0
+            keyGeneration: 2
+            keyRotationPolicy: KeyGeneration
+            keyType: aes256k
           daemon:
             keyGeneration: 2
             keyRotationPolicy: KeyGeneration
+          rbdMirrorPeer:
+            keyGeneration: 2
+            keyRotationPolicy: KeyGeneration
+            keyType: aes256k
       network:
         provider: host
-        # addressRanges:
-        #   public: ["10.69.1.0/24"]
-        #   cluster: ["169.254.255.0/24"]
+        addressRanges:
+          public: ["10.0.2.0/24"]
+          # cluster: ["169.254.255.0/24"]
         connections:
           requireMsgr2: true
       storage:
