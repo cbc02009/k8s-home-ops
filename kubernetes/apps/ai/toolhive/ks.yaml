@@ -152,6 +152,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: &app kguardian-mcp
+spec:
+  dependsOn:
+    - name: toolhive
+  interval: 1h
+  path: ./kubernetes/apps/ai/toolhive/mcp-servers/kguardian
+  postBuild:
+    substitute:
+      APP: *app
+  wait: false
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: kubectl-mcp
 spec:
   dependsOn:

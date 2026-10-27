@@ -15,11 +15,11 @@ spec:
     - name: NPM_CONFIG_CACHE
       value: /tmp/.npm
     - name: SONARR_URL
-      value: http://sonarr.downloads
+      value: http://sonarr.default
     - name: RADARR_URL
-      value: http://radarr.downloads
+      value: http://radarr.default
     - name: PROWLARR_URL
-      value: http://prowlarr.downloads
+      value: http://prowlarr.default
   secrets:
     - name: toolhive-sonarr
       key: SONARR_API_KEY
