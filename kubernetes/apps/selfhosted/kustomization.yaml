@@ -17,4 +17,4 @@ resources:
   # - ./opencloud/ks.yaml
   # - ./paperless/ks.yaml
   # - ./rustdesk/ks.yaml
-  - ./smtp-relay/ks.yaml
+  # - ./smtp-relay/ks.yaml

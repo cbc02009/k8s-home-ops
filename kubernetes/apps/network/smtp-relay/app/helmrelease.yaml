@@ -5,18 +5,10 @@ kind: HelmRelease
 metadata:
   name: &app smtp-relay
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: *app
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  interval: 1h
   values:
     controllers:
       smtp-relay:
@@ -31,7 +23,6 @@ spec:
               tag: 0.9.6@sha256:e1074e92a452b84d1135ebe8ab831c5f541d33dcbd39e38fab740a53bbf2f97c
             env:
               SMTP_RELAY_SMTP_PORT: &port 25
-              SMTP_RELAY_METRICS_PORT: &metricsPort 8080
               SMTP_RELAY_SERVER_PORT: 587
             envFrom:
               - secretRef:
@@ -39,8 +30,19 @@ spec:
             probes:
               liveness:
                 enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               readiness:
                 enabled: true
+                spec:
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -49,50 +51,56 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 128Mi
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: *app
+                memory: 64Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
     service:
       app:
-        controller: smtp-relay
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: ${IP}
           external-dns.kubernetes.io/hostname: ${HOSTNAME}
+          lbipam.cilium.io/ips: ${IP}
+        externalTrafficPolicy: Local
         ports:
-          http:
-            primary: true
-            port: *metricsPort
           smtp:
             port: *port
-    serviceMonitor:
-      app:
-        serviceName: smtp-relay
-        endpoints:
-          - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
-    persistence:
+    configMaps:
       config:
+        data:
+          maddy.conf: |-
+            state_dir /cache/state
+            runtime_dir /cache/run
+
+            debug yes
+
+            tls off
+            hostname {env:SMTP_RELAY_DOMAIN}
+
+            smtp tcp://0.0.0.0:{env:SMTP_RELAY_SMTP_PORT} {
+                default_source {
+                    deliver_to &remote_queue
+                }
+            }
+
+            target.queue remote_queue {
+                target &remote_smtp
+            }
+
+            target.smtp remote_smtp {
+                attempt_starttls yes
+                require_tls yes
+                auth plain {env:SMTP_RELAY_USERNAME} {env:SMTP_RELAY_PASSWORD}
+                targets tcp://{env:SMTP_RELAY_SERVER}:{env:SMTP_RELAY_SERVER_PORT}
+            }
+    persistence:
+      cache:
+        type: emptyDir
+      config-file:
         type: configMap
-        name: smtp-relay-configmap
+        identifier: config
         globalMounts:
           - path: /data/maddy.conf
             subPath: maddy.conf
-            readOnly: true
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /cache

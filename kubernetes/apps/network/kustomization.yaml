@@ -11,3 +11,4 @@ resources:
   - ./cloudflare-tunnel/ks.yaml
   - ./envoy-gateway/ks.yaml
   - ./external-dns/ks.yaml
+  - ./smtp-relay/ks.yaml
