@@ -35,7 +35,7 @@ spec:
               TZ: "America/New_York"
               BASE_URL: https://mealie.ctec.run
               DB_ENGINE: postgres
-              SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
+              SMTP_HOST: smtp-relay.default.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM_NAME: Mealie
               SMTP_FROM_EMAIL: noreply@ctec.run

@@ -29,4 +29,3 @@ spec:
       APP: *app
       IP: 10.6.0.7
       PVC_CAPACITY: 5Gi
-      OLD_NS: selfhosted

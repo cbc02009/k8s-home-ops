@@ -25,7 +25,6 @@ spec:
       HOSTNAME: mealie.ctec.run
       APP: *app
       PVC_CAPACITY: "15Gi"
-      OLD_NS: selfhosted
   prune: true
   sourceRef:
     kind: GitRepository

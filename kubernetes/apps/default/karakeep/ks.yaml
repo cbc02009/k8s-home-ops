@@ -22,7 +22,6 @@ spec:
       AUTH_HOSTNAME: auth.ctec.run
       APP_UID: "1000"
       APP_GID: "1000"
-      OLD_NS: selfhosted
   prune: true
   sourceRef:
     kind: GitRepository

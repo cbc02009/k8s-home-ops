@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app opencloud
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/kopiur
+  dependsOn:
+    - name: external-secrets
+      namespace: security
+    - name: kopiur
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 30m
+  path: ./kubernetes/apps/default/opencloud/app
+  postBuild:
+    substitute:
+      APP: *app
+      HOSTNAME: opencloud.ctec.run
+      AUTH_HOSTNAME: auth.ctec.run
+      APP_UID: "1000"
+      APP_GID: "1000"
+      PVC_CLAIM: opencloud-data
+      PVC_CAPACITY: 20Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: default
+  wait: false
