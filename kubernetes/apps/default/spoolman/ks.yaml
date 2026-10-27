@@ -22,6 +22,8 @@ spec:
     substitute:
       HOSTNAME: spoolman.ctec.run
       APP: *app
+      APP_GID: "2000"
+      APP_UID: "2000"
       PVC_CAPACITY: "1Gi"
   prune: true
   sourceRef:

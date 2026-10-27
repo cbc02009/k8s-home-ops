@@ -36,8 +36,8 @@ spec:
               TZ: ${CONFIG_TZ}
               SPOOLMAN_PORT: &port 8000
               SPOOLMAN_DB_TYPE: postgres
-              PUID: 2000
-              PGID: 2000
+              PUID: ${APP_UID}
+              PGID: ${APP_GID}
             envFrom: *envFrom
             probes:
               liveness: &probes
