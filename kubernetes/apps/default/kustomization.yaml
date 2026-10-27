@@ -28,4 +28,5 @@ resources:
   - ./searxng/ks.yaml
   - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
+  - ./spoolman/ks.yaml
   - ./tautulli/ks.yaml
