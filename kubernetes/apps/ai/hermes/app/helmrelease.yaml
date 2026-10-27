@@ -104,9 +104,9 @@ spec:
             env:
               GATEWAY_HEALTH_URL: http://localhost:8642
               TZ: ${CONFIG_TZ}
-            envFrom:
-              - secretRef:
-                  name: hermes-dashboard
+            # envFrom:
+            #   - secretRef:
+            #       name: hermes-dashboard
             args:
               - dashboard
               - --host
