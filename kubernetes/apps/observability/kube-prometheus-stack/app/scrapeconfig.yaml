@@ -3,16 +3,24 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name smtp-relay
+  name: snapmaker-u1
 spec:
   staticConfigs:
     - targets:
-        - "smtp-relay.selfhosted.svc.cluster.local:8080"
-  metricsPath: /metrics
-  relabelings:
-    - action: replace
-      targetLabel: job
-      replacement: *name
+        - "u1.ctec.internal:9101"
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+# apiVersion: monitoring.coreos.com/v1alpha1
+# kind: ScrapeConfig
+# metadata:
+#   name: garage
+# spec:
+#   staticConfigs:
+#     - targets:
+#         - expanse.internal:9002
+#   relabelings:
+#     - targetLabel: job
+#       replacement: garage
 # ---
 # # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
 # apiVersion: monitoring.coreos.com/v1alpha1
