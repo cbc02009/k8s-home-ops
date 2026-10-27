@@ -18,6 +18,8 @@ resources:
   - ./karakeep/ks.yaml
   - ./lidarr/ks.yaml
   - ./mealie/ks.yaml
+  # - ./opencloud/ks.yaml
+  # - ./paperless/ks.yaml
   - ./plex/ks.yaml
   # - ./plex2/ks.yaml
   - ./prowlarr/ks.yaml
