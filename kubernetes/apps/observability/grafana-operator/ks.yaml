@@ -57,11 +57,34 @@ metadata:
   name: &app mcp-grafana
 spec:
   interval: 1h
+  dependsOn:
+    - name: grafana-instance
   path: ./kubernetes/apps/observability/grafana-operator/mcp
   postBuild:
     substitute:
       APP: *app
       HOSTNAME: grafana-mcp.ctec.run
+  wait: false
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: observability
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app grafana-klipper
+spec:
+  interval: 1h
+  dependsOn:
+    - name: grafana-instance
+  path: ./kubernetes/apps/observability/grafana-operator/klipper
+  postBuild:
+    substitute:
+      APP: *app
   wait: false
   prune: true
   sourceRef:

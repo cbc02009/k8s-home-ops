@@ -95,7 +95,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: forgejo-runner-secret
-                    key: token2
+                    key: token
         containers:
           daemon:
             image:
