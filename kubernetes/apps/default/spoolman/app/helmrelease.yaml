@@ -14,6 +14,14 @@ spec:
       spoolman:
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.6.0'
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
         containers:
           app:
             image:
@@ -30,6 +38,7 @@ spec:
               SPOOLMAN_DB_TYPE: postgres
               PUID: 2000
               PGID: 2000
+            envFrom: *envFrom
             probes:
               liveness: &probes
                 enabled: true
