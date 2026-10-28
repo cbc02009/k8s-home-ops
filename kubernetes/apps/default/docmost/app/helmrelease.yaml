@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app docmost
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    controllers:
+      docmost:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          01-init-db:
+            envFrom: &envFrom
+              - secretRef:
+                  name: *app
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.6.0'
+        containers:
+          app:
+            image:
+              repository: mirror.gcr.io/docmost/docmost
+              tag: 0.97.0
+            env:
+              TZ: ${CONFIG_TZ}
+              APP_URL: "https://${HOSTNAME}"
+              MAIL_DRIVER: smtp
+              MAIL_FROM_ADDRESS: docmost@kokoro.wtf
+              MAIL_FROM_NAME: Docmost
+              PORT: "3000"
+              REDIS_URL: "redis://docmost-dragonfly-db.default.svc.cluster.local:6379"
+              SMTP_HOST: smtp-relay.network.svc.cluster.local
+              SMTP_PORT: 25
+            envFrom: *envFrom
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 25m
+                memory: 105M
+              limits:
+                memory: 512M
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        runAsNonRoot: true
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        ports:
+          http:
+            port: 3000
+    route:
+      app:
+        hostnames:
+          - "${HOSTNAME}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    persistence:
+      data:
+        existingClaim: *app
+        globalMounts:
+          - path: /app/data/storage
