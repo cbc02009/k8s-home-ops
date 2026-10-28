@@ -7,7 +7,7 @@ metadata:
   namespace: &namespace default
 spec:
   interval: 1h
-  path: ./kubernetes/apps/default/forgejo/runner
+  path: ./kubernetes/apps/default/forgejo-runner/runner
   postBuild:
     substitute:
       APP: *app
@@ -27,7 +27,7 @@ metadata:
   namespace: &namespace default
 spec:
   interval: 1h
-  path: ./kubernetes/apps/default/forgejo/runner-old
+  path: ./kubernetes/apps/default/forgejo-runner/runner-old
   postBuild:
     substitute:
       APP: *app
