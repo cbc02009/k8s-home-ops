@@ -38,6 +38,7 @@ spec:
               SPOOLMAN_DB_TYPE: postgres
               PUID: ${APP_UID}
               PGID: ${APP_GID}
+              SPOOLMAN_METRICS_ENABLED: true
             envFrom: *envFrom
             probes:
               liveness: &probes
