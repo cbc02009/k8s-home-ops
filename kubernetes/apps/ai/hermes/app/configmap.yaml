@@ -6,7 +6,7 @@ metadata:
 data:
   config.yaml: |
     model:
-      default: qwen3.8-27b
+      default: muse-glimmer
       provider: litellm
     providers:
       litellm:

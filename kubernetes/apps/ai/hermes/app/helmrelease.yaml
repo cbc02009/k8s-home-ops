@@ -82,11 +82,12 @@ spec:
               tag: v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
             args: ["gateway", "run"]
             env:
-              MEMINI_URL: http://memini.ai:8080
+              MEMINI_URL: http://memini.ai.svc.local:8080
               MEMINI_NAMESPACE: hermes
               HERMES_HOME: /opt/data
               HOME: /opt/data
               TZ: ${CONFIG_TZ}
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: "1"
             envFrom:
               - secretRef:
                   name: hermes
@@ -121,6 +122,94 @@ spec:
               - containerPort: &dashboard_port 9119
                 name: http
                 protocol: TCP
+          webui:
+            image:
+              repository: ghcr.io/nesquena/hermes-webui
+              tag: 0.52.555@sha256:d0bbb1c5371b1f4b0a28e4cffa5f403780eb81601b66a6d6843f6fc338f08523
+            env:
+              HERMES_API_URL: http://127.0.0.1:8642
+              HERMES_HOME: /home/hermeswebui/.hermes
+              HERMES_WEBUI_CHAT_BACKEND: gateway
+              HERMES_WEBUI_DEFAULT_WORKSPACE: /home/hermeswebui/.hermes/workspace
+              HERMES_WEBUI_GATEWAY_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: API_SERVER_KEY
+              HERMES_WEBUI_GATEWAY_BASE_URL: http://127.0.0.1:8642
+              HERMES_WEBUI_GATEWAY_USE_RUNS_API: "true"
+              HERMES_WEBUI_HOST: 0.0.0.0
+              HERMES_WEBUI_OIDC_ALLOW_CLAIM: hermes_access
+              HERMES_WEBUI_OIDC_ALLOW_VALUES: admin
+              HERMES_WEBUI_OIDC_CLIENT_ID: hermes
+              HERMES_WEBUI_OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-kanidm-oauth2-credentials
+                    key: CLIENT_SECRET
+              HERMES_WEBUI_OIDC_ISSUER: https://idm.bjw-s.dev/oauth2/openid/hermes
+              HERMES_WEBUI_OIDC_REDIRECT_URI: https://hermes.bjw-s.dev/api/auth/oidc/callback
+              HERMES_WEBUI_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-webui
+                    key: PASSWORD
+              HERMES_WEBUI_PORT: &port 8787
+              HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+              HOME: /home/hermeswebui
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-litellm
+                    key: key
+              UV_CACHE_DIR: /uv_cache
+              WANTED_GID: "10000"
+              WANTED_UID: "10000"
+            # The init script runs as PID 1 without forwarding SIGTERM; signal server.py directly.
+            lifecycle:
+              preStop:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - kill -TERM $(cat /proc/1/task/1/children)
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  failureThreshold: 90
+                  httpGet:
+                    path: /health
+                    port: *port
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
           codeserver:
             image:
               repository: ghcr.io/coder/code-server
