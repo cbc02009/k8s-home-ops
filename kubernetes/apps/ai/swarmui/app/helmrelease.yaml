@@ -78,12 +78,12 @@ spec:
       output:
         type: nfs
         server: ${CONFIG_TRUENAS_HOST}
-        path: /mnt/tank/swarmui/output
+        path: /mnt/smoltank/swarmui/output
         globalMounts:
           - path: /SwarmUI/Output
       models:
         type: nfs
         server: ${CONFIG_TRUENAS_HOST}
-        path: /mnt/tank/swarmui/models
+        path: /mnt/smoltank/swarmui/models
         globalMounts:
           - path: /SwarmUI/Models
