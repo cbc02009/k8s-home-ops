@@ -66,8 +66,7 @@ spec:
               runAsUser: 0
               runAsGroup: 0
     serviceAccount:
-      dcgm-exporter:
-        automountServiceAccountToken: true
+      dcgm-exporter: {}
     persistence:
       exporter-metrics:
         type: configMap
