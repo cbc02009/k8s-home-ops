@@ -6,6 +6,13 @@ metadata:
   name: &app swarmui
 spec:
   interval: 1h
+  components:
+    - ../../../../components/kopiur
+  dependsOn:
+    - name: kopiur
+      namespace: system
+    - name: nvidia-device-plugin
+      namespace: system
   path: ./kubernetes/apps/ai/swarmui/app
   postBuild:
     substitute:
