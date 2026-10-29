@@ -8,6 +8,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur
+    - ../../../../gpu
   dependsOn:
     - name: kopiur
       namespace: system
@@ -21,6 +22,7 @@ spec:
       APP_GID: "1000"
       PVC_CAPACITY: 20Gi
       HOSTNAME: swarmui.ctec.run
+      GPU_CLASSNAME: gpu.nvidia.com
   wait: false
   prune: true
   sourceRef:

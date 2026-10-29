@@ -12,6 +12,10 @@ spec:
   dependsOn: []
   interval: 1h
   values:
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: swarmui-gpu
     controllers:
       swarmui:
         annotations:

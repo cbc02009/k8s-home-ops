@@ -9,6 +9,6 @@ spec:
       requests:
         - name: gpu
           exactly:
-            deviceClassName: gpu.intel.com
+            deviceClassName: ${GPU_CLASSNAME:=gpu.intel.com}
             adminAccess: true
             allocationMode: All
