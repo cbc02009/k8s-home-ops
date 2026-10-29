@@ -23,7 +23,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
           nodeSelector:
-            nvidia.feature.node.kubernetes.io/gpu: "true"
+            topology.kubernetes.io: "dgpu"
           tolerations:
             - key: llm-workload
               operator: Exists
