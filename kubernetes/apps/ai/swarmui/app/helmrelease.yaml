@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app swarmui
+  namespace: ai
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  dependsOn: []
+  interval: 1h
+  values:
+    controllers:
+      swarmui:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: "OnRootMismatch"
+          nodeSelector:
+            nvidia.feature.node.kubernetes.io/gpu: "true"
+          tolerations:
+            - key: llm-workload
+              operator: exists
+              effect: NoSchedule
+          runtimeClassName: nvidia
+        containers:
+          app:
+            image:
+              repository: ghcr.io/spiceratops/swarmui
+              tag: 0.9.5@sha256:7f416b79746a14a8bd0736f4961f2e4ff0a4dcc751bb6986af2a6e62caaaeaca
+            env:
+              TZ: ${TIMEZONE}
+            resources:
+              requests:
+                nvidia.com/gpu: 1
+                cpu: 500m
+                memory: 4Gi
+              limits:
+                memory: 6Gi
+                nvidia.com/gpu: 1
+    service:
+      app:
+        controller: swarmui
+        ports:
+          http:
+            port: &port 7801
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: networking
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /SwarmUI/Data
+            subPath: data
+          - path: /SwarmUI/dlbackend
+            subPath: dlbackend
+          - path: /SwarmUI/src/BuiltinExtensions/ComfyUIBackend/DLNodes
+            subPath: dlnodes
+          - path: /SwarmUI/src/BuiltinExtensions/ComfyUIBackend/CustomWorkflows
+            subPath: workflows
+      output:
+        type: nfs
+        server: ${CONFIG_TRUENAS_HOST}
+        path: /mnt/tank/swarmui/output
+        globalMounts:
+          - path: /SwarmUI/Output
+      models:
+        type: nfs
+        server: ${CONFIG_TRUENAS_HOST}
+        path: /mnt/tank/swarmui/models
+        globalMounts:
+          - path: /SwarmUI/Models

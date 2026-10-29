@@ -16,4 +16,5 @@ resources:
   - ./llmkube/ks.yaml
   - ./memini/ks.yaml
   - ./open-webui/ks.yaml
+  - ./swarmui/ks.yaml
   - ./toolhive/ks.yaml
