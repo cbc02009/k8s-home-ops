@@ -18,6 +18,36 @@ spec:
     remediation:
       retries: 3
   values:
+    externalSecrets:
+      home-assistant:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: *app
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              # Home Assistant
+              RECORDER_DB_URL: "postgresql://{{ .pg_user }}:{{ .pg_pass }}@postgres-rw.databases.svc.cluster.local/home_assistant"
+              HASS_TOKEN: "{{ .vscode_token }}"
+
+              # Postgres Init
+              INIT_POSTGRES_SUPER_PASS: "{{ .postgres_super_pass }}"
+              INIT_POSTGRES_PASS: "{{ .pg_pass }}"
+              INIT_POSTGRES_USER: "{{ .pg_user }}"
+              INIT_POSTGRES_HOST: "{{ .postgres_host }}"
+              INIT_POSTGRES_DBNAME: "home_assistant"
+        dataFrom:
+          - extract:
+              key: home-assistant
+          - extract:
+              key: postgres
+            rewrite:
+              - regexp:
+                  source: "(.*)"
+                  target: "postgres_$1"
     controllers:
       *app :
         annotations:
@@ -89,7 +119,27 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
 
-
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: "{{ .Release.Name }}"
+                port: &port 8123
+      codeserver:
+        hostnames:
+          - hass-code.ctec.run
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: "{{ .Release.Name }}"
+                port: &codeserverPort 12321
     service:
       app:
         primary: true
@@ -99,38 +149,11 @@ spec:
           lbipam.cilium.io/ips: ${IP}
         ports:
           http:
-            port: &port 8123
+            port: *port
       code-server:
         ports:
           code-server:
-            port: 12321
-
-    route:
-      app:
-        hostnames:
-          - "{{ .Release.Name }}.ctec.run"
-          - "hass.ctec.run"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: 8123
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /code/
-            filters:
-              - type: URLRewrite
-                urlRewrite:
-                  path:
-                    type: ReplacePrefixMatch
-                    replacePrefixMatch: /
-            backendRefs:
-              - identifier: code-server
-                port: 12321
+            port: *codeserverPort
 
     persistence:
       config:

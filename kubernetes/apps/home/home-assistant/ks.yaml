@@ -35,4 +35,4 @@ spec:
       PVC_CAPACITY: 5Gi
       APP_UID: "1000"
       APP_GID: "1000"
-      OLD_NS: home
+      HOSTNAME: hass.ctec.run

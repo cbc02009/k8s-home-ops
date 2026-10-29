@@ -11,6 +11,29 @@ spec:
     name: *app
   dependsOn: []
   values:
+    externalSecrets:
+      frigate:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: *app
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              FRIGATE_RTSP_USER: "{{ .rtsp_user }}"
+              FRIGATE_RTSP_PASSWORD: "{{ .rtsp_pass }}"
+              FRIGATE_MQTT_USERNAME: "{{ .mosquitto_mqtt_user }}"
+              FRIGATE_MQTT_PASSWORD: "{{ .mosquitto_mqtt_pass }}"
+        dataFrom:
+          - extract:
+              key: frigate
+          - extract:
+              key: mosquitto
+            rewrite:
+              - regexp:
+                  source: "(.*)"
     defaultPodOptions:
       resourceClaims:
         - name: gpu
