@@ -16,5 +16,4 @@ spec:
     kubeletPlugin:
       privileged: true
       healthMonitoring:
-        enabled: true
-    xpumdEnabled: true
+        enabled: false
