@@ -11,4 +11,4 @@ spec:
     operation: copy
   ref:
     tag: 0.21.0
-  url: oci://k8tz.github.io/k8tz/
+  url: oci://ghcr.io/k8tz/k8tz/charts/k8tz
