@@ -8,7 +8,7 @@ talosVersion: 1.14.4
 schematicId: "@schematics/control-plane.yaml"
 
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.37.1
+kubernetesVersion: v1.37.2
 
 patchesDir: patches
 secretsPath: secrets.sops.yaml
