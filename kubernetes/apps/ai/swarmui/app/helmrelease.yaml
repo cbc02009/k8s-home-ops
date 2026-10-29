@@ -35,7 +35,7 @@ spec:
               repository: ghcr.io/spiceratops/swarmui
               tag: 0.9.5@sha256:7f416b79746a14a8bd0736f4961f2e4ff0a4dcc751bb6986af2a6e62caaaeaca
             env:
-              TZ: ${TIMEZONE}
+              TZ: ${CONFIG_TZ}
             resources:
               requests:
                 nvidia.com/gpu: 1
