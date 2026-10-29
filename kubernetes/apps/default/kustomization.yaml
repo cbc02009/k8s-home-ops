@@ -32,6 +32,7 @@ resources:
   - ./seerr/ks.yaml
   - ./searxng/ks.yaml
   - ./shelfmark/ks.yaml
+  - ./silverbullet/ks.yaml
   - ./sonarr/ks.yaml
   - ./spoolman/ks.yaml
   - ./tautulli/ks.yaml
