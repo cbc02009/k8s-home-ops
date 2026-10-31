@@ -8,7 +8,6 @@ components:
 resources:
   - ./namespace.yaml
   - ./coder/ks.yaml
-  - ./context7-mcp/ks.yaml
   - ./headroom/ks.yaml
   # - ./hermes/ks.yaml
   - ./litellm/ks.yaml
