@@ -37,8 +37,8 @@ spec:
               - "mcp/grafana"
               - "-t"
               - "sse"
-              - "--allowed-hosts"
-              - "mcp-grafana.observability.svc.cluster.local:8000"
+              # - "--allowed-hosts"
+              # - "mcp-grafana.observability.svc.cluster.local:8000"
               - "--allowed-origins"
               - "*"
             env:
