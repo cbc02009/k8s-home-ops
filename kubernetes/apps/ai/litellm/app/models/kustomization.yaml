@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   # - ./embed.yaml
   - ./free-pool.yaml
-  # - ./local-pool.yaml
-  # - ./muse-glimmer.yaml
-  # - ./qwen3.8-27b.yaml
+  - ./local-pool.yaml
+  - ./muse-glimmer.yaml
+  - ./qwen3.8-27b.yaml
