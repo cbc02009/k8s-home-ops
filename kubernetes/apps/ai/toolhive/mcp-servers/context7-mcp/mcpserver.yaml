@@ -27,5 +27,5 @@ spec:
     addHeadersFromSecret:
       - headerName: Authorization
         valueSecretRef:
-          name: context7-mcp
+          name: context7-mcp-secret
           key: authorization
