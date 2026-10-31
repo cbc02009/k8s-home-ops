@@ -5,6 +5,7 @@ kind: MCPServerEntry
 metadata:
   name: grafana
 spec:
+  allowPrivateEndpoint: true
   remoteUrl: http://mcp-grafana.observability.svc.cluster.local:8000/sse
   transport: sse
   groupRef:
