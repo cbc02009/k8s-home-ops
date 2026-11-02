@@ -16,7 +16,7 @@ metadata:
   name: grafana
   namespace: ai
 spec:
-  image: docker.io/grafana/mcp-grafana:2.0.2
+  image: docker.io/grafana/mcp-grafana:2.1.1
   transport: streamable-http
   mcpPort: 8000
   proxyPort: 8080
