@@ -1,12 +1,36 @@
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserverentry_v1alpha1.json
-apiVersion: toolhive.stacklok.dev/v1alpha1
-kind: MCPServerEntry
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserverentry_v1alpha1.json
+# apiVersion: toolhive.stacklok.dev/v1alpha1
+# kind: MCPServerEntry
+# metadata:
+#   name: grafana
+# spec:
+#   allowPrivateEndpoint: true
+#   remoteUrl: http://mcp-grafana.observability.svc.cluster.local:8000/
+#   transport: streamable-http
+#   groupRef:
+#     name: mcp-tools
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
 metadata:
   name: grafana
+  namespace: ai
 spec:
-  allowPrivateEndpoint: true
-  remoteUrl: http://mcp-grafana.observability.svc.cluster.local:8000/
+  image: docker.io/grafana/mcp-grafana:2.0.2
   transport: streamable-http
+  mcpPort: 8000
+  proxyPort: 8080
+  args:
+    - --transport
+    - streamable-http
+    - --allowed-hosts
+    - '*'
+  env:
+    - name: GRAFANA_URL
+      value: 'http://grafana.observability.svc.cluster.local:3000'
+  secrets:
+    - name: grafana-token
+      key: token
+      targetEnvName: GRAFANA_SERVICE_ACCOUNT_TOKEN
   groupRef:
     name: mcp-tools
