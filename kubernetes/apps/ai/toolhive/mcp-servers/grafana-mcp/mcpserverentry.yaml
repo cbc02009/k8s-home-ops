@@ -7,6 +7,6 @@ metadata:
 spec:
   allowPrivateEndpoint: true
   remoteUrl: http://mcp-grafana.observability.svc.cluster.local:8000/
-  transport: sse
+  transport: streamable-http
   groupRef:
     name: mcp-tools

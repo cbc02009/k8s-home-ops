@@ -36,7 +36,7 @@ spec:
               - "GRAFANA_AUTH"
               - "mcp/grafana"
               - "-t"
-              - "sse"
+              - "streamable-http"
               - "--allowed-hosts"
               # - "mcp-grafana.observability.svc.cluster.local:8000"
               - "*"
