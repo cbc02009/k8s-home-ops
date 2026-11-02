@@ -9,6 +9,10 @@ spec:
   keyAlias: Karakeep
   secretName: litellm-key-karakeep
   secretKey: api-key
+  models:
+  - local-pool-chat
+  - muse-glimmer
+  - qwen3.8-27b-chat
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1
