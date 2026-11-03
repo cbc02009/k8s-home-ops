@@ -5,6 +5,7 @@ metadata:
   name: mealie
 spec:
   proxyRef: litellm
+  proxyNamespace: ai
   keyAlias: Mealie
   secretName: litellm-key-mealie
   secretKey: api-key
