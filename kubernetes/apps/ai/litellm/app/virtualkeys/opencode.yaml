@@ -3,10 +3,10 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMVirtualKey
 metadata:
-  name: open-code
+  name: opencode
 spec:
   proxyRef: litellm
-  keyAlias: open-code
+  keyAlias: Open Code
   secretName: litellm-key-opencode
   secretKey: api-key
   models:
