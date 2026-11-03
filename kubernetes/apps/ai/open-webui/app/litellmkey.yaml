@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: open-webui
+spec:
+  proxyRef: litellm
+  keyAlias: open-webui
+  secretName: litellm-key-open-webui
+  secretKey: api-key
+  models:
+  - local-pool
+  - muse-glimmer
+  - qwen3.8-27b
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: open-webui
+spec:
+  secretStoreRefs:
+  - name: onepassword-connect
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: litellm-key-open-webui
+  data:
+  - match:
+      secretKey: api-key
+      remoteRef:
+        remoteKey: litellm
+        property: open-webui_api_key
