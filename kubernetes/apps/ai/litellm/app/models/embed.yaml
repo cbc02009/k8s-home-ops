@@ -9,7 +9,7 @@ spec:
   proxyRef: litellm
   params:
     model: openai/embed
-    apiBase: http://embed-1.ai:8080/v1
+    apiBase: http://embed-1.ai.svc.cluster.local:8080/v1
     apiKey: sk-llmkube-noauth
   info:
     maxInputTokens: 32768
@@ -24,7 +24,7 @@ spec:
   proxyRef: litellm
   params:
     model: openai/embed
-    apiBase: http://embed-2.ai:8080/v1
+    apiBase: http://embed-2.ai.svc.cluster.local:8080/v1
     apiKey: sk-llmkube-noauth
   info:
     maxInputTokens: 32768
@@ -39,7 +39,7 @@ spec:
   proxyRef: litellm
   params:
     model: openai/embed
-    apiBase: http://embed-3.ai:8080/v1
+    apiBase: http://embed-3.ai.svc.cluster.local:8080/v1
     apiKey: sk-llmkube-noauth
   info:
     maxInputTokens: 32768

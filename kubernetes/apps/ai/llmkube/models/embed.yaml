@@ -30,13 +30,22 @@ spec:
   podLabels:
     cpu-inference: "true"
     embed-pool: "true"
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       - topologyKey: kubernetes.io/hostname
+  #         labelSelector:
+  #           matchLabels:
+  #             embed-pool: "true"
   affinity:
     podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchLabels:
-              embed-pool: "true"
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                embed-pool: "true"
+            topologyKey: kubernetes.io/hostname
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
@@ -107,13 +116,22 @@ spec:
   podLabels:
     cpu-inference: "true"
     embed-pool: "true"
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       - topologyKey: kubernetes.io/hostname
+  #         labelSelector:
+  #           matchLabels:
+  #             embed-pool: "true"
   affinity:
     podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchLabels:
-              embed-pool: "true"
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                embed-pool: "true"
+            topologyKey: kubernetes.io/hostname
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
@@ -186,11 +204,13 @@ spec:
     embed-pool: "true"
   affinity:
     podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchLabels:
-              embed-pool: "true"
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                embed-pool: "true"
+            topologyKey: kubernetes.io/hostname
   contextSize: 32768
   parallelSlots: 32
   batchSize: 2048
