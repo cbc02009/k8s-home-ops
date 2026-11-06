@@ -8,7 +8,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur
-    - ../../../../components/gpu
+    # - ../../../../components/gpu
   dependsOn:
     - name: kopiur
       namespace: system
