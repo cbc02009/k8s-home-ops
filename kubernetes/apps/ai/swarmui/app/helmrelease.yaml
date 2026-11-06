@@ -37,7 +37,7 @@ spec:
           app:
             image:
               repository: ghcr.io/cbc02009/swarmui
-              tag: 0.9.8@sha256:50bbb320f635f4da8d068dc742e9f4e0553dfc5010f9ec8c7cf0d161adf00aae
+              tag: 0.9.8@sha256:436e2e1082abbec40c3aa2e19ef37d2328f1e0fa46c7858b0c9b37c380a8e38d
             env:
               TZ: ${CONFIG_TZ}
             resources:
