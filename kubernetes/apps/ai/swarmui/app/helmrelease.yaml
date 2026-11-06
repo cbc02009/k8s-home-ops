@@ -36,8 +36,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/spiceratops/swarmui
-              tag: 0.9.5@sha256:7f416b79746a14a8bd0736f4961f2e4ff0a4dcc751bb6986af2a6e62caaaeaca
+              repository: ghcr.io/cbc02009/swarmui
+              tag: 0.9.8@sha256:50bbb320f635f4da8d068dc742e9f4e0553dfc5010f9ec8c7cf0d161adf00aae
             env:
               TZ: ${CONFIG_TZ}
             resources:
