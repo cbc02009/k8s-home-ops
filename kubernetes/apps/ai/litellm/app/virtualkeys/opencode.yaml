@@ -3,11 +3,11 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMVirtualKey
 metadata:
-  name: opencode
+  name: codeopen
 spec:
   proxyRef: litellm
-  keyAlias: OpenCode
-  secretName: litellm-key-opencode
+  keyAlias: CodeOpen
+  secretName: litellm-key-codeopen
   secretKey: api-key
   models:
   - qwen3.8-27b
@@ -15,14 +15,14 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: opencode
+  name: CodeOpen
 spec:
   secretStoreRefs:
   - name: onepassword-connect
     kind: ClusterSecretStore
   selector:
     secret:
-      name: litellm-key-opencode
+      name: litellm-key-codeopen
   data:
   - match:
       secretKey: api-key
