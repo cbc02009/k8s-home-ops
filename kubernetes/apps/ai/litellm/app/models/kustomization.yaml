@@ -7,5 +7,5 @@ resources:
   # - ./implementation-pool.yaml
   # - ./local-pool.yaml
   - ./muse-glimmer.yaml
-  # - ./qwen3.8-27b.yaml
+  - ./qwen3.8-27b.yaml
   - ./rerank.yaml
