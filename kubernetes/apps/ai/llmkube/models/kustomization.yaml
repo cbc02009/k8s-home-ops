@@ -7,4 +7,4 @@ resources:
   - ./memini-rerank.yaml
   - ./muse-glimmer.yaml
   - ./nvidia-pool.yaml
-  - ./qwen3.8-27b.y aml
+  - ./qwen3.8-27b.yaml
