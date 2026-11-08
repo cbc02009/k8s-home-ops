@@ -27,7 +27,7 @@ metadata:
 spec:
   modelRef: qwen3.8-27b
   runtime: vllm
-  image: ghcr.io/syv-ai/qwen38-27b-rtx3090@sha256:82b01c1f801b766e414b2af045091754dd0305ca1ab525c7047d80a0b795482d
+  image: ghcr.io/syv-ai/hyperqwen@sha256:f706b092aabb156c23fe98c312ba7912fb8dbc0c107d4f152382113e33762f1c
   command:
     - bash
     - docker/entrypoint.sh
@@ -58,7 +58,7 @@ spec:
     - name: CTX
       value: long
     - name: GPU_UTIL
-      value: "0.98"
+      value: "0.93"
     - name: MAX_SEQS
       value: "8"
     - name: MAX_LEN
