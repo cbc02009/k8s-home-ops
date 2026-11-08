@@ -26,7 +26,7 @@ spec:
           main:
             image:
               repository: ghcr.io/headroomlabs-ai/headroom
-              tag: 0.41.0-slim-nonroot@sha256:686a86ad0f7dba60816b5d3d6f6438a02323d256d70491c6448526212c6c08b3
+              tag: 0.43.1-slim-nonroot@sha256:ba108bc0c269464de93efb6ae20990b3ab0e153c888bcb217407766dbb8eaea4
             env:
               HEADROOM_COMPRESS_ALLOW_REMOTE: "1"
               HEADROOM_HOST: 0.0.0.0
