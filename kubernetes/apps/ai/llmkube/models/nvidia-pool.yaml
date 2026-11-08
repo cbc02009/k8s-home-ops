@@ -34,14 +34,14 @@ spec:
       inferenceServiceRef:
         name: muse-glimmer
       capabilities: ["tools", "vision"]
-  rules:
-    # One-way fallthrough. Muse requests can hit Qwen3.8-27B, but not the reverse.
-    - name: muse-fallthrough
-      match:
-        models: ["muse-glimmer"]
-      route:
-        backends: ["muse-glimmer", "qwen38-27b"]
-        poolActivation: IfIdle
+  # rules:
+  #   # One-way fallthrough. Muse requests can hit Qwen3.8-27B, but not the reverse.
+  #   - name: muse-fallthrough
+  #     match:
+  #       models: ["muse-glimmer"]
+  #     route:
+  #       backends: ["muse-glimmer", "qwen38-27b"]
+  #       poolActivation: IfIdle
   proxy:
     replicas: 1
     responseHeaderTimeout: 600s
