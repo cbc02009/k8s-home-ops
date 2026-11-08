@@ -23,7 +23,7 @@ metadata:
   name: nvidia
 spec:
   defaultRouteStrategy: BackendNameMatch
-  defaultRoute: qwen38-27b
+  defaultRoute: muse-glimmer
   backends:
     - name: qwen38-27b
       displayName: qwen3.8-27b
