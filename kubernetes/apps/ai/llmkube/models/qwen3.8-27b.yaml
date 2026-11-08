@@ -27,18 +27,21 @@ metadata:
 spec:
   modelRef: qwen3.8-27b
   runtime: vllm
-  image: ghcr.io/syv-ai/hyperqwen@sha256:f706b092aabb156c23fe98c312ba7912fb8dbc0c107d4f152382113e33762f1c
+  image: ghcr.io/syv-ai/qwen38-27b-rtx3090@sha256:82b01c1f801b766e414b2af045091754dd0305ca1ab525c7047d80a0b795482d
   command:
     - bash
     - docker/entrypoint.sh
   args:
     - single
+  # extraArgs:
+  #   - --chat-template-kwargs
+  #   - '{"enable_thinking": false}'
   skipModelInit: true
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
-  priorityClassName: gpu-preemptible
   runtimeClassName: nvidia
+  priorityClassName: gpu-preemptible
   nodeSelector:
     topology.kubernetes.io: dgpu
   env:
@@ -60,16 +63,10 @@ spec:
       value: "8"
     - name: MAX_LEN
       value: "147456"
-    # Trial rolled back 2026-10-20: TurboQuant KV (4-bit) worked capacity-wise
-    # (253k pool, 0 preemptions) but forced SPEC=off after MTP output loops
-    # (matches syv-ai/HyperQwen#323: TQ+MTP quality collapse), and solo decode
-    # dropped to ~21.5 tok/s vs ~64 on fp8+MTP. Reverting to fp8+MTP baseline.
     - name: PREFIX_CACHE
       value: "1"
     - name: VERIFY
       value: "0"
-    - name: HOST
-      value: 0.0.0.0
     - name: NVIDIA_DRIVER_CAPABILITIES
       value: compute,utility
     - name: HF_TOKEN
