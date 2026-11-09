@@ -33,9 +33,6 @@ spec:
     - docker/entrypoint.sh
   args:
     - single
-  # extraArgs:
-  #   - --chat-template-kwargs
-  #   - '{"enable_thinking": false}'
   skipModelInit: true
   rolloutPolicy:
     waitForIdle: true
@@ -58,7 +55,7 @@ spec:
     - name: CTX
       value: long
     - name: GPU_UTIL
-      value: "0.90"
+      value: "0.95"
     - name: MAX_SEQS
       value: "8"
     - name: MAX_LEN

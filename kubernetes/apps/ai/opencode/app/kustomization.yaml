@@ -8,3 +8,4 @@ resources:
   - ./helmrelease.yaml
   - ./litellmkey.yaml
   - ./ocirepository.yaml
+  - ./securitypolicy.yaml

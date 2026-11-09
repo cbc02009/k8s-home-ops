@@ -81,6 +81,12 @@ module "secret_openwebui" {
   item   = "open-webui"
 }
 
+module "secret_opencode" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "opencode"
+}
+
 module "secret_paperless" {
   source = "./modules/1password-item"
   vault  = "k8s-home-ops"

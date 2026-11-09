@@ -65,11 +65,48 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 8Gi
+          codeserver:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.145.2@sha256:09565f9e07f5624554e295e8bab0e2fec4a7c533eb3cff459ed6596a4d3d7c1c
+            env:
+              HOME: *homepath
+              TZ: ${CONFIG_TZ}
+              GH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: opencode
+                    key: GH_TOKEN
+              GITHUB_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: opencode
+                    key: GITHUB_TOKEN
+            args:
+              [
+                "--auth",
+                "none",
+                "--user-data-dir",
+                "/home/opencode/.vscode",
+                "--extensions-dir",
+                "/home/opencode/.vscode",
+                "--port",
+                "12321",
+                "/home/opencode/projects",
+              ]
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
     service:
       app:
         ports:
           http:
             port: *port
+          codeserver:
+            port: &codeserverPort 12321
     route:
       app:
         hostnames:
@@ -91,6 +128,16 @@ spec:
           - backendRefs:
               - name: "{{ .Release.Name }}"
                 port: *port
+      codeserver:
+        hostnames:
+          - opencode-code.ctec.run
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: "{{ .Release.Name }}"
+                port: *codeserverPort
     persistence:
       home:
         existingClaim: *app

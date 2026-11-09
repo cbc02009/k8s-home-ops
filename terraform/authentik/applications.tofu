@@ -221,6 +221,27 @@ module "oauth2-opencloud-ios" {
   redirect_uris      = ["oc://ios.opencloud.eu"]
 }
 
+module "oauth2-opencode" {
+  source             = "./modules/oauth2_application"
+  name               = "OpenCode"
+  icon_url           = "https://opencode.ai/favicon.ico"
+  launch_url         = "https://opencode.${var.public_domain}"
+  description        = "AI coding agent"
+  newtab             = true
+  group              = "AI"
+  slug               = "opencode"
+  client_type        = "confidential"
+  auth_groups        = [authentik_group.users.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_opencode.fields["oidc_id"]
+  client_secret      = module.secret_opencode.fields["oidc_secret"]
+  redirect_uris      = [
+    "https://opencode.${var.public_domain}/oauth2/callback",
+    "https://opencode-code.${var.public_domain}/oauth2/callback",
+  ]
+}
+
 module "oauth2-openwebui" {
   source             = "./modules/oauth2_application"
   name               = "Open-WebUI"
