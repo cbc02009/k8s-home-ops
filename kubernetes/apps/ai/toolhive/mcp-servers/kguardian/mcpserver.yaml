@@ -5,6 +5,11 @@ kind: MCPServerEntry
 metadata:
   name: kguardian-mcp
 spec:
+  # The kguardian LLM-bridge is an in-cluster (cluster.local) endpoint. toolhive blocks
+  # cluster-internal hostnames by default, so allowPrivateEndpoint must be set or the
+  # entry fails validation (RemoteURLValidated=False -> phase:Failed) and its tools are
+  # never registered in the mcp-tools group.
+  allowPrivateEndpoint: true
   remoteUrl: http://kguardian-llm-bridge.kguardian.svc.cluster.local:8080/mcp
   transport: streamable-http
   groupRef:
