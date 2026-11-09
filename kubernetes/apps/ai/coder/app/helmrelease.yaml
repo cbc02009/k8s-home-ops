@@ -8,6 +8,7 @@ spec:
   chart:
     spec:
       chart: *app
+      version: 2.39.0
       sourceRef:
         kind: HelmRepository
         name: coder-charts
@@ -25,9 +26,25 @@ spec:
           value: "0.0.0.0:2112"
         - name: CODER_OAUTH2_GITHUB_DEFAULT_PROVIDER_ENABLE
           value: "false"
-      # tls:
-      #   secretNames:
-      #     - coder-tls
+        # OIDC login via authentik (application "Coder", see terraform/authentik)
+        - name: CODER_OIDC_ISSUER_URL
+          value: "https://auth.ctec.run/application/o/coder/"
+        - name: CODER_OIDC_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: *app
+              key: CODER_OIDC_CLIENT_ID
+        - name: CODER_OIDC_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: *app
+              key: CODER_OIDC_CLIENT_SECRET
+        - name: CODER_OIDC_SCOPES
+          value: "openid,profile,email,offline_access"
+        - name: CODER_OIDC_SIGN_IN_TEXT
+          value: "Log in with authentik"
+        - name: CODER_OIDC_ICON_URL
+          value: "https://auth.ctec.run/static/dist/assets/icons/icon.svg"
       replicaCount: 1
       initContainers:
         - name: init-db

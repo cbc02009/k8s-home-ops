@@ -32,6 +32,12 @@ module "secret_authentik" {
   item   = "authentik"
 }
 
+module "secret_coder" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "coder"
+}
+
 module "secret_grimmory" {
   # Remember to export OP_CONNECT_HOST and OP_CONNECT_TOKEN
   source = "./modules/1password-item"

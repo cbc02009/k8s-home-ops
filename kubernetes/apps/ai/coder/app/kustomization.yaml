@@ -5,3 +5,5 @@ resources:
   - ./helmrelease.yaml
   - ./helmrepository.yaml
   - ./externalsecret.yaml
+  - ./litellmkey.yaml
+  - ./rbac.yaml

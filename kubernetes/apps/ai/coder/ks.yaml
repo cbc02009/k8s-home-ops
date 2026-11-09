@@ -9,7 +9,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HOSTNAME: coder.tec.run
+      HOSTNAME: coder.ctec.run
   prune: true
   sourceRef:
     kind: GitRepository

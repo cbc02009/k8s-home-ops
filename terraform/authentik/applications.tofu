@@ -38,6 +38,24 @@
 #   auth_groups        = [authentik_group.users.id]
 # }
 
+module "oauth2-coder" {
+  source             = "./modules/oauth2_application"
+  name               = "Coder"
+  icon_url           = "https://coder.com/favicon.ico"
+  launch_url         = "https://coder.${var.public_domain}"
+  description        = "Dev workspaces"
+  newtab             = true
+  group              = "AI"
+  slug               = "coder"
+  client_type        = "confidential"
+  auth_groups        = [authentik_group.users.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_coder.fields["oidc_id"]
+  client_secret      = module.secret_coder.fields["oidc_secret"]
+  redirect_uris      = ["https://coder.${var.public_domain}/api/v2/users/oidc/callback"]
+}
+
 module "oauth2-Grimmory" {
   source             = "./modules/oauth2_application"
   name               = "Grimmory"
