@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: prometheus
+spec:
+  image: docker.io/prom/prometheus-mcp:v0.19.0-rc.0@sha256:5f482413be181560d454b88458f8e4ce65c0713501ef827d314ec267ebc71d84
+  transport: streamable-http
+  proxyPort: 8080
+  mcpPort: 8000
+  # The MCP transport is served at /mcp on the web listen address; the ToolHive
+  # transparent proxy forwards the /mcp path through to this port unchanged.
+  # The HTTP transport is stateless, so no session affinity is needed.
+  sessionAffinity: None
+  args:
+    - --mcp.transport=http
+    - --web.listen-address=:8000
+    - --prometheus.url=http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
+    # Cap API responses at 200 lines/entries to keep LLM context usage sane.
+    # The LLM can still request more on a per-call basis.
+    - --prometheus.truncation-limit=200
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools
