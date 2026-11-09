@@ -14,6 +14,7 @@ resources:
   - ./litellm-operator/ks.yaml
   - ./llmkube/ks.yaml
   - ./memini/ks.yaml
+  - ./opencode/ks.yaml
   - ./open-webui/ks.yaml
   # - ./swarmui/ks.yaml
   - ./toolhive/ks.yaml
