@@ -1,0 +1,124 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: strata-fn
+spec:
+  # Strata Flash-Next IQ3_S on mayne / RTX 4090.
+  # Pack pre-staged on llmkube-mayne-cache at /Strata-data (huggingface-cli,
+  # resumable); skipModelInit keeps the llmkube downloader out of the picture.
+  # Only the IQ3_S quant is staged (~84 GB); the repo's other variants
+  # (IQ2_XS/IQ3_XXS/Q2_0, ~214 GB combined) do not fit the cache.
+  # The MTP draft (~5 GB) is fetched by strata launch itself on first start,
+  # not by this Model CR.
+  source: hf://ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF
+  sourceSecretRef:
+    name: huggingface
+  files:
+    - IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00001-of-00002.gguf
+    - IQ3_S/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_S-00002-of-00002.gguf
+  format: gguf
+  quantization: IQ3_S
+  hardware:
+    accelerator: cuda
+    gpu:
+      count: 1
+      enabled: true
+      vendor: nvidia
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: strata-fn
+  labels:
+    krr/ignore: "true"
+spec:
+  modelRef: strata-fn
+  runtime: generic
+  # Ported from the 3090 benchmark deployment (driver 595.91.07 — same as
+  # mayne's). 0.2.12-cuda13 @ sha256:c3a85342… runs Ada out of the box.
+  image: ghcr.io/niko1221/strata:0.2.12-cuda13@sha256:c3a853420670f4c0f5a948c2d9e9904af4cedf52b11bc8cf167602dc5c578bcc
+  command:
+    - /bin/sh
+    - -c
+    - |
+      # Launch IQ3_S at 256K (admission verified to 232K prompt tokens).
+      # No FAMILY/MODEL env vars on this pod: strata launch maps env overrides
+      # over CLI flags and silently reverts to the wrong pack (observed).
+      # --no-api-key: serve without auth, matching the keyless local rungs.
+      # litellm sends sk-llmkube-noauth, which a keyless engine ignores.
+      # Kubelet probes hit the engine unauthenticated; a keyed engine 401s
+      # them and never becomes Ready. Gotchas observed live:
+      # - The key actually lives in /data/state/api-key on the PVC (NOT the
+      #   launch preset json); strata 401s every request until that file is
+      #   deleted once. --no-api-key does not remove it.
+      # - Keyless mode enforces a DNS-rebinding Host check (keyed mode skips
+      #   it), so the Service DNS names must be in STRATA_ALLOWED_HOSTS below;
+      #   without it the engine 403s litellm's requests by Host header.
+      strata launch --model iq3_s --data-dir /data/Strata-data --context 256k \
+        --vision gpu --tune skip --access lan --port 8080 --yes --no-tui --no-api-key
+      # `strata launch --no-tui` starts the engine and returns; supervise it.
+      # Any HTTP response means the engine is alive; connection errors mean it
+      # died.
+      PY=/opt/strata/terminal/python/bin/python3
+      while $PY -c 'import urllib.request, urllib.error
+      try:
+          urllib.request.urlopen("http://127.0.0.1:8080/v1/models", timeout=5)
+      except urllib.error.HTTPError:
+          pass
+      ' 2>/dev/null; do
+        sleep 15
+      done
+      echo "strata engine died; exiting so the pod restarts"
+      exit 1
+  # The engine warns about low free VRAM (<512 MiB) on a 24 GB card; that is
+  # expected (IQ3_S + KV fills the card) and not an error.
+  skipModelInit: true
+  # No `replicas`: the nvidia ModelPool owns this member's scale (0/1).
+  # Activate with `kubectl scale isvc/strata-fn -n ai --replicas=1`; the pool
+  # drains the incumbent first and reclaimAfter returns the slot to
+  # qwen3.8-27b after 5m idle.
+  # No `priority` either: the pool default (27B) is normal-priority, and a
+  # higher-priority member could never be reclaimed by it — the swap would jam.
+  runtimeClassName: nvidia
+  priorityClassName: gpu-preemptible
+  nodeSelector:
+    topology.kubernetes.io: dgpu
+  # Keyless engines enforce a DNS-rebinding Host allowlist (see command
+  # above); without the Service DNS names here litellm gets 403s.
+  env:
+    - name: STRATA_ALLOWED_HOSTS
+      value: strata-fn.ai.svc.cluster.local,strata-fn.ai.svc,strata-fn
+  tolerations:
+    - key: llm-workload
+      operator: Exists
+      effect: NoSchedule
+  resources:
+    gpu: 1
+    cpu: "8"
+    # 50Gi, not the 28Gi that mirrors 27B: llmkube renders memory as request
+    # AND limit, and the IQ3_S 256K arena hard-fails below 46.84 GiB
+    # (joryirving's first-live-week correction — a 28Gi limit makes the
+    # engine refuse to start, the pod never becomes Ready, and the pool
+    # swap times out with 27B still drained). 50Gi stays ~12Gi under
+    # mayne's ~62Gi allocatable once 27B is drained. If the engine ever
+    # overruns the limit, cut the KV cost with --kv q4_0 (halves it) rather
+    # than pushing the number toward the node ceiling.
+    memory: 50Gi
+  extraVolumes:
+    - name: models
+      persistentVolumeClaim:
+        claimName: llmkube-mayne-cache
+  extraVolumeMounts:
+    - name: models
+      mountPath: /data
+  containerPort: 8080
+  endpoint:
+    port: 8080
+    type: ClusterIP
+  # Keyless engine (see command above): the default unauthenticated probes
+  # pass. If the engine ever runs keyed again, restore probeOverrides with an
+  # Authorization httpHeader — a keyed engine 401s headerless probes and the
+  # pod never becomes Ready.

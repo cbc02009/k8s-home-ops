@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Strata IQ3_S Flash-Next on mayne / RTX 4090 (llmkube nvidia pool member).
+# Direct service, NOT the nvidia router: strata serves a fixed, non-renamable
+# model id (qwen3.8-flash-next-iq3_s) and the router rewrites outbound models
+# to the InferenceService name for generic runtimes, so a router-fronted
+# request 404s at the engine. The group name stays qwen3.8-flash-next so
+# openclaw's existing aliases (skirk / skirk-chat) resolve as-is.
+# The IS is a ModelPool member: scale it to 1 to activate (the pool drains
+# the incumbent first); swapPolicy reclaim returns the slot to qwen3.8-27b
+# after 5m idle. While strata owns the slot, 27B requests via the router
+# trigger the reverse swap (default poolActivation: Wait, 240s budget).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: flash-next-strata
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: qwen3.8-flash-next
+  proxyRef: litellm
+  params:
+    model: openai/qwen3.8-flash-next-iq3_s
+    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
+    apiKey: sk-llmkube-noauth
+    additional:
+      temperature: 1.0
+      top_p: 0.95
+      top_k: 20
+      min_p: 0
+      max_parallel_requests: 3
+  info:
+    mode: chat
+    maxInputTokens: 245760
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true # verified on the 3090 run 2026-11-09 (data-URL image, 200 + correct description)
+    extra:
+      input_cost_per_token: 6.2e-08
+      output_cost_per_token: 1.35e-06
+      cache_read_input_token_cost: 0.0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Non-thinking variant. Unlike the vLLM rung, thinking cannot be forced off
+# here (chat_template_kwargs is a vLLM feature strata does not expose) —
+# sampling params only; treat this as "lower-temperature strata", not a
+# guaranteed non-reasoning mode, until a live A/B says otherwise.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: flash-next-strata-chat
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: qwen3.8-flash-next-chat
+  proxyRef: litellm
+  params:
+    model: openai/qwen3.8-flash-next-iq3_s
+    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
+    apiKey: sk-llmkube-noauth
+    additional:
+      temperature: 0.7
+      top_p: 0.8
+      presence_penalty: 1.5
+      max_parallel_requests: 3
+  info:
+    mode: chat
+    maxInputTokens: 245760
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 6.2e-08
+      output_cost_per_token: 1.35e-06
+      cache_read_input_token_cost: 0.0

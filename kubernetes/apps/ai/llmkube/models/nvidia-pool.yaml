@@ -16,6 +16,8 @@ spec:
         name: qwen3.8-27b
     - inferenceServiceRef:
         name: muse-glimmer
+    - inferenceServiceRef:
+        name: strata-fn
 ---
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: ModelRouter
@@ -34,6 +36,11 @@ spec:
       inferenceServiceRef:
         name: muse-glimmer
       capabilities: ["tools", "vision"]
+    - name: strata-fn
+      displayName: qwen3.8-flash-next
+      inferenceServiceRef:
+        name: strata-fn
+      capabilities: ["tools", "vision"]
   rules:
     # One-way fallthrough. Muse requests can hit Qwen3.8-27B, but not the reverse.
     - name: muse-fallthrough
@@ -41,6 +48,21 @@ spec:
         models: ["muse-glimmer"]
       route:
         backends: ["muse-glimmer", "qwen38-27b"]
+        poolActivation: IfIdle
+    # Strata wakes on demand (IfIdle: no swap while the incumbent has
+    # in-flight requests — the request falls through to 27B instead).
+    # Caveat: the router rewrites the outbound model to the InferenceService
+    # name for generic runtimes (no ServedModel detection), and strata serves
+    # a fixed, non-renamable id (qwen3.8-flash-next-iq3_s). If the engine
+    # rejects the rewritten name the request falls through to 27B; the
+    # litellm qwen3.8-flash-next group deliberately bypasses this router and
+    # talks to strata-fn's Service directly with the exact served name.
+    # This rule keeps pool activation reachable for router-native clients.
+    - name: strata-fallthrough
+      match:
+        models: ["qwen3.8-flash-next"]
+      route:
+        backends: ["strata-fn", "qwen38-27b"]
         poolActivation: IfIdle
   proxy:
     replicas: 1
