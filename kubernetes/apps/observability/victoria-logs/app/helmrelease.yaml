@@ -37,6 +37,14 @@ spec:
       enabled: true
       podHostNetwork: true # needed for the sockets created below
       dnsPolicy: ClusterFirstWithHostNet # without this the Vector pods can't resolve the VL pods because they're running in hostNetworking mode
+      # tolerate the dGPU taint so the agent lands on mayne and its journal
+      # (talos UDP 6050/6051) is captured remotely; must live in the chart
+      # values, not a kustomize patch, or the next helm upgrade re-renders
+      # the DaemonSet and wipes it
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
       containerPorts:
         - name: prom-exporter
           containerPort: 9090

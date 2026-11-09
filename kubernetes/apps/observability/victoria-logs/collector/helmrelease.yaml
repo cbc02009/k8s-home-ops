@@ -16,6 +16,12 @@ spec:
         registry: quay.io
     podMonitor:
       enabled: true
+    # tolerate the dGPU taint so pod logs from mayne reach VictoriaLogs too
+    # (same reason as the vector agent above; in-chart so helm upgrades keep it)
+    tolerations:
+      - key: llm-workload
+        operator: Exists
+        effect: NoSchedule
     remoteWrite:
       - url: http://victoria-logs.observability.svc.cluster.local:9428
         maxDiskUsagePerURL: 10GB
