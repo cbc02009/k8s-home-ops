@@ -97,7 +97,7 @@ spec:
       effect: NoSchedule
   resources:
     gpu: 1
-    cpu: "8"
+    cpu: "12"
     # 50Gi, not the 28Gi that mirrors 27B: llmkube renders memory as request
     # AND limit, and the IQ3_S 256K arena hard-fails below 46.84 GiB
     # (joryirving's first-live-week correction — a 28Gi limit makes the
