@@ -37,11 +37,10 @@ data:
         }
       },
       "enabled_providers": [
-        "litellm-anthropic",
         "litellm",
         "opencode"
       ],
-      "model": "litellm-anthropic/auto",
+      "model": "litellm/strata-fn",
       "permission": "allow",
       "plugins": [
         {
@@ -56,34 +55,6 @@ data:
       "provider": {
         "litellm": {
           "models": {
-            "auto": {
-              "limit": {
-                "context": 131072,
-                "output": 16384
-              },
-              "name": "Auto (router)"
-            },
-            "free-pool": {
-              "limit": {
-                "context": 200000,
-                "output": 16384
-              },
-              "name": "Free Pool (public work only)"
-            },
-            "implementation-pool": {
-              "limit": {
-                "context": 147456,
-                "output": 16384
-              },
-              "name": "Implementation Pool"
-            },
-            "muse-glimmer": {
-              "limit": {
-                "context": 131072,
-                "output": 20480
-              },
-              "name": "Muse Glimmer 30B"
-            },
             "qwen3.8-27b": {
               "limit": {
                 "context": 147456,
@@ -91,12 +62,12 @@ data:
               },
               "name": "Qwen3.8-27B W4A16"
             },
-            "qwen3.8-27b-chat": {
+            "strata-fn": {
               "limit": {
-                "context": 147456,
-                "output": 16384
+                "context": 262144,
+                "output": 65536
               },
-              "name": "Qwen3.8-27B W4A16 non-thinking"
+              "name": "Strata Qwen3.8-flash-next"
             }
           },
           "name": "LiteLLM OpenAI",
