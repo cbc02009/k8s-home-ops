@@ -35,7 +35,7 @@ spec:
   modelCache:
     claimName: llmkube-mayne-cache
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:77e84a5d6d885c07afbda0ae2fe48f4943f5181c8c8fe3b2e4231e8a1498bb24
+  image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:a361e47e28e8801e290f3c855292e0f25047e5d8e998b0d101431f54db68e008
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
