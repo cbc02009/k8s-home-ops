@@ -125,7 +125,8 @@ spec:
               - kubernetes_audit_logs
             source: |
               . = parse_json(.message) ?? .message
-              parsed_timestamp, err = parse_timestamp(.requestReceivedTimestamp, format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              # "+%" = timezone-aware RFC3339; naive formats get re-read as local time
+              parsed_timestamp, err = parse_timestamp(.requestReceivedTimestamp, format: "%+")
               if err == null {
                 .timestamp = to_unix_timestamp(parsed_timestamp)
               } else {
@@ -146,7 +147,8 @@ spec:
             inputs: [talos_kernel_logs]
             source: |
               del(.clock)
-              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              # "+%" = timezone-aware RFC3339; naive formats get re-read as local time
+              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%+")
               if err == null {
                 .timestamp = to_unix_timestamp(parsed_timestamp)
               } else {
@@ -155,11 +157,18 @@ spec:
               .message = parse_json(.msg) ?? .msg
               del(.msg)
               del(."talos-time")
+              # KmsgLogConfig cannot carry extraTags, so tag with the node this
+              # agent runs on (injected by the vector chart in Agent mode)
+              node_name, err = get_env_var("VECTOR_SELF_NODE_NAME")
+              if err == null {
+                .hostname = node_name
+              }
           talos_service_logs_xform:
             type: remap
             inputs: [talos_service_logs]
             source: |
-              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%Y-%m-%dT%H:%M:%S.%fZ")
+              # "+%" = timezone-aware RFC3339; naive formats get re-read as local time
+              parsed_timestamp, err = parse_timestamp(."talos-time", format: "%+")
               if err == null {
                 .timestamp = to_unix_timestamp(parsed_timestamp)
               } else {
