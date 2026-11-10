@@ -9,8 +9,7 @@ spec:
   secretName: litellm-key-memini
   secretKey: api-key
   models:
-  - local-pool-chat
-  - muse-glimmer
+  - flash-next-strata-chat
   - qwen3.8-27b-chat
   - embed
   - rerank
