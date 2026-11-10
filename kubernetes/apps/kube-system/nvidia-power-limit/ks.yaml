@@ -6,7 +6,7 @@ metadata:
   name: nvidia-power-limit
 spec:
   interval: 1h
-  path: ./kubernetes/apps/kube-system/nvidia-power-limit
+  path: ./kubernetes/apps/kube-system/nvidia-power-limit/app
   wait: true
   prune: true
   sourceRef:
