@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json
+# Z-Wave controller on the Pi, via Z-Wave JS UI (the project formerly named zwave2mqtt).
+# Until the stick is attached and the TODO by-id path below is filled in (from
+# `ls -l /dev/serial/by-id/` on the Pi) the stack fails to deploy - expected.
+# Unlike zigbee2mqtt, ZWJS UI keeps its MQTT/serial settings in the store volume, so after
+# first bring-up do a one-time setup at http://<pi>:8091: Settings -> MQTT
+# (host 10.6.0.16, port 1883, Home Assistant discovery on) and the serial port /dev/zwave.
+# The WS server (3000) is intentionally not published - Home Assistant connects over MQTT.
+services:
+  zwave2mqtt:
+    container_name: zwave2mqtt
+    image: ghcr.io/zwave-js/zwave-js-ui:11.26.2@sha256:00360afd0b0e833d6166d4127f4ef41d2b24c75f2b2172d32dd4e9d26d613778
+    stop_signal: SIGINT
+    tty: true
+    devices:
+      - /dev/serial/by-id/TODO-ZWAVE-STICK-BY-ID:/dev/zwave
+    environment:
+      TZ: America/New_York
+    ports:
+      - 8091:8091
+    restart: unless-stopped
+    volumes:
+      - store:/usr/src/app/store
+volumes:
+  store: {}

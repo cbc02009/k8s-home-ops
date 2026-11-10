@@ -1,0 +1,6 @@
+---
+working_dir: ./docker/zigbee-pi
+auto_discover: true
+auto_discover_opts:
+  depth: 1
+  delete: true

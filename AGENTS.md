@@ -18,7 +18,7 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 | `talos/` | Talos machine configs via topf (`topf.yaml`, `schematics/`, `patches/`, `secrets.sops.yaml`). `output/` is gitignored. Has its own `AGENTS.md`. |
 | `bootstrap/` | One-shot provisioning of **fresh** hardware: `kustomize/personal/` (flux-system GitRepository + base secrets) and `helmfile/` (CRDs + first apps). Has its own `AGENTS.md`. |
 | `terraform/` | OpenTofu (`.tofu` files): `cloudflare/`, `authentik/`, `garage/`. Has its own `AGENTS.md`. |
-| `docker/` | docker-compose stacks deployed by doco-cd on TrueNAS from this repo (`docker/truenas/`); `docker/.archive/` is retired stacks. Secrets are 1Password `op://` references (`.doco-cd.yaml`). |
+| `docker/` | docker-compose stacks deployed by doco-cd from this repo, one instance per host (`docker/truenas/` on TrueNAS, `docker/zigbee-pi/` on the Zigbee/Z-Wave Raspberry Pi); `docker/.archive/` is retired stacks. Secrets are 1Password `op://` references (`.doco-cd.yaml`). |
 | `tools/` | One-shot scripts and debug manifests (e.g. `wipe-rook.yaml`, `postgres-backup.yaml`). Most `app-*` generators are **legacy** (they reference a `templates/` dir that no longer exists) — read before running. |
 | `.github/workflows/` | CI: `flux-local` test/diff on `kubernetes/**`, image-pull, renovate, labeler/label-sync, codeql, release, schemas (publishes flux2-schemas to `k8s-schemas.home-operations.com`). |
 | `.renovate/` + `.renovaterc.json5` | Renovate config: semantic commits, automerge, `area/*` + `renovate/*` labels, presets from `home-operations/renovate-presets`. |

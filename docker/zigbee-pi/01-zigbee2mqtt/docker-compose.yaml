@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json
+# Zigbee controller on the Pi. Until the stick is attached and the TODO by-id path below is
+# filled in (from `ls -l /dev/serial/by-id/` on the Pi) the stack fails to deploy - expected.
+# Never use /dev/ttyUSBx-style paths, they drift between boots.
+# MQTT broker is the in-cluster mosquitto LoadBalancer (kubernetes/apps/home/mosquitto,
+# 10.6.0.16:1883, allow_anonymous); Home Assistant autodiscovers over the same broker.
+services:
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt:2.14.3@sha256:fb4a6b0f6868ad1cd6a9996479802b2420e599c3463b62bbff8c8cd9a908f43a
+    devices:
+      - /dev/serial/by-id/TODO-ZIGBEE-STICK-BY-ID:/dev/ttyACM0
+    environment:
+      TZ: America/New_York
+      ZIGBEE2MQTT_DATA: /data
+      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://10.6.0.16:1883
+      ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: zigbee2mqtt
+      ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/ttyACM0
+      ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: "true"
+      ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
+      ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: "true"
+      ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: "false"
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    volumes:
+      - data:/data
+volumes:
+  data: {}
