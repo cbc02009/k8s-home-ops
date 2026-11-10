@@ -9,13 +9,11 @@ spec:
   gpu: 1
   swapPolicy: reclaim
   swapBudget: 240s
-  default: qwen3.8-27b
+  default: strata-fn
   reclaimAfter: 5m
   members:
     - inferenceServiceRef:
         name: qwen3.8-27b
-    - inferenceServiceRef:
-        name: muse-glimmer
     - inferenceServiceRef:
         name: strata-fn
 ---
@@ -32,23 +30,12 @@ spec:
       inferenceServiceRef:
         name: qwen3.8-27b
       capabilities: ["tools"]
-    - name: muse-glimmer
-      inferenceServiceRef:
-        name: muse-glimmer
-      capabilities: ["tools", "vision"]
     - name: strata-fn
       displayName: qwen3.8-flash-next
       inferenceServiceRef:
         name: strata-fn
       capabilities: ["tools", "vision"]
   rules:
-    # One-way fallthrough. Muse requests can hit Qwen3.8-27B, but not the reverse.
-    - name: muse-fallthrough
-      match:
-        models: ["muse-glimmer"]
-      route:
-        backends: ["muse-glimmer", "qwen38-27b"]
-        poolActivation: IfIdle
     # Strata wakes on demand (IfIdle: no swap while the incumbent has
     # in-flight requests — the request falls through to 27B instead).
     # Caveat: the router rewrites the outbound model to the InferenceService
