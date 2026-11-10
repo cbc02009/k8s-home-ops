@@ -11,6 +11,7 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
+  - strata-fn
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
