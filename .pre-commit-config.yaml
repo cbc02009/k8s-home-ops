@@ -29,6 +29,7 @@ repos:
     rev: v2.1.1
     hooks:
       - id: forbid-secrets
+        exclude: ^\.github/flate-supply/
 
   - repo: https://github.com/sirosen/texthooks
     rev: 0.7.1

@@ -94,4 +94,4 @@ keda-all state:
 
 [private]
 render-local-ks ns ks:
-  flate build ks "{{ ks }}" -n "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" --allow-missing-secrets --skip-secrets=false --skip-crds=false
+  flate build ks "{{ ks }}" -n "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" --allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml --skip-kinds=''

@@ -43,17 +43,17 @@ jobs:
       # base: "" keeps the action's FLATE_BASE unset so `test` renders the
       # full tree instead of the action's changed-only default.
       - name: Setup flate
-        uses: home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        uses: home-operations/flate/action@bbb6ebc344da051752dbdb1b413860ceffcfb63d # v0.7.3
         with:
           base: ""
-          version: "0.6.5"
+          version: "0.7.3"
           cache: true
 
-      # --allow-missing-secrets: the two bootstrap Secrets
-      # (cloudflare-account-id-secret, cloudflare-tunnel-id-secret) only exist
-      # in bootstrap/kustomize/personal/, not in this tree.
+      # --allow-missing-kinds Secret: soft-skip source-auth / Helm valuesFrom
+      # Secrets that only materialize in the live cluster. The two bootstrap
+      # Secrets are supplied below so Kustomization substituteFrom resolves.
       - name: Run flate test
-        run: flate test all --path kubernetes/flux/cluster --allow-missing-secrets --no-progress
+        run: flate test all --path kubernetes/flux/cluster --allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml --no-progress
 
   diff:
     if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
@@ -79,14 +79,14 @@ jobs:
           persist-credentials: false
 
       - name: Setup flate
-        uses: home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        uses: home-operations/flate/action@bbb6ebc344da051752dbdb1b413860ceffcfb63d # v0.7.3
         with:
           base: main
-          version: "0.6.5"
+          version: "0.7.3"
           cache: true
 
       - name: Run flate diff
-        run: flate diff ${{ matrix.resources }} --path kubernetes/flux/cluster --allow-missing-secrets --no-progress -o github > diff.txt
+        run: flate diff ${{ matrix.resources }} --path kubernetes/flux/cluster --allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml --no-progress -o github > diff.txt
 
       - name: Generate Diff
         id: diff

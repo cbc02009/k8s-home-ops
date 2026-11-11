@@ -29,7 +29,7 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 - **direnv + sops**: the root `.envrc` decrypts `secrets.sops.yaml` (age key at `~/.config/sops/age/keys.txt`) into the shell environment; `terraform/.envrc` does the same for `terraform/secrets.sops.yaml`. `use_sops <path>` loads any other sops env file.
 - **minijinja + 1Password**: `just template <file.j2>` renders a minijinja template with environment injected via `op inject` (settings in `.minijinja.toml`). Used by bootstrap to render the personal manifests.
 - **pre-commit**: yamllint (config `.github/yamllint-config.yaml`), end-of-file/line-ending/trailing-whitespace fixes, forbid CRLF/tabs, `sops-pre-commit` (forbid-secrets), gitleaks, smart-quote fix, json5 check. Run `pre-commit run --all-files` before committing.
-- **flate** (successor to the archived `flux-local`): used by CI and by `just kube apply-ks` to render/validate Flux objects without a cluster. Pass `--allow-missing-secrets` for the two bootstrap-only Secrets (Cloudflare account ID / tunnel ID) that live only in `bootstrap/kustomize/personal/`.
+- **flate** (successor to the archived `flux-local`): used by CI and by `just kube apply-ks` to render/validate Flux objects without a cluster. Pass `--allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml` so the two bootstrap-only Secrets (Cloudflare account ID / tunnel ID) resolve offline.
 - **Renovate** owns version updates (image tags, chart versions, Talos/K8s versions, action digests, `docker/` compose images). Do not hand-edit versions it manages; use `# renovate:` directives when you need to influence it (e.g. `datasource=docker depName=...` on Talos/K8s versions in `talos/topf.yaml`).
 
 ## Global conventions
@@ -40,8 +40,8 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 - **Commits**: semantic commit messages; CODEOWNERS is `@cbc02009`; the labeler applies `area/<dir>` labels per changed directory.
 - **Validating `kubernetes/**` changes** (same commands CI runs — run before pushing):
   ```bash
-  flate test all --path kubernetes/flux/cluster --allow-missing-secrets
-  flate diff ks --path kubernetes/flux/cluster
+  flate test all --path kubernetes/flux/cluster --allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml
+  flate diff ks --path kubernetes/flux/cluster --allow-missing-kinds Secret --supply .github/flate-supply/secrets.yaml
   ```
 
 ## Network / cluster reference
