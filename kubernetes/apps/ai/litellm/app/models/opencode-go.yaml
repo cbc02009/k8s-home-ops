@@ -1,0 +1,343 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# OpenCode Go ($10/mo subscription) lane — the cloud rung for coding-agent
+# work that outgrows the local Qwen rungs. Provider opencode_go/ requires
+# LiteLLM >= v1.109.0 (provider first shipped in v1.109.0-rc.1; NOT in the
+# 1.108.x LTS line). Auth: OPENCODE_GO_API_KEY on the proxy (1Password item
+# "opencode-go", field api_key, pushed via the litellm ExternalSecret — kept
+# separate from the item used for cluster opencode's own cloud sign-in).
+# Billing: flat subscription. Each model has a monthly allowance at Go list
+# rates ($60 workhorses, $20-30 mid, $15 premium) with a 5h window at 20% of
+# monthly; the prices below mirror LiteLLM's built-in opencode_go catalog and
+# track allowance burn on the economics dashboard — they are not extra charge.
+# Routing: go-pool members carry `order` so the big-allowance cheap models
+# drain first and the $15-20 models are rationed last.
+# Sessions: LiteLLM forwards x-litellm-session-id as x-opencode-session (the
+# envoy filter already maps x-session-id -> x-litellm-session-id); LiteLLM
+# does not invent one, so agents that send a stable x-session-id get the
+# better prompt-cache behaviour.
+# DATA POLICY: Go publishes per-model training/retention terms. Everything in
+# this pool is no-training (Beam Free: not used/30d; LongCat 2.5 Free: not
+# used/0d; paid endpoints that train on request data are blocked by default
+# in the workspace privacy settings). Models that train on prompts in exchange
+# for free/discounted tokens — Iceman Contributor Free, Muse Spark 1.x
+# Contributor — are deliberately EXCLUDED and must not be added. LongCat 2.5
+# Free is hosted in China and needs "Global" regions in the Go workspace
+# privacy settings; drop it if that is unacceptable. Contrast with free-pool
+# (OpenRouter :free), which is banned from coding/agentic keys.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-glm-5.3-flash
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/glm-5.3-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 1
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-mimo-v2.6-flash
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/mimo-v2.6-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-07
+      output_cost_per_token: 2.8e-07
+      cache_read_input_token_cost: 2.8e-09
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-minimax-m3.1-flash
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3.1-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 3
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 512000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 6e-07
+      cache_read_input_token_cost: 1.5e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-qwen3.8-flash
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/qwen3.8-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 4
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 4.7e-07
+      cache_read_input_token_cost: 1.6e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-minimax-m3
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 5
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 3e-07
+      output_cost_per_token: 1.2e-06
+      cache_read_input_token_cost: 6e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-kimi-k2.7-code
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/kimi-k2.7-code
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 6
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 262144
+    maxOutputTokens: 262144
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 9.5e-07
+      output_cost_per_token: 4e-06
+      cache_read_input_token_cost: 1.9e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Limited-time free models: zero allowance burn and listed "model training:
+# not used" in Go's privacy table, so safe for the pool; sit behind every
+# paid Go member.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-longcat-2.5-free
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/longcat-2.5-preview-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 7
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-beam-free
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/beam-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 8
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: false
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Named single-model lanes for targeted tasks. The $15-allowance lanes are
+# rationed harder (lower parallelism) than the $60 pool members.
+# go-coder: Kimi K2.7 Code, the pool's best agentic-coder; $60/mo allowance.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-coder
+spec:
+  modelName: go-coder
+  proxyRef: litellm
+  params:
+    model: opencode_go/kimi-k2.7-code
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 262144
+    maxOutputTokens: 262144
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 9.5e-07
+      output_cost_per_token: 4e-06
+      cache_read_input_token_cost: 1.9e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# go-strong: Kimi K3.1 Pro, hardest one-shot tasks/refactors; $15/mo allowance.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-strong
+spec:
+  modelName: go-strong
+  proxyRef: litellm
+  params:
+    model: opencode_go/kimi-k3.1-pro
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 2e-06
+      output_cost_per_token: 1e-05
+      cache_read_input_token_cost: 2e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# go-max: Qwen3.8 Max, the frontier lane that replaces the Copilot Pro idea
+# (Copilot Pro is ~1500 AI credits ~= $15/mo of frontier tokens since the
+# June 2026 credits switch); $15/mo allowance.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-max
+spec:
+  modelName: go-max
+  proxyRef: litellm
+  params:
+    model: opencode_go/qwen3.8-max
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 2e-06
+      output_cost_per_token: 6e-06
+      cache_read_input_token_cost: 2.5e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# go-chat: Claude Haiku 5.5, general chat with vision (open-webui); $15/mo
+# allowance at $0.10/$0.50 per M tokens, so the lane stretches far.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-chat
+spec:
+  modelName: go-chat
+  proxyRef: litellm
+  params:
+    model: opencode_go/claude-haiku-5-5
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 1e-08

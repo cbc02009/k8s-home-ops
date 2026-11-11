@@ -55,6 +55,34 @@ data:
       "provider": {
         "litellm": {
           "models": {
+            "go-coder": {
+              "limit": {
+                "context": 262144,
+                "output": 65536
+              },
+              "name": "OpenCode Go · Kimi K2.7 Code"
+            },
+            "go-max": {
+              "limit": {
+                "context": 1000000,
+                "output": 131072
+              },
+              "name": "OpenCode Go · Qwen3.8 Max"
+            },
+            "go-pool": {
+              "limit": {
+                "context": 262144,
+                "output": 65536
+              },
+              "name": "OpenCode Go · workhorse pool"
+            },
+            "go-strong": {
+              "limit": {
+                "context": 1000000,
+                "output": 131072
+              },
+              "name": "OpenCode Go · Kimi K3.1 Pro"
+            },
             "qwen3.8-27b": {
               "limit": {
                 "context": 147456,

@@ -13,6 +13,10 @@ spec:
   - local-pool
   - muse-glimmer
   - qwen3.8-27b
+  # Chat-UI cloud lanes: go-chat (Claude Haiku 5.5, vision) + the cheap
+  # go-pool. Keep local 27B as the default; premium $15 lanes stay out.
+  - go-pool
+  - go-chat
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1

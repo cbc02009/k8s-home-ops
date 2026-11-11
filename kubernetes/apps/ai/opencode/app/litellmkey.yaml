@@ -12,6 +12,12 @@ spec:
   models:
   - qwen3.8-27b
   - strata-fn
+  # OpenCode Go cloud lanes for agent work that outgrows the local rungs;
+  # keep the local Qwen models as the default (grunt stays on the 4090).
+  - go-pool
+  - go-coder
+  - go-strong
+  - go-max
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret

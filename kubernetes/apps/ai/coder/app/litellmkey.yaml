@@ -10,11 +10,16 @@ spec:
   secretName: litellm-key-coder
   secretKey: api-key
   models:
-  - free-pool
+  # NOTE: no free-pool here - OpenRouter :free models may train on prompts,
+  # and coding/agentic keys must never send repo data to them. Cloud coding
+  # lanes are the OpenCode Go groups (no-training policy, see opencode-go.yaml).
   - implementation-pool
   - muse-glimmer
   - qwen3.8-27b
   - qwen3.8-27b-chat
+  - go-pool
+  - go-coder
+  - go-strong
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret

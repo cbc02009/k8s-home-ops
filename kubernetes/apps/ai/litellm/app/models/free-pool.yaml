@@ -1,5 +1,10 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# POLICY: free-pool (OpenRouter :free endpoints) must NOT be granted to any
+# coding or agentic virtual key — free OpenRouter routes are permitted to
+# train on / retain prompts, so never send repo or personal context here.
+# Only grant to low-stakes chat/utility keys, and keep it out of agent
+# fallback chains (cloud agent overflow goes to go-pool instead).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
