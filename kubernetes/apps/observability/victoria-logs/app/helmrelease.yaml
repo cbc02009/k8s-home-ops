@@ -81,6 +81,14 @@ spec:
             compression: gzip
             healthcheck:
               enabled: false
+            batch:
+              max_events: 10
+              max_bytes: 1048576
+              timeout_secs: 1
+            buffer:
+              type: memory
+              max_events: 100
+              when_full: drop_newest
             request:
               headers:
                 VL-Time-Field: timestamp
