@@ -102,6 +102,12 @@ spec:
                 memory: 1Gi
     service:
       app:
+        # Not named `opencode`: with the kubelet's default ndots:5, the public
+        # domain opencode.ai (the OpenCode Go API host that litellm's
+        # opencode_go provider and this app's cloud sign-in call) resolves to
+        # <svc>.<ns>.svc.cluster.local via the search suffix, i.e. to this
+        # service, and every opencode_go lane hangs with no 443 listener.
+        forceRename: opencode-svc
         ports:
           http:
             port: *port
@@ -116,7 +122,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: "{{ .Release.Name }}"
+              - name: opencode-svc
                 port: *port
       api:
         hostnames:
@@ -126,7 +132,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: "{{ .Release.Name }}"
+              - name: opencode-svc
                 port: *port
       codeserver:
         hostnames:
@@ -136,7 +142,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: "{{ .Release.Name }}"
+              - name: opencode-svc
                 port: *codeserverPort
     persistence:
       home:
