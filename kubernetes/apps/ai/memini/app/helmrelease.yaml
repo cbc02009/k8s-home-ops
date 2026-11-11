@@ -31,7 +31,7 @@ spec:
               # MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
               MEMINI_BACKEND: sqlite
               MEMINI_DEFAULT_NAMESPACE: default
-              MEMINI_EMBED_BASE_URL: http://litellm.ai:4000/v1
+              MEMINI_EMBED_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               MEMINI_EMBED_MODEL: embed # Qwen3-Embedding-0.6B, 1024-dim, 32k ctx
               MEMINI_EMBED_DIMS: "1024"
               MEMINI_EMBED_QUERY_PREFIX: "Instruct: Given a user message, retrieve relevant past memories\nQuery: "
@@ -44,7 +44,7 @@ spec:
               MEMINI_DEDUP_SIMILARITY: 0.80
               MEMINI_SHORT_TERM_CAP: 300
               MEMINI_ASSESS_BATCH: "5"
-              MEMINI_LLM_BASE_URL: http://litellm.ai:4000/v1
+              MEMINI_LLM_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               MEMINI_LLM_MODEL: qwen3.8-flash-next-chat
               # MEMINI_LLM_MODEL: qwen3.8-27b-chat
               MEMINI_LLM_MAX_TOKENS: "24576"
@@ -52,7 +52,7 @@ spec:
               MEMINI_DISTILL_ON_WRITE: false
               MEMINI_ASSESSED_SALIENCE_WEIGHT: "0.6"
               MEMINI_REEMBED_ON_MODEL_CHANGE: true
-              MEMINI_RERANK: http://litellm.ai:4000/v1
+              MEMINI_RERANK: http://litellm.ai.svc.cluster.local:4000/v1
               MEMINI_RERANK_MODEL: rerank
               MEMINI_RERANK_MAX_CONCURRENCY: 2
               MEMINI_RERANK_TIMEOUT: 45s

@@ -38,8 +38,11 @@ spec:
             configBlock: |-
               pods verified
               fallthrough in-addr.arpa ip6.arpa
-          - name: autopath
-            parameters: "@kubernetes"
+          # No autopath: serving <service>.<namespace> as top-level zones
+          # shadows public domains that happen to match (the OpenCode Go
+          # backend lives at opencode.ai, and there is an ai/opencode service;
+          # that collision hung every opencode_go lane in litellm). In-cluster
+          # clients use full <svc>.<ns>.svc.cluster.local names.
           - name: forward
             parameters: . /etc/resolv.conf
           - name: cache

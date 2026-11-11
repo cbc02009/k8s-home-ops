@@ -15,11 +15,11 @@ spec:
     - name: NPM_CONFIG_CACHE
       value: /tmp/.npm
     - name: SONARR_URL
-      value: http://sonarr.default
+      value: http://sonarr.default.svc.cluster.local
     - name: RADARR_URL
-      value: http://radarr.default
+      value: http://radarr.default.svc.cluster.local
     - name: PROWLARR_URL
-      value: http://prowlarr.default
+      value: http://prowlarr.default.svc.cluster.local
   secrets:
     - name: toolhive-sonarr
       key: SONARR_API_KEY
