@@ -566,7 +566,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Spend per backend model in the selected time range (local models = $0)",
+      "description": "Spend per backend model in the selected time range (local models at their configured rates).",
       "fieldConfig": {
         "defaults": {
           "currency": "USD",
@@ -793,7 +793,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"chatgpt/.*|gpt-5\\\\..*\"}[$__range])) or vector(0)), \"provider\", \"ChatGPT\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"go-.*\"}[$__range])) or vector(0)), \"provider\", \"Opencode Go\", \"\", \"\")",
           "legendFormat": "{{provider}}",
           "refId": "A"
         },
@@ -802,7 +802,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"dsv4f|dsv4p|mimo-v2.5|mimo-v2.5-pro|go-gpt-5.6-luna|qwen3.8-max|qwen3.7-plus|go-minimax-m3|mimo-v2-pro|mimo-v2-omni\"}[$__range])) or vector(0)), \"provider\", \"Opencode Go\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"free-pool\"}[$__range])) or vector(0)), \"provider\", \"Free pool\", \"\", \"\")",
           "legendFormat": "{{provider}}",
           "refId": "B"
         },
@@ -811,7 +811,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"glm-.*\"}[$__range])) or vector(0)), \"provider\", \"GLM\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"provider\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{provider}}",
           "refId": "C"
         },
@@ -820,45 +820,9 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"MiniMax.*\"}[$__range])) or vector(0)), \"provider\", \"MiniMax\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"go-.*|free-pool|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"provider\", \"Other\", \"\", \"\")",
           "legendFormat": "{{provider}}",
           "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"kimi-.*\"}[$__range])) or vector(0)), \"provider\", \"Kimi\", \"\", \"\")",
-          "legendFormat": "{{provider}}",
-          "refId": "E"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"frontier-pool|reasoning-pool|auto|complexity_router\"}[$__range])) or vector(0)), \"provider\", \"Pools\", \"\", \"\")",
-          "legendFormat": "{{provider}}",
-          "refId": "F"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"self-hosted|nvidia|nvidia-test|nemotron|vision|muse|summary|reviewer|dsv4f-local|ryzen|memini-embed|memini-rerank|toolhive-embed|llama-.*|mellum2-.*|qwen3\\\\.5-4b\"}[$__range])) or vector(0)), \"provider\", \"Self-hosted\", \"\", \"\")",
-          "legendFormat": "{{provider}}",
-          "refId": "G"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"chatgpt/.*|gpt-5\\\\..*|dsv4f|dsv4p|mimo-v2.5|mimo-v2.5-pro|go-gpt-5.6-luna|qwen3.8-max|qwen3.7-plus|go-minimax-m3|mimo-v2-pro|mimo-v2-omni|glm-.*|MiniMax.*|kimi-.*|frontier-pool|reasoning-pool|auto|complexity_router|self-hosted|nvidia|nvidia-test|nemotron|vision|muse|summary|reviewer|dsv4f-local|ryzen|memini-embed|memini-rerank|toolhive-embed|llama-.*|mellum2-.*|qwen3\\\\.5-4b\"}[$__range])) or vector(0)), \"provider\", \"Other\", \"\", \"\")",
-          "legendFormat": "{{provider}}",
-          "refId": "H"
         }
       ],
       "title": "Tokens by Provider (range)",

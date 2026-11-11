@@ -248,7 +248,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "max(max_over_time(llamacpp:predicted_tokens_seconds{service=~\"$service\", service!~\"llama-embed|memini-embed|memini-rerank|memini-summary|toolhive-embed\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_generation_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_decode_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
+          "expr": "max(max_over_time(llamacpp:predicted_tokens_seconds{service=~\"$service\", service!~\"embed.*|memini-rerank.*\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_generation_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_decode_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
           "legendFormat": "TG tok/s",
           "refId": "A"
         }
@@ -500,7 +500,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "max by (service)(max_over_time(llamacpp:prompt_tokens_seconds{service=~\"$service\", service!~\"llama-embed|memini-embed|memini-rerank|memini-summary|toolhive-embed\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_prefill_kv_computed_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_prefill_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
+          "expr": "max by (service)(max_over_time(llamacpp:prompt_tokens_seconds{service=~\"$service\", service!~\"embed.*|memini-rerank.*\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_prefill_kv_computed_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_prefill_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
           "legendFormat": "{{service}}",
           "refId": "A"
         }
@@ -523,7 +523,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "max by (service)(max_over_time(llamacpp:predicted_tokens_seconds{service=~\"$service\", service!~\"llama-embed|memini-embed|memini-rerank|memini-summary|toolhive-embed\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_generation_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_decode_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
+          "expr": "max by (service)(max_over_time(llamacpp:predicted_tokens_seconds{service=~\"$service\", service!~\"embed.*|memini-rerank.*\"}[$__range]) or max_over_time((sum by (service)(rate(vllm:request_generation_tokens_sum{service=~\"$service\"}[5m])) / sum by (service)(rate(vllm:request_decode_time_seconds_sum{service=~\"$service\"}[5m])))[$__range:1m]))",
           "legendFormat": "{{service}}",
           "refId": "A"
         }
@@ -546,7 +546,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "max by (service)(max_over_time(llamacpp:n_tokens_max{service=~\"$service\", service!~\"llama-embed|memini-embed|memini-rerank|memini-summary|toolhive-embed\"}[$__range]))",
+          "expr": "max by (service)(max_over_time(llamacpp:n_tokens_max{service=~\"$service\", service!~\"embed.*|memini-rerank.*\"}[$__range]))",
           "legendFormat": "{{service}}",
           "refId": "A"
         }
@@ -597,7 +597,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Running and queued requests per service (llama.cpp processing/deferred, vLLM running/waiting). gufo does not export these.",
+      "description": "Running and queued requests per service (llama.cpp processing/deferred, vLLM running/waiting). strata does not export these.",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -650,7 +650,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Share of the KV pool in use (gufo/llama.cpp kv_cache_usage_ratio, vLLM kv_cache_usage_perc).",
+      "description": "Share of the KV pool in use (strata/llama.cpp kv_cache_usage_ratio, vLLM kv_cache_usage_perc).",
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -696,7 +696,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Accepted / drafted speculative tokens over 15m (llama.cpp and vLLM MTP/draft decoding). gufo does not export it.",
+      "description": "Accepted / drafted speculative tokens over 15m (llama.cpp and vLLM MTP/draft decoding). strata does not export it.",
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -756,7 +756,7 @@
       {
         "current": { "selected": true, "text": "All", "value": "$__all" },
         "datasource": { "type": "prometheus", "uid": "${datasource}" },
-        "definition": "query_result(group by (service) (last_over_time({__name__=~\"llamacpp:prompt_tokens_total|vllm:generation_tokens_total\", namespace=\"llm\", service!~\".*embed.*|.*rerank.*\"}[$__range]) * on(pod) group_left(node) group by (pod, node) (last_over_time(kube_pod_info{node=~\"$instance\"}[$__range]))))",
+        "definition": "query_result(group by (service) (last_over_time({__name__=~\"llamacpp:prompt_tokens_total|vllm:generation_tokens_total\", namespace=\"ai\", service!~\".*embed.*|.*rerank.*\"}[$__range]) * on(pod) group_left(node) group by (pod, node) (last_over_time(kube_pod_info{node=~\"$instance\"}[$__range]))))",
         "refresh": 2,
         "hide": 0,
         "includeAll": true,
@@ -764,7 +764,7 @@
         "name": "service",
         "regex": "/service=\"([^\"]+)\"/",
         "query": {
-          "query": "query_result(group by (service) (last_over_time({__name__=~\"llamacpp:prompt_tokens_total|vllm:generation_tokens_total\", namespace=\"llm\", service!~\".*embed.*|.*rerank.*\"}[$__range]) * on(pod) group_left(node) group by (pod, node) (last_over_time(kube_pod_info{node=~\"$instance\"}[$__range]))))",
+          "query": "query_result(group by (service) (last_over_time({__name__=~\"llamacpp:prompt_tokens_total|vllm:generation_tokens_total\", namespace=\"ai\", service!~\".*embed.*|.*rerank.*\"}[$__range]) * on(pod) group_left(node) group by (pod, node) (last_over_time(kube_pod_info{node=~\"$instance\"}[$__range]))))",
           "refId": "StandardVariableQuery"
         },
         "sort": 1,
