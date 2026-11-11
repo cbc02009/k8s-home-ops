@@ -50,7 +50,7 @@ data:
       ],
       "agents": {
         "explore": {
-          "model": "litellm/go-pool"
+          "model": "litellm/local-pool"
         },
         "general": {
           "model": "litellm/go-coder"

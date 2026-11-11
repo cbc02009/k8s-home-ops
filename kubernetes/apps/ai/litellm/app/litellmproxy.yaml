@@ -84,6 +84,20 @@ spec:
     fallbacks:
       - auto:
           - qwen3.8-27b
+      # Quota fail-down: when a Go lane's 5h/weekly/monthly window runs dry
+      # (429 after retries), continue on the cheap go-pool flash rungs
+      # instead of stalling the session. K2.7/flagships stay the first
+      # choice; only the floor changes.
+      - go-coder:
+          - go-pool
+      - go-strong:
+          - go-pool
+      - go-max:
+          - go-pool
+      - frontier-pool:
+          - go-pool
+      - reasoning-pool:
+          - go-pool
   litellmSettings:
     success_callback:
       - prometheus
