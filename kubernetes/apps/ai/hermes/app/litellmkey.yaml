@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: hermes
+spec:
+  proxyRef: litellm
+  keyAlias: Hermes
+  secretName: litellm-key-hermes
+  secretKey: api-key
+  # Exactly the lanes config.yaml references: the default (auto, plus the
+  # pool lanes its complexity router resolves to), the fallback chain, the
+  # delegation roles and the auxiliary. No free-pool (banned for
+  # coding/agentic keys, see free-pool.yaml), no embed/rerank (the memini
+  # plugin talks to the memini server, which holds its own key for those),
+  # and no go-coder/go-strong/go-max single lanes (opencode's escalation
+  # lanes; hermes escalates via the pools).
+  models:
+  - auto
+  - reasoning-pool
+  - local-pool
+  - qwen3.8-27b
+  - qwen3.8-27b-chat
+  - qwen3.8-flash-next
+  - qwen3.8-flash-next-chat
+  - implementation-pool
+  - frontier-pool
+  - go-pool
+  - go-chat
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: hermes
+spec:
+  secretStoreRefs:
+  - name: onepassword-connect
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: litellm-key-hermes
+  data:
+  - match:
+      secretKey: api-key
+      remoteRef:
+        remoteKey: litellm
+        property: hermes_api_key

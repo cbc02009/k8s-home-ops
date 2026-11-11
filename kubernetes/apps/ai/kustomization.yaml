@@ -9,7 +9,7 @@ resources:
   - ./namespace.yaml
   - ./coder/ks.yaml
   - ./headroom/ks.yaml
-  # - ./hermes/ks.yaml
+  - ./hermes/ks.yaml
   - ./litellm/ks.yaml
   - ./litellm-operator/ks.yaml
   - ./llmkube/ks.yaml

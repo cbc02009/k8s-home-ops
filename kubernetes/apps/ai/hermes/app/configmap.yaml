@@ -1,0 +1,126 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-config
+data:
+  config.yaml: |
+    model:
+      # Complexity router: simple/medium traffic stays on the free resident
+      # local lanes (local-pool / 27B); only complex/reasoning turns burn the
+      # shared Go allowance (reasoning-pool). Session affinity keeps the
+      # chosen tier stable for an hour, so long tasks stay on the strong
+      # rung after the first complex classification.
+      default: auto
+      provider: litellm
+    fallback_providers:
+      # Last resort if the whole pool chain fails: the always-resident 27B
+      # first, then go-pool as the cloud overflow (free-pool is banned from
+      # agent keys/fallbacks, see free-pool.yaml), then strata as a second
+      # local runtime when it is awake.
+      - provider: litellm
+        model: qwen3.8-27b
+      - provider: litellm
+        model: go-pool
+      - provider: litellm
+        model: qwen3.8-flash-next
+    providers:
+      litellm:
+        base_url: http://litellm.ai:4000/v1
+        api_key: $${LITELLM_API_KEY}
+    toolsets:
+      - hermes-cli
+    terminal:
+      backend: local
+      cwd: /opt/data/workspace
+      timeout: 180
+      persistent_shell: true
+    memory:
+      provider: memini
+      auto_migrate: true
+    compression:
+      enabled: true
+      threshold: 0.50
+      target_ratio: 0.20
+      protect_last_n: 20
+    agent:
+      max_turns: 90
+      gateway_timeout: 1800
+      restart_drain_timeout: 60
+      api_max_retries: 2
+      reasoning_effort: medium
+    approvals:
+      mode: smart
+    display:
+      platforms:
+        discord:
+          tool_progress: "off"
+    streaming:
+      enabled: false
+    delegation:
+      roles:
+        # Fast 1M-context cloud lane for parallel exploration and review.
+        explorer:
+          provider: litellm
+          model: go-pool
+          max_concurrent_children: 4
+        # Stable local lane: resident 27B first, strata as second runtime —
+        # free and always available (unlike the strata-only flash-next group).
+        agentic-local:
+          provider: litellm
+          model: local-pool
+          max_concurrent_children: 1
+        implementer:
+          provider: litellm
+          model: implementation-pool
+        reviewer:
+          provider: litellm
+          model: go-pool
+        # Rare deep-consultation role on the rationed flagship lane.
+        oracle:
+          provider: litellm
+          model: frontier-pool
+          max_concurrent_children: 1
+        # Only vision-capable local model; active when strata owns the GPU.
+        vision-local:
+          provider: litellm
+          model: qwen3.8-flash-next-chat
+          max_concurrent_children: 1
+      max_iterations: 250
+    gateway:
+      multiplex_profiles: false
+    security:
+      redact_secrets: true
+    privacy:
+      redact_pii: true
+    platform_toolsets:
+      cli:
+        - hermes-cli
+    mcp_servers:
+      toolhive:
+        url: http://vmcp-mcp-gateway-internal.ai:4483/mcp
+    auxiliary:
+      # Always-on cheap cloud vision (no-training Go lane): strata sleeps by
+      # default, so the local vision group would fail in the pool's default
+      # state and swap the GPU out from under the 27B-dependent lanes.
+      vision:
+        provider: litellm
+        model: go-chat
+      # 27B-chat: always resident and no forced reasoning, so these
+      # utilities stay fast and cheap.
+      compression:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 180
+      web_extract:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 120
+      approval:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 60
+      session_search:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 120
