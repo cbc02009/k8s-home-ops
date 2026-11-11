@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: victorialogs
+spec:
+  image: ghcr.io/victoriametrics/mcp-victorialogs:v1.9.0@sha256:753bb4fbe402ca1a782842f44636830f9895736f11d7fe783b924f8a0daf083d
+  transport: streamable-http
+  proxyPort: 8080
+  mcpPort: 8081
+  # The MCP server serves Streamable HTTP at /mcp on its listen address; the
+  # ToolHive transparent proxy forwards the /mcp path through to mcpPort.
+  # The http transport is stateless, so no session affinity is needed.
+  sessionAffinity: None
+  env:
+    # Streamable HTTP mode -> /mcp endpoint (default is stdio).
+    - name: MCP_SERVER_MODE
+      value: http
+    # Bind all interfaces so the ToolHive proxy sidecar can reach it.
+    - name: MCP_LISTEN_ADDR
+      value: ":8081"
+    # In-cluster VictoriaLogs single-node endpoint (no auth in front of it).
+    - name: VL_INSTANCE_ENTRYPOINT
+      value: http://victoria-logs.observability.svc.cluster.local:9428
+  resources:
+    # The server embeds a vector DB of VictoriaLogs docs for the `documentation`
+    # tool, so it is heavier than a pure API proxy — keep headroom for that.
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  groupRef:
+    name: mcp-tools
