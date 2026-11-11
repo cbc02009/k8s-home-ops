@@ -45,6 +45,9 @@ spec:
           value: "Log in with authentik"
         - name: CODER_OIDC_ICON_URL
           value: "https://auth.ctec.run/static/dist/assets/icons/icon.svg"
+        # Authentik OIDC is the only way in: disable built-in email/password login.
+        - name: CODER_PASSWORD_ENABLE
+          value: "false"
       replicaCount: 1
       initContainers:
         - name: init-db

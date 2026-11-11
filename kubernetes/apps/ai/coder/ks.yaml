@@ -16,3 +16,6 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: ai
+  dependsOn:
+    - name: external-secrets
+      namespace: security

@@ -9,74 +9,95 @@ lives in Coder's database.
 
 - **code-server** on port `13337` (VS Code in the browser, and the backend for
   the VS Code *Coder* extension).
-- **OpenCode 2** installed into the persistent home (`$HOME/.opencode/bin`),
-  configured to talk to the in-cluster LiteLLM proxy.
-- Two pod-mounted Secrets (read-only, at `/run/secrets`) so keys never enter
-  Coder's DB:
-  - `litellm-key-coder` → `LITELLM_API_KEY` (the `coder` LiteLLM virtual key)
-  - `memini-key-opencode` → `MEMINI_API_KEY` (the shared `"opencode"` memini key)
-- A `coder-workspace` ServiceAccount whose only permission is `get` on those two
-  Secrets (see `app/rbac.yaml`).
+- **The k8s-home-ops toolchain**, installed once onto the persistent home
+  (`~/.local/bin`) and skipped on later starts:
+  `kubectl`, `helm`, `kustomize`, `flux`, `sops`, `age`, `direnv`, `just`,
+  `tofu`, `gh`, `gitleaks`, `talosctl`, plus `yamllint`, `pre-commit` and
+  `flux-local` via pipx. (Base image `codercom/example-base:ubuntu` already
+  ships git, python3, pipx, jq, unzip, docker CLI.)
+- **Fish + starship + atuin**, installed from `cbc02009/dotfiles` via
+  `chezmoi init --apply`. code-server's integrated terminal defaults to Fish.
+- **The repo cloned** to `~/git/k8s-home-ops` (over SSH, see credentials below).
+- **OpenCode 2** (`$HOME/.opencode/bin`) configured against the in-cluster
+  LiteLLM proxy, memini plugin (namespace `opencode`) and toolhive MCP.
+- Secrets mounted read-only at `/run/secrets` — nothing is stored in Coder's DB:
 
-The workspace `opencode.json` is written at startup and mirrors the cluster
-opencode agent: the in-cluster LiteLLM endpoint (`litellm.ai.svc.cluster.local:4000`),
-the memini plugin (namespace `opencode`, so workspace and local/cluster opencode
-share one memory pool), and the in-cluster toolhive MCP gateway. It uses
-`litellm/qwen3.8-27b` by default; other models from the `coder` key's model list
-are selectable.
+  | Path | Secret (key) | Becomes |
+  |---|---|---|
+  | `/run/secrets/litellm/api-key` | `litellm-key-coder` | `LITELLM_API_KEY` |
+  | `/run/secrets/memini/api-key` | `memini-key-opencode` | `MEMINI_API_KEY` |
+  | `/run/secrets/kubeconfig/kubeconfig` | `coder-workspace` (`kubeconfig`) | `KUBECONFIG` |
+  | `/run/secrets/age/keys.txt` | `coder-workspace` (`age_key`) | `~/.config/sops/age/keys.txt` (sops/direnv) |
+  | `/run/secrets/ssh/id_ed25519[.pub]` | `coder-workspace` (`ssh_private`/`ssh_public`) | `~/.ssh/` + git `core.sshCommand` |
+
+  A `coder-workspace` ServiceAccount limits workspace pods to `get` on exactly
+  those three Secrets (see `app/rbac.yaml`).
 
 ## One-time setup (in order)
 
-Do these **before** pushing the template. Steps 1–2 are the only manual,
-out-of-repo actions; everything else converges from this repo.
+Everything from step 1–3 is already done except where noted; keep them here for
+rebuilds.
 
-1. **Seed the 1Password `coder` item with the OIDC fields.** The `coder`
-   ExternalSecret templates `CODER_OIDC_CLIENT_ID` / `CODER_OIDC_CLIENT_SECRET`
-   from this item, so the fields must exist before the secret can be created.
-   Add to the `coder` item in the `k8s-home-ops` vault:
-   - `oidc_id` = `coder`
-   - `oidc_secret` = a long random string (e.g. `openssl rand -hex 32`)
-2. **Create the authentik OIDC application.**
+1. **1Password `coder` item** (vault `k8s-home-ops`): fields `oidc_id`,
+   `oidc_secret` — consumed by the Coder server itself for authentik OIDC. ✅ done
+2. **authentik OIDC application** (`terraform/authentik`):
+   `tofu apply` creates the confidential `coder` OAuth2 app. ✅ done
+3. **Push these repo changes** — Flux creates the `coder` secret, the RBAC, the
+   `coder` LiteLLM virtual key (→ secret `litellm-key-coder`), the
+   `memini-key-opencode` secret, and the `coder-workspace` secret.
+4. **Populate the 1Password fields** (vault `k8s-home-ops`) — do this **before
+   creating a workspace**, because the `coder-workspace` ExternalSecret errors
+   until they exist, and workspace pods sit in `ContainerCreating` without the
+   Secret.
+
+   On the existing **`coder`** item (shared with the Coder server's
+   Postgres/OIDC fields), add:
+
+   | Field | Contents |
+   |---|---|
+   | `kubeconfig` | contents of your workstation `kubeconfig` (cluster access) |
+   | `age_key` | contents of `~/.config/sops/age/keys.txt` (personal age key) |
+
+   And the **`coder-github-key`** item (must be a 1Password **SSH Key** item
+   type — the ExternalSecret maps its built-in `private key` / `public key`
+   fields to `ssh_private` / `ssh_public`, since labels with spaces can't be
+   used as Secret keys via `extract`):
+
+   | Built-in field | Used as |
+   |---|---|
+   | `private key` | `ssh_private` (recommended: a dedicated key) |
+   | `public key` | `ssh_public` (must be added to your GitHub account) |
+
+5. **Create the first Coder user** (first OIDC login becomes admin):
+   `coder login https://coder.ctec.run` ✅ done
+6. **Push the template** (re-run this whenever `main.tf` changes):
    ```sh
-   cd terraform/authentik
-   just tofu          # or: tofu apply
+   coder templates push kubernetes --directory kubernetes/apps/ai/coder/templates/kubernetes
    ```
-   This creates the confidential `coder` OAuth2 app (group `AI`,
-   `auth_groups = authentik_group.users`) and writes the generated
-   `client_id` / `client_secret` back into the 1Password `coder` item.
-3. **Commit and push** these repo changes. Flux then creates the `coder`
-   secret (OIDC fields + Postgres init), the `coder-workspace` ServiceAccount
-   / Role, the `coder` LiteLLM virtual key (which generates
-   `litellm-key-coder` and pushes it to 1Password as `litellm.coder_api_key`),
-   and the `memini-key-opencode` secret.
-4. **Create the first Coder user.** Coder is already running (release
-   `ai/coder.v13`). Log in and authenticate via authentik:
-   ```sh
-   coder login https://coder.ctec.run
-   ```
-   The **first** user to sign in over OIDC becomes admin.
-5. **Push the template.**
-   ```sh
-   coder templates push kubernetes/apps/ai/coder/templates/kubernetes/ kubernetes
-   ```
-   Then create a workspace from it in the dashboard.
+7. **Create a workspace** in the dashboard (or `coder create dev`). First start
+   takes a few minutes: toolchain download + repo clone. Later starts are fast.
 
 ## Using from VS Code
 
 1. Install the **Coder** extension.
-2. Run **Coder: Connect to Coder**, select `https://coder.ctec.run` and sign in
-   via authentik.
-3. Pick a workspace and open it. VS Code proxies to the workspace's
-   code-server. The `opencode` CLI is available in the integrated terminal,
-   pre-authenticated against LiteLLM and memini.
+2. **Coder: Connect to Coder** → `https://coder.ctec.run` → authentik.
+3. Open the workspace and pick `~/git/k8s-home-ops`. The integrated terminal is
+   a login-ish bash: `.bashrc` sources `~/.config/coder/env` (API keys,
+   `KUBECONFIG`) and the direnv hook, so `direnv`/`sops`/`kubectl`/`flux` work
+   exactly like on the workstation.
 
 ## Notes
 
-- **Re-push after edits.** The template's source of truth is this file; the copy
-  in Coder's DB is a snapshot. After changing `main.tf`, re-run
-  `coder templates push` to apply the change to existing/new workspaces.
-- **Keys stay out of Coder.** No API key is stored in Coder's Postgres — the
-  provisioner mounts the Secrets directly into the pod, and the `coder-workspace`
-  ServiceAccount can only `get` those two Secrets.
+- **Re-push after edits.** The repo copy of `main.tf` is the source of truth;
+  Coder's DB holds a snapshot. After editing, re-run step 6, then update
+  running workspaces (Versions tab → update).
+- **Keys stay out of Coder.** API keys, kubeconfig, age key and SSH key are
+  mounted from Kubernetes Secrets; the provisioner never copies them into its
+  Postgres. Rotate by editing the 1Password items; the secret volume refreshes
+  automatically within the ES refresh interval (1h) — the running shell env
+  vars refresh on next terminal.
+- **Cluster access is admin-equivalent** (the kubeconfig is the repo's
+  kubeconfig). Deliberate: home cluster, single trust domain. The SSH key gets
+  write access to the repos your GitHub account can reach.
 - **Tuning.** CPU / memory are mutable workspace parameters; the home disk size
   is fixed at creation time (it is the PVC size).

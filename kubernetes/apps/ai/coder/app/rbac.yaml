@@ -1,8 +1,8 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/v1/serviceaccount_v1.json
 # ServiceAccount used by Coder workspace pods. The only cluster resources it
-# may read are the two API key secrets, which the template mounts at
-# /run/secrets so workspaces can talk to the LiteLLM proxy and memini.
+# may read are the API key secrets and the personal dev credentials bundle
+# (kubeconfig/age/ssh), which the template mounts at /run/secrets.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -16,7 +16,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
-    resourceNames: ["litellm-key-coder", "memini-key-opencode"]
+    resourceNames: ["litellm-key-coder", "memini-key-opencode", "coder-workspace"]
     verbs: ["get"]
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/rbac.authorization.k8s.io/rolebinding_v1.json

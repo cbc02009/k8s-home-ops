@@ -117,20 +117,154 @@ resource "coder_agent" "main" {
   arch           = "amd64"
   startup_script = <<-EOT
     set -e
+    BIN="$HOME/.local/bin"
+    export PATH="$BIN:$HOME/.opencode/bin:$PATH"
+    mkdir -p "$BIN" "$HOME/.config/coder"
 
     # --- Secrets (pod-mounted, see kubernetes_deployment_v1 below) ---
-    #   /run/secrets/litellm  <- Secret litellm-key-coder  (LiteLLM virtual key "Coder")
-    #   /run/secrets/memini   <- Secret memini-key-opencode ("opencode" memini key)
+    #   /run/secrets/litellm     Secret litellm-key-coder     (LiteLLM virtual key "Coder")
+    #   /run/secrets/memini      Secret memini-key-opencode   ("opencode" memini key)
+    #   /run/secrets/kubeconfig  Secret coder-workspace       (kubeconfig item)
+    #   /run/secrets/age         Secret coder-workspace       (age_key item)
+    #   /run/secrets/ssh         Secret coder-workspace       (ssh_private/ssh_public items)
+    # Sourced by every interactive shell via ~/.bashrc. Keys stay in the pod;
+    # they are NOT baked into Coder's DB.
+    cat > "$HOME/.config/coder/env" <<'ENVEOF'
     export LITELLM_API_KEY="$(cat /run/secrets/litellm/api-key)"
     export MEMINI_API_KEY="$(cat /run/secrets/memini/api-key)"
+    export KUBECONFIG=/run/secrets/kubeconfig/kubeconfig
+    ENVEOF
+    grep -q '# coder-env' "$HOME/.bashrc" 2>/dev/null || \
+      printf '\n# coder-env\nexport PATH="$HOME/.local/bin:$HOME/.opencode/bin:$PATH"\n. "$HOME/.config/coder/env"\n' >> "$HOME/.bashrc"
 
-    # Make the keys (and the opencode bin dir) available to future login shells.
-    {
-      echo 'export PATH="$HOME/.opencode/bin:$PATH"'
-      echo 'export LITELLM_API_KEY="$(cat /run/secrets/litellm/api-key)"'
-      echo 'export MEMINI_API_KEY="$(cat /run/secrets/memini/api-key)"'
-    } > /etc/profile.d/coder-secrets.sh
-    chmod 0644 /etc/profile.d/coder-secrets.sh
+    # --- dev toolchain for k8s-home-ops (static binaries into the persistent
+    # home, installed once and skipped afterwards) ---
+    ghdl() { # ghdl <owner/repo> <asset-regex> -> latest release asset URL
+      curl -fsSL "https://api.github.com/repos/$1/releases/latest" |
+        jq -r '.assets[].browser_download_url' | grep -E "$2" | head -n1
+    }
+    if ! command -v kubectl >/dev/null 2>&1; then
+      curl -fsSL "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o "$BIN/kubectl"
+      chmod +x "$BIN/kubectl"
+    fi
+    if ! command -v helm >/dev/null 2>&1; then
+      curl -fsSL "https://get.helm.sh/helm-$(curl -fsSL https://get.helm.sh/helm-latest-version)-linux-amd64.tar.gz" |
+        tar xz -C "$BIN" --strip-components=1 linux-amd64/helm
+    fi
+    if ! command -v kustomize >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl kubernetes-sigs/kustomize 'kustomize_v.*_linux_amd64\.tar\.gz$')" | tar xz -C "$BIN" kustomize
+    fi
+    if ! command -v flux >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl fluxcd/flux2 'flux_.*_linux_amd64\.tar\.gz$')" | tar xz -C "$BIN" ./flux
+    fi
+    if ! command -v sops >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl getsops/sops 'sops-linux-amd64$')" -o "$BIN/sops"
+      chmod +x "$BIN/sops"
+    fi
+    if ! command -v age >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl FiloSottile/age 'age-.*-linux-amd64\.tar\.gz$')" |
+        tar xz -C "$BIN" --strip-components=1 --wildcards 'age-*/age' 'age-*/age-keygen'
+    fi
+    if ! command -v direnv >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl direnv/direnv 'direnv\.linux-amd64$')" -o "$BIN/direnv"
+      chmod +x "$BIN/direnv"
+    fi
+    if ! command -v just >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl casey/just 'just-.*x86_64-unknown-linux-musl\.tar\.gz$')" | tar xz -C "$BIN" just
+    fi
+    if ! command -v tofu >/dev/null 2>&1; then
+      TMP="$(mktemp -d)"
+      curl -fsSL "$(ghdl opentofu/opentofu 'tofu_.*_linux_amd64\.zip$')" -o "$TMP/tofu.zip"
+      unzip -q "$TMP/tofu.zip" -d "$TMP" && mv "$TMP/tofu" "$BIN/tofu" && rm -rf "$TMP"
+    fi
+    if ! command -v gh >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl cli/cli 'gh_.*_linux_amd64\.tar\.gz$')" |
+        tar xz -C "$BIN" --strip-components=2 --wildcards 'gh_*/bin/gh'
+    fi
+    if ! command -v gitleaks >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl gitleaks/gitleaks 'gitleaks_.*_linux_x86_64\.tar\.gz$')" | tar xz -C "$BIN" gitleaks
+    fi
+    if ! command -v talosctl >/dev/null 2>&1; then
+      curl -fsSL "$(ghdl siderolabs/talos 'talosctl-.*-linux-amd64$')" -o "$BIN/talosctl"
+      chmod +x "$BIN/talosctl"
+    fi
+    if ! command -v chezmoi >/dev/null 2>&1; then
+      curl -fsSL https://get.chezmoi.io | sh -s -- -b "$BIN"
+    fi
+    command -v yamllint >/dev/null 2>&1 || pipx install --silent yamllint
+    command -v pre-commit >/dev/null 2>&1 || pipx install --silent pre-commit
+    command -v flux-local >/dev/null 2>&1 || pipx install --silent flux-local
+    grep -q 'direnv hook' "$HOME/.bashrc" 2>/dev/null || echo 'eval "$(direnv hook bash)"' >> "$HOME/.bashrc"
+
+    # --- personal dev credentials (from Secret coder-workspace, see app/externalsecret.yaml) ---
+    mkdir -p "$HOME/.config/sops/age"
+    if [ -f /run/secrets/age/keys.txt ] && ! cmp -s /run/secrets/age/keys.txt "$HOME/.config/sops/age/keys.txt"; then
+      install -m 600 /run/secrets/age/keys.txt "$HOME/.config/sops/age/keys.txt"
+    fi
+    if [ -f /run/secrets/ssh/id_ed25519 ]; then
+      mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+      install -m 600 /run/secrets/ssh/id_ed25519 "$HOME/.ssh/id_ed25519"
+      install -m 644 /run/secrets/ssh/id_ed25519.pub "$HOME/.ssh/id_ed25519.pub"
+      grep -q 'github.com' "$HOME/.ssh/known_hosts" 2>/dev/null || \
+        ssh-keyscan -t ed25519,ecdsa,rsa github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
+    fi
+
+    # --- chezmoi dotfiles (fish/starship/atuin/gitconfig/ssh/k9s/...) ---
+    # Uses the mounted SSH key to clone cbc02009/dotfiles. run_once_before
+    # scripts install fish + apt packages; run_once_after installs fisher plugins.
+    if [ -d "$HOME/.local/share/chezmoi/.git" ]; then
+      chezmoi update -q
+    else
+      chezmoi init --apply --ssh \
+        --promptBool headless=true \
+        --promptBool kubernetes=true \
+        --promptBool minimal=false \
+        --promptBool coder=true \
+        cbc02009/dotfiles
+    fi
+
+    # chezmoi's gitconfig is source-of-truth; force this identity after apply.
+    if [ -f "$HOME/.ssh/id_ed25519" ]; then
+      git config --global core.sshCommand "ssh -i $HOME/.ssh/id_ed25519 -o IdentitiesOnly=yes"
+    fi
+    if [ ! -d "$HOME/git/k8s-home-ops/.git" ] && [ -f /run/secrets/ssh/id_ed25519 ]; then
+      mkdir -p "$HOME/git"
+      git clone git@github.com:cbc02009/k8s-home-ops.git "$HOME/git/k8s-home-ops"
+    fi
+
+    # --- fish environment: secrets + PATH for the Coder workspace ---
+    mkdir -p "$HOME/.config/fish/conf.d"
+    cat > "$HOME/.config/fish/conf.d/00-coder.fish" <<'FISHEOF'
+    set -gx PATH $HOME/.local/bin $HOME/.opencode/bin $PATH
+    set -gx KUBECONFIG /run/secrets/kubeconfig/kubeconfig
+    set -gx LITELLM_API_KEY (cat /run/secrets/litellm/api-key)
+    set -gx MEMINI_API_KEY (cat /run/secrets/memini/api-key)
+    FISHEOF
+
+    # --- make fish the default shell (chezmoi's setup script may skip if
+    # /usr/sbin/fish is missing, so ensure it here) ---
+    FISH_BIN="$(command -v fish)"
+    if [ -n "$FISH_BIN" ] && [ "$(getent passwd "$USER" | cut -d: -f7)" != "$FISH_BIN" ]; then
+      grep -qx "$FISH_BIN" /etc/shells 2>/dev/null || echo "$FISH_BIN" | sudo tee -a /etc/shells >/dev/null
+      sudo chsh -s "$FISH_BIN" "$USER"
+    fi
+
+    # --- VS Code / code-server: default terminal profile is fish ---
+    python3 - "$HOME" <<'PY'
+    import json, os, sys
+    home = sys.argv[1]
+    p = os.path.join(home, ".local", "share", "code-server", "User", "settings.json")
+    d = {}
+    if os.path.exists(p):
+        try:
+            with open(p) as f: d = json.load(f)
+        except Exception:
+            pass
+    d.setdefault("terminal.integrated.profiles.linux", {"fish": {"path": "fish"}})
+    d["terminal.integrated.defaultProfile.linux"] = "fish"
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, "w") as f: json.dump(d, f, indent=2)
+PY
 
     # --- opencode (OpenCode 2, standalone binary; reinstalled on every start
     # to pick up the latest release, the binary lives on the persistent home) ---
@@ -249,13 +383,6 @@ resource "coder_agent" "main" {
               },
               "name": "Implementation Pool"
             },
-            "muse-glimmer": {
-              "limit": {
-                "context": 131072,
-                "output": 20480
-              },
-              "name": "Muse Glimmer 30B"
-            },
             "qwen3.8-27b": {
               "limit": {
                 "context": 147456,
@@ -288,11 +415,13 @@ resource "coder_agent" "main" {
     }
     JSON
 
-    # --- code-server ---
-    curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
+    # --- code-server (installed once onto the persistent home) ---
+    if [ ! -x "$HOME/.local/code-server/bin/code-server" ]; then
+      curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix="$HOME/.local/code-server"
+    fi
 
     # Start code-server in the background.
-    /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
+    "$HOME/.local/code-server/bin/code-server" --auth none --port 13337 >/tmp/code-server.log 2>&1 &
   EOT
 
   # The following metadata blocks are optional. They are used to display
@@ -454,8 +583,9 @@ resource "kubernetes_deployment_v1" "main" {
         }
       }
       spec {
-        # Only allowed to read the two API key Secrets (see rbac.yaml in the
-        # coder app); the template mounts them at /run/secrets.
+        # Only allowed to read the API key Secrets and the coder-workspace
+        # dev-credentials Secret (see rbac.yaml in the coder app); the template
+        # mounts them at /run/secrets.
         service_account_name = "coder-workspace"
 
         security_context {
@@ -501,6 +631,21 @@ resource "kubernetes_deployment_v1" "main" {
             name       = "memini"
             read_only  = true
           }
+          volume_mount {
+            mount_path = "/run/secrets/kubeconfig"
+            name       = "kubeconfig"
+            read_only  = true
+          }
+          volume_mount {
+            mount_path = "/run/secrets/age"
+            name       = "age"
+            read_only  = true
+          }
+          volume_mount {
+            mount_path = "/run/secrets/ssh"
+            name       = "ssh"
+            read_only  = true
+          }
         }
 
         volume {
@@ -522,7 +667,43 @@ resource "kubernetes_deployment_v1" "main" {
             secret_name = "memini-key-opencode"
           }
         }
-
+        # Personal dev credentials (Secret coder-workspace, mapped explicitly
+        # from the 1Password items "coder" + "coder-github-key"). items{} picks
+        # the keys we need and names the files the startup script expects.
+        volume {
+          name = "kubeconfig"
+          secret {
+            secret_name = "coder-workspace"
+            items {
+              key  = "kubeconfig"
+              path = "kubeconfig"
+            }
+          }
+        }
+        volume {
+          name = "age"
+          secret {
+            secret_name = "coder-workspace"
+            items {
+              key  = "age_key"
+              path = "keys.txt"
+            }
+          }
+        }
+        volume {
+          name = "ssh"
+          secret {
+            secret_name = "coder-workspace"
+            items {
+              key  = "ssh_private"
+              path = "id_ed25519"
+            }
+            items {
+              key  = "ssh_public"
+              path = "id_ed25519.pub"
+            }
+          }
+        }
         affinity {
           // This affinity attempts to spread out all workspace pods evenly across
           // nodes.
