@@ -58,5 +58,5 @@ repo onto non-k8s docker hosts, one **instance** per host:
 
 ## Validating
 
-- No flux-local equivalent for this tree. CI only lints/secrets-scans it, so run
+- No flate equivalent for this tree (it only renders Flux trees). CI only lints/secrets-scans it, so run
   `pre-commit run --all-files` before pushing.

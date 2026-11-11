@@ -52,8 +52,8 @@ kubernetes/
 2. Write `app/` (`kustomization.yaml`, `helmrelease.yaml`, `ocirepository.yaml`) and `ks.yaml` following the conventions above; update `name`/`path`/`dependsOn`.
 3. Register the app in `<ns>/kustomization.yaml` (list its `ks.yaml`); for a brand-new namespace, add `namespace.yaml` and the `kustomization.yaml` (pull in `../../components/common`).
 4. Add any needed secret (sops file or ExternalSecret) and `dependsOn` for it.
-5. Validate: `flux-local test --all-namespaces --enable-helm --path kubernetes/flux/cluster`; CI posts a `flux-local diff` on the PR.
-6. Manually sync from a workstation: `just kube ks-sync <ns> <ks>` (also `hr-sync`, `gr-sync`, `es-sync` and `*-all` variants; `apply-ks`/`delete-ks` apply a Kustomization directly with `flux-local build`).
+5. Validate: `flate test all --path kubernetes/flux/cluster --allow-missing-secrets`; CI posts a `flate diff` comment on the PR.
+6. Manually sync from a workstation: `just kube ks-sync <ns> <ks>` (also `hr-sync`, `gr-sync`, `es-sync` and `*-all` variants; `apply-ks`/`delete-ks` apply a Kustomization directly with `flate build ks`).
 
 ## Gotchas
 

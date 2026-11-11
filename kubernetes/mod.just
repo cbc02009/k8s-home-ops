@@ -94,4 +94,4 @@ keda-all state:
 
 [private]
 render-local-ks ns ks:
-  flux-local build ks --namespace "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" "{{ ks }}"
+  flate build ks "{{ ks }}" -n "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" --allow-missing-secrets --skip-secrets=false --skip-crds=false

@@ -20,7 +20,7 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 | `terraform/` | OpenTofu (`.tofu` files): `cloudflare/`, `authentik/`, `garage/`. Has its own `AGENTS.md`. |
 | `docker/` | docker-compose stacks deployed by doco-cd from this repo, one instance per host (`docker/truenas/` on TrueNAS, `docker/zigbee-pi/` on the Zigbee/Z-Wave Raspberry Pi); `docker/.archive/` is retired stacks. Secrets are 1Password `op://` references (`.doco-cd.yaml`). |
 | `tools/` | One-shot scripts and debug manifests (e.g. `wipe-rook.yaml`, `postgres-backup.yaml`). Most `app-*` generators are **legacy** (they reference a `templates/` dir that no longer exists) — read before running. |
-| `.github/workflows/` | CI: `flux-local` test/diff on `kubernetes/**`, image-pull, renovate, labeler/label-sync, codeql, release, schemas (publishes flux2-schemas to `k8s-schemas.home-operations.com`). |
+| `.github/workflows/` | CI: `flate` test/diff on `kubernetes/**`, image-pull, renovate, labeler/label-sync, codeql, release, schemas (publishes flux2-schemas to `k8s-schemas.home-operations.com`). |
 | `.renovate/` + `.renovaterc.json5` | Renovate config: semantic commits, automerge, `area/*` + `renovate/*` labels, presets from `home-operations/renovate-presets`. |
 
 ## Toolchain
@@ -29,7 +29,7 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 - **direnv + sops**: the root `.envrc` decrypts `secrets.sops.yaml` (age key at `~/.config/sops/age/keys.txt`) into the shell environment; `terraform/.envrc` does the same for `terraform/secrets.sops.yaml`. `use_sops <path>` loads any other sops env file.
 - **minijinja + 1Password**: `just template <file.j2>` renders a minijinja template with environment injected via `op inject` (settings in `.minijinja.toml`). Used by bootstrap to render the personal manifests.
 - **pre-commit**: yamllint (config `.github/yamllint-config.yaml`), end-of-file/line-ending/trailing-whitespace fixes, forbid CRLF/tabs, `sops-pre-commit` (forbid-secrets), gitleaks, smart-quote fix, json5 check. Run `pre-commit run --all-files` before committing.
-- **flux-local**: used by CI and by `just kube apply-ks` to render/validate Kustomizations without a cluster.
+- **flate** (successor to the archived `flux-local`): used by CI and by `just kube apply-ks` to render/validate Flux objects without a cluster. Pass `--allow-missing-secrets` for the two bootstrap-only Secrets (Cloudflare account ID / tunnel ID) that live only in `bootstrap/kustomize/personal/`.
 - **Renovate** owns version updates (image tags, chart versions, Talos/K8s versions, action digests, `docker/` compose images). Do not hand-edit versions it manages; use `# renovate:` directives when you need to influence it (e.g. `datasource=docker depName=...` on Talos/K8s versions in `talos/topf.yaml`).
 
 ## Global conventions
@@ -40,8 +40,8 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 - **Commits**: semantic commit messages; CODEOWNERS is `@cbc02009`; the labeler applies `area/<dir>` labels per changed directory.
 - **Validating `kubernetes/**` changes** (same commands CI runs — run before pushing):
   ```bash
-  flux-local test --all-namespaces --enable-helm --path kubernetes/flux/cluster
-  flux-local diff kustomization --path kubernetes/flux/cluster
+  flate test all --path kubernetes/flux/cluster --allow-missing-secrets
+  flate diff ks --path kubernetes/flux/cluster
   ```
 
 ## Network / cluster reference
@@ -58,4 +58,4 @@ Inspired by Truxnell/home-cluster and the home-operations (bjw-s) ecosystem.
 - **Never run `just bootstrap` against the running cluster** — it is for bare-metal/fresh nodes only.
 - Avoid touching `kube-system` (Cilium, CoreDNS), Rook-Ceph, or node resets unless explicitly asked.
 - `prune: true` is the norm: deleting a file from the repo deletes the resource in-cluster. Keep paths and resource names stable when refactoring.
-- When a change is uncertain, prefer making the edit in-repo and letting Flux converge, and validate with `flux-local` first.
+- When a change is uncertain, prefer making the edit in-repo and letting Flux converge, and validate with `flate` first.
