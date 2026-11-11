@@ -36,3 +36,41 @@ spec:
       remoteRef:
         remoteKey: litellm
         property: opencode_api_key
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: opencode-local
+spec:
+  proxyRef: litellm
+  keyAlias: OpenCode Local
+  secretName: litellm-key-opencode
+  secretKey: api-key
+  models:
+  - qwen3.8-27b
+  - strata-fn
+  # OpenCode Go cloud lanes for agent work that outgrows the local rungs;
+  # keep the local Qwen models as the default (grunt stays on the 4090).
+  - go-pool
+  - go-coder
+  - go-strong
+  - go-max
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: opencode-local
+spec:
+  secretStoreRefs:
+  - name: onepassword-connect
+    kind: ClusterSecretStore
+  selector:
+    secret:
+      name: litellm-key-opencode-local
+  data:
+  - match:
+      secretKey: api-key
+      remoteRef:
+        remoteKey: litellm
+        property: opencode_local_api_key
