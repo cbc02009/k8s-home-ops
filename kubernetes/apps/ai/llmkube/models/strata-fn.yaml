@@ -39,7 +39,7 @@ spec:
   runtime: generic
   # Ported from the 3090 benchmark deployment (driver 595.91.07 — same as
   # mayne's). 0.2.12-cuda13 @ sha256:c3a85342… runs Ada out of the box.
-  image: ghcr.io/niko1221/strata:0.2.12-cuda13@sha256:c3a853420670f4c0f5a948c2d9e9904af4cedf52b11bc8cf167602dc5c578bcc
+  image: ghcr.io/niko1221/strata:0.2.13-cuda13@sha256:b6e1876515d5663047a7cd8dfee5223c8b2d117710eb2a9c285a433fb6e4a703
   command:
     - /bin/sh
     - -c
