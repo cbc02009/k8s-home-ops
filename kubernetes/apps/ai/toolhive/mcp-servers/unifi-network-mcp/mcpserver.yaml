@@ -12,7 +12,7 @@ spec:
     name: mcp-tools
   env:
     - name: UNIFI_NETWORK_HOST
-      value: unifi.internal
+      value: 10.0.2.1
     - name: UNIFI_NETWORK_SITE
       value: default
     - name: UNIFI_NETWORK_VERIFY_SSL
@@ -38,12 +38,9 @@ spec:
     - name: UNIFI_TOOL_PERMISSION_MODE
       value: confirm
   secrets:
-    - name: toolhive-unifi-network-username
-      key: UNIFI_NETWORK_USERNAME
-      targetEnvName: UNIFI_NETWORK_USERNAME
-    - name: toolhive-unifi-network-password
-      key: UNIFI_NETWORK_PASSWORD
-      targetEnvName: UNIFI_NETWORK_PASSWORD
+    - name: toolhive-unifi-network-api-key
+      key: UNIFI_NETWORK_API_KEY
+      targetEnvName: UNIFI_NETWORK_API_KEY
   resources:
     requests:
       cpu: 100m
