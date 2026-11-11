@@ -9,7 +9,7 @@ spec:
   # v1.109.0-rc.1 is the first build carrying the opencode_go provider (the
   # 1.108.x LTS line predates its Oct 24 merge). Drop back to stable/LTS once
   # v1.109.0 stable ships — Renovate will propose it.
-  image: ghcr.io/berriai/litellm:v1.109.0-rc.1@sha256:030121401c60d732a2cdf8fd485c91432d40388b046bfa3e0b2d3370f26378c9
+  image: ghcr.io/berriai/litellm:v1.110.0-rc.1@sha256:82602881a82ae09dbb09873a0eb47afbc1b24752f06fca9aee290fdacf29b15d
   replicas: 2
   service:
     port: 4000
