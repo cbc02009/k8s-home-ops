@@ -45,7 +45,7 @@ metadata:
 spec:
   proxyRef: litellm
   keyAlias: OpenCode Local
-  secretName: litellm-key-opencode
+  secretName: litellm-key-opencode-local
   secretKey: api-key
   models:
   - qwen3.8-27b
