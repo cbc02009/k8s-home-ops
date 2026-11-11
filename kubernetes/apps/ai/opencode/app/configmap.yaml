@@ -128,34 +128,6 @@ data:
             "timeout": 1800000
           },
           "models": {
-            "go-coder": {
-              "limit": {
-                "context": 262144,
-                "output": 65536
-              },
-              "name": "OpenCode Go · Kimi K2.7 Code"
-            },
-            "go-max": {
-              "limit": {
-                "context": 1000000,
-                "output": 131072
-              },
-              "name": "OpenCode Go · Qwen3.8 Max"
-            },
-            "go-pool": {
-              "limit": {
-                "context": 262144,
-                "output": 65536
-              },
-              "name": "OpenCode Go · workhorse pool"
-            },
-            "go-strong": {
-              "limit": {
-                "context": 1000000,
-                "output": 131072
-              },
-              "name": "OpenCode Go · Kimi K3.1 Pro"
-            },
             "auto": {
               "limit": {
                 "context": 1000000,
@@ -200,14 +172,14 @@ data:
             },
             "local-pool": {
               "limit": {
-                "context": 245760,
+                "context": 147456,
                 "output": 65536
               },
               "name": "Local pool"
             },
             "local-pool-chat": {
               "limit": {
-                "context": 245760,
+                "context": 147456,
                 "output": 65536
               },
               "name": "Local pool · chat"
