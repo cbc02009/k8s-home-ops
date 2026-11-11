@@ -100,6 +100,12 @@ data:
           "model": "litellm/go-max",
           "subagent": true,
           "template": "You have a 1M-token context and a generous budget. Ingest as much as you need, then complete the work end-to-end. Task: $ARGUMENTS"
+        },
+        "auto": {
+          "description": "Switch this session to the auto complexity router",
+          "agent": "build",
+          "model": "litellm/auto",
+          "template": "Continue with the auto router selecting the lane for this session. $ARGUMENTS"
         }
       },
       "plugins": [
