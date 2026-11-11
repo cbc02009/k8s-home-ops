@@ -124,7 +124,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "((sum(increase(litellm_spend_metric_total{requested_model!~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6))",
+          "expr": "((sum(increase(litellm_spend_metric_total{requested_model!~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6))",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -220,7 +220,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s))",
+          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s))",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -284,7 +284,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode)",
+          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode)",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -442,7 +442,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace(((((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -451,7 +451,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }
@@ -526,7 +526,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((((sum(rate(litellm_input_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 0.4 + (sum(rate(litellm_output_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 1.2) / 1e6) * 86400), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace(((((sum(rate(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 0.4 + (sum(rate(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 1.2) / 1e6) * 86400), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -535,7 +535,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }
@@ -770,7 +770,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -779,7 +779,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"go-.*|free-pool|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|qwen3\\\\.8-flash-next.*|strata-fn|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }

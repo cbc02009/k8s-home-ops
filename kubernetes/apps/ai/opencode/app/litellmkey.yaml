@@ -11,13 +11,16 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
-  - strata-fn
-  # OpenCode Go cloud lanes for agent work that outgrows the local rungs;
-  # keep the local Qwen models as the default (grunt stays on the 4090).
+  - local-pool
+  # OpenCode Go cloud lanes for agent work that outgrows the local rungs.
   - go-pool
   - go-coder
   - go-strong
   - go-max
+  # New pooled lanes.
+  - reasoning-pool
+  - frontier-pool
+  - auto
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
@@ -49,13 +52,16 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
-  - strata-fn
-  # OpenCode Go cloud lanes for agent work that outgrows the local rungs;
-  # keep the local Qwen models as the default (grunt stays on the 4090).
+  - local-pool
+  # OpenCode Go cloud lanes for agent work that outgrows the local rungs.
   - go-pool
   - go-coder
   - go-strong
   - go-max
+  # New pooled lanes.
+  - reasoning-pool
+  - frontier-pool
+  - auto
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret

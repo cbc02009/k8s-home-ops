@@ -1,11 +1,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./auto.yaml
   - ./embed.yaml
   - ./free-pool.yaml
-  # - ./implementation-pool.yaml
+  - ./frontier-pool.yaml
+  - ./implementation-pool.yaml
+  - ./local-pool.yaml
   - ./opencode-go.yaml
   - ./qwen3.8-27b.yaml
+  - ./reasoning-pool.yaml
   - ./rerank.yaml
   - ./strata-fn.yaml

@@ -1,9 +1,49 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Coding lane: local rungs first (free, private), then big-allowance Go
+# workhorses for overflow. The local rungs also give a stable name for the
+# coder virtual key regardless of which local model is resident.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: implementation-pool-strata
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: implementation-pool
+  proxyRef: litellm
+  params:
+    model: openai/qwen3.8-flash-next-iq3_s
+    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
+    apiKey: sk-llmkube-noauth
+    additional:
+      temperature: 1.0
+      top_p: 0.95
+      top_k: 20
+      min_p: 0
+      order: 1
+      max_parallel_requests: 2
+      reasoning_effort: high
+      allowed_openai_params:
+        - reasoning_effort
+  info:
+    mode: chat
+    maxInputTokens: 245760
+    maxOutputTokens: 40960
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 6.2e-08
+      output_cost_per_token: 1.35e-06
+      cache_read_input_token_cost: 0.0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
   name: implementation-pool-27b
+  labels:
+    litellm.home-operations.com/managed-by: flux
 spec:
   modelName: implementation-pool
   proxyRef: litellm
@@ -16,7 +56,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 3
+      order: 2
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:
@@ -26,8 +66,66 @@ spec:
     maxInputTokens: 131072
     maxOutputTokens: 40960
     supportsFunctionCalling: true
-    supportsVision: true
+    supportsVision: false
     extra:
       input_cost_per_token: 6.2e-08
       output_cost_per_token: 1.35e-06
       cache_read_input_token_cost: 0.0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Go $60/mo allowance workhorse; kept at low parallelism so this pool does
+# not starve the main go-pool.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: implementation-pool-glm-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: implementation-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/glm-5.3-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 3
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: implementation-pool-minimax-m3.1-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: implementation-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3.1-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 4
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 512000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 6e-07
+      cache_read_input_token_cost: 1.5e-08

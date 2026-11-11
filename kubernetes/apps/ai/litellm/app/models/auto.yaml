@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Complexity router: one model name that picks the right lane. Simple chat
+# goes to local-pool (fast local flash model), medium work stays on the
+# always-resident 27B, and hard reasoning/coding escalates to reasoning-pool.
+# The classifier runs on 27b-chat so it works even when strata is asleep.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: auto
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: auto
+  proxyRef: litellm
+  params:
+    model: auto_router/complexity_router
+    additional:
+      complexity_router_default_model: qwen3.8-27b
+      complexity_router_config:
+        tiers:
+          SIMPLE: local-pool
+          MEDIUM: qwen3.8-27b
+          COMPLEX: reasoning-pool
+          REASONING: reasoning-pool
+        classifier_type: llm
+        classifier_llm_config:
+          model: qwen3.8-27b-chat
+          timeout_ms: 20000
+        classifier_fallback: default_model
+        session_affinity: true
+        session_affinity_ttl_seconds: 3600

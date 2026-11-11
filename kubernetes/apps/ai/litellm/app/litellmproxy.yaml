@@ -81,6 +81,9 @@ spec:
     routing_strategy: simple-shuffle
     cooldown_time: 30
     enable_pre_call_checks: true
+    fallbacks:
+      - auto:
+          - qwen3.8-27b
   litellmSettings:
     success_callback:
       - prometheus

@@ -11,7 +11,7 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
-  - strata-fn
+  - local-pool
   # OpenCode Go cloud lanes for agent work that outgrows the local rungs.
   - go-pool
   - go-coder
