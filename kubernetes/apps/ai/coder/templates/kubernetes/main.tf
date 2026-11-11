@@ -138,7 +138,11 @@ resource "coder_agent" "main" {
     curl -fsSL https://opencode.ai/v2/install | bash
 
     # opencode config - mirrors the cluster opencode agent with in-cluster
-    # endpoints and the mounted keys.
+    # endpoints and the mounted keys. Task -> model routing: the session
+    # default is the local Qwen 27B; explore/general subagents run on the
+    # Go cloud lanes; reviewer runs read-only adversarial review on the
+    # free Go pool; /coder and /deep move work to the premium one-shot
+    # rungs (the coder key has no go-max or vision model).
     mkdir -p "$HOME/.config/opencode"
     cat > "$HOME/.config/opencode/opencode.json" <<'JSON'
     {
@@ -155,7 +159,48 @@ resource "coder_agent" "main" {
         "opencode"
       ],
       "model": "litellm/qwen3.8-27b",
-      "permission": "allow",
+      "permissions": [
+        {
+          "action": "*",
+          "resource": "*",
+          "effect": "allow"
+        }
+      ],
+      "agents": {
+        "explore": {
+          "model": "litellm/go-pool"
+        },
+        "general": {
+          "model": "litellm/go-coder"
+        },
+        "reviewer": {
+          "description": "Independent adversarial review of the current diff or changes; use for substantive or risky changes",
+          "model": "litellm/go-pool",
+          "permissions": [
+            {
+              "action": "edit",
+              "resource": "*",
+              "effect": "deny"
+            }
+          ],
+          "system": "Independently review the supplied diff or changes for concrete correctness defects and consequential regressions. Be skeptical, not obligated to find a flaw: a clean verdict is useful. Do not manufacture findings, praise, or unsolicited polish.\n\nThis is a production GitOps homelab: kubernetes/ manifests converge via Flux (prune: true — renaming or removing a path deletes the in-cluster resource), secrets live only in sops/1Password, and litellm virtual keys whitelist their model lanes. Treat resource name/path stability, prune semantics, secret handling and key allow-lists as first-class failure modes.\n\nReceive the goal, diff, relevant paths and test facts, not the author's rationale or full transcript. Inspect affected behavior and coverage. At changed execution/ownership boundaries, test plausible failure scenarios involving authority, state/resource lifetime, cleanup, malformed inputs, ordering or partial failure as relevant. Before a clean verdict on authority, data-loss/recovery, or concurrency behavior, construct and check at least one concrete failure scenario. Do not apply every checklist item to every edit or expand to unrelated files without a concrete dependency.\n\nA finding needs a file/line, triggering input or state, and the incorrect outcome. Verify what can be checked; distinguish an unresolved risk from an observed defect. Reuse passing test receipts while relevant state is unchanged; extra checks must address concrete concerns or missing evidence. On a follow-up, review only material fix deltas or unresolved findings.\n\nReturn findings ordered by severity, then any essential evidence limitations. If none, say 'no defect found' and briefly state coverage and residual uncertainty; do not invent two or three boundaries to satisfy an output quota. Keep the handoff compact. One review is not permission to spawn more reviewers; cloud lanes are quota-limited."
+        }
+      },
+      "commands": {
+        "coder": {
+          "description": "Switch this session to Kimi K2.7 Code (best agentic coder)",
+          "agent": "build",
+          "model": "litellm/go-coder",
+          "template": "Continue in the Kimi K2.7 Code lane for this session. $ARGUMENTS"
+        },
+        "deep": {
+          "description": "Run a hard one-shot on Kimi K3.1 Pro in a background child session",
+          "agent": "general",
+          "model": "litellm/go-strong",
+          "subagent": true,
+          "template": "You have a generous budget for this task. Do not stop at a sketch: complete the work end-to-end and verify it. Task: $ARGUMENTS"
+        }
+      },
       "plugins": [
         {
           "options": {
@@ -166,15 +211,36 @@ resource "coder_agent" "main" {
           "package": "@eleboucher/opencode-memini-v2@0.7.38"
         }
       ],
-      "provider": {
+      "providers": {
         "litellm": {
+          "name": "LiteLLM OpenAI",
+          "package": "aisdk:@ai-sdk/openai-compatible",
+          "settings": {
+            "apiKey": "{env:LITELLM_API_KEY}",
+            "baseURL": "http://litellm.ai.svc.cluster.local:4000/v1",
+            "timeout": 1800000
+          },
           "models": {
-            "free-pool": {
+            "go-coder": {
               "limit": {
-                "context": 200000,
-                "output": 16384
+                "context": 262144,
+                "output": 65536
               },
-              "name": "Free Pool (public work only)"
+              "name": "OpenCode Go · Kimi K2.7 Code"
+            },
+            "go-pool": {
+              "limit": {
+                "context": 262144,
+                "output": 65536
+              },
+              "name": "OpenCode Go · workhorse pool"
+            },
+            "go-strong": {
+              "limit": {
+                "context": 1000000,
+                "output": 131072
+              },
+              "name": "OpenCode Go · Kimi K3.1 Pro"
             },
             "implementation-pool": {
               "limit": {
@@ -204,13 +270,6 @@ resource "coder_agent" "main" {
               },
               "name": "Qwen3.8-27B W4A16 non-thinking"
             }
-          },
-          "name": "LiteLLM OpenAI",
-          "npm": "@ai-sdk/openai-compatible",
-          "options": {
-            "apiKey": "{env:LITELLM_API_KEY}",
-            "baseURL": "http://litellm.ai.svc.cluster.local:4000/v1",
-            "timeout": 1800000
           }
         }
       },
