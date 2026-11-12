@@ -16,6 +16,11 @@ spec:
     #   resourceClaims:
     #     - name: gpu
     #       resourceClaimTemplateName: swarmui-gpu
+    # No GPU for now: no nvidia.com/gpu request and no nvidia runtime
+    # class, so this app can never take the dGPU out from under the
+    # local LLMs (llmkube). Re-add GPU access only as part of the
+    # manual pre-emption setup, and only then re-enable the app in
+    # apps/ai/kustomization.yaml.
     controllers:
       swarmui:
         annotations:
@@ -32,7 +37,6 @@ spec:
             - key: llm-workload
               operator: Exists
               effect: NoSchedule
-          runtimeClassName: nvidia
         containers:
           app:
             image:
@@ -42,12 +46,10 @@ spec:
               TZ: ${CONFIG_TZ}
             resources:
               requests:
-                nvidia.com/gpu: 1
                 cpu: 500m
                 memory: 4Gi
               limits:
                 memory: 6Gi
-                nvidia.com/gpu: 1
     service:
       app:
         controller: swarmui
