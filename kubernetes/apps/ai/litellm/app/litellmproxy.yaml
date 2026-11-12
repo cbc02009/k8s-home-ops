@@ -27,16 +27,36 @@ spec:
           set:
             - name: x-litellm-session-id
               value: '%REQ(x-session-id)%'
+  # OIDC SSO via authentik: the litellm UI login redirects to the `litellm`
+  # authentik application (auth.ctec.run). Client credentials come from the
+  # litellm 1Password item (oidc_id/oidc_secret) via the ExternalSecret; the
+  # litellm_role claim (group-mapped in authentik) sets admin/user.
   env:
+    - name: AUTO_REDIRECT_UI_LOGIN_TO_SSO
+      value: 'true'
     - name: DATABASE_URL
       valueFrom:
         secretKeyRef:
           name: litellm
           key: DATABASE_URL
+    - name: GENERIC_AUTHORIZATION_ENDPOINT
+      value: https://auth.ctec.run/application/o/authorize/
+    - name: GENERIC_SCOPE
+      value: openid email profile litellm_role
+    - name: GENERIC_TOKEN_ENDPOINT
+      value: https://auth.ctec.run/application/o/token/
+    - name: GENERIC_USERINFO_ENDPOINT
+      value: https://auth.ctec.run/application/o/userinfo/
+    - name: GENERIC_USER_ROLE_ATTRIBUTE
+      value: litellm_role
     - name: LITELLM_LOG
       value: INFO
     - name: LITELLM_MODE
       value: PRODUCTION
+    - name: PROXY_BASE_URL
+      value: https://litellm.ctec.run
+    - name: PROXY_LOGOUT_URL
+      value: https://auth.ctec.run/application/o/end-session/
     - name: REDIS_HOST
       value: litellm-dragonfly-db
     - name: REDIS_PORT
