@@ -118,6 +118,13 @@ spec:
     num_retries: 2
     retry_after: 5
     set_verbose: false
+    # Hermes sends agent-level params (e.g. reasoning_effort) to every lane;
+    # the opencode_go rungs don't accept them, so those requests 400'd and
+    # hermes's COMPLEX turns silently degraded to the local 27B after two
+    # failed Go rungs (alert: auto -> reasoning-pool UnsupportedParamsError).
+    # Drop unsupported params instead — only affects requests that would
+    # otherwise 400; explicitly allowed params (local lanes) still pass.
+    drop_params: true
   generalSettings:
     health_check_endpoint: /v1/health
     store_model_in_db: false

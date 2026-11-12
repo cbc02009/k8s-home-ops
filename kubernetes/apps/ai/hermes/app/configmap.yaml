@@ -13,6 +13,12 @@ data:
       # rung after the first complex classification.
       default: auto
       provider: litellm
+      # The router's window isn't discoverable via /v1/models, so without this
+      # hermes assumes 256k and computes a 192k compression trigger — above the
+      # 27b-chat compression model's 131k window, which forced a per-session
+      # auto-lower warning. Pin the tier floor (27B: 131k; strata is 245k but
+      # sleeps, Go rungs are 262k+) so the trigger (~98k) always fits.
+      context_length: 131072
     fallback_providers:
       # Last resort if the whole pool chain fails: the always-resident 27B
       # first, then go-pool as the cloud overflow (free-pool is banned from

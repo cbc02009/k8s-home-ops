@@ -82,7 +82,12 @@ spec:
               tag: v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
             args: ["gateway", "run"]
             env:
-              MEMINI_URL: http://memini.ai.svc.local:8080
+              # The memini plugin (memini-hermes ad5e12b3) reads
+              # MEMINI_BASE_URL; MEMINI_URL was ignored and it dialed its
+              # http://localhost:8080 default (connection refused on every
+              # call). .svc.local is also not served by this cluster's
+              # CoreDNS (search domains are *.svc.cluster.local).
+              MEMINI_BASE_URL: http://memini.ai.svc.cluster.local:8080
               MEMINI_NAMESPACE: hermes
               HERMES_HOME: /opt/data
               HOME: /opt/data
