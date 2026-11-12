@@ -22,8 +22,6 @@ spec:
   - local-pool
   - qwen3.8-27b
   - qwen3.8-27b-chat
-  - qwen3.8-flash-next
-  - qwen3.8-flash-next-chat
   - implementation-pool
   - frontier-pool
   - go-pool

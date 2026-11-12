@@ -11,8 +11,7 @@ spec:
   # Exactly what the main container requests: the resident 27B LLM lane
   # (both variants, so the -chat alternative in helmrelease.yaml is
   # permission-free) plus the embed/rerank models of the memory pipeline.
-  # No pool lanes: local-pool(-chat) can fall through to strata, which
-  # evicts the resident 27B from the dGPU slot.
+  # No pool lanes: the memory pipeline stays pinned to the resident 27B.
   models:
   - qwen3.8-27b
   - qwen3.8-27b-chat

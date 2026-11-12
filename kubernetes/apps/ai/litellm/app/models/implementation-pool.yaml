@@ -1,44 +1,9 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Coding lane: local rungs first (free, private), then big-allowance Go
-# workhorses for overflow, finally the Z.AI Coding Plan as a paid fallback.
-# The local rungs also give a stable name for the coder virtual key regardless
-# of which local model is resident.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: implementation-pool-strata
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: implementation-pool
-  proxyRef: litellm
-  params:
-    model: openai/qwen3.8-flash-next-iq3_s
-    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
-    additional:
-      temperature: 1.0
-      top_p: 0.95
-      top_k: 20
-      min_p: 0
-      order: 1
-      max_parallel_requests: 2
-      reasoning_effort: high
-      allowed_openai_params:
-        - reasoning_effort
-  info:
-    mode: chat
-    maxInputTokens: 245760
-    maxOutputTokens: 40960
-    supportsFunctionCalling: true
-    supportsVision: true
-    extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Coding lane: the always-resident 27B first (free, private), then
+# big-allowance Go workhorses for overflow, finally the Z.AI Coding Plan as
+# a paid fallback. The local rung also gives a stable name for the coder
+# virtual key regardless of which local model is resident.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -57,7 +22,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 2
+      order: 1
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:
@@ -89,7 +54,7 @@ spec:
     model: opencode_go/glm-5.3-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 3
+      order: 2
       max_parallel_requests: 2
   info:
     mode: chat
@@ -117,7 +82,7 @@ spec:
     model: opencode_go/minimax-m3.1-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 4
+      order: 3
       max_parallel_requests: 2
   info:
     mode: chat
@@ -149,7 +114,7 @@ spec:
     apiBase: https://api.z.ai/api/coding/paas/v4
     apiKey: os.environ/ZAI_API_KEY
     additional:
-      order: 5
+      order: 4
       max_parallel_requests: 2
   info:
     mode: chat
@@ -178,7 +143,7 @@ spec:
     apiBase: https://api.z.ai/api/coding/paas/v4
     apiKey: os.environ/ZAI_API_KEY
     additional:
-      order: 6
+      order: 5
       max_parallel_requests: 1
   info:
     mode: chat

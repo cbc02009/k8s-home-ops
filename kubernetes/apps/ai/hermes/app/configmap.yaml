@@ -16,20 +16,17 @@ data:
       # The router's window isn't discoverable via /v1/models, so without this
       # hermes assumes 256k and computes a 192k compression trigger — above the
       # 27b-chat compression model's 131k window, which forced a per-session
-      # auto-lower warning. Pin the tier floor (27B: 131k; strata is 245k but
-      # sleeps, Go rungs are 262k+) so the trigger (~98k) always fits.
+      # auto-lower warning. Pin the tier floor (27B: 131k; Go rungs are
+      # 262k+) so the trigger (~98k) always fits.
       context_length: 131072
     fallback_providers:
       # Last resort if the whole pool chain fails: the always-resident 27B
       # first, then go-pool as the cloud overflow (free-pool is banned from
-      # agent keys/fallbacks, see free-pool.yaml), then strata as a second
-      # local runtime when it is awake.
+      # agent keys/fallbacks, see free-pool.yaml).
       - provider: litellm
         model: qwen3.8-27b
       - provider: litellm
         model: go-pool
-      - provider: litellm
-        model: qwen3.8-flash-next
     providers:
       litellm:
         base_url: http://litellm.ai:4000/v1
@@ -79,8 +76,7 @@ data:
           provider: litellm
           model: go-pool
           max_concurrent_children: 4
-        # Stable local lane: resident 27B first, strata as second runtime —
-        # free and always available (unlike the strata-only flash-next group).
+        # Stable local lane: the always-resident 27B — free and always available.
         agentic-local:
           provider: litellm
           model: local-pool
@@ -96,10 +92,11 @@ data:
           provider: litellm
           model: frontier-pool
           max_concurrent_children: 1
-        # Only vision-capable local model; active when strata owns the GPU.
-        vision-local:
+        # Cheap always-on cloud vision (no-training Go lane) — replaces the
+        # decommissioned strata local engine.
+        vision-cloud:
           provider: litellm
-          model: qwen3.8-flash-next-chat
+          model: go-chat
           max_concurrent_children: 1
       max_iterations: 250
     gateway:
@@ -117,9 +114,7 @@ data:
       toolhive:
         url: http://vmcp-mcp-gateway-internal.ai:4483/mcp
     auxiliary:
-      # Always-on cheap cloud vision (no-training Go lane): strata sleeps by
-      # default, so the local vision group would fail in the pool's default
-      # state and swap the GPU out from under the 27B-dependent lanes.
+      # Always-on cheap cloud vision (no-training Go lane).
       vision:
         provider: litellm
         model: go-chat

@@ -3,7 +3,7 @@
 # Complexity router: one model name that picks the right lane. Simple chat
 # goes to local-pool (fast local flash model), medium work stays on the
 # always-resident 27B, and hard reasoning/coding escalates to reasoning-pool.
-# The classifier runs on 27b-chat so it works even when strata is asleep.
+# The classifier runs on 27b-chat (always resident).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

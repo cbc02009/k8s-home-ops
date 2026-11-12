@@ -597,7 +597,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Running and queued requests per service (llama.cpp processing/deferred, vLLM running/waiting). strata does not export these.",
+      "description": "Running and queued requests per service (llama.cpp processing/deferred, vLLM running/waiting).",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -650,7 +650,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Share of the KV pool in use (strata/llama.cpp kv_cache_usage_ratio, vLLM kv_cache_usage_perc).",
+      "description": "Share of the KV pool in use (llama.cpp kv_cache_usage_ratio, vLLM kv_cache_usage_perc).",
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -696,7 +696,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Accepted / drafted speculative tokens over 15m (llama.cpp and vLLM MTP/draft decoding). strata does not export it.",
+      "description": "Accepted / drafted speculative tokens over 15m (llama.cpp and vLLM MTP/draft decoding).",
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",

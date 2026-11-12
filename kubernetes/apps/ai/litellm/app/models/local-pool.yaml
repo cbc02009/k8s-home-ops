@@ -1,10 +1,9 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Stable "any local model" lane. qwen3.8-27b is the preferred rung: it is the
-# ModelPool default (always resident), faster with vLLM+MTP, and higher
-# quality at W4A16 than the IQ3_S strata quant. Strata flash-next is the
-# fallback for redundancy, vision, and contexts beyond 147K (use the explicit
-# qwen3.8-flash-next group for vision; local-pool will hit 27B first).
+# Stable "any local model" lane: the always-resident qwen3.8-27b vLLM rung
+# (the nvidia ModelPool default). The former strata flash-next fallback was
+# decommissioned — the pool can no longer evict the 27B, and vision requests
+# should use the go-chat cloud lane instead.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -36,39 +35,7 @@ spec:
       cache_read_input_token_cost: 0.0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: local-pool-strata
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: local-pool
-  proxyRef: litellm
-  params:
-    model: openai/qwen3.8-flash-next-iq3_s
-    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
-    additional:
-      temperature: 1.0
-      top_p: 0.95
-      top_k: 20
-      min_p: 0
-      order: 2
-      max_parallel_requests: 3
-  info:
-    mode: chat
-    maxInputTokens: 245760
-    maxOutputTokens: 65536
-    supportsFunctionCalling: true
-    supportsVision: true
-    extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Chat-tuned local lane: low temperature, no forced reasoning. 27B first.
+# Chat-tuned local lane: low temperature, no forced reasoning.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -96,37 +63,6 @@ spec:
     maxOutputTokens: 16384
     supportsFunctionCalling: true
     supportsVision: false
-    extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: local-pool-chat-strata
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: local-pool-chat
-  proxyRef: litellm
-  params:
-    model: openai/qwen3.8-flash-next-iq3_s
-    apiBase: http://strata-fn.ai.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
-    additional:
-      temperature: 0.7
-      top_p: 0.8
-      presence_penalty: 1.5
-      order: 2
-      max_parallel_requests: 3
-  info:
-    mode: chat
-    maxInputTokens: 245760
-    maxOutputTokens: 65536
-    supportsFunctionCalling: true
-    supportsVision: true
     extra:
       input_cost_per_token: 6.2e-08
       output_cost_per_token: 1.35e-06

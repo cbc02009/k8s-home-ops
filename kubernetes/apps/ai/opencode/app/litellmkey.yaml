@@ -17,6 +17,8 @@ spec:
   - go-coder
   - go-strong
   - go-max
+  # Cheap cloud vision lane for the vision agent (no-training Go).
+  - go-chat
   # New pooled lanes.
   - reasoning-pool
   - frontier-pool
@@ -58,6 +60,8 @@ spec:
   - go-coder
   - go-strong
   - go-max
+  # Cheap cloud vision lane for the vision agent (no-training Go).
+  - go-chat
   # New pooled lanes.
   - reasoning-pool
   - frontier-pool

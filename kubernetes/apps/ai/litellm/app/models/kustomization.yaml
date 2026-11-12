@@ -13,4 +13,3 @@ resources:
   - ./qwen3.8-27b.yaml
   - ./reasoning-pool.yaml
   - ./rerank.yaml
-  - ./strata-fn.yaml

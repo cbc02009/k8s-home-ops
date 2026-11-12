@@ -7,4 +7,3 @@ resources:
   - ./memini-rerank.yaml
   - ./nvidia-pool.yaml
   - ./qwen3.8-27b.yaml
-  - ./strata-fn.yaml
