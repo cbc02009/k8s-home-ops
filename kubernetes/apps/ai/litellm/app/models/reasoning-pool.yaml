@@ -1,8 +1,10 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Reasoning lane: strongest cloud coding/reasoning models first (OpenCode Go,
-# then Z.AI Coding Plan), free local rungs as last-resort fallbacks. Ration the
-# cloud rungs tightly because they burn subscription allowances/credits.
+# Reasoning lane: cheap-first — MiniMax M3 (3x lower token cost than K2.7)
+# takes the lead, Kimi K2.7 Code (the best agentic coder) is rationed to the
+# second rung as failover, then Z.AI Coding Plan, free local rungs as
+# last-resort fallbacks. Ration the cloud rungs tightly because they burn
+# subscription allowances/credits.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -16,8 +18,11 @@ spec:
     model: opencode_go/kimi-k2.7-code
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 1
-      max_parallel_requests: 2
+      # Deliberately rationed: M3 takes normal traffic, this only fires on
+      # M3 429s/timeout cooldowns. Use the dedicated `go-coder` lane for
+      # on-purpose top-tier coding.
+      order: 2
+      max_parallel_requests: 1
   info:
     mode: chat
     maxInputTokens: 262144
@@ -31,6 +36,8 @@ spec:
       cache_read_input_token_cost: 1.9e-07
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# First choice: ~3x cheaper per token than K2.7 with 1M context, so
+# COMPLEX/REASONING traffic drains M3's $60 allowance before touching Kimi.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -44,7 +51,7 @@ spec:
     model: opencode_go/minimax-m3
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 2
+      order: 1
       max_parallel_requests: 2
   info:
     mode: chat

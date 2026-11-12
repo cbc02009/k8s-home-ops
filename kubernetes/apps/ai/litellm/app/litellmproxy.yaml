@@ -106,8 +106,8 @@ spec:
           - qwen3.8-27b
       # Quota fail-down: when a Go lane's 5h/weekly/monthly window runs dry
       # (429 after retries), continue on the cheap go-pool flash rungs
-      # instead of stalling the session. K2.7/flagships stay the first
-      # choice; only the floor changes.
+      # instead of stalling the session. The named single-model lanes keep
+      # their model as first choice; only the pool floor changes.
       - go-coder:
           - go-pool
       - go-strong:
