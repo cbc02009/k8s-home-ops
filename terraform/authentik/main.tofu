@@ -63,6 +63,12 @@ module "secret_grafana" {
   item   = "grafana"
 }
 
+module "secret_litellm" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "litellm"
+}
+
 module "secret_hermes" {
   source = "./modules/1password-item"
   vault  = "k8s-home-ops"

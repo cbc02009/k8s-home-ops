@@ -33,3 +33,11 @@ resource "authentik_property_mapping_provider_scope" "email" {
   scope_name = "email"
   expression = file("./expressions/openid-scope-email.py")
 }
+
+# litellm UI role claim: users in the litellm-admin group (group attribute
+# litellm_role=admin) get the LiteLLM admin role, everyone else user.
+resource "authentik_property_mapping_provider_scope" "litellm-role" {
+  name       = "OAuth Mapping: litellm_role"
+  scope_name = "litellm_role"
+  expression = file("./expressions/openid-scope-litellm-role.py")
+}

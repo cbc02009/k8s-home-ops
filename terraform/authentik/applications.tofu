@@ -160,6 +160,24 @@ module "oauth2-karakeep" {
   redirect_uris      = ["https://karakeep.${var.public_domain}/api/auth/callback/custom"]
 }
 
+module "oauth2-litellm" {
+  source                       = "./modules/oauth2_application"
+  name                         = "LiteLLM"
+  launch_url                   = "https://litellm.${var.public_domain}/ui"
+  description                  = "LLM Proxy"
+  newtab                       = true
+  group                        = "AI"
+  slug                         = "litellm"
+  client_type                  = "confidential"
+  auth_groups                  = [authentik_group.users.id]
+  authorization_flow           = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow            = resource.authentik_flow.provider-invalidation.uuid
+  client_id                    = module.secret_litellm.fields["oidc_id"]
+  client_secret                = module.secret_litellm.fields["oidc_secret"]
+  additional_property_mappings = [authentik_property_mapping_provider_scope.litellm-role.id]
+  redirect_uris                = ["https://litellm.${var.public_domain}/sso/callback"]
+}
+
 module "oauth2-Mealie" {
   source             = "./modules/oauth2_application"
   name               = "Mealie"

@@ -14,3 +14,11 @@ resource "authentik_group" "infrastructure" {
   name         = "infrastructure"
   is_superuser = false
 }
+
+# LiteLLM role source: group attribute litellm_role=admin => admin in the
+# LiteLLM UI (see expressions/openid-scope-litellm-role.py).
+resource "authentik_group" "litellm-admin" {
+  name         = "litellm-admin"
+  is_superuser = false
+  attributes   = jsonencode({ litellm_role = "admin" })
+}
