@@ -27,7 +27,7 @@ metadata:
 spec:
   modelRef: qwen3.8-27b
   runtime: vllm
-  image: ghcr.io/syv-ai/qwen38-27b-rtx3090@sha256:82b01c1f801b766e414b2af045091754dd0305ca1ab525c7047d80a0b795482d
+  image: ghcr.io/syv-ai/hyperqwen@sha256:f706b09ad588dc67a0fb35d62ac68d6257e4d9bd78b0d5d6d9f5f87a80a6bd0e
   command:
     - bash
     - docker/entrypoint.sh
@@ -55,13 +55,15 @@ spec:
     - name: CTX
       value: long
     - name: GPU_UTIL
-      value: "0.95"
+      value: "0.93"
     - name: MAX_SEQS
       value: "8"
     - name: MAX_LEN
       value: "147456"
     - name: PREFIX_CACHE
       value: "1"
+    - name: DFLASH2
+      value: "0"
     - name: VERIFY
       value: "0"
     - name: NVIDIA_DRIVER_CAPABILITIES
