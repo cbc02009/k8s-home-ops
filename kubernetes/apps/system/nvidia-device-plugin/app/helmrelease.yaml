@@ -23,13 +23,8 @@ spec:
           version: v1
           flags:
             migStrategy: none
-          sharing:
-            timeSlicing:
-              renameByDefault: false
-              failRequestsGreaterThanOne: false
-              resources:
-                - name: nvidia.com/gpu
-                  replicas: 6
+          # No sharing.timeSlicing on purpose: the dGPU must serve at most
+          # one workload at a time, so expose a single nvidia.com/gpu.
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
