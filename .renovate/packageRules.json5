@@ -25,5 +25,11 @@
       "matchPackagePatterns": ["minio", "reloader"],
       "schedule": ["on the first day of the month"]
     },
+    {
+      "description": "Hermes agent semver versioning",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["nousresearch/hermes-agent"],
+      "versioning": "semver"
+    }
   ]
 }
