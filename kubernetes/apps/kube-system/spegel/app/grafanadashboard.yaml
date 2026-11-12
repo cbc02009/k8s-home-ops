@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+# The chart's bundled GrafanaDashboard was removed in spegel 0.8.0
+# (spegel-org/spegel#1512); this restores it as an app-owned CR with the
+# last known JSON adapted to the 0.8.x metrics.
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: spegel
+spec:
+  allowCrossNamespaceImport: true
+  datasources:
+    - datasourceName: prometheus
+      inputName: DS_PROMETHEUS
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  configMapRef:
+    name: spegel
+    key: spegel.json
