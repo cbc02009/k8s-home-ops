@@ -30,6 +30,7 @@ data:
         api_key: $${LITELLM_API_KEY}
     toolsets:
       - hermes-cli
+      - hermes-discord
     terminal:
       backend: local
       cwd: /opt/data/workspace
@@ -96,6 +97,8 @@ data:
     platform_toolsets:
       cli:
         - hermes-cli
+      discord:
+        - hermes-discord
     mcp_servers:
       toolhive:
         url: http://vmcp-mcp-gateway-internal.ai:4483/mcp
