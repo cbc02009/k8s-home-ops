@@ -1,8 +1,8 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Reasoning lane: strongest cloud coding/reasoning models first, free local
-# rungs as last-resort fallbacks. Ration the cloud rungs tightly because they
-# burn the Go subscription's middle-tier allowance.
+# Reasoning lane: strongest cloud coding/reasoning models first (OpenCode Go,
+# then Z.AI Coding Plan), free local rungs as last-resort fallbacks. Ration the
+# cloud rungs tightly because they burn subscription allowances/credits.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -59,6 +59,66 @@ spec:
       cache_read_input_token_cost: 6e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Z.AI Coding Plan overflow: GLM-5.3 first, then Flash. Kept behind the Go
+# rungs because the Lite plan's 5-hour/weekly credit windows are small.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-zai-glm-5.3
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 3
+      max_parallel_requests: 1
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.6e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-zai-glm-5.3-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3-flash
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 4
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -77,7 +137,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 3
+      order: 5
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:
@@ -112,7 +172,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 4
+      order: 6
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:
