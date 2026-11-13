@@ -148,29 +148,87 @@ phaseB() {
   [ "$still" = "$total" ] || die "not all Kustomizations in $NS_OLD are suspended — refusing to continue"
 
   step "B2: rebind the four PVs out of $NS_OLD"
-  local row name modes size sc mode pv
+  local row name modes size sc mode pv c owner_kind owner_name deploy stale t newph
   for row in "${REBINDS[@]}"; do
     IFS='|' read -r name modes size sc mode <<<"$row"
     pv=$(kubectl get pvc -n "$NS_OLD" "$name" -o jsonpath='{.spec.volumeName}' 2>/dev/null || true)
-    [ -n "${pv:-}" ] || { log "  $name: PV no longer referenced by a $NS_OLD PVC (already rebound?) — skipping"; continue; }
+    if [ -z "${pv:-}" ]; then
+      # The old claim is gone (deleted here, or destroyed by its owner — e.g. a
+      # Coder workspace stop destroys its PVC). Verify the rebind already
+      # completed, or finish it if a stale PV still points at the dead claim.
+      case "$mode" in
+        bind)
+          newph=$(kubectl get pvc -n "$NS_NEW" "$name" -o jsonpath='{.status.phase}' 2>/dev/null || true)
+          if [ "$newph" = "Bound" ]; then
+            log "  $name: already rebound ($NS_NEW/$name is Bound) — skipping"
+          else
+            die "$name: the $NS_OLD PVC is gone but $NS_NEW/$name is not Bound (phase: ${newph:-absent}) — finish this rebind by hand"
+          fi
+          continue
+          ;;
+        *)
+          stale=$(kubectl get pv -o json | jq -r --arg n "$name" --arg ns "$NS_OLD" '.items[] | select(.spec.claimRef.namespace==$ns and .spec.claimRef.name==$n) | .metadata.name' 2>/dev/null || true)
+          if [ -n "$stale" ] && [ "$(kubectl get pv "$stale" -o jsonpath='{.status.phase}')" != "Available" ]; then
+            log "  $name: releasing stale PV $stale (its claim was destroyed by its owner)"
+            kubectl patch pv "$stale" -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}' >/dev/null
+            kubectl patch pv "$stale" --type=json -p '[{"op":"replace","path":"/spec/claimRef","value":null}]' >/dev/null
+            t=0
+            while [ "$(kubectl get pv "$stale" -o jsonpath='{.status.phase}')" != "Available" ]; do
+              t=$((t+5)); [ $t -gt 120 ] && die "$stale did not return to Available"
+              sleep 5
+            done
+          else
+            log "  $name: no $NS_OLD PVC and no stale PV — already handled, skipping"
+          fi
+          continue
+          ;;
+      esac
+    fi
 
-    # 0) stop the pods mounting this PVC first: the kubernetes.io/pvc-protection
+    # 0) stop the workloads mounting this PVC first: the kubernetes.io/pvc-protection
     #    finalizer keeps an in-use PVC from actually deleting, which would hang
-    #    the --timeout below. (These pods are being replaced in $NS_NEW anyway.)
-    local consumers t
+    #    the --timeout below. (These workloads are being replaced in $NS_NEW
+    #    anyway.) Scaling the OWNING deployment/statefulset to 0 is what makes
+    #    the pods stay gone: merely deleting a pod lets its controller respawn
+    #    a new one (new name, same volumes) that keeps the finalizer held
+    #    forever. Coder-managed pods: run `coder stop <workspace>` before the
+    #    window — this script cannot talk to Coder, and a raw scale would leave
+    #    the workspace offline instead of Stopped.
+    local consumers
     consumers=$(kubectl get pods -n "$NS_OLD" -o json 2>/dev/null \
       | jq -r --arg pvc "$name" '.items[] | select([.spec.volumes[]? | .persistentVolumeClaim.claimName] | index($pvc)) | .metadata.name' 2>/dev/null || true)
     if [ -n "$consumers" ]; then
-      log "  $name: stopping consumer pods: $(echo $consumers | tr '\n' ' ')"
-      # shellcheck disable=SC2086
-      kubectl delete pod -n "$NS_OLD" $consumers --ignore-not-found --timeout=60s >/dev/null 2>&1 || true
+      for c in $consumers; do
+        owner_kind=$(kubectl get pod -n "$NS_OLD" "$c" -o jsonpath='{.metadata.ownerReferences[0].kind}' 2>/dev/null || true)
+        owner_name=$(kubectl get pod -n "$NS_OLD" "$c" -o jsonpath='{.metadata.ownerReferences[0].name}' 2>/dev/null || true)
+        case "${owner_kind:-}" in
+          ReplicaSet)
+            deploy=$(kubectl get rs -n "$NS_OLD" "$owner_name" -o jsonpath='{.metadata.ownerReferences[?(@.kind=="Deployment")].name}' 2>/dev/null || true)
+            [ -n "$deploy" ] || die "$c: ReplicaSet $owner_name has no Deployment owner — stop it by hand and re-run"
+            log "  $name: scaling deployment/$deploy to 0 (consumer: $c)"
+            kubectl scale deployment -n "$NS_OLD" "$deploy" --replicas=0 >/dev/null
+            ;;
+          StatefulSet)
+            log "  $name: scaling statefulset/$owner_name to 0 (consumer: $c)"
+            kubectl scale statefulset -n "$NS_OLD" "$owner_name" --replicas=0 >/dev/null
+            ;;
+          "")
+            log "  $name: deleting ownerless pod $c"
+            kubectl delete pod -n "$NS_OLD" "$c" --timeout=90s >/dev/null 2>&1 || true
+            ;;
+          *)
+            die "$c is owned by $owner_kind/$owner_name — stop that workload by hand and re-run"
+            ;;
+        esac
+      done
       for c in $consumers; do
         t=0
         while kubectl get pod -n "$NS_OLD" "$c" >/dev/null 2>&1; do
-          t=$((t+2)); [ $t -gt 90 ] && break
+          t=$((t+2)); [ $t -gt 180 ] && die "$c did not terminate after scaling its owner to 0"
           sleep 2
         done
       done
+      log "  $name: all consumer pods terminated"
     fi
 
     # 1) protect the data

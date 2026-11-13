@@ -99,7 +99,11 @@ coder update <name>
 - **Pause**: the script stops and asks you to type `llm`. The cluster is
   still 100% up; you can take a breather here.
 - **Phase B (downtime, ~5–15 min)**: suspend the `ai` KSs → rebind the 4 PVs
-  (pods mounting them die here, **including the agent's workspace pod**) →
+  (the owning deployments of the pods mounting them are scaled to 0 —
+  deleting a pod alone is not enough: its controller respawns it and the
+  `pvc-protection` finalizer would hang the deletion forever; for the Coder
+  workspace pod, run `coder stop <workspace>` *before* the window so Coder
+  ends in a clean Stopped state, **including the agent's workspace pod**) →
   push the branch to `main` → `cluster-apps` prunes the `ai` KSs (their
   finalizers delete the `ai` Helm releases; the `ai` Namespace itself is
   `prune: disabled` and survives until step 4) → applies the `llm` tree →
