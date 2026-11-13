@@ -33,9 +33,10 @@ spec:
   # litellm_role claim (group-mapped in authentik) sets the UI role:
   # proxy_admin for the litellm-admin group, internal_user otherwise (values
   # must match LiteLLM's LitellmUserRoles enum). AUTO_REDIRECT_UI_LOGIN_TO_SSO
-  # is deliberately left off so the login page still offers username/password
-  # instead of bouncing every visitor straight back into authentik.
+  # skips the login form and bounces visitors straight into authentik.
   env:
+    - name: AUTO_REDIRECT_UI_LOGIN_TO_SSO
+      value: 'true'
     - name: DATABASE_URL
       valueFrom:
         secretKeyRef:
