@@ -48,25 +48,35 @@ spec:
             command: ["/bin/bash", "-c"]
             args:
               - |
-                set -euo pipefail
+                # Best-effort pre-clone so agent sessions start with the repo
+                # and the bot git identity. Every step is guarded and the
+                # script always exits 0, so a failure here (no git, no token,
+                # no network, bad permissions) never blocks the daemon.
+                # Only bare $vars are used: Flux postBuild envsubst (strict)
+                # aborts the build on any braced variable it cannot resolve.
+                export HOME=/home/paseo
                 umask 077
-                # Best-effort: a missing git must not block the daemon.
-                command -v git >/dev/null 2>&1 || { echo "git unavailable; skipping repo pre-clone"; exit 0; }
-                git config --global user.name "mahoro-ai"
-                git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
-                git config --global init.defaultBranch main
-                git config --global --add safe.directory '*'
-                printf 'https://x-access-token:%s@github.com\n' "$GH_TOKEN" > "${HOME}/.git-credentials"
-                git config --global credential.helper store
-                umask 022
-
-                mkdir -p /workspace/worktrees
-                if [[ ! -d /workspace/k8s-home-ops/.git ]]; then
-                  git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /workspace/k8s-home-ops \
-                    || echo "WARN: k8s-home-ops clone failed; clone it from a session instead"
+                mkdir -p "$HOME" /workspace/worktrees 2>/dev/null
+                if command -v git >/dev/null 2>&1; then
+                  git config --global user.name "mahoro-ai" 2>/dev/null
+                  git config --global user.email "354213225+mahoro-ai@users.noreply.github.com" 2>/dev/null
+                  git config --global init.defaultBranch main 2>/dev/null
+                  git config --global --add safe.directory '*' 2>/dev/null
+                  if [ -n "$GH_TOKEN" ]; then
+                    printf 'https://x-access-token:%s@github.com\n' "$GH_TOKEN" > "$HOME/.git-credentials" 2>/dev/null
+                    git config --global credential.helper store 2>/dev/null
+                  fi
+                  umask 022
+                  if [ ! -d /workspace/k8s-home-ops/.git ]; then
+                    git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /workspace/k8s-home-ops \
+                      || echo "WARN: k8s-home-ops clone failed; clone it from a session instead"
+                  else
+                    git -C /workspace/k8s-home-ops fetch --all --prune 2>/dev/null
+                  fi
                 else
-                  git -C /workspace/k8s-home-ops fetch --all --prune
+                  echo "git unavailable; skipping repo pre-clone"
                 fi
+                exit 0
             env:
               - name: GH_TOKEN
                 valueFrom:
