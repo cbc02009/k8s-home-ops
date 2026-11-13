@@ -1,0 +1,32 @@
+---
+# One-shot cross-namespace restore: ai/opencode -> llm/opencode.
+# See restores/hermes.yaml for the full rationale of this cross-ns Restore
+# shape. Applied by 02-window.sh before the cutover, deleted by 04-cleanup.sh.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: opencode
+  namespace: llm
+spec:
+  mover:
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+  policy:
+    onMissingSnapshot: Continue
+  repository:
+    kind: ClusterRepository
+    name: nas
+  source:
+    fromPolicy:
+      name: opencode
+      namespace: ai
+      offset: 0
+      sourcePath: /pvc/opencode
+  target:
+    pvc:
+      name: opencode
+      capacity: 20Gi
+      storageClassName: ceph-block
+      accessModes:
+        - ReadWriteOnce

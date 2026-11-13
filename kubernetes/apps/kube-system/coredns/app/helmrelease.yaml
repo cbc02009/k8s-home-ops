@@ -39,10 +39,14 @@ spec:
               pods verified
               fallthrough in-addr.arpa ip6.arpa
           # No autopath: serving <service>.<namespace> as top-level zones
-          # shadows public domains that happen to match (the OpenCode Go
-          # backend lives at opencode.ai, and there is an ai/opencode service;
-          # that collision hung every opencode_go lane in litellm). In-cluster
-          # clients use full <svc>.<ns>.svc.cluster.local names.
+          # shadows public domains that happen to match. The former `ai`
+          # namespace was the canonical trap: `ai` is a delegated public TLD,
+          # so in-cluster services (memini, litellm, headroom, ...) shadowed
+          # the public <name>.ai domains and hung every opencode_go lane in
+          # litellm. The namespace was renamed to `llm` (not a TLD) on
+          # 2026-11-13; the opencode.ai collision it masked is handled by
+          # forceRename: opencode-svc on that Service. In-cluster clients use
+          # full <svc>.<ns>.svc.cluster.local names.
           - name: forward
             parameters: . /etc/resolv.conf
           - name: cache

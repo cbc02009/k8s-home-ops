@@ -1,0 +1,138 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-config
+data:
+  config.yaml: |
+    model:
+      # Complexity router: simple/medium traffic stays on the free resident
+      # local lanes (local-pool / 27B); only complex/reasoning turns burn the
+      # shared Go allowance (reasoning-pool). Session affinity keeps the
+      # chosen tier stable for an hour, so long tasks stay on the strong
+      # rung after the first complex classification.
+      default: auto
+      provider: litellm
+      # The router's window isn't discoverable via /v1/models, so without this
+      # hermes assumes 256k and computes a 192k compression trigger — above the
+      # 27b-chat compression model's 131k window, which forced a per-session
+      # auto-lower warning. Pin the tier floor (27B: 131k; Go rungs are
+      # 262k+) so the trigger (~98k) always fits.
+      context_length: 131072
+    fallback_providers:
+      # Last resort if the whole pool chain fails: the always-resident 27B
+      # first, then go-pool as the cloud overflow (free-pool is banned from
+      # agent keys/fallbacks, see free-pool.yaml).
+      - provider: litellm
+        model: qwen3.8-27b
+      - provider: litellm
+        model: go-pool
+    providers:
+      litellm:
+        base_url: http://litellm.llm:4000/v1
+        api_key: $${LITELLM_API_KEY}
+        # OpenCode Go (the go-pool / reasoning-pool / frontier rungs) rejects
+        # requests without a session id (400 MissingSessionID): LiteLLM
+        # forwards x-litellm-session-id as x-opencode-session but never
+        # invents one. Opt in per provider entry so hermes sends its stable
+        # per-conversation key on every request through this relay — fixes
+        # the 400s and keeps each conversation pinned to one Go backend
+        # (warm prompt cache).
+        session_affinity_header: x-litellm-session-id
+    toolsets:
+      - hermes-cli
+      - hermes-discord
+    terminal:
+      backend: local
+      cwd: /opt/data/workspace
+      timeout: 180
+      persistent_shell: true
+    memory:
+      provider: memini
+      auto_migrate: true
+    compression:
+      enabled: true
+      threshold: 0.50
+      target_ratio: 0.20
+      protect_last_n: 20
+    agent:
+      max_turns: 90
+      gateway_timeout: 1800
+      restart_drain_timeout: 60
+      api_max_retries: 2
+      reasoning_effort: medium
+    approvals:
+      mode: smart
+    display:
+      platforms:
+        discord:
+          tool_progress: "off"
+    streaming:
+      enabled: false
+    delegation:
+      roles:
+        # Fast 1M-context cloud lane for parallel exploration and review.
+        explorer:
+          provider: litellm
+          model: go-pool
+          max_concurrent_children: 4
+        # Stable local lane: the always-resident 27B — free and always available.
+        agentic-local:
+          provider: litellm
+          model: local-pool
+          max_concurrent_children: 1
+        implementer:
+          provider: litellm
+          model: implementation-pool
+        reviewer:
+          provider: litellm
+          model: go-pool
+        # Rare deep-consultation role on the rationed flagship lane.
+        oracle:
+          provider: litellm
+          model: frontier-pool
+          max_concurrent_children: 1
+        # Cheap always-on cloud vision (no-training Go lane) — replaces the
+        # decommissioned strata local engine.
+        vision-cloud:
+          provider: litellm
+          model: go-chat
+          max_concurrent_children: 1
+      max_iterations: 250
+    gateway:
+      multiplex_profiles: false
+    security:
+      redact_secrets: true
+    privacy:
+      redact_pii: true
+    platform_toolsets:
+      cli:
+        - hermes-cli
+      discord:
+        - hermes-discord
+    mcp_servers:
+      toolhive:
+        url: http://vmcp-mcp-gateway-internal.llm:4483/mcp
+    auxiliary:
+      # Always-on cheap cloud vision (no-training Go lane).
+      vision:
+        provider: litellm
+        model: go-chat
+      # 27B-chat: always resident and no forced reasoning, so these
+      # utilities stay fast and cheap.
+      compression:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 180
+      web_extract:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 120
+      approval:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 60
+      session_search:
+        provider: litellm
+        model: qwen3.8-27b-chat
+        timeout: 120

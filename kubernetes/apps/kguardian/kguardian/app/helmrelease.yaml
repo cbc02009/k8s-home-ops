@@ -13,7 +13,7 @@ spec:
     ai:
       enabled: true
       provider: openai
-      baseUrl: http://litellm.ai.svc.cluster.local:4000/v1
+      baseUrl: http://litellm.llm.svc.cluster.local:4000/v1
       model: qwen3.8-27b
       mcp:
         enabled: true

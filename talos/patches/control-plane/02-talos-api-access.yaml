@@ -8,4 +8,4 @@ allowedRoles:
 allowedKubernetesNamespaces:
   - actions-runner-system
   - system-upgrade
-  - ai
+  - llm

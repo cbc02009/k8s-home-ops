@@ -1,0 +1,18 @@
+---
+# yaml-language-server $schema=https://k8s-schemas.home-operations.com/core/persistentvolumeclaim_v1.json
+# The llmkube shared model cache (RWX, mounted by the operator and every
+# InferenceService). It was Helm-created in the old `ai` namespace; after the
+# ai -> llm rename it is declared in git so a fresh install in `llm` cannot
+# fail on the pre-existing (rebound) claim, and so flux owns its lifecycle.
+# The llmkube HR's modelCache.existingClaim points at it.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: llmkube-model-cache
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ceph-filesystem
+  resources:
+    requests:
+      storage: 200Gi

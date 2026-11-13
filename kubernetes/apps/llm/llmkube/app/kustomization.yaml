@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./externalsecret.yaml
+  - ./ocirepository.yaml
+  - ./helmrelease.yaml
+  - ./llmkube-mayne-cache.yaml
+  - ./llmkube-model-cache.yaml
+  - ./priorityclass.yaml
+  - ./priorityclass-gpu-interactive.yaml
+  - ./resourceclaim.yaml
