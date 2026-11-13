@@ -13,8 +13,9 @@ spec:
   # /v1/messages-protocol Go models (minimax-m3, qwen3.8-max,
   # claude-haiku-5-5) dies mid-stream with 'NoneType' object is not an
   # iterator → APIConnectionError 500 (LiteLLMModelFailover alerts). Drop the
-  # overlay once the fix ships upstream; Renovate tracks the base version in
-  # container-images and proposes the :rolling digest bump here on rebuild.
+  # overlay once https://github.com/BerriAI/litellm/issues/51666 ships in a
+  # release; Renovate tracks the base version in container-images and
+  # proposes the :rolling digest bump here on rebuild.
   image: ghcr.io/cbc02009/litellm:rolling@sha256:8fb51bb31889b651d1749a33b31032564dd152e669258beecbecbf001777d3a8
   replicas: 2
   service:
