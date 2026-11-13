@@ -168,7 +168,6 @@ module "oauth2-litellm" {
   newtab                       = true
   group                        = "AI"
   slug                         = "litellm"
-  client_type                  = "confidential"
   auth_groups                  = [authentik_group.users.id]
   authorization_flow           = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow            = resource.authentik_flow.provider-invalidation.uuid

@@ -35,7 +35,8 @@ resource "authentik_property_mapping_provider_scope" "email" {
 }
 
 # litellm UI role claim: users in the litellm-admin group (group attribute
-# litellm_role=admin) get the LiteLLM admin role, everyone else user.
+# litellm_role=proxy_admin) get the LiteLLM admin role, everyone else
+# internal_user. Values must match LiteLLM's LitellmUserRoles enum.
 resource "authentik_property_mapping_provider_scope" "litellm-role" {
   name       = "OAuth Mapping: litellm_role"
   scope_name = "litellm_role"
