@@ -5,13 +5,8 @@ kind: Kustomization
 metadata:
   name: &app hermes
 spec:
-  # TRANSIENT (ai -> llm rename): the shared kopiur component is disabled
-  # while ./app/restore.yaml restores hermes's data from the old `ai` kopia
-  # identity (the component's fromPolicy-based Restore can't see snapshots
-  # whose policy CR was pruned with the old namespace). Re-enable it and
-  # delete ./app/restore.yaml once llm has its own hermes snapshots.
   components:
-    # - ../../../../components/kopiur
+    - ../../../../components/kopiur
   dependsOn:
     - name: litellm
   interval: 1h
