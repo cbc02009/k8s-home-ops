@@ -192,9 +192,17 @@ phaseB() {
     done
 
     if [ "$mode" = "bind" ]; then
-      # 3) point the PV at the new namespaced claim and let the controller bind it
-      kubectl patch pv "$pv" --type=merge -p '{"spec":{"claimRef":{"namespace":"'$NS_NEW'","name":"'$name'"}},"metadata":{"annotations":{"pv.kubernetes.io/bound-by-controller":""}}}' >/dev/null
-      if ! kubectl get pvc -n "$NS_NEW" "$name" >/dev/null 2>&1; then
+      # 3) point the PV at the new namespaced claim.
+      #    The claimRef must be replaced as a WHOLE: it carries the OLD
+      #    claim's uid, and the PV controller refuses to bind a claimRef whose
+      #    uid does not match the target PVC. A JSON merge patch cannot unset
+      #    those fields, so use a JSON patch (remove + add) or `kubectl replace`.
+      #    The PV is bound statically (volumeName), so we set the new claimRef
+      #    ourselves and clear the bound-by-controller marker.
+      local newuid
+      if kubectl get pvc -n "$NS_NEW" "$name" >/dev/null 2>&1; then
+        newuid=$(kubectl get pvc -n "$NS_NEW" "$name" -o jsonpath='{.metadata.uid}')
+      else
         kubectl apply -f - <<EOF
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -210,17 +218,23 @@ spec:
       storage: $size
   volumeName: $pv
 EOF
+        newuid=$(kubectl get pvc -n "$NS_NEW" "$name" -o jsonpath='{.metadata.uid}')
       fi
+      kubectl patch pv "$pv" --type=json \
+        -p "[{\"op\":\"replace\",\"path\":\"/spec/claimRef\",\"value\":{\"apiVersion\":\"v1\",\"kind\":\"PersistentVolumeClaim\",\"name\":\"$name\",\"namespace\":\"$NS_NEW\",\"uid\":\"$newuid\"}}]" >/dev/null
       t=0
       while [ "$(kubectl get pvc -n "$NS_NEW" "$name" -o jsonpath='{.status.phase}')" != "Bound" ]; do
-        t=$((t+5)); [ $t -gt 120 ] && die "$NS_NEW/$name did not bind to $pv"
+        t=$((t+5)); [ $t -gt 120 ] && die "$NS_NEW/$name did not bind to $pv (claimRef: $(kubectl get pv "$pv" -o jsonpath='{.spec.claimRef}'))"
         sleep 5
       done
       log "  $name: $pv rebound to $NS_NEW/$name (Bound, zero-copy)"
     else
       # leave it Available; the Coder terraform PVC (same class/modes/size)
       # static-binds it the next time the workspace starts.
-      kubectl patch pv "$pv" --type=merge -p '{"spec":{"claimRef":null}}' >/dev/null
+      # Remove the claimRef entirely (JSON patch: replace with null) so the PV
+      # controller does not keep chasing the deleted $NS_OLD claim.
+      kubectl patch pv "$pv" --type=json \
+        -p '[{"op":"replace","path":"/spec/claimRef","value":null}]' >/dev/null
       t=0
       while [ "$(kubectl get pv "$pv" -o jsonpath='{.status.phase}')" != "Available" ]; do
         t=$((t+5)); [ $t -gt 120 ] && die "$pv did not return to Available"
