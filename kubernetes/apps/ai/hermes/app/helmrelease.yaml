@@ -54,16 +54,20 @@ spec:
 
                 # Configure git for the mahoro-ai sockpuppet account.
                 # Credentials come from the hermes secret (GITHUB_TOKEN).
+                # Use HOME=/opt/data so the app container (which also uses
+                # HOME=/opt/data) inherits the config from the PVC.
+                export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
                 git config --global credential.helper store
                 git config --global --add safe.directory '*'
                 umask 077
-                printf "https://x-access-token:***\n" "$GITHUB_TOKEN" > /opt/data/.git-credentials
+                printf 'https://x-access-token:%s\n' "$GITHUB_TOKEN" > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials
+                chown 10000:10000 /opt/data/.gitconfig 2>/dev/null || true
 
                 # Clone the home-ops repo if it isn't already present.
                 mkdir -p /opt/data/workspace
@@ -127,26 +131,6 @@ spec:
               - containerPort: &port 8642
                 name: http
                 protocol: TCP
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - sh
-                    - -c
-                    - |
-                      set -euo pipefail
-                      export HOME=/opt/data
-                      export XDG_CONFIG_HOME=/opt/data/.config
-                      git config --global user.name "mahoro-ai"
-                      git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
-                      git config --global init.defaultBranch main
-                      git config --global credential.helper 'store --file /opt/data/.git-credentials'
-                      git config --global --add safe.directory '*'
-                      mkdir -p /opt/data/workspace
-                      if [[ ! -d /opt/data/workspace/k8s-home-ops/.git ]]; then
-                        git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /opt/data/workspace/k8s-home-ops || true
-                      fi
-                      chown -R 10000:10000 /opt/data/workspace/k8s-home-ops 2>/dev/null || true
           dashboard:
             image: *image
             env:
