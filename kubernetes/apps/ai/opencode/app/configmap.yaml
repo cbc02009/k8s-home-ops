@@ -40,7 +40,7 @@ data:
         "litellm",
         "opencode"
       ],
-      "model": "litellm/local-pool",
+      "model": "litellm/auto",
       "permissions": [
         {
           "action": "*",
