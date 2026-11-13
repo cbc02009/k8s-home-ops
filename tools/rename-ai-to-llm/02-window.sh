@@ -94,18 +94,17 @@ EOF
   while :; do
     local pending=0
     for app in "${KOPAN_APPS[@]}"; do
-      local st
-      st=$(kubectl get restore -n "$NS_NEW" "$app" -o jsonpath='{.status.claims.'"$app"'.phase} {.status.claims.'"$app"'.reason} {.status.claims.'"$app"'.resolved.resolution} {.status.claims.'"$app"'.sourcePath}' 2>/dev/null || true)
-      local phase reason resolution
-      read -r phase reason resolution _ <<<"$st"
+      local st phase reason resolution snap
+      # target.pvc Restores report at the top level: .status.phase, the
+      # Ready condition's reason, and .status.resolved (not a claims map).
+      st=$(kubectl get restore -n "$NS_NEW" "$app" -o jsonpath='{.status.phase} {.status.conditions[?(@.type=="Ready")].reason} {.status.resolved.resolution} {.status.resolved.kopiaSnapshotID}' 2>/dev/null || true)
+      read -r phase reason resolution snap <<<"$st"
       case "$phase" in
-        Populated)
-          if [ "$reason" = "RestoreSucceeded" ] && [ "$resolution" = "Snapshot" ]; then
-            local bytes
-            bytes=$(kubectl get restore -n "$NS_NEW" "$app" -o jsonpath='{.status.progress.bytesRestored}' 2>/dev/null || echo "?")
-            log "  $app: Populated (real snapshot, ${bytes} bytes) — OK"
+        Completed|Populated)
+          if [ "$resolution" = "Snapshot" ] && [ "$reason" = "RestoreSucceeded" ]; then
+            log "  $app: $phase from real snapshot ${snap:-?} — OK"
           else
-            log "  $app: Populated but NO SNAPSHOT WAS FOUND (reason=$reason resolution=$resolution) — the source data was NOT copied. Do NOT proceed with Phase B for this app."
+            log "  $app: $phase but NO SNAPSHOT WAS FOUND (reason=$reason resolution=$resolution) — the source data was NOT copied. Do NOT proceed with Phase B for this app."
             pending=2
           fi
           ;;
@@ -114,7 +113,7 @@ EOF
           pending=1
           ;;
         *)
-          log "  $app: $phase"
+          log "  $app: $phase (reason=${reason:-?})"
           pending=1
           ;;
       esac
