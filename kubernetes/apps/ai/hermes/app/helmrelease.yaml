@@ -36,7 +36,9 @@ spec:
               - -c
               - |
                 set -euo pipefail
-                apk add --no-cache gettext >/dev/null
+                # git is needed for the credential/clone setup below (alpine
+                # ships without it); gettext provides envsubst.
+                apk add --no-cache gettext git >/dev/null
                 cp /tmp/config.yaml /opt/data/config.yaml
                 # Expand env-var references from the pod env before hermes
                 # reads the config. v0.21.5 stopped expanding LITELLM_API_KEY
