@@ -23,10 +23,20 @@ spec:
     - name: certificates
       rules:
         - alert: CertManagerCertExpirySoon
+          # Deviates from the upstream mixin, which hardcodes a 21d threshold.
+          # letsencrypt-production uses the `shortlived` ACME profile, which issues
+          # 160h certs, so a fixed 21d window can never be satisfied and the alert
+          # is permanently firing. Scale the threshold to the certificate's actual
+          # validity period instead: 25% of it, which is ~22.5d for the 90d certs
+          # (matching upstream) and ~40h for the 160h ones. cert-manager renews at
+          # 2/3 of the duration, so 25% is never reached by a healthy certificate.
           expr: |
             avg by (exported_namespace, namespace, name) (
             certmanager_certificate_expiration_timestamp_seconds - time())
-              < (21 * 24 * 3600)
+              < on (exported_namespace, namespace, name)
+            avg by (exported_namespace, namespace, name) (
+            (certmanager_certificate_not_after_timestamp_seconds
+              - certmanager_certificate_not_before_timestamp_seconds) * 0.25)
           for: 15m
           labels:
             severity: warning
@@ -38,7 +48,7 @@ spec:
             runbook_url: https://gitlab.com/uneeq-oss/cert-manager-mixin/-/blob/master/RUNBOOK.md#certmanagercertexpirysoon
             summary:
               "The cert {{ $labels.name }} is {{ $value | humanizeDuration }}
-              from expiry, it should have renewed over a week ago."
+              from expiry and should have been renewed by now."
         - alert: CertManagerCertNotReady
           expr: |
             max by (name, exported_namespace, namespace, condition) (
