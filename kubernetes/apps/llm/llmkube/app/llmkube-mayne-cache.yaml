@@ -8,6 +8,11 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: openebs-hostpath
+  # Pinned to the PV that was zero-copy rebound from the `ai` namespace
+  # during the ai -> llm rename. The claim already exists with this
+  # volumeName; declaring it keeps the git object in sync with the live one
+  # (PVC spec is immutable for bound claims).
+  volumeName: pvc-823b1c1c-f3e3-4efe-8073-31534ebc5295
   resources:
     requests:
       storage: 200Gi

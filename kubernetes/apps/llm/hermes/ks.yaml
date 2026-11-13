@@ -24,3 +24,23 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: llm
+  # TRANSIENT migration pin (ai -> llm namespace rename): hermes's chat data is
+  # NOT re-downloadable, and its kopia snapshots were taken under the OLD `ai`
+  # namespace identity (hermes@ai:/pvc/hermes). The kopiur component resolves
+  # `fromPolicy` in the restore's own namespace, which has no snapshots until
+  # the first llm snapshot cycle completes — without this pin a PVC re-creation
+  # silently continues with an EMPTY volume (spec.policy.onMissingSnapshot:
+  # Continue; this bit litellm during the cutover).
+  # Applied pre-postBuild, hence the literal ${APP} placeholders.
+  # REMOVE this patch once the llm SnapshotPolicy has produced hermes snapshots.
+  patches:
+    - patch: |-
+        apiVersion: kopiur.home-operations.com/v1alpha1
+        kind: Restore
+        metadata:
+          name: ${APP}
+        spec:
+          source:
+            fromPolicy:
+              namespace: ai
+              sourcePath: /pvc/${APP}

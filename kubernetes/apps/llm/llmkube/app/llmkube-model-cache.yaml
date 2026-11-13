@@ -13,6 +13,11 @@ spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ceph-filesystem
+  # Pinned to the PV that was zero-copy rebound from the `ai` namespace
+  # during the ai -> llm rename. The claim already exists with this
+  # volumeName; declaring it keeps the git object in sync with the live one
+  # (PVC spec is immutable for bound claims).
+  volumeName: pvc-2b5840a8-a19a-4bb9-87e6-1bd0f6d28f63
   resources:
     requests:
       storage: 200Gi
