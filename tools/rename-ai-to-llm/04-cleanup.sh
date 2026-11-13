@@ -87,4 +87,7 @@ cat <<'EOF'
   c. Optional, bigger: the Postgres cluster is still named `postgres-ai`
      (databases namespace). Renaming a CNPG cluster is a data operation —
      do it as its own planned event if at all.
+  d. If you dropped the Coder path: its home PV (name in window-*.log)
+     holds only IDE scaffolding and is safe to delete:
+         kubectl delete pv <name>
 EOF

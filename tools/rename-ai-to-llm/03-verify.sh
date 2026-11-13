@@ -117,7 +117,7 @@ fi
 
 echo "== 8. Coder workspaces (if the CLI is here) =="
 if command -v coder >/dev/null; then
-  coder workspace list 2>/dev/null | sed 's/^/    /' || warn "coder workspace list failed (not logged in?)"
+  coder list 2>/dev/null | sed 's/^/    /' || warn "coder list failed (not logged in?)"
 else
   warn "coder CLI not here; check workspaces at https://coder.ctec.run"
 fi

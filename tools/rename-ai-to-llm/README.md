@@ -40,18 +40,22 @@ Delete this whole directory in a follow-up commit once the rename is done.
 | llmkube-mayne-cache | 200Gi openebs-hostpath | **PV rebind** (Retain → repoint `claimRef` → `volumeName`) — zero-copy, models stay |
 | llmkube-model-cache | 200Gi CephFS (6 pods mount it) | **PV rebind** — zero-copy |
 | paseo | 20Gi RBD (new, daemon state) | **PV rebind** |
-| coder-…-home (your workspace) | 10Gi CephFS | **PV rebind to Available**; the Coder terraform PVC (same class/modes/size) static-binds it when you start the workspace |
+| coder-…-home (half-set-up Coder workspace; ~16K of IDE scaffolding) | 10Gi CephFS | **PV rebind to Available**; the Coder terraform PVC (same class/modes/size) static-binds it the next time the workspace is (re)provisioned. The volume is effectively empty, so this is cheap insurance, not a data rescue. |
 
 Every PV is flipped to `reclaimPolicy: Retain` **before** its old PVC is
 deleted, so no volume can be destroyed mid-move. `04-cleanup.sh` reverts the
 regenerable ones to `Delete`; the Coder-home PV stays `Retain` forever
 (your dotfiles have no backup).
 
-## The run (from a machine OUTSIDE the cluster)
+## The run (from a machine that survives the window)
 
-Do not run this from inside a Coder workspace in `ai` — that pod (and any
-terminal in it, including the agent's) is killed during the window and the
-script would die with it.
+Any machine with `kubectl` + `git` + `jq` + `flux` that is **not** a pod
+inside `ai`: your laptop, or the `dev` LXC on the NAS. The opencode agent
+lives in that LXC and can drive the run itself — it stays alive through the
+whole thing, but its LLM is routed through `litellm.ctec.run` → `ai`, so it
+is deaf for the length of the Phase B downtime and wakes up again when
+`llm` converges (start it with `--yes` in the background; it is self-driving
+and idempotent, and writes `window-*.log` next to itself).
 
 > **Warning (already relevant now):** the new template version (default
 > namespace `llm`) has already been pushed to Coder while preparing this
@@ -69,9 +73,12 @@ git fetch origin && git checkout rename-ai-to-llm
 # 1. the window (one script; asks you to type `llm` before the destructive half)
 ./tools/rename-ai-to-llm/02-window.sh          # add --yes for hands-off
 
-# 2. immediately after: move your workspace(s) onto the new template version
-#    (namespace llm). NOT plain `coder start` — that would run the old
-#    version, which still targets the deleted `ai` namespace.
+# 2. only if you are continuing with Coder: move the workspace onto the new
+#    template version (namespace llm). NOT plain `coder start` — that would
+#    run the old version, which still targets the deleted `ai` namespace.
+#    (Its home volume holds ~16K of IDE scaffolding only. If you are
+#    dropping the Coder path, skip this — the PV stays on Retain until
+#    deleted.)
 coder update <name>
 
 # 3. prove it worked (read-only)
@@ -96,9 +103,10 @@ coder update <name>
   finalizers delete the `ai` Helm releases; the `ai` Namespace itself is
   `prune: disabled` and survives until step 4) → applies the `llm` tree →
   waits for every `llm` KS/HR to be Ready → applies the Talos patch.
-- **After**: `coder update <name>` moves each workspace to the new template
-  version (namespace `llm`); its home PVC static-binds the retained PV, so
-  your dotfiles come back intact. Verify, then clean up when satisfied.
+- **After**: if you continue with Coder, `coder update <name>` moves the
+  workspace to the new template version (namespace `llm`) and its home PVC
+  static-binds the retained PV. If you drop the Coder path, skip it — the PV
+  just sits on `Retain` until deleted. Verify, then clean up when satisfied.
 
 ### Why the order is safe
 

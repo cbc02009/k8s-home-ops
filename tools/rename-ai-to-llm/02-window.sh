@@ -2,11 +2,18 @@
 # ============================================================================
 # 02-window.sh — the ai -> llm namespace rename cutover.
 #
-# RUN THIS FROM A MACHINE OUTSIDE THE CLUSTER (e.g. your laptop):
-#   kubectl, git (authenticated to GitHub), and the `flux` CLI must be
-#   available. It must NOT run from inside a coder workspace in the `ai`
-#   namespace — that workspace (and any terminal in it) is destroyed during
-#   the cutover, which would kill this script mid-flight.
+# RUN THIS FROM A MACHINE THAT SURVIVES THE WINDOW: your laptop, or the
+#   `dev` LXC on the NAS (where the opencode agent lives and can drive the
+#   run itself). kubectl, git (authenticated to GitHub), jq and the `flux`
+#   CLI must be available. Do NOT run it from a pod inside the `ai`
+#   namespace — those die during the cutover.
+#
+# If the agent runs it: use --yes (the interactive pause has no TTY to read
+# from in the background) and start it in the background. The agent's LLM is
+# routed through litellm.ctec.run -> the `ai` namespace, so the agent is
+# deaf for the length of the Phase B downtime and wakes up again when `llm`
+# converges; the script is fully self-driving and idempotent, and writes
+# window-*.log next to itself for post-hoc inspection.
 #
 # Prerequisite: you are in a clone of k8s-home-ops checked out on branch
 #   `rename-ai-to-llm`   (git fetch origin && git checkout rename-ai-to-llm)
@@ -244,13 +251,13 @@ EOF
 
 Next steps (do these, in order):
   1. ./tools/rename-ai-to-llm/03-verify.sh     # proves the data and services landed
-  2. Update your Coder workspace(s) to the new template version:
+  2. Only if you are continuing with Coder:
          coder update <name>
-     (the template's default namespace is now $NS_NEW; terraform re-creates
-      the deployment and the home PVC in $NS_NEW, and the home PVC
-      static-binds the retained PV, so your dotfiles come back intact.
-      Do NOT use plain `coder start` here: that would run the OLD template
-      version, which still points at the deleted $NS_OLD namespace.)
+     (moves the workspace to the new template version, namespace $NS_NEW;
+      its home PVC static-binds the retained PV. NOT plain `coder start` —
+      that would run the OLD template version, which still points at the
+      deleted $NS_OLD namespace. If you are dropping the Coder path, skip
+      this — the PV stays on Retain until you delete it.)
   3. When everything checks out (and you have had a chance to use it):
      ./tools/rename-ai-to-llm/04-cleanup.sh    # deletes the old $NS_OLD namespace
 EOF
