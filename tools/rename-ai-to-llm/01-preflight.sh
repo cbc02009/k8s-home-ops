@@ -46,11 +46,8 @@ for app in "${KOPAN_APPS[@]}"; do
 done
 
 echo "== 4. PVCs in $NS_OLD (baseline before the window) =="
-kubectl get pvc -n "$NS_OLD" 2>/dev/null | tee /dev/stderr | awk 'NR>1' | while read -r name phase _; do
-  [ "$phase" = "Bound" ] || echo "  FAIL $name is $phase"
-done
-[ "$(kubectl get pvc -n "$NS_OLD" --no-headers 2>/dev/null | awk '$3!="Bound"' | wc -l)" -eq 0 ] \
-  && ok "all $NS_OLD PVCs Bound" || bad "some $NS_OLD PVCs are not Bound"
+unbound=$(kubectl get pvc -n "$NS_OLD" --no-headers 2>/dev/null | awk '$2!="Bound" {print "    " $1 " is " $2}')
+[ -z "$unbound" ] && ok "all $NS_OLD PVCs Bound" || { bad "some $NS_OLD PVCs are not Bound"; echo "$unbound"; }
 
 echo "== 5. static-binding ambiguity for the Coder home volume =="
 # The Coder terraform PVC (10Gi RWO ceph-filesystem, no volumeName) will bind
