@@ -26,11 +26,19 @@ spec:
               repository: docker.io/library/alpine
               tag: "3.24"
             env:
+              # envsubst expands ${LITELLM_API_KEY} in config.yaml (see below).
               - name: LITELLM_API_KEY
                 valueFrom:
                   secretKeyRef:
                     name: hermes
                     key: LITELLM_API_KEY
+              # Required by the git credential setup below; set -u aborts
+              # the init script if it is not present in the container env.
+              - name: GITHUB_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: GITHUB_TOKEN
             command:
               - sh
               - -c
