@@ -238,12 +238,18 @@ EOF
   kubectl get kustomization -n "$NS_NEW" | tee -a "$LOGFILE"
   kubectl get helmrelease -n "$NS_NEW" | tee -a "$LOGFILE"
 
-  step "B6: apply the Talos control-plane patch (talos API access: $NS_OLD -> $NS_NEW)"
-  if command -v just >/dev/null; then
-    (cd "$REPO" && just talos apply-node) 2>&1 | tee -a "$LOGFILE" || log "  WARN: 'just talos apply-node' failed — run it manually (non-fatal)"
-  else
-    log "  SKIP: just CLI not found — run: just talos apply-node"
-  fi
+  step "B6: Talos machine config — deliberately deferred to the operator"
+  cat <<EOF | tee -a "$LOGFILE"
+  The Talos control-plane patch (KubeTalosAPIAccessConfig.allowedKubernetesNamespaces:
+  $NS_OLD -> $NS_NEW) is NOT applied by this script. The branch's talos/topf.yaml
+  also bumps Kubernetes 1.37.1 -> 1.37.2 (Renovate), so a topf apply is a bigger
+  event than the rename and is left to you, whenever convenient:
+      cd talos && topf apply
+  (renders and applies to all four nodes; nodes may briefly reboot).
+  Until then the stale $NS_OLD list entry is inert — after 04-cleanup.sh that
+  namespace no longer exists, and the talos API-access feature simply does not
+  expose $NS_NEW yet.
+EOF
 
   step "Cutover complete."
   cat <<EOF | tee -a "$LOGFILE"

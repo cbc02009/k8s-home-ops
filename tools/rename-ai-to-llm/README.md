@@ -29,7 +29,8 @@ Delete this whole directory in a follow-up commit once the rename is done.
   volume survives as a rebind instead of a re-download.
 - Cross-ns consumers: karakeep/mealie `proxyNamespace`, kguardian `baseUrl`.
 - Talos `KubeTalosAPIAccessConfig.allowedKubernetesNamespaces: ai → llm`
-  (applied out-of-band via `just talos apply-node` during the window).
+  (applied later by a normal `topf apply` — the branch also carries the
+  Renovate k8s 1.37.2 bump, so it is a separate, operator-driven event).
 - coredns comment updated to tell the future story.
 
 ## How each of the 9 PVCs moves
@@ -102,7 +103,9 @@ coder update <name>
   push the branch to `main` → `cluster-apps` prunes the `ai` KSs (their
   finalizers delete the `ai` Helm releases; the `ai` Namespace itself is
   `prune: disabled` and survives until step 4) → applies the `llm` tree →
-  waits for every `llm` KS/HR to be Ready → applies the Talos patch.
+  waits for every `llm` KS/HR to be Ready. (The Talos machine-config patch is
+  deliberately NOT part of the window — you apply it later with `topf apply`,
+  together with the k8s 1.37.2 bump.)
 - **After**: if you continue with Coder, `coder update <name>` moves the
   workspace to the new template version (namespace `llm`) and its home PVC
   static-binds the retained PV. If you drop the Coder path, skip it — the PV
