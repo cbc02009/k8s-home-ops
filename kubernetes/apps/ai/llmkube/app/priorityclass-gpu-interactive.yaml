@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/scheduling.k8s.io/priorityclass_v1.json
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: gpu-interactive
+value: 1000
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+description: Interactive GPU workloads (image generation) that preempt LLM inference.

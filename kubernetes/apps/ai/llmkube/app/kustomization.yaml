@@ -8,4 +8,5 @@ resources:
   - ./helmrelease.yaml
   - ./llmkube-mayne-cache.yaml
   - ./priorityclass.yaml
+  - ./priorityclass-gpu-interactive.yaml
   - ./resourceclaim.yaml

@@ -12,6 +12,8 @@ spec:
   dependsOn: []
   interval: 1h
   values:
+    defaultPodOptions:
+      priorityClassName: gpu-interactive
     # defaultPodOptions:
     #   resourceClaims:
     #     - name: gpu

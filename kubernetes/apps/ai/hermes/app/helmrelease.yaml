@@ -70,10 +70,10 @@ spec:
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
-                git config --global credential.helper store
+                git config --global credential.helper 'store --file /opt/data/.git-credentials'
                 git config --global --add safe.directory '*'
                 umask 077
-                printf 'https://x-access-token:%s\n' "$GITHUB_TOKEN" > /opt/data/.git-credentials
+                printf 'https://x-access-token:%s@github.com/cbc02009/k8s-home-ops.git\n' "$GITHUB_TOKEN" > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials
