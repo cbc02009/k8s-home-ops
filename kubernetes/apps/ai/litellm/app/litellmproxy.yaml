@@ -56,6 +56,13 @@ spec:
       value: INFO
     - name: LITELLM_MODE
       value: PRODUCTION
+    # /v1/messages on OpenAI-family deployments defaults to the Responses API
+    # (/v1/responses), which the local nvidia-router-proxy (vLLM) does not
+    # serve — every auto-router SIMPLE/MEDIUM turn 404'd ('404 page not
+    # found'). Route those through chat/completions instead: verified to
+    # stream correctly with thinking blocks on the 27B lanes.
+    - name: LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES
+      value: 'true'
     - name: PROXY_BASE_URL
       value: https://litellm.ctec.run
     - name: PROXY_LOGOUT_URL

@@ -26,6 +26,14 @@ data:
 
     cd "$${HOME}/projects"
     exec opencode serve --hostname 0.0.0.0 --port 4096
+  # The same proxy is reachable two ways. `litellm` is the OpenAI-compatible
+  # /v1/chat/completions path; `litellm-anthropic` is the native Anthropic
+  # /v1/messages path. The Go-lane models that only serve /v1/messages
+  # (minimax-m3, qwen3.8-flash/max, claude-haiku-5-5) have broken OpenAI-style
+  # streaming (TypeError in the opencode_go chat transformation), so the
+  # auto/go-pool/go-max/go-chat lanes run through the Anthropic path, where
+  # LiteLLM uses the opencode provider's native messages handler. The
+  # chat-capable lanes (local 27B, Kimi) stay on the OpenAI path.
   opencode.json: |
     {
       "$schema": "https://opencode.ai/config.json",
@@ -38,9 +46,10 @@ data:
       },
       "enabled_providers": [
         "litellm",
+        "litellm-anthropic",
         "opencode"
       ],
-      "model": "litellm/auto",
+      "model": "litellm-anthropic/auto",
       "permissions": [
         {
           "action": "*",
@@ -53,11 +62,11 @@ data:
           "model": "litellm/local-pool"
         },
         "general": {
-          "model": "litellm/auto"
+          "model": "litellm-anthropic/auto"
         },
         "reviewer": {
           "description": "Independent adversarial review of the current diff or changes; use for substantive or risky changes",
-          "model": "litellm/go-pool",
+          "model": "litellm-anthropic/go-pool",
           "permissions": [
             {
               "action": "edit",
@@ -69,7 +78,7 @@ data:
         },
         "vision": {
           "description": "Reads images (screenshots, diagrams, OCR) on the cheap cloud go-chat vision lane",
-          "model": "litellm/go-chat",
+          "model": "litellm-anthropic/go-chat",
           "permissions": [
             {
               "action": "edit",
@@ -97,14 +106,14 @@ data:
         "max": {
           "description": "Run a one-shot on Qwen3.8 Max (1M context) in a background child session",
           "agent": "general",
-          "model": "litellm/go-max",
+          "model": "litellm-anthropic/go-max",
           "subagent": true,
           "template": "You have a 1M-token context and a generous budget. Ingest as much as you need, then complete the work end-to-end. Task: $ARGUMENTS"
         },
         "auto": {
           "description": "Switch this session to the auto complexity router",
           "agent": "build",
-          "model": "litellm/auto",
+          "model": "litellm-anthropic/auto",
           "template": "Continue with the auto router selecting the lane for this session. $ARGUMENTS"
         }
       },
@@ -204,6 +213,45 @@ data:
                 "output": 262144
               },
               "name": "Reasoning pool"
+            }
+          }
+        },
+        "litellm-anthropic": {
+          "name": "LiteLLM Anthropic",
+          "package": "aisdk:@ai-sdk/anthropic",
+          "settings": {
+            "authToken": "{env:LITELLM_API_KEY}",
+            "baseURL": "http://litellm.ai.svc.cluster.local:4000/v1",
+            "timeout": 1800000
+          },
+          "models": {
+            "auto": {
+              "limit": {
+                "context": 1000000,
+                "output": 131072
+              },
+              "name": "Auto router"
+            },
+            "go-chat": {
+              "limit": {
+                "context": 1000000,
+                "output": 128000
+              },
+              "name": "OpenCode Go · Claude Haiku 5.5"
+            },
+            "go-max": {
+              "limit": {
+                "context": 1000000,
+                "output": 131072
+              },
+              "name": "OpenCode Go · Qwen3.8 Max"
+            },
+            "go-pool": {
+              "limit": {
+                "context": 262144,
+                "output": 65536
+              },
+              "name": "OpenCode Go · workhorse pool"
             }
           }
         }
