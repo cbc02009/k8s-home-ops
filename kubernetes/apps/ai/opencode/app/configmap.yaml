@@ -53,7 +53,7 @@ data:
           "model": "litellm/local-pool"
         },
         "general": {
-          "model": "litellm/go-coder"
+          "model": "litellm/auto"
         },
         "reviewer": {
           "description": "Independent adversarial review of the current diff or changes; use for substantive or risky changes",

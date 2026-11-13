@@ -3,7 +3,15 @@
 # Complexity router: one model name that picks the right lane. Simple chat
 # goes to local-pool (fast local flash model), medium work stays on the
 # always-resident 27B, and hard reasoning/coding escalates to reasoning-pool.
-# The classifier runs on 27b-chat (always resident).
+# The classifier runs on 27b-chat (always resident) with the built-in 'agentic'
+# rubric: routine installs, builds, multi-file edits and standard debugging
+# anchor at MEDIUM, so ordinary engineering traffic stays on free local 27B
+# instead of the allowance-metered cloud pool. classification_mode 'user_turn'
+# re-classifies on every new human ask (a session can move tiers between asks,
+# no hour-long freeze) but replays the held decision on an agent loop's tool
+# continuations, so a long loop neither re-classifies per step nor switches
+# models mid-loop. Per-tier deployment pins keep prompt caches warm and
+# survive tier moves, so a session returning to a tier reuses its deployment.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -27,6 +35,8 @@ spec:
         classifier_llm_config:
           model: qwen3.8-27b-chat
           timeout_ms: 20000
+          classification_rubric: agentic
         classifier_fallback: default_model
-        session_affinity: true
+        classification_mode: user_turn
+        session_affinity: false
         session_affinity_ttl_seconds: 3600
