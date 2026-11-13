@@ -161,7 +161,7 @@ spec:
                 memory: 1Gi
             ports:
               - containerPort: &dashboard_port 9119
-                name: http
+                name: dashboard
                 protocol: TCP
           codeserver:
             image:
