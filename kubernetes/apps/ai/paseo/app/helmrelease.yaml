@@ -41,13 +41,17 @@ spec:
         initContainers:
           clone:
             image:
-              repository: ghcr.io/cbc02009/paseo
-              tag: 0.15.4
+              # Self-built ghcr.io/cbc02009/paseo is pending; joryirving's
+              # image (opencode + home-ops toolchain) is the stopgap.
+              repository: ghcr.io/joryirving/paseo
+              tag: 0.15.4@sha256:d4a7e3b47860ef629c134d90d48381429d123fe787431a7bfcd66cc5bd7d278e
             command: ["/bin/bash", "-c"]
             args:
               - |
                 set -euo pipefail
                 umask 077
+                # Best-effort: a missing git must not block the daemon.
+                command -v git >/dev/null 2>&1 || { echo "git unavailable; skipping repo pre-clone"; exit 0; }
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
@@ -72,8 +76,18 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/cbc02009/paseo
-              tag: 0.15.4
+              # Self-built ghcr.io/cbc02009/paseo is pending; joryirving's
+              # image (opencode + home-ops toolchain) is the stopgap.
+              repository: ghcr.io/joryirving/paseo
+              tag: 0.15.4@sha256:d4a7e3b47860ef629c134d90d48381429d123fe787431a7bfcd66cc5bd7d278e
+            # The image's CMD is the builder's paseo-start wrapper, which
+            # aborts without PASEO_PASSWORD/LITELLM_API_KEY and installs the
+            # builder's own paseo.json/opencode.json. Bypass it: run the stock
+            # entrypoint (under tini) with no args so the daemon starts on its
+            # default config: listen 0.0.0.0:6767, web UI on, no relay, no auth.
+            # A PASEO_PASSWORD can be set later for defense-in-depth.
+            command: ["/usr/bin/tini", "--", "/bin/bash", "-c"]
+            args: ["exec /usr/local/bin/paseo-docker-entrypoint"]
             env:
               - name: TZ
                 value: ${CONFIG_TZ}
@@ -107,9 +121,11 @@ spec:
                     port: *port
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop: ["ALL"]
+              # readOnlyRootFilesystem is a follow-up hardening step: enable
+              # once the daemon's write paths are confirmed to stay on the PVC
+              # (/home/paseo) and /tmp.
             resources:
               requests:
                 cpu: 100m
