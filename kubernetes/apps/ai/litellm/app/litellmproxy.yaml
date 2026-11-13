@@ -6,10 +6,16 @@ metadata:
   name: litellm
 spec:
   applyMode: file
-  # v1.109.0-rc.1 is the first build carrying the opencode_go provider (the
-  # 1.108.x LTS line predates its Oct 24 merge). Drop back to stable/LTS once
-  # v1.109.0 stable ships — Renovate will propose it.
-  image: ghcr.io/berriai/litellm:v1.109.0-rc.1@sha256:030121401c60d732a2cdf8fd485c91432d40388b046bfa3e0b2d3370f26378c9
+  # Overlay image built by cbc02009/container-images (apps/litellm): upstream
+  # v1.109.0-rc.1 (first build carrying the opencode_go provider) + the
+  # get_model_response_iterator_for_request override on
+  # OpenCodeGoMessagesChatConfig. Without it, OpenAI-wire streaming to
+  # /v1/messages-protocol Go models (minimax-m3, qwen3.8-max,
+  # claude-haiku-5-5) dies mid-stream with 'NoneType' object is not an
+  # iterator → APIConnectionError 500 (LiteLLMModelFailover alerts). Drop the
+  # overlay once the fix ships upstream; Renovate tracks the base version in
+  # container-images and proposes the :rolling digest bump here on rebuild.
+  image: ghcr.io/cbc02009/litellm:rolling@sha256:8fb51bb31889b651d1749a33b31032564dd152e669258beecbecbf001777d3a8
   replicas: 2
   service:
     port: 4000
