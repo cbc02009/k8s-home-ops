@@ -53,6 +53,14 @@ Do not run this from inside a Coder workspace in `ai` — that pod (and any
 terminal in it, including the agent's) is killed during the window and the
 script would die with it.
 
+> **Warning (already relevant now):** the new template version (default
+> namespace `llm`) has already been pushed to Coder while preparing this
+> branch. Do **not** run `coder update` (or create workspaces) before
+> `02-window.sh` has run: an update before the window makes terraform delete
+> the old `ai` home PVC while its PV is still on `reclaimPolicy: Delete`,
+> which would destroy your dotfiles/toolchain. The window flips that PV to
+> `Retain` first — that is what makes the post-window update safe.
+
 ```fish
 # 0. prepare (any time before the window; a few minutes)
 git fetch origin && git checkout rename-ai-to-llm
@@ -61,8 +69,10 @@ git fetch origin && git checkout rename-ai-to-llm
 # 1. the window (one script; asks you to type `llm` before the destructive half)
 ./tools/rename-ai-to-llm/02-window.sh          # add --yes for hands-off
 
-# 2. immediately after: bring your workspace(s) back
-coder workspace start <name>
+# 2. immediately after: move your workspace(s) onto the new template version
+#    (namespace llm). NOT plain `coder start` — that would run the old
+#    version, which still targets the deleted `ai` namespace.
+coder update <name>
 
 # 3. prove it worked (read-only)
 ./tools/rename-ai-to-llm/03-verify.sh
@@ -86,8 +96,9 @@ coder workspace start <name>
   finalizers delete the `ai` Helm releases; the `ai` Namespace itself is
   `prune: disabled` and survives until step 4) → applies the `llm` tree →
   waits for every `llm` KS/HR to be Ready → applies the Talos patch.
-- **After**: start your Coder workspace (its home volume binds automatically),
-  verify, then clean up when satisfied.
+- **After**: `coder update <name>` moves each workspace to the new template
+  version (namespace `llm`); its home PVC static-binds the retained PV, so
+  your dotfiles come back intact. Verify, then clean up when satisfied.
 
 ### Why the order is safe
 

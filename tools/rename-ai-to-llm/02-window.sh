@@ -244,9 +244,13 @@ EOF
 
 Next steps (do these, in order):
   1. ./tools/rename-ai-to-llm/03-verify.sh     # proves the data and services landed
-  2. Start your Coder workspace(s):  coder workspace start <name>
-     (the home volume binds to its retained PV automatically; the template
-      now targets the $NS_NEW namespace)
+  2. Update your Coder workspace(s) to the new template version:
+         coder update <name>
+     (the template's default namespace is now $NS_NEW; terraform re-creates
+      the deployment and the home PVC in $NS_NEW, and the home PVC
+      static-binds the retained PV, so your dotfiles come back intact.
+      Do NOT use plain `coder start` here: that would run the OLD template
+      version, which still points at the deleted $NS_OLD namespace.)
   3. When everything checks out (and you have had a chance to use it):
      ./tools/rename-ai-to-llm/04-cleanup.sh    # deletes the old $NS_OLD namespace
 EOF
