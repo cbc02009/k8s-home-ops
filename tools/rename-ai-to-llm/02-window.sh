@@ -129,8 +129,23 @@ EOF
 # --- Phase B: the cutover (DOWNTIME for the ai namespace) --------------------
 phaseB() {
   step "B1: suspend every Kustomization in $NS_OLD (no more re-apply/prune races)"
-  kubectl get kustomization -n "$NS_OLD" --no-headers 2>/dev/null | awk '{print "  suspending " $1}'
-  kubectl patch kustomization -n "$NS_OLD" --all -p '{"spec":{"suspend":true}}' --type=merge >/dev/null
+  # NOTE: `kubectl patch --all` is not supported by every kubectl version —
+  # patch each object by name instead.
+  local ks n suspended=0
+  for ks in $(kubectl get kustomization -n "$NS_OLD" -o name 2>/dev/null); do
+    if kubectl patch "$ks" -n "$NS_OLD" --type=merge -p '{"spec":{"suspend":true}}' >/dev/null 2>&1; then
+      suspended=$((suspended+1))
+    else
+      die "could not suspend $ks"
+    fi
+  done
+  log "  suspended $suspended Kustomizations in $NS_OLD"
+  # verify, do not trust the loop
+  local still
+  still=$(kubectl get kustomization -n "$NS_OLD" -o jsonpath='{range .items[?(@.spec.suspend==true)]}{.metadata.name}{"\n"}{end}' 2>/dev/null | wc -l)
+  total=$(kubectl get kustomization -n "$NS_OLD" --no-headers 2>/dev/null | wc -l)
+  log "  verification: $still of $total Kustomizations report suspend=true"
+  [ "$still" = "$total" ] || die "not all Kustomizations in $NS_OLD are suspended — refusing to continue"
 
   step "B2: rebind the four PVs out of $NS_OLD"
   local row name modes size sc mode pv
