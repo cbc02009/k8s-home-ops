@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: litellm-admin
+spec:
+  # BerriAI/liteadmin-mcp: standalone connector for the LiteLLM management API
+  # (keys, teams, budgets, spend, activity, request logs). Upstream publishes
+  # neither a release cycle nor a container image, so the pod pip-installs the
+  # pinned source tarball at startup (same install-at-startup pattern as
+  # arr-mcp's npx). To bump: update the commit SHA below to a newer main commit
+  # (3d4cd40225 is the latest as of 2026-10-23 and matches the commit the
+  # in-cluster LiteLLM v1.109.0-rc.1 bundles in its admin-mcp dependency group).
+  image: docker.io/library/python:3.12-slim
+  # stdio transport: the connector reads its gateway credential from
+  # LITELLM_API_KEY (injected from the litellm Secret below) and is bridged to
+  # streamable-http by the ToolHive proxy — the same shape as github-mcp/arr-mcp.
+  # The connector's own HTTP transport would not work here: it refuses a shared
+  # credential and demands a per-client bearer token, which the ToolHive proxy
+  # consumes for its own authentication.
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    # The connector rejects non-HTTPS, non-loopback origins, so the in-cluster
+    # Service URL cannot be used; the HTTPS route via envoy-internal works from
+    # inside the cluster.
+    - name: LITELLM_BASE_URL
+      value: https://litellm.ctec.run
+    # Read-only mode: only the GET operations are exposed (spend reports,
+    # per-key/team/user/organization activity, request logs, model/key/team/
+    # user/budget listings). All mutating operations (create/update/delete/
+    # block/rotate keys, teams, budgets, deployments) stay hidden.
+    - name: LITELLM_ADMIN_READ_ONLY
+      value: "true"
+  secrets:
+    # The gateway master key carries the proxy_admin role; the connector
+    # re-checks the role on every call and redacts credentials from results.
+    # Reuses the existing litellm Secret — no new secret needed.
+    - name: litellm
+      key: LITELLM_MASTER_KEY
+      targetEnvName: LITELLM_API_KEY
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - pip install --no-cache-dir --quiet 'https://github.com/BerriAI/liteadmin-mcp/archive/3d4cd40225430f32fee061f42a1fa538ae8d01b2.tar.gz' && exec litellm-admin-mcp --transport stdio
+  groupRef:
+    name: mcp-tools
