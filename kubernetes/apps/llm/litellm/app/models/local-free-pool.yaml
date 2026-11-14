@@ -1,17 +1,28 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Simple/medium lane for the auto complexity router: the always-resident 27B
-# (weight 2) mixed with OpenCode Go's zero-allowance free models, so half of
-# the simple/medium traffic is offloaded from the local GPU while the resident
-# 27B stays the majority share and the failover floor. The Go rungs are
-# "limited-time" free listings (zero allowance burn, "model training: not
-# used" per Go's privacy table — see opencode-go.yaml; LongCat needs the
-# "Global" region already enabled in the Go workspace privacy settings). If Go
-# retires one, requests fail over to the 27B member (order 1). The same free
-# models also remain in go-pool as its quota fail-down floor. Members are
-# picked per request by the proxy's simple-shuffle, so sessions hop between
-# the three; the Go session id keeps per-conversation affinity (prompt cache)
-# on the cloud rungs.
+# Simple/medium lane for the auto complexity router. All members sit at the
+# SAME order (1) so the proxy's simple-shuffle actually mixes them per
+# request — mixing only happens within one order, and the earlier staggered
+# order 1/2/3/4 ladder meant the 27B took every request until a cloud rung
+# 429'd into cooldown, which is why the lane felt local-slow. Weights:
+#   27B              (weight 2) — the local always-resident rung, kept as the
+#     larger share so private/local traffic stays dominant
+#   Z.AI GLM Flash   (weight 2) — credit-drain member: the Coding Plan's
+#     weekly credits do not roll over, so this high-volume lane carries the
+#     cheap 0.4x-off-peak rung to burn them steadily instead of only ever
+#     touching them on a deep fallback
+#   LongCat 2.5 Free (weight 1) — zero allowance burn, "model training:
+#   Beam Free        (weight 1)   not used" per Go's privacy table (see
+#     opencode-go.yaml); LongCat needs the "Global" region already enabled in
+#     the Go workspace privacy settings
+# The same free models also remain in go-pool as its quota fail-down floor.
+# Members are picked per request by the proxy's simple-shuffle, so sessions hop
+# between them; the Go session id keeps per-conversation affinity (prompt cache)
+# on the cloud rungs. Order 2 is the paid Go last-resort rung: a cheap go-pool
+# workhorse that only fires when every order-1 member is in cooldown (local
+# saturated, Go free listings down/retired, Z.AI window dry). Kept at
+# max_parallel_requests: 2 so this lane cannot starve go-pool / implementation
+# work on the same $60 allowance.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -44,6 +55,42 @@ spec:
       cache_read_input_token_cost: 0.0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Z.AI Coding Plan Flash: the credit-drain rung of the mixed lane (0.4x
+# off-peak consumption, weight 2 so it carries most of the high-volume
+# traffic). Paired with the Go free rungs so a dried Z.AI window cools the
+# member for 30s and the lane continues on the other rungs. Carries vision,
+# so it also absorbs this lane's vision traffic when the free Go listings are
+# cooling.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-zai-glm-5.3-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3-flash
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 1
+      weight: 2
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # LongCat 2.5 Free: zero allowance burn, not used for training, hosted in
 # China (the Go workspace "Global" regions setting is already in place for
 # go-pool). Carries vision for the mixed lane.
@@ -60,7 +107,7 @@ spec:
     model: opencode_go/longcat-2.5-preview-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 2
+      order: 1
       weight: 1
       max_parallel_requests: 4
   info:
@@ -89,7 +136,7 @@ spec:
     model: opencode_go/beam-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 3
+      order: 1
       weight: 1
       max_parallel_requests: 4
   info:
@@ -98,8 +145,41 @@ spec:
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsVision: false
-    supportsPromptCaching: true
     extra:
       input_cost_per_token: 0
       output_cost_per_token: 0
       cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Paid Go overflow (order 2): Mimo 2.6 Flash, the cheapest go-pool workhorse
+# per token ($60/mo allowance window, no-training, vision-capable so it can
+# also absorb this lane's vision traffic if LongCat is cooling). Only reached
+# when every order-1 member is in cooldown — ordinary simple/medium traffic
+# still avoids the allowance-metered pool.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-mimo-v2.6-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/mimo-v2.6-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-07
+      output_cost_per_token: 2.8e-07
+      cache_read_input_token_cost: 2.8e-09
