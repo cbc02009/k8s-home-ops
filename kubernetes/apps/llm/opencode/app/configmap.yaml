@@ -205,6 +205,13 @@ data:
                 "output": 24576
               },
               "name": "Qwen3.8-27B W4A16"
+            },
+            "zai-pool": {
+              "limit": {
+                "context": 1048576,
+                "output": 131072
+              },
+              "name": "Z.AI · GLM-5.3 pool"
             }
           }
         },
@@ -244,6 +251,13 @@ data:
                 "output": 65536
               },
               "name": "OpenCode Go · workhorse pool"
+            },
+            "zai-pool": {
+              "limit": {
+                "context": 1048576,
+                "output": 131072
+              },
+              "name": "Z.AI · GLM-5.3 pool"
             }
           }
         }

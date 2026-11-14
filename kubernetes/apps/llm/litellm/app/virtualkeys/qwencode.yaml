@@ -17,6 +17,9 @@ spec:
   - go-coder
   - go-strong
   - go-max
+  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
+  # credits do not roll over, so the traffic is wanted, not just tolerated).
+  - zai-pool
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret

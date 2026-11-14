@@ -44,6 +44,14 @@ spec:
   env:
     - name: AUTO_REDIRECT_UI_LOGIN_TO_SSO
       value: 'true'
+    # Lens connection (see kubernetes/apps/llm/lens/): the gateway calls the
+    # in-cluster Lens service directly and shows agents the public ingestion
+    # URL. LITELLM_LENS_SERVICE_TOKEN / LENS_GATEWAY_SECRET arrive via the
+    # litellm ExternalSecret (same 1Password item fields Lens consumes).
+    - name: LITELLM_LENS_URL
+      value: http://lens.llm.svc.cluster.local:4318
+    - name: LITELLM_LENS_PUBLIC_URL
+      value: https://lens.ctec.run
     - name: DATABASE_URL
       valueFrom:
         secretKeyRef:
@@ -119,22 +127,55 @@ spec:
     cooldown_time: 30
     enable_pre_call_checks: true
     fallbacks:
-      - auto:
-          - qwen3.8-27b
-      # Quota fail-down: when a Go lane's 5h/weekly/monthly window runs dry
-      # (429 after retries), continue on the cheap go-pool flash rungs
-      # instead of stalling the session. The named single-model lanes keep
-      # their model as first choice; only the pool floor changes.
+      # Two flat subscriptions back each other up. When a Go lane's
+      # 5h/weekly/monthly window runs dry (429 after retries), traffic
+      # continues on the Z.AI Coding Plan lane (zai-pool: GLM-5.3 Flash /
+      # GLM-5.3) instead of stalling the session — and the Z.AI credits,
+      # which do not roll over, get burned in the process. The local 27B
+      # pool is the final free floor, so no workload fails when both
+      # subscriptions are exhausted.
+      - go-pool:
+          - zai-pool
+          - local-pool
+      # The named single-model lanes keep their model as first choice; only
+      # the pool floor changes.
       - go-coder:
           - go-pool
+          - zai-pool
+          - local-pool
       - go-strong:
           - go-pool
+          - zai-pool
+          - local-pool
       - go-max:
           - go-pool
+          - zai-pool
+          - local-pool
       - frontier-pool:
           - go-pool
+          - zai-pool
+          - local-pool
+      # go-chat is the vision lane: both zai-pool rungs are vision-capable,
+      # so image/vision workloads survive a Go outage too.
+      - go-chat:
+          - zai-pool
       - reasoning-pool:
-          - go-pool
+          - zai-pool
+          - local-pool
+      - implementation-pool:
+          - zai-pool
+          - local-pool
+      # The complexity router's own floor: the pooled lanes first (they carry
+      # the Z.AI co-primary rungs), then the plain local pool.
+      - auto:
+          - implementation-pool
+          - local-pool
+      - local-free-pool:
+          - local-pool
+      # The Z.AI lane is itself a fallback target, so it needs its own floor:
+      # when the Coding Plan's window is dry too, the local 27B catches it.
+      - zai-pool:
+          - local-pool
   litellmSettings:
     success_callback:
       - prometheus
@@ -165,6 +206,13 @@ spec:
   generalSettings:
     health_check_endpoint: /v1/health
     store_model_in_db: false
+    # Enable the Lens agent-tracing store: registers the LensExporter spend
+    # callback (records per-call cost records into Lens) and serves the
+    # /lens/* proxy routes to the standalone Lens service. No-op until the
+    # Lens service itself is reachable.
+    tracing:
+      store:
+        type: lens
   extraConfig:
     environment:
       - REDIS_HOST

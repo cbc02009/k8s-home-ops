@@ -25,6 +25,9 @@ spec:
   # Simple/medium lane the auto router resolves to (27B + Go free rungs).
   - local-free-pool
   - auto
+  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
+  # credits do not roll over, so the traffic is wanted, not just tolerated).
+  - zai-pool
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
@@ -70,6 +73,9 @@ spec:
   # Simple/medium lane the auto router resolves to (27B + Go free rungs).
   - local-free-pool
   - auto
+  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
+  # credits do not roll over, so the traffic is wanted, not just tolerated).
+  - zai-pool
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret

@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Z.AI Coding Plan lane (https://api.z.ai/api/coding/paas/v4): the flat
+# subscription whose weekly credit windows reset and never roll over, so the
+# goal is to drain them, not preserve them. It plays three roles:
+#   1. Named fallback target for every lane (litellmproxy fallbacks): when a
+#      Go lane's 5h/weekly/monthly window runs dry, traffic lands here before
+#      the local 27B floor — both subscriptions back each other up, and the
+#      Z.AI credits get burned in the process.
+#   2. Co-primary weighted rung, paired with the Go rungs at the same order
+#      in implementation-pool and reasoning-pool (Go weight 2 : Z.AI weight 1)
+#      and with the free Go rungs in local-free-pool — so ordinary traffic
+#      steadily drains the weekly credits instead of only the deep fallback
+#      ever touching them.
+#   3. Vision fallback for go-chat: both GLM rungs are vision-capable.
+# Rungs: Flash first (weight 2) — the cheap drain rung (0.4x off-peak credit
+# consumption, the largest window); GLM-5.3 (weight 1) is the stronger but
+# credit-hungry rung (1x off-peak / 3x peak, peak = Mon-Fri 14:00-18:00 SGT).
+# A dried window 429s and cools for 30s; the paired Go rung then carries the
+# request. NOTE: the coding endpoint's training/retention terms differ from
+# OpenCode Go's strict no-training pool — the same data policy caveat the
+# in-pool Z.AI rungs always carried.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: zai-pool-glm-5.3-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: zai-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3-flash
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 1
+      weight: 2
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: zai-pool-glm-5.3
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: zai-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 1
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.6e-07

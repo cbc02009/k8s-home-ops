@@ -7,10 +7,12 @@
 # 429'd into cooldown, which is why the lane felt local-slow. Weights:
 #   27B              (weight 2) — the local always-resident rung, kept as the
 #     larger share so private/local traffic stays dominant
-#   Z.AI GLM Flash   (weight 2) — credit-drain member: the Coding Plan's
+#   Z.AI GLM Flash   (weight 1) — credit-drain member: the Coding Plan's
 #     weekly credits do not roll over, so this high-volume lane carries the
 #     cheap 0.4x-off-peak rung to burn them steadily instead of only ever
-#     touching them on a deep fallback
+#     touching them on a deep fallback. Weighted 2:1 against the 27B (Go
+#     : Z.AI) to match the co-primary ratio used in the implementation and
+#     reasoning pools, so the local model stays the majority share.
 #   LongCat 2.5 Free (weight 1) — zero allowance burn, "model training:
 #   Beam Free        (weight 1)   not used" per Go's privacy table (see
 #     opencode-go.yaml); LongCat needs the "Global" region already enabled in
@@ -56,11 +58,11 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Z.AI Coding Plan Flash: the credit-drain rung of the mixed lane (0.4x
-# off-peak consumption, weight 2 so it carries most of the high-volume
-# traffic). Paired with the Go free rungs so a dried Z.AI window cools the
-# member for 30s and the lane continues on the other rungs. Carries vision,
-# so it also absorbs this lane's vision traffic when the free Go listings are
-# cooling.
+# off-peak consumption, weight 1 so the 2:1 Go:Z.AI ratio keeps the local
+# 27B the majority share of the lane. Paired with the Go free rungs so a
+# dried Z.AI window cools the member for 30s and the lane continues on the
+# other rungs. Carries vision, so it also absorbs this lane's vision traffic
+# when the free Go listings are cooling.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -76,7 +78,7 @@ spec:
     apiKey: os.environ/ZAI_API_KEY
     additional:
       order: 1
-      weight: 2
+      weight: 1
       max_parallel_requests: 2
   info:
     mode: chat

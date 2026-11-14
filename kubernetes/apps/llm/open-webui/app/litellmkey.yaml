@@ -15,6 +15,9 @@ spec:
   # go-pool. Keep local 27B as the default; premium $15 lanes stay out.
   - go-pool
   - go-chat
+  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (vision
+  # capable, and its weekly credits do not roll over).
+  - zai-pool
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1

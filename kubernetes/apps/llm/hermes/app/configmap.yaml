@@ -23,10 +23,14 @@ data:
       context_length: 131072
     fallback_providers:
       # Last resort if the whole pool chain fails: the always-resident 27B
-      # first, then go-pool as the cloud overflow (free-pool is banned from
-      # agent keys/fallbacks, see free-pool.yaml).
+      # first, then the Z.AI Coding Plan lane (the mutual fallback for the Go
+      # pool — its weekly credits do not roll over), then go-pool as the
+      # cloud overflow (free-pool is banned from agent keys/fallbacks, see
+      # free-pool.yaml).
       - provider: litellm
         model: qwen3.8-27b
+      - provider: litellm
+        model: zai-pool
       - provider: litellm
         model: go-pool
     providers:

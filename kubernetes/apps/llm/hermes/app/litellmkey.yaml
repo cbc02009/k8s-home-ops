@@ -11,11 +11,10 @@ spec:
   secretKey: api-key
   # Exactly the lanes config.yaml references: the default (auto, plus the
   # pool lanes its complexity router resolves to), the fallback chain, the
-  # delegation roles and the auxiliary. No free-pool (banned for
-  # coding/agentic keys, see free-pool.yaml), no embed/rerank (the memini
-  # plugin talks to the memini server, which holds its own key for those),
-  # and no go-coder/go-strong/go-max single lanes (opencode's escalation
-  # lanes; hermes escalates via the pools).
+  # delegation roles and the auxiliary. No embed/rerank (the memini plugin
+  # talks to the memini server, which holds its own key for those), and no
+  # go-coder/go-strong/go-max single lanes (opencode's escalation lanes;
+  # hermes escalates via the pools).
   models:
   - auto
   # Simple/medium lane the complexity router resolves to (27B + Go free rungs).
@@ -28,6 +27,9 @@ spec:
   - frontier-pool
   - go-pool
   - go-chat
+  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
+  # credits do not roll over, so the traffic is wanted, not just tolerated).
+  - zai-pool
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1

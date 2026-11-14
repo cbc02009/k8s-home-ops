@@ -29,7 +29,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "OpenCode Go flat subscription (tunable variable).",
+      "description": "Flat subscriptions: OpenCode Go + Z.AI Coding Plan (tunable variables).",
       "fieldConfig": {
         "defaults": {
           "unit": "currency:USD",
@@ -76,7 +76,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "vector($sub_opencode)",
+          "expr": "vector($sub_opencode) + vector($sub_zai)",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -284,7 +284,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode)",
+          "expr": "(((sum(increase(litellm_spend_metric_total{requested_model!~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) + (((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode) - ($sub_zai)",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -348,7 +348,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "(((((sum(increase(litellm_input_tokens_metric_total[$__range])) or vector(0)) * 5.0 + (sum(increase(litellm_output_tokens_metric_total[$__range])) or vector(0)) * 25.0) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode)",
+          "expr": "(((((sum(increase(litellm_input_tokens_metric_total[$__range])) or vector(0)) * 5.0 + (sum(increase(litellm_output_tokens_metric_total[$__range])) or vector(0)) * 25.0) / 1e6)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_opencode) - ($sub_zai)",
           "refId": "A",
           "legendFormat": "A"
         }
@@ -433,7 +433,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model=~\"free-pool\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Free pool\", \"\", \"\")",
+          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model=~\"zai-.*\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)) - ($sub_zai), \"bucket\", \"Z.AI\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "B"
         },
@@ -442,7 +442,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace(((((sum(increase(litellm_input_tokens_metric_total{requested_model=~\"local(-free-)?pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 0.4 + (sum(increase(litellm_output_tokens_metric_total{requested_model=~\"local(-free-)?pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * 1.2) / 1e6) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -451,7 +451,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace(((sum(increase(litellm_spend_metric_total{requested_model!~\"go-.*|zai-.*|local(-free-)?pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)) * (${days_in_month} * 86400 / $__range_s)), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }
@@ -517,7 +517,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model=~\"free-pool\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Free pool\", \"\", \"\")",
+          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model=~\"zai-.*\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Z.AI\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "B"
         },
@@ -526,7 +526,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((((sum(rate(litellm_input_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 0.4 + (sum(rate(litellm_output_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 1.2) / 1e6) * 86400), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace(((((sum(rate(litellm_input_tokens_metric_total{requested_model=~\"local(-free-)?pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 0.4 + (sum(rate(litellm_output_tokens_metric_total{requested_model=~\"local(-free-)?pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 1.2) / 1e6) * 86400), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -535,7 +535,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace(((sum(rate(litellm_spend_metric_total{requested_model!~\"go-.*|zai-.*|local(-free-)?pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__rate_interval])) or vector(0)) * 86400), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }
@@ -761,7 +761,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"free-pool\"}[$__range])) or vector(0)), \"bucket\", \"Free pool\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"zai-.*\"}[$__range])) or vector(0)), \"bucket\", \"Z.AI\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "B"
         },
@@ -770,7 +770,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"local-pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Self-hosted\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model=~\"local(-free-)?pool(-chat)?|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Self-hosted\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "C"
         },
@@ -779,7 +779,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"go-.*|free-pool|local-pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Other\", \"\", \"\")",
+          "expr": "label_replace((sum(increase(litellm_total_tokens_metric_total{requested_model!~\"go-.*|zai-.*|local(-free-)?pool(-chat)?|reasoning-pool|frontier-pool|auto|complexity_router|qwen3\\\\.8-27b.*|implementation-pool|embed.*|memini-rerank.*|rerank.*\"}[$__range])) or vector(0)), \"bucket\", \"Other\", \"\", \"\")",
           "legendFormat": "{{bucket}}",
           "refId": "D"
         }
@@ -1062,7 +1062,18 @@
           "value": "10"
         },
         "query": "10",
-        "description": "OpenCode Go \u2014 USD/mo (the only flat subscription here)."
+        "description": "OpenCode Go \u2014 USD/mo (one of the two flat subscriptions here)."
+      },
+      {
+        "name": "sub_zai",
+        "label": "Z.AI $/mo (USD)",
+        "type": "textbox",
+        "current": {
+          "text": "10",
+          "value": "10"
+        },
+        "query": "10",
+        "description": "Z.AI Coding Plan \u2014 USD/mo (the other flat subscription; its weekly credits do not roll over, so the zai-pool lane burns them)."
       },
       {
         "name": "days_in_month",

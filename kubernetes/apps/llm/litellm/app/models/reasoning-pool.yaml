@@ -1,14 +1,18 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Reasoning lane for COMPLEX/REASONING traffic, ordered cheapest-first so a
-# healthy window always burns the cheapest allowance available:
-#   1. MiniMax M3        — $60 Go workhorse window, 1M context, 3x cheaper than K2.7
-#   2. MiniMax M3.1 Flash — $20-30 Go mid window, half of M3 per token
-#   3. Z.AI GLM Flash    — $0.15/M input, behind the Go rungs (small Lite windows)
-#   4. Z.AI GLM-5.3      — Z.AI's best, but its Lite credit windows are the smallest
-#   5. Kimi K2.7 Code    — premium, rationed to last-resort cloud; use the
+# healthy window always burns the cheapest allowance available. Rungs come in
+# paired tiers: each Z.AI Coding Plan rung sits at the SAME order as its Go
+# counterpart (Go weight 2 : Z.AI weight 1), so the two flat subscriptions
+# back each other up — when one side's 5h/weekly window dries, that member
+# 429s, cools for 30s, and the other subscription's rung carries the
+# traffic. Pairing Z.AI as a co-primary is also how its non-rolling weekly
+# credits get burned before they expire:
+#   1. MiniMax M3        — $60 Go workhorse window, 1M context (Z.AI: GLM-5.3)
+#   2. MiniMax M3.1 Flash — $20-30 Go mid window (Z.AI: GLM-5.3 Flash)
+#   3. Kimi K2.7 Code    — premium, rationed to last-resort cloud; use the
 #                          dedicated `go-coder` lane for on-purpose top-tier coding
-#   6. Local 27B         — free floor, last resort
+#   4. Local 27B         — free floor, last resort
 # Failover matters more than order here: a session that trips a 429 mid-conversation
 # sticks to the deployment that caught it (router deployment pin), so every rung
 # after M3 must be cheap enough that a failover does not silently become the session's model.
@@ -26,6 +30,7 @@ spec:
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
       order: 1
+      weight: 2
       max_parallel_requests: 2
   info:
     mode: chat
@@ -40,68 +45,8 @@ spec:
       cache_read_input_token_cost: 6e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# First failover target when M3's 5h window exhausts: half of M3's token cost,
-# same 1M context, and its own Go allowance instead of a second burn on M3.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: reasoning-pool-minimax-m3.1-flash
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: reasoning-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/minimax-m3.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      order: 2
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 512000
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 1.5e-07
-      output_cost_per_token: 6e-07
-      cache_read_input_token_cost: 1.5e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Z.AI Coding Plan overflow: Flash first (cheapest, bigger window), GLM-5.3
-# second. Both kept behind the Go rungs because the Lite plan's 5-hour/weekly
-# credit windows are small.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: reasoning-pool-zai-glm-5.3-flash
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: reasoning-pool
-  proxyRef: litellm
-  params:
-    model: zai/glm-5.3-flash
-    apiBase: https://api.z.ai/api/coding/paas/v4
-    apiKey: os.environ/ZAI_API_KEY
-    additional:
-      order: 3
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 1.5e-07
-      output_cost_per_token: 5e-07
-      cache_read_input_token_cost: 3e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Tier 1 (Z.AI half): GLM-5.3 — Z.AI's best, 1x off-peak / 3x peak credit
+# consumption, rationed to one parallel request.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -116,7 +61,8 @@ spec:
     apiBase: https://api.z.ai/api/coding/paas/v4
     apiKey: os.environ/ZAI_API_KEY
     additional:
-      order: 4
+      order: 1
+      weight: 1
       max_parallel_requests: 1
   info:
     mode: chat
@@ -129,6 +75,69 @@ spec:
       input_cost_per_token: 1.4e-06
       output_cost_per_token: 4.4e-06
       cache_read_input_token_cost: 2.6e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Tier 2 (Go half): half of M3's token cost, same 1M context, and its own Go
+# allowance instead of a second burn on M3.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-minimax-m3.1-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3.1-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 2
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 512000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 6e-07
+      cache_read_input_token_cost: 1.5e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Tier 2 (Z.AI half): Flash — the cheap drain rung (0.4x off-peak credit
+# consumption) with the largest window.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-zai-glm-5.3-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: zai/glm-5.3-flash
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: os.environ/ZAI_API_KEY
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Last cloud rung: the best agentic coder, but 10x M3 per token. Deliberately
@@ -147,7 +156,7 @@ spec:
     model: opencode_go/kimi-k2.7-code
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 5
+      order: 3
       max_parallel_requests: 1
   info:
     mode: chat
@@ -182,7 +191,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 6
+      order: 4
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:

@@ -58,6 +58,24 @@ spec:
               (auth/quota — check the upstream key or plan cap)
           labels:
             severity: warning
+        - alert: LiteLLMZaiQuotaExhausted
+          # Z.AI Coding Plan windows reset and do not roll over: a 429 means
+          # that window's credits are gone until it refreshes. The paired Go
+          # rung keeps serving, but the weekly credits are being wasted if
+          # this fires often — raise the Z.AI weight (zai-pool / the zai-*
+          # members of the implementation/reasoning/local-free pools) or
+          # check the plan's usage page.
+          expr: |-
+            sum by (litellm_model_name, exception_status) (
+              increase(litellm_deployment_failure_responses_total{exception_status=~"429",litellm_model_name=~"zai-.*|implementation-pool-zai-.*|reasoning-pool-zai-.*|local-free-pool-zai-.*"}[15m])
+            ) > 5
+          for: 5m
+          annotations:
+            summary: >-
+              LiteLLM {{ $labels.litellm_model_name }} returning {{ $labels.exception_status }}
+              (Z.AI Coding Plan window exhausted — credits reset, they do not roll over)
+          labels:
+            severity: warning
     - name: llamacpp.rules
       rules:
         - alert: LlamaCppRequestsDeferred
