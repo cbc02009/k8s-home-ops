@@ -12,7 +12,7 @@ spec:
   # arr-mcp's npx). To bump: update the commit SHA below to a newer main commit
   # (3d4cd40225 is the latest as of 2026-10-23 and matches the commit the
   # in-cluster LiteLLM v1.109.0-rc.1 bundles in its admin-mcp dependency group).
-  image: docker.io/library/python:3.12-slim
+  image: docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
   # stdio transport: the connector reads its gateway credential from
   # LITELLM_API_KEY (injected from the litellm Secret below) and is bridged to
   # streamable-http by the ToolHive proxy — the same shape as github-mcp/arr-mcp.
@@ -50,12 +50,26 @@ spec:
       memory: 512Mi
   podTemplateSpec:
     spec:
+      # The operator hardens the container with readOnlyRootFilesystem and
+      # runAsUser 1000, so the image root filesystem is not writable and pip
+      # cannot install into the system site-packages. A writable emptyDir at
+      # /tmp gives pip its temp dir and the venv its install target.
+      volumes:
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: mcp
           command:
             - /bin/sh
           args:
             - -c
-            - pip install --no-cache-dir --quiet 'https://github.com/BerriAI/liteadmin-mcp/archive/3d4cd40225430f32fee061f42a1fa538ae8d01b2.tar.gz' && exec litellm-admin-mcp --transport stdio
+            - |
+              set -e
+              python -m venv /tmp/venv
+              /tmp/venv/bin/pip install --no-cache-dir --quiet 'https://github.com/BerriAI/liteadmin-mcp/archive/3d4cd40225430f32fee061f42a1fa538ae8d01b2.tar.gz'
+              exec /tmp/venv/bin/litellm-admin-mcp --transport stdio
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
   groupRef:
     name: mcp-tools
