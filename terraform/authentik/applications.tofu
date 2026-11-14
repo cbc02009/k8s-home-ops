@@ -122,7 +122,10 @@ module "oauth2-hermes" {
   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_hermes.fields["oidc_id"]
-  redirect_uris      = ["https://hermes.${var.public_domain}/auth/callback"]
+  redirect_uris = [
+    "https://hermes.${var.public_domain}/auth/callback",      # Webapp (gateway-served)
+    "https://hermes-dash.${var.public_domain}/auth/callback", # standalone dashboard
+  ]
 }
 
 module "oauth2-immich" {

@@ -128,6 +128,22 @@ spec:
               HERMES_HOME: /opt/data
               HOME: /opt/data
               TZ: ${CONFIG_TZ}
+              # The Webapp (browser-hosted Desktop workspace) is served by
+              # this gateway process on a non-loopback bind, so it engages
+              # the sign-in gate. It has no auth provider of its own: it
+              # uses the dashboard's OIDC config, which must therefore be
+              # present here or the Webapp stays off. Public PKCE client,
+              # so no client secret is needed.
+              HERMES_DASHBOARD_OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-dashboard
+                    key: HERMES_DASHBOARD_OIDC_CLIENT_ID
+              HERMES_DASHBOARD_OIDC_ISSUER:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-dashboard
+                    key: HERMES_DASHBOARD_OIDC_ISSUER
             envFrom:
               - secretRef:
                   name: hermes
@@ -138,15 +154,19 @@ spec:
               limits:
                 memory: 2Gi
             ports:
-              - containerPort: &port 8642
-                name: http
+              # The gateway's single HTTP listener. With webapp.enabled in
+              # config.yaml it serves the Webapp on 9120 instead of the
+              # API-server port (8642).
+              - containerPort: &port 9120
+                name: webapp
                 protocol: TCP
           dashboard:
             image: *image
             env:
-              GATEWAY_HEALTH_URL: http://localhost:8642
+              # The gateway's listener moved to the Webapp port.
+              GATEWAY_HEALTH_URL: http://localhost:9120
               TZ: ${CONFIG_TZ}
-              HERMES_DASHBOARD_PUBLIC_URL: https://hermes.ctec.run
+              HERMES_DASHBOARD_PUBLIC_URL: https://hermes-dash.ctec.run
             envFrom:
               - secretRef:
                   name: hermes-dashboard
@@ -194,8 +214,9 @@ spec:
       app:
         controller: hermes
         ports:
-          http:
+          webapp:
             port: *port
+            appProtocol: kubernetes.io/wss
           codeserver:
             port: *codeserverPort
       dashboard:
@@ -203,9 +224,10 @@ spec:
         ports:
           http:
             port: *dashboard_port
+            appProtocol: kubernetes.io/wss
     route:
-      app:
-        hostnames: ["hermes.ctec.run"]
+      dashboard:
+        hostnames: ["hermes-dash.ctec.run"]
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -213,6 +235,19 @@ spec:
           - backendRefs:
               - identifier: dashboard
                 port: http
+      webapp:
+        hostnames: ["hermes.ctec.run"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: webapp
+            # The Webapp holds long-lived chat WebSockets open; don't let
+            # the gateway's request timeout cut them.
+            timeouts:
+              request: 0s
       codeserver:
         hostnames: ["hermes-code.ctec.run"]
         parentRefs:

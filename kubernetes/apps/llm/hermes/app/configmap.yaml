@@ -107,6 +107,19 @@ data:
       max_iterations: 250
     gateway:
       multiplex_profiles: false
+    webapp:
+      # The browser-hosted Desktop workspace (v0.23.0+), served by the
+      # gateway's own HTTP listener. Enabling it moves that listener from
+      # the API-server port (8642) to webapp.port (9120).
+      enabled: true
+      # A wildcard bind engages the sign-in gate; the provider is the
+      # dashboard's OIDC config (HERMES_DASHBOARD_OIDC_* in the app
+      # container). public_url is the address the reverse proxy serves
+      # the Webapp at, and it fixes the OIDC callback origin:
+      # https://hermes.ctec.run/auth/callback.
+      host: 0.0.0.0
+      port: 9120
+      public_url: https://hermes.ctec.run
     security:
       redact_secrets: true
     privacy:
