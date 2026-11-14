@@ -8,6 +8,7 @@ resources:
   - ./free-pool.yaml
   - ./frontier-pool.yaml
   - ./implementation-pool.yaml
+  - ./local-free-pool.yaml
   - ./local-pool.yaml
   - ./opencode-go.yaml
   - ./qwen3.8-27b.yaml

@@ -18,6 +18,8 @@ spec:
   # lanes; hermes escalates via the pools).
   models:
   - auto
+  # Simple/medium lane the complexity router resolves to (27B + Go free rungs).
+  - local-free-pool
   - reasoning-pool
   - local-pool
   - qwen3.8-27b

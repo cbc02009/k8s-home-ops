@@ -1,0 +1,105 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Simple/medium lane for the auto complexity router: the always-resident 27B
+# (weight 2) mixed with OpenCode Go's zero-allowance free models, so half of
+# the simple/medium traffic is offloaded from the local GPU while the resident
+# 27B stays the majority share and the failover floor. The Go rungs are
+# "limited-time" free listings (zero allowance burn, "model training: not
+# used" per Go's privacy table — see opencode-go.yaml; LongCat needs the
+# "Global" region already enabled in the Go workspace privacy settings). If Go
+# retires one, requests fail over to the 27B member (order 1). The same free
+# models also remain in go-pool as its quota fail-down floor. Members are
+# picked per request by the proxy's simple-shuffle, so sessions hop between
+# the three; the Go session id keeps per-conversation affinity (prompt cache)
+# on the cloud rungs.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-27b
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: openai/qwen3.8-27b
+    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
+    apiKey: sk-llmkube-noauth
+    additional:
+      max_parallel_requests: 10
+      reasoning_effort: medium
+      order: 1
+      weight: 2
+      allowed_openai_params:
+        - reasoning_effort
+  info:
+    mode: chat
+    # maxInputTokens: 147456
+    maxOutputTokens: 24576
+    supportsFunctionCalling: true
+    supportsVision: false
+    extra:
+      input_cost_per_token: 6.2e-08
+      output_cost_per_token: 1.35e-06
+      cache_read_input_token_cost: 0.0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# LongCat 2.5 Free: zero allowance burn, not used for training, hosted in
+# China (the Go workspace "Global" regions setting is already in place for
+# go-pool). Carries vision for the mixed lane.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-longcat-2.5-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/longcat-2.5-preview-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-beam-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/beam-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 3
+      weight: 1
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: false
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0

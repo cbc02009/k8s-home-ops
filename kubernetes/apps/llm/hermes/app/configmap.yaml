@@ -6,18 +6,20 @@ metadata:
 data:
   config.yaml: |
     model:
-      # Complexity router: simple/medium traffic stays on the free resident
-      # local lanes (local-pool / 27B); only complex/reasoning turns burn the
-      # shared Go allowance (reasoning-pool). Session affinity keeps the
-      # chosen tier stable for an hour, so long tasks stay on the strong
-      # rung after the first complex classification.
+      # Complexity router: simple/medium traffic shares the hybrid
+      # local-free-pool (resident 27B at 50% via weight, plus Go's
+      # zero-allowance free rungs); only complex/reasoning turns burn the
+      # shared Go allowance (reasoning-pool). Sessions re-classify per user
+      # turn (no hour-long freeze) but replay the held decision across an
+      # agent loop's tool continuations, so a long loop neither re-classifies
+      # per step nor switches tiers mid-loop.
       default: auto
       provider: litellm
       # The router's window isn't discoverable via /v1/models, so without this
       # hermes assumes 256k and computes a 192k compression trigger — above the
       # 27b-chat compression model's 131k window, which forced a per-session
-      # auto-lower warning. Pin the tier floor (27B: 131k; Go rungs are
-      # 262k+) so the trigger (~98k) always fits.
+      # auto-lower warning. Pin the tier floor (27B: 131k; all other rungs are
+      # larger) so the trigger (~98k) always fits.
       context_length: 131072
     fallback_providers:
       # Last resort if the whole pool chain fails: the always-resident 27B

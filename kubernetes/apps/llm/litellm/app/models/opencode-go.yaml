@@ -183,7 +183,8 @@ spec:
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Limited-time free models: zero allowance burn and listed "model training:
 # not used" in Go's privacy table, so safe for the pool; sit behind every
-# paid Go member.
+# paid Go member. They also anchor the local-free-pool (the auto router's
+# SIMPLE/MEDIUM lane) alongside the resident 27B.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

@@ -22,6 +22,8 @@ spec:
   # New pooled lanes.
   - reasoning-pool
   - frontier-pool
+  # Simple/medium lane the auto router resolves to (27B + Go free rungs).
+  - local-free-pool
   - auto
 ---
 apiVersion: external-secrets.io/v1alpha1
@@ -65,6 +67,8 @@ spec:
   # New pooled lanes.
   - reasoning-pool
   - frontier-pool
+  # Simple/medium lane the auto router resolves to (27B + Go free rungs).
+  - local-free-pool
   - auto
 ---
 apiVersion: external-secrets.io/v1alpha1
