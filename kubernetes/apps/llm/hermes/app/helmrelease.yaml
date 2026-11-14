@@ -150,9 +150,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 1Gi
-              limits:
                 memory: 2Gi
+              limits:
+                memory: 4Gi
             ports:
               # The gateway's single HTTP listener. With webapp.enabled in
               # config.yaml it serves the Webapp on 9120 instead of the

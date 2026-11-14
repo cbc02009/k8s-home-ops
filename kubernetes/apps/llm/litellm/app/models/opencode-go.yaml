@@ -23,8 +23,7 @@
 # for free/discounted tokens — Iceman Contributor Free, Muse Spark 1.x
 # Contributor — are deliberately EXCLUDED and must not be added. LongCat 2.5
 # Free is hosted in China and needs "Global" regions in the Go workspace
-# privacy settings; drop it if that is unacceptable. Contrast with free-pool
-# (OpenRouter :free), which is banned from coding/agentic keys.
+# privacy settings; drop it if that is unacceptable.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

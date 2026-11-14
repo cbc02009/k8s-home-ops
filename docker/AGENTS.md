@@ -41,10 +41,13 @@ repo onto non-k8s docker hosts, one **instance** per host:
 
 ## zigbee-pi specifics
 
-- `provision-arch.fish` (run from an Arch host, as root: `provision-arch.fish /dev/sdX`)
-  images a microSD card with ArchLinuxARM AArch64 for the Pi 4B per the official
-  instructions, and leaves a one-shot first-boot service on it that does the pacman
-  keyring init + system update + Docker install.
+- Brings the Pi up in two steps: `provision-arch.fish` (run on an Arch-based
+  workstation, as root: `provision-arch.fish /dev/sdX`) images a microSD card with
+  ArchLinuxARM AArch64 for the Pi 4B per the official instructions and leaves a
+  one-shot first-boot service on it (pacman keyring init + system update); then
+  `setup-doco-cd.sh` (POSIX sh, run **on the Pi**, as root, after first boot)
+  installs Docker if missing and deploys this instance's doco-cd container from
+  the repo's `.doco-cd/docker-compose.app.yaml`.
 - Serial controllers must be mapped by `/dev/serial/by-id/...` paths (never
   `/dev/ttyUSBx` — they drift). After plugging a stick in, `ls -l /dev/serial/by-id/` on
   the Pi and set the `devices:` mapping (`/dev/ttyACM0` for zigbee2mqtt, `/dev/zwave` for

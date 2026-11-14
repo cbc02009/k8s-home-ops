@@ -9,9 +9,11 @@
 #   - extract ArchLinuxARM-rpi-aarch64-latest.tar.gz, move boot files to FAT32
 #   - /etc/fstab: s/mmcblk0/mmcblk1/  (Pi 4-specific: the SD card is mmcblk1)
 # and adds a one-shot first-boot service that initializes the pacman keyring
-# (official step 10), updates the system (recommended on first boot for the
-# Pi 4, to pick up current U-Boot/kernel), and installs Docker + the compose
-# plugin (needed by doco-cd) via pacman or the official static binaries.
+# (official step 10) and updates the system (recommended on first boot for
+# the Pi 4, to pick up current U-Boot/kernel).
+#
+# It does NOT set up Docker or doco-cd - do that afterwards with the
+# companion setup-doco-cd.sh, run on the Pi itself.
 #
 # Run on an Arch-based Linux host, as root:
 #   ./provision-arch.fish /dev/sdX
@@ -19,10 +21,6 @@
 # Optional environment:
 #   HOSTNAME   hostname to give the Pi        (default: zigbee-pi.ctec.internal)
 #   TZ         IANA time zone                 (default: America/New_York)
-#
-# After first boot (see the summary this script prints) change the default
-# alarm/alarm and root/root credentials, then bring up doco-cd:
-#   git clone <this repo> && docker compose -f docker/zigbee-pi/.doco-cd/docker-compose.app.yaml up -d
 
 if test (count $argv) -lt 1
     echo "usage: $0 /dev/sdX" >&stderr
@@ -157,40 +155,13 @@ ln -s /etc/systemd/system/firstboot.service $tmp/root/etc/systemd/system/multi-u
 
 set -l firstboot
 set firstboot '#!/bin/sh'
-set firstboot $firstboot '# One-shot first boot setup for zigbee-pi: pacman keyring, system'
-set firstboot $firstboot '# update, Docker (for doco-cd). Disables itself on success.'
+set firstboot $firstboot '# One-shot first boot setup for zigbee-pi: pacman keyring and'
+set firstboot $firstboot '# system update. Disables itself on success.'
 set firstboot $firstboot 'set -e'
 set firstboot $firstboot ''
 set firstboot $firstboot 'pacman-key --init'
 set firstboot $firstboot 'pacman-key --populate archlinuxarm'
 set firstboot $firstboot 'pacman -Syu --noconfirm'
-set firstboot $firstboot ''
-set firstboot $firstboot 'if command -v wget >/dev/null 2>&1; then'
-set firstboot $firstboot '    http_get() { wget -qO- "$1"; }'
-set firstboot $firstboot '    http_save() { wget -O "$2" "$1"; }'
-set firstboot $firstboot 'elif command -v curl >/dev/null 2>&1; then'
-set firstboot $firstboot '    http_get() { curl -fsSL "$1"; }'
-set firstboot $firstboot '    http_save() { curl -fsSL -o "$2" "$1"; }'
-set firstboot $firstboot 'else'
-set firstboot $firstboot '    echo "no wget or curl available, cannot fetch Docker"; exit 1'
-set firstboot $firstboot 'fi'
-set firstboot $firstboot ''
-set firstboot $firstboot 'if pacman -S --noconfirm docker >/dev/null 2>&1; then'
-set firstboot $firstboot '    systemctl enable --now docker'
-set firstboot $firstboot 'else'
-set firstboot $firstboot '    echo "pacman: no docker package available, using official static binaries"'
-set firstboot $firstboot '    dver=$(http_get https://download.docker.com/linux/static/stable/aarch64/ | grep -oE "docker-[0-9]+[.][0-9]+[.][0-9]+[.]tgz" | sort -Vu | tail -1)'
-set firstboot $firstboot '    if [ -z "$dver" ]; then echo "could not resolve a docker version, check the network"; exit 1; fi'
-set firstboot $firstboot '    http_save "https://download.docker.com/linux/static/stable/aarch64/$dver" "/tmp/$dver"'
-set firstboot $firstboot '    tar -xzf "/tmp/$dver" -C /usr/local/bin'
-set firstboot $firstboot '    mv /usr/local/bin/docker/* /usr/local/bin/'
-set firstboot $firstboot '    rm -rf "/tmp/$dver" /usr/local/bin/docker'
-set firstboot $firstboot '    if [ ! -e /etc/systemd/system/docker.service ]; then'
-set firstboot $firstboot '        printf "%s\n" "" "[Unit]" "Description=Docker Application Container Engine" "After=network-online.target" "Wants=network-online.target" "" "[Service]" "ExecStart=/usr/local/bin/dockerd" "Restart=on-failure" "" "[Install]" "WantedBy=multi-user.target" > /etc/systemd/system/docker.service'
-set firstboot $firstboot '        systemctl daemon-reload'
-set firstboot $firstboot '    fi'
-set firstboot $firstboot '    systemctl enable --now docker'
-set firstboot $firstboot 'fi'
 set firstboot $firstboot ''
 set firstboot $firstboot 'systemctl disable --now firstboot.service'
 printf '%s\n' $firstboot > $tmp/root/usr/local/bin/firstboot.sh
@@ -208,13 +179,15 @@ echo
 echo "Done. The card is ready for the Raspberry Pi 4B."
 echo
 echo "  Power      5V / 3A or better (official recommendation - underpowering corrupts the card)"
-echo "  First boot a one-shot service (firstboot.service) runs: pacman keyring init,"
-echo "               system update, Docker install. It disables itself when done."
+echo "  First boot a one-shot service (firstboot.service) runs the pacman keyring init"
+echo "               and the system update, then disables itself."
 echo "  Login      alarm/alarm or root/root - change both immediately"
 echo "  Hostname   $pi_hostname   (timezone $pi_tz)"
 echo
-echo "  Once Docker is up:"
-echo "    git clone <this repo>  (e.g. /home/\$USER/k8s-home-ops)"
-echo "    docker compose -f docker/zigbee-pi/.doco-cd/docker-compose.app.yaml up -d"
-echo "  Then plug in the USB controllers and fill in the TODO by-id serial paths"
-echo "  in docker/zigbee-pi/01-zigbee2mqtt and 02-zwave2mqtt (see docker/AGENTS.md)."
+echo "  Then bring up Docker and doco-cd on the Pi with the companion script:"
+echo "    scp docker/zigbee-pi/setup-doco-cd.sh \$pi_hostname:"
+echo "    ssh \$pi_hostname sh setup-doco-cd.sh"
+echo
+echo "  doco-cd then polls this repo; plug in the USB controllers and fill in"
+echo "  the TODO by-id serial paths in 01-zigbee2mqtt and 02-zwave2mqtt"
+echo "  (see docker/AGENTS.md) and the stacks deploy on the next poll."

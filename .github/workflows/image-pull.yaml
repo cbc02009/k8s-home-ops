@@ -53,10 +53,7 @@ jobs:
       - name: Extract Images
         id: extract
         run: |-
-          # flate matches image refs by value, so LiteLLM model IDs in the
-          # rendered litellm config (e.g. openrouter/...:free) also match;
-          # they are not container images, so drop them.
-          images=$(jq --compact-output 'map(select(startswith("openrouter/") | not))' images.json)
+          images=$(jq --compact-output . images.json)
           echo "images=${images}" >> $GITHUB_OUTPUT
 
           echo '## New images to Pull' >> $GITHUB_STEP_SUMMARY
