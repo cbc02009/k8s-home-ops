@@ -20,6 +20,10 @@ spec:
           pluginConfig:
             - name: DefaultEvictor
               args:
+                # Only evict pods that can actually schedule elsewhere
+                # (taints, affinity, resources, hostport) -- keeps LNU from
+                # churning pods pinned to their only viable node.
+                nodeFit: true
                 podProtections:
                   defaultDisabled:
                     - FailedBarePods
@@ -29,14 +33,19 @@ spec:
               args:
                 metricsUtilization:
                   source: KubernetesMetrics
+                # Pods-only, on purpose: every node idles at 26-39% memory
+                # (rook-ceph floor), so any memory threshold below that
+                # disqualifies every node from being "underutilized" and the
+                # strategy never acts. The actual skew in this cluster is
+                # pod-count (toolhive fleet bin-packed onto uiharu by
+                # LeastRequestedPriority), and cpu/mem requests are balanced
+                # -- only the pods dimension is meaningful.
+                # 65/95: miri+sakura (~55-62% pods) qualify as destinations,
+                # only uiharu at the 110-pod kubelet cap is a source.
                 thresholds:
-                  cpu: 20
-                  memory: 20
-                  pods: 20
+                  pods: 65
                 targetThresholds:
-                  cpu: 50
-                  memory: 50
-                  pods: 50
+                  pods: 95
             - name: RemoveFailedPods
               args:
                 reasons:
