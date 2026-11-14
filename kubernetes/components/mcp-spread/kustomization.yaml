@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+# Spread the toolhive MCP fleet across the untainted nodes.
+#
+# The fleet is ~25 tiny single-replica pods (server STS + proxy Deployment per
+# MCPServer, plus the gateway; all carry label toolhive=true). Most have
+# 0-100m requests, so kube-scheduler's LeastRequestedPriority ranker always
+# scores the node with the most allocatable CPU (uiharu, 20 vs 12) as
+# "emptiest" and bins every singleton there until the 110-pod kubelet cap.
+#
+# - maxSkew: 1 / whenUnsatisfiable: DoNotSchedule -> hard constraint; counts
+#   every toolhive=true pod in the namespace (selector spans server + proxy).
+# - nodeTaintsPolicy: Honor -> tainted nodes (mayne, llm-workload) are not
+#   eligible domains; the default (Ignore) would count mayne as an empty
+#   domain and wedge pods Pending.
+#
+# Descheduler's RemovePodsViolatingTopologySpreadConstraint strategy evicts
+# the existing skew; new servers spread at scheduling time.
+#
+# Wire into every mcp-servers/<name> Flux Kustomization via spec.components;
+# new MCP servers must include it too.
+# The fleet is mixed-version: older servers are v1alpha1, newer v1beta1 --
+# patch both (kustomize target selectors are version-exact).
+patches:
+  - target:
+      group: toolhive.stacklok.dev
+      version: v1alpha1
+      kind: MCPServer
+    patch: |-
+      apiVersion: toolhive.stacklok.dev/v1alpha1
+      kind: MCPServer
+      metadata:
+        # Placeholder: the target selector above does the matching.
+        name: mcp-spread-placeholder
+      spec:
+        podTemplateSpec:
+          spec:
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: DoNotSchedule
+                nodeTaintsPolicy: Honor
+                labelSelector:
+                  matchLabels:
+                    toolhive: "true"
+  - target:
+      group: toolhive.stacklok.dev
+      version: v1beta1
+      kind: MCPServer
+    patch: |-
+      apiVersion: toolhive.stacklok.dev/v1beta1
+      kind: MCPServer
+      metadata:
+        name: mcp-spread-placeholder
+      spec:
+        podTemplateSpec:
+          spec:
+            topologySpreadConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: DoNotSchedule
+                nodeTaintsPolicy: Honor
+                labelSelector:
+                  matchLabels:
+                    toolhive: "true"

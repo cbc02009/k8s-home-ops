@@ -72,6 +72,8 @@ kind: Kustomization
 metadata:
   name: arr-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     - name: radarr
@@ -96,6 +98,8 @@ kind: Kustomization
 metadata:
   name: context7-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: litellm-operator
     - name: toolhive
@@ -114,6 +118,8 @@ kind: Kustomization
 metadata:
   name: flux-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     # ClusterRoleBinding reuses the kubectl-mcp-readonly ClusterRole
@@ -134,6 +140,8 @@ kind: Kustomization
 metadata:
   name: github-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -152,6 +160,8 @@ kind: Kustomization
 metadata:
   name: grafana-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     - name: grafana-operator
@@ -172,6 +182,8 @@ kind: Kustomization
 metadata:
   name: &app kguardian-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -193,6 +205,8 @@ kind: Kustomization
 metadata:
   name: kubectl-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -211,6 +225,8 @@ kind: Kustomization
 metadata:
   name: kubesearch-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -229,6 +245,8 @@ kind: Kustomization
 metadata:
   name: litellm-admin-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     - name: litellm
@@ -248,6 +266,8 @@ kind: Kustomization
 metadata:
   name: prometheus-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     - name: kube-prometheus-stack
@@ -287,6 +307,8 @@ kind: Kustomization
 metadata:
   name: &app talos-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -308,6 +330,8 @@ kind: Kustomization
 metadata:
   name: toolhive-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -326,6 +350,8 @@ kind: Kustomization
 metadata:
   name: unifi-network-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
   interval: 1h
@@ -344,6 +370,8 @@ kind: Kustomization
 metadata:
   name: victorialogs-mcp
 spec:
+  components:
+    - ../../../../../components/mcp-spread
   dependsOn:
     - name: toolhive
     - name: victoria-logs
