@@ -16,7 +16,7 @@ spec:
   # overlay once https://github.com/BerriAI/litellm/issues/51666 ships in a
   # release; Renovate tracks the base version in container-images and
   # proposes the :rolling digest bump here on rebuild.
-  image: ghcr.io/cbc02009/litellm:rolling@sha256:8fb51bb31889b651d1749a33b31032564dd152e669258beecbecbf001777d3a8
+  image: ghcr.io/cbc02009/litellm:rolling@sha256:d679d441fb7c6c2915d6fe53196afbc9d991e8494bda6a07d6a3095cd97e3301
   replicas: 2
   service:
     port: 4000
