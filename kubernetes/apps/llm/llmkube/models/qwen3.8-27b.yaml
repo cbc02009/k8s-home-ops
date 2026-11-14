@@ -59,28 +59,9 @@ spec:
     - name: MAX_SEQS
       value: "8"
     - name: MAX_LEN
-      # 147456 -> 131072. The KV pool on this hybrid is sized by max-model-len
-      # (Qwen3.8-27B is 48/64 linear-attention layers, so the bf16 Mamba state
-      # pins the uniform page and --kv-cache-dtype fp8 buys ~nothing: see
-      # vllm-project/vllm#55196). At 147456 the pool held 169,273 tokens —
-      # kv_cache_max_concurrency 1.15, i.e. barely ONE request at a time,
-      # while the live prompt histogram is 74% in the 50k-100k band. Cutting
-      # the ceiling to 128k returns that headroom to the pool without
-      # rejecting any observed request (max observed prompt bucket is the
-      # 100k-Inf band; see the vllm request_prompt_tokens histogram).
-      value: "131072"
+      value: "147456"
     - name: PREFIX_CACHE
       value: "1"
-    # Throughput knobs for the long-prefill workload. The launcher hardcodes
-    # --max-num-batched-tokens 2048, which is far below vLLM's own guidance
-    # (">= 8192" for optimal throughput) and leaves the GPU idle on the 50k+
-    # prompts this server actually serves. EXTRA_ARGS expands last in the
-    # launcher's argv, so it overrides the hardcoded value (the launcher only
-    # warns about --max-num-batched-tokens on the CTX=huge residency path,
-    # which we are not on).
-    - name: EXTRA_ARGS
-      value: >-
-        --max-num-batched-tokens 8192 --long-prefill-token-threshold 1024
     - name: DFLASH2
       value: "0"
     - name: VERIFY
