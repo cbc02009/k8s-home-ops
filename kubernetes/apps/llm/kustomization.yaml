@@ -12,6 +12,7 @@ resources:
   - ./hermes/ks.yaml
   - ./litellm/ks.yaml
   - ./litellm-operator/ks.yaml
+  - ./lens/ks.yaml
   - ./llmkube/ks.yaml
   - ./memini/ks.yaml
   - ./opencode/ks.yaml

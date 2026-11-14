@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: lens-chart
+spec:
+  interval: 1h
+  ref:
+    # Pinned upstream chart source. No Lens release (image or chart) is
+    # published yet, so the image is built from this same tag by
+    # cbc02009/container-images (apps/lens) and pinned by digest in the
+    # HelmRelease below. Bump the tag and the image together.
+    tag: v1.108.0-rc.1
+  url: https://github.com/BerriAI/lens
