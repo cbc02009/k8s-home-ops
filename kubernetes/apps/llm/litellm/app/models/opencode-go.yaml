@@ -193,7 +193,7 @@ spec:
   modelName: go-pool
   proxyRef: litellm
   params:
-    model: opencode_go/longcat-2.5-preview-free
+    model: opencode_go/longcat-2.5-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
       order: 7
@@ -201,7 +201,7 @@ spec:
   info:
     mode: chat
     maxInputTokens: 1000000
-    maxOutputTokens: 131072
+    maxOutputTokens: 262144
     supportsFunctionCalling: true
     supportsVision: true
     extra:
