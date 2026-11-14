@@ -33,3 +33,30 @@ spec:
           expr: node_zfs_zpool_state{state!="online"} > 0
           labels:
             severity: critical
+    - name: hpa
+      rules:
+        # Replacement for the chart's KubeHpaMaxedOut (disabled via
+        # defaultRules.disabled in helmrelease.yaml): identical, except HPAs with
+        # maxReplicas <= 1 are excluded. Such HPAs are zeroscaler availability
+        # gates (scale NFS-dependent apps to zero when the NAS probe fails) and
+        # run at max replicas by design whenever the NAS is healthy.
+        - alert: KubeHpaMaxedOut
+          annotations:
+            description: HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} has been running at max replicas for longer than 15 minutes on cluster {{ $labels.cluster }}.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpamaxedout
+            summary: HPA is running at max replicas
+          expr: (kube_horizontalpodautoscaler_status_current_replicas{job="kube-state-metrics", namespace=~".*"} == kube_horizontalpodautoscaler_spec_max_replicas{job="kube-state-metrics", namespace=~".*"}) and on (namespace, horizontalpodautoscaler, cluster) (kube_horizontalpodautoscaler_spec_max_replicas{job="kube-state-metrics", namespace=~".*"} != kube_horizontalpodautoscaler_spec_min_replicas{job="kube-state-metrics", namespace=~".*"}) and on (namespace, horizontalpodautoscaler, cluster) (kube_horizontalpodautoscaler_spec_max_replicas{job="kube-state-metrics", namespace=~".*"} > 1)
+          for: 15m
+          labels:
+            severity: warning
+        # Catches the failure mode seen on 2026-11: every zeroscaler HPA sat with
+        # ScalingActive=False (FailedGetExternalMetric) because prometheus-adapter
+        # was never registered in the observability kustomization.
+        - alert: HpaScalingInactive
+          annotations:
+            description: HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} cannot compute a replica count (ScalingActive=False), usually because its metrics source is unavailable or not deployed. Autoscaling is inert until this clears.
+            summary: HPA is unable to compute a replica count
+          expr: kube_horizontalpodautoscaler_status_condition{job="kube-state-metrics", condition="ScalingActive", status="false"} == 1
+          for: 15m
+          labels:
+            severity: warning

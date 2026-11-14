@@ -14,6 +14,13 @@ spec:
     crds:
       enabled: true
     cleanPrometheusOperatorObjectNames: true
+    defaultRules:
+      disabled:
+        # Overridden by the HPA group in prometheusrule.yaml: the replacement
+        # excludes maxReplicas<=1 HPAs, because the zeroscaler component gates
+        # NFS-dependent apps behind minReplicas=0/maxReplicas=1 HPAs that sit at
+        # max replicas whenever the NAS probe is healthy (by design).
+        KubeHpaMaxedOut: true
 
     ###
     ### Component values

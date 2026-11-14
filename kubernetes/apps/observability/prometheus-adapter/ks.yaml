@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: prometheus-adapter
 spec:
+  dependsOn:
+    - name: kube-prometheus-stack
   interval: 1h
   path: "./kubernetes/apps/observability/prometheus-adapter/app"
   prune: true
