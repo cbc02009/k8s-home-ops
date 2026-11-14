@@ -34,6 +34,12 @@ data:
   # auto/go-pool/go-max/go-chat lanes run through the Anthropic path, where
   # LiteLLM uses the opencode provider's native messages handler. The
   # chat-capable lanes (local 27B, Kimi) stay on the OpenAI path.
+  # The pooled escalation lanes (reasoning-pool, frontier-pool) are
+  # deliberately NOT in the picker: pool escalation goes through the auto
+  # router (cheapest Go allowance rung, per the agentic rubric), and the
+  # big guns (go-coder/go-strong/go-max) stay as explicit /coder /deep /max
+  # commands rather than one-click session models. The virtual keys still
+  # carry the pool grants for direct API use and the Coder workspace.
   opencode.json: |
     {
       "$schema": "https://opencode.ai/config.json",
@@ -144,13 +150,6 @@ data:
               },
               "name": "Auto router"
             },
-            "frontier-pool": {
-              "limit": {
-                "context": 1000000,
-                "output": 131072
-              },
-              "name": "Frontier pool"
-            },
             "go-chat": {
               "limit": {
                 "context": 1000000,
@@ -206,13 +205,6 @@ data:
                 "output": 24576
               },
               "name": "Qwen3.8-27B W4A16"
-            },
-            "reasoning-pool": {
-              "limit": {
-                "context": 262144,
-                "output": 262144
-              },
-              "name": "Reasoning pool"
             }
           }
         },
