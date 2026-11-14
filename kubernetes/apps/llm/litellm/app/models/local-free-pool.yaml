@@ -4,20 +4,24 @@
 # SAME order (1) so the proxy's simple-shuffle actually mixes them per
 # request — mixing only happens within one order, and the earlier staggered
 # order 1/2/3/4 ladder meant the 27B took every request until a cloud rung
-# 429'd into cooldown, which is why the lane felt local-slow. Weights:
-#   27B              (weight 2) — the local always-resident rung, kept as the
-#     larger share so private/local traffic stays dominant
+# 429'd into cooldown, which is why the lane felt local-slow. Weights make
+# the free rung the majority share, 2:1 over the 27B (the same co-primary
+# ratio the other pools use):
+#   Beam Free        (weight 4) — zero allowance burn, "model training:
+#     not used" per Go's privacy table (see opencode-go.yaml); measured
+#     100% success at sub-second TTFT, so it carries the lane
+#   27B              (weight 2) — the local always-resident rung; second
+#     share so the prefix cache stays warm and the lane keeps a private
+#     floor when the free rung 429s into cooldown
 #   Z.AI GLM Flash   (weight 1) — credit-drain member: the Coding Plan's
-#     weekly credits do not roll over, so this high-volume lane carries the
-#     cheap 0.4x-off-peak rung to burn them steadily instead of only ever
-#     touching them on a deep fallback. Weighted 2:1 against the 27B (Go
-#     : Z.AI) to match the co-primary ratio used in the implementation and
-#     reasoning pools, so the local model stays the majority share.
-#   LongCat 2.5 Free (weight 1) — zero allowance burn, "model training:
-#   Beam Free        (weight 1)   not used" per Go's privacy table (see
-#     opencode-go.yaml); LongCat needs the "Global" region already enabled in
-#     the Go workspace privacy settings
-# The same free models also remain in go-pool as its quota fail-down floor.
+#     weekly credits do not roll over, so this high-volume lane burns them
+#     steadily instead of only ever touching them on a deep fallback
+# LongCat 2.5 Free is deliberately NOT a member: every request it gets
+# fails with Opencode_go.BadRequestError (11/11 after the
+# longcat-2.5-preview-free -> longcat-2.5-free swap; 3/3 on a live test of
+# the new id), and each failure cools an order-1 rung long enough to spill
+# paid traffic onto the order-2 floor. Re-add only once it shows successes
+# in Prometheus; it remains in go-pool as that pool's deepest rung.
 # Members are picked per request by the proxy's simple-shuffle, so sessions hop
 # between them; the Go session id keeps per-conversation affinity (prompt cache)
 # on the cloud rungs. Order 2 is the paid Go last-resort rung: a cheap go-pool
@@ -58,11 +62,10 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Z.AI Coding Plan Flash: the credit-drain rung of the mixed lane (0.4x
-# off-peak consumption, weight 1 so the 2:1 Go:Z.AI ratio keeps the local
-# 27B the majority share of the lane. Paired with the Go free rungs so a
-# dried Z.AI window cools the member for 30s and the lane continues on the
-# other rungs. Carries vision, so it also absorbs this lane's vision traffic
-# when the free Go listings are cooling.
+# off-peak consumption). Weight 1 keeps it the lane's smallest share so the
+# weekly credits drain steadily instead of only being touched on a deep
+# fallback. Carries vision, so it also absorbs this lane's vision traffic
+# when the free rung is cooling (Beam has no vision).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -93,38 +96,11 @@ spec:
       cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# LongCat 2.5 Free: zero allowance burn, not used for training, hosted in
-# China (the Go workspace "Global" regions setting is already in place for
-# go-pool). Carries vision for the mixed lane.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: local-free-pool-longcat-2.5-free
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: local-free-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/longcat-2.5-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      order: 1
-      weight: 1
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 262144
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Beam Free: the free rung that actually works — 100% success and sub-second
+# TTFT measured on this lane. Weight 4 gives it a 2:1 majority over the 27B
+# so simple/medium traffic defaults to the free cloud rung; the 27B absorbs
+# bursts once beam's 4 parallel slots saturate. No vision: image-bearing
+# requests fall through to Z.AI (or Mimo) on retry.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -139,7 +115,7 @@ spec:
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
       order: 1
-      weight: 1
+      weight: 4
       max_parallel_requests: 4
   info:
     mode: chat
@@ -155,7 +131,8 @@ spec:
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Paid Go overflow (order 2): Mimo 2.6 Flash, the cheapest go-pool workhorse
 # per token ($60/mo allowance window, no-training, vision-capable so it can
-# also absorb this lane's vision traffic if LongCat is cooling). Only reached
+# also absorb this lane's vision traffic when Beam and the 27B are both
+# unavailable). Only reached
 # when every order-1 member is in cooldown — ordinary simple/medium traffic
 # still avoids the allowance-metered pool.
 apiVersion: litellm.home-operations.com/v1alpha1
