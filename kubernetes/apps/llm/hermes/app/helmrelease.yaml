@@ -79,7 +79,10 @@ spec:
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
                 git config --global credential.helper 'store --file /opt/data/.git-credentials'
-                git config --global --add safe.directory '*'
+                # Set (not --add): --add appends on every boot and the
+                # multivalued key accumulated dozens of identical entries;
+                # set replaces the list and self-heals old duplicates.
+                git config --global safe.directory '*'
                 # Host-scoped identity: repos on git.cnas.dev commit as the
                 # Forgejo mahoro-ai account (noreply address), everything else
                 # keeps the GitHub sockpuppet identity above. The includeIf
@@ -98,6 +101,15 @@ spec:
                 chmod 600 /opt/data/.git-credentials
                 chown 10000:10000 /opt/data/.gitconfig 2>/dev/null || true
                 chown 10000:10000 /opt/data/.gitconfig-forgejo 2>/dev/null || true
+                # The hermes gateway overrides the pod-level HOME=/opt/data
+                # with /opt/data/home for the sessions it spawns, so git run
+                # from a session reads /opt/data/home/.gitconfig (which is
+                # empty) and sees no identity, no credential helper, and no
+                # includeIf. Bridge the scopes with a one-line include so
+                # session-side git behaves exactly like pod-side git.
+                mkdir -p /opt/data/home
+                git config --file /opt/data/home/.gitconfig include.path /opt/data/.gitconfig
+                chown 10000:10000 /opt/data/home/.gitconfig 2>/dev/null || true
 
                 # Clone the home-ops repo if it isn't already present.
                 mkdir -p /opt/data/workspace
