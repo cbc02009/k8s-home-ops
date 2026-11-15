@@ -7,16 +7,21 @@ metadata:
 spec:
   applyMode: file
   # Overlay image built by cbc02009/container-images (apps/litellm): upstream
-  # v1.109.0-rc.1 (first build carrying the opencode_go provider) + the
+  # v1.109.1 + two fixes the opencode_go overlay carries. The
   # get_model_response_iterator_for_request override on
-  # OpenCodeGoMessagesChatConfig. Without it, OpenAI-wire streaming to
+  # OpenCodeGoMessagesChatConfig: without it, OpenAI-wire streaming to
   # /v1/messages-protocol Go models (minimax-m3, qwen3.8-max,
   # claude-haiku-5-5) dies mid-stream with 'NoneType' object is not an
-  # iterator → APIConnectionError 500 (LiteLLMModelFailover alerts). Drop the
-  # overlay once https://github.com/BerriAI/litellm/issues/51666 ships in a
-  # release; Renovate tracks the base version in container-images and
-  # proposes the :rolling digest bump here on rebuild.
-  image: ghcr.io/cbc02009/litellm:rolling@sha256:d679d441fb7c6c2915d6fe53196afbc9d991e8494bda6a07d6a3095cd97e3301
+  # iterator → APIConnectionError 500 (LiteLLMModelFailover alerts). The
+  # transform_request override on OpenCodeGoChatConfig strips replayed
+  # per-message `reasoning`/`reasoning_content` fields: OpenCode Go 400s
+  # (unsupported_parameter: messages[N].reasoning) on unmapped
+  # /v1/chat/completions rungs (e.g. beam-free) replaying Anthropic wire
+  # turns, which tanked local-free-pool. Drop the overlay once
+  # https://github.com/BerriAI/litellm/issues/51666 ships in a release;
+  # Renovate tracks the base version in container-images and proposes the
+  # :rolling digest bump here on rebuild.
+  image: ghcr.io/cbc02009/litellm:rolling@sha256:a39062f3b70b21588cc3dab8bdf22ec8eed66fea818c820270d78d3b8700301e
   replicas: 2
   # Roll the gateway whenever the litellm Secret (envFrom below) changes —
   # the operator's config-hash only covers the CR spec, so ExternalSecret
