@@ -121,7 +121,8 @@ partprobe $device 2>/dev/null
 set -l bootpart "$device"1
 set -l rootpart "$device"2
 # USB card readers can take a moment to expose the new partition nodes
-for _ in (seq 1 10)
+# (loop variable: _ is a read-only fish special, not assignable)
+for i in (seq 1 10)
     if test -b $bootpart; and test -b $rootpart
         break
     end
