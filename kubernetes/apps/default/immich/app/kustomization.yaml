@@ -6,3 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./immich-dragonfly-db-cnp.yaml
+  - ./immich-machine-learning-cnp.yaml
+  - ./immich-microservices-cnp.yaml
+  - ./immich-server-cnp.yaml

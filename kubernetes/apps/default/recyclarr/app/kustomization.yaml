@@ -6,6 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./recyclarr-cnp.yaml
 configMapGenerator:
   - name: recyclarr-configmap
     files:

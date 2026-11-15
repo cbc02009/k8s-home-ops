@@ -7,3 +7,4 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./litellmkey.yaml
+  - ./karakeep-chrome-cnp.yaml

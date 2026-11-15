@@ -6,3 +6,5 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./docmost-cnp.yaml
+  - ./docmost-dragonfly-db-cnp.yaml

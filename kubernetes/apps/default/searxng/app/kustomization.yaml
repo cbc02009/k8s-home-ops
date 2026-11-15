@@ -6,6 +6,8 @@ resources:
   - ./externalsecret.yaml
   - ./ocirepository.yaml
   - ./helmrelease.yaml
+  - ./searxng-cnp.yaml
+  - ./searxng-dragonfly-db-cnp.yaml
 configMapGenerator:
   - name: searxng-config
     files:
