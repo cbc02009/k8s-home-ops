@@ -16,13 +16,6 @@ spec:
       envFrom:
         - secretRef:
             name: *secret
-      # volumes:
-      #   - name: media
-      #     persistentVolumeClaim:
-      #       claimName: authentik-media
-      # volumeMounts:
-      #   - name: media
-      #     mountPath: /media
     server:
       replicas: 1
       initContainers:
