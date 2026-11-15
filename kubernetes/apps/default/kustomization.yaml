@@ -10,6 +10,7 @@ resources:
   - ./actual/ks.yaml
   - ./animarr/ks.yaml
   - ./atuin/ks.yaml
+  - ./cilium-network-policies/ks.yaml
   - ./forgejo-runner/ks.yaml
   - ./docmost/ks.yaml
   - ./grimmory/ks.yaml

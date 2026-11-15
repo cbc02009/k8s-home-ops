@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./actual-cnp.yaml
+  - ./animarr-cnp.yaml
+  - ./atuin-cnp.yaml
+  - ./docmost-cnp.yaml
+  - ./docmost-dragonfly-db-cnp.yaml
+  - ./forgejo-runner-old-cnp.yaml
+  - ./grimmory-cnp.yaml
+  - ./immich-dragonfly-db-cnp.yaml
+  - ./immich-machine-learning-cnp.yaml
+  - ./immich-microservices-cnp.yaml
+  - ./immich-server-cnp.yaml
+  - ./it-tools-cnp.yaml
+  - ./karakeep-chrome-cnp.yaml
+  - ./lidarr-cnp.yaml
+  - ./mealie-cnp.yaml
+  - ./plex-cnp.yaml
+  - ./prowlarr-cnp.yaml
+  - ./qbittorrent-cnp.yaml
+  - ./radarr-cnp.yaml
+  - ./recyclarr-cnp.yaml
+  - ./rustdesk-cnp.yaml
+  - ./sabnzbd-cnp.yaml
+  - ./searxng-cnp.yaml
+  - ./searxng-dragonfly-db-cnp.yaml
+  - ./seerr-cnp.yaml
+  - ./shelfmark-cnp.yaml
+  - ./silverbullet-cnp.yaml
+  - ./sonarr-cnp.yaml
+  - ./tautulli-cnp.yaml
