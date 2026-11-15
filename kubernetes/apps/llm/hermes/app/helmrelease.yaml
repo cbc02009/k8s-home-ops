@@ -173,6 +173,16 @@ spec:
                   secretKeyRef:
                     name: hermes-dashboard
                     key: HERMES_DASHBOARD_OIDC_ISSUER
+              # Explicit rather than via the envFrom sweep below: the init
+              # container needs it for the git.cnas.dev credential line, and
+              # an explicit non-optional ref fails loudly at pod start if the
+              # ExternalSecret ever lags, instead of surfacing as empty-token
+              # git failures later.
+              FORGEJO_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: FORGEJO_TOKEN
             envFrom:
               - secretRef:
                   name: hermes
