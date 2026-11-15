@@ -39,6 +39,13 @@ spec:
                   secretKeyRef:
                     name: hermes
                     key: GITHUB_TOKEN
+              # Required by the git credential setup below; set -u aborts
+              # the init script if it is not present in the container env.
+              - name: FORGEJO_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes
+                    key: FORGEJO_TOKEN
             command:
               - sh
               - -c
@@ -63,8 +70,9 @@ spec:
                 chown 10000:10000 /opt/data/config.yaml
 
                 # Configure git for the mahoro-ai sockpuppet account.
-                # Credentials come from the hermes secret (GITHUB_TOKEN).
-                # Use HOME=/opt/data so the app container (which also uses
+                # Credentials come from the hermes secret (GITHUB_TOKEN for
+                # github.com, FORGEJO_TOKEN for git.cnas.dev). Use
+                # HOME=/opt/data so the app container (which also uses
                 # HOME=/opt/data) inherits the config from the PVC.
                 export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
@@ -72,12 +80,24 @@ spec:
                 git config --global init.defaultBranch main
                 git config --global credential.helper 'store --file /opt/data/.git-credentials'
                 git config --global --add safe.directory '*'
+                # Host-scoped identity: repos on git.cnas.dev commit as the
+                # Forgejo mahoro-ai account (noreply address), everything else
+                # keeps the GitHub sockpuppet identity above. The includeIf
+                # glob matches any repo cloned over HTTPS from that host; the
+                # single-quoted key survives the shell, and git config makes
+                # the write idempotent across restarts.
+                git config --global 'includeIf.hasconfig:remote.*.url:https://git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
+                printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
                 umask 077
-                printf 'https://x-access-token:%s@github.com/cbc02009/k8s-home-ops.git\n' "$GITHUB_TOKEN" > /opt/data/.git-credentials
+                {
+                  printf 'https://x-access-token:%s@github.com/cbc02009/k8s-home-ops.git\n' "$GITHUB_TOKEN"
+                  printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN"
+                } > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials
                 chown 10000:10000 /opt/data/.gitconfig 2>/dev/null || true
+                chown 10000:10000 /opt/data/.gitconfig-forgejo 2>/dev/null || true
 
                 # Clone the home-ops repo if it isn't already present.
                 mkdir -p /opt/data/workspace
@@ -86,6 +106,15 @@ spec:
                     || echo "WARN: k8s-home-ops clone failed; clone it from a session instead"
                 fi
                 chown -R 10000:10000 /opt/data/workspace/k8s-home-ops 2>/dev/null || true
+
+                # Clone the nas-ops repo (Forgejo on git.cnas.dev) if it
+                # isn't already present. Runs after the credential file is
+                # written, so private repos on that host clone too.
+                if [[ ! -d /opt/data/workspace/nas-ops/.git ]]; then
+                  git clone --filter=blob:none https://git.cnas.dev/cbc02009/nas-ops.git /opt/data/workspace/nas-ops \
+                    || echo "WARN: nas-ops clone failed; clone it from a session instead"
+                fi
+                chown -R 10000:10000 /opt/data/workspace/nas-ops 2>/dev/null || true
 
                 # Install the memini memory-provider plugin from the upstream
                 # standalone mirror eleboucher/memini-hermes (a release-synced
