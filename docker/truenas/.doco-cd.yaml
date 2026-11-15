@@ -5,7 +5,7 @@ auto_discover_opts:
   depth: 1
   delete: true
 external_secrets:
-  TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_nas/truenas_traefik_api_token
+  TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_traefik/api_key
   GARAGE_ADMIN_TOKEN: op://Homelab/garage/admin_token
   GARAGE_RPC_SECRET: op://Homelab/garage/rpc_secret
   GARAGE_METRICS_TOKEN: op://Homelab/garage/metrics_token
