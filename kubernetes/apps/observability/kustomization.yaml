@@ -10,7 +10,7 @@ resources:
   - ./blackbox-exporter/ks.yaml
   - ./dcgm-exporter/ks.yaml
   - ./drm-exporter/ks.yaml
-  # - ./gatus/ks.yaml
+  - ./gatus/ks.yaml
   - ./grafana-operator/ks.yaml
   - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
@@ -18,5 +18,6 @@ resources:
   - ./node-exporter/ks.yaml
   - ./prometheus-adapter/ks.yaml
   - ./silence-operator/ks.yaml
+  - ./smartctl-exporter/ks.yaml
   - ./unpoller/ks.yaml
   - ./victoria-logs/ks.yaml
