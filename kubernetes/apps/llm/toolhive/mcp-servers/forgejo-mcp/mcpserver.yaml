@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: forgejo
+spec:
+  image: git.b4mad.industries/agentic-forges/forgejo-mcp:v3.4.1
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  args:
+    - --transport
+    - stdio
+    - --url
+    - https://git.cnas.dev
+  secrets:
+    - name: toolhive-forgejo
+      key: token
+      targetEnvName: FORGEJO_ACCESS_TOKEN
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools
