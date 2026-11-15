@@ -4,7 +4,7 @@ metadata:
   name: toolhive-docs
   namespace: toolhive-system
 spec:
-  image: ghcr.io/stackloklabs/toolhive-doc-mcp
+  image: ghcr.io/stackloklabs/toolhive-doc-mcp:v0.0.18-20260831
   transport: streamable-http
   proxyPort: 8080
   mcpPort: 8080
