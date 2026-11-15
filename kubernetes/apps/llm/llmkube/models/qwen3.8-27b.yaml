@@ -49,11 +49,15 @@ spec:
     - name: HF_REPO
       value: dbirks/Qwen3.8-27B-W4A16-AutoRound
     - name: FAST_VARIANT
-      value: "0"
+      value: "1"
     - name: SPEC
       value: mtp
     - name: CTX
       value: long
+    - name: INT8_ACT
+      value: int8
+    - name: PREFILL_ATTN
+      value: int8
     - name: GPU_UTIL
       value: "0.93"
     - name: MAX_SEQS
