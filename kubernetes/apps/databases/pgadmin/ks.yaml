@@ -27,7 +27,6 @@ spec:
       APP_UID: "5050"
       APP_GID: "5050"
       PVC_CAPACITY: "1Gi"
-      OLD_NS: databases
   prune: true
   sourceRef:
     kind: GitRepository

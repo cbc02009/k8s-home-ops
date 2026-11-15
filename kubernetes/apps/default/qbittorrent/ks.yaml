@@ -29,7 +29,6 @@ spec:
       APP: *app
       IP: 10.6.0.9
       PVC_CAPACITY: "10Gi"
-      OLD_NS: downloads
   prune: true
   sourceRef:
     kind: GitRepository

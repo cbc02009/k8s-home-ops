@@ -21,7 +21,6 @@ spec:
       APP_UID: "1000"
       APP_GID: "1000"
       HOSTNAME: grimmory.ctec.run
-      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

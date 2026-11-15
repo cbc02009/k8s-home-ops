@@ -17,7 +17,6 @@ spec:
       APP: jellyfin
       PVC_CAPACITY: 20Gi
       HOSTNAME: jellyfin.ctec.run
-      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

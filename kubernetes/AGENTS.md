@@ -34,7 +34,7 @@ kubernetes/
 - `path`: repo-relative, `./kubernetes/apps/<ns>/<app>[/<section>]`.
 - `dependsOn` for ordering (cross-namespace ones include `namespace:`); add `healthChecks` for CRs where readiness matters (see `databases/cloudnative-pg` for `postgresql.cnpg.io/v1` clusters).
 - `components:` pulls shared pieces, e.g. frigate uses `../../components/{gpu,igpu-spread,kopiur,zeroscaler}`.
-- `postBuild.substitute` / `substituteFrom` for per-app values (`APP`, `PVC_CAPACITY`, `OLD_NS`, fixed IPs, Secret references).
+- `postBuild.substitute` / `substituteFrom` for per-app values (`APP`, `PVC_CAPACITY`, fixed IPs, Secret references).
 
 ## Charts and images
 

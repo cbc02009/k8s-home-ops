@@ -28,7 +28,6 @@ spec:
       PVC_CAPACITY: "50Gi"
       APP_UID: "1000"
       APP_GID: "1000"
-      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

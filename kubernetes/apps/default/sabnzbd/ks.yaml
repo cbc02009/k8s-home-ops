@@ -26,7 +26,6 @@ spec:
       HOSTNAME: sab.ctec.run
       APP: *app
       PVC_CAPACITY: "1Gi"
-      OLD_NS: downloads
   prune: true
   sourceRef:
     kind: GitRepository

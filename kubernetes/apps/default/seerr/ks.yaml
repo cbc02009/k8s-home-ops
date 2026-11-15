@@ -25,7 +25,6 @@ spec:
       HOSTNAME: requests.ctec.run
       APP: *app
       PVC_CAPACITY: "5Gi"
-      OLD_NS: downloads
   prune: true
   sourceRef:
     kind: GitRepository

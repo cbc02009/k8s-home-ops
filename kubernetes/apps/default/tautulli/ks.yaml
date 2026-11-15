@@ -22,7 +22,6 @@ spec:
       HOSTNAME: tautulli.ctec.run
       APP: *app
       PVC_CAPACITY: "10Gi"
-      OLD_NS: media
   prune: true
   sourceRef:
     kind: GitRepository

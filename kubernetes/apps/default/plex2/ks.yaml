@@ -28,7 +28,6 @@ spec:
       PVC_CAPACITY: "50Gi"
       APP_UID: "2000"
       APP_GID: "2000"
-      OLD_NS: default
   prune: true
   sourceRef:
     kind: GitRepository

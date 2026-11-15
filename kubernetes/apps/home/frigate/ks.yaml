@@ -33,4 +33,3 @@ spec:
     substitute:
       APP: *app
       PVC_CAPACITY: 5Gi
-      OLD_NS: home
