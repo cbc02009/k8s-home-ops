@@ -75,11 +75,11 @@ module "secret_hermes" {
   item   = "hermes"
 }
 
-# module "secret_forgejo" {
-#   source = "./modules/1password-item"
-#   vault  = "k8s-home-ops"
-#   item   = "forgejo"
-# }
+module "secret_forgejo" {
+  source = "./modules/1password-item"
+  vault  = "k8s-home-ops"
+  item   = "forgejo"
+}
 
 module "secret_mealie" {
   source = "./modules/1password-item"

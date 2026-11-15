@@ -76,21 +76,21 @@ module "oauth2-Grimmory" {
   ]
 }
 
-# module "oauth2-forgejo" {
-#   source             = "./modules/oauth2_application"
-#   name               = "Forgejo"
-#   icon_url           = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
-#   launch_url         = "https://git.cnas.dev"
-#   description        = "Git Repo"
-#   newtab             = true
-#   group              = "Infrastructure"
-#   auth_groups        = [authentik_group.infrastructure.id]
-#   authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
-#   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
-#   client_id          = module.secret_forgejo.fields["oidc_id"]
-#   client_secret      = module.secret_forgejo.fields["oidc_secret"]
-#   redirect_uris      = ["https://git.cnas.dev/user/oauth2/authentik/callback"]
-# }
+module "oauth2-forgejo" {
+  source             = "./modules/oauth2_application"
+  name               = "Forgejo"
+  icon_url           = "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
+  launch_url         = "https://git.cnas.dev"
+  description        = "Git Repo"
+  newtab             = true
+  group              = "Infrastructure"
+  auth_groups        = [authentik_group.infrastructure.id]
+  authorization_flow = resource.authentik_flow.provider-authorization-implicit-consent.uuid
+  invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
+  client_id          = module.secret_forgejo.fields["oidc_id"]
+  client_secret      = module.secret_forgejo.fields["oidc_secret"]
+  redirect_uris      = ["https://git.cnas.dev/user/oauth2/Authentik/callback"]
+}
 
 module "oauth2-grafana" {
   source             = "./modules/oauth2_application"
