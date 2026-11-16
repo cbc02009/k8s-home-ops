@@ -41,13 +41,14 @@ repo onto non-k8s docker hosts, one **instance** per host:
 
 ## zigbee-pi specifics
 
-- Brings the Pi up in two steps: `provision-arch.fish` (run on an Arch-based
-  workstation, as root: `provision-arch.fish /dev/sdX`) images a microSD card with
-  ArchLinuxARM AArch64 for the Pi 4B per the official instructions and leaves a
-  one-shot first-boot service on it (pacman keyring init + system update); then
-  `setup-doco-cd.sh` (POSIX sh, run **on the Pi**, as root, after first boot)
-  installs Docker if missing and deploys this instance's doco-cd container from
-  the repo's `.doco-cd/docker-compose.app.yaml`.
+- Brings the Pi up in two steps: flash the microSD with **Raspberry Pi OS Lite
+  64-bit** (Raspberry Pi Imager; use its OS-customization step for hostname
+  `zigbee-pi.ctec.internal`, timezone `America/New_York`, an admin user, and
+  SSH enabled); then `setup-doco-cd.sh` (POSIX sh, run **on the Pi**, as root,
+  after first boot — from a repo clone or standalone; when run standalone it
+  clones the repo to `~/k8s-home-ops`) installs Docker CE + the compose plugin
+  from Docker's official Debian arm64 apt repo if missing and deploys this
+  instance's doco-cd container from the repo's `.doco-cd/docker-compose.app.yaml`.
 - Serial controllers must be mapped by `/dev/serial/by-id/...` paths (never
   `/dev/ttyUSBx` — they drift). After plugging a stick in, `ls -l /dev/serial/by-id/` on
   the Pi and set the `devices:` mapping (`/dev/ttyACM0` for zigbee2mqtt, `/dev/zwave` for
