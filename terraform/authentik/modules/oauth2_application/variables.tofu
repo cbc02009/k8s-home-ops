@@ -85,18 +85,15 @@ variable "access_code_validity" {
 
 variable "access_token_validity" {
   type    = string
-  default = "hours=24"
+  default = "minutes=10"
 }
 
-variable "refresh_token_validity" {
-  type    = string
-  default = "days=7"
-}
-
-variable "refresh_token_threshold" {
-  type    = string
-  default = "days=1"
-}
+# Token lifetimes deliberately match Authentik's own defaults:
+#   access_token_validity    minutes=10
+#   refresh_token_validity   days=30
+#   refresh_token_threshold  seconds=0  (re-mint the RT on every refresh)
+# Refresh tokens are enabled by grant_types plus the offline_access scope, not
+# by overriding any of these values.
 
 variable "grant_types" {
   type    = list(string)
