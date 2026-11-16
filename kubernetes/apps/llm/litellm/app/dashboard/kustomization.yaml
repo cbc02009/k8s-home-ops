@@ -21,6 +21,9 @@ configMapGenerator:
   - name: llama-server
     files:
       - llama-server.json
+  - name: litellm-auto-router
+    files:
+      - litellm-auto-router.json
   - name: vllm
     files:
       - vllm.json
