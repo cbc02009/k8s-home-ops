@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: mtg-mcp
+spec:
+  # nathanmartins/mtg-mcp: Commander-focused Magic: The Gathering tools
+  # (card search, card details, rulings, prices, commander legality, ban lists,
+  # EDHREC combos) backed by the Scryfall and EDHREC APIs.
+  #
+  # Upstream publishes GitHub release tarballs only -- there is no container
+  # image on Docker Hub or GHCR -- so the pod downloads the pinned,
+  # checksum-verified static binary at startup, the same install-at-startup
+  # pattern litellm-admin uses for its pip install.
+  #
+  # To bump: update the release tag and the matching SHA256 below (the digest
+  # is published in the release's mtg-mcp_<version>_checksums.txt).
+  image: docker.io/curlimages/curl:8.16.0@sha256:463eaf6072688fe96ac64fa623fe73e1dbe25d8ad6c34404a669ad3ce1f104b6
+  # stdio transport: the server speaks MCP over stdin/stdout and is bridged to
+  # streamable-http by the ToolHive proxy -- the same shape as arr-mcp.
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    # The operator hardens the container with readOnlyRootFilesystem and
+    # runAsUser 1000, so the image root filesystem is not writable. The server
+    # writes its log file to $HOME/.cache/mtg-mcp/, so HOME must point at the
+    # writable emptyDir mounted at /tmp.
+    - name: HOME
+      value: /tmp
+    - name: MTG_MCP_LOG_FILE
+      value: /tmp/mtg-mcp.log
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  podTemplateSpec:
+    spec:
+      # The server only talks to the public Scryfall and EDHREC APIs, so no
+      # service account token is mounted.
+      automountServiceAccountToken: false
+      # A writable emptyDir gives the download, the extracted binary and the
+      # log file a home despite the read-only root filesystem.
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: mcp
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - |
+              set -eu
+              cd /tmp
+              curl -fsSL --retry 3 --retry-delay 2 \
+                -o mtg-mcp.tar.gz \
+                https://github.com/nathanmartins/mtg-mcp/releases/download/v3.2.1/mtg-mcp_Linux_x86_64.tar.gz
+              echo "17fc0cf3a166a0f32b49c7e16b9d0f346694a76b2430e99865250717809b36e0  mtg-mcp.tar.gz" | sha256sum -c -
+              tar -xzf mtg-mcp.tar.gz mtg-mcp
+              chmod +x mtg-mcp
+              exec /tmp/mtg-mcp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+  groupRef:
+    name: mcp-tools
