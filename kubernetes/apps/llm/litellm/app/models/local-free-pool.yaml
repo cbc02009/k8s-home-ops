@@ -28,7 +28,7 @@
 #     steadily instead of only ever touching them on a deep fallback
 # LongCat 2.5 Free IS a member (Global regions enabled in the Go workspace
 # privacy settings on 2026-11-16; verified end-to-end through
-# longcat-gate-test at 200 OK). It sits at the same order (1) as the
+# verified at 200 OK). It sits at the same order (1) as the
 # other free rungs so simple-shuffle mixes it in; weight 4 matches Beam
 # Free so the two free models share the majority share ~evenly, with the
 # local 27B at weight 2 keeping its prefix-cache-warm floor.
