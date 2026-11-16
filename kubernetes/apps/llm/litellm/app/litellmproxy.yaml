@@ -181,8 +181,6 @@ spec:
       - auto:
           - implementation-pool
           - local-pool
-      - local-free-pool:
-          - local-pool
       # The Z.AI lane is itself a fallback target, so it needs its own floor:
       # when the Coding Plan's window is dry too, the local 27B catches it.
       - zai-pool:

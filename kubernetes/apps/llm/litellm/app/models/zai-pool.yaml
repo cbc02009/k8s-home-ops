@@ -9,9 +9,10 @@
 #      Z.AI credits get burned in the process.
 #   2. Co-primary weighted rung, paired with the Go rungs at the same order
 #      in implementation-pool and reasoning-pool (Go weight 2 : Z.AI weight 1)
-#      and with the free Go rungs in local-free-pool — so ordinary traffic
-#      steadily drains the weekly credits instead of only the deep fallback
-#      ever touching them.
+#      — so ordinary traffic steadily drains the weekly credits instead of
+#      only the deep fallback ever touching them. (Removed from
+#      local-free-pool on 2026-11-16: that lane rebalanced to favor the
+#      resident 27B.)
 #   3. Vision fallback for go-chat: both GLM rungs are vision-capable.
 # Rungs: Flash first (weight 2) — the cheap drain rung (0.4x off-peak credit
 # consumption, the largest window); GLM-5.3 (weight 1) is the stronger but

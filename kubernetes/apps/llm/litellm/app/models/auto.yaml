@@ -1,9 +1,10 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Complexity router: one model name that picks the right lane. Simple and
-# medium work share the local-free-pool — the always-resident 27B at 50%
-# (weight 2) mixed with OpenCode Go's zero-allowance free rungs — so half of
-# that traffic is offloaded from the local GPU. Hard reasoning/coding
+# medium work share the local-free-pool — the always-resident 27B as the
+# ~43% primary (weight 6) mixed with OpenCode Go's zero-allowance free rungs
+# (~57% combined) — so most of that traffic is offloaded from the local GPU.
+# Hard reasoning/coding
 # escalates to reasoning-pool. The classifier runs on 27b-chat (always
 # resident) with the built-in 'agentic' rubric: routine installs, builds,
 # multi-file edits and standard debugging anchor at MEDIUM, so ordinary
@@ -14,8 +15,8 @@
 # re-classifies per step nor switches tiers mid-loop. Pool members are picked
 # per request by the proxy's simple-shuffle, so sessions hop within the pool;
 # the Go session id keeps per-conversation affinity (prompt cache) on the
-# cloud rungs. The 27B member (order 1) is the failover floor if Go drops a
-# free model.
+# cloud rungs. The 27B member (order 1) is the lane's primary and the
+# failover floor if Go drops a free model.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

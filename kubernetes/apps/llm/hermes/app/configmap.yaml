@@ -7,7 +7,7 @@ data:
   config.yaml: |
     model:
       # Complexity router: simple/medium traffic shares the hybrid
-      # local-free-pool (resident 27B at 50% via weight, plus Go's
+      # local-free-pool (resident 27B as ~43% primary via weight, plus Go's
       # zero-allowance free rungs); only complex/reasoning turns burn the
       # shared Go allowance (reasoning-pool). Sessions re-classify per user
       # turn (no hour-long freeze) but replay the held decision across an
