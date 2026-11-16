@@ -234,6 +234,37 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Hy4 Flash Free (Tencent's Hy4 tier): limited-time free model added to Go
+# on 2026-11-16. Zero allowance burn, "model training: not used" with 0-day
+# retention in Go's privacy table, and NO region restriction (unlike Beam
+# Free, which blocks a country list). Vision-capable (image/jpeg, png,
+# webp, gif) with a 1M context. Sits last in go-pool's order so it only
+# drains when every paid member and the other free rungs are exhausted.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-hy4-flash-free
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy4-flash-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 9
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Named single-model lanes for targeted tasks. The $15-allowance lanes are
 # rationed harder (lower parallelism) than the $60 pool members.
 # go-coder: Kimi K2.7 Code, the pool's best agentic-coder; $60/mo allowance.
