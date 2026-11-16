@@ -43,6 +43,7 @@ resource "authentik_provider_oauth2" "oauth2-application" {
   sub_mode                   = var.sub_mode
   access_code_validity       = var.access_code_validity
   access_token_validity      = var.access_token_validity
+  refresh_token_threshold    = var.refresh_token_threshold
   property_mappings          = concat(data.authentik_property_mapping_provider_scope.default-scopes.ids, [data.authentik_property_mapping_provider_scope.profile.id, data.authentik_property_mapping_provider_scope.email.id], var.additional_property_mappings)
   allowed_redirect_uris      = local.allowed_redirect_uris
   logout_method              = var.logout_method
