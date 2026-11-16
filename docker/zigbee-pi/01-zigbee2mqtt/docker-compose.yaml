@@ -10,7 +10,7 @@ services:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt:2.14.3@sha256:fb4a6b0f6868ad1cd6a9996479802b2420e599c3463b62bbff8c8cd9a908f43a
     devices:
-      - /dev/serial/by-id/TODO-ZIGBEE-STICK-BY-ID:/dev/ttyACM0
+      - /dev/serial/by-id/usb-Nabu_Casa_ZBT-2_DCB4D90E5878-if00:/dev/ttyACM0
     environment:
       TZ: America/New_York
       ZIGBEE2MQTT_DATA: /data

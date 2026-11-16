@@ -14,7 +14,7 @@ services:
     stop_signal: SIGINT
     tty: true
     devices:
-      - /dev/serial/by-id/TODO-ZWAVE-STICK-BY-ID:/dev/zwave
+      - /dev/serial/by-id/usb-Nabu_Casa_ZWA-2_80B54EE2F040-if00:/dev/zwave
     environment:
       TZ: America/New_York
     ports:
