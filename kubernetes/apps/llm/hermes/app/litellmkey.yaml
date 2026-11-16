@@ -9,42 +9,13 @@ spec:
   keyAlias: Hermes
   secretName: litellm-key-hermes
   secretKey: api-key
-  # All public lanes on the proxy. The config.yaml-referenced subset (auto
-  # plus the pool lanes its complexity router resolves to, the fallback
-  # chain, the delegation roles and the auxiliary) carries every chat
-  # completion and agentic request — that routing is unchanged. The extra
-  # lanes below are NOT referenced by config.yaml: they exist so the agent
-  # can reach individual models for testing and verification only (probing
-  # new rungs, engine swaps, embed/rerank health). If a lane is ever added
-  # to config.yaml's routing, move it up into the first group.
-  models:
-  # --- Chat/agentic lanes (referenced by config.yaml). ---
-  - auto
-  # Simple/medium lane the complexity router resolves to (27B + Go free rungs).
-  - local-free-pool
-  - reasoning-pool
-  - local-pool
-  - qwen3.8-27b
-  - qwen3.8-27b-chat
-  - implementation-pool
-  - frontier-pool
-  - go-pool
-  - go-chat
-  # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
-  # credits do not roll over, so the traffic is wanted, not just tolerated).
-  - zai-pool
-  # --- Testing/verification-only lanes (never referenced by config.yaml). ---
-  # OpenCode's escalation single lanes (opencode's domain; hermes escalates
-  # via the pools).
-  - go-coder
-  - go-strong
-  - go-max
-  # local-pool's no-forced-reasoning chat twin.
-  - local-pool-chat
-  # Embedding/rerank lanes (production use rides memini's own key; these
-  # grants are for direct health verification).
-  - embed
-  - rerank
+  # Empty list permits every model on the proxy. Enumerating lanes here can't
+  # keep up with pool members: an allow-listed pool gives no control over
+  # which backend serves a request, which defeats diagnosis. With no
+  # allow-list the agent can address any individual model directly for
+  # testing/verification. Chat/agentic routing is unaffected — it still
+  # flows through config.yaml's complexity router and its pools.
+  models: []
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1
