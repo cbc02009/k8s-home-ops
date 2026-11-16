@@ -28,7 +28,7 @@ spec:
         containers:
           main:
             env:
-              # MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
+              MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
               MEMINI_BACKEND: sqlite
               MEMINI_DEFAULT_NAMESPACE: default
               MEMINI_EMBED_BASE_URL: http://litellm.llm.svc.cluster.local:4000/v1
