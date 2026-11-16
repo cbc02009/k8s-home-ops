@@ -161,7 +161,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/longcat-2.5-free
-    apiKey: "***"
+    apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
       order: 1
       weight: 4
