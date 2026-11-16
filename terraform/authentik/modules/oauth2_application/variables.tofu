@@ -85,7 +85,17 @@ variable "access_code_validity" {
 
 variable "access_token_validity" {
   type    = string
-  default = "hours=1"
+  default = "hours=24"
+}
+
+variable "refresh_token_validity" {
+  type    = string
+  default = "days=7"
+}
+
+variable "refresh_token_threshold" {
+  type    = string
+  default = "days=1"
 }
 
 variable "grant_types" {

@@ -119,6 +119,16 @@ data:
       host: 0.0.0.0
       port: 9120
       public_url: https://hermes.ctec.run
+    # Sign-in gate. issuer/client_id/client_secret come from env
+    # (HERMES_DASHBOARD_OIDC_*); only the scope list lives here because it
+    # is static. offline_access is REQUIRED for refresh tokens: Authentik
+    # mints a refresh token only when the authorization request carries
+    # that scope, and rejects a refresh without it (invalid_scope). Without
+    # it every session is access-token-only and dies with the 1h AT.
+    dashboard:
+      oauth:
+        self_hosted:
+          scopes: openid profile email offline_access
     security:
       redact_secrets: true
     privacy:

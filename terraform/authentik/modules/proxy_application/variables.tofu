@@ -15,6 +15,11 @@ variable "access_token_validity" {
   default = "days=7"
 }
 
+variable "refresh_token_validity" {
+  type    = string
+  default = "days=7"
+}
+
 variable "authorization_flow" {
   type = string
 }
