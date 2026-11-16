@@ -1,12 +1,17 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json
 # Z-Wave controller on the Pi, via Z-Wave JS UI (the project formerly named zwave2mqtt).
-# Until the stick is attached and the TODO by-id path below is filled in (from
-# `ls -l /dev/serial/by-id/` on the Pi) the stack fails to deploy - expected.
-# Unlike zigbee2mqtt, ZWJS UI keeps its MQTT/serial settings in the store volume, so after
-# first bring-up do a one-time setup at http://<pi>:8091: Settings -> MQTT
-# (host 10.6.0.16, port 1883, Home Assistant discovery on) and the serial port /dev/zwave.
-# The WS server (3000) is intentionally not published - Home Assistant connects over MQTT.
+# Serial + driver settings are repo-driven: ZWAVE_PORT forces the controller on at
+# /dev/zwave (api/lib/ZwaveClient.ts "force enable and override port"), and the
+# read-only external-settings.json mounted below is merged over the store at startup
+# (api/app.ts mergeExternalSettings) and hides those controls in the web UI. It pins
+# logging, RF region (1 = RFRegion.USA), soft reset, statistics off and the WS server
+# off - HA connects over MQTT, not :3000.
+# Still store-volume only (one-time setup at http://<pi>:8091 after first bring-up):
+# Settings -> MQTT (host 10.6.0.16, port 1883, Home Assistant discovery on) and the
+# S0/S2 security keys - keys are secrets and can't live in this public repo, and
+# 11.26.2 has no env-var path for them (external-settings.json is plain JSON, so
+# putting keys there would expose them too; anything set there also overrides the UI).
 services:
   zwave2mqtt:
     container_name: zwave2mqtt
@@ -17,10 +22,13 @@ services:
       - /dev/serial/by-id/usb-Nabu_Casa_ZWA-2_80B54EE2F040-if00:/dev/zwave
     environment:
       TZ: America/New_York
+      ZWAVE_PORT: /dev/zwave
+      ZWAVE_EXTERNAL_SETTINGS: /usr/src/app/external-settings.json
     ports:
       - 8091:8091
     restart: unless-stopped
     volumes:
       - store:/usr/src/app/store
+      - ./external-settings.json:/usr/src/app/external-settings.json:ro
 volumes:
   store: {}

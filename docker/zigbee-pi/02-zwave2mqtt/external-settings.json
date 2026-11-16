@@ -1,0 +1,12 @@
+{
+  "logEnabled": true,
+  "logLevel": "info",
+  "logToFile": false,
+  "maxFiles": 7,
+  "rf": {
+    "region": 1
+  },
+  "enableSoftReset": true,
+  "enableStatistics": false,
+  "serverEnabled": false
+}

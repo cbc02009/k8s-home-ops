@@ -58,9 +58,13 @@ repo onto non-k8s docker hosts, one **instance** per host:
   `allow_anonymous true`, so no credentials). Home Assistant autodiscovers over the same
   broker with the `homeassistant` topic prefix.
 - zigbee2mqtt is configured entirely through `ZIGBEE2MQTT_CONFIG_*` env (fully declarative).
-  Z-Wave JS UI keeps MQTT + serial settings in its `store` volume instead — after first
-  bring-up, one-time setup at `http://<pi>:8091` (MQTT host/port, HA discovery on, serial
-  `/dev/zwave`).
+  Z-Wave JS UI is repo-driven for serial + driver settings: `ZWAVE_PORT` forces the
+  controller on at `/dev/zwave`, and the read-only `02-zwave2mqtt/external-settings.json`
+  (mounted in the container) is merged over the store at startup and hides those controls
+  in the web UI — it pins logging, RF region (1 = USA), soft reset, statistics off and
+  the WS server off. Still one-time UI at `http://<pi>:8091` after first bring-up: MQTT
+  host/port + HA discovery, and the S0/S2 security keys — secrets can't be committed and
+  11.26.2 has no env-var path for keys.
 - Pi host ports: doco-cd 7789, zigbee2mqtt frontend 8080, Z-Wave JS UI 8091. The ZWJS UI
   websocket server (3000) is intentionally not published — HA connects over MQTT.
 
