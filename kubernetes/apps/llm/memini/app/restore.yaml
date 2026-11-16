@@ -17,9 +17,13 @@ spec:
     kind: ClusterRepository
     name: nas
   source:
-    # No sourcePath: match any path for the identity; offset default = latest.
+    # The kopia identity triple is username@hostname:sourcePath and the mover
+    # matches the path EXACTLY — an absent sourcePath queries `memini@ai:` and
+    # matches nothing. The pre-rename ai series was written under /pvc/memini
+    # (see tools/rename-ai-to-llm/restores/memini.yaml).
     identity:
       username: memini
       hostname: ai
+      sourcePath: /pvc/memini
   target:
     populator: {}
