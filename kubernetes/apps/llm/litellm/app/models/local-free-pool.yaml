@@ -5,11 +5,15 @@
 # request — mixing only happens within one order, and the earlier staggered
 # order 1/2/3/4 ladder meant the 27B took every request until a cloud rung
 # 429'd into cooldown, which is why the lane felt local-slow. Weights make
-# the free rung the majority share, 2:1 over the 27B (the same co-primary
+# the free rungs the majority share, 2:1 over the 27B (the same co-primary
 # ratio the other pools use):
 #   Beam Free        (weight 4) — zero allowance burn, "model training:
 #     not used" per Go's privacy table (see opencode-go.yaml); measured
 #     100% success at sub-second TTFT, so it carries the lane
+#   Hy4 Flash Free   (weight 2) — the second free rung: Tencent's everyday
+#     agent tier, sub-second TTFT, 1M context and vision (Beam has none),
+#     "model training: not used" with 0-day retention and no region block.
+#     Weight 2 keeps it below Beam's 4 so the fastest rung still leads
 #   27B              (weight 2) — the local always-resident rung; second
 #     share so the prefix cache stays warm and the lane keeps a private
 #     floor when the free rung 429s into cooldown
@@ -109,7 +113,7 @@ spec:
 # TTFT measured on this lane. Weight 4 gives it a 2:1 majority over the 27B
 # so simple/medium traffic defaults to the free cloud rung; the 27B absorbs
 # bursts once beam's 4 parallel slots saturate. No vision: image-bearing
-# requests fall through to Z.AI (or Mimo) on retry.
+# requests fall through to Hy4 Flash Free (free, vision) or Z.AI on retry.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -132,6 +136,40 @@ spec:
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsVision: false
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Hy4 Flash Free: the lane's second free Go rung (added to Go on 2026-11-16).
+# Tencent's everyday agent tier — vision-capable, 1M context, zero allowance
+# burn, "model training: not used" with 0-day retention, and no region block
+# (Beam Free blocks a country list). Weight 2: below Beam's 4 so the
+# sub-second rung keeps the majority share, above the 27B's 2. Like every Go
+# free rung it hard-requires the session header (headerless = 400).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-hy4-flash-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy4-flash-free
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 1
+      weight: 2
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true
     extra:
       input_cost_per_token: 0
       output_cost_per_token: 0
