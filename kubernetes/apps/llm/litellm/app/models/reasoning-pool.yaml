@@ -1,18 +1,21 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Reasoning lane for COMPLEX/REASONING traffic, ordered cheapest-first so a
-# healthy window always burns the cheapest allowance available. Rungs come in
-# paired tiers: each Z.AI Coding Plan rung sits at the SAME order as its Go
-# counterpart (Go weight 2 : Z.AI weight 1), so the two flat subscriptions
-# back each other up — when one side's 5h/weekly window dries, that member
-# 429s, cools for 30s, and the other subscription's rung carries the
-# traffic. Pairing Z.AI as a co-primary is also how its non-rolling weekly
-# credits get burned before they expire:
-#   1. MiniMax M3        — $60 Go workhorse window, 1M context (Z.AI: GLM-5.3)
-#   2. MiniMax M3.1 Flash — $20-30 Go mid window (Z.AI: GLM-5.3 Flash)
-#   3. Kimi K2.7 Code    — premium, rationed to last-resort cloud; use the
-#                          dedicated `go-coder` lane for on-purpose top-tier coding
-#   4. Local 27B         — free floor, last resort
+# Reasoning lane for COMPLEX/REASONING traffic. Both subscription pairs
+# contend at order 1 and split by weight: the flash pair carries equal weight
+# with its Go primary so the cheap rungs genuinely share traffic instead of
+# waiting for both primaries to cool (GLM-5.3 keeps the low weight — its
+# per-token cost is ~5-9x every other order-1 rung). Rungs come in paired
+# tiers: each Z.AI Coding Plan rung sits at the SAME order as its Go
+# counterpart, so the two flat subscriptions back each other up — when one
+# side's 5h/weekly window dries, that member 429s, cools for 30s, and the
+# other subscription's rung carries the traffic. Pairing Z.AI as a
+# co-primary is also how its non-rolling weekly credits get burned before
+# they expire:
+#   Order 1 — MiniMax M3          $60 Go workhorse window, 1M context (Z.AI pair: GLM-5.3)
+#   Order 1 — MiniMax M3.1 Flash  $20-30 Go mid window (Z.AI pair: GLM-5.3 Flash, equal weight)
+#   Order 3 — Kimi K2.7 Code      premium, rationed to last-resort cloud; use the
+#                                 dedicated `go-coder` lane for on-purpose top-tier coding
+#   Order 4 — Local 27B           free floor, last resort
 # Failover matters more than order here: a session that trips a 429 mid-conversation
 # sticks to the deployment that caught it (router deployment pin), so every rung
 # after M3 must be cheap enough that a failover does not silently become the session's model.
@@ -77,8 +80,8 @@ spec:
       cache_read_input_token_cost: 2.6e-07
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 2 (Go half): half of M3's token cost, same 1M context, and its own Go
-# allowance instead of a second burn on M3.
+# Order 1 (Go half of the flash pair): half of M3's token cost, same 1M
+# context, and its own Go allowance instead of a second burn on M3.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -92,7 +95,7 @@ spec:
     model: opencode_go/minimax-m3.1-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 2
+      order: 1
       weight: 2
       max_parallel_requests: 2
   info:
@@ -108,8 +111,9 @@ spec:
       cache_read_input_token_cost: 1.5e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 2 (Z.AI half): Flash — the cheap drain rung (0.4x off-peak credit
-# consumption) with the largest window.
+# Order 1 (Z.AI half of the flash pair): Flash — the cheap drain rung (0.4x
+# off-peak credit consumption) with the largest window; equal weight with its
+# Go counterpart so the pair splits 50/50.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -124,8 +128,8 @@ spec:
     apiBase: https://api.z.ai/api/coding/paas/v4
     apiKey: os.environ/ZAI_API_KEY
     additional:
-      order: 2
-      weight: 1
+      order: 1
+      weight: 2
       max_parallel_requests: 2
   info:
     mode: chat
