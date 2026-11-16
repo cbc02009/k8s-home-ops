@@ -10,25 +10,28 @@
 #   Beam Free        (weight 4) — zero allowance burn, "model training:
 #     not used" per Go's privacy table (see opencode-go.yaml); measured
 #     100% success at sub-second TTFT, so it carries the lane
+#   LongCat 2.5 Free (weight 4) — verified working once the Go workspace
+#     privacy Regions setting is Global (China-hosted endpoint); zero
+#     allowance burn, "model training: not used" with 0-day retention,
+#     vision-capable, 1M context. Matches Beam's weight so the two free
+#     rungs share the majority share ~evenly.
 #   Hy4 Flash Free   (weight 2) — the second free rung: Tencent's everyday
 #     agent tier, sub-second TTFT, 1M context and vision (Beam has none),
 #     "model training: not used" with 0-day retention and no region block.
-#     Weight 2 keeps it below Beam's 4 so the fastest rung still leads
+#     Weight 2 keeps it below the free pair's 4 so the fastest rung still
+#     leads
 #   27B              (weight 2) — the local always-resident rung; second
 #     share so the prefix cache stays warm and the lane keeps a private
 #     floor when the free rung 429s into cooldown
 #   Z.AI GLM Flash   (weight 1) — credit-drain member: the Coding Plan's
 #     weekly credits do not roll over, so this high-volume lane burns them
 #     steadily instead of only ever touching them on a deep fallback
-# LongCat 2.5 Free is deliberately NOT a member: it fails with
-# Opencode_go.BadRequestError (400) both headerless (11/11 on 2026-11-14)
-# AND with the Go session header (15/15 through this lane, same day, on
-# both gateway replicas) — unlike beam-free, which the session header
-# fixed. Longcat is China-hosted and the docs say it needs the Go
-# workspace's Global regions privacy setting; check Console -> Settings ->
-# Privacy -> Regions before ever re-adding. Each failure also cools an
-# order-1 rung long enough to spill traffic onto lower rungs; it remains
-# in go-pool as that pool's deepest rung.
+# LongCat 2.5 Free IS a member (Global regions enabled in the Go workspace
+# privacy settings on 2026-11-16; verified end-to-end through
+# longcat-gate-test at 200 OK). It sits at the same order (1) as the
+# other free rungs so simple-shuffle mixes it in; weight 4 matches Beam
+# Free so the two free models share the majority share ~evenly, with the
+# local 27B at weight 2 keeping its prefix-cache-warm floor.
 #
 # Go free-tier session gate (2026-11-14): free rungs reject requests
 # without a stable session as 400 "unknown model" — paid rungs do not.
@@ -142,6 +145,39 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# LongCat 2.5 Free: verified working once the Go workspace privacy Regions
+# setting is set to Global (China-hosted endpoint). Zero allowance burn,
+# "model training: not used" with 0-day retention, vision-capable, 1M
+# context. Weight 4 matches Beam Free so the two free rungs share the
+# majority share ~evenly; order 1 keeps it in the simple-shuffle mix.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-longcat-2.5-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/longcat-2.5-free
+    apiKey: ***
+    additional:
+      order: 1
+      weight: 4
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 262144
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+
 # Hy4 Flash Free: the lane's second free Go rung (added to Go on 2026-11-16).
 # Tencent's everyday agent tier — vision-capable, 1M context, zero allowance
 # burn, "model training: not used" with 0-day retention, and no region block
