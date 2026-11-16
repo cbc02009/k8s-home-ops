@@ -45,6 +45,10 @@ spec:
   # grants are for direct health verification).
   - embed
   - rerank
+  # TEMPORARY (2026-11-16): single-deployment group for the LongCat 2.5
+  # Free Global-regions verdict. Deleted as soon as the longcat-gate-test
+  # model group is removed.
+  - longcat-gate-test
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1
