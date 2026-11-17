@@ -34,6 +34,9 @@ swarmui is committed **parked**:
 
 ## Per-session workflow
 
+Run `just swarm up` / `just swarm down` from the repo root (the module is
+`mod.just` next to this file). The raw commands, for reference:
+
 ```bash
 # 1. stop the Flux Helm controller so it can't revert our manual scale
 flux suspend helmrelease swarmui -n llm
