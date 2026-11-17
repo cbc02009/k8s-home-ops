@@ -53,7 +53,12 @@ spec:
               # MEMINI_LLM_MODEL: qwen3.8-27b-chat
               MEMINI_LLM_MAX_TOKENS: "24576"
               MEMINI_DISTILL_TIMEOUT: 600s
-              MEMINI_DISTILL_ON_WRITE: false
+              # Keep distillation on so the classifier runs; otherwise all writes land in
+              # the working tier and never graduate unless the 24h promoter fires.
+              MEMINI_DISTILL_ON_WRITE: "true"
+              # Default 24h is fragile under GitOps restarts (the ticker resets on boot).
+              # 1h gives a memory multiple chances to promote before any routine rollout.
+              MEMINI_PROMOTE_INTERVAL: "1h"
               MEMINI_ASSESSED_SALIENCE_WEIGHT: "0.6"
               MEMINI_REEMBED_ON_MODEL_CHANGE: true
               MEMINI_RERANK: http://litellm.llm.svc.cluster.local:4000/v1
