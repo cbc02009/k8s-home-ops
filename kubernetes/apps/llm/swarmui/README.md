@@ -34,12 +34,18 @@ swarmui is committed **parked**:
 
 ## Per-session workflow
 
+Run `just swarm up` / `just swarm down` from the repo root (the module is
+`mod.just` next to this file; `up` blocks until the rollout is Ready,
+`down` returns as soon as the scale lands). The raw commands, for reference:
+
 ```bash
 # 1. stop the Flux Helm controller so it can't revert our manual scale
 flux suspend helmrelease swarmui -n llm
 
 # 2. bring swarmui up -> scheduler evicts qwen3.8-27b (-100) for swarmui (1000)
 kubectl scale deployment swarmui -n llm --replicas=1
+# 2b. optional: block until the SwarmUI pod is Ready
+kubectl rollout status deployment swarmui -n llm
 
 # 3. ...generate images...
 

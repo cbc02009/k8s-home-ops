@@ -16,6 +16,10 @@ mod bootstrap "bootstrap"
 [group('Kube')]
 mod kube "kubernetes"
 
+# Swarm Recipes
+[group('Swarm')]
+mod swarm "kubernetes/apps/llm/swarmui"
+
 # Talos Recipes
 [group('Talos')]
 mod talos "talos"
