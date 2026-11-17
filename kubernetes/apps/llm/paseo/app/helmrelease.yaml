@@ -44,7 +44,7 @@ spec:
               # Self-built ghcr.io/cbc02009/paseo is pending; joryirving's
               # image (opencode + home-ops toolchain) is the stopgap.
               repository: ghcr.io/joryirving/paseo
-              tag: 0.15.4@sha256:d4a7e3b47860ef629c134d90d48381429d123fe787431a7bfcd66cc5bd7d278e
+              tag: 0.15.4@sha256:c051d872a3fb6d52d62d0e7547384368532de5a56d5e218d1f02c792112bd6ee
             command: ["/bin/bash", "-c"]
             args:
               - |
@@ -89,7 +89,7 @@ spec:
               # Self-built ghcr.io/cbc02009/paseo is pending; joryirving's
               # image (opencode + home-ops toolchain) is the stopgap.
               repository: ghcr.io/joryirving/paseo
-              tag: 0.15.4@sha256:d4a7e3b47860ef629c134d90d48381429d123fe787431a7bfcd66cc5bd7d278e
+              tag: 0.15.4@sha256:c051d872a3fb6d52d62d0e7547384368532de5a56d5e218d1f02c792112bd6ee
             # The image's CMD is the builder's paseo-start wrapper, which
             # aborts without PASEO_PASSWORD/LITELLM_API_KEY and installs the
             # builder's own paseo.json/opencode.json. Bypass it: run the stock
