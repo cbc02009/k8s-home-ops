@@ -10,18 +10,22 @@
 #   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
 #   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889
 #   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
+#   deepseek-v4.1-flash  cap 200 -> 1.20x, effective in/out 0.36/1.44 peak <- order 2
 #   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- demoted
 #   kimi-k2.7-code     cap 180 -> 1.33x, effective out ~$5.33/1M, bench 0.867  <- demoted
 # zai/glm-5.3 (bench 0.625, worst value, fastest non-rolling credit burn) was
-# REMOVED. deepseek-v4.1-flash and hy3 were evaluated as additions but the
-# deployed proxy 400s them ("Invalid model name") — dead rungs, excluded.
+# REMOVED. deepseek-v4.1-flash (1.20x burn, cap 200) was evaluated as an
+# addition and admitted at ORDER 2 (see its doc); the "Invalid model name"
+# 400s from the original exclusion were the proxy rejecting an unregistered
+# name, not the Go provider. hy3 remains excluded.
 #
 # Ladder (order is a priority FILTER, not a per-rung attribute): only the
 # lowest healthy order level is eligible; weight splits traffic WITHIN a level.
 #   Order 1 — glm-5.3-flash (w3), minimax-m3 (w2), zai/glm-5.3-flash (w1):
 #             cheap high-scoring primaries; the Z.AI rung is the flat-plan half
 #             that drains non-rolling weekly credits before they expire.
-#   Order 2 — minimax-m3.1-flash (3x) + mimo-v2.6-flash (cheapest): cheap
+#   Order 2 — deepseek-v4.1-flash (1.20x, the only sub-2x burn left),
+#             mimo-v2.6-flash (2.0x) + minimax-m3.1-flash (3.0x): cheap
 #             second wave once order 1 saturates/cools.
 #   Order 3 — local 27B: free floor, ahead of the expensive cloud rung.
 #   Order 4 — kimi-k2.7-code: last resort. It burned ~55% of this lane's Go
@@ -191,6 +195,46 @@ spec:
       input_cost_per_token: 1.4e-07
       output_cost_per_token: 2.8e-07
       cache_read_input_token_cost: 2.8e-09
+---
+
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Order 2 — 2026-11-17 production-shape eval (69k-token context, 5 targets):
+# the only non-Go-rung candidate that passed the whole EASY class (needle,
+# multi-hop, short math) on both bench suites, with the cheapest burn of any
+# Go Plus model (1.20x; cap 200). NOT promoted to order 1: on the hard
+# whole-scan aggregation class it runs its hidden reasoning to the 2048-token
+# ceiling and returns 200 with EMPTY content (silent failure the pool's
+# 429/5xx failover cannot see), and its per-request cost on this lane's
+# cached-94% traffic is still within reach of the glm-5.3-flash primary.
+# It is the second wave: order 1 saturates/cools -> deepseek before the
+# 2.0x/3.0x rungs. Peak-rate cost block mirrors the eval candidate (PR #6016).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-deepseek-v4.1-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/deepseek-v4.1-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 2
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 3e-07
+      output_cost_per_token: 1.2e-06
+      cache_read_input_token_cost: 6e-09
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Order 3 — free floor, MOVED UP from order 4: the always-resident 27B now sits
