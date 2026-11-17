@@ -198,16 +198,18 @@ spec:
 ---
 
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Order 2 — 2026-11-17 production-shape eval (69k-token context, 5 targets):
-# the only non-Go-rung candidate that passed the whole EASY class (needle,
-# multi-hop, short math) on both bench suites, with the cheapest burn of any
-# Go Plus model (1.20x; cap 200). NOT promoted to order 1: on the hard
-# whole-scan aggregation class it runs its hidden reasoning to the 2048-token
-# ceiling and returns 200 with EMPTY content (silent failure the pool's
-# 429/5xx failover cannot see), and its per-request cost on this lane's
-# cached-94% traffic is still within reach of the glm-5.3-flash primary.
-# It is the second wave: order 1 saturates/cools -> deepseek before the
-# 2.0x/3.0x rungs. Peak-rate cost block mirrors the eval candidate (PR #6016).
+# Order 2 — 2026-11-17 production-shape eval (69k-token context, 5 targets,
+# 6 tasks; modelops scratch prod_traffic_bench.py / prod_bench_results.json).
+# It passed the fast class — needle (q1), code (q4 2/3), short math (q6) —
+# with modest reasoning overhead (25-142 tokens) and sub-9s latencies, and
+# carries the cheapest burn of any Go Plus model (1.20x; cap 200).
+# KEPT BELOW the order-1 primaries: on multi-hop (q3) and the whole-scan
+# aggregation tasks (q2/q5) it runs its hidden reasoning to the 2048-token
+# ceiling and returns 200 with EMPTY content — a silent failure the pool's
+# 429/5xx failover cannot see (the glm-5.3-flash primary answers the same
+# q3 in 10 tokens with zero reasoning). Second wave: it fires only when
+# order 1 saturates or cools, ahead of the 2.0x/3.0x rungs. The peak-rate
+# cost block mirrors the eval candidate (PR #6016).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
