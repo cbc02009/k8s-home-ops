@@ -1,24 +1,35 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Reasoning lane for COMPLEX/REASONING traffic. Both subscription pairs
-# contend at order 1 and split by weight: the flash pair carries equal weight
-# with its Go primary so the cheap rungs genuinely share traffic instead of
-# waiting for both primaries to cool (GLM-5.3 keeps the low weight — its
-# per-token cost is ~5-9x every other order-1 rung). Rungs come in paired
-# tiers: each Z.AI Coding Plan rung sits at the SAME order as its Go
-# counterpart, so the two flat subscriptions back each other up — when one
-# side's 5h/weekly window dries, that member 429s, cools for 30s, and the
-# other subscription's rung carries the traffic. Pairing Z.AI as a
-# co-primary is also how its non-rolling weekly credits get burned before
-# they expire:
-#   Order 1 — MiniMax M3          $60 Go workhorse window, 1M context (Z.AI pair: GLM-5.3)
-#   Order 1 — MiniMax M3.1 Flash  $20-30 Go mid window (Z.AI pair: GLM-5.3 Flash, equal weight)
-#   Order 3 — Kimi K2.7 Code      premium, rationed to last-resort cloud; use the
-#                                 dedicated `go-coder` lane for on-purpose top-tier coding
-#   Order 4 — Local 27B           free floor, last resort
-# Failover matters more than order here: a session that trips a 429 mid-conversation
-# sticks to the deployment that caught it (router deployment pin), so every rung
-# after M3 must be cheap enough that a failover does not silently become the session's model.
+# REASONING lane for the auto router's hardest tier (deep reasoning, advanced
+# math, intricate multi-step logic). COMPLEX/coding traffic now uses
+# implementation-pool instead; see auto.yaml.
+#
+# Every opencode_go rung here draws from the ONE shared $240 Go Plus allowance;
+# the per-model cap is a rate MULTIPLIER divisor (mult = 240 / goplus_cap), NOT
+# a budget slice. Rank by effective cost = list price x multiplier, not by cap:
+#   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
+#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889
+#   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
+#   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- demoted
+#   kimi-k2.7-code     cap 180 -> 1.33x, effective out ~$5.33/1M, bench 0.867  <- demoted
+# zai/glm-5.3 (bench 0.625, worst value, fastest non-rolling credit burn) was
+# REMOVED. deepseek-v4.1-flash and hy3 were evaluated as additions but the
+# deployed proxy 400s them ("Invalid model name") — dead rungs, excluded.
+#
+# Ladder (order is a priority FILTER, not a per-rung attribute): only the
+# lowest healthy order level is eligible; weight splits traffic WITHIN a level.
+#   Order 1 — glm-5.3-flash (w3), minimax-m3 (w2), zai/glm-5.3-flash (w1):
+#             cheap high-scoring primaries; the Z.AI rung is the flat-plan half
+#             that drains non-rolling weekly credits before they expire.
+#   Order 2 — minimax-m3.1-flash (3x) + mimo-v2.6-flash (cheapest): cheap
+#             second wave once order 1 saturates/cools.
+#   Order 3 — local 27B: free floor, ahead of the expensive cloud rung.
+#   Order 4 — kimi-k2.7-code: last resort. It burned ~55% of this lane's Go
+#             spend for ~18% of requests; demoting it below the free floor
+#             stops one rung from dominating the shared allowance.
+# A 429 puts a rung in 30s cooldown and the next eligible level carries the
+# request. Every rung after the order-1 primaries must be cheap enough that a
+# mid-conversation failover does not silently become the session's model.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -48,72 +59,44 @@ spec:
       cache_read_input_token_cost: 6e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 1 (Z.AI half): GLM-5.3 — Z.AI's best, 1x off-peak / 3x peak credit
-# consumption, rationed to one parallel request.
+# NEW primary (order 1, highest weight): the cheapest of the high-scoring Go
+# rungs — 1.33x burn, ~$0.67/1M effective output, deterministic bench 0.952.
+# 1M context, sub-second TTFT. Carries the bulk of the reasoning lane.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: reasoning-pool-zai-glm-5.3
+  name: reasoning-pool-glm-5.3-flash
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
   modelName: reasoning-pool
   proxyRef: litellm
   params:
-    model: zai/glm-5.3
-    apiBase: https://api.z.ai/api/coding/paas/v4
-    apiKey: os.environ/ZAI_API_KEY
+    model: opencode_go/glm-5.3-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
       order: 1
-      weight: 1
-      max_parallel_requests: 1
+      weight: 3
+      max_parallel_requests: 3
   info:
     mode: chat
-    maxInputTokens: 1048576
+    maxInputTokens: 1000000
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsVision: true
     supportsPromptCaching: true
     extra:
-      input_cost_per_token: 1.4e-06
-      output_cost_per_token: 4.4e-06
-      cache_read_input_token_cost: 2.6e-07
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Order 1 (Go half of the flash pair): half of M3's token cost, same 1M
-# context, and its own Go allowance instead of a second burn on M3.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: reasoning-pool-minimax-m3.1-flash
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: reasoning-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/minimax-m3.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      order: 1
-      weight: 2
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 512000
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
       input_cost_per_token: 1.5e-07
-      output_cost_per_token: 6e-07
-      cache_read_input_token_cost: 1.5e-08
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Order 1 (Z.AI half of the flash pair): Flash — the cheap drain rung (0.4x
-# off-peak credit consumption) with the largest window; equal weight with its
-# Go counterpart so the pair splits 50/50.
+# Z.AI half of the order-1 pair: flat Coding Plan subscription, 0.4x off-peak
+# credit consumption and the largest window. Co-primary (same order as the Go
+# rungs) so its non-rolling weekly credits drain before they expire; a dried
+# window 429s and cools for 30s, and the Go rungs carry the traffic. NOTE: the
+# coding endpoint's training/retention terms differ from OpenCode Go's strict
+# no-training pool.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -129,7 +112,7 @@ spec:
     apiKey: os.environ/ZAI_API_KEY
     additional:
       order: 1
-      weight: 2
+      weight: 1
       max_parallel_requests: 2
   info:
     mode: chat
@@ -144,39 +127,75 @@ spec:
       cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Last cloud rung: the best agentic coder, but 10x M3 per token. Deliberately
-# rationed — it only fires when M3, M3.1 Flash and both Z.AI rungs are all in
-# cooldown. Use the dedicated `go-coder` lane for on-purpose top-tier coding.
+# Order 2 — demoted from order 1: its 3.0x burn multiplier (cap 80) makes it
+# the most expensive of the top scorers per token on the shared pool. Still a
+# strong agentic rung, so it stays as a cheap-second-wave failover, not a
+# primary. Half of M3's token cost at list price, 1M context.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: reasoning-pool-kimi-k2.7-code
+  name: reasoning-pool-minimax-m3.1-flash
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
   modelName: reasoning-pool
   proxyRef: litellm
   params:
-    model: opencode_go/kimi-k2.7-code
+    model: opencode_go/minimax-m3.1-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 3
-      max_parallel_requests: 1
+      order: 2
+      weight: 2
+      max_parallel_requests: 2
   info:
     mode: chat
-    maxInputTokens: 262144
-    maxOutputTokens: 262144
+    maxInputTokens: 1000000
+    maxOutputTokens: 512000
     supportsFunctionCalling: true
     supportsVision: true
     supportsPromptCaching: true
     extra:
-      input_cost_per_token: 9.5e-07
-      output_cost_per_token: 4e-06
-      cache_read_input_token_cost: 1.9e-07
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 6e-07
+      cache_read_input_token_cost: 1.5e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Free floor: local 27B as the last-resort fallback when every cloud rung is
-# exhausted or in cooldown. Quality drops, but nothing else gets burned.
+# Order 2 — NEW cost-effective rung: the cheapest effective per-token model on
+# the plan (2.0x burn, ~$0.56/1M effective output, 1M context, vision, live 200
+# verified). No deterministic bench in the reasoning set, so it is a low-order
+# cost floor rather than a primary — it only fires when order 1 is saturated.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-mimo-v2.6-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/mimo-v2.6-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 2
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-07
+      output_cost_per_token: 2.8e-07
+      cache_read_input_token_cost: 2.8e-09
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Order 3 — free floor, MOVED UP from order 4: the always-resident 27B now sits
+# below the two cheap second-wave rungs but ABOVE the expensive kimi rung, so
+# cloud exhaustion lands on free local capacity before a $5.33/1M model.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -195,7 +214,7 @@ spec:
       top_p: 0.95
       top_k: 20
       min_p: 0
-      order: 4
+      order: 3
       max_parallel_requests: 2
       reasoning_effort: high
       allowed_openai_params:
@@ -210,3 +229,35 @@ spec:
       input_cost_per_token: 6.2e-08
       output_cost_per_token: 1.35e-06
       cache_read_input_token_cost: 0.0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Last resort — DEMOTED from order 3 to order 4: the best agentic coder but
+# ~$5.33/1M effective output. It accounted for ~55% of this lane's Go allowance
+# burn on ~18% of requests. Use the dedicated `go-coder` lane for on-purpose
+# top-tier coding; here it only fires when every cheaper rung is in cooldown.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-kimi-k2.7-code
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/kimi-k2.7-code
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 4
+      max_parallel_requests: 1
+  info:
+    mode: chat
+    maxInputTokens: 262144
+    maxOutputTokens: 262144
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 9.5e-07
+      output_cost_per_token: 4e-06
+      cache_read_input_token_cost: 1.9e-07
