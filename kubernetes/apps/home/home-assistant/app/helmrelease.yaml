@@ -128,7 +128,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: "{{ .Release.Name }}"
+              - identifier: app
                 port: &port 8123
       codeserver:
         hostnames:
@@ -138,7 +138,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: "{{ .Release.Name }}"
+              - identifier: code-server
                 port: &codeserverPort 12321
     service:
       app:
