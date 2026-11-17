@@ -1,16 +1,21 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Coding lane: the always-resident 27B first (free, private), then the
-# overflow rungs in two paired tiers. Each Z.AI Coding Plan rung sits at the
-# SAME order as its Go counterpart (Go weight 2 : Z.AI weight 1): tier 1 is
-# the cheap Flash pair (Go glm-5.3-flash / Z.AI glm-5.3-flash), tier 2 the
-# stronger pair (Go minimax-m3.1-flash / Z.AI glm-5.3). When either
-# subscription's 5h/weekly window runs dry, that member 429s and cools for
-# 30s and the paired rung of the other subscription absorbs the traffic —
-# the two flat subscriptions back each other up, and pairing Z.AI as a
-# co-primary (instead of a deep fallback) is how its non-rolling weekly
-# credits get burned before they expire. The local rung also gives a stable
-# name for the coder virtual key regardless of which local model is resident.
+# COMPLEX lane for the auto router (bulk multi-step / coding work; REASONING
+# now uses reasoning-pool — see auto.yaml). Local 27B is the free, private
+# primary; the cloud rungs are cheap overflow in two paired tiers. Each Z.AI
+# Coding Plan rung sits at the SAME order as its Go counterpart (Go weight 2 :
+# Z.AI weight 1): tier 1 is the cheap Flash pair (Go glm-5.3-flash / Z.AI
+# glm-5.3-flash), tier 2 the stronger pair (Go minimax-m3.1-flash / Z.AI
+# glm-5.3). Pairing Z.AI as a co-primary drains its non-rolling weekly credits
+# instead of leaving them to expire; when either subscription's 5h/weekly
+# window dries, that rung 429s, cools 30s, and its paired rung carries on.
+#
+# NEW cost-effective rung: mimo-v2.6-flash (order 2) — the cheapest effective
+# per-token model on the shared $240 Go Plus pool (2.0x burn, ~$0.56/1M
+# effective output, 1M context, vision, live 200 verified). Its only Go rung
+# here; kept at a modest share so the bench-proven glm-5.3-flash stays primary.
+# deepseek-v4.1-flash / hy3 were evaluated but the deployed proxy 400s them
+# ("Invalid model name") — dead rungs, excluded.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -46,8 +51,8 @@ spec:
       cache_read_input_token_cost: 0.0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 1 (Go half): $60/mo allowance workhorse; kept at low parallelism so
-# this pool does not starve the main go-pool.
+# Tier 1 (Go half): cheapest high-scoring rung — 1.33x burn, ~$0.67/1M
+# effective output, deterministic bench 0.952. $60/mo allowance workhorse.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -77,8 +82,41 @@ spec:
       cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# NEW (order 2): cheapest effective per-token Go rung on the shared pool.
+# Low weight keeps it an overflow/failover rung behind the bench-proven
+# glm-5.3-flash; live 200 verified with the Go session header.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: implementation-pool-mimo-v2.6-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: implementation-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/mimo-v2.6-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-07
+      output_cost_per_token: 2.8e-07
+      cache_read_input_token_cost: 2.8e-09
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Tier 1 (Z.AI half): Flash — 0.4x off-peak credit consumption, the cheap
-# drain rung of the Coding Plan.
+# drain rung of the Coding Plan. Equal weight with the Go half so the FLAT
+# subscription carries a real share of COMPLEX traffic.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -94,7 +132,7 @@ spec:
     apiKey: os.environ/ZAI_API_KEY
     additional:
       order: 2
-      weight: 1
+      weight: 2
       max_parallel_requests: 2
   info:
     mode: chat
@@ -109,7 +147,8 @@ spec:
       cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 2 (Go half): $20-30 Go mid window, half of M3 per token.
+# Tier 2 (Go half): $20-30 Go mid window, 3.0x burn (cap 80) — expensive per
+# token on the shared pool, so it stays a tier-2 failover rather than a primary.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -139,8 +178,9 @@ spec:
       cache_read_input_token_cost: 1.5e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Tier 2 (Z.AI half): GLM-5.3 — the stronger (and more credit-hungry) rung,
-# 1x off-peak / 3x peak consumption; rationed to one parallel request.
+# Tier 2 (Z.AI half): GLM-5.3 — the stronger but credit-hungry rung (1x off-peak
+# / 3x peak consumption); rationed to one parallel request. Benchmarks poorly
+# (0.625) against the Go rungs, so it is never a primary here.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

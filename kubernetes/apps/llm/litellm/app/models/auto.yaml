@@ -1,22 +1,32 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Complexity router: one model name that picks the right lane. Simple and
-# medium work share the local-free-pool — the always-resident 27B as the
-# ~43% primary (weight 6) mixed with OpenCode Go's zero-allowance free rungs
+# Complexity router: one model name that picks the right lane. SIMPLE and
+# MEDIUM work share local-free-pool — the always-resident 27B as the ~43%
+# primary (weight 6) mixed with OpenCode Go's zero-allowance free rungs
 # (~57% combined) — so most of that traffic is offloaded from the local GPU.
-# Hard reasoning/coding
-# escalates to reasoning-pool. The classifier runs on 27b-chat (always
-# resident) with the built-in 'agentic' rubric: routine installs, builds,
-# multi-file edits and standard debugging anchor at MEDIUM, so ordinary
-# engineering traffic avoids the allowance-metered Go pools.
-# classification_mode 'user_turn' re-classifies on every new human ask (a
-# session can move tiers between asks, no hour-long freeze) but replays the
-# held decision on an agent loop's tool continuations, so a long loop neither
-# re-classifies per step nor switches tiers mid-loop. Pool members are picked
-# per request by the proxy's simple-shuffle, so sessions hop within the pool;
-# the Go session id keeps per-conversation affinity (prompt cache) on the
-# cloud rungs. The 27B member (order 1) is the lane's primary and the
-# failover floor if Go drops a free model.
+#
+# COMPLEX and REASONING are now SPLIT into two lanes (they used to share
+# reasoning-pool). Measured over 16d both tiers landed 100% in reasoning-pool,
+# but they are different kinds of work and different volumes: COMPLEX is the
+# higher-volume bulk multi-step/coding tier (261 fresh classifications), so it
+# goes to implementation-pool — local 27B first, free and private, with cheap
+# cloud rungs only as overflow. REASONING is the lower-volume hardest tier
+# (146 fresh classifications: deep reasoning / advanced math / intricate logic)
+# and keeps the cloud-first reasoning-pool where quality matters most. Routing
+# the bulk tier at the local-first lane keeps the shared $240 Go allowance off
+# the work the resident GPU can do for free.
+#
+# The classifier runs on 27b-chat (always resident) with the built-in 'agentic'
+# rubric: routine installs, builds, multi-file edits and standard debugging
+# anchor at MEDIUM, so ordinary engineering traffic avoids the allowance-
+# metered Go pools. classification_mode 'user_turn' re-classifies on every new
+# human ask (a session can move tiers between asks, no hour-long freeze) but
+# replays the held decision on an agent loop's tool continuations, so a long
+# loop neither re-classifies per step nor switches tiers mid-loop. Pool members
+# are picked per request by the proxy's simple-shuffle, so sessions hop within
+# the pool; the Go session id keeps per-conversation affinity (prompt cache) on
+# the cloud rungs. The 27B member (order 1) is each lane's primary/failover
+# floor where applicable.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -34,7 +44,7 @@ spec:
         tiers:
           SIMPLE: local-free-pool
           MEDIUM: local-free-pool
-          COMPLEX: reasoning-pool
+          COMPLEX: implementation-pool
           REASONING: reasoning-pool
         classifier_type: llm
         classifier_llm_config:
