@@ -10,7 +10,8 @@ spec:
   secretName: litellm-key-mealie
   secretKey: api-key
   models:
-  - qwen3.8-27b-chat
+  - local-free-pool
+
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
 apiVersion: external-secrets.io/v1alpha1
