@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./it-tools-cnp.yaml
+  - ./ciliumNetworkPolicy.yaml

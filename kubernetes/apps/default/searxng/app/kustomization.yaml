@@ -6,8 +6,7 @@ resources:
   - ./externalsecret.yaml
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./searxng-cnp.yaml
-  - ./searxng-dragonfly-db-cnp.yaml
+  - ./ciliumNetworkPolicy.yaml
 configMapGenerator:
   - name: searxng-config
     files:
