@@ -21,7 +21,7 @@ spec:
   # https://github.com/BerriAI/litellm/issues/51666 ships in a release;
   # Renovate tracks the base version in container-images and proposes the
   # :rolling digest bump here on rebuild.
-  image: ghcr.io/cbc02009/litellm:rolling@sha256:a39062f3b70b21588cc3dab8bdf22ec8eed66fea818c820270d78d3b8700301e
+  image: ghcr.io/cbc02009/litellm:rolling@sha256:8c1c39f40d5ee7534b4d25ef9001c53b7a1a035cd8df648807ab681bb879a533
   replicas: 2
   # Roll the gateway whenever the litellm Secret (envFrom below) changes —
   # the operator's config-hash only covers the CR spec, so ExternalSecret
