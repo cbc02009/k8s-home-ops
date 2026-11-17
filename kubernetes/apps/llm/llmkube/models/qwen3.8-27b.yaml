@@ -27,7 +27,7 @@ metadata:
 spec:
   modelRef: qwen3.8-27b
   runtime: vllm
-  image: ghcr.io/syv-ai/hyperqwen@sha256:e0e4f9db81c0ce6eda3089d1df445fd50b1abdac8ae92c6eb985b498ec4fd7a4
+  image: ghcr.io/syv-ai/hyperqwen@sha256:68557954f5700e3bbdab37e0e310b83adc42e2cd20ddcd71e46b5690ca92f71e
   command:
     - bash
     - docker/entrypoint.sh
