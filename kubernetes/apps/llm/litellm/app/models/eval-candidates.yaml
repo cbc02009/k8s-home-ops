@@ -1,0 +1,124 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Individual (non-pool) OpenCode Go candidate models for evaluation. These are
+# NOT in any auto-router pool — they exist only so deterministic benchmarks can
+# be run against a fixed model name (a pool's shuffle router ignores a pinned
+# model_id; individual deployments do not). Promote a winner into the matching
+# pool only after a benchmark shows it beats the current rung at equal or lower
+# effective cost on the shared $240 Go Plus allowance.
+#
+# Effective cost = list price x (240 / goplus_cap). deepseek-v4.1-flash has a
+# Go Plus cap of 200 -> 1.20x, the cheapest burn of any non-free Go model and
+# cheaper than the current glm-5.3-flash primary (cap 180 -> 1.33x).
+# deepseek-v4.1-flash was previously assumed to 400 ("Invalid model name"), but
+# that 400 was the LITELLM PROXY rejecting an unregistered name, not the Go
+# provider. Registering it here makes the real provider test possible.
+# No OpenRouter is involved: these are opencode_go/ deployments via the Go key.
+
+---
+# DeepSeek V4.1 Flash: cap 200 -> 1.20x burn (cheapest non-free Go model). DeepSWE 74.2 / TB2.1 90.6 - beats current pool rungs. User-requested test.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-deepseek-v4.1-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-deepseek-v4.1-flash
+  proxyRef: litellm
+  params:
+    model: opencode_go/deepseek-v4.1-flash
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 384000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 3e-07
+      output_cost_per_token: 1.2e-06
+      cache_read_input_token_cost: 6e-09
+---
+# Qwen3.7 Plus: cap 180 -> 1.33x. Cheaper mid-tier alternative to qwen3.8-flash (2.67x).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-qwen3.7-plus
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-qwen3.7-plus
+  proxyRef: litellm
+  params:
+    model: opencode_go/qwen3.7-plus
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 384000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 4e-07
+      output_cost_per_token: 1.6e-06
+      cache_read_input_token_cost: 4e-08
+---
+# Step 5 Preview: cap 60 -> 4x (limited-time 4x promo). Reasoning candidate; quality test only.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-step-5-preview
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-step-5-preview
+  proxyRef: litellm
+  params:
+    model: opencode_go/step-5-preview
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-06
+      output_cost_per_token: 2.7e-06
+      cache_read_input_token_cost: 1e-07
+---
+# GLM-5.2: cap 180 -> 1.33x, a full GLM flagship at Flash-tier burn. Reasoning-pool promotion candidate.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-glm-5.2
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-glm-5.2
+  proxyRef: litellm
+  params:
+    model: opencode_go/glm-5.2
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.6e-07
