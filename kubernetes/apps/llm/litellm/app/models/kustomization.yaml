@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./auto.yaml
   - ./embed.yaml
+  - ./eval-candidates.yaml
   - ./frontier-pool.yaml
   - ./implementation-pool.yaml
   - ./local-free-pool.yaml
