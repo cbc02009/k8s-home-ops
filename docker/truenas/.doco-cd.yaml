@@ -14,9 +14,6 @@ external_secrets:
   FORGEJO_INTERNAL_TOKEN: op://Homelab/forgejo-homelab/internal_token
   FORGEJO_SECRET_KEY: op://Homelab/forgejo-homelab/secret_key
   FORGEJO_DATABASE_PASSWORD: op://Homelab/forgejo-homelab/pg_pass
-environment:
-  # 1Password Connect API reachable from the NAS (a URL, not a secret).
-  SECRET_PROVIDER_CONNECT_HOST: "http://opc.ctec.run"
 force_recreate: false
 reconciliation:
   enabled: true

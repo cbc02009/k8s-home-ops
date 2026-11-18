@@ -21,12 +21,8 @@ services:
         - url: https://github.com/cbc02009/k8s-home-ops.git
           reference: main
           interval: 180
-      # GIT_ACCESS_TOKEN_FILE: /run/secrets/git_access_token
-      WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
       SECRET_PROVIDER: 1password
-      # Set in this stack's entry in .doco-cd.yaml (a URL, not a secret).
-      SECRET_PROVIDER_CONNECT_HOST: ${SECRET_PROVIDER_CONNECT_HOST:?set SECRET_PROVIDER_CONNECT_HOST in .doco-cd.yaml}
-      SECRET_PROVIDER_CONNECT_TOKEN_FILE: /run/secrets/connect_token
+      SECRET_PROVIDER_ACCESS_TOKEN_FILE: /run/secrets/1pw_token
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       # Same bind the TrueNAS app used, so the repository cache and journal carry over.
@@ -39,10 +35,10 @@ services:
       retries: 3
     secrets:
       # - git_access_token
-      - connect_token
+      - 1pw_token
 
 secrets:
   # git_access_token:
   #   file: /mnt/apps/appdata/doco-cd/secrets/git_access_token
-  connect_token:
-    file: /mnt/smoltank/apps/doco-cd/secrets/connect_token
+  1pw_token:
+    file: /mnt/smoltank/apps/doco-cd/secrets/1pw_token
