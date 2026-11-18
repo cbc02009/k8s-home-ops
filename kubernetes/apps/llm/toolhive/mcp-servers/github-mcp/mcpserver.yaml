@@ -14,6 +14,8 @@ spec:
       value: https://api.github.com
     - name: LOG_LEVEL
       value: info
+    - name: GITHUB_TOOLSETS
+      value: context,issues,pull_requests,repos,users,actions
   secrets:
     - name: toolhive-github
       key: token
