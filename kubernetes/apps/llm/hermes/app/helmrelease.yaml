@@ -169,6 +169,7 @@ spec:
               HERMES_HOME: /opt/data
               HOME: /opt/data
               TZ: ${CONFIG_TZ}
+              CAMOFOX_URL: http://camofox.llm.svc.cluster.local:9377
               # The Webapp (browser-hosted Desktop workspace) is served by
               # this gateway process on a non-loopback bind, so it engages
               # the sign-in gate. It has no auth provider of its own: it
