@@ -5,52 +5,19 @@ kind: HelmRelease
 metadata:
   name: mosquitto
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: mosquitto
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 15m
+  dependsOn: []
   values:
-    controllers:
-      mosquitto:
-        containers:
-          app:
-            image:
-              repository: public.ecr.aws/docker/library/eclipse-mosquitto
-              tag: 2.0.22
-            env:
-              TZ: America/New_York
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 100Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsGroup: 100
+        fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        type: LoadBalancer
-        annotations:
-          external-dns.kubernetes.io/hostname: mosquitto.ctec.run
-          lbipam.cilium.io/ips: ${IP}
-        ports:
-          http:
-            port: 1883
     configMaps:
       config:
         data:
@@ -61,15 +28,49 @@ spec:
             listener 1883
             per_listener_settings false
             persistence true
-            persistence_location /config
+            persistence_location /config/
+    controllers:
+      mosquitto:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: public.ecr.aws/docker/library/eclipse-mosquitto
+              tag: 2.0.23
+            env:
+              TZ: ${CONFIG_TZ}
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 100Mi
+        statefulset:
+          volumeClaimTemplates:
+            - name: config
+              accessMode: ReadWriteOnce
+              size: 5Gi
     persistence:
-      config:
-        existingClaim: "{{ .Release.Name }}-cache"
       config-file:
         type: configMap
-        name: mosquitto
+        identifier: config
         advancedMounts:
           mosquitto:
             app:
               - path: /mosquitto/config/mosquitto.conf
                 subPath: mosquitto.conf
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          external-dns.kubernetes.io/hostname: mqtt.ctec.run
+          lbipam.cilium.io/ips: 10.6.0.30
+        externalTrafficPolicy: Local
+        ports:
+          mqtt:
+            port: 1883

@@ -14,7 +14,7 @@ services:
     environment:
       TZ: America/New_York
       ZIGBEE2MQTT_DATA: /data
-      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://10.6.0.16:1883
+      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mqtt.ctec.run:1883
       ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: zigbee2mqtt
       ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/ttyACM0
       ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: "true"
