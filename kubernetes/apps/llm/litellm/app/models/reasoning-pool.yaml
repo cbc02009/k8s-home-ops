@@ -21,12 +21,17 @@
 #
 # Ladder (order is a priority FILTER, not a per-rung attribute): only the
 # lowest healthy order level is eligible; weight splits traffic WITHIN a level.
-#   Order 1 — glm-5.3-flash (w3), minimax-m3 (w2), zai/glm-5.3-flash (w1):
-#             cheap high-scoring primaries; the Z.AI rung is the flat-plan half
-#             that drains non-rolling weekly credits before they expire.
+#   Order 1 — glm-5.3-flash (w1, live-tuned 2026-11-18 — adopted here),
+#             minimax-m3 (w2), zai/glm-5.3-flash (w1): cheap high-scoring
+#             primaries; the Z.AI rung is the flat-plan half that drains
+#             non-rolling weekly credits before they expire.
 #   Order 2 — deepseek-v4.1-flash (1.20x, the only sub-2x burn left),
 #             mimo-v2.6-flash (2.0x) + minimax-m3.1-flash (3.0x): cheap
-#             second wave once order 1 saturates/cools.
+#             second wave once order 1 saturates/cools. The 3.0x rung's
+#             weight is cut 2->1 (2026-11-18 burn audit: heaviest single draw
+#             of the $9.24 heavy day at ~1.4x its tier partners' effective
+#             cost), so the tier mix is now evenly 33/33/33 instead of
+#             50/25/25.
 #   Order 4 — gemini-4-argon: 2.00x burn but the only 1M-class deep rung, with
 #             a 95% cached-input discount on a 94%-cached lane. Last-resort
 #             long-context rung alongside kimi; fires only in total cooldown.
@@ -50,7 +55,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 1
       weight: 2
@@ -68,9 +73,11 @@ spec:
       cache_read_input_token_cost: 6e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# NEW primary (order 1, highest weight): the cheapest of the high-scoring Go
-# rungs — 1.33x burn, ~$0.67/1M effective output, deterministic bench 0.952.
-# 1M context, sub-second TTFT. Carries the bulk of the reasoning lane.
+# NEW primary (order 1): the cheapest of the high-scoring Go rungs — 1.33x
+# burn, ~$0.67/1M effective output, deterministic bench 0.952. 1M context,
+# sub-second TTFT. Carries the bulk of the reasoning lane; weight live-tuned
+# 3->1 on 2026-11-18 (the local 27B floor carries more of the lane now) with
+# mpr 3->2 — adopted here so the repo matches the running proxy.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -82,11 +89,11 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/glm-5.3-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 1
-      weight: 3
-      max_parallel_requests: 3
+      weight: 1
+      max_parallel_requests: 2
   info:
     mode: chat
     maxInputTokens: 1000000
@@ -118,7 +125,7 @@ spec:
   params:
     model: zai/glm-5.3-flash
     apiBase: https://api.z.ai/api/coding/paas/v4
-    apiKey: os.environ/ZAI_API_KEY
+    apiKey: "os.environ/ZAI_API_KEY"
     additional:
       order: 1
       weight: 1
@@ -139,7 +146,9 @@ spec:
 # Order 2 — demoted from order 1: its 3.0x burn multiplier (cap 80) makes it
 # the most expensive of the top scorers per token on the shared pool. Still a
 # strong agentic rung, so it stays as a cheap-second-wave failover, not a
-# primary. Half of M3's token cost at list price, 1M context.
+# primary. Half of M3's token cost at list price, 1M context. Weight cut
+# 2->1 on the 2026-11-18 burn audit (heaviest single draw of the $9.24 heavy
+# day, ~1.4x its tier partners' effective cost).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -151,10 +160,10 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
-      weight: 2
+      weight: 1
       max_parallel_requests: 2
   info:
     mode: chat
@@ -184,7 +193,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/mimo-v2.6-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
       weight: 2
@@ -226,7 +235,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/deepseek-v4.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
       weight: 2
@@ -259,7 +268,7 @@ spec:
   params:
     model: openai/qwen3.8-27b
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
+    apiKey: "sk-llmkube-noauth"
     additional:
       temperature: 1.0
       top_p: 0.95
@@ -301,7 +310,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/gemini-4-argon
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 4
       weight: 1
@@ -333,7 +342,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/kimi-k2.7-code
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 4
       max_parallel_requests: 1

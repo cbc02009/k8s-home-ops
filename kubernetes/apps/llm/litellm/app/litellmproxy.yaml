@@ -138,46 +138,50 @@ spec:
     cooldown_time: 30
     enable_pre_call_checks: true
     fallbacks:
-      # Two flat subscriptions back each other up. When a Go lane's
-      # 5h/weekly/monthly window runs dry (429 after retries), traffic
-      # continues on the Z.AI Coding Plan lane (zai-pool: GLM-5.3 Flash /
-      # GLM-5.3) instead of stalling the session — and the Z.AI credits,
-      # which do not roll over, get burned in the process. The local 27B
-      # pool is the final free floor, so no workload fails when both
-      # subscriptions are exhausted.
+      # The 2026-11-18 burn audit: while every paid lane's first fallback was
+      # zai-pool, the non-rolling Z.AI credits absorbed the lanes' overflow
+      # (12-15 $/day on the 11-17/18 heavy days) even though the free local
+      # 27B pool was healthy. Every paid lane now falls to the local pool
+      # first (free, always resident, warm prefix cache) and keeps zai-pool
+      # as the last-resort rung, so the Z.AI credits only burn when the
+      # local floor is itself saturated. The named single-model lanes keep
+      # their model as first choice; only the pool floor changes.
       - go-pool:
-          - zai-pool
           - local-pool
-      # The named single-model lanes keep their model as first choice; only
-      # the pool floor changes.
+          - zai-pool
       - go-coder:
           - go-pool
-          - zai-pool
           - local-pool
+          - zai-pool
       - go-strong:
           - go-pool
-          - zai-pool
           - local-pool
+          - zai-pool
       - go-max:
           - go-pool
-          - zai-pool
           - local-pool
+          - zai-pool
       - frontier-pool:
           - go-pool
-          - zai-pool
           - local-pool
-      # go-chat is the vision lane: both zai-pool rungs are vision-capable,
-      # so image/vision workloads survive a Go outage too.
+          - zai-pool
+      # go-chat is the vision lane: when the Go window dries, text traffic
+      # lands on the local pool first; image-bearing requests 4xx there (the
+      # 27B has no vision) and continue to zai-pool, whose GLM-5.3 rung is
+      # vision-capable — so vision workloads still survive a Go outage, one
+      # extra hop later.
       - go-chat:
+          - local-pool
           - zai-pool
       - reasoning-pool:
-          - zai-pool
           - local-pool
+          - zai-pool
       - implementation-pool:
-          - zai-pool
           - local-pool
-      # The complexity router's own floor: the pooled lanes first (they carry
-      # the Z.AI co-primary rungs), then the plain local pool.
+          - zai-pool
+      # The complexity router's own floor: the pooled lane first (its Z.AI
+      # co-primary rungs only fire when the lane's local primary cools), then
+      # the plain local pool.
       - auto:
           - implementation-pool
           - local-pool
