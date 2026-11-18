@@ -12,7 +12,7 @@ services:
     environment:
       TZ: "America/New_York"
       HTTP_PORT: 8880
-      LOG_LEVEL: debug
+      LOG_LEVEL: info
       METRICS_PORT: "9130"
       SELF_UPDATE_ENABLED: "true"
       SELF_UPDATE_STRATEGY: applier

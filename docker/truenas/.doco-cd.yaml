@@ -7,7 +7,7 @@ auto_discovery:
   delete: true
 reference: refs/heads/main
 external_secrets:
-  TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_traefik/api_key
+  TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_traefik/api_token
   GARAGE_ADMIN_TOKEN: op://Homelab/garage/admin_token
   GARAGE_RPC_SECRET: op://Homelab/garage/rpc_secret
   GARAGE_METRICS_TOKEN: op://Homelab/garage/metrics_token
