@@ -9,3 +9,5 @@ k8s home cluster setup largely ~~stolen from~~ inspired by Truxnell's amazingly 
 I should probably update this at some point.
 
 Many thanks to everyone on the discord for all their help getting this setup!
+
+<!-- mcp-test 2026-11-17: throwaway PR to validate github-mcp review/merge tools -->
