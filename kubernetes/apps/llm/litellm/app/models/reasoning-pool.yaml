@@ -27,6 +27,11 @@
 #   Order 2 — deepseek-v4.1-flash (1.20x, the only sub-2x burn left),
 #             mimo-v2.6-flash (2.0x) + minimax-m3.1-flash (3.0x): cheap
 #             second wave once order 1 saturates/cools.
+#   Order 4 — gemini-4-argon: 2.00x burn but the only 1M-class deep rung, with
+#             a 95% cached-input discount on a 94%-cached lane. Last-resort
+#             long-context rung alongside kimi; fires only in total cooldown.
+#             Standardized SimpleBench (AVG@5, T=.7): 100% on our 10-item
+#             subset vs 46% go-pool, 36% hy4; published frontier ~80-82%.
 #   Order 3 — local 27B: free floor, ahead of the expensive cloud rung.
 #   Order 4 — kimi-k2.7-code: last resort. It burned ~55% of this lane's Go
 #             spend for ~18% of requests; demoting it below the free floor
@@ -277,6 +282,42 @@ spec:
       cache_read_input_token_cost: 0.0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Order 4 — NEW long-context deep rung: 2.00x burn (cap 120) but the only
+# 1M-class model in the pool, with a 95% cached-input discount on this lane's
+# 94%-cached traffic (effective cache ~$0.40/1M). 100% on the standardized
+# SimpleBench subset (10/10 x 5 runs), zero 403s in that window. Fires only
+# when orders 1-3 are all in cooldown, alongside kimi-k2.7-code; the deep
+# position bounds the blast radius of its intermittent PERMISSION_DENIED
+# flakiness (see eval-candidate doc). Last resort, not a primary — its
+# effective output cost ($40/1M list-x-burn) is the steepest on the board.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-gemini-4-argon
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/gemini-4-argon
+    apiKey: os.environ/OPENCODE_GO_API_KEY
+    additional:
+      order: 4
+      weight: 1
+      max_parallel_requests: 1
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 8e-06
+      output_cost_per_token: 4e-05
+      cache_read_input_token_cost: 4e-07
+---
 # Last resort — DEMOTED from order 3 to order 4: the best agentic coder but
 # ~$5.33/1M effective output. It accounted for ~55% of this lane's Go allowance
 # burn on ~18% of requests. Use the dedicated `go-coder` lane for on-purpose
