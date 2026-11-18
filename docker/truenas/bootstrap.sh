@@ -32,6 +32,7 @@ docker run --rm \
   -e SECRET_PROVIDER_CONNECT_HOST="$SECRET_PROVIDER_CONNECT_HOST" \
   -e SECRET_PROVIDER_CONNECT_TOKEN_FILE=/run/secrets/connect_token \
   -e POLL_CONFIG="- url: $REPO_URL
+  -e LOG_LEVEL=debug
   reference: main
   interval: 180" \
   "$IMAGE" apply-self --bootstrap
