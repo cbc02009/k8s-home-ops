@@ -72,16 +72,6 @@ spec:
             env:
               HOME: *homepath
               TZ: ${CONFIG_TZ}
-              GH_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: opencode
-                    key: GH_TOKEN
-              GITHUB_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: opencode
-                    key: GITHUB_TOKEN
             args:
               [
                 "--auth",

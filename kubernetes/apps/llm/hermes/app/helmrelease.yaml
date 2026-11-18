@@ -34,13 +34,6 @@ spec:
                     key: LITELLM_API_KEY
               # Required by the git credential setup below; set -u aborts
               # the init script if it is not present in the container env.
-              - name: GITHUB_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: GITHUB_TOKEN
-              # Required by the git credential setup below; set -u aborts
-              # the init script if it is not present in the container env.
               - name: FORGEJO_TOKEN
                 valueFrom:
                   secretKeyRef:
@@ -70,9 +63,11 @@ spec:
                 chown 10000:10000 /opt/data/config.yaml
 
                 # Configure git for the mahoro-ai sockpuppet account.
-                # Credentials come from the hermes secret (GITHUB_TOKEN for
-                # github.com, FORGEJO_TOKEN for git.cnas.dev). Use
-                # HOME=/opt/data so the app container (which also uses
+                # Direct GitHub tokens no longer reach this pod (MCP-only
+                # policy): the sole credential line written is the
+                # git.cnas.dev one, from FORGEJO_TOKEN. GitHub repo work
+                # goes through the MCP servers, never this credential file.
+                # Use HOME=/opt/data so the app container (which also uses
                 # HOME=/opt/data) inherits the config from the PVC.
                 export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
@@ -92,10 +87,7 @@ spec:
                 git config --global 'includeIf.hasconfig:remote.*.url:https://git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
                 printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
                 umask 077
-                {
-                  printf 'https://x-access-token:%s@github.com/cbc02009/k8s-home-ops.git\n' "$GITHUB_TOKEN"
-                  printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN"
-                } > /opt/data/.git-credentials
+                printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials

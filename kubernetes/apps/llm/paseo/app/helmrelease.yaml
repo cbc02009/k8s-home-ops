@@ -48,25 +48,22 @@ spec:
             command: ["/bin/bash", "-c"]
             args:
               - |
-                # Best-effort pre-clone so agent sessions start with the repo
-                # and the bot git identity. Every step is guarded and the
-                # script always exits 0, so a failure here (no git, no token,
-                # no network, bad permissions) never blocks the daemon.
+                # Best-effort pre-clone so agent sessions start with the
+                # repo and the bot git identity. No credential file is
+                # written (direct GitHub access is gone; pushes go through
+                # the MCP servers), so the clone stays anonymous. Every
+                # step is guarded and the script always exits 0, so a
+                # failure here (no git, no network, bad permissions) never
+                # blocks the daemon.
                 # Only bare $vars are used: Flux postBuild envsubst (strict)
                 # aborts the build on any braced variable it cannot resolve.
                 export HOME=/home/paseo
-                umask 077
                 mkdir -p "$HOME" /workspace/worktrees 2>/dev/null
                 if command -v git >/dev/null 2>&1; then
                   git config --global user.name "mahoro-ai" 2>/dev/null
                   git config --global user.email "354213225+mahoro-ai@users.noreply.github.com" 2>/dev/null
                   git config --global init.defaultBranch main 2>/dev/null
                   git config --global --add safe.directory '*' 2>/dev/null
-                  if [ -n "$GH_TOKEN" ]; then
-                    printf 'https://x-access-token:%s@github.com\n' "$GH_TOKEN" > "$HOME/.git-credentials" 2>/dev/null
-                    git config --global credential.helper store 2>/dev/null
-                  fi
-                  umask 022
                   if [ ! -d /workspace/k8s-home-ops/.git ]; then
                     git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /workspace/k8s-home-ops \
                       || echo "WARN: k8s-home-ops clone failed; clone it from a session instead"
@@ -77,12 +74,6 @@ spec:
                   echo "git unavailable; skipping repo pre-clone"
                 fi
                 exit 0
-            env:
-              - name: GH_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: paseo
-                    key: GH_TOKEN
         containers:
           app:
             image:
@@ -101,10 +92,6 @@ spec:
             env:
               - name: TZ
                 value: ${CONFIG_TZ}
-            envFrom:
-              # Bot github token (GH_TOKEN / GITHUB_TOKEN) for agent sessions.
-              - secretRef:
-                  name: paseo
             probes:
               startup:
                 enabled: true
@@ -164,8 +151,8 @@ spec:
       data:
         existingClaim: *app
         globalMounts:
-          # Daemon state (PASEO_HOME, agent creds, git identity) plus the
-          # code workspace Paseo sessions and worktrees operate in.
+          # Daemon state (PASEO_HOME, git identity) plus the code
+          # workspace Paseo sessions and worktrees operate in.
           - path: /home/paseo
             subPath: home
           - path: /workspace
