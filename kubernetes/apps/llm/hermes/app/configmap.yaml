@@ -105,7 +105,15 @@ data:
           max_concurrent_children: 1
       max_iterations: 250
     gateway:
-      multiplex_profiles: false
+      # One gateway process serves every profile (routed turns). The
+      # per-profile s6 slots under /run/hermes-service are created at boot
+      # but stay down; only the default slot's gateway runs. This tracks the
+      # live pod, which has served all profiles this way; flipping it to
+      # false would stop every non-default profile's bot from being served
+      # on the next deploy. Per-profile isolation comes from the framework's
+      # routed-turn machinery (secret scopes, the memini namespace pins in
+      # the HelmRelease env), not from per-profile gateway processes.
+      multiplex_profiles: true
     webapp:
       # The browser-hosted Desktop workspace (v0.23.0+), served by the
       # gateway's own HTTP listener. Enabling it moves that listener from

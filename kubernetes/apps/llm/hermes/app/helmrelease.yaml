@@ -93,8 +93,8 @@ spec:
                 printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
                 umask 077
                 {
-                  printf 'https://x-access-token:%s@github.com/cbc02009/k8s-home-ops.git\n' "$GITHUB_TOKEN"
-                  printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN"
+                  printf 'https://x-access-token:***\n' "$GITHUB_TOKEN"
+                  printf 'https://mahoro-ai:***@git.cnas.dev\n' "$FORGEJO_TOKEN"
                 } > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
@@ -152,6 +152,24 @@ spec:
                     echo "WARN: memini plugin fetch failed; starting with whatever is present"
                   fi
                 fi
+
+                # Apply the in-repo per-profile namespace patch to the pinned
+                # plugin (idempotent: a no-op when its marker comment is
+                # already present, a warning when the upstream anchor moved).
+                # Fetched from this repo, so a pin bump above (which
+                # refetches the upstream file) is followed by an automatic
+                # re-apply of this same reviewed patch. A failed fetch or
+                # apply leaves the upstream plugin untouched, which is
+                # today's behavior: one shared namespace for all profiles.
+                apk add --no-cache python3 >/dev/null
+                if [ -f "$PLUGIN_DIR/__init__.py" ]; then
+                  if wget -qO /tmp/memini-per-profile-ns.py "https://raw.githubusercontent.com/cbc02009/k8s-home-ops/main/kubernetes/apps/llm/hermes/app/memini-per-profile-namespace.py"; then
+                    python3 /tmp/memini-per-profile-ns.py || echo "WARN: per-profile namespace patch failed to apply; keeping the upstream plugin"
+                    chown -R 10000:10000 "$PLUGIN_DIR" 2>/dev/null || true
+                  else
+                    echo "WARN: per-profile namespace patch fetch failed; keeping the upstream plugin"
+                  fi
+                fi
         containers:
           app:
             image: &image
@@ -165,7 +183,32 @@ spec:
               # call). .svc.local is also not served by this cluster's
               # CoreDNS (search domains are *.svc.cluster.local).
               MEMINI_BASE_URL: http://memini.llm.svc.cluster.local:8080
+              # The gateway multiplexes every profile through one process,
+              # and a routed profile's .env is never loaded into
+              # os.environ, so a per-profile MEMINI_NAMESPACE cannot come
+              # from the profiles' .env files. The in-repo plugin patch
+              # (app/memini-per-profile-namespace.py, applied by the init
+              # container below) therefore reads one static, non-secret pin
+              # per profile instead, keyed by upper-cased profile name.
+              # Every profile keeps the shared "hermes" root as an
+              # ancestor: durable facts stored at the root (and in the home
+              # leg) cascade down to each profile, while each profile's own
+              # transcripts live in its own child namespace instead of one
+              # shared catch-all.
               MEMINI_NAMESPACE: hermes
+              MEMINI_NAMESPACE_DEFAULT: hermes
+              MEMINI_NAMESPACE_CLUSTEROPS: hermes/clusterops
+              MEMINI_NAMESPACE_MAKER: hermes/maker
+              MEMINI_NAMESPACE_MODELOPS: hermes/modelops
+              MEMINI_NAMESPACE_MTG: hermes/mtg
+              MEMINI_NAMESPACE_REVIEWER: hermes/reviewer
+              MEMINI_NAMESPACE_TALOS: hermes/talos
+              # Shared home leg: personal/user-level facts (the
+              # personal/cbc02009 namespace) merge into every profile's
+              # recall on both the read and write sides. The hermes key
+              # carries no server-side home binding, so this client-side
+              # value is authoritative.
+              MEMINI_HOME: personal/cbc02009
               HERMES_HOME: /opt/data
               HOME: /opt/data
               TZ: ${CONFIG_TZ}
