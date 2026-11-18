@@ -34,6 +34,34 @@ spec:
         replicas: 0
         annotations:
           reloader.stakater.com/auto: "true"
+        # The image's entrypoint (upstream launch-standard-docker.sh) exits
+        # without launching if /SwarmUI/dlbackend is root-owned. The PVC's
+        # subPath directories are created by the kubelet as root and the pod
+        # fsGroup is not applied to subPath subdirectories, so this init
+        # container (root, the image's own `fixch` repair) chowns the four
+        # persistent subPaths to the app's uid/gid before the app starts.
+        initContainers:
+          fix-perms:
+            image:
+              repository: ghcr.io/cbc02009/swarmui
+              tag: 0.9.8@sha256:436e2e1082abbec40c3aa2e19ef37d2328f1e0fa46c7858b0c9b37c380a8e38d
+            command:
+              - chown
+              - -R
+              - "${APP_UID}:${APP_GID}"
+              - /SwarmUI/dlbackend
+              - /SwarmUI/Data
+              - /SwarmUI/src/BuiltinExtensions/ComfyUIBackend/DLNodes
+              - /SwarmUI/src/BuiltinExtensions/ComfyUIBackend/CustomWorkflows
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                cpu: 100m
+                memory: 64Mi
         pod:
           securityContext:
             runAsUser: ${APP_UID}

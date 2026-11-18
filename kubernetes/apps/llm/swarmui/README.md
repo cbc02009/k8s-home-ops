@@ -70,3 +70,16 @@ drift fix, so a suspend there is not enough.
   moment swarmui's pod binds, and the pool may also drop `strata-fn` (same GPU).
 - On release, the 27B reloads from the shared cache — several minutes. Plan the
   session so you are not ping-ponging the GPU back and forth.
+
+## Data volume and the ownership guard
+
+The SwarmUI image's entrypoint (upstream `launch-standard-docker.sh`) prints
+"Detected folder ownership issue" and exits without launching when
+`/SwarmUI/dlbackend` is root-owned — a guard left over from the image running
+as root inside the container. The four `subPath` directories on the `swarmui`
+PVC are created by the kubelet as root, and the pod's `fsGroup` is not applied
+to subPath subdirectories, so a `fix-perms` init container (runs as root, the
+image's own `fixch` repair) chowns those four subPaths to the app's uid/gid
+before every pod start. The NFS `output`/`models` mounts are *not* chowned:
+`/mnt/smoltank/swarmui/{output,models}` on `shana` must be owned by (or
+writable by) uid 1000, or SwarmUI will not be able to save its images.
