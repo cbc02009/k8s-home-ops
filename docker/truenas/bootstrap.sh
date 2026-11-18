@@ -16,7 +16,7 @@ REPO_URL="https://github.com/cbc02009/k8s-home-ops.git"
 for f in connect_token; do
   [ -s "$SECRETS/$f" ] || { echo "missing or empty: $SECRETS/$f" >&2; exit 1; }
 done
-[ -z "$(docker ps -q --filter publish=6584)" ] || { echo "port 6584 is in use: stop the TrueNAS doco-cd app first" >&2; exit 1; }
+[ -z "$(docker ps -q --filter publish=8880)" ] || { echo "port 6584 is in use: stop the TrueNAS doco-cd app first" >&2; exit 1; }
 
 # The bootstrap deploys every stack in .doco-cd.yaml (adopting the running projects by name), so it
 # needs the same secret provider and token files as the long-running instance.
