@@ -9,16 +9,118 @@
 # Effective cost = list price x (240 / goplus_cap). Each doc below notes its own
 # cap/burn and third-party benchmark signal at the time of registration.
 # No OpenRouter is involved: these are opencode_go/ deployments via the Go key.
-
+#
+# Cycle history:
+#   2026-11-17: hy4 + gemini-4-argon registered (PR #6016). Cycle closed
+#   2026-11-17: gemini-4-argon promoted to reasoning-pool order 4; hy4
+#   rejected (36% standardized SimpleBench vs 46% go-pool / 100% gemini).
+#   2026-11-18 spend audit (weekly-spend-audit-2026-11-18.md): new cycle
+#   registered gpt-6-luna (rec 1: frontier-class fidelity at effective
+#   $0.40/$2.00 per 1M - bench then promote to implementation-pool order 3,
+#   the slot vacated by the m3.1-flash weight cut), hy3 (rec 5: the 1x-burn
+#   bargain, cheapest effective output in the catalog), and claude-haiku-5-5
+#   (rec 1: identical list price to gpt-6-luna - head-to-head bench decides
+#   which of the two carries the slot).
+---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Hy4 (Tencent): cap 240 -> 1.00x burn (cheapest paid model in the Go lineup,
-# 17% under deepseek-v4.1-flash). DeepSWE 74.9 measured (benchgap) ~ deepseek's
-# 74.2; Tencent's own chart has it beating DeepSeek V4.1 Flash and GLM-5.3 on
-# several tests. Weak spot: Terminal-Bench 4.0 only 44.4 vs Kimi K3.1 Pro 66.8.
-# 770B MoE; latency unknown on our lane. Efficiency target: beat glm-5.3-flash
-# at 2.76 score-per-burn-unit on the production-shape bench.
-# Candidate cycle closed 2026-11-17:
-#   - gemini-4-argon promoted to reasoning-pool order 4 (see reasoning-pool.yaml).
-#   - hy4 rejected: 36% on standardized SimpleBench vs 46% go-pool / 100% gemini;
-#     1.67/6 on the production-shape bench. Not worth a rung.
-# Re-add a candidate doc here only when a new model is registered for evaluation.
+# GPT-6 Luna (OpenAI): cap 60 -> 4.0x burn, but the lowest list price in the
+# paid lineup ($0.10/$0.50 per 1M) -> effective $0.40 in / $2.00 out - below
+# minimax-m3.1-flash's effective $0.45/$1.80, the rung it targets for.
+# "OpenAI's most efficient model for focused, high-volume tasks" (Go catalog,
+# released 2026-09-22). Switch-day probe on 2026-11-17 (~$0.05) returned a
+# valid completion. Bench target: implementation-pool order 3 (the 3.0x-burn
+# overflow slot being cut in this PR). Context/vision unverified on our lane -
+# set conservative (262144 in, no vision); cache discount assumed 90%.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-gpt-6-luna
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-gpt-6-luna
+  proxyRef: litellm
+  params:
+    model: opencode_go/gpt-6-luna
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 262144
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: false
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 1e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Claude Haiku 5.5 (Anthropic): cap 60 -> 4.0x burn, $0.10/$0.50 per 1M list -
+# IDENTICAL effective price to gpt-6-luna, so the bench is a head-to-head:
+# whichever wins carries the implementation-pool order 3 promotion. Already
+# served as the go-chat lane (open-webui, vision) - this eval lane is a
+# dedicated bench target; the go-chat rung is untouched. Vision + 1M context
+# per the go-chat doc.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-claude-haiku-5-5
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-claude-haiku-5-5
+  proxyRef: litellm
+  params:
+    model: opencode_go/claude-haiku-5-5
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 1e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Hy3 (Tencent, released 2026-07-06): "Hy reasoning model for coding,
+# instruction following, and agent tasks". cap 240 -> 1.00x burn (no burn
+# penalty) and the cheapest effective output in the catalog ($0.58/1M list) -
+# the audit's "unpooled bargain" (rec 5): it sits in no pool. Second bench
+# candidate; if it matches or beats the current mid tier at 1x burn it becomes
+# a new bulk rung rather than a swap. Input list price not exposed in the
+# catalog at registration time - placeholder 0 (the flat Go plan bills the
+# same either way; correct when the catalog exposes it). Vision unverified.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-hy3
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-hy3
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy3
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: false
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 5.8e-07
+      cache_read_input_token_cost: 5.8e-08

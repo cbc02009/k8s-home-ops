@@ -15,7 +15,10 @@
 # effective output, 1M context, vision, live 200 verified). Its only Go rung
 # here; kept at a modest share so the bench-proven glm-5.3-flash stays primary.
 # deepseek-v4.1-flash / hy3 were evaluated but the deployed proxy 400s them
-# ("Invalid model name") — dead rungs, excluded.
+# ("Invalid model name") — dead rungs, excluded. (That 400 was the
+# unregistered-name bug, not a Go-side rejection: hy3 re-enters as a
+# registered eval-candidates lane on the 2026-11-18 audit; bench before any
+# pool slot.)
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -28,7 +31,7 @@ spec:
   params:
     model: openai/qwen3.8-27b
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
+    apiKey: "sk-llmkube-noauth"
     additional:
       temperature: 1.0
       top_p: 0.95
@@ -64,7 +67,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/glm-5.3-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
       weight: 2
@@ -96,7 +99,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/mimo-v2.6-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
       weight: 1
@@ -129,7 +132,7 @@ spec:
   params:
     model: zai/glm-5.3-flash
     apiBase: https://api.z.ai/api/coding/paas/v4
-    apiKey: os.environ/ZAI_API_KEY
+    apiKey: "os.environ/ZAI_API_KEY"
     additional:
       order: 2
       weight: 2
@@ -148,7 +151,10 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Tier 2 (Go half): $20-30 Go mid window, 3.0x burn (cap 80) — expensive per
-# token on the shared pool, so it stays a tier-2 failover rather than a primary.
+# token on the shared pool, so it stays a tier-2 failover rather than a
+# primary. Weight cut 2->1 on the 2026-11-18 burn audit (heaviest single draw
+# of the $9.24 heavy day at ~1.4x its tier partner's effective cost), so
+# tier 2 is now a 50/50 Go-m3.1 / Z.AI-GLM-5.3 mix instead of 67/33 Go.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -160,10 +166,10 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 3
-      weight: 2
+      weight: 1
       max_parallel_requests: 2
   info:
     mode: chat
@@ -193,7 +199,7 @@ spec:
   params:
     model: zai/glm-5.3
     apiBase: https://api.z.ai/api/coding/paas/v4
-    apiKey: os.environ/ZAI_API_KEY
+    apiKey: "os.environ/ZAI_API_KEY"
     additional:
       order: 3
       weight: 1
