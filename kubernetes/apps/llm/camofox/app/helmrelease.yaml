@@ -1,0 +1,105 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app camofox
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        # Camoufox ships in /root/.cache/camoufox and /root is 0700, so
+        # the server has to run as root to reach its own browser binary.
+        runAsUser: 0
+        runAsGroup: 0
+        seccompProfile: { type: RuntimeDefault }
+    controllers:
+      camofox:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        # Single browser host with a ReadWriteOnce profile volume.
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/jo-inc/camofox-browser
+              tag: 1.19.0@sha256:49f8e02f9fb0e191b406845482745efc72f835db06789e3a34e77a6ff1497046
+            env:
+              # The browser launches lazily and idles down to ~40MB
+              # between sessions, so the pod is cheap to keep resident.
+              CAMOFOX_PORT: &port 9377
+              CAMOFOX_BIND_HOST: 0.0.0.0
+              # Everything the server writes lives on the PVC, so logins
+              # and imported cookies survive restarts.
+              CAMOFOX_PROFILE_DIR: /data/profiles
+              CAMOFOX_COOKIES_DIR: /data/cookies
+              CAMOFOX_UPLOADS_DIR: /data/uploads
+              CAMOFOX_TRACES_DIR: /data/traces
+              # Opt out of the vendor's crash/hang telemetry (files GitHub
+              # issues).
+              CAMOFOX_CRASH_REPORT_ENABLED: "false"
+              # Node heap only; the Camoufox processes live outside it.
+              MAX_OLD_SPACE_SIZE: "1024"
+            envFrom:
+              - secretRef:
+                  name: camofox-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 5
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+      # Firefox keeps its runtime profile and IPC scratch here.
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      dshm:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /dev/shm

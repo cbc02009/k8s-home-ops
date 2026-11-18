@@ -7,6 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
+  - ./camofox/ks.yaml
   - ./coder/ks.yaml
   - ./headroom/ks.yaml
   - ./hermes/ks.yaml
