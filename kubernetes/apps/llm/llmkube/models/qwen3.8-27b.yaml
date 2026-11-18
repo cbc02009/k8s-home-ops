@@ -61,7 +61,7 @@ spec:
     - name: GPU_UTIL
       value: "0.93"
     - name: MAX_SEQS
-      value: "8"
+      value: "12"
     - name: MAX_LEN
       value: "147456"
     - name: PREFIX_CACHE
