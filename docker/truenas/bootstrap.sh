@@ -9,7 +9,7 @@ set -eu
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 SECRETS=/mnt/smoltank/apps/doco-cd/secrets
-IMAGE="$(sed -n 's/^[[:space:]]*image:[[:space:]]*//p' "$DIR/.doco-cd/docker-compose.app.yaml" | head -n1)"
+IMAGE="$(sed -n 's/^[[:space:]]*image:[[:space:]]*//p' "$DIR/00-doco-cd/docker-compose.yaml" | head -n1)"
 REPO_URL="https://github.com/cbc02009/k8s-home-ops.git"
 
 for f in 1pw_token; do
