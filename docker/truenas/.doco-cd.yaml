@@ -17,3 +17,7 @@ external_secrets:
 environment:
   # 1Password Connect API reachable from the NAS (a URL, not a secret).
   SECRET_PROVIDER_CONNECT_HOST: "http://opc.ctec.run"
+force_recreate: false
+reconciliation:
+  enabled: true
+  interval: 3600
