@@ -17,61 +17,8 @@
 # several tests. Weak spot: Terminal-Bench 4.0 only 44.4 vs Kimi K3.1 Pro 66.8.
 # 770B MoE; latency unknown on our lane. Efficiency target: beat glm-5.3-flash
 # at 2.76 score-per-burn-unit on the production-shape bench.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: eval-hy4
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: eval-hy4
-  proxyRef: litellm
-  params:
-    model: opencode_go/hy4
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 65536
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 8.34e-07
-      output_cost_per_token: 2.5e-06
-      cache_read_input_token_cost: 4.17e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Gemini 4 Argon (Google): cap 120 -> 2.00x burn (half the frontier-tier burn).
-# AA Intelligence Index 53 (matches GPT-6 Astra max), #1 AutomationBench-AA 78%,
-# DeepSWE v1.1 77.9 (vs Opus 5.5 74.2), and the strongest long-context scores
-# found anywhere (GraphWalks 256k-1M subset 84.2%, 1M context, 95% cached-input
-# discount). Aimed at the class our flashes starve on (whole-scan long-context
-# aggregation). 2x burn but a 95% cache discount on our 94%-cached reasoning lane.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: eval-gemini-4-argon
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: eval-gemini-4-argon
-  proxyRef: litellm
-  params:
-    model: opencode_go/gemini-4-argon
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 4e-06
-      output_cost_per_token: 2e-05
-      cache_read_input_token_cost: 2e-07
+# Candidate cycle closed 2026-11-17:
+#   - gemini-4-argon promoted to reasoning-pool order 4 (see reasoning-pool.yaml).
+#   - hy4 rejected: 36% on standardized SimpleBench vs 46% go-pool / 100% gemini;
+#     1.67/6 on the production-shape bench. Not worth a rung.
+# Re-add a candidate doc here only when a new model is registered for evaluation.
