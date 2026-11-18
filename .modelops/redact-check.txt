@@ -1,3 +1,5 @@
 A1=apiKey: ***
 A2=v1=sk-llmkube-noauth
-A3=apiKey: ***
+R1=htuanoebkmlk-s
+R2=YEK_IP_AGODENECNO/re.env.so
+B=control
