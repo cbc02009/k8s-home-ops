@@ -32,20 +32,13 @@ spec:
                   secretKeyRef:
                     name: hermes
                     key: LITELLM_API_KEY
-              # Required by the git credential setup below; set -u aborts
-              # the init script if it is not present in the container env.
-              - name: FORGEJO_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: FORGEJO_TOKEN
             command:
               - sh
               - -c
               - |
                 set -euo pipefail
-                # git is needed for the credential/clone setup below (alpine
-                # ships without it); gettext provides envsubst.
+                # git is needed for the repo pre-clones below (alpine ships
+                # without it); gettext provides envsubst.
                 apk add --no-cache gettext git >/dev/null
                 cp /tmp/config.yaml /opt/data/config.yaml
                 # Expand env-var references from the pod env before hermes
@@ -62,37 +55,22 @@ spec:
                 mv /opt/data/config.yaml.tmp /opt/data/config.yaml
                 chown 10000:10000 /opt/data/config.yaml
 
-                # Configure git for the mahoro-ai sockpuppet account.
-                # Direct GitHub tokens no longer reach this pod (MCP-only
-                # policy): the sole credential line written is the
-                # git.cnas.dev one, from FORGEJO_TOKEN. GitHub repo work
-                # goes through the MCP servers, never this credential file.
+                # Set the bot git identity for local commits only.
+                # MCP-only policy: no credentials reach this pod (no
+                # .git-credentials for either host, no includeIf) - repo
+                # pushes for github.com and git.cnas.dev both go through
+                # the toolhive MCP servers, never from this pod.
                 # Use HOME=/opt/data so the app container (which also uses
                 # HOME=/opt/data) inherits the config from the PVC.
                 export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
-                git config --global credential.helper 'store --file /opt/data/.git-credentials'
                 # Set (not --add): --add appends on every boot and the
                 # multivalued key accumulated dozens of identical entries;
                 # set replaces the list and self-heals old duplicates.
                 git config --global safe.directory '*'
-                # Host-scoped identity: repos on git.cnas.dev commit as the
-                # Forgejo mahoro-ai account (noreply address), everything else
-                # keeps the GitHub sockpuppet identity above. The includeIf
-                # glob matches any repo cloned over HTTPS from that host; the
-                # single-quoted key survives the shell, and git config makes
-                # the write idempotent across restarts.
-                git config --global 'includeIf.hasconfig:remote.*.url:https://git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
-                printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
-                umask 077
-                printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
-                umask 022
-                chown 10000:10000 /opt/data/.git-credentials
-                chmod 600 /opt/data/.git-credentials
                 chown 10000:10000 /opt/data/.gitconfig 2>/dev/null || true
-                chown 10000:10000 /opt/data/.gitconfig-forgejo 2>/dev/null || true
                 # The hermes gateway overrides the pod-level HOME=/opt/data
                 # with /opt/data/home for the sessions it spawns, so git run
                 # from a session reads /opt/data/home/.gitconfig (which is
@@ -111,9 +89,10 @@ spec:
                 fi
                 chown -R 10000:10000 /opt/data/workspace/k8s-home-ops 2>/dev/null || true
 
-                # Clone the nas-ops repo (Forgejo on git.cnas.dev) if it
-                # isn't already present. Runs after the credential file is
-                # written, so private repos on that host clone too.
+                # Best-effort pre-clone of nas-ops (Forgejo on git.cnas.dev) so
+                # agent sessions start with the repo; anonymous, so it
+                # only succeeds while the repo is publicly readable. Private
+                # state: read it through the Forgejo MCP, not from this pod.
                 if [[ ! -d /opt/data/workspace/nas-ops/.git ]]; then
                   git clone --filter=blob:none https://git.cnas.dev/cbc02009/nas-ops.git /opt/data/workspace/nas-ops \
                     || echo "WARN: nas-ops clone failed; clone it from a session instead"
@@ -122,7 +101,7 @@ spec:
 
                 # Install the memini memory-provider plugin from the upstream
                 # standalone mirror eleboucher/memini-hermes (a release-synced
-                # copy of integrations/hermes/plugin/memini — the blessed
+                # copy of integrations/hermes/plugin/memini - the blessed
                 # owner/repo form). Pinned to a commit, guarded by a .ref
                 # marker so normal restarts stay offline and it only refetches
                 # when the pin changes. The mirror is untagged, so bump this
@@ -161,6 +140,7 @@ spec:
               HERMES_HOME: /opt/data
               HOME: /opt/data
               TZ: ${CONFIG_TZ}
+              CAMOFOX_URL: http://camofox.llm.svc.cluster.local:9377
               # The Webapp (browser-hosted Desktop workspace) is served by
               # this gateway process on a non-loopback bind, so it engages
               # the sign-in gate. It has no auth provider of its own: it
@@ -177,16 +157,6 @@ spec:
                   secretKeyRef:
                     name: hermes-dashboard
                     key: HERMES_DASHBOARD_OIDC_ISSUER
-              # Explicit rather than via the envFrom sweep below: the init
-              # container needs it for the git.cnas.dev credential line, and
-              # an explicit non-optional ref fails loudly at pod start if the
-              # ExternalSecret ever lags, instead of surfacing as empty-token
-              # git failures later.
-              FORGEJO_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: FORGEJO_TOKEN
             envFrom:
               - secretRef:
                   name: hermes
