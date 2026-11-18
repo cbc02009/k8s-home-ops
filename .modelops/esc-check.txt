@@ -1,4 +1,0 @@
-v1=sk-llmkube-noauth
-v2=os.environ/OPENCODE_GO_API_KEY
-x17=xxxxxxxxxxxxxxxxx
-x30=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
