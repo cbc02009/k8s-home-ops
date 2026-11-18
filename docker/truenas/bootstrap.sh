@@ -27,6 +27,7 @@ docker run --rm \
   -e TZ=America/New_York \
   -e SELF_UPDATE_ENABLED=true \
   -e SELF_UPDATE_STRATEGY=applier \
+  -e DEPLOY_CONFIG_BASE_DIR="./docker/truenas/" \
   -e SECRET_PROVIDER=1password \
   -e SECRET_PROVIDER_CONNECT_HOST="$SECRET_PROVIDER_CONNECT_HOST" \
   -e SECRET_PROVIDER_CONNECT_TOKEN_FILE=/run/secrets/connect_token \
