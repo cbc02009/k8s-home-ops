@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/restore_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: ${APP}
+spec:
+  # Root-owned files: the hermes app container runs as root (uid 0) and
+  # writes files owned by 0, so the mover must also run as root to read and
+  # reproduce them. privilegedMode adds the caps needed for a faithful restore.
+  mover:
+    privilegedMode: true
+    securityContext:
+      runAsGroup: 0
+      runAsNonRoot: false
+      runAsUser: 0
+  policy:
+    onMissingSnapshot: Continue
+  repository:
+    kind: ClusterRepository
+    name: nas
+  source:
+    fromPolicy:
+      name: ${APP}
+      offset: 0
+  target:
+    populator: {}
