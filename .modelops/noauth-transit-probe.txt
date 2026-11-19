@@ -1,0 +1,2 @@
+probe-27b-noauth: apiKey: ***
+probe-go-env: apiKey: os.environ/OPENCODE_GO_API_KEY
