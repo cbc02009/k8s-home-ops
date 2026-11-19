@@ -1,0 +1,3 @@
+# probe: can a credential-bearing apiKey line transit push_files?
+key_unquoted: os.environ/OPENCODE_GO_API_KEY
+weight_probe: 5
