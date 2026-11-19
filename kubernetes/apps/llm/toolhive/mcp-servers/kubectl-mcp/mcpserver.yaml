@@ -20,8 +20,22 @@ spec:
   serviceAccount: kubectl-mcp-readonly
   podTemplateSpec:
     spec:
+      volumes:
+        # The operator hardens the container with readOnlyRootFilesystem and
+        # runAsUser 1000. The 2.0.0 image's WORKDIR is /home/mcp, mode 0700 and
+        # owned by uid 10001, so the pod's uid 1000 cannot even stat() inside
+        # it: pydantic-settings resolves its default dotenv file as the
+        # relative path ".env" at import time and the resulting EACCES
+        # crashes the server before it binds (PermissionError: [Errno 13]
+        # Permission denied: '.env'). A writable emptyDir at /tmp, combined
+        # with workingDir and HOME below, moves every startup lookup off the
+        # unsearchable directory -- the same pattern mtg-mcp and
+        # litellm-admin-mcp use.
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: mcp
+          workingDir: /tmp
           args:
             - --transport
             - streamable-http
@@ -30,10 +44,23 @@ spec:
             - --port
             - "8000"
             - --read-only
+            # 2.0.0 refuses to bind a non-loopback address without OAuth or
+            # this flag (ensure_network_exposure_allowed, exits 2). The
+            # ToolHive proxy reaches the server over the pod network, so
+            # 0.0.0.0 is required; the cluster network is the protection.
+            - --allow-unauthenticated
           env:
             - name: MCP_K8S_PROVIDER
               value: in-cluster
             - name: PYTHONUNBUFFERED
               value: "1"
+            # fastmcp's platformdirs home (~/.local/share/fastmcp) and any
+            # other $HOME lookup must land in the writable emptyDir, not the
+            # unreadable image home.
+            - name: HOME
+              value: /tmp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
   groupRef:
     name: mcp-tools
