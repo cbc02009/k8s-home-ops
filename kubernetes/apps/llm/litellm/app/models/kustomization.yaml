@@ -1,9 +1,10 @@
-# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomization_v1.json
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./auto.yaml
+  - ./classifier-pool.yaml
   - ./embed.yaml
   - ./eval-candidates.yaml
   - ./frontier-pool.yaml

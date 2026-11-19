@@ -16,17 +16,25 @@
 # the bulk tier at the local-first lane keeps the shared $240 Go allowance off
 # the work the resident GPU can do for free.
 #
-# The classifier runs on 27b-chat (always resident) with the built-in 'agentic'
-# rubric: routine installs, builds, multi-file edits and standard debugging
-# anchor at MEDIUM, so ordinary engineering traffic avoids the allowance-
-# metered Go pools. classification_mode 'user_turn' re-classifies on every new
-# human ask (a session can move tiers between asks, no hour-long freeze) but
+# The classifier runs on classifier-pool rather than directly on the 27B:
+# the zero-burn Go free rungs (Hy4 Flash Free / Beam Free) do the per-ask tier
+# calls, so the classifier is no longer an always-resident 27B consumer and
+# the 4090-busy -> 27B-pinned -> 4090-busy loop is broken. The 27B-chat
+# lane (reasoning off, ~0.3-2.5s verdicts) sits in the pool at order 2 as the
+# floor, drawn only when both free rungs are in cooldown; a 20s-timeout
+# breaker pin (30s cooldown) and every failed verdict still land on the 27B
+# via classifier_fallback. The built-in 'agentic' rubric is unchanged:
+# routine installs, builds, multi-file edits and standard debugging anchor at
+# MEDIUM, so ordinary engineering traffic avoids the allowance-metered Go
+# pools. classification_mode 'user_turn' re-classifies on every new human
+# ask (a session can move tiers between asks, no hour-long freeze) but
 # replays the held decision on an agent loop's tool continuations, so a long
-# loop neither re-classifies per step nor switches tiers mid-loop. Pool members
-# are picked per request by the proxy's simple-shuffle, so sessions hop within
-# the pool; the Go session id keeps per-conversation affinity (prompt cache) on
-# the cloud rungs. The 27B member (order 1) is each lane's primary/failover
-# floor where applicable.
+# loop neither re-classifies per step nor switches tiers mid-loop. Pool
+# members are picked per request by the proxy's simple-shuffle, so sessions
+# hop within the pool; the Go session id keeps per-conversation affinity
+# (prompt cache) on the cloud rungs. In the tier lanes the 27B member
+# (order 1) is each lane's primary/failover floor; in classifier-pool the
+# 27B is the order-2 floor instead.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -48,7 +56,7 @@ spec:
           REASONING: reasoning-pool
         classifier_type: llm
         classifier_llm_config:
-          model: qwen3.8-27b-chat
+          model: classifier-pool
           timeout_ms: 20000
           classification_rubric: agentic
         classifier_fallback: default_model
