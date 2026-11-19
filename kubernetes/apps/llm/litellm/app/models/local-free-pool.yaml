@@ -9,20 +9,25 @@
 # under-serving the resident model: the 27B drew ~5% of auto-lane traffic,
 # beam 400-ed ~15% of its requests, and the free rungs emitted 4-5x fewer
 # completion tokens than the 27B on comparable agent inputs. The 27B is now
-# the lane's primary; the free rungs share the remainder (order-1 weight 14):
-#   27B              (weight 6, ~43%) — the local always-resident primary;
+# the lane's primary; the free rungs share the remainder (order-1 weight 13):
+#   27B              (weight 5, ~38%) — the local always-resident primary;
+#     2026-11-18 latency audit: the single 4090 card was absorbing 40-50%
+#     of auto-lane requests on the heavy days and request latency spiked
+#     under that queueing, so the 27B share was nudged down 6->5 (~43% ->
+#     ~38%) to push more work onto the zero-burn Go free rungs; their
+#     weights are unchanged
 #     keeps the prefix cache warm and gives the lane a consistent quality
 #     floor, and absorbs extra share whenever a cloud rung 429/400s into
 #     cooldown
-#   Beam Free        (weight 3, ~21%) — zero allowance burn, "model
+#   Beam Free        (weight 3, ~23%) — zero allowance burn, "model
 #     training: not used" per Go's privacy table (see opencode-go.yaml);
 #     sub-second TTFT when it serves
-#   LongCat 2.5 Free (weight 3, ~21%) — verified working once the Go
+#   LongCat 2.5 Free (weight 3, ~23%) — verified working once the Go
 #     workspace privacy Regions setting is Global (China-hosted endpoint);
 #     zero allowance burn, "model training: not used" with 0-day retention,
 #     vision-capable, 1M context. Matches Beam's weight so the two free
 #     rungs share the remainder ~evenly
-#   Hy4 Flash Free   (weight 2, ~14%) — Tencent's everyday agent tier,
+#   Hy4 Flash Free   (weight 2, ~15%) — Tencent's everyday agent tier,
 #     sub-second TTFT, 1M context and vision (Beam has none), "model
 #     training: not used" with 0-day retention and no region block
 # The Z.AI credit-drain rung was removed from this lane on 2026-11-16: it is
@@ -54,12 +59,12 @@ spec:
   params:
     model: openai/qwen3.8-27b
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: sk-llmkube-noauth
+    apiKey: ***
     additional:
       max_parallel_requests: 10
       reasoning_effort: medium
       order: 1
-      weight: 6
+      weight: 5
       allowed_openai_params:
         - reasoning_effort
   info:
@@ -75,8 +80,8 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Beam Free: the free rung that actually works — sub-second TTFT, zero
-# allowance burn. Weight 3 (~21%) pairs it with LongCat as the free share;
-# the 27B (weight 6) is the lane primary and absorbs the load once beam's
+# allowance burn. Weight 3 (~23%) pairs it with LongCat as the free share;
+# the 27B (weight 5) is the lane primary and absorbs the load once beam's
 # 4 parallel slots saturate. No vision: image-bearing requests fall through
 # to LongCat or Hy4 Flash Free (free, vision).
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -90,7 +95,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/beam-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: ***
     additional:
       order: 1
       weight: 3
@@ -123,7 +128,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/longcat-2.5-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: ***
     additional:
       order: 1
       weight: 3
@@ -144,7 +149,7 @@ spec:
 # Tencent's everyday agent tier — vision-capable, 1M context, zero allowance
 # burn, "model training: not used" with 0-day retention, and no region block
 # (Beam Free blocks a country list). Weight 2: the smallest order-1 share,
-# below Beam and LongCat's 3 and the 27B's 6. Like every Go free rung it
+# below Beam and LongCat's 3 and the 27B's 5. Like every Go free rung it
 # hard-requires the session header (headerless = 400).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
@@ -157,7 +162,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/hy4-flash-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: ***
     additional:
       order: 1
       weight: 2
@@ -191,7 +196,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/mimo-v2.6-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: ***
     additional:
       order: 2
       weight: 1
