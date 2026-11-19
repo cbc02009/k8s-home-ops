@@ -59,7 +59,7 @@ spec:
       max_parallel_requests: 10
       reasoning_effort: medium
       order: 1
-      weight: 6
+      weight: 5
       allowed_openai_params:
         - reasoning_effort
   info:
