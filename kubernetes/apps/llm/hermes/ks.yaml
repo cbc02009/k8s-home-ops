@@ -5,8 +5,12 @@ kind: Kustomization
 metadata:
   name: &app hermes
 spec:
+  # Hermes uses its own kopiur component (apps/llm/hermes/kopiur) instead of the
+  # shared one, because its mover must run as a privileged root mover: the hermes
+  # app container writes files owned by root (uid 0), which the shared component's
+  # ${APP_UID}=10000 mover cannot read (snapshot fails with PermissionDenied).
   components:
-    - ../../../../components/kopiur
+    - ../kopiur
   dependsOn:
     - name: litellm
   interval: 1h
@@ -15,8 +19,6 @@ spec:
     substitute:
       APP: *app
       PVC_CAPACITY: 20Gi
-      APP_UID: "10000"
-      APP_GID: "10000"
   wait: false
   prune: true
   sourceRef:
