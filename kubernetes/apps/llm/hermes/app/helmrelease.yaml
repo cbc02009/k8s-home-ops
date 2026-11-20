@@ -103,8 +103,8 @@ spec:
                 printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
                 umask 077
                 {
-                  printf 'https://x-access-token:***\n' "$GITHUB_TOKEN"
-                  printf 'https://mahoro-ai:***@git.cnas.dev\n' "$FORGEJO_TOKEN"
+                  printf 'https://x-access-token:%s@github.com\n' "$GITHUB_TOKEN"
+                  printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN"
                 } > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials

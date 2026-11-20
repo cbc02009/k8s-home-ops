@@ -1,0 +1,151 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# classifier-pool: where the auto router's complexity classifier runs. It
+# exists to take the per-human-ask tier calls off the always-resident 27B on
+# the 4090: while the classifier itself is pinned to that GPU, a busy 4090
+# keeps re-selecting the 27B for new traffic, which is the busy-loop that
+# local-free-pool's 27B/Go-free mix only blunts. A zero-burn cloud classifier
+# breaks the loop; the 27B stays as the floor and as classifier_fallback.
+#
+# Members. One order-1 group (one simple-shuffle weighted draw per request)
+# of the zero-burn Go free rungs, plus one order-2 floor:
+#
+#   hy4-flash-free  (order 1, weight 3)  Tencent Hy4 Flash. Zero allowance
+#                                          burn, "model training: not used"
+#                                          with 0-day retention, and unlike
+#                                          Beam Free it carries no region
+#                                          block, so every client with a
+#                                          session id can use it. 1M
+#                                          context, vision, 64k output.
+#   beam-free       (order 1, weight 3)  Zero burn, no training (30d
+#                                          retention). The fastest of the
+#                                          free rungs (sub-2s TTFT).
+#   27B floor      (order 2, weight 1)   The qwen3.8-27b-chat lane
+#                                          (reasoning off): drawn ONLY when
+#                                          both free rungs are in cooldown
+#                                          (429 / 5xx / the 20s timeout -
+#                                          e.g. a free listing retired or
+#                                          rate-limited), never as a
+#                                          coin-flip member. A 27B at
+#                                          order 1 would put ~40% of
+#                                          classifications back on the 4090
+#                                          and leave the feedback loop
+#                                          closed; the floor keeps it out of
+#                                          the normal draw entirely.
+#                                          max_parallel_requests: 2 keeps
+#                                          even a cooldown storm from
+#                                          starving the GPU's main jobs.
+#
+# v1.109.1 semantics (why it is shaped this way). The classifier call goes
+# out with num_retries=0 and disable_fallbacks=True, so a failed draw is
+# NOT escalated within the request - the order ladder only matters across
+# requests, once a member is in cooldown. The 20s budget in auto.yaml
+# covers the free rungs' verdict latency; the timeout-only circuit breaker
+# (30s cooldown, then classifier_fallback) is the only thing that can pin
+# traffic away from this pool. A 400 - notably what a client WITHOUT a
+# session id gets from the Go rungs (they reject missing session ids, and
+# 400s never cool a member down) - fails that one verdict, which then runs
+# on the 27B via the default-model fallback. That is a strict improvement
+# over today, where the same untagged traffic is classified BY the 27B.
+#
+# Measured 2026-11-19 (hermes key, live proxy): with a 2048/8192 output
+# budget both free rungs returned schema-clean tier verdicts 9/9
+# (SIMPLE/MEDIUM/COMPLEX/REASONING matching the 27B's calls on the same
+# four tasks), 2.9-5.8s each. At a 64-token budget they burn the whole
+# budget on reasoning content and answer with no content - the pool
+# therefore relies on the classifier's normal (unbudgeted) output ceiling,
+# and the 20s timeout is what bounds a pathological CoT, not a token cap.
+#
+# Data policy: both rungs are "model training: not used" in Go's privacy
+# table (Hy4 Flash 0-day, Beam 30-day retention). Free endpoints that train
+# on request data (Iceman Contributor Free, Muse Spark 1.x Contributor)
+# stay excluded, same as in go-pool.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: classifier-pool-hy4-flash-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: classifier-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy4-flash-free
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      order: 1
+      weight: 3
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: classifier-pool-beam-free
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: classifier-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/beam-free
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      order: 1
+      weight: 3
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: false
+    extra:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_read_input_token_cost: 0
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: classifier-pool-27b-floor
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: classifier-pool
+  proxyRef: litellm
+  params:
+    model: openai/qwen3.8-27b
+    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
+    apiKey: "noauth"
+    additional:
+      temperature: 0.7
+      top_p: 0.8
+      presence_penalty: 1.5
+      reasoning_effort: none
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+      allowed_openai_params:
+        - reasoning_effort
+  info:
+    mode: chat
+    # maxInputTokens: 122880
+    maxOutputTokens: 16384
+    supportsFunctionCalling: true
+    supportsVision: false
+    extra:
+      input_cost_per_token: 6.2e-08
+      output_cost_per_token: 1.35e-06
+      cache_read_input_token_cost: 0.0

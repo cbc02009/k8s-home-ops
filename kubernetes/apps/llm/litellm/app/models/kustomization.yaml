@@ -4,6 +4,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./auto.yaml
+  - ./classifier-pool.yaml
   - ./embed.yaml
   - ./eval-candidates.yaml
   - ./frontier-pool.yaml
