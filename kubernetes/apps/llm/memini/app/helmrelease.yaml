@@ -27,16 +27,35 @@ spec:
         type: deployment
         annotations:
           reloader.stakater.com/auto: "true"
+        # Provisioning (postgres backend): home-operations/postgres-init
+        # (the same pattern as open-webui's 01-init-db) runs as the cluster
+        # superuser using the INIT_POSTGRES_* keys in the `memini` secret:
+        # it creates the `memini` role and database, then executes
+        # /initdb/memini.sql (postgres-init.yaml), which creates the vchord
+        # extension - not a trusted extension (vchord.control:
+        # superuser=true), so only a superuser can create it. The app's own
+        # first-boot `CREATE EXTENSION IF NOT EXISTS vchord CASCADE` then
+        # no-ops. Idempotent: pod (re)starts re-run it as no-ops.
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.7.0'
+            envFrom: &envFrom
+              - secretRef:
+                  name: memini
+            # Mounts the postgres-init-sql persistence item (below) at
+            # /initdb/memini.sql; postgres-init executes it after creating
+            # the database.
         containers:
           main:
             env:
               MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
               MEMINI_BACKEND: postgres
-              MEMINI_POSTGRES_DSN:
-                valueFrom:
-                  secretKeyRef:
-                    name: memini-pg
-                    key: dsn
+              # The DSN (and the INIT_POSTGRES_* keys the 01-init-db init
+              # container below consumes) arrive via envFrom from the
+              # `memini` secret, templated in externalsecret.yaml from the
+              # 1Password `memini` item - no password in this manifest.
               MEMINI_DEFAULT_NAMESPACE: default
               MEMINI_EMBED_BASE_URL: http://litellm.llm.svc.cluster.local:4000/v1
               MEMINI_EMBED_MODEL: embed # Qwen3-Embedding-0.6B, 1024-dim, 32k ctx
@@ -96,9 +115,7 @@ spec:
                     name: litellm-key-memini
                     key: api-key
               MEMINI_TIMEOUT_MS: "55000"
-            envFrom:
-              - secretRef:
-                  name: memini
+            envFrom: *envFrom
             probes:
               startup:
                 enabled: true
@@ -135,6 +152,18 @@ spec:
         enabled: false
       api-keys:
         enabled: true
+      # SQL the 01-init-db init container runs as the cluster superuser after
+      # creating the role/database (vchord is not a trusted extension, so
+      # only the superuser can create it). Mounted into that init container
+      # only, via advancedMounts.
+      postgres-init-sql:
+        type: configMap
+        name: memini-postgres-init
+        advancedMounts:
+          main:
+            01-init-db:
+              - path: /initdb/memini.sql
+                subPath: memini.sql
     route:
       ui:
         enabled: true

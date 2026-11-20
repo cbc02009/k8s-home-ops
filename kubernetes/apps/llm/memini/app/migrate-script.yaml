@@ -7,51 +7,6 @@ metadata:
   labels:
     app.kubernetes.io/name: memini
 data:
-  createdb.sh: |
-    #!/bin/sh
-    # Idempotent bootstrap for memini on the shared postgres-ai CNPG cluster
-    # (same split of duties as open-webui's postgres init, Job form since
-    # the memini chart has no init-container support): as the cluster
-    # superuser, wait for connectivity, create the app role and database,
-    # and load the vchord extension in that database. The memini store
-    # creates its own schema on first connect as the app role. Safe to
-    # re-run: every step is a no-op when the object already exists (the
-    # role's password is not touched on re-runs).
-    set -eu
-
-    # psql reads the password from PGPASSWORD, keeping special characters
-    # out of the connection-string parser.
-    export PGPASSWORD="$INIT_POSTGRES_SUPER_PASS"
-    PSQL="psql host=$INIT_POSTGRES_HOST user=$INIT_POSTGRES_SUPER_USER dbname=postgres sslmode=disable"
-
-    echo "[createdb] waiting for $INIT_POSTGRES_HOST"
-    until $PSQL -tAc "SELECT 1" >/dev/null 2>&1; do
-      sleep 5
-    done
-    echo "[createdb] $INIT_POSTGRES_HOST is up; provisioning role and database"
-
-    $PSQL -v u="$INIT_POSTGRES_USER" -v p="$INIT_POSTGRES_PASS" -c "
-    DO \$\$
-    BEGIN
-      IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = :'u') THEN
-        CREATE ROLE :'u' LOGIN PASSWORD :'p';
-      END IF;
-    END;
-    \$\$;
-    "
-
-    if $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '$INIT_POSTGRES_DBNAME'" | grep -q 1; then
-      echo "[createdb] database $INIT_POSTGRES_DBNAME already exists"
-    else
-      $PSQL -c "CREATE DATABASE \"$INIT_POSTGRES_DBNAME\" OWNER \"$INIT_POSTGRES_USER\""
-      echo "[createdb] created database $INIT_POSTGRES_DBNAME"
-    fi
-
-    # vchord is not a trusted extension, so it must be created as the
-    # superuser (the app role only ever uses it).
-    PSQL_APP="psql host=$INIT_POSTGRES_HOST user=$INIT_POSTGRES_SUPER_USER dbname=$INIT_POSTGRES_DBNAME sslmode=disable"
-    $PSQL_APP -c "CREATE EXTENSION IF NOT EXISTS vchord"
-    echo "[createdb] vchord ensured in $INIT_POSTGRES_DBNAME; done"
   migrate.py: |
     #!/usr/bin/env python3
     """One-shot migration: copy the legacy memini SQLite store into the

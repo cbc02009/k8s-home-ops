@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.pages.dev/v1/ConfigMap.json
+# Superuser bootstrap SQL for the memini postgres backend.
+#
+# The `01-init-db` init container in helmrelease.yaml
+# (ghcr.io/home-operations/postgres-init, the same pattern as open-webui)
+# creates the `memini` role and database as the cluster superuser, then —
+# if a file is mounted at /initdb/<dbname>.sql — executes it against that
+# database as the same superuser. This ConfigMap provides that hook:
+# `CREATE EXTENSION IF NOT EXISTS vchord` must run as a superuser because
+# vchord is not a trusted extension (vchord.control: superuser=true,
+# requires='vector'); the app's own first-boot
+# `CREATE EXTENSION IF NOT EXISTS vchord CASCADE`
+# (internal/store/postgres/store.go) would fail as the plain `memini` role
+# without it, and no-ops once this has run. CASCADE also ensures the
+# pgvector dependency. Idempotent: every pod (re)start re-runs this as a
+# no-op once the extension exists.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: memini-postgres-init
+  labels:
+    app.kubernetes.io/name: memini
+data:
+  memini.sql: |
+    CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
