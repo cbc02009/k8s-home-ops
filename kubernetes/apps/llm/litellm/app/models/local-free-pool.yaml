@@ -17,11 +17,12 @@
 #   Beam Free        (weight 3, ~21%) — zero allowance burn, "model
 #     training: not used" per Go's privacy table (see opencode-go.yaml);
 #     sub-second TTFT when it serves
-#   LongCat 2.5 Free (weight 3, ~21%) — verified working once the Go
-#     workspace privacy Regions setting is Global (China-hosted endpoint);
-#     zero allowance burn, "model training: not used" with 0-day retention,
+#   LongCat 2.5 Free (weight 3, ~21%) — China-hosted endpoint (needs
+#     "Global" regions in the Go workspace privacy settings); zero
+#     allowance burn, "model training: not used" with 0-day retention,
 #     vision-capable, 1M context. Matches Beam's weight so the two free
-#     rungs share the remainder ~evenly
+#     rungs share the remainder ~evenly. Provider-side daily network caps
+#     can 429 this rung; the paid twin longcat-2.0 covers it in order 2.
 #   Hy4 Flash Free   (weight 2, ~14%) — Tencent's everyday agent tier,
 #     sub-second TTFT, 1M context and vision (Beam has none), "model
 #     training: not used" with 0-day retention and no region block
@@ -107,11 +108,12 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# LongCat 2.5 Free: verified working once the Go workspace privacy Regions
-# setting is set to Global (China-hosted endpoint). Zero allowance burn,
-# "model training: not used" with 0-day retention, vision-capable, 1M
-# context. Weight 3 matches Beam Free so the two free rungs share the
-# remainder ~evenly; order 1 keeps it in the simple-shuffle mix.
+# LongCat 2.5 Free: China-hosted endpoint (needs "Global" regions in the Go
+# workspace privacy settings). Zero allowance burn, "model training: not used"
+# with 0-day retention, vision-capable, 1M context. Weight 3 matches Beam Free
+# so the two free rungs share the remainder ~evenly; order 1 keeps it in the
+# simple-shuffle mix. Provider-side daily network caps can 429 this rung; the
+# paid twin longcat-2.0 covers it in order 2.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
