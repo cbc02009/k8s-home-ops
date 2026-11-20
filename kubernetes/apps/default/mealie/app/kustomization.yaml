@@ -6,3 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./litellmkey.yaml
   - ./ocirepository.yaml
+  - ./ciliumNetworkPolicy.yaml
