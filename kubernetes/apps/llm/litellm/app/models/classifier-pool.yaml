@@ -71,7 +71,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/hy4-flash-free
-    apiKey: "${OPENCODE_GO_API_KEY}"
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 1
       weight: 3
@@ -99,7 +99,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/beam-free
-    apiKey: "${OPENCODE_GO_API_KEY}"
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 1
       weight: 3
