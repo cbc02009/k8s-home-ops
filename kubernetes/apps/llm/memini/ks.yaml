@@ -5,8 +5,6 @@ kind: Kustomization
 metadata:
   name: &app memini
 spec:
-  # TEMPORARY — kopiur component temporarily inlined in app/kustomization.yaml
-  # for the cross-namespace restore; re-add after verification.
   components:
     - ../../../../components/gpu
   dependsOn:
