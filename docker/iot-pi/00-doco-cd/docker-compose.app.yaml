@@ -3,7 +3,7 @@
 # Instead it is deployed manually on the Pi (docker compose up -d)
 # doco-cd needs a 1Password service-account token file
 # (/root/.config/doco-cd/1pw_token, mounted below) to resolve the
-# external_secrets map in .doco-cd.yaml - the Cloudflare DNS token 00-traefik
+# external_secrets map in .doco-cd.yaml - the Cloudflare DNS token 01-traefik
 # uses for its Let's Encrypt DNS-01 challenge. Same service account as the
 # truenas instance (/mnt/smoltank/apps/doco-cd/secrets/1pw_token);
 # setup-doco-cd.sh preflights the file and aborts if it is missing.

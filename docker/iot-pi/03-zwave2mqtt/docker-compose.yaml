@@ -26,12 +26,12 @@ services:
       ZWAVE_PORT: /dev/zwave
       ZWAVE_EXTERNAL_SETTINGS: /usr/src/app/external-settings.json
     networks:
-      # Shared network created by 00-traefik (declared external below);
+      # Shared network created by 01-traefik (declared external below);
       # traefik's docker provider watches it, so the zwave.cnas.dev router
       # reaches this container by name.
       app:
     labels:
-      # Served as https://zwave.cnas.dev by 00-traefik (8091 below stays
+      # Served as https://zwave.cnas.dev by 01-traefik (8091 below stays
       # published for direct LAN access).
       traefik.enable: "true"
       traefik.http.services.zwave.loadbalancer.server.port: "8091"

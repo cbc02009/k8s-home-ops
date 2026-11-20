@@ -6,7 +6,7 @@ repo onto non-k8s docker hosts, one **instance** per host:
 | Instance dir | Host | Notes |
 |---|---|---|
 | `truenas/` | TrueNAS SCALE box "shana" | Uses the shared `app_ipvlan` network with fixed IPs |
-| `iot-pi/` | Raspberry Pi "iot-pi" with Zigbee + Z-Wave controllers | Plain bridge networking; `00-traefik` publishes 80/443 for *.cnas.dev |
+| `iot-pi/` | Raspberry Pi "iot-pi" with Zigbee + Z-Wave controllers | Plain bridge networking; `01-traefik` publishes 80/443 for *.cnas.dev |
 
 ## How an instance works
 
@@ -15,7 +15,7 @@ repo onto non-k8s docker hosts, one **instance** per host:
   order), and optional `external_secrets`.
 - `auto_discover_opts.delete: true` — **removing a stack dir from git removes it on the
   host** on the next sync. Same caution as Flux's `prune: true`: keep dir names stable.
-- `<instance>/.doco-cd/docker-compose.app.yaml` runs doco-cd itself and is **not managed by
+- `<instance>/00-doco-cd/docker-compose.app.yaml` runs doco-cd itself and is **not managed by
   doco-cd** (it can't manage itself): deploy it manually on the host (TrueNAS UI app /
   `docker compose up -d` on the Pi). After editing it, redeploy it yourself. It polls the
   GitHub repo (repo is public; the poll config needs no token) and reconciles stacks.
@@ -50,11 +50,11 @@ repo onto non-k8s docker hosts, one **instance** per host:
   after first boot — from a repo clone or standalone; when run standalone it
   clones the repo to `~/k8s-home-ops`) installs Docker CE + the compose plugin
   from Docker's official Debian arm64 apt repo if missing and deploys this
-  instance's doco-cd container from the repo's `.doco-cd/docker-compose.app.yaml`
+  instance's doco-cd container from the repo's `00-doco-cd/docker-compose.app.yaml`
   (the script first preflights the 1Password service-account token file at
   `/root/.config/doco-cd/1pw_token` - the doco-cd container mounts it to resolve the
   instance's `external_secrets`; same service account as the truenas box).
-- **00-traefik**: the instance's reverse proxy. It deploys first (the 00- prefix)
+- **01-traefik**: the instance's reverse proxy. It deploys first (the 00- prefix)
   because it creates the shared `app` bridge network that the other stacks attach to
   (declared `external: true` in their own files) - that is how traefik's docker
   provider reaches the workloads by container name. Serves `zigbee.cnas.dev`
