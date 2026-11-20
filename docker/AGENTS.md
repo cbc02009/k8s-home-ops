@@ -54,7 +54,7 @@ repo onto non-k8s docker hosts, one **instance** per host:
   (the script first preflights the 1Password service-account token file at
   `/root/.config/doco-cd/1pw_token` - the doco-cd container mounts it to resolve the
   instance's `external_secrets`; same service account as the truenas box).
-- **01-traefik**: the instance's reverse proxy. It deploys first (the 00- prefix)
+- **01-traefik**: the instance's reverse proxy. It deploys first (after 00-doco-cd)
   because it creates the shared `app` bridge network that the other stacks attach to
   (declared `external: true` in their own files) - that is how traefik's docker
   provider reaches the workloads by container name. Serves `zigbee.cnas.dev`
@@ -76,7 +76,7 @@ repo onto non-k8s docker hosts, one **instance** per host:
   broker with the `homeassistant` topic prefix.
 - zigbee2mqtt is configured entirely through `ZIGBEE2MQTT_CONFIG_*` env (fully declarative).
   Z-Wave JS UI is repo-driven for serial + driver settings: `ZWAVE_PORT` forces the
-  controller on at `/dev/zwave`, and the read-only `02-zwave2mqtt/external-settings.json`
+  controller on at `/dev/zwave`, and the read-only `03-zwave2mqtt/external-settings.json`
   (mounted in the container) is merged over the store at startup and hides those controls
   in the web UI — it pins logging, RF region (1 = USA), soft reset, statistics off and
   the WS server off. Still one-time UI after first bring-up, at `https://zwave.cnas.dev`
