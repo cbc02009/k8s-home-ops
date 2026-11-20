@@ -54,6 +54,16 @@ spec:
                 # git is needed for the credential/clone setup below (alpine
                 # ships without it); gettext provides envsubst.
                 apk add --no-cache gettext git >/dev/null
+                # The kopiur mover reads this PVC as uid 10000 (shared kopiur
+                # component). Files left by pre-s6 root-running image
+                # generations (e.g. /opt/data/.bash_history) and by the
+                # since-removed code-server sidecar (uid 1000) are owned by
+                # other uids, and the app image's stage2 hook deliberately
+                # only chowns its known subpaths, never the volume top
+                # level — so the mover hit PermissionDenied on snapshot.
+                # Repair the whole tree up front; the per-file chowns below
+                # keep files written by this script aligned too.
+                chown -R 10000:10000 /opt/data
                 cp /tmp/config.yaml /opt/data/config.yaml
                 # Expand env-var references from the pod env before hermes
                 # reads the config. v0.21.5 stopped expanding LITELLM_API_KEY
@@ -278,33 +288,6 @@ spec:
               - containerPort: &dashboard_port 9119
                 name: dashboard
                 protocol: TCP
-          codeserver:
-            image:
-              repository: ghcr.io/coder/code-server
-              tag: 4.145.2@sha256:09565f9e07f5624554e295e8bab0e2fec4a7c533eb3cff459ed6596a4d3d7c1c
-            env:
-              TZ: ${CONFIG_TZ}
-            args:
-              [
-                "--auth",
-                "none",
-                "--user-data-dir",
-                "/home/node/.vscode",
-                "--extensions-dir",
-                "/home/node/.vscode",
-                "--port",
-                "12321",
-                "/opt/data",
-              ]
-            ports:
-              - containerPort: &codeserverPort 12321
-                name: codeserver
-                protocol: TCP
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 1Gi
     service:
       app:
         controller: hermes
@@ -312,8 +295,6 @@ spec:
           webapp:
             port: *port
             appProtocol: kubernetes.io/wss
-          codeserver:
-            port: *codeserverPort
       dashboard:
         controller: hermes
         ports:
@@ -343,15 +324,6 @@ spec:
             # the gateway's request timeout cut them.
             timeouts:
               request: 0s
-      codeserver:
-        hostnames: ["hermes-code.ctec.run"]
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: codeserver
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
