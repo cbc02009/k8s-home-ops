@@ -7,8 +7,9 @@
 # Every opencode_go rung here draws from the ONE shared $240 Go Plus allowance;
 # the per-model cap is a rate MULTIPLIER divisor (mult = 240 / goplus_cap), NOT
 # a budget slice. Rank by effective cost = list price x multiplier, not by cap:
+#   hy3                cap 240 -> 1.00x, effective out ~$0.58/1M, bench 0.895  <- primary (promoted 2026-11-20)
 #   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
-#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889
+#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889  <- demoted to order 2
 #   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
 #   deepseek-v4.1-flash  cap 200 -> 1.20x, effective in/out 0.36/1.44 peak <- order 2
 #   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- demoted
@@ -17,21 +18,23 @@
 # REMOVED. deepseek-v4.1-flash (1.20x burn, cap 200) was evaluated as an
 # addition and admitted at ORDER 2 (see its doc); the "Invalid model name"
 # 400s from the original exclusion were the proxy rejecting an unregistered
-# name, not the Go provider. hy3 remains excluded.
+# name, not the Go provider. hy3 was PROMOTED to order 1 on 2026-11-20 (bench
+# 0.895 at 1.00x burn, ~$0.101/1M pooled = half minimax-m3's burn for
+# equal-or-better quality, REPORT-POOL-FILL tier 2); its p50 5.5s is the
+# slowest of the primaries — the trade buys the burn + quality win, not speed.
 #
 # Ladder (order is a priority FILTER, not a per-rung attribute): only the
 # lowest healthy order level is eligible; weight splits traffic WITHIN a level.
-#   Order 1 — glm-5.3-flash (w1, live-tuned 2026-11-18 — adopted here),
-#             minimax-m3 (w2), zai/glm-5.3-flash (w1): cheap high-scoring
-#             primaries; the Z.AI rung is the flat-plan half that drains
-#             non-rolling weekly credits before they expire.
-#   Order 2 — deepseek-v4.1-flash (1.20x, the only sub-2x burn left),
-#             mimo-v2.6-flash (2.0x) + minimax-m3.1-flash (3.0x): cheap
-#             second wave once order 1 saturates/cools. The 3.0x rung's
-#             weight is cut 2->1 (2026-11-18 burn audit: heaviest single draw
-#             of the $9.24 heavy day at ~1.4x its tier partners' effective
-#             cost), so the tier mix is now evenly 33/33/33 instead of
-#             50/25/25.
+#   Order 1 — hy3 (w1, promoted from eval-candidates 2026-11-20),
+#             glm-5.3-flash (w1, live-tuned 2026-11-18 — adopted here),
+#             zai/glm-5.3-flash (w1): cheap high-scoring primaries; the Z.AI
+#             rung is the flat-plan half that drains non-rolling weekly
+#             credits before they expire.
+#   Order 2 — minimax-m3 (demoted 2026-11-20, w1), deepseek-v4.1-flash
+#             (1.20x, the only sub-2x burn left), mimo-v2.6-flash (2.0x)
+#             + minimax-m3.1-flash (3.0x, w1 after the 2026-11-18 burn
+#             audit): cheap second wave once order 1 saturates/cools. The
+#             tier mix is now 25/25/25/25.
 #   Order 4 — gemini-4-argon: 2.00x burn but the only 1M-class deep rung, with
 #             a 95% cached-input discount on a 94%-cached lane. Last-resort
 #             long-context rung alongside kimi; fires only in total cooldown.
@@ -57,8 +60,13 @@ spec:
     model: opencode_go/minimax-m3
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      order: 1
-      weight: 2
+      # 2026-11-20 pool-fill audit: demoted order 1 -> 2, weight 2 -> 1.
+      # minimax-m3 drew ~89% of the Go Plus pool spend (1.33x burn,
+      # $0.211/1M pooled) with the worst p90 tail of any rung (11.9s) for
+      # 0.856 quality. Bulk share moves to hy3 (1.00x, 0.895); this lane
+      # stays as a second-wave rung so nothing is lost if hy3 cools.
+      order: 2
+      weight: 1
       max_parallel_requests: 2
   info:
     mode: chat
@@ -247,10 +255,14 @@ spec:
     supportsFunctionCalling: true
     supportsVision: true
     supportsPromptCaching: true
+    # 2026-11-20 fix: cache_read was 6e-09 (= $0.006/M, 10x low). The
+    # under-pricing is material because ~94% of deepseek's traffic is
+    # cache-read (94,597 of 100,757 tok on the 11-18 bench). List price
+    # is $0.06/M = 6e-08.
     extra:
       input_cost_per_token: 3e-07
       output_cost_per_token: 1.2e-06
-      cache_read_input_token_cost: 6e-09
+      cache_read_input_token_cost: 6e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Order 3 — free floor, MOVED UP from order 4: the always-resident 27B now sits
@@ -357,3 +369,40 @@ spec:
       input_cost_per_token: 9.5e-07
       output_cost_per_token: 4e-06
       cache_read_input_token_cost: 1.9e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Order 1 — PROMOTED from eval-candidates on 2026-11-20 (REPORT-PAID +
+# REPORT-POOL-FILL tier 2): 0.895 overall on the 23-task paid bench (math
+# .875 / code .847 / tools .917 / long-ctx 1.00), 1.00x burn (cap 240, no
+# penalty) and ~$0.101/1M pooled — the best paid bulk carrier on the plan:
+# equal-or-better quality than minimax-m3 at half the pool burn. Trade-off:
+# p50 5.5s / p90 14.7s is the slowest of the order-1 primaries; the
+# promotion buys burn + quality, not speed (latency-critical work still
+# splits across the w1 primaries by weight).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-hy3
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy3
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      order: 1
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: false
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.4e-07
+      output_cost_per_token: 5.8e-07
+      cache_read_input_token_cost: 5.8e-08

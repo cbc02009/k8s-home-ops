@@ -101,8 +101,12 @@ spec:
     model: opencode_go/mimo-v2.6-flash
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
+      # 2026-11-20 pool-fill audit: weight 1 -> 2. mimo is the best
+      # quality-per-pool-dollar of the paid lanes (13.3) and the cheapest
+      # output on the plan ($0.28/M, REPORT-PAID tier 1): it now takes a
+      # real share of the cheap second wave instead of a token's worth.
       order: 2
-      weight: 1
+      weight: 2
       max_parallel_requests: 2
   info:
     mode: chat
