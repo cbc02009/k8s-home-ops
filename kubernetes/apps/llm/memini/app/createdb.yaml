@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.config.k8s.io/v1beta1
+# Idempotent bootstrap for memini on the shared postgres-ai CNPG cluster
+# (same pattern as open-webui's postgres init, Job form because the memini
+# chart has no init-container support): as the cluster superuser, wait for
+# connectivity, create the memini role + database, and load the vchord
+# extension in that database. The memini store creates its own schema on
+# first connect as the app role (see createdb.sh in migrate-script.yaml).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: memini-createdb
+  labels:
+    app.kubernetes.io/name: memini
+spec:
+  backoffLimit: 20
+  activeDeadlineSeconds: 1800
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+      containers:
+        - name: createdb
+          image: ghcr.io/cloudnative-pg/postgresql:18.7-standard-trixie@sha256:23719505c7cc417b043ffd9998b44ab8d57fec1d92f0bf11b231a1754a5962f2
+          command:
+            - sh
+            - /etc/memini-migrate/createdb.sh
+          env:
+            - name: INIT_POSTGRES_SUPER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_SUPER_USER
+            - name: INIT_POSTGRES_SUPER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_SUPER_PASS
+            - name: INIT_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_USER
+            - name: INIT_POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_PASS
+            - name: INIT_POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_HOST
+            - name: INIT_POSTGRES_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: memini-pg
+                  key: INIT_POSTGRES_DBNAME
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: script
+              mountPath: /etc/memini-migrate
+              readOnly: true
+      volumes:
+        - name: script
+          configMap:
+            name: memini-migrate-script

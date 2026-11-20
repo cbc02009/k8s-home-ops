@@ -3,11 +3,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./createdb.yaml
   - ./externalsecret.yaml
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
   - ./litellmkey.yaml
+  - ./migrate-script.yaml
+  - ./migrate.yaml
   - ./ocirepository.yaml
+  - ./pg-externalsecret.yaml
   - ./prometheusrule.yaml
   # TEMPORARY — kopiur component inlined for the cross-namespace restore
   # (parent-level patches do not reach component resources, so restore.yaml is

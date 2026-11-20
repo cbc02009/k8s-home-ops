@@ -23,13 +23,20 @@ spec:
     fullnameOverride: memini
     controllers:
       main:
+        # postgres backend: no PVC; replicas > 1 possible if ever needed
+        type: deployment
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           main:
             env:
               MEMINI_API_KEYS_FILE: /etc/memini/api-keys.yaml
-              MEMINI_BACKEND: sqlite
+              MEMINI_BACKEND: postgres
+              MEMINI_POSTGRES_DSN:
+                valueFrom:
+                  secretKeyRef:
+                    name: memini-pg
+                    key: dsn
               MEMINI_DEFAULT_NAMESPACE: default
               MEMINI_EMBED_BASE_URL: http://litellm.llm.svc.cluster.local:4000/v1
               MEMINI_EMBED_MODEL: embed # Qwen3-Embedding-0.6B, 1024-dim, 32k ctx
@@ -122,8 +129,10 @@ spec:
                     name: memini
                     key: MEMINI_API_KEY
     persistence:
+      # sqlite backend retired; the legacy PVC stays for the migrate Job and
+      # any rollback (kopiur snapshots of it also keep running)
       data:
-        existingClaim: memini
+        enabled: false
       api-keys:
         enabled: true
     route:
