@@ -1,0 +1,242 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.config.k8s.io/v1beta1
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: memini-migrate-script
+  labels:
+    app.kubernetes.io/name: memini
+data:
+  migrate.py: |
+    #!/usr/bin/env python3
+    """One-shot migration: copy the legacy memini SQLite store into the
+    postgres-backed memini server via its REST API.
+
+    Reads the SQLite database read-only and POSTs each memory to
+    POST /v1/memories with the same wire format the upstream
+    `memini import --remote` CLI uses (per-record X-Memini-Namespace header,
+    Bearer auth, low-trust import confidence 0.25). Idempotent: records keep
+    their deterministic id, so re-running a partial import updates in place
+    instead of duplicating. The server stamps a fresh created_at; the source
+    timestamp is preserved in metadata.imported_created_at (upstream CLI
+    behavior).
+
+    Env: MEMINI_URL, MEMINI_API_KEY (same secret the memini server uses).
+    Exit codes: 0 ok, 1 import errors, 2 auth/config errors.
+    """
+
+    import argparse
+    import json
+    import os
+    import sqlite3
+    import sys
+    import time
+    import urllib.error
+    import urllib.request
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    from datetime import datetime, timezone
+
+    # memory.ConfidenceSeedImported: the seed trust the import path assigns;
+    # trust is re-earned at recall time.
+    CONFIDENCE_SEED_IMPORTED = 0.25
+
+    SELECT_SQL = (
+        "SELECT id, namespace, tier, content, summary, metadata, tags,"
+        " importance, created_at, expires_at, superseded_by FROM memories"
+    )
+
+
+    def log(msg):
+        print(f"[migrate] {msg}", flush=True)
+
+
+    def iso_ms(ms):
+        return datetime.fromtimestamp(ms / 1000, tz=timezone.utc).isoformat(
+            timespec="milliseconds"
+        )
+
+
+    def http_json(url, headers, body=None, timeout=60):
+        data = json.dumps(body).encode() if body is not None else None
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers=headers,
+            method="POST" if data is not None else "GET",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.status, resp.read()
+        except urllib.error.HTTPError as e:
+            return e.code, e.read()
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
+            return -1, b""
+
+
+    def load_rows(path):
+        db = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        try:
+            return db.execute(SELECT_SQL).fetchall()
+        finally:
+            db.close()
+
+
+    def build_record(row, now_ms):
+        (
+            id_, ns, tier, content, summary, meta, tags, importance,
+            created_at, expires_at, _superseded_by,
+        ) = row
+        try:
+            metadata = json.loads(meta) if meta else {}
+        except json.JSONDecodeError:
+            metadata = {}
+        try:
+            tag_list = json.loads(tags) if tags else []
+        except json.JSONDecodeError:
+            tag_list = []
+        body = {
+            "id": id_,
+            "content": content,
+            "tier": tier,
+            "confidence": CONFIDENCE_SEED_IMPORTED,
+            "metadata": metadata,
+        }
+        if created_at:
+            metadata["imported_created_at"] = iso_ms(created_at)
+        if summary:
+            body["summary"] = summary
+        if tag_list:
+            body["tags"] = tag_list
+        if importance:
+            body["importance"] = importance
+        if expires_at is not None and expires_at > now_ms:
+            body["ttl_seconds"] = int((expires_at - now_ms) / 1000)
+        return body, ns
+
+
+    def main():
+        ap = argparse.ArgumentParser()
+        ap.add_argument("--db", default="/data/memini.db")
+        ap.add_argument(
+            "--url",
+            default=os.environ.get("MEMINI_URL", "http://memini.llm.svc.cluster.local:8080"),
+        )
+        ap.add_argument("--key", default=os.environ.get("MEMINI_API_KEY", ""))
+        ap.add_argument("--concurrency", type=int, default=8)
+        ap.add_argument(
+            "--wait-server",
+            type=int,
+            default=1800,
+            help="max seconds to wait for the server to come up",
+        )
+        ap.add_argument("--include-expired", action="store_true")
+        ap.add_argument("--include-superseded", action="store_true")
+        ap.add_argument("--dry-run", action="store_true", help="count only, no POSTs")
+        args = ap.parse_args()
+
+        if not args.dry_run and not args.key:
+            log("FATAL: MEMINI_API_KEY is empty")
+            return 2
+
+        now_ms = int(time.time() * 1000)
+        rows = load_rows(args.db)
+
+        # Upstream export defaults: skip expired and superseded records;
+        # the flags include them.
+        send, skipped = [], {"expired": 0, "superseded": 0}
+        for row in rows:
+            if not args.include_expired and row[9] is not None and row[9] < now_ms:
+                skipped["expired"] += 1
+            elif not args.include_superseded and row[10] is not None:
+                skipped["superseded"] += 1
+            else:
+                send.append(row)
+
+        by_ns = {}
+        for row in send:
+            by_ns[row[1]] = by_ns.get(row[1], 0) + 1
+        log(f"db={args.db} total={len(rows)} sending={len(send)} skipped={skipped}")
+        for ns in sorted(by_ns):
+            log(f"  namespace {ns}: {by_ns[ns]}")
+        if args.dry_run:
+            return 0
+
+        # 1) Wait for the server (the CNPG cluster + memini Deployment may
+        #    still be provisioning when this Job starts).
+        base = args.url.rstrip("/")
+        deadline = time.time() + args.wait_server
+        while True:
+            status, _ = http_json(base + "/healthz", {}, timeout=10)
+            if 200 <= status < 300:
+                break
+            if time.time() >= deadline:
+                log(f"FATAL: server not ready after {args.wait_server}s (status {status})")
+                return 1
+            log(f"server not up (status {status}); retrying in 30s")
+            time.sleep(30)
+        log("server is up")
+
+        # 2) Verify credentials before the first batch.
+        status, _ = http_json(
+            base + "/v1/memories",
+            {
+                "Authorization": "Bearer " + args.key,
+                "X-Memini-Namespace": "default",
+            },
+            timeout=15,
+        )
+        if status in (401, 403):
+            log(f"FATAL: server rejected the API key ({status})")
+            return 2
+
+        # 3) Import.
+        ok = failed = auth_failed = 0
+        failures = []
+
+        def post(row):
+            body, ns = build_record(row, now_ms)
+            return http_json(
+                base + "/v1/memories",
+                {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + args.key,
+                    "X-Memini-Namespace": ns,
+                },
+                body=body,
+                timeout=120,
+            )
+
+        with ThreadPoolExecutor(max_workers=args.concurrency) as ex:
+            futures = {ex.submit(post, row): row for row in send}
+            done = 0
+            for fut in as_completed(futures):
+                row = futures[fut]
+                status, resp_body = fut.result()
+                done += 1
+                if status in (401, 403):
+                    auth_failed += 1
+                elif 200 <= status < 300 or status == -1:
+                    # -1: transport error (server may still have committed);
+                    # reported as failed so the re-run covers it.
+                    if 200 <= status < 300:
+                        ok += 1
+                    else:
+                        failed += 1
+                else:
+                    failed += 1
+                if not (200 <= status < 300):
+                    failures.append((row[0], status, resp_body[:300].decode(errors="replace")))
+                if done % 100 == 0:
+                    log(f"progress {done}/{len(send)} ok={ok} failed={failed}")
+
+        log(f"done: ok={ok} failed={failed} auth_failed={auth_failed} skipped={skipped}")
+        for id_, status, detail in failures[:10]:
+            log(f"  failure id={id_} status={status} body={detail}")
+        if auth_failed:
+            log("FATAL: credentials were rejected mid-run")
+            return 2
+        return 1 if failed else 0
+
+
+    if __name__ == "__main__":
+        sys.exit(main())

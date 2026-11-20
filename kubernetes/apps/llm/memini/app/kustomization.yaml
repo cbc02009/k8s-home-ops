@@ -7,7 +7,10 @@ resources:
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
   - ./litellmkey.yaml
+  - ./migrate-script.yaml
+  - ./migrate.yaml
   - ./ocirepository.yaml
+  - ./postgres-init.yaml
   - ./prometheusrule.yaml
   # TEMPORARY — kopiur component inlined for the cross-namespace restore
   # (parent-level patches do not reach component resources, so restore.yaml is

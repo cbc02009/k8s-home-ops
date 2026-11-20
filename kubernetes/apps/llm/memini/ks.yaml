@@ -10,6 +10,8 @@ spec:
   components:
     - ../../../../components/gpu
   dependsOn:
+    - name: external-secrets
+      namespace: security
     - name: litellm
     - name: llmkube
   interval: 1h
