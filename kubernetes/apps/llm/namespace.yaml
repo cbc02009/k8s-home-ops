@@ -6,10 +6,5 @@ metadata:
   name: _
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
-    # Allow kopiur movers in this namespace to run as a privileged (root)
-    # mover. Required so the hermes SnapshotPolicy/Restore can be granted
-    # privilegedMode — the hermes app writes files owned by root, so its
-    # mover must run as root to read them. See kopiur home-operations docs.
-    kopiur.home-operations.com/privileged-movers: "true"
   labels:
     resource.kubernetes.io/admin-access: "true"
