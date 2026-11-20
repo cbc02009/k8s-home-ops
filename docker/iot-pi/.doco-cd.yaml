@@ -1,0 +1,9 @@
+---
+name: iot-pi
+working_dir: ./docker/iot-pi
+auto_discovery:
+  enabled: true
+  depth: 1
+  delete: true
+external_secrets:
+  TRAEFIK_CF_DNS_API_TOKEN: op://Homelab/cloudflare_traefik/api_token

@@ -1,5 +1,5 @@
 #!/bin/sh
-# setup-doco-cd.sh -- second bring-up step for the zigbee-pi doco-cd host.
+# setup-doco-cd.sh -- second bring-up step for the iot-pi doco-cd host.
 #
 # Target OS: Raspberry Pi OS Lite 64-bit (Debian, arm64). Run ON the Pi as root,
 # after first boot. First step is flashing the card with Raspberry Pi Imager and
@@ -10,7 +10,7 @@
 #      for Debian arm64 (skipped when already present and healthy);
 #   2. locates this repo (the script's own checkout, ~/k8s-home-ops, or a fresh
 #      shallow clone) and deploys this instance's doco-cd container from
-#      docker/zigbee-pi/.doco-cd/docker-compose.app.yaml.
+#      docker/iot-pi/.doco-cd/docker-compose.app.yaml.
 #
 # Idempotent: safe to re-run; `docker compose up -d` reconciles in place.
 
@@ -75,12 +75,25 @@ if [ -n "${SUDO_USER:-}" ] && [ "$SUDO_USER" != root ]; then
     echo "Added $SUDO_USER to the docker group (log out and back in for it to apply)"
 fi
 
+# --- 1Password service-account token ----------------------------------------
+# doco-cd resolves the instance's external_secrets (.doco-cd.yaml - the
+# Cloudflare DNS token 00-traefik uses for its Let's Encrypt DNS-01 challenge)
+# with a 1Password service-account token file, mounted by
+# .doco-cd/docker-compose.app.yaml from the path below. Same service account as
+# the truenas instance (/mnt/smoltank/apps/doco-cd/secrets/1pw_token).
+TOKEN_FILE=/root/.config/doco-cd/1pw_token
+if [ ! -s "$TOKEN_FILE" ]; then
+    echo "missing or empty $TOKEN_FILE -- copy the 1Password service-account" >&2
+    echo "token file there (same one the truenas instance uses) and re-run" >&2
+    exit 1
+fi
+
 # --- locate the repo / the doco-cd compose file ----------------------------
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 APP_DIR="$SCRIPT_DIR"
 
 if [ ! -f "$APP_DIR/.doco-cd/docker-compose.app.yaml" ]; then
-    APP_DIR="$FALLBACK_DIR/docker/zigbee-pi"
+    APP_DIR="$FALLBACK_DIR/docker/iot-pi"
     if [ ! -f "$APP_DIR/.doco-cd/docker-compose.app.yaml" ]; then
         echo "No checkout found -- cloning $REPO_URL into $FALLBACK_DIR..."
         command -v git >/dev/null 2>&1 || apt-get install -y git
@@ -117,7 +130,7 @@ fi
 echo 'doco-cd is healthy.'
 PI_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
 echo
-echo 'Done. doco-cd reconciles the stacks in docker/zigbee-pi/ hourly'
+echo 'Done. doco-cd reconciles the stacks in docker/iot-pi/ hourly'
 echo '(poll-config.yml, interval 3600s) from the GitHub repo.'
 if [ -n "$PI_IP" ]; then
     echo "  UI/health endpoint: http://${PI_IP}:7789"
@@ -126,3 +139,5 @@ echo 'Next steps (see docker/AGENTS.md):'
 echo '  - plug in the Zigbee/Z-Wave controllers'
 echo '  - ls -l /dev/serial/by-id/ and fill the by-id paths into'
 echo '    01-zigbee2mqtt and 02-zwave2mqtt (then commit the change)'
+echo '  - Cloudflare A records zigbee.cnas.dev / zwave.cnas.dev pointing at the'
+echo '    Pi, then the UIs are https://zigbee.cnas.dev and https://zwave.cnas.dev'
