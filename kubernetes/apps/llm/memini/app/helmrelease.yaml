@@ -146,6 +146,12 @@ spec:
                     name: memini
                     key: MEMINI_API_KEY
     persistence:
+      # The chart's default renders a 5Gi sqlite data PVC (mounted at /data,
+      # and into the fsck cronjob as well). All memini data lives in the
+      # postgres-ai cluster, so the PVC and its mounts must stay disabled —
+      # do not drop this block.
+      data:
+        enabled: false
       api-keys:
         enabled: true
       # SQL the 01-init-db init container runs as the cluster superuser after
