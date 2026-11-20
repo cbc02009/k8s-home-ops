@@ -31,10 +31,12 @@
 #             rung is the flat-plan half that drains non-rolling weekly
 #             credits before they expire.
 #   Order 2 — minimax-m3 (demoted 2026-11-20, w1), deepseek-v4.1-flash
-#             (1.20x, the only sub-2x burn left), mimo-v2.6-flash (2.0x)
-#             + minimax-m3.1-flash (3.0x, w1 after the 2026-11-18 burn
-#             audit): cheap second wave once order 1 saturates/cools. The
-#             tier mix is now 25/25/25/25.
+#             (1.20x, the only sub-2x burn left, w2), mimo-v2.6-flash
+#             (2.0x, w2) + minimax-m3.1-flash (3.0x, w1 after the 2026-11-18
+#             burn audit): cheap second wave once order 1 saturates/cools.
+#             The tier mix is 1/1/2/2 of a weight-6 total — mimo and
+#             deepseek take a third each, minimax-m3 and m3.1-flash a sixth
+#             each.
 #   Order 4 — gemini-4-argon: 2.00x burn but the only 1M-class deep rung, with
 #             a 95% cached-input discount on a 94%-cached lane. Last-resort
 #             long-context rung alongside kimi; fires only in total cooldown.
