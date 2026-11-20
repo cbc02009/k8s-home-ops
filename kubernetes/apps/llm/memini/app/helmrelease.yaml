@@ -146,10 +146,6 @@ spec:
                     name: memini
                     key: MEMINI_API_KEY
     persistence:
-      # sqlite backend retired; the legacy PVC stays for the migrate Job and
-      # any rollback (kopiur snapshots of it also keep running)
-      data:
-        enabled: false
       api-keys:
         enabled: true
       # SQL the 01-init-db init container runs as the cluster superuser after
