@@ -7,7 +7,8 @@
 # (api/app.ts mergeExternalSettings) and hides those controls in the web UI. It pins
 # logging, RF region (1 = RFRegion.USA), soft reset, statistics off and the WS server
 # off - HA connects over MQTT, not :3000.
-# Still store-volume only (one-time setup at http://<pi>:8091 after first bring-up):
+# Still store-volume only (one-time setup after first bring-up, at
+# https://zwave.cnas.dev or http://<pi>:8091):
 # Settings -> MQTT (host 10.6.0.16, port 1883, Home Assistant discovery on) and the
 # S0/S2 security keys - keys are secrets and can't live in this public repo, and
 # 11.26.2 has no env-var path for them (external-settings.json is plain JSON, so
@@ -24,11 +25,28 @@ services:
       TZ: America/New_York
       ZWAVE_PORT: /dev/zwave
       ZWAVE_EXTERNAL_SETTINGS: /usr/src/app/external-settings.json
+    networks:
+      # Shared network created by 01-traefik (declared external below);
+      # traefik's docker provider watches it, so the zwave.cnas.dev router
+      # reaches this container by name.
+      app:
+    labels:
+      # Served as https://zwave.cnas.dev by 01-traefik (8091 below stays
+      # published for direct LAN access).
+      traefik.enable: "true"
+      traefik.http.services.zwave.loadbalancer.server.port: "8091"
+      traefik.http.routers.zwave.entrypoints: https
+      traefik.http.routers.zwave.rule: Host(`zwave.cnas.dev`)
+      traefik.http.routers.zwave.tls: "true"
+      traefik.http.routers.zwave.service: zwave
     ports:
       - 8091:8091
     restart: unless-stopped
     volumes:
       - store:/usr/src/app/store
       - ./external-settings.json:/usr/src/app/external-settings.json:ro
+networks:
+  app:
+    external: true
 volumes:
   store: {}

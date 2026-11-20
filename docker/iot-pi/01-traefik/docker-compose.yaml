@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json
+# Shared reverse proxy for this instance. The 00- prefix makes doco-cd deploy it
+# first: it creates the `app` network that the other stacks join (external: true),
+# which is how traefik's docker provider reaches the workloads and how
+# zigbee.cnas.dev / zwave.cnas.dev resolve to them. It deploys as its own compose
+# project (doco-cd projects are per-directory, so the 01-/02- stacks keep their
+# names and volumes).
+# TLS: Let's Encrypt via a Cloudflare DNS-01 challenge (CF_DNS_API_TOKEN from the
+# instance external_secrets - same 1Password item as the truenas box); the
+# generated certificate is the *.cnas.dev wildcard. zigbee.cnas.dev and
+# zwave.cnas.dev need Cloudflare A records pointing at the Pi.
+configs:
+  traefik-config:
+    file: ./config/traefik.yaml
+networks:
+  app:
+    name: app
+services:
+  traefik:
+    image: traefik:v3.7.19@sha256:aa942a00bce033c909bf1f7e861d93761be4b31a035f10d2410d33e38a8f41cf
+    container_name: traefik
+    restart: unless-stopped
+    environment:
+      TZ: America/New_York
+      CF_DNS_API_TOKEN: ${TRAEFIK_CF_DNS_API_TOKEN}
+    networks:
+      - app
+    configs:
+      - source: traefik-config
+        target: /etc/traefik/traefik.yaml
+    volumes:
+      - acme:/certs
+      - ./config/dynamic:/dynamic
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 443:443
+volumes:
+  acme:

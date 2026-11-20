@@ -21,10 +21,27 @@ services:
       ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
       ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: "true"
       ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: "false"
+    networks:
+      # Shared network created by 01-traefik (declared external below);
+      # traefik's docker provider watches it, so the zigbee.cnas.dev router
+      # reaches this container by name.
+      app:
+    labels:
+      # Served as https://zigbee.cnas.dev by 01-traefik (8080 below stays
+      # published for direct LAN access).
+      traefik.enable: "true"
+      traefik.http.services.zigbee.loadbalancer.server.port: "8080"
+      traefik.http.routers.zigbee.entrypoints: https
+      traefik.http.routers.zigbee.rule: Host(`zigbee.cnas.dev`)
+      traefik.http.routers.zigbee.tls: "true"
+      traefik.http.routers.zigbee.service: zigbee
     ports:
       - 8080:8080
     restart: unless-stopped
     volumes:
       - data:/data
+networks:
+  app:
+    external: true
 volumes:
   data: {}
