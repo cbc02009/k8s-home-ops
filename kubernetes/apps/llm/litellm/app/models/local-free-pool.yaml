@@ -174,12 +174,14 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Paid Go overflow (order 2): Mimo 2.6 Flash, the cheapest go-pool workhorse
-# per token ($60/mo allowance window, no-training, vision-capable so it can
-# also absorb this lane's vision traffic when Beam and the 27B are both
-# unavailable). Only reached
-# when every order-1 member is in cooldown — ordinary simple/medium traffic
-# still avoids the allowance-metered pool.
+# Paid-twin layer (order 2). Fires only when EVERY order-1 member is in
+# cooldown — i.e. the local 27B is saturated AND the free rungs have tripped
+# their per-network daily cap. Each free rung has a same-family paid Go model
+# under it (see the lane note above): hy4 covers hy4-flash-free, longcat-2.0
+# covers longcat-2.5-free, and mimo covers beam (no paid Beam exists). The
+# three share weight 1 and max_parallel_requests: 2 so the paid layer
+# drains the shared Go Plus $240 pool in proportion and cannot starve the
+# main go-pool / implementation lanes.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -207,3 +209,74 @@ spec:
       input_cost_per_token: 1.4e-07
       output_cost_per_token: 2.8e-07
       cache_read_input_token_cost: 2.8e-09
+
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# longcat-2.0 — paid twin of longcat-2.5-free (same Meituan LongCat family).
+# 1M context, 131k output, no vision. $240/mo cap = 1x pool burn, the cheapest
+# 1M long-context cover in the paid layer. Order 2: only reached when the
+# free longcat rung has 429'd its per-network daily cap. China-hosted, so it
+# needs "Global" regions in the Go workspace privacy settings (as the free
+# rung does).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-longcat-2.0
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/longcat-2.0
+    apiKey: sk-llmkube-noauth
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: false
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 3e-07
+      output_cost_per_token: 1.2e-06
+      cache_read_input_token_cost: 6e-09
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# hy4 — paid twin of hy4-flash-free (same Tencent Hy family). Keeps vision
+# (image in), 1M context, 65k output, reasoning-capable. $240/mo cap = 1x
+# pool burn. Order 2: only reached when the free hy4-flash rung has 429'd
+# its per-network daily cap, so the lane's vision traffic has a same-quality
+# paid continuation instead of degrading to the non-vision longcat-2.0.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: local-free-pool-hy4
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: local-free-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/hy4
+    apiKey: sk-llmkube-noauth
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1048576
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 8.34e-07
+      output_cost_per_token: 2.501e-06
+      cache_read_input_token_cost: 4.2e-08
