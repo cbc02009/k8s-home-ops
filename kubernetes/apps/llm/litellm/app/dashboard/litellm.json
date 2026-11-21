@@ -1102,6 +1102,40 @@
       "type": "timeseries"
     },
     {
+      "id": 37,
+      "title": "Avg Time to First Token by Model",
+      "description": "Mean latency to the first streamed token, per served model. Local 27B should hold well under a second; sharp jumps on the flash pair usually mean the Z.AI / Go subscription window is throttling.",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 54,
+        "w": 12,
+        "h": 7
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (model) (rate(litellm_llm_api_time_to_first_token_metric_sum[$__rate_interval])) / sum by (model) (rate(litellm_llm_api_time_to_first_token_metric_count[$__rate_interval]))",
+          "instant": false,
+          "legendFormat": "{{model}} avg"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      }
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -1158,7 +1192,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 55
+        "y": 62
       },
       "id": 31,
       "panels": [],
@@ -1177,7 +1211,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 63
       },
       "fieldConfig": {
         "defaults": {
@@ -1226,7 +1260,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 56
+        "y": 63
       },
       "fieldConfig": {
         "defaults": {
@@ -1273,7 +1307,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 56
+        "y": 63
       },
       "fieldConfig": {
         "defaults": {
@@ -1320,7 +1354,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 71
       },
       "fieldConfig": {
         "defaults": {
@@ -1369,7 +1403,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 64
+        "y": 71
       },
       "fieldConfig": {
         "defaults": {
