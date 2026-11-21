@@ -9,10 +9,11 @@
 # a budget slice. Rank by effective cost = list price x multiplier, not by cap:
 #   hy3                cap 240 -> 1.00x, effective out ~$0.58/1M, bench 0.895  <- primary (promoted 2026-11-20)
 #   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
-#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889  <- demoted to order 2
+#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889  <- order 2 w1 (stays: overflow behind m3.1)
 #   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
 #   deepseek-v4.1-flash  cap 200 -> 1.20x, effective in/out 0.36/1.44 peak <- order 2
-#   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- demoted
+#   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- order 2 w2: the cache vehicle (2026-11-21)
+#   gpt-6-luna         cap  60 -> 4.00x, effective in/out 0.40/2.00, p50 ~2s   <- order 2 w1: fast lane (2026-11-21)
 #   kimi-k2.7-code     cap 180 -> 1.33x, effective out ~$5.33/1M, bench 0.867  <- demoted
 # zai/glm-5.3 (bench 0.625, worst value, fastest non-rolling credit burn) was
 # REMOVED. deepseek-v4.1-flash (1.20x burn, cap 200) was evaluated as an
@@ -30,13 +31,19 @@
 #             zai/glm-5.3-flash (w1): cheap high-scoring primaries; the Z.AI
 #             rung is the flat-plan half that drains non-rolling weekly
 #             credits before they expire.
-#   Order 2 — minimax-m3 (demoted 2026-11-20, w1), deepseek-v4.1-flash
-#             (1.20x, the only sub-2x burn left, w2), mimo-v2.6-flash
-#             (2.0x, w2) + minimax-m3.1-flash (3.0x, w1 after the 2026-11-18
-#             burn audit): cheap second wave once order 1 saturates/cools.
-#             The tier mix is 1/1/2/2 of a weight-6 total — mimo and
-#             deepseek take a third each, minimax-m3 and m3.1-flash a sixth
-#             each.
+#   Order 2 — minimax-m3 (demoted 2026-11-20; confirmed to stay here — the
+#             overflow rung behind its cheaper sibling, w1), deepseek-v4.1-flash
+#             (1.20x, the only sub-2x burn left, w2), mimo-v2.6-flash (2.0x,
+#             w2), minimax-m3.1-flash (3.0x, w2 — the designated cache vehicle:
+#             4x cheaper cache-read than m3 on the list, half the fresh-input
+#             price, same measured latency, and this lane's input is ~93%
+#             cache-read) + gpt-6-luna (4.0x, w1 — the fast lane, p50 ~2s):
+#             cheap second wave once order 1 saturates/cools. The tier mix is
+#             1/2/2/2/1 of a weight-8 total — m3.1, mimo and deepseek a
+#             quarter each, minimax-m3 and gpt-6-luna an eighth each.
+#             2026-11-21 Go Plus usage report: the report's other findings
+#             (gemini's 2x off-peak multiplier, deepseek's off-peak pricing)
+#             stay documented landmines for this pool — no change made.
 #   Order 4 — gemini-4-argon: 2.00x burn but the only 1M-class deep rung, with
 #             a 95% cached-input discount on a 94%-cached lane. Last-resort
 #             long-context rung alongside kimi; fires only in total cooldown.
@@ -159,6 +166,13 @@ spec:
 # primary. Half of M3's token cost at list price, 1M context. Weight cut
 # 2->1 on the 2026-11-18 burn audit (heaviest single draw of the $9.24 heavy
 # day, ~1.4x its tier partners' effective cost).
+# 2026-11-21: designated cache vehicle — weight 1 -> 2, ahead of minimax-m3
+# (which stays at order 2, w1). Its cache-read price is 4x cheaper than m3's
+# on the list ($0.015 vs $0.06/1M; ~$0.045 vs ~$0.08 pooled at 3.0x vs 1.33x)
+# and its fresh-input price is half m3's, at the same measured latency. This
+# lane's input is ~93% cache-read, so the measured-mix cost per 1M input is
+# ~$0.12 for m3.1 vs ~$0.14 for m3: the traffic that used to ride m3 moves to
+# m3.1, and m3 is the overflow rung. mpr stays 2 like its tier peers.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -173,7 +187,7 @@ spec:
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
-      weight: 1
+      weight: 2
       max_parallel_requests: 2
   info:
     mode: chat
@@ -265,6 +279,48 @@ spec:
       input_cost_per_token: 3e-07
       output_cost_per_token: 1.2e-06
       cache_read_input_token_cost: 6e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# Order 2 — 2026-11-21 fast lane: the plan's fastest paid rung (p50 ~2s /
+# p90 ~5s in the Nov 17-21 window, ~5x ahead of the minimax family's 10s
+# p50), so the second wave stops being this lane's slowest tier. 4.0x burn
+# (cap 60), but on this lane's measured 93%-cached input mix its pooled cost
+# is ~$0.12/1M input — below both minimax rungs (~$0.12 / ~$0.14) — so it is
+# a burn-neutral-or-better member, not a new cost center; w1 behind the
+# m3.1/mimo/deepseek split, mpr 2 like its order-2 peers. The 5x price tier
+# only starts above 272k context (the largest agent loop), and the $12 5h
+# window plus the 30s cooldown bound a window 429 to the rest of order 2.
+# Quality caveat: gpt-6-luna has NOT been scored on the 23-task
+# deterministic bench (the 2026-11-18 audit left it UNTESTED) — this is a
+# second-wave add on measured latency + pooled economics, not a quality
+# promotion; bench it before it may ever become an order-1 primary.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: reasoning-pool-gpt-6-luna
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: reasoning-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/gpt-6-luna
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      order: 2
+      weight: 1
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1050000
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 1e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Order 3 — free floor, MOVED UP from order 4: the always-resident 27B now sits
