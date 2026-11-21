@@ -195,24 +195,20 @@ spec:
               MEMINI_BASE_URL: http://memini.llm.svc.cluster.local:8080
               # The gateway multiplexes every profile through one process,
               # and a routed profile's .env is never loaded into
-              # os.environ, so a per-profile MEMINI_NAMESPACE cannot come
-              # from the profiles' .env files. The in-repo plugin patch
+              # os.environ. The in-repo plugin patch
               # (app/memini-per-profile-namespace.py, applied by the init
-              # container below) therefore reads one static, non-secret pin
-              # per profile instead, keyed by upper-cased profile name.
-              # Every profile keeps the shared "hermes" root as an
+              # container below) derives each profile's namespace by
+              # convention instead: <this value>/<profile-name> from the
+              # framework-passed agent_identity — no per-profile env map to
+              # keep in sync (the previous MEMINI_NAMESPACE_<PROFILE> map
+              # missed containers and never produced a routed-profile
+              # write). Every profile keeps the shared "hermes" root as an
               # ancestor: durable facts stored at the root (and in the home
               # leg) cascade down to each profile, while each profile's own
               # transcripts live in its own child namespace instead of one
-              # shared catch-all.
+              # shared catch-all. MEMINI_NAMESPACE_<PROFILE> remains an
+              # optional per-profile override honored by the same patch.
               MEMINI_NAMESPACE: hermes
-              MEMINI_NAMESPACE_DEFAULT: hermes
-              MEMINI_NAMESPACE_CLUSTEROPS: hermes/clusterops
-              MEMINI_NAMESPACE_MAKER: hermes/maker
-              MEMINI_NAMESPACE_MODELOPS: hermes/modelops
-              MEMINI_NAMESPACE_MTG: hermes/mtg
-              MEMINI_NAMESPACE_REVIEWER: hermes/reviewer
-              MEMINI_NAMESPACE_TALOS: hermes/talos
               # Shared home leg: personal/user-level facts (the
               # personal/cbc02009 namespace) merge into every profile's
               # recall on both the read and write sides. The hermes key
