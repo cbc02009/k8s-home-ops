@@ -19,11 +19,12 @@ and re-run `pre-commit run --files <changed>` + `flate test all` before
 committing (see AGENTS.md). CI can enforce sync by re-running this tool and
 failing on `git diff --exit-code`.
 
-Pool identity heuristic: a CR named `<p1>-<p2>-<model...>` belongs to the
-two-token pool `<p1>-<p2>` (e.g. `go-pool-glm-5.3-flash` -> pool `go-pool`,
-model `glm-5.3-flash`). A two-token name (`go-coder`, `go-max`) is its own
-standalone single-model pool. POOL_TOKENS changes the prefix depth if a
-pool is ever named with more tokens.
+Pool identity heuristic: a pool is named `<...>-pool`, so the pool name runs
+up to and including the `pool` token (`go-pool-glm-5.3-flash` -> pool
+`go-pool` / model `glm-5.3-flash`; `local-free-pool-27b` -> pool
+`local-free-pool` / model `27b`). Names with no `pool` token fall back to the
+two-token rule (POOL_TOKENS): `go-coder`/`go-max` are standalone, and
+`qwen3.8-27b-chat` -> pool `qwen3.8-27b` / model `chat`.
 
 Stays read-only on the source YAML; only writes the .md sibling.
 """
@@ -64,8 +65,19 @@ def cost_per_million(tok):
 
 
 def pool_key(cr_name):
-    """Split a CR name into (pool, model). Two-token names are standalone."""
+    """Split a CR name into (pool, model).
+
+    A pool is named ``...-pool``: the pool name runs up to and including the
+    ``pool`` token (so ``go-pool-glm-5.3-flash`` -> pool ``go-pool`` / model
+    ``glm-5.3-flash``, and ``local-free-pool-27b`` -> pool ``local-free-pool``
+    / model ``27b``). Names with no ``pool`` token fall back to the two-token
+    rule: ``go-coder``/``go-max`` are standalone, ``qwen3.8-27b-chat`` -> pool
+    ``qwen3.8-27b`` / model ``chat``.
+    """
     toks = cr_name.split("-")
+    if "pool" in toks:
+        i = toks.index("pool")
+        return "-".join(toks[: i + 1]), "-".join(toks[i + 1 :])
     if len(toks) > POOL_TOKENS:
         return "-".join(toks[:POOL_TOKENS]), "-".join(toks[POOL_TOKENS:])
     return cr_name, ""
