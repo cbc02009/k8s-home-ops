@@ -21,6 +21,11 @@
 #   bargain, cheapest effective output in the catalog), and claude-haiku-5-5
 #   (rec 1: identical list price to gpt-6-luna - head-to-head bench decides
 #   which of the two carries the slot).
+#   2026-11-20 pool-fill cycle: hy3 PROMOTED to reasoning-pool order 1
+#   (bench 0.895 at 1.00x burn, ~$0.101/1M pooled = half minimax-m3's burn
+#   for equal-or-better quality, REPORT-POOL-FILL tier 2); minimax-m3
+#   demoted to order 2; implementation-pool mimo weight 1->2; hy3's
+#   input_cost fixed 0 -> 1.4e-07 (was under-reported on the dashboard).
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # GPT-6 Luna (OpenAI): cap 60 -> 4.0x burn, but the lowest list price in the
@@ -120,7 +125,9 @@ spec:
     supportsFunctionCalling: true
     supportsVision: false
     supportsPromptCaching: true
+    # 2026-11-20 fix: input_cost was 0 (under-reports burn on the Go
+    # dashboard). List price per the REPORT-PAID table: $0.14/M in.
     extra:
-      input_cost_per_token: 0
+      input_cost_per_token: 1.4e-07
       output_cost_per_token: 5.8e-07
       cache_read_input_token_cost: 5.8e-08
