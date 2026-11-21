@@ -77,7 +77,14 @@ spec:
               # needs MEMINI_LLM_MAX_TOKENS <= 16384.
               MEMINI_LLM_MODEL: qwen3.8-27b
               # MEMINI_LLM_MODEL: qwen3.8-27b-chat
-              MEMINI_LLM_MAX_TOKENS: "24576"
+              # Upstream default (4096 via maxTokensOr). 24576 let the 27B decode
+              # far past the 60s async consolidation job cap (hardcoded in v0.7.39,
+              # internal/service/consolidate.go:27), so the slow merges died on
+              # "context deadline exceeded" (14-15/hour in the
+              # last week, ~a quarter of all consolidation decisions; the rest
+              # were fine) -> those memories got stored raw instead of merged,
+              # and the MeminiConsolidateErrors alert ran hot.
+              MEMINI_LLM_MAX_TOKENS: "4096"
               MEMINI_DISTILL_TIMEOUT: 600s
               # Keep distillation on so the classifier runs; otherwise all writes land in
               # the working tier and never graduate unless the 24h promoter fires.
