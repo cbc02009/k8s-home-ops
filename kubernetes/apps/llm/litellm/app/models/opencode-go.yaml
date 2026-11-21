@@ -12,6 +12,18 @@
 # track allowance burn on the economics dashboard — they are not extra charge.
 # Routing: go-pool members carry `order` so the big-allowance cheap models
 # drain first and the $15-20 models are rationed last.
+# 2026-11-21 (Go Plus usage report, findings 1+2): gpt-6-luna joins the
+# ladder at order 3 - the plan's fastest paid rung (p50 ~2s / p90 ~5s in
+# the Nov 17-21 window, ~5x faster than the minimax family's 10s p50).
+# Pooled cost on this lane's measured 93%-cached input mix is
+# ~$0.12/1M input, ahead of minimax-m3.1-flash (~$0.12) and minimax-m3
+# (~$0.14), so the ladder stays cost-ascending. It burns the shared
+# pool at 4.0x (cap 60): the $12 5h window bounds the blast radius and
+# a window 429 fails the ladder down to m3.1-flash. The minimax pair
+# keeps its relative order (m3.1 ahead of m3), so m3.1-flash stays the
+# ladder's cache vehicle. claude-haiku-5-5 is NOT added to this pool:
+# its 5x price tier starts above 100k context, which the heavy agent
+# loops cross - it stays the go-chat lane.
 # Sessions: LiteLLM forwards x-litellm-session-id as x-opencode-session (the
 # envoy filter already maps x-session-id -> x-litellm-session-id); LiteLLM
 # does not invent one, so agents that send a stable x-session-id get the
@@ -76,6 +88,36 @@ spec:
       cache_read_input_token_cost: 2.8e-09
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# 2026-11-21: order-3 fast lane - the plan's fastest paid rung (p50
+# ~2s / p90 ~5s). 4.0x burn (cap 60); the $12 5h window and the 30s
+# cooldown on a window 429 bound it. Its 5x price tier only starts
+# above 272k context, which the lanes' typical requests do not reach.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: go-pool-gpt-6-luna
+spec:
+  modelName: go-pool
+  proxyRef: litellm
+  params:
+    model: opencode_go/gpt-6-luna
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      order: 3
+      max_parallel_requests: 4
+  info:
+    mode: chat
+    maxInputTokens: 1050000
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 1e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -87,7 +129,7 @@ spec:
     model: opencode_go/minimax-m3.1-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 3
+      order: 4
       max_parallel_requests: 4
   info:
     mode: chat
@@ -113,7 +155,7 @@ spec:
     model: opencode_go/qwen3.8-flash
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 4
+      order: 5
       max_parallel_requests: 4
   info:
     mode: chat
@@ -139,7 +181,7 @@ spec:
     model: opencode_go/minimax-m3
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 5
+      order: 6
       max_parallel_requests: 4
   info:
     mode: chat
@@ -165,7 +207,7 @@ spec:
     model: opencode_go/kimi-k2.7-code
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 6
+      order: 7
       max_parallel_requests: 4
   info:
     mode: chat
@@ -195,7 +237,7 @@ spec:
     model: opencode_go/longcat-2.5-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 7
+      order: 8
       max_parallel_requests: 4
   info:
     mode: chat
@@ -220,7 +262,7 @@ spec:
     model: opencode_go/beam-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 8
+      order: 9
       max_parallel_requests: 4
   info:
     mode: chat
@@ -251,7 +293,7 @@ spec:
     model: opencode_go/hy4-flash-free
     apiKey: os.environ/OPENCODE_GO_API_KEY
     additional:
-      order: 9
+      order: 10
       max_parallel_requests: 4
   info:
     mode: chat
