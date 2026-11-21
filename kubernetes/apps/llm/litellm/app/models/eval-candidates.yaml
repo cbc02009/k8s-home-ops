@@ -1,4 +1,16 @@
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+#
+# *** DORMANT - NOT DEPLOYED ***
+# This file is intentionally NOT listed in models/kustomization.yaml, so none of
+# the eval-* models below are registered on the live litellm proxy. The eval pool
+# is a transient testing fixture: it is removed when no bench is running and
+# re-created only when a bench cycle is requested.
+#
+#   To run a bench cycle: add `- ./eval-candidates.yaml` back to
+#   kustomization.yaml (keep these individual eval-* modelNames for per-model
+#   attribution - never a shared pool modelName, which breaks diagnosis), run the
+#   bench, then remove that line again so flux GC's the CRs off the proxy.
+#
 # Individual (non-pool) OpenCode Go candidate models for evaluation. These are
 # NOT in any auto-router pool - they exist only so deterministic benchmarks can
 # be run against a fixed model name (a pool's shuffle router ignores a pinned
@@ -47,7 +59,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/gpt-6-luna
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    apiKey: ***
     additional:
       max_parallel_requests: 2
   info:
@@ -80,7 +92,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/claude-haiku-5-5
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    apiKey: ***
     additional:
       max_parallel_requests: 2
   info:
@@ -115,7 +127,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/hy3
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    apiKey: ***
     additional:
       max_parallel_requests: 2
   info:
