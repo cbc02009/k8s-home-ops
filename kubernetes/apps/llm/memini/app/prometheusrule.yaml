@@ -36,14 +36,21 @@ spec:
               not keeping up with recall volume
           labels:
             severity: warning
+        # Recalibrated 2026-11-21: the 30/day threshold assumed a single human
+        # session volume (6-13/day upstream baseline). This cluster runs multiple
+        # hermes profiles continuously, so a healthy distiller mints 20-40 semantic
+        # facts/hour (~500-1000/day) and the old rule fired permanently. 100+/h for
+        # 2h is the real runaway signal (a distill loop or an unbounded session
+        # feed), not ordinary load.
         - alert: MeminiFactMintingHigh
           expr: |-
-            sum(increase(memini_store_upserts_total{op="insert",tier="semantic"}[1d])) > 30
+            sum(increase(memini_store_upserts_total{op="insert",tier="semantic"}[1h])) > 100
           for: 2h
           annotations:
             summary: >-
-              Memini minted {{ $value | printf "%.0f" }} durable facts in 24h — the distiller is
-              over-extracting (healthy baseline is 6-13/day)
+              Memini minted {{ $value | printf "%.0f" }} semantic facts in the last hour and has
+              stayed above 100/h — normal for this cluster is 20-40/h, so a sustained rate this
+              high means a distill loop or an unbounded session feed
           labels:
             severity: warning
         - alert: MeminiLifecycleStalled
