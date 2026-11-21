@@ -45,7 +45,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/glm-5.3-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 1
       max_parallel_requests: 4
@@ -71,7 +71,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/mimo-v2.6-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 2
       max_parallel_requests: 4
@@ -127,7 +127,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3.1-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 4
       max_parallel_requests: 4
@@ -153,7 +153,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/qwen3.8-flash
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 5
       max_parallel_requests: 4
@@ -179,7 +179,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 6
       max_parallel_requests: 4
@@ -205,7 +205,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/kimi-k2.7-code
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 7
       max_parallel_requests: 4
@@ -235,7 +235,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/longcat-2.5-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 8
       max_parallel_requests: 4
@@ -260,7 +260,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/beam-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 9
       max_parallel_requests: 4
@@ -291,7 +291,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/hy4-flash-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       order: 10
       max_parallel_requests: 4
@@ -319,7 +319,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/kimi-k2.7-code
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       max_parallel_requests: 4
   info:
@@ -345,7 +345,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/kimi-k3.1-pro
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       max_parallel_requests: 2
   info:
@@ -373,7 +373,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/qwen3.8-max
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       max_parallel_requests: 2
   info:
@@ -400,7 +400,7 @@ spec:
   proxyRef: litellm
   params:
     model: opencode_go/claude-haiku-5-5
-    apiKey: os.environ/OPENCODE_GO_API_KEY
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       max_parallel_requests: 4
   info:
