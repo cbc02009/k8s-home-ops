@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: swarmui
+spec:
+  groups:
+    - name: swarmui.rules
+      rules:
+        # Session sentinel, not a page (routed to the null receiver). Scaling
+        # swarmui up preempts the llmkube pods off mayne's dGPU, so qwen3.8-27b
+        # being down for the length of a session is expected, not an outage.
+        # Alertmanager inhibits the 27B down-alerts while this is firing (see
+        # kube-prometheus-stack/app/alertmanagerconfig.yaml). status_replicas
+        # counts the deployment's pod as soon as it is created (Pending
+        # included), so the sentinel is firing before any of the 27B down-alerts
+        # can trip their `for:` windows, and resolves once the deployment is
+        # scaled back to 0.
+        - alert: SwarmUIActive
+          expr: |-
+            max by (namespace, deployment) (kube_deployment_status_replicas{namespace="llm", deployment="swarmui"}) > 0
+          annotations:
+            summary: >-
+              SwarmUI session active - the dGPU is held by SwarmUI and the LLM
+              pods are intentionally preempted until the session ends
+          labels:
+            severity: none
