@@ -30,6 +30,10 @@ spec:
     name: kanzo
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
     configMaps:
       scripts:
         data:
