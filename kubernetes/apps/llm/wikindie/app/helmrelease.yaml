@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# Wikindie (https://github.com/dexgamedev/wikindie) is a self-hosted
+# Markdown wiki whose whole state is plain .md files on a volume: pages,
+# sections, kanban boards, labels and comments. It speaks MCP over HTTP on
+# the same port (/mcp) with per-key bearer auth, so agents can read and
+# write the workspace directly.
+#
+# The image (>=0.8.0) has no USER line: it starts as root, chowns SPACE_DIR
+# to WIKINDIE_RUN_AS (default 1000:1000, baked into the image), then
+# setuids down to that user (lib/privileges.ts). That makes it the
+# "specific user and group" exception to the default 2000:2000 pod ids:
+# the app manages its own uid, so no runAsUser/runAsGroup here (setting
+# one would break the root chown phase), and the PVC needs no fsGroup
+# (ceph-block is a block volume; only the app itself can take ownership).
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: wikindie
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: wikindie
+  interval: 1h
+  values:
+    controllers:
+      main:
+        type: deployment
+        replicas: 1
+        containers:
+          app:
+            image:
+              repository: ghcr.io/dexgamedev/wikindie
+              tag: 0.8.0@sha256:5ea90c7da7db3f48d534c54371819a4a7398396cdb33708f0b3159591221adb1
+              pullPolicy: IfNotPresent
+            env:
+              - name: NODE_ENV
+                value: production
+              - name: SPACE_DIR
+                value: /space
+              - name: PORT
+                value: "3000"
+              # Only these two Host headers are served: the ingress hostname
+              # for browsers and the in-cluster service hostname for agents
+              # hitting the /mcp endpoint directly.
+              - name: WIKINDIE_ALLOWED_HOSTS
+                value: wikindie.ctec.run,wikindie.llm.svc.cluster.local
+            # JWT_SECRET (>=32 bytes) and WIKINDIE_USER (user:password) come
+            # from the 1Password item `wikindie` via the ExternalSecret below.
+            envFrom:
+              - secretRef:
+                  name: wikindie-secret
+                  optional: true
+            ports:
+              - name: http
+                containerPort: 3000
+            # TCP probe: the HTTP root sits behind the login wall and its
+            # status code is not a stable readiness signal.
+            probes:
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: http
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: http
+                  initialDelaySeconds: 15
+                  periodSeconds: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
+              # The app never writes outside SPACE_DIR, so a read-only rootfs
+              # with a tmpfs /tmp is safe (mirrors the upstream compose file).
+              readOnlyRootFilesystem: true
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    service:
+      http:
+        ports:
+          http:
+            port: 3000
+            protocol: HTTP
+            primary: true
+    route:
+      wikindie:
+        hostnames:
+          - wikindie.ctec.run
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+    persistence:
+      space:
+        existingClaim: wikindie
+        globalMounts:
+          - path: /space
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
