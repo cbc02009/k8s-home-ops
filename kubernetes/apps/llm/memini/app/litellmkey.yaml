@@ -8,11 +8,13 @@ spec:
   keyAlias: Memini
   secretName: litellm-key-memini
   secretKey: api-key
-  # Exactly what the main container requests: zai-pool (the memory LLM lane;
-  # its fallback chain resolves to the local pool), the 27B names (the floor
-  # of that chain, and the -chat alternative in helmrelease.yaml), plus the
-  # embed/rerank models of the memory pipeline.
+  # Exactly what the main container requests: memini-pool (the memory LLM
+  # lane; deepseek rung 1, local 27b floor rung 2), zai-pool (the documented
+  # manual-rollback lane), the 27B names (the floor of that chain, and the
+  # -chat alternative in helmrelease.yaml), plus the embed/rerank models of
+  # the memory pipeline.
   models:
+  - memini-pool
   - zai-pool
   - qwen3.8-27b
   - qwen3.8-27b-chat
