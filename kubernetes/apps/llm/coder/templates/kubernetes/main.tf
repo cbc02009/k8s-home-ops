@@ -273,10 +273,11 @@ PY
 
     # opencode config - mirrors the cluster opencode agent with in-cluster
     # endpoints and the mounted keys. Task -> model routing: the session
-    # default is the local Qwen 27B; explore/general subagents run on the
-    # Go cloud lanes; reviewer runs read-only adversarial review on the
-    # free Go pool; /coder and /deep move work to the premium one-shot
-    # rungs (the coder key has no go-max or vision model).
+    # default is the local Qwen 27B; the explore/general subagents and the
+    # read-only reviewer run on the Go workhorse pool; /coder moves the
+    # session onto that pool, and /deep runs a generous-budget one-shot in a
+    # background child session (the coder key whitelists go-pool, zai-pool
+    # and the local 27B lanes only).
     mkdir -p "$HOME/.config/opencode"
     cat > "$HOME/.config/opencode/opencode.json" <<'JSON'
     {
@@ -305,7 +306,7 @@ PY
           "model": "litellm/go-pool"
         },
         "general": {
-          "model": "litellm/go-coder"
+          "model": "litellm/go-pool"
         },
         "reviewer": {
           "description": "Independent adversarial review of the current diff or changes; use for substantive or risky changes",
@@ -322,15 +323,15 @@ PY
       },
       "commands": {
         "coder": {
-          "description": "Switch this session to Kimi K2.7 Code (best agentic coder)",
+          "description": "Switch this session to the Go workhorse pool (go-pool)",
           "agent": "build",
-          "model": "litellm/go-coder",
-          "template": "Continue in the Kimi K2.7 Code lane for this session. $ARGUMENTS"
+          "model": "litellm/go-pool",
+          "template": "Continue on the go-pool workhorse ladder for this session. $ARGUMENTS"
         },
         "deep": {
-          "description": "Run a hard one-shot on Kimi K3.1 Pro in a background child session",
+          "description": "Run a hard one-shot on the Go workhorse pool in a background child session",
           "agent": "general",
-          "model": "litellm/go-strong",
+          "model": "litellm/go-pool",
           "subagent": true,
           "template": "You have a generous budget for this task. Do not stop at a sketch: complete the work end-to-end and verify it. Task: $ARGUMENTS"
         }
@@ -355,26 +356,12 @@ PY
             "timeout": 1800000
           },
           "models": {
-            "go-coder": {
-              "limit": {
-                "context": 262144,
-                "output": 65536
-              },
-              "name": "OpenCode Go · Kimi K2.7 Code"
-            },
             "go-pool": {
               "limit": {
                 "context": 262144,
                 "output": 65536
               },
               "name": "OpenCode Go · workhorse pool"
-            },
-            "go-strong": {
-              "limit": {
-                "context": 1000000,
-                "output": 131072
-              },
-              "name": "OpenCode Go · Kimi K3.1 Pro"
             },
             "implementation-pool": {
               "limit": {
