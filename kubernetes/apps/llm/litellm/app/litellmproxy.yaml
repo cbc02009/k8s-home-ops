@@ -136,6 +136,18 @@ spec:
     redis_port: os.environ/REDIS_PORT
     routing_strategy: simple-shuffle
     cooldown_time: 30
+    # 2026-11-22 20:13-20:51Z: swarmui preempted the 27B's 4090 and the
+    # 27B hung on LLMKube's 240s activation budget until it 503'd (83
+    # activation failures, TTFT p95 274-285s) — yet the 503s never cooled
+    # the rung out: the default 5xx rule (50% of 5+ in a minute) cannot
+    # accumulate at the homelab's 1-3 req/min, so the dead 27B stayed in
+    # the weighted rotation for the full 38-minute park. allowed_fails: 1
+    # cools a deployment for one cooldown cycle (30s) after any 2 failures
+    # within that window: a dead rung drops out within one or two traffic
+    # cycles and a recovering model re-enters just as fast. 429/401/404
+    # count toward the same limit (the old instant-cooldown on 429 becomes
+    # the same 2-strike rule).
+    allowed_fails: 1
     enable_pre_call_checks: true
     fallbacks:
       # The 2026-11-18 burn audit: while every paid lane's first fallback was

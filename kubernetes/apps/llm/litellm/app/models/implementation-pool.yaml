@@ -76,7 +76,13 @@ spec:
     additional:
       order: 1
       weight: 1
-      max_parallel_requests: 2
+      # 2026-11-22: mp 2 -> 4 on both flash rungs (Go + Z.AI twins). While
+      # the 27B parked on 2026-11-22 (swarmui preemption, 20:13-20:51Z)
+      # these were the only top-rung cover in the lane and logged 28
+      # "hit max parallel requests" saturation lines, piling queue latency
+      # onto the fallback. 4 matches every other rung in this pool and
+      # go-pool's own flash rung.
+      max_parallel_requests: 4
   info:
     mode: chat
     maxInputTokens: 1000000
@@ -146,7 +152,13 @@ spec:
     additional:
       order: 1
       weight: 1
-      max_parallel_requests: 2
+      # 2026-11-22: mp 2 -> 4 on both flash rungs (Go + Z.AI twins). While
+      # the 27B parked on 2026-11-22 (swarmui preemption, 20:13-20:51Z)
+      # these were the only top-rung cover in the lane and logged 28
+      # "hit max parallel requests" saturation lines, piling queue latency
+      # onto the fallback. 4 matches every other rung in this pool and
+      # go-pool's own flash rung.
+      max_parallel_requests: 4
   info:
     mode: chat
     maxInputTokens: 1048576
