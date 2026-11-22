@@ -44,7 +44,7 @@ spec:
           fix-perms:
             image:
               repository: ghcr.io/cbc02009/swarmui
-              tag: 0.9.8@sha256:436e2e1082abbec40c3aa2e19ef37d2328f1e0fa46c7858b0c9b37c380a8e38d
+              tag: 0.9.8@sha256:29ea24ec22ba6c379d3bd03911b541de184f37bea13c6ef2679ae3bd997c8fd6
             command:
               - chown
               - -R
@@ -78,7 +78,7 @@ spec:
           app:
             image:
               repository: ghcr.io/cbc02009/swarmui
-              tag: 0.9.8@sha256:436e2e1082abbec40c3aa2e19ef37d2328f1e0fa46c7858b0c9b37c380a8e38d
+              tag: 0.9.8@sha256:29ea24ec22ba6c379d3bd03911b541de184f37bea13c6ef2679ae3bd997c8fd6
             env:
               TZ: ${CONFIG_TZ}
             resources:
