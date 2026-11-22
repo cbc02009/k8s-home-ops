@@ -10,6 +10,7 @@ resources:
   - ./implementation-pool.yaml
   - ./local-free-pool.yaml
   - ./local-pool.yaml
+  - ./memini-pool.yaml
   - ./opencode-go.yaml
   - ./qwen3.8-27b.yaml
   - ./reasoning-pool.yaml
