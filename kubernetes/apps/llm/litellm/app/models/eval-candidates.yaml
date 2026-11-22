@@ -38,6 +38,20 @@
 #   for equal-or-better quality, REPORT-POOL-FILL tier 2); minimax-m3
 #   demoted to order 2; implementation-pool mimo weight 1->2; hy3's
 #   input_cost fixed 0 -> 1.4e-07 (was under-reported on the dashboard).
+#   2026-11-22 bench cycle (user-approved): registered eval-glm-5.3 -
+#   flagship GLM at cap 1000 -> 0.24x burn, the LOWEST multiplier in the
+#   catalog (effective $0.336/$1.056 per 1M, flash-class money at
+#   flagship class); bench target: reasoning-pool order 2. Reference
+#   lanes eval-minimax-m3 (current reasoning-pool order 2 paid rung)
+#   and eval-minimax-m3.1-flash (implementation-pool order 3) added so
+#   all five targets score on ONE suite - prior-cycle numbers came from
+#   an older harness and are not directly comparable. Carried over from
+#   the 11-18 audit: eval-gpt-6-luna vs eval-claude-haiku-5-5
+#   head-to-head for implementation-pool order 3 (note: 11-21 rebalance
+#   already placed gpt-6-luna in reasoning-pool order 2 as the fast
+#   lane; the implementation slot decision still pends this bench).
+#   Closed: eval-hy3 removed (promoted 2026-11-20, no longer a
+#   candidate).
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # GPT-6 Luna (OpenAI): cap 60 -> 4.0x burn, but the lowest list price in the
@@ -108,38 +122,104 @@ spec:
       cache_read_input_token_cost: 1e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Hy3 (Tencent, released 2026-07-06): "Hy reasoning model for coding,
-# instruction following, and agent tasks". cap 240 -> 1.00x burn (no burn
-# penalty) and the cheapest effective output in the catalog ($0.58/1M list) -
-# the audit's "unpooled bargain" (rec 5): it sits in no pool. Second bench
-# candidate; if it matches or beats the current mid tier at 1x burn it becomes
-# a new bulk rung rather than a swap. Input list price not exposed in the
-# catalog at registration time - placeholder 0 (the flat Go plan bills the
-# same either way; correct when the catalog exposes it). Vision unverified.
+# GLM 5.3 (Zhipu, released 2026-08-14): "Flagship GLM model for long-horizon
+# coding, agents, and complex project delivery". cap 1000 -> 0.24x burn - the
+# LOWEST burn multiplier in the Go catalog - at $1.40/$4.40 per 1M list
+# (cache read $0.26), so its EFFECTIVE cost is $0.336 in / $1.056 out per 1M:
+# flash-class money at flagship class. Its 0.24x cap also makes it the best
+# burn-rate guard available: bulk traffic routed here drains the shared $240
+# pool 5.5x slower than a 1.33x rung and 16x slower than a 4x rung. Bench
+# target: reasoning-pool order 2 (replace or supplement the paid rungs there).
+# No context-gated price overrides. Text-only (no vision); tools + structured
+# output + reasoning effort per the live Go catalog (re-checked 2026-11-22).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: eval-hy3
+  name: eval-glm-5.3
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: eval-hy3
+  modelName: eval-glm-5.3
   proxyRef: litellm
   params:
-    model: opencode_go/hy3
+    model: opencode_go/glm-5.3
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
       max_parallel_requests: 2
   info:
     mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 65536
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsVision: false
     supportsPromptCaching: true
-    # 2026-11-20 fix: input_cost was 0 (under-reports burn on the Go
-    # dashboard). List price per the REPORT-PAID table: $0.14/M in.
     extra:
-      input_cost_per_token: 1.4e-07
-      output_cost_per_token: 5.8e-07
-      cache_read_input_token_cost: 5.8e-08
+      input_cost_per_token: 1.4e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.6e-07
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# REFERENCE LANE (not a promotion candidate): minimax-m3 as a pinned
+# individual deployment so the suite scores it side-by-side with
+# eval-glm-5.3. It already serves reasoning-pool order 2 (w1, demoted
+# 2026-11-20; prior-suite quality 0.856 with the lane's worst p90 at
+# 11.9s). cap 180 -> 1.33x burn; $0.30/$1.20 list, cache read $0.06.
+# The >512k context override (2x prices) is out of bench range (~64k).
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-minimax-m3
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-minimax-m3
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 3e-07
+      output_cost_per_token: 1.2e-06
+      cache_read_input_token_cost: 6e-08
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# REFERENCE LANE (not a promotion candidate): minimax-m3.1-flash, the
+# implementation-pool order 3 incumbent the luna/haiku winner would
+# displace, scored on the same suite. cap 80 -> 3.00x burn; $0.15/$0.60
+# list, cache read $0.015; effective $0.45 in / $1.80 out - the pair it
+# is measured against prices at $0.40/$2.00 (luna) and identical
+# $0.10/$0.50 list (haiku). maxOutput 512000 per its pool doc.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: eval-minimax-m3.1-flash
+  labels:
+    litellm.home-operations.com/managed-by: flux
+spec:
+  modelName: eval-minimax-m3.1-flash
+  proxyRef: litellm
+  params:
+    model: opencode_go/minimax-m3.1-flash
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
+    additional:
+      max_parallel_requests: 2
+  info:
+    mode: chat
+    maxInputTokens: 1000000
+    maxOutputTokens: 512000
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+    extra:
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 6e-07
+      cache_read_input_token_cost: 1.5e-08
