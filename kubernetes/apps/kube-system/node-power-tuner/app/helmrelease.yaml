@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app node-power-tuner
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 30m
+  values:
+    defaultPodOptions:
+      # Node utility: pin to the dGPU worker (mayne) only. No runtimeClassName:
+      # this touches host CPU/PCI sysfs, not the GPU, so it does not need the
+      # nvidia container runtime.
+      nodeSelector:
+        topology.kubernetes.io: dgpu
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
+    controllers:
+      node-power-tuner:
+        type: daemonset
+        containers:
+          app:
+            image:
+              repository: docker.io/library/debian
+              tag: 13-slim
+            command:
+              - /bin/bash
+              - -c
+              - |
+                set -uo pipefail
+                SYS=/host/sys
+                log(){ printf '[%s] node-power-tuner: %s\n' "$(date -u +%FT%TZ)" "$*"; }
+                # NVIDIA vendor id: the 4090 holds the always-resident qwen3.8-27b
+                # model (a live CUDA context), so it must NOT be put into runtime
+                # PM and its busy PCIe link is left at the default ASPM.
+                NVIDIA_VENDOR=0x10de
+                apply_once(){
+                  # (1) CPU: governor -> schedutil, EPP -> balance_power (AMD amd_pstate)
+                  for c in "$SYS"/devices/system/cpu/cpu[0-9]*; do
+                    [ -d "$c" ] || continue
+                    n=$(basename "$c")
+                    f="$c/cpufreq/scaling_governor"
+                    if [ -f "$f" ] && [ -w "$f" ]; then
+                      cur=$(cat "$f" 2>/dev/null || true)
+                      [ "$cur" = "schedutil" ] || { echo schedutil > "$f" 2>/dev/null && log "$n governor -> schedutil (was: $cur)"; }
+                    fi
+                    e="$c/cpufreq/energy_performance_preference"
+                    if [ -f "$e" ] && [ -w "$e" ]; then
+                      cur=$(cat "$e" 2>/dev/null || true)
+                      [ "$cur" = "balance_power" ] || { echo balance_power > "$e" 2>/dev/null && log "$n EPP -> balance_power (was: $cur)"; }
+                    fi
+                  done
+                  # (2) + (3) PCI: runtime-PM -> auto and ASPM -> powersave, all non-GPU devices
+                  for d in "$SYS"/bus/pci/devices/*; do
+                    [ -d "$d" ] || continue
+                    dev=$(basename "$d")
+                    [ "$(cat "$d/vendor" 2>/dev/null || true)" = "$NVIDIA_VENDOR" ] && continue
+                    p="$d/power/control"
+                    if [ -f "$p" ] && [ -w "$p" ]; then
+                      cur=$(cat "$p" 2>/dev/null || true)
+                      [ "$cur" = "auto" ] || { echo auto > "$p" 2>/dev/null && log "pci $dev runtime-PM -> auto (was: $cur)"; }
+                    fi
+                    a="$d/link/aspm"
+                    if [ -f "$a" ] && [ -w "$a" ]; then
+                      cur=$(cat "$a" 2>/dev/null || true)
+                      [ "$cur" = "powersave" ] || { echo powersave > "$a" 2>/dev/null && log "pci $dev ASPM -> powersave (was: $cur)"; }
+                    fi
+                  done
+                }
+                log "starting; re-asserting every 30s; NVIDIA GPU skipped for runtime-PM/ASPM"
+                while :; do
+                  apply_once
+                  sleep 30
+                done
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 64Mi
+            securityContext:
+              privileged: true
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+    persistence:
+      host-sys:
+        type: hostPath
+        hostPath: /sys
+        globalMounts:
+          - path: /host/sys
+            readOnly: false
