@@ -9,7 +9,7 @@
 # a budget slice. Rank by effective cost = list price x multiplier, not by cap:
 #   hy3                cap 240 -> 1.00x, effective out ~$0.58/1M, bench 0.895  <- primary (promoted 2026-11-20)
 #   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
-#   minimax-m3         cap 180 -> 1.33x, effective out ~$1.60/1M, bench 0.889  <- order 2 w1 (stays: overflow behind m3.1)
+#   glm-5.3            cap 1000 -> 0.24x, effective in/out 0.34/1.06, bench reg 0.929 <- order 2 w1 (promoted 2026-11-22)
 #   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
 #   deepseek-v4.1-flash  cap 200 -> 1.20x, effective in/out 0.36/1.44 peak <- order 2
 #   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- order 2 w2: the cache vehicle (2026-11-21)
@@ -31,8 +31,12 @@
 #             zai/glm-5.3-flash (w1): cheap high-scoring primaries; the Z.AI
 #             rung is the flat-plan half that drains non-rolling weekly
 #             credits before they expire.
-#   Order 2 — minimax-m3 (demoted 2026-11-20; confirmed to stay here — the
-#             overflow rung behind its cheaper sibling, w1), deepseek-v4.1-flash
+#   Order 2 — glm-5.3 (PROMOTED here 2026-11-22, bench cycle: best registry
+#             score 0.929 of the five-lane suite at 0.24x burn — the LOWEST
+#             burn multiplier in the Go catalog; w1, the overflow slot;
+#             latency caveat: bench p50 14.4s / p90 93.1s, slower than the
+#             rung it replaces, acceptable for second-wave overflow),
+#             deepseek-v4.1-flash
 #             (1.20x, the only sub-2x burn left, w2), mimo-v2.6-flash (2.0x,
 #             w2), minimax-m3.1-flash (3.0x, w2 — the designated cache vehicle:
 #             4x cheaper cache-read than m3 on the list, half the fresh-input
@@ -40,7 +44,7 @@
 #             cache-read) + gpt-6-luna (4.0x, w1 — the fast lane, p50 ~2s):
 #             cheap second wave once order 1 saturates/cools. The tier mix is
 #             1/2/2/2/1 of a weight-8 total — m3.1, mimo and deepseek a
-#             quarter each, minimax-m3 and gpt-6-luna an eighth each.
+#             quarter each, glm-5.3 and gpt-6-luna an eighth each.
 #             2026-11-21 Go Plus usage report: the report's other findings
 #             (gemini's 2x off-peak multiplier, deepseek's off-peak pricing)
 #             stay documented landmines for this pool — no change made.
@@ -59,21 +63,26 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: reasoning-pool-minimax-m3
+  name: reasoning-pool-glm-5.3
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
   modelName: reasoning-pool
   proxyRef: litellm
   params:
-    model: opencode_go/minimax-m3
+    model: opencode_go/glm-5.3
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      # 2026-11-20 pool-fill audit: demoted order 1 -> 2, weight 2 -> 1.
-      # minimax-m3 drew ~89% of the Go Plus pool spend (1.33x burn,
-      # $0.211/1M pooled) with the worst p90 tail of any rung (11.9s) for
-      # 0.856 quality. Bulk share moves to hy3 (1.00x, 0.895); this lane
-      # stays as a second-wave rung so nothing is lost if hy3 cools.
+      # 2026-11-22 bench-cycle promotion (PR replaces minimax-m3's order 2
+      # w1 slot): best registry score of the five-lane suite (0.929 vs m3's
+      # 0.500 on the same suite; suite history in eval-candidates.yaml) at
+      # 0.24x burn - effective $0.34/$1.06 per 1M vs m3's $0.40/$1.60 - so
+      # it wins the equal-or-lower-effective-cost gate on BOTH axes. m3 is
+      # now fully out of this pool (it remains in the go-pool ladder,
+      # order 6). Latency is the accepted trade: bench p50 14.4s / p90
+      # 93.1s (one reasoning runaway capped at 16k out) vs m3's 2.1s/4.0s -
+      # acceptable for an order-2 overflow rung; the order-1 primaries and
+      # luna's fast lane stay the latency paths.
       order: 2
       weight: 1
       max_parallel_requests: 2
@@ -82,12 +91,12 @@ spec:
     maxInputTokens: 1000000
     maxOutputTokens: 131072
     supportsFunctionCalling: true
-    supportsVision: true
+    supportsVision: false
     supportsPromptCaching: true
     extra:
-      input_cost_per_token: 3e-07
-      output_cost_per_token: 1.2e-06
-      cache_read_input_token_cost: 6e-08
+      input_cost_per_token: 1.4e-06
+      output_cost_per_token: 4.4e-06
+      cache_read_input_token_cost: 2.6e-07
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # NEW primary (order 1): the cheapest of the high-scoring Go rungs — 1.33x
