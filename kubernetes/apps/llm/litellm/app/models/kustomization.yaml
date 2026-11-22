@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./auto.yaml
   - ./classifier-pool.yaml
-  - ./deepseek-v4.1-flash-gate-test.yaml
   - ./embed.yaml
   - ./frontier-pool.yaml
   - ./implementation-pool.yaml
