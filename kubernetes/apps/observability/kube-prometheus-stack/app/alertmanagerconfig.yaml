@@ -25,6 +25,11 @@ spec:
           - name: alertname
             value: InfoInhibitor
             matchType: =
+      - receiver: "null"
+        matchers:
+          - name: alertname
+            value: SwarmUIActive
+            matchType: =
       - receiver: discord
       # - receiver: "null"
         matchers:
@@ -43,6 +48,39 @@ spec:
         - name: severity
           value: warning
           matchType: =
+    # A SwarmUI session preempts qwen3.8-27b off mayne's dGPU, so its
+    # deployment/pod down-alerts are expected for the length of the session.
+    # Inhibit the 27B down-family while the SwarmUIActive sentinel is firing;
+    # when SwarmUI is parked (replicas 0) the sentinel resolves and genuine
+    # 27B outages alert normally.
+    - sourceMatch:
+        - name: alertname
+          value: SwarmUIActive
+          matchType: =
+      targetMatch:
+        - name: namespace
+          value: llm
+          matchType: =
+        - name: deployment
+          value: qwen3.8-27b
+          matchType: =
+        - name: alertname
+          value: KubeDeploymentReplicasMismatch|KubeDeploymentRolloutStuck
+          matchType: =~
+    - sourceMatch:
+        - name: alertname
+          value: SwarmUIActive
+          matchType: =
+      targetMatch:
+        - name: namespace
+          value: llm
+          matchType: =
+        - name: pod
+          value: qwen3\.8-27b-.*
+          matchType: =~
+        - name: alertname
+          value: KubePodNotReady|KubePodPending|KubeContainerWaiting
+          matchType: =~
   receivers:
     - name: "null"
     - name: "discord"
