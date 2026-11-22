@@ -9,6 +9,7 @@ resources:
   - ./namespace.yaml
   - ./camofox/ks.yaml
   - ./coder/ks.yaml
+  - ./comfyui/ks.yaml
   - ./headroom/ks.yaml
   - ./hermes/ks.yaml
   - ./litellm/ks.yaml

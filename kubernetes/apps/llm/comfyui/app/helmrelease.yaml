@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app comfyui
+  namespace: llm
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  dependsOn: []
+  interval: 1h
+  values:
+    defaultPodOptions:
+      priorityClassName: gpu-interactive
+      runtimeClassName: nvidia
+    # Parked at replicas 0 with the full GPU request in place: this is the
+    # only switch for one-way preemption of the llmkube pods (gpu-preemptible,
+    # -100) on mayne's single dGPU. Bring it up for image generation:
+    #   flux suspend helmrelease comfyui -n llm
+    #   kubectl scale deployment comfyui -n llm --replicas=1
+    # and hand the GPU back (llmkube rebinds its pending pod automatically):
+    #   kubectl scale deployment comfyui -n llm --replicas=0
+    #   flux resume helmrelease comfyui -n llm
+    # Suspend the HelmRelease, not just the Kustomization: the Flux Helm
+    # controller owns this Deployment's replicas and reverts manual scaling.
+    #
+    # No pod securityContext / init container on purpose: unlike the swarmui
+    # image, this image's entrypoint starts as root, installs any missing
+    # custom-node requirements, and drops to PUID/PGID (default 1000), so the
+    # kubelet-created root-owned subPath directories below are writable at
+    # start and end up owned by uid 1000 for the app.
+    controllers:
+      comfyui:
+        replicas: 0
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          nodeSelector:
+            topology.kubernetes.io: "dgpu"
+          tolerations:
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
+        containers:
+          app:
+            image:
+              repository: ghcr.io/clsferguson/comfyui-docker
+              tag: v0.39.0@sha256:6c0adbc07478eca67c56ec25ac0bfdd4e58ea91fc7f63b0cad45a11a2ad76a32
+            env:
+              TZ: ${CONFIG_TZ}
+            resources:
+              requests:
+                cpu: 500m
+                memory: 4Gi
+                nvidia.com/gpu: 1
+              limits:
+                memory: 8Gi
+                nvidia.com/gpu: 1
+    service:
+      app:
+        controller: comfyui
+        ports:
+          http:
+            port: &port 8188
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /app/ComfyUI/user/default
+            subPath: user
+          - path: /app/ComfyUI/custom_nodes
+            subPath: custom_nodes
+          - path: /app/ComfyUI/input
+            subPath: input
+      output:
+        type: nfs
+        server: ${CONFIG_TRUENAS_HOST}
+        path: /mnt/smoltank/comfyui/output
+        globalMounts:
+          - path: /app/ComfyUI/output
+      models:
+        type: nfs
+        server: ${CONFIG_TRUENAS_HOST}
+        path: /mnt/smoltank/comfyui/models
+        globalMounts:
+          - path: /app/ComfyUI/models

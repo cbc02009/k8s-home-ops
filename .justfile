@@ -20,6 +20,10 @@ mod kube "kubernetes"
 [group('Swarm')]
 mod swarm "kubernetes/apps/llm/swarmui"
 
+# ComfyUI Recipes
+[group('ComfyUI')]
+mod comfy "kubernetes/apps/llm/comfyui"
+
 # Talos Recipes
 [group('Talos')]
 mod talos "talos"
