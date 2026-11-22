@@ -84,7 +84,7 @@ data:
         # Stable local lane: the always-resident 27B — free and always available.
         agentic-local:
           provider: litellm
-          model: local-pool
+          model: local-free-pool
           max_concurrent_children: 1
         implementer:
           provider: litellm
@@ -101,7 +101,7 @@ data:
         # decommissioned strata local engine.
         vision-cloud:
           provider: litellm
-          model: go-chat
+          model: go-pool
           max_concurrent_children: 1
       max_iterations: 250
     gateway:
@@ -153,7 +153,7 @@ data:
       # Always-on cheap cloud vision (no-training Go lane).
       vision:
         provider: litellm
-        model: go-chat
+        model: go-pool
       # 27B-chat: always resident and no forced reasoning, so these
       # utilities stay fast and cheap.
       compression:

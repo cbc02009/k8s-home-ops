@@ -399,8 +399,9 @@ spec:
 ---
 # Last resort — DEMOTED from order 3 to order 4: the best agentic coder but
 # ~$5.33/1M effective output. It accounted for ~55% of this lane's Go allowance
-# burn on ~18% of requests. Use the dedicated `go-coder` lane for on-purpose
-# top-tier coding; here it only fires when every cheaper rung is in cooldown.
+# burn on ~18% of requests. On-purpose top-tier coding belongs on the
+# dedicated coding lanes (implementation-pool / go-pool); here it only fires
+# when every cheaper rung is in cooldown.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
