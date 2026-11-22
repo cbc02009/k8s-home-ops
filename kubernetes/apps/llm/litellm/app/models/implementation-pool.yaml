@@ -81,7 +81,7 @@ spec:
       # these were the only top-rung cover in the lane and logged 28
       # "hit max parallel requests" saturation lines, piling queue latency
       # onto the fallback. 4 matches every other rung in this pool and
-      # go-pool's own flash rung.
+      # workhorse-pool's own flash rung.
       max_parallel_requests: 4
   info:
     mode: chat
@@ -157,7 +157,7 @@ spec:
       # these were the only top-rung cover in the lane and logged 28
       # "hit max parallel requests" saturation lines, piling queue latency
       # onto the fallback. 4 matches every other rung in this pool and
-      # go-pool's own flash rung.
+      # workhorse-pool's own flash rung.
       max_parallel_requests: 4
   info:
     mode: chat

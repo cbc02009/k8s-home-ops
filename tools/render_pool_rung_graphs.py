@@ -4,7 +4,7 @@
 Each `LiteLLMModel` CR in a pool file is one RUNG in a fallback ladder. Rungs
 are tried in ascending `spec.params.additional.order` (lower = first). This
 script turns a pool YAML into a sibling `<base>-rungs.md` (e.g.
-`opencode-go.yaml` -> `opencode-go-rungs.md`) that shows the ladder as a
+`workhorse-pool.yaml` -> `workhorse-pool-rungs.md`) that shows the ladder as a
 graph (rung-1 -> rung-2 -> ...) plus a data table (model, context window,
 $ / 1M tokens in/out, cache-read, and burn weight where present).
 
@@ -12,7 +12,7 @@ The .md is DERIVED from the YAML. It is required to be regenerated whenever
 the pool YAML changes. Regenerate with:
 
     python3 tools/render_pool_rung_graphs.py \
-        kubernetes/apps/llm/litellm/app/models/opencode-go.yaml \
+        kubernetes/apps/llm/litellm/app/models/workhorse-pool.yaml \
         kubernetes/apps/llm/litellm/app/models/reasoning-pool.yaml
 
 and re-run `pre-commit run --files <changed>` + `flate test all` before
@@ -20,8 +20,8 @@ committing (see AGENTS.md). CI can enforce sync by re-running this tool and
 failing on `git diff --exit-code`.
 
 Pool identity heuristic: a pool is named `<...>-pool`, so the pool name runs
-up to and including the `pool` token (`go-pool-glm-5.3-flash` -> pool
-`go-pool` / model `glm-5.3-flash`; `local-free-pool-27b` -> pool
+up to and including the `pool` token (`workhorse-pool-glm-5.3-flash` -> pool
+`workhorse-pool` / model `glm-5.3-flash`; `local-free-pool-27b` -> pool
 `local-free-pool` / model `27b`). Names with no `pool` token fall back to the
 two-token rule (POOL_TOKENS), e.g. `qwen3.8-27b-chat` -> pool
 `qwen3.8-27b` / model `chat`.
@@ -68,7 +68,7 @@ def pool_key(cr_name):
     """Split a CR name into (pool, model).
 
     A pool is named ``...-pool``: the pool name runs up to and including the
-    ``pool`` token (so ``go-pool-glm-5.3-flash`` -> pool ``go-pool`` / model
+    ``pool`` token (so ``workhorse-pool-glm-5.3-flash`` -> pool ``workhorse-pool`` / model
     ``glm-5.3-flash``, and ``local-free-pool-27b`` -> pool ``local-free-pool``
     / model ``27b``). Names with no ``pool`` token fall back to the two-token
     rule, e.g. ``qwen3.8-27b-chat`` -> pool ``qwen3.8-27b`` / model ``chat``.

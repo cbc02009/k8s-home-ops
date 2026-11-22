@@ -13,7 +13,7 @@
 #      only the deep fallback ever touching them. (Removed from
 #      local-free-pool on 2026-11-16: that lane rebalanced to favor the
 #      resident 27B.)
-#   3. Vision fallback for go-pool's vision traffic: both GLM rungs are
+#   3. Vision fallback for workhorse-pool's vision traffic: both GLM rungs are
 #      vision-capable.
 # Rungs: Flash first (weight 2) — the cheap drain rung (0.4x off-peak credit
 # consumption, the largest window); GLM-5.3 (weight 1) is the stronger but

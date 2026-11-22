@@ -1,7 +1,10 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# OpenCode Go ($10/mo subscription) lane — the cloud rung for coding-agent
-# work that outgrows the local Qwen rungs. Provider opencode_go/ requires
+# The workhorse pool: the stack's general-purpose bulk cloud lane — everyday
+# agent/coding/chat traffic drains here first, it is the vision-capable
+# cloud lane (absorbed the former go-chat lane), and frontier-pool's
+# overflow rung. Underlying subscription: OpenCode Go ($10/mo).
+# Provider opencode_go/ requires
 # LiteLLM >= v1.109.0 (provider first shipped in v1.109.0-rc.1; NOT in the
 # 1.108.x LTS line). Auth: OPENCODE_GO_API_KEY on the proxy (1Password item
 # "opencode-go", field api_key, pushed via the litellm ExternalSecret — kept
@@ -10,7 +13,7 @@
 # rates ($60 workhorses, $20-30 mid, $15 premium) with a 5h window at 20% of
 # monthly; the prices below mirror LiteLLM's built-in opencode_go catalog and
 # track allowance burn on the economics dashboard — they are not extra charge.
-# Routing: go-pool members carry `order` so the big-allowance cheap models
+# Routing: workhorse-pool members carry `order` so the big-allowance cheap models
 # drain first and the $15-20 models are rationed last.
 # 2026-11-21 (Go Plus usage report, findings 1+2): gpt-6-luna joins the
 # ladder - the plan's fastest paid rung (p50 ~2s / p90 ~5s in the Nov
@@ -29,28 +32,34 @@
 # copies of the free rungs, so no cluster capability is lost. The
 # named single-model lanes (go-coder/go-strong/go-max/go-chat) were
 # removed in the same change; their consumers (coder/qwencode/
-# open-webui keys, hermes vision roles) now ride go-pool, and their
+# open-webui keys, hermes vision roles) now ride this pool, and their
 # fallback chains were collapsed accordingly. claude-haiku-5-5 remains
 # out of the pool: its 5x price tier starts above 100k context, which
 # the heavy agent loops cross.
+# 2026-11-22 (rename + refocus): renamed go-pool -> workhorse-pool - the
+# name now states the lane's FUNCTION (the bulk workhorse ladder), not
+# its provenance. The longcat-2.5-free rung moved out: it is a free
+# floor, not workhorse capacity, and already serves at order 1 of
+# local-free-pool; the pool's fallback chain (local-free-pool, then
+# zai-pool) keeps the zero-burn floor reachable when the paid windows
+# dry. The ladder is the three paid workhorse rungs.
 # Sessions: LiteLLM forwards x-litellm-session-id as x-opencode-session (the
 # envoy filter already maps x-session-id -> x-litellm-session-id); LiteLLM
 # does not invent one, so agents that send a stable x-session-id get the
 # better prompt-cache behaviour.
 # DATA POLICY: Go publishes per-model training/retention terms. Everything in
-# this pool is no-training (LongCat 2.5 Free: not used/0d; paid endpoints
-# that train on request data are blocked by default in the workspace
-# privacy settings). Models that train on prompts in exchange
-# for free/discounted tokens — Iceman Contributor Free, Muse Spark 1.x
-# Contributor — are deliberately EXCLUDED and must not be added. LongCat 2.5
-# Free is hosted in China and needs "Global" regions in the Go workspace
-# privacy settings; drop it if that is unacceptable.
+# this pool is no-training (paid endpoints that train on request data are
+# blocked by default in the workspace privacy settings). Models that train
+# on prompts in exchange for free/discounted tokens — Iceman Contributor
+# Free, Muse Spark 1.x Contributor — are deliberately EXCLUDED and must
+# not be added. Free Go rungs live in local-free-pool / classifier-pool,
+# which carry their own data-policy notes.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: go-pool-glm-5.3-flash
+  name: workhorse-pool-glm-5.3-flash
 spec:
-  modelName: go-pool
+  modelName: workhorse-pool
   proxyRef: litellm
   params:
     model: opencode_go/glm-5.3-flash
@@ -79,9 +88,9 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: go-pool-gpt-6-luna
+  name: workhorse-pool-gpt-6-luna
 spec:
-  modelName: go-pool
+  modelName: workhorse-pool
   proxyRef: litellm
   params:
     model: opencode_go/gpt-6-luna
@@ -105,9 +114,9 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: go-pool-minimax-m3.1-flash
+  name: workhorse-pool-minimax-m3.1-flash
 spec:
-  modelName: go-pool
+  modelName: workhorse-pool
   proxyRef: litellm
   params:
     model: opencode_go/minimax-m3.1-flash
@@ -126,33 +135,3 @@ spec:
       input_cost_per_token: 1.5e-07
       output_cost_per_token: 6e-07
       cache_read_input_token_cost: 1.5e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Limited-time free model: zero allowance burn and listed "model training:
-# not used" in Go's privacy table, so safe for the pool; sits behind every
-# paid Go member as the ladder's zero-burn floor. The same model anchors
-# the local-free-pool (the auto router's SIMPLE/MEDIUM lane) alongside
-# the resident 27B.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-longcat-2.5-free
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/longcat-2.5-free
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 4
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 262144
-    supportsFunctionCalling: true
-    supportsVision: true
-    extra:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
