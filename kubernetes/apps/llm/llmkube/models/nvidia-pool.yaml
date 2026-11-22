@@ -2,7 +2,7 @@
 # The nvidia dGPU slot. qwen3.8-27b is the sole member and pool default
 # (always resident). strata-fn (the former second member, swapped in on
 # demand) was decommissioned 2026-11-12 — its vision role moved to the
-# go-chat cloud lane. The pool and router remain: litellm's 27B models
+# go-pool cloud vision rungs. The pool and router remain: litellm's 27B models
 # front the nvidia-router-proxy Service this router serves.
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: ModelPool

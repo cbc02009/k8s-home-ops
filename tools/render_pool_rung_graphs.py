@@ -23,8 +23,8 @@ Pool identity heuristic: a pool is named `<...>-pool`, so the pool name runs
 up to and including the `pool` token (`go-pool-glm-5.3-flash` -> pool
 `go-pool` / model `glm-5.3-flash`; `local-free-pool-27b` -> pool
 `local-free-pool` / model `27b`). Names with no `pool` token fall back to the
-two-token rule (POOL_TOKENS): `go-coder`/`go-max` are standalone, and
-`qwen3.8-27b-chat` -> pool `qwen3.8-27b` / model `chat`.
+two-token rule (POOL_TOKENS), e.g. `qwen3.8-27b-chat` -> pool
+`qwen3.8-27b` / model `chat`.
 
 Stays read-only on the source YAML; only writes the .md sibling.
 """
@@ -71,8 +71,7 @@ def pool_key(cr_name):
     ``pool`` token (so ``go-pool-glm-5.3-flash`` -> pool ``go-pool`` / model
     ``glm-5.3-flash``, and ``local-free-pool-27b`` -> pool ``local-free-pool``
     / model ``27b``). Names with no ``pool`` token fall back to the two-token
-    rule: ``go-coder``/``go-max`` are standalone, ``qwen3.8-27b-chat`` -> pool
-    ``qwen3.8-27b`` / model ``chat``.
+    rule, e.g. ``qwen3.8-27b-chat`` -> pool ``qwen3.8-27b`` / model ``chat``.
     """
     toks = cr_name.split("-")
     if "pool" in toks:

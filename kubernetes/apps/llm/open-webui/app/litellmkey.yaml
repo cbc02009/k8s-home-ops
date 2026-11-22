@@ -11,10 +11,10 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
-  # Chat-UI cloud lanes: go-chat (Claude Haiku 5.5, vision) + the cheap
-  # go-pool. Keep local 27B as the default; premium $15 lanes stay out.
+  # Chat-UI cloud lane: go-pool (vision-capable Go rungs; absorbed the
+  # former go-chat lane). Keep local 27B as the default; premium $15
+  # lanes stay out.
   - go-pool
-  - go-chat
   # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (vision
   # capable, and its weekly credits do not roll over).
   - zai-pool

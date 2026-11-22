@@ -110,10 +110,10 @@ spec:
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Claude Haiku 5.5 (Anthropic): cap 60 -> 4.0x burn, $0.10/$0.50 per 1M list -
 # IDENTICAL effective price to gpt-6-luna, so the bench is a head-to-head:
-# whichever wins carries the implementation-pool order 3 promotion. Already
-# served as the go-chat lane (open-webui, vision) - this eval lane is a
-# dedicated bench target; the go-chat rung is untouched. Vision + 1M context
-# per the go-chat doc.
+# whichever wins carries the implementation-pool order 3 promotion. The
+# production chat-vision traffic this model served via the former go-chat
+# lane (open-webui) now rides go-pool; this eval lane stays a dedicated
+# bench target. Vision + 1M context.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

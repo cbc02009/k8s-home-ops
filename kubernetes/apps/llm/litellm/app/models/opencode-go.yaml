@@ -13,25 +13,34 @@
 # Routing: go-pool members carry `order` so the big-allowance cheap models
 # drain first and the $15-20 models are rationed last.
 # 2026-11-21 (Go Plus usage report, findings 1+2): gpt-6-luna joins the
-# ladder at order 3 - the plan's fastest paid rung (p50 ~2s / p90 ~5s in
-# the Nov 17-21 window, ~5x faster than the minimax family's 10s p50).
-# Pooled cost on this lane's measured 93%-cached input mix is
-# ~$0.12/1M input, ahead of minimax-m3.1-flash (~$0.12) and minimax-m3
-# (~$0.14), so the ladder stays cost-ascending. It burns the shared
-# pool at 4.0x (cap 60): the $12 5h window bounds the blast radius and
-# a window 429 fails the ladder down to m3.1-flash. The minimax pair
-# keeps its relative order (m3.1 ahead of m3), so m3.1-flash stays the
-# ladder's cache vehicle. claude-haiku-5-5 is NOT added to this pool:
-# its 5x price tier starts above 100k context, which the heavy agent
-# loops cross - it stays the go-chat lane.
+# ladder - the plan's fastest paid rung (p50 ~2s / p90 ~5s in the Nov
+# 17-21 window, ~5x faster than the minimax family's 10s p50). Pooled
+# cost on this lane's measured 93%-cached input mix is ~$0.12/1M input,
+# on par with minimax-m3.1-flash (~$0.12), so the ladder stays
+# cost-ascending, and m3.1-flash stays the cache vehicle. It burns the
+# shared pool at 4.0x (cap 60): the $12 5h window bounds the blast
+# radius and a window 429 fails the ladder down to m3.1-flash.
+# 2026-11-22 (pool trim): the ladder was cut from 10 rungs to 4 -
+# glm-5.3-flash, gpt-6-luna, minimax-m3.1-flash, longcat-2.5-free.
+# Dropped: mimo-v2.6-flash and qwen3.8-flash (redundant with the glm
+# head), minimax-m3 (superseded by m3.1-flash), kimi-k2.7-code (still
+# in reasoning-pool), beam-free (region-locked) and hy4-flash-free (66k
+# output cap) - classifier-pool and local-free-pool keep their own
+# copies of the free rungs, so no cluster capability is lost. The
+# named single-model lanes (go-coder/go-strong/go-max/go-chat) were
+# removed in the same change; their consumers (coder/qwencode/
+# open-webui keys, hermes vision roles) now ride go-pool, and their
+# fallback chains were collapsed accordingly. claude-haiku-5-5 remains
+# out of the pool: its 5x price tier starts above 100k context, which
+# the heavy agent loops cross.
 # Sessions: LiteLLM forwards x-litellm-session-id as x-opencode-session (the
 # envoy filter already maps x-session-id -> x-litellm-session-id); LiteLLM
 # does not invent one, so agents that send a stable x-session-id get the
 # better prompt-cache behaviour.
 # DATA POLICY: Go publishes per-model training/retention terms. Everything in
-# this pool is no-training (Beam Free: not used/30d; LongCat 2.5 Free: not
-# used/0d; paid endpoints that train on request data are blocked by default
-# in the workspace privacy settings). Models that train on prompts in exchange
+# this pool is no-training (LongCat 2.5 Free: not used/0d; paid endpoints
+# that train on request data are blocked by default in the workspace
+# privacy settings). Models that train on prompts in exchange
 # for free/discounted tokens — Iceman Contributor Free, Muse Spark 1.x
 # Contributor — are deliberately EXCLUDED and must not be added. LongCat 2.5
 # Free is hosted in China and needs "Global" regions in the Go workspace
@@ -62,36 +71,11 @@ spec:
       cache_read_input_token_cost: 3e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-mimo-v2.6-flash
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/mimo-v2.6-flash
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 2
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 1.4e-07
-      output_cost_per_token: 2.8e-07
-      cache_read_input_token_cost: 2.8e-09
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# 2026-11-21: order-3 fast lane - the plan's fastest paid rung (p50
-# ~2s / p90 ~5s). 4.0x burn (cap 60); the $12 5h window and the 30s
-# cooldown on a window 429 bound it. Its 5x price tier only starts
-# above 272k context, which the lanes' typical requests do not reach.
+# 2026-11-21: fast lane - the plan's fastest paid rung (p50 ~2s / p90
+# ~5s). 4.0x burn (cap 60); the $12 5h window and the 30s cooldown on a
+# window 429 bound it. Its 5x price tier only starts above 272k
+# context, which the lanes' typical requests do not reach.
+# 2026-11-22: promoted to order 2 in the trimmed 4-rung ladder.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -103,7 +87,7 @@ spec:
     model: opencode_go/gpt-6-luna
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      order: 3
+      order: 2
       max_parallel_requests: 4
   info:
     mode: chat
@@ -129,7 +113,7 @@ spec:
     model: opencode_go/minimax-m3.1-flash
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      order: 4
+      order: 3
       max_parallel_requests: 4
   info:
     mode: chat
@@ -144,88 +128,11 @@ spec:
       cache_read_input_token_cost: 1.5e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-qwen3.8-flash
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/qwen3.8-flash
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 5
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 1.5e-07
-      output_cost_per_token: 4.7e-07
-      cache_read_input_token_cost: 1.6e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-minimax-m3
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/minimax-m3
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 6
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 3e-07
-      output_cost_per_token: 1.2e-06
-      cache_read_input_token_cost: 6e-08
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-kimi-k2.7-code
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/kimi-k2.7-code
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 7
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 262144
-    maxOutputTokens: 262144
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 9.5e-07
-      output_cost_per_token: 4e-06
-      cache_read_input_token_cost: 1.9e-07
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Limited-time free models: zero allowance burn and listed "model training:
-# not used" in Go's privacy table, so safe for the pool; sit behind every
-# paid Go member. They also anchor the local-free-pool (the auto router's
-# SIMPLE/MEDIUM lane) alongside the resident 27B.
+# Limited-time free model: zero allowance burn and listed "model training:
+# not used" in Go's privacy table, so safe for the pool; sits behind every
+# paid Go member as the ladder's zero-burn floor. The same model anchors
+# the local-free-pool (the auto router's SIMPLE/MEDIUM lane) alongside
+# the resident 27B.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -237,7 +144,7 @@ spec:
     model: opencode_go/longcat-2.5-free
     apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      order: 8
+      order: 4
       max_parallel_requests: 4
   info:
     mode: chat
@@ -249,168 +156,3 @@ spec:
       input_cost_per_token: 0
       output_cost_per_token: 0
       cache_read_input_token_cost: 0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-beam-free
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/beam-free
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 9
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: false
-    extra:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Hy4 Flash Free (Tencent's Hy4 tier): limited-time free model added to Go
-# on 2026-11-16. Zero allowance burn, "model training: not used" with 0-day
-# retention in Go's privacy table, and NO region restriction (unlike Beam
-# Free, which blocks a country list). Vision-capable (image/jpeg, png,
-# webp, gif) with a 1M context. Sits last in go-pool's order so it only
-# drains when every paid member and the other free rungs are exhausted.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-pool-hy4-flash-free
-spec:
-  modelName: go-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/hy4-flash-free
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      order: 10
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 65536
-    supportsFunctionCalling: true
-    supportsVision: true
-    extra:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Named single-model lanes for targeted tasks. The $15-allowance lanes are
-# rationed harder (lower parallelism) than the $60 pool members.
-# go-coder: Kimi K2.7 Code, the pool's best agentic-coder; $60/mo allowance.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-coder
-spec:
-  modelName: go-coder
-  proxyRef: litellm
-  params:
-    model: opencode_go/kimi-k2.7-code
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 262144
-    maxOutputTokens: 262144
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 9.5e-07
-      output_cost_per_token: 4e-06
-      cache_read_input_token_cost: 1.9e-07
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# go-strong: Kimi K3.1 Pro, hardest one-shot tasks/refactors; $15/mo allowance.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-strong
-spec:
-  modelName: go-strong
-  proxyRef: litellm
-  params:
-    model: opencode_go/kimi-k3.1-pro
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1048576
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 2e-06
-      output_cost_per_token: 1e-05
-      cache_read_input_token_cost: 2e-07
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# go-max: Qwen3.8 Max, the frontier lane that replaces the Copilot Pro idea
-# (Copilot Pro is ~1500 AI credits ~= $15/mo of frontier tokens since the
-# June 2026 credits switch); $15/mo allowance.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-max
-spec:
-  modelName: go-max
-  proxyRef: litellm
-  params:
-    model: opencode_go/qwen3.8-max
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      max_parallel_requests: 2
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 2e-06
-      output_cost_per_token: 6e-06
-      cache_read_input_token_cost: 2.5e-07
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# go-chat: Claude Haiku 5.5, general chat with vision (open-webui); $15/mo
-# allowance at $0.10/$0.50 per M tokens, so the lane stretches far.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: go-chat
-spec:
-  modelName: go-chat
-  proxyRef: litellm
-  params:
-    model: opencode_go/claude-haiku-5-5
-    apiKey: "os.environ/OPENCODE_GO_API_KEY"
-    additional:
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 128000
-    supportsFunctionCalling: true
-    supportsVision: true
-    supportsPromptCaching: true
-    extra:
-      input_cost_per_token: 1e-07
-      output_cost_per_token: 5e-07
-      cache_read_input_token_cost: 1e-08

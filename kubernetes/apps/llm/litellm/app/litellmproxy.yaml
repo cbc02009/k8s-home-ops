@@ -144,51 +144,37 @@ spec:
       # 27B pool was healthy. Every paid lane now falls to the local pool
       # first (free, always resident, warm prefix cache) and keeps zai-pool
       # as the last-resort rung, so the Z.AI credits only burn when the
-      # local floor is itself saturated. The named single-model lanes keep
-      # their model as first choice; only the pool floor changes.
+      # local floor is itself saturated. Since 2026-11-22 the floor is
+      # local-free-pool — the resident 27B plus the free Go rungs — rather
+      # than the bare local-pool lane, which no consumer uses anymore.
+      # go-pool is the cloud lane and (since it absorbed the go-chat lane)
+      # the vision lane: when the Go window dries, text traffic lands on
+      # the local pool first; image-bearing requests 4xx there (the 27B
+      # has no vision) and continue to zai-pool, whose GLM-5.3 rung is
+      # vision-capable — so vision workloads still survive a Go outage.
       - go-pool:
-          - local-pool
-          - zai-pool
-      - go-coder:
-          - go-pool
-          - local-pool
-          - zai-pool
-      - go-strong:
-          - go-pool
-          - local-pool
-          - zai-pool
-      - go-max:
-          - go-pool
-          - local-pool
+          - local-free-pool
           - zai-pool
       - frontier-pool:
           - go-pool
-          - local-pool
-          - zai-pool
-      # go-chat is the vision lane: when the Go window dries, text traffic
-      # lands on the local pool first; image-bearing requests 4xx there (the
-      # 27B has no vision) and continue to zai-pool, whose GLM-5.3 rung is
-      # vision-capable — so vision workloads still survive a Go outage, one
-      # extra hop later.
-      - go-chat:
-          - local-pool
+          - local-free-pool
           - zai-pool
       - reasoning-pool:
-          - local-pool
+          - local-free-pool
           - zai-pool
       - implementation-pool:
-          - local-pool
+          - local-free-pool
           - zai-pool
       # The complexity router's own floor: the pooled lane first (its Z.AI
       # co-primary rungs only fire when the lane's local primary cools), then
       # the plain local pool.
       - auto:
           - implementation-pool
-          - local-pool
+          - local-free-pool
       # The Z.AI lane is itself a fallback target, so it needs its own floor:
       # when the Coding Plan's window is dry too, the local 27B catches it.
       - zai-pool:
-          - local-pool
+          - local-free-pool
   litellmSettings:
     success_callback:
       - prometheus

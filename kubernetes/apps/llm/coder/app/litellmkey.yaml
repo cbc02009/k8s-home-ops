@@ -16,8 +16,6 @@ spec:
   - qwen3.8-27b
   - qwen3.8-27b-chat
   - go-pool
-  - go-coder
-  - go-strong
   # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
   # credits do not roll over, so the traffic is wanted, not just tolerated).
   - zai-pool

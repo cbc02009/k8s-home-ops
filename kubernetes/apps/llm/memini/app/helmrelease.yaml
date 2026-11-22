@@ -74,7 +74,7 @@ spec:
               # Z.AI Coding Plan's GLM flash lane (zai-pool). The memory LLM
               # lane now drains the non-rolling Z.AI weekly credits instead of
               # living on the resident 27B; when the Coding Plan's 5h/weekly
-              # window dries, zai-pool's fallback chain lands on local-pool, so
+              # window dries, zai-pool's fallback chain lands on local-free-pool, so
               # the 27B stays the floor rather than the primary. The -chat
               # variant (0.7/0.8/penalty 1.5, 16K out) remains the alternative
               # if the assessment calls ever need conversational sampling; it
