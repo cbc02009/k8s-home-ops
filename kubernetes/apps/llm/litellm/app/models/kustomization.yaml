@@ -6,6 +6,7 @@ resources:
   - ./auto.yaml
   - ./classifier-pool.yaml
   - ./embed.yaml
+  - ./eval-candidates.yaml
   - ./frontier-pool.yaml
   - ./implementation-pool.yaml
   - ./local-free-pool.yaml
