@@ -52,6 +52,25 @@
 #   lane; the implementation slot decision still pends this bench).
 #   Closed: eval-hy3 removed (promoted 2026-11-20, no longer a
 #   candidate).
+#   2026-11-22 RESULTS (registry lane: 1800-row deterministic service
+#   registry, 66.8k-token context, 14 tasks; code lane: 4 sandbox-tested
+#   tasks; gold answers computed locally; suite seed 4224):
+#     eval-glm-5.3            avg 0.889  reg 0.929  code 0.75  p50 14.4s  p90 93.1s
+#     eval-claude-haiku-5-5   avg 0.889  reg 0.857  code 1.00  p50 5.1s   p90 16.6s
+#     eval-minimax-m3.1-flash avg 0.833  reg 0.786  code 1.00  p50 6.6s   p90 48.6s  (1 length-starved)
+#     eval-gpt-6-luna         avg 0.778  reg 0.714  code 1.00  p50 2.3s   p90 20.3s
+#     eval-minimax-m3         avg 0.611  reg 0.500  code 1.00  p50 2.1s   p90 4.0s
+#   Notes: (a) glm-5.3 scored the best registry lane at the catalog's
+#   LOWEST burn (0.24x) - promotion candidate for reasoning-pool order 2
+#   vs the demoted minimax-m3 rung (0.500 here), gated on its latency
+#   (one reasoning-runaway hit the 16k bench cap; production has no such
+#   cap). (b) Haiku beat luna for implementation order 3 on quality but
+#   got ZERO provider cache hits in the bench session vs 93% for luna -
+#   follow up before any promotion; neither displaces m3.1-flash under
+#   the equal-or-lower-effective-cost gate (haiku 4.0x output vs 3.0x).
+#   (c) This suite re-confirms the 2026-11-20 minimax-m3 demotion.
+#   Eval CRs undeployed (kustomization line removed; this file stays as
+#   the cycle fixture).
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # GPT-6 Luna (OpenAI): cap 60 -> 4.0x burn, but the lowest list price in the
