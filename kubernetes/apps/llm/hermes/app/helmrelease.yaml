@@ -114,7 +114,7 @@ spec:
                 # core.sshCommand block above), and a deploy key cannot be
                 # used against the GitHub REST API, so this file is now
                 # forgejo-only.
-                printf 'https://mahoro-ai:***@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
+                printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials
