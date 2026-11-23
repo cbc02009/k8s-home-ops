@@ -10,7 +10,10 @@
 #     fetch-kanzo.py bootstrap from a ConfigMap below: it downloads the pinned
 #     release tarball, verifies its published sha256, and installs the binary
 #     into the shared /bin-vol emptyDir (skipped on restarts when the pinned
-#     version is already installed);
+#     version is already installed); it also pins `listen = "0.0.0.0"` in the
+#     PVC's config.toml - upstream binds 127.0.0.1 by default, which the
+#     kubelet's tcp probes and the service cannot reach (they dial the pod
+#     IP), so the pod would be liveness-killed in a loop;
 #   - the main container execs /bin-vol/kanzo directly against the kanzo PVC
 #     mounted at /kanzo (KANZO_HOME). No python needed at runtime.
 #
@@ -41,13 +44,15 @@ spec:
           # the release's .sha256 sidecar) to upgrade kanzo.
           fetch-kanzo.py: |
             #!/usr/bin/env python3
-            """One-shot bootstrap: install the pinned kanzo release into /bin-vol.
+            """One-shot bootstrap: install the pinned kanzo release into /bin-vol
+            and pin the HTTP listener config in the PVC home (/kanzo).
 
             Runs in the init container. The main container execs /bin-vol/kanzo.
             Re-runs are cheap: if the pinned version marker matches, no download.
             """
             import hashlib
             import os
+            import re
             import shutil
             import tarfile
             import urllib.request
@@ -81,7 +86,35 @@ spec:
                 print(f"sha256 ok: {expected}", flush=True)
 
 
+            def ensure_listen_config() -> None:
+                """Pin config.toml's listen to 0.0.0.0 (upstream default is 127.0.0.1).
+
+                The kubelet tcp probes and the service dial the pod IP; with the
+                loopback default nothing outside the container can connect, so
+                the pod is liveness-killed in a loop ~90s after every start.
+                """
+                path = "/kanzo/config.toml"
+                wanted = 'listen = "0.0.0.0"'
+                current = ""
+                if os.path.exists(path):
+                    with open(path) as f:
+                        current = f.read()
+                patched, n = re.subn(r"(?m)^listen\s*=.*$", wanted, current)
+                if n == 0:
+                    prefix = current.rstrip("\n") + "\n" if current.strip() else ""
+                    patched = prefix + wanted + "\n"
+                if patched != current:
+                    tmp = path + ".new"
+                    with open(tmp, "w") as f:
+                        f.write(patched)
+                    os.replace(tmp, path)
+                    print(f"config.toml: pinned {wanted} (upstream default is loopback)", flush=True)
+
+
             def main() -> None:
+                # Run before the version-marker early-return so the listener
+                # config is ensured on every init run, not only on fetches.
+                ensure_listen_config()
                 binary = os.path.join(DEST_DIR, "kanzo")
                 marker = os.path.join(DEST_DIR, ".kanzo-version")
                 if os.path.exists(binary) and os.path.exists(marker):
