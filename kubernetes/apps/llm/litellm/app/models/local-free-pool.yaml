@@ -9,21 +9,15 @@
 # under-serving the resident model: the 27B drew ~5% of auto-lane traffic,
 # beam 400-ed ~15% of its requests, and the free rungs emitted 4-5x fewer
 # completion tokens than the 27B on comparable agent inputs. The 27B is now
-# the lane's primary; the free rungs share the remainder (order-1 weight 14):
-#   27B              (weight 6, ~43%) — the local always-resident primary;
+# the lane's primary; the free rungs share the remainder (order-1 weight 10):
+#   27B              (weight 5, ~50%) — the local always-resident primary;
 #     keeps the prefix cache warm and gives the lane a consistent quality
 #     floor, and absorbs extra share whenever a cloud rung 429/400s into
 #     cooldown
-#   Beam Free        (weight 3, ~21%) — zero allowance burn, "model
-#     training: not used" per Go's privacy table (see workhorse-pool.yaml);
+#   Beam Free        (weight 3, ~30%) — zero allowance burn, "model
+#     training: not used" per Go's privacy table (see opencode-go.yaml);
 #     sub-second TTFT when it serves
-#   LongCat 2.5 Free (weight 3, ~21%) — China-hosted endpoint (needs
-#     "Global" regions in the Go workspace privacy settings); zero
-#     allowance burn, "model training: not used" with 0-day retention,
-#     vision-capable, 1M context. Matches Beam's weight so the two free
-#     rungs share the remainder ~evenly. Provider-side daily network caps
-#     can 429 this rung; the paid twin longcat-2.0 covers it in order 2.
-#   Hy4 Flash Free   (weight 2, ~14%) — Tencent's everyday agent tier,
+#   Hy4 Flash Free   (weight 2, ~20%) — Tencent's everyday agent tier,
 #     sub-second TTFT, 1M context and vision (Beam has none), "model
 #     training: not used" with 0-day retention and no region block
 # The Z.AI credit-drain rung was removed from this lane on 2026-11-16: it is
@@ -77,10 +71,12 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Beam Free: the free rung that actually works — sub-second TTFT, zero
-# allowance burn. Weight 3 (~21%) pairs it with LongCat as the free share;
-# the 27B (weight 6) is the lane primary and absorbs the load once beam's
+# allowance burn. Weight 3 (~30%) makes it the largest free share after the
+# LongCat 2.5 Free rung was removed (2026-11-23: no longer served upstream —
+# absent from the /console/go free list and 400ing "unknown model" live);
+# the 27B (weight 5) is the lane primary and absorbs the load once beam's
 # 4 parallel slots saturate. No vision: image-bearing requests fall through
-# to LongCat or Hy4 Flash Free (free, vision).
+# to Hy4 Flash Free (free, vision).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -108,46 +104,13 @@ spec:
       output_cost_per_token: 0
       cache_read_input_token_cost: 0
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# LongCat 2.5 Free: China-hosted endpoint (needs "Global" regions in the Go
-# workspace privacy settings). Zero allowance burn, "model training: not used"
-# with 0-day retention, vision-capable, 1M context. Weight 3 matches Beam Free
-# so the two free rungs share the remainder ~evenly; order 1 keeps it in the
-# simple-shuffle mix. Provider-side daily network caps can 429 this rung; the
-# paid twin longcat-2.0 covers it in order 2.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: local-free-pool-longcat-2.5-free
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: local-free-pool
-  proxyRef: litellm
-  params:
-    model: opencode_go/longcat-2.5-free
-    apiKey: os.environ/OPENCODE_GO_API_KEY
-    additional:
-      order: 1
-      weight: 3
-      max_parallel_requests: 4
-  info:
-    mode: chat
-    maxInputTokens: 1000000
-    maxOutputTokens: 262144
-    supportsFunctionCalling: true
-    supportsVision: true
-    extra:
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
----
+
 
 # Hy4 Flash Free: the lane's second free Go rung (added to Go on 2026-11-16).
 # Tencent's everyday agent tier — vision-capable, 1M context, zero allowance
 # burn, "model training: not used" with 0-day retention, and no region block
 # (Beam Free blocks a country list). Weight 2: the smallest order-1 share,
-# below Beam and LongCat's 3 and the 27B's 6. Like every Go free rung it
+# below Beam's 3 and the 27B's 5. Like every Go free rung it
 # hard-requires the session header (headerless = 400).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
@@ -177,14 +140,16 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Paid-twin layer (order 2). Fires only when EVERY order-1 member is in
-# cooldown — i.e. the local 27B is saturated AND the free rungs have tripped
-# their per-network daily cap. Each free rung has a same-family paid Go model
-# under it (see the lane note above): hy4 covers hy4-flash-free, longcat-2.0
-# covers longcat-2.5-free, and mimo covers beam (no paid Beam exists). The
-# three share weight 1 and max_parallel_requests: 2 so the paid layer
-# drains the shared Go Plus $240 pool in proportion and cannot starve the
-# main workhorse-pool / implementation lanes.
+# paid-continuation layer (order 2). Fires only when EVERY order-1 member is
+# in cooldown — i.e. the local 27B is saturated AND the free rungs have
+# tripped their per-network daily cap. Each free rung has a same-family paid
+# Go model under it (see the lane note above): hy4 covers hy4-flash-free and
+# mimo covers beam (no paid Beam exists). longcat-2.0 no longer has a free
+# twin (longcat-2.5-free was removed upstream on 2026-11-23) but stays as a
+# cheap 1M long-context paid rung. They share weight 1 and
+# max_parallel_requests: 2 so the paid layer drains the shared Go Plus $240
+# pool in proportion and cannot starve the main workhorse-pool /
+# implementation lanes.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -216,12 +181,12 @@ spec:
 
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# longcat-2.0 — paid twin of longcat-2.5-free (same Meituan LongCat family).
+# longcat-2.0 — paid 1M long-context rung (Meituan LongCat family; its free
+# twin longcat-2.5-free was removed on 2026-11-23 after OpenCode retired it).
 # 1M context, 131k output, no vision. $240/mo cap = 1x pool burn, the cheapest
-# 1M long-context cover in the paid layer. Order 2: only reached when the
-# free longcat rung has 429'd its per-network daily cap. China-hosted, so it
-# needs "Global" regions in the Go workspace privacy settings (as the free
-# rung does).
+# 1M long-context cover in the paid layer. Order 2: only reached when every
+# order-1 member is in cooldown. China-hosted, so it needs "Global" regions
+# in the Go workspace privacy settings.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
