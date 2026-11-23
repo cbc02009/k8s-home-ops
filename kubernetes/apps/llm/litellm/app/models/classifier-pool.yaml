@@ -59,7 +59,7 @@
 # Data policy: both rungs are "model training: not used" in Go's privacy
 # table (Hy4 Flash 0-day, Beam 30-day retention). Free endpoints that train
 # on request data (Iceman Contributor Free, Muse Spark 1.x Contributor)
-# stay excluded, same as in go-pool.
+# stay excluded, same as in workhorse-pool.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

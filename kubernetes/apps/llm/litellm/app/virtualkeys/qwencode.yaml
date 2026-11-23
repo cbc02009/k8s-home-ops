@@ -13,7 +13,7 @@ spec:
   - qwen3.8-27b
   - local-free-pool
   # OpenCode Go cloud lane for agent work that outgrows the local rungs.
-  - go-pool
+  - workhorse-pool
   # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly
   # credits do not roll over, so the traffic is wanted, not just tolerated).
   - zai-pool

@@ -24,19 +24,19 @@ data:
     fallback_providers:
       # Last resort if the whole pool chain fails: the always-resident 27B
       # first, then the Z.AI Coding Plan lane (the mutual fallback for the Go
-      # pool — its weekly credits do not roll over), then go-pool as the
+      # pool — its weekly credits do not roll over), then workhorse-pool as the
       # cloud overflow.
       - provider: litellm
         model: qwen3.8-27b
       - provider: litellm
         model: zai-pool
       - provider: litellm
-        model: go-pool
+        model: workhorse-pool
     providers:
       litellm:
         base_url: http://litellm.llm:4000/v1
         api_key: $${LITELLM_API_KEY}
-        # OpenCode Go (the go-pool / reasoning-pool / frontier rungs) rejects
+        # OpenCode Go (the workhorse-pool / reasoning-pool / frontier rungs) rejects
         # requests without a session id (400 MissingSessionID): LiteLLM
         # forwards x-litellm-session-id as x-opencode-session but never
         # invents one. Opt in per provider entry so hermes sends its stable
@@ -79,7 +79,7 @@ data:
         # Fast 1M-context cloud lane for parallel exploration and review.
         explorer:
           provider: litellm
-          model: go-pool
+          model: workhorse-pool
           max_concurrent_children: 4
         # Stable local lane: the always-resident 27B — free and always available.
         agentic-local:
@@ -91,7 +91,7 @@ data:
           model: implementation-pool
         reviewer:
           provider: litellm
-          model: go-pool
+          model: workhorse-pool
         # Rare deep-consultation role on the rationed flagship lane.
         oracle:
           provider: litellm
@@ -101,7 +101,7 @@ data:
         # decommissioned strata local engine.
         vision-cloud:
           provider: litellm
-          model: go-pool
+          model: workhorse-pool
           max_concurrent_children: 1
       max_iterations: 250
     gateway:
@@ -153,7 +153,7 @@ data:
       # Always-on cheap cloud vision (no-training Go lane).
       vision:
         provider: litellm
-        model: go-pool
+        model: workhorse-pool
       # 27B-chat: always resident and no forced reasoning, so these
       # utilities stay fast and cheap.
       compression:

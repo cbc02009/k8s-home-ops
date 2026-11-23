@@ -3,7 +3,7 @@
 # Stable "any local model" lane: the always-resident qwen3.8-27b vLLM rung
 # (the nvidia ModelPool default). The former strata flash-next fallback was
 # decommissioned — the pool can no longer evict the 27B, and vision requests
-# should use the go-pool cloud lane's vision-capable rungs instead.
+# should use the workhorse-pool cloud lane's vision-capable rungs instead.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:

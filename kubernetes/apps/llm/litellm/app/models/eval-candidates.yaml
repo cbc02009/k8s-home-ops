@@ -25,7 +25,7 @@
 # Cycle history:
 #   2026-11-17: hy4 + gemini-4-argon registered (PR #6016). Cycle closed
 #   2026-11-17: gemini-4-argon promoted to reasoning-pool order 4; hy4
-#   rejected (36% standardized SimpleBench vs 46% go-pool / 100% gemini).
+#   rejected (36% standardized SimpleBench vs 46% workhorse-pool / 100% gemini).
 #   2026-11-18 spend audit (weekly-spend-audit-2026-11-18.md): new cycle
 #   registered gpt-6-luna (rec 1: frontier-class fidelity at effective
 #   $0.40/$2.00 per 1M - bench then promote to implementation-pool order 3,
@@ -112,7 +112,7 @@ spec:
 # IDENTICAL effective price to gpt-6-luna, so the bench is a head-to-head:
 # whichever wins carries the implementation-pool order 3 promotion. The
 # production chat-vision traffic this model served via the former go-chat
-# lane (open-webui) now rides go-pool; this eval lane stays a dedicated
+# lane (open-webui) now rides workhorse-pool; this eval lane stays a dedicated
 # bench target. Vision + 1M context.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel

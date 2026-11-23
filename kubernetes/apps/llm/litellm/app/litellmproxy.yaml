@@ -159,16 +159,16 @@ spec:
       # local floor is itself saturated. Since 2026-11-22 the floor is
       # local-free-pool — the resident 27B plus the free Go rungs — rather
       # than the bare local-pool lane, which no consumer uses anymore.
-      # go-pool is the cloud lane and (since it absorbed the go-chat lane)
+      # workhorse-pool is the cloud lane and (since it absorbed the go-chat lane)
       # the vision lane: when the Go window dries, text traffic lands on
       # the local pool first; image-bearing requests 4xx there (the 27B
       # has no vision) and continue to zai-pool, whose GLM-5.3 rung is
       # vision-capable — so vision workloads still survive a Go outage.
-      - go-pool:
+      - workhorse-pool:
           - local-free-pool
           - zai-pool
       - frontier-pool:
-          - go-pool
+          - workhorse-pool
           - local-free-pool
           - zai-pool
       - reasoning-pool:

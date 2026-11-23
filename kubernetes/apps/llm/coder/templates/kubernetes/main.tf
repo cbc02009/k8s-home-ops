@@ -276,7 +276,7 @@ PY
     # default is the local Qwen 27B; the explore/general subagents and the
     # read-only reviewer run on the Go workhorse pool; /coder moves the
     # session onto that pool, and /deep runs a generous-budget one-shot in a
-    # background child session (the coder key whitelists go-pool, zai-pool
+    # background child session (the coder key whitelists workhorse-pool, zai-pool
     # and the local 27B lanes only).
     mkdir -p "$HOME/.config/opencode"
     cat > "$HOME/.config/opencode/opencode.json" <<'JSON'
@@ -303,14 +303,14 @@ PY
       ],
       "agents": {
         "explore": {
-          "model": "litellm/go-pool"
+          "model": "litellm/workhorse-pool"
         },
         "general": {
-          "model": "litellm/go-pool"
+          "model": "litellm/workhorse-pool"
         },
         "reviewer": {
           "description": "Independent adversarial review of the current diff or changes; use for substantive or risky changes",
-          "model": "litellm/go-pool",
+          "model": "litellm/workhorse-pool",
           "permissions": [
             {
               "action": "edit",
@@ -323,15 +323,15 @@ PY
       },
       "commands": {
         "coder": {
-          "description": "Switch this session to the Go workhorse pool (go-pool)",
+          "description": "Switch this session to the workhorse pool (workhorse-pool)",
           "agent": "build",
-          "model": "litellm/go-pool",
-          "template": "Continue on the go-pool workhorse ladder for this session. $ARGUMENTS"
+          "model": "litellm/workhorse-pool",
+          "template": "Continue on the workhorse-pool ladder for this session. $ARGUMENTS"
         },
         "deep": {
           "description": "Run a hard one-shot on the Go workhorse pool in a background child session",
           "agent": "general",
-          "model": "litellm/go-pool",
+          "model": "litellm/workhorse-pool",
           "subagent": true,
           "template": "You have a generous budget for this task. Do not stop at a sketch: complete the work end-to-end and verify it. Task: $ARGUMENTS"
         }
@@ -356,7 +356,7 @@ PY
             "timeout": 1800000
           },
           "models": {
-            "go-pool": {
+            "workhorse-pool": {
               "limit": {
                 "context": 262144,
                 "output": 65536

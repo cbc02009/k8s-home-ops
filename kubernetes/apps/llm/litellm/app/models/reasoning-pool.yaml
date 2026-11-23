@@ -52,7 +52,7 @@
 #             a 95% cached-input discount on a 94%-cached lane. Last-resort
 #             long-context rung alongside kimi; fires only in total cooldown.
 #             Standardized SimpleBench (AVG@5, T=.7): 100% on our 10-item
-#             subset vs 46% go-pool, 36% hy4; published frontier ~80-82%.
+#             subset vs 46% workhorse-pool, 36% hy4; published frontier ~80-82%.
 #   Order 3 — local 27B: free floor, ahead of the expensive cloud rung.
 #   Order 4 — kimi-k2.7-code: last resort. It burned ~55% of this lane's Go
 #             spend for ~18% of requests; demoting it below the free floor
@@ -78,8 +78,9 @@ spec:
       # 0.500 on the same suite; suite history in eval-candidates.yaml) at
       # 0.60x burn - effective $0.84/$2.64 per 1M vs m3's $0.40/$1.60 - so
       # it wins the equal-or-lower-effective-cost gate on BOTH axes. m3 is
-      # now fully out of this pool (it remains in the go-pool ladder,
-      # order 6). Latency is the accepted trade: bench p50 14.4s / p90
+      # now fully out of this pool and out of the workhorse-pool ladder
+      # (superseded there by
+      # m3.1-flash). Latency is the accepted trade: bench p50 14.4s / p90
       # 93.1s (one reasoning runaway capped at 16k out) vs m3's 2.1s/4.0s -
       # acceptable for an order-2 overflow rung; the order-1 primaries and
       # luna's fast lane stay the latency paths.
@@ -409,7 +410,7 @@ spec:
 # Last resort — DEMOTED from order 3 to order 4: the best agentic coder but
 # ~$5.33/1M effective output. It accounted for ~55% of this lane's Go allowance
 # burn on ~18% of requests. On-purpose top-tier coding belongs on the
-# dedicated coding lanes (implementation-pool / go-pool); here it only fires
+# dedicated coding lanes (implementation-pool / workhorse-pool); here it only fires
 # when every cheaper rung is in cooldown.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
