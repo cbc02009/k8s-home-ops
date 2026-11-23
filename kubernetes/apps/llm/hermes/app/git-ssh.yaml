@@ -7,11 +7,14 @@ metadata:
 data:
   # github.com host keys pinned from https://api.github.com/meta (fetched
   # 2026-11-23; the fingerprints are cross-checked against that document's
-  # own ssh_key_fingerprints block). The git.cnas.dev key is the RSA-4096
+  # own ssh_key_fingerprints block). The git.cnas.dev key is the ed25519
   # host key served by its Forgejo built-in SSH server (captured
-  # 2026-11-23; fingerprint SHA256:vKOIYqaYlgkmTQQxLZ1BzDSHyq6EB51Wv0RovrkZGzg,
+  # 2026-11-23; fingerprint SHA256:8IUyzf3J9n1bPgsrm9Go6XdUeNHV8pak7xnjkFj1+fM,
   # recorded in the PR for verification — Forgejo publishes no meta
-  # endpoint, so this pin is trust-on-first-use against the live server).
+  # endpoint, so this pin is trust-on-first-use against the live server;
+  # the server serves this single key — the compose env's
+  # SSH_SERVER_HOST_KEYS now resolves, and the fallback RSA key it
+  # previously generated is no longer offered).
   # The hermes pod verifies all of these with StrictHostKeyChecking=yes,
   # so there is no accept-new-key path. If a host ever rotates its keys,
   # re-pin from the same source and the pod picks them up on its next
@@ -20,7 +23,7 @@ data:
     github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
     github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
     github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
-    git.cnas.dev ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDd1kVmy1LcaN0RKRX8icGXMTk+SMZnCGnReORXRGIiofyZZ81OlDAs2vNBC/dQkDJQJquZrZJ/c/eAWapAy/Rr/KXof2C9zbcuO1uohdv/4n3Llcvcu+yNk3TwluZun0QbYPqifGu2pV2qbWwFmZjPG6MQ635/w25fGOMJa6tD/2gTd4jzsj6AZWnY5FWh9uczrohFWiMehc3GcdSF8t/BHxeGBQTe0nGZgDlQYvfrEAdrWDCfxOs4O6nzaiVnToIhr8RnupoqIBS/R7TQihO4NLD7sZLV/WL5IXnCW6fujqaX1szj0SyO24+0GLElNeoyqRbUz1Sv5mCBgK/nbmRpgTHnYIgpedWJdq1YaawoxJOVXzFhkvcbPYUfchx2FbZ/mXxpNzlZkA7jW35SQLOR0YNUybW8nZ9vgB3XGjagPQrwEH7BF1J70+KuHhiXfWFg+Fl+0jht5RnSbhKSx7CBX9qO1ptTvwpENF1FBrudQLKZ+c9AUzTyqzxzpm/a39+U+tP9dkKxx2lSibEvymL2b/FAe1X6l3+ahX6dDUjQ0lteXAqIl+r0PIc8GrhmTmib82bNes53F7cBIvw6tJe50CPhPCkCDtzXtjZa4d7kgDpIZPuFavLO6Ixscxw4P2aKsEm76fp8WcGhZSutPq3S5eu7NzM6axJz3NT2hM68EQ==
+    git.cnas.dev ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJOlR5ft8E/l4Xh8cHtQM9ccYHZOdIBbjpXNdlpz6zY
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/externalsecret_v1.json
 apiVersion: external-secrets.io/v1
