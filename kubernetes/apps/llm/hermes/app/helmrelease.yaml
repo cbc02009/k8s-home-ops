@@ -32,21 +32,15 @@ spec:
                   secretKeyRef:
                     name: hermes
                     key: LITELLM_API_KEY
-              # Required by the git credential setup below; set -u aborts
-              # the init script if it is not present in the container env.
-              - name: FORGEJO_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: FORGEJO_TOKEN
             command:
               - sh
               - -c
               - |
                 set -euo pipefail
-                # git is needed for the credential/clone setup below (alpine
+                # git is needed for the git-config/clone setup below (alpine
                 # ships without it); openssh-client provides the ssh binary
-                # (the github.com clone path); gettext provides envsubst.
+                # (both clone paths now go over SSH); gettext provides
+                # envsubst.
                 apk add --no-cache gettext git openssh-client >/dev/null
                 # The kopiur mover reads this PVC as uid 10000 (shared kopiur
                 # component). Files left by pre-s6 root-running image
@@ -74,50 +68,44 @@ spec:
                 chown 10000:10000 /opt/data/config.yaml
 
                 # Configure git for the mahoro-ai sockpuppet account.
-                # github.com authenticates over SSH with the deploy key
-                # (projected read-only at /opt/data/.ssh — see the git-ssh
-                # persistence below); git.cnas.dev keeps the HTTPS token line
-                # in .git-credentials (FORGEJO_TOKEN). Use HOME=/opt/data so
+                # Both git hosts authenticate over SSH with the same deploy
+                # key (projected read-only at /opt/data/.ssh — see the
+                # git-ssh persistence below). Use HOME=/opt/data so
                 # the app container (which also uses HOME=/opt/data)
                 # inherits the config from the PVC.
                 export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
                 git config --global init.defaultBranch main
-                git config --global credential.helper 'store --file /opt/data/.git-credentials'
                 # Set (not --add): --add appends on every boot and the
                 # multivalued key accumulated dozens of identical entries;
                 # set replaces the list and self-heals old duplicates.
                 git config --global safe.directory '*'
-                # GitHub over SSH: rewrite every https://github.com/ remote to
-                # its git@github.com: form and point git's ssh at the deploy
-                # key. The key is a read-only projection (never on the PVC,
-                # never in env); known_hosts pins github.com's published host
-                # keys (StrictHostKeyChecking=yes, no TOFU) and
+                # Both git hosts over SSH: rewrite every https:// remote of
+                # the two hosts to its scp form and point git's ssh at the
+                # deploy key. The key is a read-only projection (never on
+                # the PVC, never in env); known_hosts pins github.com's
+                # published host keys and git.cnas.dev's served key
+                # (StrictHostKeyChecking=yes, no accept-new path) and
                 # IdentitiesOnly stops ssh offering other local keys. A
-                # deploy key is useless against the GitHub REST API, so no
-                # session can repurpose it as an API token — GitHub API work
-                # goes through the toolhive github-mcp server.
+                # deploy key is useless against either REST API, so no
+                # session can repurpose it as an API token — API work goes
+                # through the toolhive github-mcp / forgejo-mcp servers.
                 git config --global core.sshCommand 'ssh -i /opt/data/.ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/opt/data/.ssh/known_hosts -o StrictHostKeyChecking=yes'
                 git config --global url.git@github.com:.insteadOf 'https://github.com/'
+                git config --global url.git@git.cnas.dev:.insteadOf 'https://git.cnas.dev/'
                 # Host-scoped identity: repos on git.cnas.dev commit as the
                 # Forgejo mahoro-ai account (noreply address), everything else
                 # keeps the GitHub sockpuppet identity above. The includeIf
-                # glob matches any repo cloned over HTTPS from that host; the
-                # single-quoted key survives the shell, and git config makes
-                # the write idempotent across restarts.
+                # globs match any repo whose remote is that host — https
+                # URLs (as stored in the clone's config; insteadOf rewrites
+                # apply at transport time only), scp form, and ssh:// form;
+                # the single-quoted keys survive the shell, and git config
+                # makes the writes idempotent across restarts.
                 git config --global 'includeIf.hasconfig:remote.*.url:https://git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
+                git config --global 'includeIf.hasconfig:remote.*.url:git@git.cnas.dev:**.path' /opt/data/.gitconfig-forgejo
+                git config --global 'includeIf.hasconfig:remote.*.url:ssh://git@git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
                 printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
-                umask 077
-                # The github.com line is deliberately absent: that host
-                # authenticates over SSH with the deploy key (see the
-                # core.sshCommand block above), and a deploy key cannot be
-                # used against the GitHub REST API, so this file is now
-                # forgejo-only.
-                printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
-                umask 022
-                chown 10000:10000 /opt/data/.git-credentials
-                chmod 600 /opt/data/.git-credentials
                 chown 10000:10000 /opt/data/.gitconfig 2>/dev/null || true
                 chown 10000:10000 /opt/data/.gitconfig-forgejo 2>/dev/null || true
                 # The hermes gateway overrides the pod-level HOME=/opt/data
@@ -147,11 +135,15 @@ spec:
                 chown -R 10000:10000 /opt/data/workspace/k8s-home-ops 2>/dev/null || true
 
                 # Clone the nas-ops repo (Forgejo on git.cnas.dev) if it
-                # isn't already present. Runs after the credential file is
-                # written, so private repos on that host clone too.
+                # isn't already present. Same shape as the clone above: the
+                # insteadOf rewrite turns the https URL into the scp form,
+                # and GIT_SSH_COMMAND points at this container's own
+                # projection (the global core.sshCommand path /opt/data/.ssh
+                # exists only in the app container).
                 if [[ ! -d /opt/data/workspace/nas-ops/.git ]]; then
-                  git clone --filter=blob:none https://git.cnas.dev/cbc02009/nas-ops.git /opt/data/workspace/nas-ops \
-                    || echo "WARN: nas-ops clone failed; clone it from a session instead"
+                  GIT_SSH_COMMAND="ssh -i /run/hermes-git-ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/run/hermes-git-ssh/known_hosts -o StrictHostKeyChecking=yes" \
+                    git clone --filter=blob:none https://git.cnas.dev/cbc02009/nas-ops.git /opt/data/workspace/nas-ops \
+                      || echo "WARN: nas-ops clone failed (deploy key not registered on Forgejo yet, or no network); clone it from a session instead"
                 fi
                 chown -R 10000:10000 /opt/data/workspace/nas-ops 2>/dev/null || true
 
@@ -275,16 +267,6 @@ spec:
                   secretKeyRef:
                     name: hermes-dashboard
                     key: HERMES_DASHBOARD_OIDC_ISSUER
-              # Explicit rather than via the envFrom sweep below: the init
-              # container needs it for the git.cnas.dev credential line, and
-              # an explicit non-optional ref fails loudly at pod start if the
-              # ExternalSecret ever lags, instead of surfacing as empty-token
-              # git failures later.
-              FORGEJO_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: FORGEJO_TOKEN
             envFrom:
               - secretRef:
                   name: hermes
@@ -378,7 +360,7 @@ spec:
       # "mahoro-ai deploy key"; the source is optional so the pod can
       # still boot before that item exists — the file then appears in
       # place, no restart needed, once the secret syncs) and the pinned
-      # github.com host keys (hermes-ssh-known-hosts). The key file is
+      # host keys of both git hosts (hermes-ssh-known-hosts). The key file is
       # 0400: the pod's fsGroup (10000) gets group-read added by the
       # kubelet, which is exactly what the hermes process (uid/gid 10000)
       # needs. The init container receives the same content at a path
