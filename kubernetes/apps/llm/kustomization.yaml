@@ -11,7 +11,7 @@ resources:
   - ./coder/ks.yaml
   - ./headroom/ks.yaml
   - ./hermes/ks.yaml
-  - ./kanzo/ks.yaml
+  # - ./kanzo/ks.yaml
   - ./litellm/ks.yaml
   - ./litellm-operator/ks.yaml
   - ./lens/ks.yaml
