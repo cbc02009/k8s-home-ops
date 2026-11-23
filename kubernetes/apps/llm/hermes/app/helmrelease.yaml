@@ -176,6 +176,29 @@ spec:
                   if wget -qO /tmp/memini-per-profile-ns.py "https://raw.githubusercontent.com/cbc02009/k8s-home-ops/main/kubernetes/apps/llm/hermes/app/memini-per-profile-namespace.py"; then
                     python3 /tmp/memini-per-profile-ns.py || echo "WARN: per-profile namespace patch failed to apply; keeping the upstream plugin"
                     chown -R 10000:10000 "$PLUGIN_DIR" 2>/dev/null || true
+                    # The patch above reaches only the shared copy, but
+                    # every named profile carries its own clone of the
+                    # plugin dir (profile creation copies the parent's
+                    # plugins/ once), and discovery prefers the scope's
+                    # own user plugins dir — so a stale clone shadows the
+                    # patched shared file. Clones made before the
+                    # per-profile-namespace patch landed run pre-patch
+                    # code that files every profile's memories into the
+                    # shared "hermes" catch-all instead of its own
+                    # <base>/<profile> sub-namespace. Re-run the same
+                    # idempotent patcher over each clone on boot: the v2
+                    # marker short-circuits, a v1 block is stripped and
+                    # replaced, and a moved upstream anchor leaves the
+                    # copy untouched (warning only). New clones need no
+                    # entry here — they inherit the patched shared copy.
+                    if [ -f /tmp/memini-per-profile-ns.py ]; then
+                      for plugin_init in /opt/data/profiles/*/plugins/memini/__init__.py; do
+                        [ -f "$plugin_init" ] || continue
+                        python3 /tmp/memini-per-profile-ns.py "$plugin_init" \
+                          || echo "WARN: per-profile namespace patch failed on $plugin_init"
+                        chown 10000:10000 "$plugin_init" 2>/dev/null || true
+                      done
+                    fi
                   else
                     echo "WARN: per-profile namespace patch fetch failed; keeping the upstream plugin"
                   fi
