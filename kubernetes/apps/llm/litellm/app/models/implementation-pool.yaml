@@ -36,6 +36,9 @@ spec:
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
     apiKey: "sk-llmkube-noauth"
     additional:
+      # fail a dead-rung draw in 90s instead of hanging out LLMKube's full
+      # 240s activation budget (see litellmproxy routerSettings cooldown_time)
+      timeout: 90
       temperature: 1.0
       top_p: 0.95
       top_k: 20

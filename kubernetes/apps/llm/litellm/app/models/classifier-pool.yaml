@@ -130,6 +130,7 @@ spec:
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
     apiKey: "noauth"
     additional:
+      timeout: 90
       temperature: 0.7
       top_p: 0.8
       presence_penalty: 1.5

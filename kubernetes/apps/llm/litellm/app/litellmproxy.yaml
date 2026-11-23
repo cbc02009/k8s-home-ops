@@ -135,7 +135,7 @@ spec:
     redis_host: os.environ/REDIS_HOST
     redis_port: os.environ/REDIS_PORT
     routing_strategy: simple-shuffle
-    cooldown_time: 30
+    cooldown_time: 300
     # 2026-11-22 20:13-20:51Z: swarmui preempted the 27B's 4090 and the
     # 27B hung on LLMKube's 240s activation budget until it 503'd (83
     # activation failures, TTFT p95 274-285s) — yet the 503s never cooled
