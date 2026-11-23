@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/v1/configmap_v1.json
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-ssh-known-hosts
+data:
+  # github.com host keys pinned from https://api.github.com/meta (fetched
+  # 2026-11-23; the fingerprints below are cross-checked against that
+  # document's own ssh_key_fingerprints block). The hermes pod verifies
+  # these with StrictHostKeyChecking=yes, so there is no TOFU
+  # accept-new-key path. GitHub rotates these slowly; if they ever do,
+  # re-pull the lines from the same endpoint and the pod picks them up on
+  # its next boot.
+  known_hosts: |
+    github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+    github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+    github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYg7LXJvknV+i8bv/PBEhN2gPli3OcTDftom6zTCJ7+fe5hAKsbYO0Ac2ASIMpjdlp+OYYPdw6SWJfsSo3jp13FNS7r83+vcq79PvtnvR+euD61HYsJpkCovewP9l5+uX2MS3euo6ZTxi/EJZZNI2FJF6oqMO48y6GtqNC6Ne2hjpdaNdO5fHnnWS5W597S4H0yY9V057h7Jw=
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: hermes-git-ssh
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  # The GitHub deploy key, from the 1Password item "mahoro-ai deploy key"
+  # (an SSH key item; the field is labelled "private key" and carries the
+  # key in PEM/PKCS8, which OpenSSH 10.x reads directly — no conversion
+  # step anywhere). Single-field fetch, same pattern as the forgejo entry
+  # in externalsecret.yaml: the item's field names are not valid
+  # secret-key material, so a dataFrom whole-item extract is unusable.
+  data:
+    - secretKey: git_ssh_private_key
+      remoteRef:
+        key: mahoro-ai deploy key
+        property: private key
+  target:
+    name: hermes-git-ssh
+    template:
+      data:
+        GIT_SSH_PRIVATE_KEY: "{{ .git_ssh_private_key }}"
