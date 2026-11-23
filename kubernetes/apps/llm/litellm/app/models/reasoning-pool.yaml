@@ -9,7 +9,7 @@
 # a budget slice. Rank by effective cost = list price x multiplier, not by cap:
 #   hy3                cap 240 -> 1.00x, effective out ~$0.58/1M, bench 0.895  <- primary (promoted 2026-11-20)
 #   glm-5.3-flash      cap 180 -> 1.33x, effective out ~$0.67/1M, bench 0.952  <- primary
-#   glm-5.3            cap 1000 -> 0.24x, effective in/out 0.34/1.06, bench reg 0.929 <- order 2 w1 (promoted 2026-11-22)
+#   glm-5.3            cap 400 -> 0.60x, effective in/out 0.84/2.64, bench reg 0.929 <- order 2 w1 (promoted 2026-11-22)
 #   mimo-v2.6-flash    cap 120 -> 2.00x, effective out ~$0.56/1M              <- cheapest per token
 #   deepseek-v4.1-flash  cap 200 -> 1.20x, effective in/out 0.36/1.44 peak <- order 2
 #   minimax-m3.1-flash cap  80 -> 3.00x, effective out ~$1.80/1M, bench 0.714  <- order 2 w2: the cache vehicle (2026-11-21)
@@ -32,7 +32,7 @@
 #             rung is the flat-plan half that drains non-rolling weekly
 #             credits before they expire.
 #   Order 2 — glm-5.3 (PROMOTED here 2026-11-22, bench cycle: best registry
-#             score 0.929 of the five-lane suite at 0.24x burn — the LOWEST
+#             score 0.929 of the five-lane suite at 0.60x burn — the LOWEST
 #             burn multiplier in the Go catalog; w1, the overflow slot;
 #             latency caveat: bench p50 14.4s / p90 93.1s, slower than the
 #             rung it replaces, acceptable for second-wave overflow),
@@ -76,7 +76,7 @@ spec:
       # 2026-11-22 bench-cycle promotion (PR replaces minimax-m3's order 2
       # w1 slot): best registry score of the five-lane suite (0.929 vs m3's
       # 0.500 on the same suite; suite history in eval-candidates.yaml) at
-      # 0.24x burn - effective $0.34/$1.06 per 1M vs m3's $0.40/$1.60 - so
+      # 0.60x burn - effective $0.84/$2.64 per 1M vs m3's $0.40/$1.60 - so
       # it wins the equal-or-lower-effective-cost gate on BOTH axes. m3 is
       # now fully out of this pool (it remains in the go-pool ladder,
       # order 6). Latency is the accepted trade: bench p50 14.4s / p90

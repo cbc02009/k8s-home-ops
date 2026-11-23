@@ -39,8 +39,8 @@
 #   demoted to order 2; implementation-pool mimo weight 1->2; hy3's
 #   input_cost fixed 0 -> 1.4e-07 (was under-reported on the dashboard).
 #   2026-11-22 bench cycle (user-approved): registered eval-glm-5.3 -
-#   flagship GLM at cap 1000 -> 0.24x burn, the LOWEST multiplier in the
-#   catalog (effective $0.336/$1.056 per 1M, flash-class money at
+# flagship GLM at cap 400 -> 0.60x burn, the LOWEST multiplier in the
+#   catalog (effective $0.84/$2.64 per 1M, not flash-class money —
 #   flagship class); bench target: reasoning-pool order 2. Reference
 #   lanes eval-minimax-m3 (current reasoning-pool order 2 paid rung)
 #   and eval-minimax-m3.1-flash (implementation-pool order 3) added so
@@ -61,7 +61,7 @@
 #     eval-gpt-6-luna         avg 0.778  reg 0.714  code 1.00  p50 2.3s   p90 20.3s
 #     eval-minimax-m3         avg 0.611  reg 0.500  code 1.00  p50 2.1s   p90 4.0s
 #   Notes: (a) glm-5.3 scored the best registry lane at the catalog's
-#   LOWEST burn (0.24x) - promotion candidate for reasoning-pool order 2
+#   LOWEST burn (0.60x) - promotion candidate for reasoning-pool order 2
 #   vs the demoted minimax-m3 rung (0.500 here), gated on its latency
 #   (one reasoning-runaway hit the 16k bench cap; production has no such
 #   cap). (b) Haiku beat luna for implementation order 3 on quality but
@@ -142,10 +142,11 @@ spec:
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # GLM 5.3 (Zhipu, released 2026-08-14): "Flagship GLM model for long-horizon
-# coding, agents, and complex project delivery". cap 1000 -> 0.24x burn - the
-# LOWEST burn multiplier in the Go catalog - at $1.40/$4.40 per 1M list
-# (cache read $0.26), so its EFFECTIVE cost is $0.336 in / $1.056 out per 1M:
-# flash-class money at flagship class. Its 0.24x cap also makes it the best
+# coding, agents, and complex project delivery". cap 400 -> 0.60x burn -
+# LOWEST burn multiplier among flagship-class rungs in the Go catalog - at
+# $1.40/$4.40 per 1M list (cache read $0.26), so its EFFECTIVE cost is
+# $0.84 in / $2.64 out per 1M: mid-tier money at flagship class (NOT
+# flash-class, despite the prior note). Its 0.60x cap also makes it the best
 # burn-rate guard available: bulk traffic routed here drains the shared $240
 # pool 5.5x slower than a 1.33x rung and 16x slower than a 4x rung. Bench
 # target: reasoning-pool order 2 (replace or supplement the paid rungs there).
