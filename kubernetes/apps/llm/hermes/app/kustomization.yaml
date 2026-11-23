@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./configmap.yaml
   - ./externalsecret.yaml
+  - ./git-ssh.yaml
   - ./helmrelease.yaml
   - ./litellmkey.yaml
   - ./ocirepository.yaml

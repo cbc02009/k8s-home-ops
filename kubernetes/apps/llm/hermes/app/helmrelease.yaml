@@ -34,13 +34,6 @@ spec:
                     key: LITELLM_API_KEY
               # Required by the git credential setup below; set -u aborts
               # the init script if it is not present in the container env.
-              - name: GITHUB_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes
-                    key: GITHUB_TOKEN
-              # Required by the git credential setup below; set -u aborts
-              # the init script if it is not present in the container env.
               - name: FORGEJO_TOKEN
                 valueFrom:
                   secretKeyRef:
@@ -52,8 +45,9 @@ spec:
               - |
                 set -euo pipefail
                 # git is needed for the credential/clone setup below (alpine
-                # ships without it); gettext provides envsubst.
-                apk add --no-cache gettext git >/dev/null
+                # ships without it); openssh-client provides the ssh binary
+                # (the github.com clone path); gettext provides envsubst.
+                apk add --no-cache gettext git openssh-client >/dev/null
                 # The kopiur mover reads this PVC as uid 10000 (shared kopiur
                 # component). Files left by pre-s6 root-running image
                 # generations (e.g. /opt/data/.bash_history) and by the
@@ -80,10 +74,12 @@ spec:
                 chown 10000:10000 /opt/data/config.yaml
 
                 # Configure git for the mahoro-ai sockpuppet account.
-                # Credentials come from the hermes secret (GITHUB_TOKEN for
-                # github.com, FORGEJO_TOKEN for git.cnas.dev). Use
-                # HOME=/opt/data so the app container (which also uses
-                # HOME=/opt/data) inherits the config from the PVC.
+                # github.com authenticates over SSH with the deploy key
+                # (projected read-only at /opt/data/.ssh — see the git-ssh
+                # persistence below); git.cnas.dev keeps the HTTPS token line
+                # in .git-credentials (FORGEJO_TOKEN). Use HOME=/opt/data so
+                # the app container (which also uses HOME=/opt/data)
+                # inherits the config from the PVC.
                 export HOME=/opt/data
                 git config --global user.name "mahoro-ai"
                 git config --global user.email "354213225+mahoro-ai@users.noreply.github.com"
@@ -93,6 +89,17 @@ spec:
                 # multivalued key accumulated dozens of identical entries;
                 # set replaces the list and self-heals old duplicates.
                 git config --global safe.directory '*'
+                # GitHub over SSH: rewrite every https://github.com/ remote to
+                # its git@github.com: form and point git's ssh at the deploy
+                # key. The key is a read-only projection (never on the PVC,
+                # never in env); known_hosts pins github.com's published host
+                # keys (StrictHostKeyChecking=yes, no TOFU) and
+                # IdentitiesOnly stops ssh offering other local keys. A
+                # deploy key is useless against the GitHub REST API, so no
+                # session can repurpose it as an API token — GitHub API work
+                # goes through the toolhive github-mcp server.
+                git config --global core.sshCommand 'ssh -i /opt/data/.ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/opt/data/.ssh/known_hosts -o StrictHostKeyChecking=yes'
+                git config --global url.git@github.com:.insteadOf 'https://github.com/'
                 # Host-scoped identity: repos on git.cnas.dev commit as the
                 # Forgejo mahoro-ai account (noreply address), everything else
                 # keeps the GitHub sockpuppet identity above. The includeIf
@@ -102,10 +109,12 @@ spec:
                 git config --global 'includeIf.hasconfig:remote.*.url:https://git.cnas.dev/**.path' /opt/data/.gitconfig-forgejo
                 printf '[user]\n\tname = mahoro-ai\n\temail = mahoro-ai@noreply.git.cnas.dev\n' > /opt/data/.gitconfig-forgejo
                 umask 077
-                {
-                  printf 'https://x-access-token:%s@github.com\n' "$GITHUB_TOKEN"
-                  printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN"
-                } > /opt/data/.git-credentials
+                # The github.com line is deliberately absent: that host
+                # authenticates over SSH with the deploy key (see the
+                # core.sshCommand block above), and a deploy key cannot be
+                # used against the GitHub REST API, so this file is now
+                # forgejo-only.
+                printf 'https://mahoro-ai:%s@git.cnas.dev\n' "$FORGEJO_TOKEN" > /opt/data/.git-credentials
                 umask 022
                 chown 10000:10000 /opt/data/.git-credentials
                 chmod 600 /opt/data/.git-credentials
@@ -121,11 +130,19 @@ spec:
                 git config --file /opt/data/home/.gitconfig include.path /opt/data/.gitconfig
                 chown 10000:10000 /opt/data/home/.gitconfig 2>/dev/null || true
 
-                # Clone the home-ops repo if it isn't already present.
+                # Clone the home-ops repo if it isn't already present. The
+                # insteadOf rewrite above turns the https URL into
+                # git@github.com:, and GIT_SSH_COMMAND (which overrides the
+                # global core.sshCommand for this one invocation) points at
+                # this container's own projection at /run/hermes-git-ssh:
+                # the key is deliberately not mounted into the PVC here,
+                # because the chown -R below must never touch the read-only
+                # projection.
                 mkdir -p /opt/data/workspace
                 if [[ ! -d /opt/data/workspace/k8s-home-ops/.git ]]; then
-                  git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /opt/data/workspace/k8s-home-ops \
-                    || echo "WARN: k8s-home-ops clone failed; clone it from a session instead"
+                  GIT_SSH_COMMAND="ssh -i /run/hermes-git-ssh/id_ed25519 -o IdentitiesOnly=yes -o UserKnownHostsFile=/run/hermes-git-ssh/known_hosts -o StrictHostKeyChecking=yes" \
+                    git clone --filter=blob:none https://github.com/cbc02009/k8s-home-ops.git /opt/data/workspace/k8s-home-ops \
+                      || echo "WARN: k8s-home-ops clone failed (deploy key not registered yet, or no network); clone it from a session instead"
                 fi
                 chown -R 10000:10000 /opt/data/workspace/k8s-home-ops 2>/dev/null || true
 
@@ -355,3 +372,40 @@ spec:
         globalMounts:
           - path: /tmp/config.yaml
             subPath: config.yaml
+      # The GitHub deploy key material, projected into one read-only
+      # volume: the private key (Secret hermes-git-ssh, filled by the
+      # ExternalSecret in git-ssh.yaml from the 1Password item
+      # "mahoro-ai deploy key"; the source is optional so the pod can
+      # still boot before that item exists — the file then appears in
+      # place, no restart needed, once the secret syncs) and the pinned
+      # github.com host keys (hermes-ssh-known-hosts). The key file is
+      # 0400: the pod's fsGroup (10000) gets group-read added by the
+      # kubelet, which is exactly what the hermes process (uid/gid 10000)
+      # needs. The init container receives the same content at a path
+      # outside /opt/data so the `chown -R /opt/data` above never touches
+      # this read-only projection (and its clone uses /run/hermes-git-ssh
+      # via GIT_SSH_COMMAND).
+      git-ssh:
+        type: projected
+        sources:
+          - secret:
+              name: hermes-git-ssh
+              optional: true
+              items:
+                - key: GIT_SSH_PRIVATE_KEY
+                  path: id_ed25519
+                  mode: 0400
+          - configMap:
+              name: hermes-ssh-known-hosts
+              items:
+                - key: known_hosts
+                  path: known_hosts
+                  mode: 0444
+        advancedMounts:
+          hermes:
+            app:
+              - path: /opt/data/.ssh
+                readOnly: true
+            init:
+              - path: /run/hermes-git-ssh
+                readOnly: true
