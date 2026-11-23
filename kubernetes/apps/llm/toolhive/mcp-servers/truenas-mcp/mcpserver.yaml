@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: truenas
+spec:
+  # cbc02009/container-images build of the official truenas/truenas-mcp server
+  # (upstream ships binaries only). The binary exits at startup unless it can
+  # log in to a TrueNAS 25.10+ over wss:// — shana (27.0.0) qualifies.
+  image: ghcr.io/cbc02009/truenas-mcp:1.0.1@sha256:bfd8ecdbce78f4d70e41a84b02de087c2330302cc6bf326d3872a2f276963684
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  args:
+    # Read-only mode: every state-changing tool is hidden from tools/list and
+    # refused on call; TrueNAS itself also enforces the key's READONLY_ADMIN
+    # role. Drop this flag to expose management tools (then narrow the 1Password
+    # key's role to the tools you actually want).
+    - --read-only
+  env:
+    # Bare-host form is expanded by the server to wss://shana.ctec.internal:443/api/current.
+    # Certificate verification stays on; TRUENAS_INSECURE=1 is required because
+    # shana serves the default iXsystems self-signed certificate (CN=localhost,
+    # no SANs) -- --tls-ca cannot fix a hostname mismatch (upstream docs).
+    - name: TRUENAS_URL
+      value: shana.ctec.internal
+    - name: TRUENAS_INSECURE
+      value: "1"
+  secrets:
+    - name: toolhive-truenas
+      key: TRUENAS_API_KEY
+      targetEnvName: TRUENAS_API_KEY
+    - name: toolhive-truenas
+      key: TRUENAS_API_USER
+      targetEnvName: TRUENAS_API_USER
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools
