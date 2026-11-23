@@ -11,9 +11,8 @@
 #     release tarball, verifies its published sha256, and installs the binary
 #     into the shared /bin-vol emptyDir (skipped on restarts when the pinned
 #     version is already installed); it also pins `listen = "0.0.0.0"` in the
-#     PVC's config.toml - upstream binds 127.0.0.1 by default, which the
-#     kubelet's tcp probes and the service cannot reach (they dial the pod
-#     IP), so the pod would be liveness-killed in a loop;
+#     PVC's config.toml - see the sidecar block for why 0.0.0.0 is still
+#     safe;
 #   - the main container execs /bin-vol/kanzo directly against the kanzo PVC
 #     mounted at /kanzo (KANZO_HOME). No python needed at runtime.
 #
@@ -23,6 +22,25 @@
 #
 # The default pod ids (2000:2000) apply here: kanzo has no user-specific
 # requirements, it just writes ordinary files.
+#
+# A third container, the proxy sidecar, exists because kanzo refuses
+# requests "from other sites" (web.rs `protect`, v0.4.2): the Host header
+# must be localhost/loopback, the Origin header only http://<same host>
+# (never https), and any NON-LOOPBACK CLIENT IP requires share mode
+# (web.rs `guest()` + `guard.lan()`). That is unreachable from a cluster
+# gateway by design - DNS-rebinding and cross-site hardening with no
+# config knob (SECURITY.md: "a way around any of these is a
+# vulnerability"). Upstream's own documented pattern for this is a local
+# reverse proxy that does the same-site check itself and then hands kanzo
+# "local" requests: Host: localhost:4242, no Origin header, connecting
+# over loopback. Our proxy does exactly that (vendor-exact), so kanzo is
+# kept loopback-only: `listen = "127.0.0.1"` in the PVC config.toml
+# (fetch-kanzo.py pins it) and the service probes/forwards :80 -> the
+# sidecar :4243 -> kanzo :4242 over 127.0.0.1. Board exposure is then the
+# proxy's rules, vendor-exact (exe.dev/deploy/kanzo): allow Origin empty
+# (non-browser clients) or https://kanzo.ctec.run (the board itself);
+# anything else gets 403; kanzo receives Host: localhost:4242 and no
+# Origin header, so it treats every proxied request as local.
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -87,14 +105,15 @@ spec:
 
 
             def ensure_listen_config() -> None:
-                """Pin config.toml's listen to 0.0.0.0 (upstream default is 127.0.0.1).
+                """Pin config.toml's listen to 127.0.0.1 (upstream's own default).
 
-                The kubelet tcp probes and the service dial the pod IP; with the
-                loopback default nothing outside the container can connect, so
-                the pod is liveness-killed in a loop ~90s after every start.
+                The proxy sidecar is kanzo's only real client and it connects
+                over loopback; binding the pod IP would expose the board to
+                anything that can reach the pod, bypassing kanzo's same-site
+                guard. Kubelet probes and the service hit the sidecar instead.
                 """
                 path = "/kanzo/config.toml"
-                wanted = 'listen = "0.0.0.0"'
+                wanted = 'listen = "127.0.0.1"'
                 current = ""
                 if os.path.exists(path):
                     with open(path) as f:
@@ -145,6 +164,48 @@ spec:
 
             if __name__ == "__main__":
                 main()
+      proxy:
+        data:
+          # Same-site gate in front of kanzo, following the vendor's own
+          # recipe (exe.dev/deploy/kanzo "Put it behind the proxy"): kanzo
+          # refuses "other sites" by design, so this nginx listens on :4243
+          # (the service's real endpoint), rejects any browser request whose
+          # Origin is neither empty (curl / MCP agents / non-browser) nor
+          # our own board URL, then forwards to kanzo over loopback with
+          # Host: localhost:4242 and no Origin header - which is all kanzo
+          # accepts (web.rs `protect`, v0.4.2: Host must be loopback-ish,
+          # Origin only http://<same-host>, non-loopback clients need share
+          # mode). No TLS here: the gateway route terminates TLS already.
+          nginx.conf: |
+            worker_processes 1;
+            pid /tmp/nginx.pid;
+            error_log /dev/stderr warn;
+            events { worker_connections 128; }
+            http {
+              access_log off;
+              client_body_temp_path /tmp/client_temp;
+              proxy_temp_path /tmp/proxy_temp;
+              fastcgi_temp_path /tmp/fastcgi_temp;
+              uwsgi_temp_path /tmp/uwsgi_temp;
+              scgi_temp_path /tmp/scgi_temp;
+              server {
+                listen 4243;
+                client_max_body_size 32m;
+                location / {
+                  set $same_site 0;
+                  if ($http_origin = "") { set $same_site 1; }
+                  if ($http_origin = "https://kanzo.ctec.run") { set $same_site 1; }
+                  if ($same_site = 0) { return 403; }
+                  proxy_pass http://127.0.0.1:4242;
+                  proxy_http_version 1.1;
+                  proxy_set_header Host localhost:4242;
+                  proxy_set_header Origin "";
+                  proxy_set_header Connection "";
+                  proxy_buffering off;
+                  proxy_read_timeout 1h;
+                }
+              }
+            }
     controllers:
       main:
         type: deployment
@@ -190,26 +251,15 @@ spec:
             ports:
               - name: http
                 containerPort: 4242
-            # The board at :4242 may gate the UI behind auth, so its HTTP
-            # status codes are not a stable readiness signal - probe the
-            # TCP port instead.
+            # No probes on kanzo itself: it binds 127.0.0.1 only, and kubelet
+            # probes dial the pod IP, so any probe here would fail and kill
+            # the container. The proxy sidecar's probes cover the whole
+            # chain (nginx -> loopback -> kanzo).
             probes:
               readiness:
-                enabled: true
-                custom: true
-                spec:
-                  tcpSocket:
-                    port: http
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
+                enabled: false
               liveness:
-                enabled: true
-                custom: true
-                spec:
-                  tcpSocket:
-                    port: http
-                  initialDelaySeconds: 15
-                  periodSeconds: 30
+                enabled: false
             securityContext:
               allowPrivilegeEscalation: false
               runAsNonRoot: true
@@ -226,6 +276,55 @@ spec:
               limits:
                 cpu: 500m
                 memory: 256Mi
+          # Same-site proxy gate (see the proxy ConfigMap comment): the only
+          # container the service routes to, and the only thing allowed to
+          # talk to kanzo over loopback.
+          proxy:
+            image:
+              repository: docker.io/library/nginx
+              tag: 1.29-alpine@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de
+              pullPolicy: IfNotPresent
+            command: ["nginx", "-c", "/kanzo-proxy/nginx.conf", "-g", "daemon off;"]
+            ports:
+              - name: proxy
+                containerPort: 4243
+            # httpGet (not tcpSocket) so the probe traverses nginx -> kanzo:
+            # kubelet sends no Origin header, which the same-site gate
+            # allows, and kanzo sees a loopback client from the sidecar -
+            # so a 200 here proves the whole chain serves.
+            probes:
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: proxy
+                  initialDelaySeconds: 3
+                  periodSeconds: 10
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: proxy
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              runAsNonRoot: true
+              runAsUser: 2000
+              runAsGroup: 2000
+              seccompProfile:
+                type: RuntimeDefault
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
     service:
       http:
         ports:
@@ -233,6 +332,10 @@ spec:
             port: 4242
             protocol: HTTP
             primary: true
+            # Terminated on the proxy sidecar (:4243), not kanzo itself - the
+            # sidecar enforces the same-site gate and forwards to kanzo over
+            # loopback.
+            targetPort: proxy
     route:
       kanzo:
         hostnames:
@@ -255,6 +358,15 @@ spec:
         identifier: scripts
         globalMounts:
           - path: /kanzo-scripts
+      # The proxy sidecar's nginx.conf (see the proxy ConfigMap block above).
+      proxy-conf:
+        type: configMap
+        identifier: proxy
+        advancedMounts:
+          main:
+            proxy:
+              - path: /kanzo-proxy
+                readOnly: true
       # kanzo state (boards, notes) - created by kanzo itself on first run.
       data:
         existingClaim: kanzo
