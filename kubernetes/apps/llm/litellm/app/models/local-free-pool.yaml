@@ -57,6 +57,7 @@ spec:
     apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
     apiKey: sk-llmkube-noauth
     additional:
+      timeout: 90
       max_parallel_requests: 10
       reasoning_effort: medium
       order: 1
