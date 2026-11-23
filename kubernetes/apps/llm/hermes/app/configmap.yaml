@@ -144,8 +144,15 @@ data:
     platform_toolsets:
       cli:
         - hermes-cli
+        # Opt-in: the built-in multi-profile kanban board is OFF by default
+        # (hermes `tools` default-off list). Enabling it here turns on the
+        # kanban_* tools for every profile (the base config is the parent that
+        # each profile home is created from), so all agents can create/read/
+        # move cards and request review on the shared board.
+        - kanban
       discord:
         - hermes-discord
+        - kanban
     mcp_servers:
       toolhive:
         url: http://vmcp-mcp-gateway-internal.llm:4483/mcp
