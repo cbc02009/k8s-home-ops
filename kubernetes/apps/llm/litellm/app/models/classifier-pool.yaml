@@ -5,7 +5,9 @@
 # the 4090: while the classifier itself is pinned to that GPU, a busy 4090
 # keeps re-selecting the 27B for new traffic, which is the busy-loop that
 # local-free-pool's 27B/Go-free mix only blunts. A zero-burn cloud classifier
-# breaks the loop; the 27B stays as the floor and as classifier_fallback.
+# breaks the loop. 2026-11-24: the floor and the classifier_fallback target
+# are cloud-only too (glm-5.3-flash here; local-free-pool via the router
+# default), so no classification path touches the GPU.
 #
 # Members. One order-1 group (one simple-shuffle weighted draw per request)
 # of the zero-burn Go free rungs, plus one order-2 floor:
@@ -20,21 +22,16 @@
 #   beam-free       (order 1, weight 3)  Zero burn, no training (30d
 #                                          retention). The fastest of the
 #                                          free rungs (sub-2s TTFT).
-#   27B floor      (order 2, weight 1)   The qwen3.8-27b-chat lane
-#                                          (reasoning off): drawn ONLY when
-#                                          both free rungs are in cooldown
-#                                          (429 / 5xx / the 20s timeout -
-#                                          e.g. a free listing retired or
-#                                          rate-limited), never as a
-#                                          coin-flip member. A 27B at
-#                                          order 1 would put ~40% of
-#                                          classifications back on the 4090
-#                                          and leave the feedback loop
-#                                          closed; the floor keeps it out of
-#                                          the normal draw entirely.
-#                                          max_parallel_requests: 2 keeps
-#                                          even a cooldown storm from
-#                                          starving the GPU's main jobs.
+#   glm-5.3-flash  (order 2, weight 1)   The paid Go floor (no-training
+#                                          pool, reasoning off): drawn ONLY
+#                                          when both free rungs are in
+#                                          cooldown (429 / 5xx / the 20s
+#                                          timeout - e.g. a free listing
+#                                          retired or rate-limited), never
+#                                          as a coin-flip member, so the
+#                                          normal draw stays zero-burn and
+#                                          GPU-free. max_parallel_requests:
+#                                          2 bounds even a cooldown storm.
 #
 # v1.109.1 semantics (why it is shaped this way). The classifier call goes
 # out with num_retries=0 and disable_fallbacks=True, so a failed draw is
@@ -45,8 +42,10 @@
 # traffic away from this pool. A 400 - notably what a client WITHOUT a
 # session id gets from the Go rungs (they reject missing session ids, and
 # 400s never cool a member down) - fails that one verdict, which then runs
-# on the 27B via the default-model fallback. That is a strict improvement
-# over today, where the same untagged traffic is classified BY the 27B.
+# on local-free-pool via the default-model fallback
+# (complexity_router_default_model points at the lane, not the bare 27B
+# engine). That is a strict improvement over the pre-split state, where the
+# same untagged traffic was classified BY the 27B.
 #
 # Measured 2026-11-19 (hermes key, live proxy): with a 2048/8192 output
 # budget both free rungs returned schema-clean tier verdicts 9/9
@@ -59,7 +58,8 @@
 # Data policy: both rungs are "model training: not used" in Go's privacy
 # table (Hy4 Flash 0-day, Beam 30-day retention). Free endpoints that train
 # on request data (Iceman Contributor Free, Muse Spark 1.x Contributor)
-# stay excluded, same as in workhorse-pool.
+# stay excluded, same as in workhorse-pool - whose policy the glm-5.3-flash
+# floor inherits (paid no-training Go rung).
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -116,37 +116,37 @@ spec:
       cache_read_input_token_cost: 0
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# 2026-11-24: 27B floor replaced by glm-5.3-flash. A SwarmUI-held GPU must
+# not stall classification; this paid no-training Go rung only serves when
+# both free rungs are in cooldown, keeping every classification path
+# GPU-free.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: classifier-pool-27b-floor
+  name: classifier-pool-glm-5.3-flash
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
   modelName: classifier-pool
   proxyRef: litellm
   params:
-    model: openai/qwen3.8-27b
-    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: "noauth"
+    model: opencode_go/glm-5.3-flash
+    apiKey: "os.environ/OPENCODE_GO_API_KEY"
     additional:
-      timeout: 90
-      temperature: 0.7
-      top_p: 0.8
-      presence_penalty: 1.5
-      reasoning_effort: none
       order: 2
       weight: 1
       max_parallel_requests: 2
+      reasoning_effort: none
       allowed_openai_params:
         - reasoning_effort
   info:
     mode: chat
-    # maxInputTokens: 122880
-    maxOutputTokens: 16384
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
     supportsFunctionCalling: true
-    supportsVision: false
+    supportsVision: true
+    supportsPromptCaching: true
     extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08

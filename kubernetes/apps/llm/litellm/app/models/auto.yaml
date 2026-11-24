@@ -19,11 +19,12 @@
 # The classifier runs on classifier-pool rather than directly on the 27B:
 # the zero-burn Go free rungs (Hy4 Flash Free / Beam Free) do the per-ask tier
 # calls, so the classifier is no longer an always-resident 27B consumer and
-# the 4090-busy -> 27B-pinned -> 4090-busy loop is broken. The 27B-chat
-# lane (reasoning off, ~0.3-2.5s verdicts) sits in the pool at order 2 as the
-# floor, drawn only when both free rungs are in cooldown; a 20s-timeout
-# breaker pin (30s cooldown) and every failed verdict still land on the 27B
-# via classifier_fallback. The built-in 'agentic' rubric is unchanged:
+# the 4090-busy -> 27B-pinned -> 4090-busy loop is broken. The glm-5.3-flash
+# lane sits in the pool at order 2 as the floor, drawn only when both free
+# rungs are in cooldown; a 20s-timeout breaker pin (30s cooldown) and every
+# failed verdict land on local-free-pool via classifier_fallback
+# (2026-11-24: moved off the bare 27B engine, so a SwarmUI-held GPU can no
+# longer stall classification). The built-in 'agentic' rubric is unchanged:
 # routine installs, builds, multi-file edits and standard debugging anchor at
 # MEDIUM, so ordinary engineering traffic avoids the allowance-metered Go
 # pools. classification_mode 'user_turn' re-classifies on every new human
@@ -33,8 +34,10 @@
 # members are picked per request by the proxy's simple-shuffle, so sessions
 # hop within the pool; the Go session id keeps per-conversation affinity
 # (prompt cache) on the cloud rungs. In the tier lanes the 27B member
-# (order 1) is each lane's primary/failover floor; in classifier-pool the
-# 27B is the order-2 floor instead.
+# (order 1) is each lane's primary/failover floor; classifier-pool's
+# order-2 floor is glm-5.3-flash and complexity_router_default_model is
+# local-free-pool, so neither the classifier floor nor the unclassified-ask
+# default touches the GPU.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
@@ -47,7 +50,7 @@ spec:
   params:
     model: auto_router/complexity_router
     additional:
-      complexity_router_default_model: qwen3.8-27b
+      complexity_router_default_model: local-free-pool
       complexity_router_config:
         tiers:
           SIMPLE: local-free-pool
