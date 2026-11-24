@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpgroup_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPGroup
+metadata:
+  name: mcp-tools-dev
+spec:
+  description: Git, docs and reference MCP tools, served by mcp-gateway-dev (github, forgejo, mtg-mcp, context7, wikindie).

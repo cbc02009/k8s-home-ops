@@ -53,4 +53,4 @@ spec:
         - name: tmp
           emptyDir: {}
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops

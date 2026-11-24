@@ -63,4 +63,4 @@ spec:
             - name: tmp
               mountPath: /tmp
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops

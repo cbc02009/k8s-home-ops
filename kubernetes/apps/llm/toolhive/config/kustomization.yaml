@@ -8,7 +8,11 @@ resources:
   - ./litellmkey.yaml
   - ./mcp-telemetry.yaml
   - ./mcpgroup.yaml
+  - ./mcpgroup-dev.yaml
+  - ./mcpgroup-ops.yaml
   - ./podmonitor.yaml
   # - ./securitypolicy.yaml
   - ./virtualmcpserver.yaml
+  - ./virtualmcpserver-dev.yaml
+  - ./virtualmcpserver-ops.yaml
   - ./dashboard/

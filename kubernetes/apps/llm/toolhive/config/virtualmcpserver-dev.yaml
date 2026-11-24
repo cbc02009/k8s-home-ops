@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/virtualmcpserver_v1beta1.json
+# Split gateway for the mcp-tools-dev group (the old mcp-gateway-internal is left in
+# place until clients re-point; see PR discussion).
+#
+# The optimizer is enabled: vMCP exposes find_tool/call_tool to clients and
+# ranks the ~259 backend tools behind them, so agents stop wading through a flat
+# list. Embeddings come from the litellm 'embed' model; the API key is the
+# existing toolhive-embed secret (LiteLLMVirtualKey 'toolhive' authorizes it).
+# Note: enabling the optimizer pins this gateway to MCP 2025-11-25, so
+# Modern-capable clients are negotiated down to the Legacy revision.
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: VirtualMCPServer
+metadata:
+  name: mcp-gateway-dev
+spec:
+  groupRef:
+    name: mcp-tools-dev
+  config:
+    aggregation:
+      conflictResolution: prefix
+      conflictResolutionConfig:
+        prefixFormat: "{workload}_"
+    optimizer:
+      embeddingModel: embed
+      embeddingProvider: openai
+      embeddingService: http://litellm.llm.svc.cluster.local:4000/v1
+      embeddingServiceTimeout: 180s
+  incomingAuth:
+    type: anonymous
+  outgoingAuth:
+    source: discovered
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: vmcp
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: toolhive-embed
+                  key: OPENAI_API_KEY
+          resources:
+            requests:
+              memory: 256Mi
+            limits:
+              memory: 2Gi
+  sessionStorage:
+    address: toolhive-config-dragonfly-db.llm.svc.cluster.local:6379
+    db: 0
+    keyPrefix: "toolhive:vmcp-dev:"
+    # passwordRef:
+    #   key: password
+    #   name: toolhive-config-redis
+    provider: redis

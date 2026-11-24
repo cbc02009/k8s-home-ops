@@ -51,4 +51,4 @@ spec:
       cpu: 500m
       memory: 1Gi
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops

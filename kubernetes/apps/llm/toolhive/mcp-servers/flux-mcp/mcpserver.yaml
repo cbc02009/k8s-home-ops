@@ -33,4 +33,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops

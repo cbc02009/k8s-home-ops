@@ -28,4 +28,4 @@ spec:
       cpu: 200m
       memory: 256Mi
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-dev
