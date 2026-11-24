@@ -1,0 +1,66 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcptoolconfig_v1beta1.json
+# Prune the 80 live grafana-mcp tools down to the 54 read/observability surface
+# (get_/list_/query_/search_/analyze_/check_/diff_). Dropped: every create_/update_/delete_ write, the
+# grafana_api_request escape hatch, plugin install, alerting routing/silence writes, and the LoKI
+# alloy label suggestor - agent work in this cluster is read-only against grafana.
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPToolConfig
+metadata:
+  name: grafana
+spec:
+  toolsFilter:
+    - analyze_loki_labels
+    - check_datasources_health
+    - diff_tempo_traces
+    - get_alert_group
+    - get_annotation_tags
+    - get_annotations
+    - get_assertions
+    - get_current_oncall_users
+    - get_dashboard_by_uid
+    - get_dashboard_panel_queries
+    - get_dashboard_property
+    - get_dashboard_summary
+    - get_datasource
+    - get_doc
+    - get_incident
+    - get_oncall_shift
+    - get_panel_image
+    - get_plugin
+    - get_snapshot
+    - get_tempo_trace
+    - get_tempo_traceql_docs
+    - list_alert_groups
+    - list_dashboard_versions
+    - list_datasources
+    - list_incident_custom_fields
+    - list_incidents
+    - list_loki_label_names
+    - list_loki_label_values
+    - list_oncall_schedules
+    - list_oncall_teams
+    - list_oncall_users
+    - list_prometheus_label_names
+    - list_prometheus_label_values
+    - list_prometheus_metric_metadata
+    - list_prometheus_metric_names
+    - list_provisioning_repositories
+    - list_pyroscope_label_names
+    - list_pyroscope_label_values
+    - list_pyroscope_profile_types
+    - list_snapshots
+    - list_tempo_attribute_names
+    - list_tempo_attribute_values
+    - query_loki_logs
+    - query_loki_patterns
+    - query_loki_stats
+    - query_prometheus
+    - query_prometheus_histogram
+    - query_pyroscope
+    - query_tempo_metrics
+    - search_dashboards
+    - search_docs
+    - search_folders
+    - search_plugin_information
+    - search_tempo_traces
