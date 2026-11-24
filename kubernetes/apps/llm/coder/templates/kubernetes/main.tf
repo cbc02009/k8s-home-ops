@@ -393,9 +393,13 @@ PY
       },
       "mcp": {
         "servers": {
-          "toolhive": {
+          "toolhive-ops": {
             "type": "remote",
-            "url": "http://vmcp-mcp-gateway-internal.llm.svc.cluster.local:4483"
+            "url": "http://vmcp-mcp-gateway-ops.llm.svc.cluster.local:4483"
+          },
+          "toolhive-dev": {
+            "type": "remote",
+            "url": "http://vmcp-mcp-gateway-dev.llm.svc.cluster.local:4483"
           }
         }
       }
