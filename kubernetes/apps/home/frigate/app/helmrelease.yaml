@@ -34,6 +34,7 @@ spec:
             rewrite:
               - regexp:
                   source: "(.*)"
+                  target: "mosquitto_$1"
     defaultPodOptions:
       resourceClaims:
         - name: gpu
