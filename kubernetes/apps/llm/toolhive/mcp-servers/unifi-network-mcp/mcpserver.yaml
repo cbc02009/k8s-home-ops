@@ -9,7 +9,7 @@ spec:
   transport: streamable-http
   mcpPort: 3000
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops
   env:
     - name: UNIFI_NETWORK_HOST
       value: 10.0.2.1

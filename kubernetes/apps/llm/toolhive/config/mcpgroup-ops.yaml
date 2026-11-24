@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpgroup_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPGroup
+metadata:
+  name: mcp-tools-ops
+spec:
+  description: Cluster-ops and observability MCP tools, served by mcp-gateway-ops (kubectl, flux, kubesearch, talos, kguardian, arr, truenas, unifi, prometheus, victorialogs, grafana, litellm-admin).

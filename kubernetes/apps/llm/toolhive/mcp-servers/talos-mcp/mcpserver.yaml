@@ -9,7 +9,7 @@ spec:
   transport: streamable-http
   mcpPort: 8080
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops
   permissionProfile:
     type: builtin
     name: network

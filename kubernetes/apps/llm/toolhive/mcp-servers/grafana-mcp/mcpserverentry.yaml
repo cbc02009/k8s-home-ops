@@ -33,4 +33,4 @@ spec:
       key: GRAFANA_SERVICE_ACCOUNT_TOKEN
       targetEnvName: GRAFANA_SERVICE_ACCOUNT_TOKEN
   groupRef:
-    name: mcp-tools
+    name: mcp-tools-ops
