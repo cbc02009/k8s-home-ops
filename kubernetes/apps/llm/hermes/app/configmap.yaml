@@ -21,17 +21,15 @@ data:
       provider: litellm
       # The router's window isn't discoverable via /v1/models, so without this
       # hermes assumes 256k and computes a 192k compression trigger.
-      # 2026-11-24: pinned at 262144 (trigger = 0.75 x pin = 196k, residual
-      # ~39k), a deliberate ceiling now that the compression primary below is
-      # zai-pool (1M): the old 131k floor (trigger ~98k) existed only so the
-      # trigger fit the 27B compression model's 131k window, and it measured a
-      # live-session compaction every ~18 min median (6,419 events in the two
-      # weeks to 2026-11-23, 384 since 11-17). It is a ceiling, not a floor:
-      # a 27B-routed turn on a >131k session 400s and the pool's 1M rungs
-      # retry it - the same rung shedding the lane has always done. Next step,
-      # once the 262k cadence re-measurement settles: 400k (trigger 300k,
-      # ~3x less frequent).
-      context_length: 262144
+      # 2026-11-24: pinned at 524288 (trigger = 0.50 x pin = ~256k, residual
+      # ~256k). 524288 is the smallest pin above the compressor's 512k
+      # _SMALL_CTX_WINDOW_LIMIT, so the configured 0.50 threshold actually
+      # governs — below 512k the code floors the trigger at 75% regardless
+      # of compression.threshold. Measured live working set is ~100-120k
+      # tokens, so a ~256k trigger gives ~2x headroom: compaction fires
+      # only on genuinely large sessions while average prefill stays
+      # roughly half of what a 1M pin (trigger ~500k) costs per turn.
+      context_length: 524288
     fallback_providers:
       # Last resort if the whole pool chain fails: the local pool first
       # (the resident 27B rung answers when it is up; the free Go rungs
@@ -71,6 +69,12 @@ data:
     memory:
       provider: memini
       auto_migrate: true
+      # 2026-11-24: doubled from stock (2200/1375). Pod logs showed the built-in
+      # MEMORY.md/USER.md stores pinned at 93%/92% with writes rejected at the
+      # cap; memini recall is unaffected by these limits and stays the long-term
+      # store. Cost is ~1300 extra prompt tokens/session on a 262k context.
+      memory_char_limit: 4400
+      user_char_limit: 2750
     compression:
       enabled: true
       threshold: 0.50
@@ -179,17 +183,14 @@ data:
       vision:
         provider: litellm
         model: workhorse-pool
-      # 27B-chat: always resident and no forced reasoning, so these
-      # utilities stay fast and cheap. fallback_chain gives each a cloud
-      # cover lane when the 27B itself is offline (swarmui preemption /
-      # cold start): the aux client walks the chain on timeout, capacity
-      # and unavailable-provider failures (agent.auxiliary_client.
-      # _try_configured_fallback_chain), so a compression/extract call
-      # waits at most the pinned task timeout instead of stalling until
-      # the pod comes back. local-free-pool is the same lane the router's
-      # fallbacks use: the resident 27B when it is up, free Go rungs when
-      # it is not, paid continuation rungs when those dry — no extra cost
-      # while the 27B is healthy (the primary is tried first).
+      # Cloud aux lanes (2026-11-24): primaries moved off qwen3.8-27b-chat —
+      # the gpu-preemptible engine goes Pending when SwarmUI holds the GPU,
+      # and each lane then burned its whole timeout on a dead primary before
+      # the chain kicked in (approval exhausted 60s + all fallbacks on
+      # 2026-11-24). workhorse-pool is the shared Go lane (1M window, ~1s
+      # answers). The fallback chains keep local-free-pool: when the
+      # resident 27B is up, its free rung covers outages of the paid lane
+      # at no extra cost.
       compression:
         provider: litellm
         model: zai-pool
@@ -201,21 +202,21 @@ data:
             model: workhorse-pool
       web_extract:
         provider: litellm
-        model: qwen3.8-27b-chat
+        model: workhorse-pool
         timeout: 120
         fallback_chain:
           - provider: litellm
             model: local-free-pool
       approval:
         provider: litellm
-        model: qwen3.8-27b-chat
+        model: workhorse-pool
         timeout: 60
         fallback_chain:
           - provider: litellm
             model: local-free-pool
       session_search:
         provider: litellm
-        model: qwen3.8-27b-chat
+        model: workhorse-pool
         timeout: 120
         fallback_chain:
           - provider: litellm
