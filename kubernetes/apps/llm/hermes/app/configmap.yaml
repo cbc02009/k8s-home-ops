@@ -162,20 +162,41 @@ data:
         provider: litellm
         model: workhorse-pool
       # 27B-chat: always resident and no forced reasoning, so these
-      # utilities stay fast and cheap.
+      # utilities stay fast and cheap. fallback_chain gives each a cloud
+      # cover lane when the 27B itself is offline (swarmui preemption /
+      # cold start): the aux client walks the chain on timeout, capacity
+      # and unavailable-provider failures (agent.auxiliary_client.
+      # _try_configured_fallback_chain), so a compression/extract call
+      # waits at most the pinned task timeout instead of stalling until
+      # the pod comes back. local-free-pool is the same lane the router's
+      # fallbacks use: the resident 27B when it is up, free Go rungs when
+      # it is not, paid continuation rungs when those dry — no extra cost
+      # while the 27B is healthy (the primary is tried first).
       compression:
         provider: litellm
         model: qwen3.8-27b-chat
         timeout: 180
+        fallback_chain:
+          - provider: litellm
+            model: local-free-pool
       web_extract:
         provider: litellm
         model: qwen3.8-27b-chat
         timeout: 120
+        fallback_chain:
+          - provider: litellm
+            model: local-free-pool
       approval:
         provider: litellm
         model: qwen3.8-27b-chat
         timeout: 60
+        fallback_chain:
+          - provider: litellm
+            model: local-free-pool
       session_search:
         provider: litellm
         model: qwen3.8-27b-chat
         timeout: 120
+        fallback_chain:
+          - provider: litellm
+            model: local-free-pool
