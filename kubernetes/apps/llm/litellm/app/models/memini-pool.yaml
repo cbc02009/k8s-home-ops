@@ -4,8 +4,10 @@
 #   gate-tested 2026-11-22 via the -gate-test lane: JSON verdicts,
 #   ~1.5 s at max_tokens 4096, reasoning_tokens 0, same with or without
 #   x-litellm-session-id.
-# Rung 2: local qwen3.8-27b floor (falls through on error/rate-limit).
-# memini max_tokens is 4096 (<= 16384 limit of the 27b floor).
+# Rung 2: zai glm-5.3-flash floor (falls through on error/rate-limit;
+# 2026-11-24: replaced the local 27b floor so memory consolidation never
+# depends on the mayne GPU - SwarmUI preemption stalled memini calls there).
+# memini max_tokens is 4096 (well under the zai rung's 131072 output cap).
 
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
@@ -42,37 +44,36 @@ spec:
       output_cost_per_token: 1.2e-06
       cache_read_input_token_cost: 6e-08
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# 2026-11-24: 27B floor replaced by zai glm-5.3-flash - memory
+# consolidation must not depend on the mayne GPU (SwarmUI preemption made
+# the old floor unavailable and stalled memini calls). The zai lane is the
+# standing fallback for every other lane's Go-window exhaustion.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: memini-pool-27b-floor
+  name: memini-pool-zai-glm-5.3-flash
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
   modelName: memini-pool
   proxyRef: litellm
   params:
-    model: openai/qwen3.8-27b
-    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: "noauth"
+    model: zai/glm-5.3-flash
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKey: "os.environ/ZAI_API_KEY"
     additional:
-      timeout: 90
-      temperature: 0.7
-      top_p: 0.8
-      presence_penalty: 1.5
-      reasoning_effort: none
       order: 2
       weight: 1
       max_parallel_requests: 2
-      allowed_openai_params:
-        - reasoning_effort
   info:
     mode: chat
-    # maxInputTokens: 122880
-    maxOutputTokens: 16384
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
     supportsFunctionCalling: true
-    supportsVision: false
+    supportsVision: true
+    supportsPromptCaching: true
     extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
+      input_cost_per_token: 1.5e-07
+      output_cost_per_token: 5e-07
+      cache_read_input_token_cost: 3e-08
