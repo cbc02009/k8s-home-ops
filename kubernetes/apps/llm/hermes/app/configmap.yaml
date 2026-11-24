@@ -159,8 +159,10 @@ data:
         - hermes-discord
         - kanban
     mcp_servers:
-      toolhive:
-        url: http://vmcp-mcp-gateway-internal.llm:4483/mcp
+      toolhive-ops:
+        url: http://vmcp-mcp-gateway-ops.llm.svc.cluster.local:4483/mcp
+      toolhive-dev:
+        url: http://vmcp-mcp-gateway-dev.llm.svc.cluster.local:4483/mcp
     auxiliary:
       # Always-on cheap cloud vision (no-training Go lane).
       vision:
