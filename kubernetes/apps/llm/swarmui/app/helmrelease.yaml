@@ -60,8 +60,8 @@ spec:
                 cpu: 10m
                 memory: 32Mi
               limits:
-                cpu: "2"
-                memory: 1Gi
+                cpu: "3"
+                memory: 8Gi
         pod:
           securityContext:
             runAsUser: ${APP_UID}
