@@ -71,6 +71,12 @@ data:
     memory:
       provider: memini
       auto_migrate: true
+      # 2026-11-24: doubled from stock (2200/1375). Pod logs showed the built-in
+      # MEMORY.md/USER.md stores pinned at 93%/92% with writes rejected at the
+      # cap; memini recall is unaffected by these limits and stays the long-term
+      # store. Cost is ~1300 extra prompt tokens/session on a 262k context.
+      memory_char_limit: 4400
+      user_char_limit: 2750
     compression:
       enabled: true
       threshold: 0.50
