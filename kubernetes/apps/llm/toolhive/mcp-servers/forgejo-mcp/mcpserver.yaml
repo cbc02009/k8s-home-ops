@@ -5,7 +5,7 @@ kind: MCPServer
 metadata:
   name: forgejo
 spec:
-  image: git.b4mad.industries/agentic-forges/forgejo-mcp:v3.4.1
+  image: git.b4mad.industries/agentic-forges/forgejo-mcp:v3.5.0
   transport: stdio
   proxyMode: streamable-http
   proxyPort: 8080
