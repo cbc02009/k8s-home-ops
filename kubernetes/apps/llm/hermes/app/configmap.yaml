@@ -22,12 +22,17 @@ data:
       # larger) so the trigger (~98k) always fits.
       context_length: 131072
     fallback_providers:
-      # Last resort if the whole pool chain fails: the always-resident 27B
-      # first, then the Z.AI Coding Plan lane (the mutual fallback for the Go
-      # pool — its weekly credits do not roll over), then workhorse-pool as the
-      # cloud overflow.
+      # Last resort if the whole pool chain fails: the local pool first
+      # (the resident 27B rung answers when it is up; the free Go rungs
+      # answer when it is not — no cost while healthy), then the Z.AI
+      # Coding Plan lane (the mutual fallback for the Go pool — its weekly
+      # credits do not roll over), then workhorse-pool as the cloud
+      # overflow. The bare qwen3.8-27b rung was dropped as the first hop:
+      # it waits on the same preemptible pod the pool already contains,
+      # so listing it first only re-introduced the long wait on a down
+      # 27B that the pool lanes were built to avoid.
       - provider: litellm
-        model: qwen3.8-27b
+        model: local-free-pool
       - provider: litellm
         model: zai-pool
       - provider: litellm
