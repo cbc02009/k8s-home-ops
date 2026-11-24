@@ -1,8 +1,12 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.home-operations.com/v1_configmap.json
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: hermes-config
+  namespace: llm
+  labels:
+    app.kubernetes.io/part-of: hermes
 data:
   config.yaml: |
     model:
@@ -16,11 +20,18 @@ data:
       default: auto
       provider: litellm
       # The router's window isn't discoverable via /v1/models, so without this
-      # hermes assumes 256k and computes a 192k compression trigger — above the
-      # 27b-chat compression model's 131k window, which forced a per-session
-      # auto-lower warning. Pin the tier floor (27B: 131k; all other rungs are
-      # larger) so the trigger (~98k) always fits.
-      context_length: 131072
+      # hermes assumes 256k and computes a 192k compression trigger.
+      # 2026-11-24: pinned at 262144 (trigger = 0.75 x pin = 196k, residual
+      # ~39k), a deliberate ceiling now that the compression primary below is
+      # zai-pool (1M): the old 131k floor (trigger ~98k) existed only so the
+      # trigger fit the 27B compression model's 131k window, and it measured a
+      # live-session compaction every ~18 min median (6,419 events in the two
+      # weeks to 2026-11-23, 384 since 11-17). It is a ceiling, not a floor:
+      # a 27B-routed turn on a >131k session 400s and the pool's 1M rungs
+      # retry it - the same rung shedding the lane has always done. Next step,
+      # once the 262k cadence re-measurement settles: 400k (trigger 300k,
+      # ~3x less frequent).
+      context_length: 262144
     fallback_providers:
       # Last resort if the whole pool chain fails: the local pool first
       # (the resident 27B rung answers when it is up; the free Go rungs
@@ -181,11 +192,13 @@ data:
       # while the 27B is healthy (the primary is tried first).
       compression:
         provider: litellm
-        model: qwen3.8-27b-chat
+        model: zai-pool
         timeout: 180
         fallback_chain:
           - provider: litellm
             model: local-free-pool
+          - provider: litellm
+            model: workhorse-pool
       web_extract:
         provider: litellm
         model: qwen3.8-27b-chat
@@ -207,3 +220,4 @@ data:
         fallback_chain:
           - provider: litellm
             model: local-free-pool
+    _config_version: 54
