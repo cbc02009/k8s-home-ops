@@ -3,12 +3,14 @@
 # Split gateway for the mcp-tools-dev group (the old mcp-gateway-internal is left in
 # place until clients re-point; see PR discussion).
 #
-# The optimizer is enabled: vMCP exposes find_tool/call_tool to clients and
-# ranks the ~259 backend tools behind them, so agents stop wading through a flat
-# list. Embeddings come from the litellm 'embed' model; the API key is the
-# existing toolhive-embed secret (LiteLLMVirtualKey 'toolhive' authorizes it).
-# Note: enabling the optimizer pins this gateway to MCP 2025-11-25, so
-# Modern-capable clients are negotiated down to the Legacy revision.
+# No tool optimizer: vMCP lists the ~259 backend tools directly in tools/list
+# with the {workload}_ prefix. That flat list is the surface Hermes agents
+# discover against (their tool index is a lexical search over exactly these
+# names), whereas the optimizer mode #6110 introduced replaced them with
+# find_tool/call_tool meta-tools the index could not see, degrading discovery.
+# Re-enabling the optimizer also pins the gateway to MCP 2025-11-25 (Modern
+# clients negotiate down to Legacy) and needs the toolhive-embed OPENAI_API_KEY
+# env re-added to the pod template.
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: VirtualMCPServer
 metadata:
@@ -21,11 +23,6 @@ spec:
       conflictResolution: prefix
       conflictResolutionConfig:
         prefixFormat: "{workload}_"
-    optimizer:
-      embeddingModel: embed
-      embeddingProvider: openai
-      embeddingService: http://litellm.llm.svc.cluster.local:4000/v1
-      embeddingServiceTimeout: 180s
   incomingAuth:
     type: anonymous
   outgoingAuth:
@@ -34,12 +31,6 @@ spec:
     spec:
       containers:
         - name: vmcp
-          env:
-            - name: OPENAI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: toolhive-embed
-                  key: OPENAI_API_KEY
           resources:
             requests:
               memory: 256Mi
