@@ -11,7 +11,7 @@ spec:
   secretKey: api-key
   models:
   - qwen3.8-27b
-  - local-free-pool
+  - free-pool
   # OpenCode Go cloud lane for agent work that outgrows the local rungs.
   - workhorse-pool
   # Z.AI Coding Plan lane: the mutual fallback for the Go lanes (its weekly

@@ -63,7 +63,7 @@ spec:
           # that window's credits are gone until it refreshes. The paired Go
           # rung keeps serving, but the weekly credits are being wasted if
           # this fires often — raise the Z.AI weight (zai-pool / the zai-*
-          # members of the implementation/reasoning/local-free pools) or
+          # members of the implementation/reasoning pools) or
           # check the plan's usage page.
           expr: |-
             sum by (litellm_model_name, exception_status) (

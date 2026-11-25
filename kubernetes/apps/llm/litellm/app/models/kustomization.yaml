@@ -6,9 +6,9 @@ resources:
   - ./auto.yaml
   - ./classifier-pool.yaml
   - ./embed.yaml
+  - ./free-pool.yaml
   - ./frontier-pool.yaml
   - ./implementation-pool.yaml
-  - ./local-free-pool.yaml
   - ./local-pool.yaml
   - ./memini-pool.yaml
   - ./qwen3.8-27b.yaml

@@ -1,66 +1,18 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# COMPLEX lane for the auto router (bulk multi-step / coding work; REASONING
-# now uses reasoning-pool — see auto.yaml). 2026-11-21 rebalance: rung 1 is a
-# 2:1:1 mix — the free, private local 27B (w2) shares the top rung with the
-# cheap Flash pair (Go glm-5.3-flash / Z.AI glm-5.3-flash, w1 each) instead of
-# running solo, so the Z.AI flash rung is no longer the lane's only cloud
-# model on the top rung (its 5h/weekly window drying can no longer strand the
-# tier on one subscription). Each Z.AI Coding Plan rung still sits at the SAME
-# order as its Go counterpart: the Flash pair at rung 1, the stronger pair
-# (Go minimax-m3.1-flash / Z.AI glm-5.3) at rung 3, with mimo the solo mid
-# window at rung 2. Pairing Z.AI as a co-primary drains its non-rolling
-# weekly credits instead of leaving them to expire; when either subscription's
-# window dries, that rung 429s, cools 30s, and the tier's partner carries on.
-#
-# NEW cost-effective rung: mimo-v2.6-flash (order 2) — the cheapest effective
-# per-token model on the shared $240 Go Plus pool (2.0x burn, ~$0.56/1M
-# effective output, 1M context, vision, live 200 verified). Its only Go rung
-# here; kept at a modest share so the bench-proven glm-5.3-flash stays primary.
-# deepseek-v4.1-flash / hy3 were evaluated but the deployed proxy 400s them
-# ("Invalid model name") — dead rungs, excluded. (That 400 was the
-# unregistered-name bug, not a Go-side rejection: hy3 re-enters as a
-# registered eval-candidates lane on the 2026-11-18 audit; bench before any
-# pool slot.)
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: implementation-pool-27b
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: implementation-pool
-  proxyRef: litellm
-  params:
-    model: openai/qwen3.8-27b
-    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: "sk-llmkube-noauth"
-    additional:
-      # fail a dead-rung draw in 90s instead of hanging out LLMKube's full
-      # 240s activation budget (see litellmproxy routerSettings cooldown_time)
-      timeout: 90
-      temperature: 1.0
-      top_p: 0.95
-      top_k: 20
-      min_p: 0
-      order: 1
-      weight: 2
-      max_parallel_requests: 2
-      reasoning_effort: high
-      allowed_openai_params:
-        - reasoning_effort
-  info:
-    mode: chat
-    maxInputTokens: 131072
-    maxOutputTokens: 40960
-    supportsFunctionCalling: true
-    supportsVision: false
-    extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# COMPLEX lane for the auto router (bulk multi-step / coding work; REASONING
+# now uses reasoning-pool - see auto.yaml). 2026-11-25: the local 27B rung
+# was removed (a SwarmUI-held GPU stalled its draws; the 27B remains only
+# in local-pool), so rung 1 is the cheap Flash pair - Go glm-5.3-flash /
+# Z.AI glm-5.3-flash at w1 each. Historical: the 2026-11-21 rebalance ran
+# that pair in a 2:1:1 top rung with the 27B (w2) so the Z.AI flash rung
+# was never the lane's only cloud model there; either subscription's
+# window drying 429s that rung, cools it 30s, and the partner carries on.
+#
+# mimo-v2.6-flash (order 2) - the cheapest effective per-token model on the
+# shared $240 Go Plus pool (2.0x burn, ~$0.56/1M effective output, 1M
+# context, vision, live 200 verified). Its only Go rung here.
 # Rung 1 (Go half): cheapest high-scoring rung — 1.33x burn, ~$0.67/1M
 # effective output, deterministic bench 0.952. $60/mo allowance workhorse;
 # promoted from rung 2 to the 2:1:1 co-primary slot on 2026-11-21.

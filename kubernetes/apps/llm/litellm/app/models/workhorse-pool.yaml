@@ -28,7 +28,7 @@
 # Dropped: mimo-v2.6-flash and qwen3.8-flash (redundant with the glm
 # head), minimax-m3 (superseded by m3.1-flash), kimi-k2.7-code (still
 # in reasoning-pool), beam-free (region-locked) and hy4-flash-free (66k
-# output cap) - classifier-pool and local-free-pool keep their own
+# output cap) - classifier-pool and free-pool keep their own
 # copies of the free rungs, so no cluster capability is lost. The
 # named single-model lanes (go-coder/go-strong/go-max/go-chat) were
 # removed in the same change; their consumers (coder/qwencode/
@@ -40,7 +40,7 @@
 # name now states the lane's FUNCTION (the bulk workhorse ladder), not
 # its provenance. The longcat-2.5-free rung moved out: it is a free
 # floor, not workhorse capacity, and already serves at order 1 of
-# local-free-pool; the pool's fallback chain (local-free-pool, then
+# free-pool; the pool's fallback chain (free-pool, then
 # zai-pool) keeps the zero-burn floor reachable when the paid windows
 # dry. The ladder is the three paid workhorse rungs.
 # Sessions: LiteLLM forwards x-litellm-session-id as x-opencode-session (the
@@ -52,7 +52,7 @@
 # blocked by default in the workspace privacy settings). Models that train
 # on prompts in exchange for free/discounted tokens — Iceman Contributor
 # Free, Muse Spark 1.x Contributor — are deliberately EXCLUDED and must
-# not be added. Free Go rungs live in local-free-pool / classifier-pool,
+# not be added. Free Go rungs live in free-pool / classifier-pool,
 # which carry their own data-policy notes.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel

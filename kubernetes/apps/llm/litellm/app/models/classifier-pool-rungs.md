@@ -13,11 +13,11 @@
 ## Pool: `classifier-pool`  (3 rungs)
 
 ```
-1 beam-free(w3) · hy4-flash-free(w3) → 2 27b-floor(w1)
+1 beam-free(w3) · hy4-flash-free(w3) → 2 glm-5.3-flash(w1)
 ```
 
 | Rung | Model | Provider/model | MaxIn | MaxOut | Wt | MP | $/1M in | $/1M out | $/1M cache-read |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `beam-free` | `opencode_go/beam-free` | 1.05M | 131K | 3 | 4 | 0.00 | 0.00 | 0.00 |
 | 1 | `hy4-flash-free` | `opencode_go/hy4-flash-free` | 1.05M | 66K | 3 | 4 | 0.00 | 0.00 | 0.00 |
-| 2 | `27b-floor` | `openai/qwen3.8-27b` | - | 16K | 1 | 2 | 0.0620 | 1.35 | 0.00 |
+| 2 | `glm-5.3-flash` | `opencode_go/glm-5.3-flash` | 1M | 131K | 1 | 2 | 0.150 | 0.500 | 0.0300 |

@@ -17,7 +17,7 @@ spec:
   # per-message `reasoning`/`reasoning_content` fields: OpenCode Go 400s
   # (unsupported_parameter: messages[N].reasoning) on unmapped
   # /v1/chat/completions rungs (e.g. beam-free) replaying Anthropic wire
-  # turns, which tanked local-free-pool. Drop the overlay once
+  # turns, which tanked free-pool. Drop the overlay once
   # https://github.com/BerriAI/litellm/issues/51666 ships in a release;
   # Renovate tracks the base version in container-images and proposes the
   # :rolling digest bump here on rebuild.
@@ -153,40 +153,41 @@ spec:
       # The 2026-11-18 burn audit: while every paid lane's first fallback was
       # zai-pool, the non-rolling Z.AI credits absorbed the lanes' overflow
       # (12-15 $/day on the 11-17/18 heavy days) even though the free local
-      # 27B pool was healthy. Every paid lane now falls to the local pool
-      # first (free, always resident, warm prefix cache) and keeps zai-pool
+      # 27B pool was healthy. Every paid lane now falls to the free pool
+      # first (Go's zero-allowance free rungs) and keeps zai-pool
       # as the last-resort rung, so the Z.AI credits only burn when the
       # local floor is itself saturated. Since 2026-11-22 the floor is
-      # local-free-pool — the resident 27B plus the free Go rungs — rather
-      # than the bare local-pool lane, which no consumer uses anymore.
+      # free-pool, and since 2026-11-25 it is Go's free rungs only (the
+      # 27B rung left the pools; a SwarmUI-held GPU can no longer stall
+      # the floor) — the bare local-pool lane has no consumers.
       # workhorse-pool is the cloud lane and (since it absorbed the go-chat lane)
       # the vision lane: when the Go window dries, text traffic lands on
-      # the local pool first; image-bearing requests 4xx there (the 27B
-      # has no vision) and continue to zai-pool, whose GLM-5.3 rung is
+      # the free pool first; image-bearing requests 4xx on the non-vision
+      # Beam Free and continue to zai-pool, whose GLM-5.3 rung is
       # vision-capable — so vision workloads still survive a Go outage.
       - workhorse-pool:
-          - local-free-pool
+          - free-pool
           - zai-pool
       - frontier-pool:
           - workhorse-pool
-          - local-free-pool
+          - free-pool
           - zai-pool
       - reasoning-pool:
-          - local-free-pool
+          - free-pool
           - zai-pool
       - implementation-pool:
-          - local-free-pool
+          - free-pool
           - zai-pool
       # The complexity router's own floor: the pooled lane first (its Z.AI
       # co-primary rungs only fire when the lane's local primary cools), then
       # the plain local pool.
       - auto:
           - implementation-pool
-          - local-free-pool
+          - free-pool
       # The Z.AI lane is itself a fallback target, so it needs its own floor:
-      # when the Coding Plan's window is dry too, the local 27B catches it.
+      # when the Coding Plan's window is dry too, the free rungs catch it.
       - zai-pool:
-          - local-free-pool
+          - free-pool
   litellmSettings:
     success_callback:
       - prometheus

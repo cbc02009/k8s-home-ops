@@ -4,9 +4,9 @@
 # exists to take the per-human-ask tier calls off the always-resident 27B on
 # the 4090: while the classifier itself is pinned to that GPU, a busy 4090
 # keeps re-selecting the 27B for new traffic, which is the busy-loop that
-# local-free-pool's 27B/Go-free mix only blunts. A zero-burn cloud classifier
+# free-pool's 27B/Go-free mix only blunts. A zero-burn cloud classifier
 # breaks the loop. 2026-11-24: the floor and the classifier_fallback target
-# are cloud-only too (glm-5.3-flash here; local-free-pool via the router
+# are cloud-only too (glm-5.3-flash here; free-pool via the router
 # default), so no classification path touches the GPU.
 #
 # Members. One order-1 group (one simple-shuffle weighted draw per request)
@@ -42,7 +42,7 @@
 # traffic away from this pool. A 400 - notably what a client WITHOUT a
 # session id gets from the Go rungs (they reject missing session ids, and
 # 400s never cool a member down) - fails that one verdict, which then runs
-# on local-free-pool via the default-model fallback
+# on free-pool via the default-model fallback
 # (complexity_router_default_model points at the lane, not the bare 27B
 # engine). That is a strict improvement over the pre-split state, where the
 # same untagged traffic was classified BY the 27B.
