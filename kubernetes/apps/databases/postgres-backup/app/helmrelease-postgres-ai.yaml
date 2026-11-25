@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: postgres-ai-backup
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: postgres-backup
+  values:
+    controllers:
+      main:
+        type: cronjob
+        cronjob:
+          schedule: "@daily"
+          ttlSecondsAfterFinished: 43200
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+          enableServiceLinks: false
+        containers:
+          main:
+            image:
+              repository: docker.io/prodrigestivill/postgres-backup-local
+              tag: 18@sha256:f70742ebe42b2277689b028d1fd15aa80f77cffa01da163cc9f85a6ff1866e7f
+            # env.sh refuses a missing BACKUP_DIR; pre-create it (uid 2000 may write the NFS export)
+            command: ['sh', '-c', 'mkdir -p "$BACKUP_DIR" && exec /backup.sh']
+            envFrom:
+              - secretRef:
+                  name: postgres-backup
+            env:
+              - name: POSTGRES_HOST
+                value: postgres-ai.ctec.run
+              - name: POSTGRES_DB
+                value: "postgres"
+              # backup.sh takes the cluster-dump (pg_dumpall) branch only on exact "TRUE"; lowercase is inert
+              - name: POSTGRES_CLUSTER
+                value: "TRUE"
+              # pg_dumpall accepts only a subset of pg_dump flags (-b/-C/-Z are invalid); gzip is applied by the script
+              - name: POSTGRES_EXTRA_OPTS
+                value: "-c"
+              # per-cluster subdir: identical postgres-* filenames across jobs would collide and cross-prune
+              - name: BACKUP_DIR
+                value: /backups/postgres-ai
+              - name: BACKUP_KEEP_DAYS
+                value: "7"
+              - name: BACKUP_KEEP_WEEKS
+                value: "4"
+              - name: BACKUP_KEEP_MONTHS
+                value: "6"
+              - name: BACKUP_KEEP_MINS
+                value: "7200"
+
+    persistence:
+      backups:
+        enabled: true
+        type: nfs
+        server: shana.ctec.internal
+        path: /mnt/tank/k8s/postgres-backup
+        globalMounts:
+          - path: /backups
