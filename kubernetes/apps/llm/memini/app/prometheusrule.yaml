@@ -17,13 +17,24 @@ spec:
               to unranked order
           labels:
             severity: warning
-        - alert: MeminiEmbedErrors
+        # v0.7.39: memini_embed_errors_total counts every failed Embed call, including
+        # benign caller-side cancels (hermes aborting a remember mid-flight logs
+        # "embed: context canceled", the row is stored vectorless with
+        # pending_embed=true, and the backfill loop re-embeds it within one tick —
+        # nothing is lost). Those arrive ~1/h, so a raw error-count alert latches
+        # ~40min per event and reads as permanently firing. The real signal is the
+        # repair queue: vectorless rows piling up faster than backfill drains them
+        # means the embed backend itself is down (caller cancels drain in a single
+        # tick, so they stay silent). Recall-side impact keeps its own alert above
+        # (MeminiRecallDegraded).
+        - alert: MeminiEmbedBackfillLag
           expr: |-
-            sum by (backend) (increase(memini_embed_errors_total[30m])) > 0
-          for: 10m
+            max(memini_embed_backfill_pending) > 20
+          for: 15m
           annotations:
             summary: >-
-              Memini embed backend {{ $labels.backend }} returning errors
+              Memini has {{ $value | printf "%.0f" }} memories waiting for an embed
+              repair — the embed backend is failing or too slow to keep up
           labels:
             severity: warning
         - alert: MeminiRerankSaturated
