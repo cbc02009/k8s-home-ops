@@ -1,153 +1,116 @@
-# media-switch — generated from live inventory via MikroMCP (2026-11-25).
-# Import each existing object before the first apply, e.g.:
-#   tofu import 'routeros_<type>.<res>' 'media/<.id>'
-# Applies are gated on a human-reviewed plan.
-
-resource "routeros_interface_list" "media_WAN" {
+# media-switch — data only; all resource boilerplate lives in modules/switch.
+# Imports: see imports.sh (module.<router>.* addresses).
+module "media" {
+  source = "./modules/switch"
   router = "media"
-  name   = "WAN"
-}
 
-resource "routeros_interface_list" "media_LAN" {
-  router = "media"
-  name   = "LAN"
-}
+  lists = {
+    WAN = {
+      name = "WAN"
+    }
+    LAN = {
+      name = "LAN"
+    }
+  }
 
-resource "routeros_interface_bridge" "media_bridge" {
-  router   = "media"
-  name     = "bridge"
-  arp      = "enabled"
-  mtu      = "auto"
-  priority = 32768
-}
+  bridge = {
+    name     = "bridge"
+    comment  = "defconf"
+    arp      = "enabled"
+    mtu      = "auto"
+    priority = 32768
+  }
 
-resource "routeros_interface_bridge_vlan" "media_Trusted" {
-  router   = "media"
-  bridge   = "bridge"
-  comment  = "Trusted"
-  vlan_ids = "10"
-  tagged   = "ether1,sfp-sfpplus1"
-  untagged = "sfp-sfpplus2,sfp-sfpplus3"
-}
+  vlans = {
+    Trusted = {
+      vlan_ids = "10"
+      tagged   = "ether1,sfp-sfpplus1"
+      untagged = "sfp-sfpplus2,sfp-sfpplus3"
+    }
+    Servers = {
+      vlan_ids = "20"
+      tagged   = "sfp-sfpplus1"
+    }
+    Guest = {
+      vlan_ids = "30"
+      tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
+    }
+    IoT = {
+      vlan_ids = "40"
+      tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
+    }
+    Video = {
+      vlan_ids = "50"
+      tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
+    }
+  }
 
-resource "routeros_interface_bridge_vlan" "media_Servers" {
-  router   = "media"
-  bridge   = "bridge"
-  comment  = "Servers"
-  vlan_ids = "20"
-  tagged   = "sfp-sfpplus1"
-  untagged = ""
-}
+  ports = {
+    ether1 = {
+      interface = "ether1"
+      comment   = "defconf"
+      pvid      = 1
+      edge      = "auto"
+      hw        = true
+    }
+    sfp_sfpplus1 = {
+      interface = "sfp-sfpplus1"
+      comment   = "defconf"
+      pvid      = 1
+      edge      = "auto"
+      hw        = true
+    }
+    sfp_sfpplus2 = {
+      interface = "sfp-sfpplus2"
+      comment   = "defconf"
+      pvid      = 10
+      edge      = "auto"
+      hw        = true
+    }
+    sfp_sfpplus3 = {
+      interface = "sfp-sfpplus3"
+      comment   = "defconf"
+      pvid      = 1
+      edge      = "auto"
+      hw        = true
+    }
+    sfp_sfpplus4 = {
+      interface = "sfp-sfpplus4"
+      comment   = "defconf"
+      pvid      = 1
+      edge      = "auto"
+      hw        = true
+    }
+  }
 
-resource "routeros_interface_bridge_vlan" "media_Guest" {
-  router   = "media"
-  bridge   = "bridge"
-  comment  = "Guest"
-  vlan_ids = "30"
-  tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
-  untagged = ""
-}
+  members = {
+    WAN_ether1 = {
+      list      = "WAN"
+      interface = "ether1"
+    }
+    LAN_sfp_sfpplus1 = {
+      list      = "LAN"
+      interface = "sfp-sfpplus1"
+    }
+    LAN_sfp_sfpplus2 = {
+      list      = "LAN"
+      interface = "sfp-sfpplus2"
+    }
+    LAN_sfp_sfpplus3 = {
+      list      = "LAN"
+      interface = "sfp-sfpplus3"
+    }
+    LAN_sfp_sfpplus4 = {
+      list      = "LAN"
+      interface = "sfp-sfpplus4"
+    }
+  }
 
-resource "routeros_interface_bridge_vlan" "media_IoT" {
-  router   = "media"
-  bridge   = "bridge"
-  comment  = "IoT"
-  vlan_ids = "40"
-  tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
-  untagged = ""
-}
+  addresses = {
+    sfp_sfpplus1 = {
+      address   = "10.0.0.6/24"
+      interface = "sfp-sfpplus1"
+    }
+  }
 
-resource "routeros_interface_bridge_vlan" "media_Video" {
-  router   = "media"
-  bridge   = "bridge"
-  comment  = "Video"
-  vlan_ids = "50"
-  tagged   = "ether1,sfp-sfpplus1,sfp-sfpplus3"
-  untagged = ""
-}
-
-resource "routeros_interface_bridge_port" "media_ether1" {
-  router    = "media"
-  bridge    = "bridge"
-  interface = "ether1"
-  pvid      = 1
-  comment   = "defconf"
-  edge      = "auto"
-  hw        = true
-}
-
-resource "routeros_interface_bridge_port" "media_sfp_sfpplus1" {
-  router    = "media"
-  bridge    = "bridge"
-  interface = "sfp-sfpplus1"
-  pvid      = 1
-  comment   = "defconf"
-  edge      = "auto"
-  hw        = true
-}
-
-resource "routeros_interface_bridge_port" "media_sfp_sfpplus2" {
-  router    = "media"
-  bridge    = "bridge"
-  interface = "sfp-sfpplus2"
-  pvid      = 10
-  comment   = "defconf"
-  edge      = "auto"
-  hw        = true
-}
-
-resource "routeros_interface_bridge_port" "media_sfp_sfpplus3" {
-  router    = "media"
-  bridge    = "bridge"
-  interface = "sfp-sfpplus3"
-  pvid      = 1
-  comment   = "defconf"
-  edge      = "auto"
-  hw        = true
-}
-
-resource "routeros_interface_bridge_port" "media_sfp_sfpplus4" {
-  router    = "media"
-  bridge    = "bridge"
-  interface = "sfp-sfpplus4"
-  pvid      = 1
-  comment   = "defconf"
-  edge      = "auto"
-  hw        = true
-}
-
-resource "routeros_ip_address" "media_sfp_sfpplus1" {
-  router    = "media"
-  address   = "10.0.0.6/24"
-  interface = "sfp-sfpplus1"
-}
-
-resource "routeros_interface_list_member" "media_WAN_ether1" {
-  router    = "media"
-  list      = "WAN"
-  interface = "ether1"
-}
-
-resource "routeros_interface_list_member" "media_LAN_sfp_sfpplus1" {
-  router    = "media"
-  list      = "LAN"
-  interface = "sfp-sfpplus1"
-}
-
-resource "routeros_interface_list_member" "media_LAN_sfp_sfpplus2" {
-  router    = "media"
-  list      = "LAN"
-  interface = "sfp-sfpplus2"
-}
-
-resource "routeros_interface_list_member" "media_LAN_sfp_sfpplus3" {
-  router    = "media"
-  list      = "LAN"
-  interface = "sfp-sfpplus3"
-}
-
-resource "routeros_interface_list_member" "media_LAN_sfp_sfpplus4" {
-  router    = "media"
-  list      = "LAN"
-  interface = "sfp-sfpplus4"
 }

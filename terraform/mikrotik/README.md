@@ -13,7 +13,7 @@ Manages the four RouterOS switches as code via [`ebogdum/routeros`](https://regi
 
 ## Scope
 
-Per device: the bridge, its VLAN entries, bridge ports, interface lists + members, and non-dynamic IP addresses — generated from live MikroMCP inventory and meant to be **imported** on first run (see `*.tofu` headers; `tofu import routeros_<type>.<res> '<router>/<.id>'`).
+Per device: the bridge, its VLAN entries, bridge ports, interface lists + members, and non-dynamic IP addresses — generated from live MikroMCP inventory. All resources live in `modules/switch/` (one module call per device in `<router>.tofu`), so per-device files contain only data: names, VLAN ids, tagged/untagged port lists. Import with `sh imports.sh` (module-scoped addresses, live `.id`s).
 
 Not managed (not present on these devices): DHCP, firewall, routes, WireGuard, DNS entries.
 
