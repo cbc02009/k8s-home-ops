@@ -20,7 +20,9 @@ spec:
       isWALArchiver: true
       name: barman-cloud.cloudnative-pg.io
       parameters: &barmanParameters
-        barmanObjectName: garage
+        # B2 is offsite: a full-cluster restore cannot depend on Garage
+        # (which itself lives in the cluster/NAS) — chicken-and-egg.
+        barmanObjectName: b2-forgejo
         serverName: forgejo-postgres
   postgresql:
     parameters:
