@@ -38,8 +38,9 @@ spec:
                 value: postgres.ctec.run
               - name: POSTGRES_DB
                 value: "postgres"
+              # backup.sh takes the cluster-dump (pg_dumpall) branch only on exact "TRUE"; lowercase is inert
               - name: POSTGRES_CLUSTER
-                value: "true"
+                value: "TRUE"
               - name: BACKUP_KEEP_DAYS
                 value: "7"
               - name: BACKUP_KEEP_WEEKS
@@ -48,8 +49,9 @@ spec:
                 value: "6"
               - name: BACKUP_KEEP_MINS
                 value: "7200"
+              # pg_dumpall accepts only a subset of pg_dump flags (-b/-C/-Z are invalid); gzip is applied by the script
               - name: POSTGRES_EXTRA_OPTS
-                value: "-b -C -c -Z6"
+                value: "-c"
 
     persistence:
       backups:
