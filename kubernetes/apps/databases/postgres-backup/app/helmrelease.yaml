@@ -29,7 +29,8 @@ spec:
             image:
               repository: docker.io/prodrigestivill/postgres-backup-local
               tag: 18@sha256:f70742ebe42b2277689b028d1fd15aa80f77cffa01da163cc9f85a6ff1866e7f
-            command: ["/backup.sh"]
+            # env.sh refuses a missing BACKUP_DIR; pre-create it (uid 2000 may write the NFS export)
+            command: ['sh', '-c', 'mkdir -p "$BACKUP_DIR" && exec /backup.sh']
             envFrom:
               - secretRef:
                   name: postgres-backup
@@ -52,6 +53,9 @@ spec:
               # pg_dumpall accepts only a subset of pg_dump flags (-b/-C/-Z are invalid); gzip is applied by the script
               - name: POSTGRES_EXTRA_OPTS
                 value: "-c"
+              # per-cluster subdir, consistent with the other clusters; the root-level dumps were all empty anyway
+              - name: BACKUP_DIR
+                value: /backups/postgres
 
     persistence:
       backups:
