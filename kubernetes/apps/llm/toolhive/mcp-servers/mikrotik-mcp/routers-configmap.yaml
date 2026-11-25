@@ -37,6 +37,8 @@ data:
         port: 80
         tls:
           enabled: false
+          # rejectUnauthorized is schema-required even with enabled: false
+          rejectUnauthorized: false
         credentials:
           source: "env"
           envPrefix: "ROUTER_OFFICE"
@@ -48,6 +50,8 @@ data:
         port: 80
         tls:
           enabled: false
+          # rejectUnauthorized is schema-required even with enabled: false
+          rejectUnauthorized: false
         credentials:
           source: "env"
           envPrefix: "ROUTER_MEDIA"
@@ -59,6 +63,8 @@ data:
         port: 80
         tls:
           enabled: false
+          # rejectUnauthorized is schema-required even with enabled: false
+          rejectUnauthorized: false
         credentials:
           source: "env"
           envPrefix: "ROUTER_CLUSTER"
