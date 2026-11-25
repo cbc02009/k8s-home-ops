@@ -26,6 +26,23 @@ spec:
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
 
+        # Provisioning (postgres backend): the 01-init-db init container
+        # (ghcr.io/home-operations/postgres-init — the same pattern as
+        # memini's / open-webui's / coder's / authentik's) runs as the
+        # forgejo-postgres cluster superuser (INIT_POSTGRES_SUPER_* in the
+        # `forgejo` secret, from the `postgres` 1Password item) and
+        # idempotently creates the `forgejo` role + database from the `forgejo`
+        # item's pg_user/pg_pass before the app container starts; the app
+        # itself then connects as that regular (non-superuser) user. No
+        # /initdb/*.sql script is needed (forgejo creates its own schema).
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.7.0'
+            envFrom:
+              - secretRef:
+                  name: *app
         containers:
           app:
             nameOverride: *app
@@ -36,7 +53,7 @@ spec:
               TZ: ${CONFIG_TZ}
               UMASK: "002"
               # database
-              FORGEJO__database__HOST: forgejo-postgres-rw.databases.svc:5432
+              FORGEJO__database__HOST: forgejo-postgres-rw.databases.svc.cluster.local:5432
               FORGEJO__database__DB_NAME: forgejo
               FORGEJO__database__USER: $(FORGEJO_DATABASE_USER)
               FORGEJO__database__PASSWORD: $(FORGEJO_DATABASE_PASSWORD)
