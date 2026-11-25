@@ -10,7 +10,7 @@ spec:
   secretName: litellm-key-mealie
   secretKey: api-key
   models:
-  - local-free-pool
+  - free-pool
 
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json

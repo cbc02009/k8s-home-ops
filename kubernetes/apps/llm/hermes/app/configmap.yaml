@@ -11,7 +11,7 @@ data:
   config.yaml: |
     model:
       # Complexity router: simple/medium traffic shares the hybrid
-      # local-free-pool (resident 27B as ~43% primary via weight, plus Go's
+      # free-pool (resident 27B as ~43% primary via weight, plus Go's
       # zero-allowance free rungs); only complex/reasoning turns burn the
       # shared Go allowance (reasoning-pool). Sessions re-classify per user
       # turn (no hour-long freeze) but replay the held decision across an
@@ -41,7 +41,7 @@ data:
       # so listing it first only re-introduced the long wait on a down
       # 27B that the pool lanes were built to avoid.
       - provider: litellm
-        model: local-free-pool
+        model: free-pool
       - provider: litellm
         model: zai-pool
       - provider: litellm
@@ -104,7 +104,7 @@ data:
         # Stable local lane: the always-resident 27B — free and always available.
         agentic-local:
           provider: litellm
-          model: local-free-pool
+          model: free-pool
           max_concurrent_children: 1
         implementer:
           provider: litellm
@@ -188,7 +188,7 @@ data:
       # and each lane then burned its whole timeout on a dead primary before
       # the chain kicked in (approval exhausted 60s + all fallbacks on
       # 2026-11-24). workhorse-pool is the shared Go lane (1M window, ~1s
-      # answers). The fallback chains keep local-free-pool: when the
+      # answers). The fallback chains keep free-pool: when the
       # resident 27B is up, its free rung covers outages of the paid lane
       # at no extra cost.
       compression:
@@ -197,7 +197,7 @@ data:
         timeout: 180
         fallback_chain:
           - provider: litellm
-            model: local-free-pool
+            model: free-pool
           - provider: litellm
             model: workhorse-pool
       web_extract:
@@ -206,19 +206,19 @@ data:
         timeout: 120
         fallback_chain:
           - provider: litellm
-            model: local-free-pool
+            model: free-pool
       approval:
         provider: litellm
         model: workhorse-pool
         timeout: 60
         fallback_chain:
           - provider: litellm
-            model: local-free-pool
+            model: free-pool
       session_search:
         provider: litellm
         model: workhorse-pool
         timeout: 120
         fallback_chain:
           - provider: litellm
-            model: local-free-pool
+            model: free-pool
     _config_version: 55

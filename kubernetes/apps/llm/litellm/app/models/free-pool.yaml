@@ -40,11 +40,11 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-27b
+  name: free-pool-27b
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: openai/qwen3.8-27b
@@ -80,11 +80,11 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-beam-free
+  name: free-pool-beam-free
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: opencode_go/beam-free
@@ -115,11 +115,11 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-hy4-flash-free
+  name: free-pool-hy4-flash-free
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: opencode_go/hy4-flash-free
@@ -153,11 +153,11 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-mimo-v2.6-flash
+  name: free-pool-mimo-v2.6-flash
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: opencode_go/mimo-v2.6-flash
@@ -190,11 +190,11 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-longcat-2.0
+  name: free-pool-longcat-2.0
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: opencode_go/longcat-2.0
@@ -224,11 +224,11 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: local-free-pool-hy4
+  name: free-pool-hy4
   labels:
     litellm.home-operations.com/managed-by: flux
 spec:
-  modelName: local-free-pool
+  modelName: free-pool
   proxyRef: litellm
   params:
     model: opencode_go/hy4

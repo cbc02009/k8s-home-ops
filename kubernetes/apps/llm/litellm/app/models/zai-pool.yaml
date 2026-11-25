@@ -11,7 +11,7 @@
 #      in implementation-pool and reasoning-pool (Go weight 2 : Z.AI weight 1)
 #      — so ordinary traffic steadily drains the weekly credits instead of
 #      only the deep fallback ever touching them. (Removed from
-#      local-free-pool on 2026-11-16: that lane rebalanced to favor the
+#      free-pool on 2026-11-16: that lane rebalanced to favor the
 #      resident 27B.)
 #   3. Vision fallback for workhorse-pool's vision traffic: both GLM rungs are
 #      vision-capable.

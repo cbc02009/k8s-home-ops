@@ -21,8 +21,8 @@ failing on `git diff --exit-code`.
 
 Pool identity heuristic: a pool is named `<...>-pool`, so the pool name runs
 up to and including the `pool` token (`workhorse-pool-glm-5.3-flash` -> pool
-`workhorse-pool` / model `glm-5.3-flash`; `local-free-pool-27b` -> pool
-`local-free-pool` / model `27b`). Names with no `pool` token fall back to the
+`workhorse-pool` / model `glm-5.3-flash`; `local-pool-27b` -> pool
+`local-pool` / model `27b`). Names with no `pool` token fall back to the
 two-token rule (POOL_TOKENS), e.g. `qwen3.8-27b-chat` -> pool
 `qwen3.8-27b` / model `chat`.
 
@@ -69,7 +69,7 @@ def pool_key(cr_name):
 
     A pool is named ``...-pool``: the pool name runs up to and including the
     ``pool`` token (so ``workhorse-pool-glm-5.3-flash`` -> pool ``workhorse-pool`` / model
-    ``glm-5.3-flash``, and ``local-free-pool-27b`` -> pool ``local-free-pool``
+    ``glm-5.3-flash``, and ``local-pool-27b`` -> pool ``local-pool``
     / model ``27b``). Names with no ``pool`` token fall back to the two-token
     rule, e.g. ``qwen3.8-27b-chat`` -> pool ``qwen3.8-27b`` / model ``chat``.
     """
