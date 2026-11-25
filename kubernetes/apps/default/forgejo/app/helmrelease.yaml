@@ -1,0 +1,148 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app forgejo
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      forgejo:
+        replicas: 0
+
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+
+        containers:
+          app:
+            nameOverride: *app
+            image:
+              repository: codeberg.org/forgejo/forgejo
+              tag: 17.0.2-rootless
+            env:
+              TZ: ${CONFIG_TZ}
+              UMASK: "002"
+              # database
+              FORGEJO__database__HOST: forgejo-postgres-rw.databases.svc:5432
+              FORGEJO__database__DB_NAME: forgejo
+              FORGEJO__database__USER: $(FORGEJO_DATABASE_USER)
+              FORGEJO__database__PASSWORD: $(FORGEJO_DATABASE_PASSWORD)
+              # server
+              FORGEJO__server__ROOT_URL: https://${HOSTNAME}
+              FORGEJO__server__DOMAIN: ${HOSTNAME}
+              FORGEJO__server__SSH_DOMAIN: ${SSH_HOSTNAME}
+              FORGEJO__server__SSH_PORT: "22"
+              FORGEJO__server__SSH_LISTEN_PORT: "2222"
+              FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
+              # lfs
+              FORGEJO__lfs__PATH: /lfs
+              # misc
+              DISABLE_REGULAR_ORG_CREATION: "true"
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /-/health
+                    port: 3000
+                    scheme: HTTP
+              readiness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /-/health
+                    port: 3000
+                    scheme: HTTP
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 60
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                cpu: "1"
+                memory: 2Gi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: 3000
+      ssh:
+        controller: *app
+        type: LoadBalancer
+        annotations:
+          external-dns.kubernetes.io/hostname: ${SSH_HOSTNAME}
+          lbipam.cilium.io/ips: ${IP}
+        externalTrafficPolicy: Local
+        ports:
+          ssh:
+            port: 22
+            targetPort: 2222
+
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          # explicit backendRef: auto-detection is impossible (app + ssh services)
+          - backendRefs:
+              - identifier: app
+                port: http
+
+    persistence:
+      data:
+        enabled: true
+        existingClaim: *app
+        advancedMounts:
+          forgejo:
+            app:
+              - path: /var/lib/gitea
+      conf:
+        enabled: true
+        size: 1Gi
+        accessMode: ReadWriteOnce
+        storageClass: ceph-block
+        suffix: conf
+        advancedMounts:
+          forgejo:
+            app:
+              - path: /etc/gitea
+      lfs:
+        type: nfs
+        server: shana.ctec.internal
+        path: /mnt/smoltank/apps/forgejo-lfs
+        globalMounts:
+          - path: /lfs

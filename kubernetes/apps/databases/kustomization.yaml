@@ -11,3 +11,4 @@ resources:
   - ./dragonfly/ks.yaml
   - ./pgadmin/ks.yaml
   - ./postgres-backup/ks.yaml
+  - ./postgres-backup-forgejo/ks.yaml
