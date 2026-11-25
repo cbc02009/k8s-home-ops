@@ -1,20 +1,20 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Complexity router: one model name that picks the right lane. SIMPLE and
-# MEDIUM work share free-pool — the always-resident 27B as the ~43%
-# primary (weight 6) mixed with OpenCode Go's zero-allowance free rungs
-# (~57% combined) — so most of that traffic is offloaded from the local GPU.
+# MEDIUM work share free-pool — OpenCode Go's zero-allowance free rungs
+# only (2026-11-25: the resident 27B rung left the pools outside
+# local-pool, so a SwarmUI-held GPU can no longer stall these lanes).
 #
 # COMPLEX and REASONING are now SPLIT into two lanes (they used to share
 # reasoning-pool). Measured over 16d both tiers landed 100% in reasoning-pool,
 # but they are different kinds of work and different volumes: COMPLEX is the
 # higher-volume bulk multi-step/coding tier (261 fresh classifications), so it
-# goes to implementation-pool — local 27B first, free and private, with cheap
-# cloud rungs only as overflow. REASONING is the lower-volume hardest tier
+# goes to implementation-pool — cloud rungs only since 2026-11-25 (the 27B
+# rung left the pools outside local-pool). REASONING is the lower-volume hardest tier
 # (146 fresh classifications: deep reasoning / advanced math / intricate logic)
 # and keeps the cloud-first reasoning-pool where quality matters most. Routing
-# the bulk tier at the local-first lane keeps the shared $240 Go allowance off
-# the work the resident GPU can do for free.
+# the bulk tier at implementation-pool's cheap Flash pair keeps the shared
+# $240 Go allowance's expensive rungs off bulk work.
 #
 # The classifier runs on classifier-pool rather than directly on the 27B:
 # the zero-burn Go free rungs (Hy4 Flash Free / Beam Free) do the per-ask tier
@@ -33,8 +33,8 @@
 # loop neither re-classifies per step nor switches tiers mid-loop. Pool
 # members are picked per request by the proxy's simple-shuffle, so sessions
 # hop within the pool; the Go session id keeps per-conversation affinity
-# (prompt cache) on the cloud rungs. In the tier lanes the 27B member
-# (order 1) is each lane's primary/failover floor; classifier-pool's
+# (prompt cache) on the cloud rungs. No tier lane touches the GPU (all
+# pools are cloud-only since 2026-11-25); classifier-pool's
 # order-2 floor is glm-5.3-flash and complexity_router_default_model is
 # free-pool, so neither the classifier floor nor the unclassified-ask
 # default touches the GPU.

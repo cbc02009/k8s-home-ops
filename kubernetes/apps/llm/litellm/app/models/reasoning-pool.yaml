@@ -53,9 +53,8 @@
 #             long-context rung alongside kimi; fires only in total cooldown.
 #             Standardized SimpleBench (AVG@5, T=.7): 100% on our 10-item
 #             subset vs 46% workhorse-pool, 36% hy4; published frontier ~80-82%.
-#   Order 3 — local 27B: free floor, ahead of the expensive cloud rung.
 #   Order 4 — kimi-k2.7-code: last resort. It burned ~55% of this lane's Go
-#             spend for ~18% of requests; demoting it below the free floor
+#             spend for ~18% of requests; parking it at the bottom rung
 #             stops one rung from dominating the shared allowance.
 # A 429 puts a rung in 30s cooldown and the next eligible level carries the
 # request. Every rung after the order-1 primaries must be cheap enough that a
@@ -103,7 +102,7 @@ spec:
 # NEW primary (order 1): the cheapest of the high-scoring Go rungs — 1.33x
 # burn, ~$0.67/1M effective output, deterministic bench 0.952. 1M context,
 # sub-second TTFT. Carries the bulk of the reasoning lane; weight live-tuned
-# 3->1 on 2026-11-18 (the local 27B floor carries more of the lane now) with
+# 3->1 on 2026-11-18 (spreading the lane across the three order-1 primaries) with
 # mpr 3->2 — adopted here so the repo matches the running proxy.
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
@@ -333,50 +332,11 @@ spec:
       cache_read_input_token_cost: 1e-08
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-# Order 3 — free floor, MOVED UP from order 4: the always-resident 27B now sits
-# below the two cheap second-wave rungs but ABOVE the expensive kimi rung, so
-# cloud exhaustion lands on free local capacity before a $5.33/1M model.
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: reasoning-pool-27b
-  labels:
-    litellm.home-operations.com/managed-by: flux
-spec:
-  modelName: reasoning-pool
-  proxyRef: litellm
-  params:
-    model: openai/qwen3.8-27b
-    apiBase: http://nvidia-router-proxy.llm.svc.cluster.local:8080/v1
-    apiKey: "sk-llmkube-noauth"
-    additional:
-      timeout: 90
-      temperature: 1.0
-      top_p: 0.95
-      top_k: 20
-      min_p: 0
-      order: 3
-      max_parallel_requests: 2
-      reasoning_effort: high
-      allowed_openai_params:
-        - reasoning_effort
-  info:
-    mode: chat
-    maxInputTokens: 131072
-    maxOutputTokens: 40960
-    supportsFunctionCalling: true
-    supportsVision: false
-    extra:
-      input_cost_per_token: 6.2e-08
-      output_cost_per_token: 1.35e-06
-      cache_read_input_token_cost: 0.0
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 # Order 4 — NEW long-context deep rung: 2.00x burn (cap 120) but the only
 # 1M-class model in the pool, with a 95% cached-input discount on this lane's
 # 94%-cached traffic (effective cache ~$0.40/1M). 100% on the standardized
 # SimpleBench subset (10/10 x 5 runs), zero 403s in that window. Fires only
-# when orders 1-3 are all in cooldown, alongside kimi-k2.7-code; the deep
+# when orders 1-2 are all in cooldown, alongside kimi-k2.7-code; the deep
 # position bounds the blast radius of its intermittent PERMISSION_DENIED
 # flakiness (see eval-candidate doc). Last resort, not a primary — its
 # effective output cost ($40/1M list-x-burn) is the steepest on the board.

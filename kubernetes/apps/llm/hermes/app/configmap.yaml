@@ -31,9 +31,9 @@ data:
       # roughly half of what a 1M pin (trigger ~500k) costs per turn.
       context_length: 524288
     fallback_providers:
-      # Last resort if the whole pool chain fails: the local pool first
-      # (the resident 27B rung answers when it is up; the free Go rungs
-      # answer when it is not — no cost while healthy), then the Z.AI
+      # Last resort if the whole pool chain fails: the free pool first
+      # (Go's zero-allowance free rungs — no cost while healthy; the
+      # 27B rung left the pools 2026-11-25), then the Z.AI
       # Coding Plan lane (the mutual fallback for the Go pool — its weekly
       # credits do not roll over), then workhorse-pool as the cloud
       # overflow. The bare qwen3.8-27b rung was dropped as the first hop:
@@ -101,7 +101,9 @@ data:
           provider: litellm
           model: workhorse-pool
           max_concurrent_children: 4
-        # Stable local lane: the always-resident 27B — free and always available.
+        # Free cloud lane: Go's zero-allowance free rungs (2026-11-25: the
+        # 27B rung left this pool; point it at local-pool if a local lane is
+        # wanted again).
         agentic-local:
           provider: litellm
           model: free-pool
@@ -221,4 +223,4 @@ data:
         fallback_chain:
           - provider: litellm
             model: free-pool
-    _config_version: 55
+    _config_version: 56

@@ -13,10 +13,10 @@
 ## Pool: `memini-pool`  (2 rungs)
 
 ```
-1 deepseek-v4.1-flash(w2) → 2 27b-floor(w1)
+1 deepseek-v4.1-flash(w2) → 2 zai-glm-5.3-flash(w1)
 ```
 
 | Rung | Model | Provider/model | MaxIn | MaxOut | Wt | MP | $/1M in | $/1M out | $/1M cache-read |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `deepseek-v4.1-flash` | `opencode_go/deepseek-v4.1-flash` | 1M | 131K | 2 | 2 | 0.300 | 1.20 | 0.0600 |
-| 2 | `27b-floor` | `openai/qwen3.8-27b` | - | 16K | 1 | 2 | 0.0620 | 1.35 | 0.00 |
+| 2 | `zai-glm-5.3-flash` | `zai/glm-5.3-flash` | 1.05M | 131K | 1 | 2 | 0.150 | 0.500 | 0.0300 |
