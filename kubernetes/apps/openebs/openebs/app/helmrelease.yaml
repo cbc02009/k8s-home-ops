@@ -18,6 +18,8 @@ spec:
           enabled: false
         zfs:
           enabled: false
+        rawfile:
+          enabled: true
       replicated:
         mayastor:
           enabled: false
@@ -46,6 +48,13 @@ spec:
       enabled: false
     minio:
       enabled: false
+    rawfile-localpv:
+      node:
+        dataDirPath: /var/mnt/local-rawpv
+        snapshotController:
+          enabled: false
+      rbac:
+        create: true
     openebs-crds:
       csi:
         volumeSnapshots:

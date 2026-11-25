@@ -89,7 +89,13 @@ module "oauth2-forgejo" {
   invalidation_flow  = resource.authentik_flow.provider-invalidation.uuid
   client_id          = module.secret_forgejo.fields["oidc_id"]
   client_secret      = module.secret_forgejo.fields["oidc_secret"]
-  redirect_uris      = ["https://git.cnas.dev/user/oauth2/Authentik/callback"]
+  # Both Forgejo instances sign in through this one Authentik app: the legacy
+  # git.cnas.dev (kept until it is retired) and the new k8s git.ctec.run.
+  # Adding ctec.run is additive — it does not disturb the old instance's flow.
+  redirect_uris      = [
+    "https://git.cnas.dev/user/oauth2/Authentik/callback",
+    "https://git.ctec.run/user/oauth2/Authentik/callback",
+  ]
 }
 
 module "oauth2-grafana" {

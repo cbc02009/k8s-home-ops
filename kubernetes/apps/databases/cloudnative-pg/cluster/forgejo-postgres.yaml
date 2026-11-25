@@ -14,6 +14,7 @@ spec:
             matchLabels:
               app.kubernetes.io/instance: forgejo-postgres
           topologyKey: kubernetes.io/hostname
+  enableSuperuserAccess: true
   plugins:
     - enabled: true
       isWALArchiver: true
@@ -38,27 +39,35 @@ spec:
       memory: 2Gi
   storage:
     size: 20Gi
-    storageClassName: openebs-hostpath
     resizeInUseVolumes: true
+  storageClassName: rawfile-localpv
   superuserSecret:
     name: cloudnative-pg
   managed:
-    roles:
-      - name: cloudnative-pg-superuser
-        ensure: present
-        login: true
-        secret:
-          name: cloudnative-pg
-  services:
-    - name: forgejo-postgres-rw
-      type: LoadBalancer
-      loadBalancerIP: 10.6.0.23
-      annotations:
-        gateway.ctec.run/route-name: forgejo-postgres
-        gateway.ctec.run/dns: forgejo-postgres.ctec.run
-    - name: forgejo-postgres
-      updateStrategy:
-        type: patch
+    services:
+      additional:
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: forgejo-postgres
+              annotations:
+                external-dns.kubernetes.io/hostname: forgejo-postgres.ctec.run
+                lbipam.cilium.io/ips: 10.6.0.23
+                gatus.home-operations.com/enabled: "true"
+                gatus.home-operations.com/endpoint: |
+                  name: forgejo-postgres
+                  conditions:
+                    - "[CONNECTED] == true"
+                  group: Services
+                  ui:
+                    hide-hostname: true
+                    hide-url: true
+                  alerts:
+                    - type: discord
+            spec:
+              type: LoadBalancer
+          updateStrategy: patch
+      disabledDefaultServices: ["r", "ro"]
   bootstrap:
     recovery:
       source: source
