@@ -16,7 +16,7 @@ spec:
         cronjob:
           schedule: "@daily"
           # k8tz already stamps America/New_York on CronJob CREATE; declared here so it is GitOps-owned
-          timeZone: America/New_York
+          timeZone: ${CONFIG_TZ}
           ttlSecondsAfterFinished: 43200
         pod:
           securityContext:
