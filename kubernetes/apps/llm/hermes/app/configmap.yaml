@@ -221,4 +221,4 @@ data:
         fallback_chain:
           - provider: litellm
             model: local-free-pool
-    _config_version: 54
+    _config_version: 55
