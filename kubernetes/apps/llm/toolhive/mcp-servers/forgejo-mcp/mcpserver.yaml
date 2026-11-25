@@ -27,3 +27,5 @@ spec:
       memory: 256Mi
   groupRef:
     name: mcp-tools-dev
+  toolConfigRef:
+    name: forgejo

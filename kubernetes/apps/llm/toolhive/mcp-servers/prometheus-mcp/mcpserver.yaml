@@ -29,3 +29,5 @@ spec:
       memory: 256Mi
   groupRef:
     name: mcp-tools-ops
+  toolConfigRef:
+    name: prometheus

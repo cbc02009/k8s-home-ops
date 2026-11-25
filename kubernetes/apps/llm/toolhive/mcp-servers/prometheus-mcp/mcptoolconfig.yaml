@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcptoolconfig_v1beta1.json
+# Prune the 30 live prometheus-mcp tools down to the 22 read/query surface.
+# Allowed via toolsFilter so agents stop wading through process-control verbs that must not be
+# used against the cluster's monitoring stack. Dropped: clean_tombstones, delete_series, quit, reload, snapshot, targets_metadata, tsdb_stats, wal_replay_status
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPToolConfig
+metadata:
+  name: prometheus
+spec:
+  toolsFilter:
+    - alertmanagers
+    - build_info
+    - config
+    - docs_list
+    - docs_read
+    - docs_search
+    - exemplar_query
+    - flags
+    - healthy
+    - label_names
+    - label_values
+    - list_alerts
+    - list_rules
+    - list_targets
+    - metric_metadata
+    - query
+    - range_query
+    - ready
+    - runbooks_list
+    - runbooks_read
+    - runtime_info
+    - series

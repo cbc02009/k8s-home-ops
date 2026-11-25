@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcptoolconfig_v1beta1.json
+# Prune the 163 live forgejo-mcp tools down to the 65 PR/issue/branch/file/CI/notification
+# surface the bot actually uses on nas-ops. Dropped: org administration (orgs, teams, members, action
+# secrets), packages, wikis, issue/PR/release attachments, stopwatch/time-tracking, issue dependencies,
+# branch protection, repo hooks/topics, and release management.
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPToolConfig
+metadata:
+  name: forgejo
+spec:
+  toolsFilter:
+    - add_issue_labels
+    - cancel_workflow_run
+    - change_files
+    - check_notifications
+    - create_branch
+    - create_file
+    - create_issue
+    - create_issue_comment
+    - create_pull_request
+    - create_pull_review
+    - create_repo
+    - create_repo_label
+    - delete_branch
+    - delete_file
+    - delete_issue_comment
+    - delete_pull_review
+    - delete_repo_label
+    - delete_workflow_run
+    - dismiss_pull_review
+    - dispatch_workflow
+    - edit_issue_comment
+    - edit_repo_label
+    - get_action_artifact
+    - get_action_job_logs
+    - get_commit_statuses
+    - get_file_content
+    - get_forgejo_mcp_server_version
+    - get_issue_by_index
+    - get_issue_comment
+    - get_my_user_info
+    - get_notification_thread
+    - get_pull_request_by_index
+    - get_pull_request_diff
+    - get_pull_review
+    - get_repo
+    - get_repo_label
+    - get_repo_tree
+    - get_workflow_run
+    - issue_state_change
+    - list_action_run_artifacts
+    - list_action_run_jobs
+    - list_branches
+    - list_issue_comments
+    - list_my_repos
+    - list_pull_request_files
+    - list_pull_review_comments
+    - list_pull_reviews
+    - list_repo_commits
+    - list_repo_contents
+    - list_repo_issues
+    - list_repo_labels
+    - list_repo_notifications
+    - list_repo_pull_requests
+    - list_workflow_runs
+    - mark_all_notifications_read
+    - mark_notification_read
+    - mark_repo_notifications_read
+    - merge_pull_request
+    - remove_issue_labels
+    - search_issues
+    - search_repos
+    - submit_pull_review
+    - update_file
+    - update_issue
+    - update_pull_request

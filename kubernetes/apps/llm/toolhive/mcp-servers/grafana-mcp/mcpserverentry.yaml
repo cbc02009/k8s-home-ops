@@ -34,3 +34,5 @@ spec:
       targetEnvName: GRAFANA_SERVICE_ACCOUNT_TOKEN
   groupRef:
     name: mcp-tools-ops
+  toolConfigRef:
+    name: grafana
