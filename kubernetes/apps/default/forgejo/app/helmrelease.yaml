@@ -52,11 +52,10 @@ spec:
             env:
               TZ: ${CONFIG_TZ}
               UMASK: "002"
-              # database
+              # database — FORGEJO__database__USER/PASSWORD come straight from
+              # the `forgejo` secret via envFrom below (no $(...) indirection).
               FORGEJO__database__HOST: forgejo-postgres-rw.databases.svc.cluster.local:5432
               FORGEJO__database__DB_NAME: forgejo
-              FORGEJO__database__USER: $(FORGEJO_DATABASE_USER)
-              FORGEJO__database__PASSWORD: $(FORGEJO_DATABASE_PASSWORD)
               # server
               FORGEJO__server__ROOT_URL: https://${HOSTNAME}
               FORGEJO__server__DOMAIN: ${HOSTNAME}
@@ -159,7 +158,7 @@ spec:
               - path: /etc/gitea
       lfs:
         type: nfs
-        server: shana.ctec.internal
+        server: ${CONFIG_TRUENAS_HOST}
         path: /mnt/smoltank/apps/forgejo-lfs
         globalMounts:
           - path: /lfs
