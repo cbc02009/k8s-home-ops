@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: forgejo-postgres
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: enabled
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: forgejo-postgres
+          topologyKey: kubernetes.io/hostname
+  enableSuperuserAccess: true
+  plugins:
+    - enabled: true
+      isWALArchiver: true
+      name: barman-cloud.cloudnative-pg.io
+      parameters: &barmanParameters
+        # B2 is offsite: a full-cluster restore cannot depend on Garage
+        # (which itself lives in the cluster/NAS) — chicken-and-egg.
+        barmanObjectName: b2-forgejo
+        serverName: forgejo-postgres
+  postgresql:
+    parameters:
+      shared_buffers: 256MB
+      effective_cache_size: 16MB
+      max_connections: "100"
+      max_parallel_workers: "100"
+      max_parallel_workers_per_gather: "1.2"
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  storage:
+    size: 20Gi
+    resizeInUseVolumes: true
+  storageClassName: rawfile-localpv
+  superuserSecret:
+    name: cloudnative-pg
+  managed:
+    services:
+      additional:
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: forgejo-postgres
+              annotations:
+                external-dns.kubernetes.io/hostname: forgejo-postgres.ctec.run
+                lbipam.cilium.io/ips: 10.6.0.23
+                gatus.home-operations.com/enabled: "true"
+                gatus.home-operations.com/endpoint: |
+                  name: forgejo-postgres
+                  conditions:
+                    - "[CONNECTED] == true"
+                  group: Services
+                  ui:
+                    hide-hostname: true
+                    hide-url: true
+                  alerts:
+                    - type: discord
+            spec:
+              type: LoadBalancer
+          updateStrategy: patch
+      disabledDefaultServices: ["r", "ro"]
+  bootstrap:
+    recovery:
+      source: source
+  externalClusters:
+    - name: source
+      plugin:
+        enabled: true
+        isWALArchiver: true
+        name: barman-cloud.cloudnative-pg.io
+        parameters: *barmanParameters
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: forgejo-postgres
+spec:
+  cluster:
+    name: forgejo-postgres
+  immediate: true
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  schedule: "@daily"
+  backupOwnerReference: self
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: forgejo-postgres
+  labels:
+    app.kubernetes.io/name: forgejo-postgres
+    app.kubernetes.io/instance: forgejo-postgres
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forgejo-postgres
+  namespaceSelector:
+    matchNames:
+      - databases
+  podMetricsEndpoints:
+    - path: /metrics
+      port: metrics
+      relabelings:
+        - action: replace
+          sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: kubernetes_namespace
+        - action: replace
+          sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: kubernetes_pod_name

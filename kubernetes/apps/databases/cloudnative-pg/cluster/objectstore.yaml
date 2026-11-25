@@ -42,3 +42,27 @@ spec:
         name: cloudnative-pg
         key: garage-secret-access-key
   retentionPolicy: 7d
+---
+# forgejo's offsite barman target. B2 (not Garage) so a full-cluster
+# restore doesn't depend on storage that lives inside the cluster itself.
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: b2-forgejo
+spec:
+  configuration:
+    data:
+      compression: bzip2
+    wal:
+      compression: bzip2
+      maxParallel: 8
+    destinationPath: s3://cbc02009-forgejo-backup/
+    endpointURL: https://s3.us-east-005.backblazeb2.com
+    s3Credentials:
+      accessKeyId:
+        name: cloudnative-pg
+        key: b2-access-key-id
+      secretAccessKey:
+        name: cloudnative-pg
+        key: b2-secret-access-key
+  retentionPolicy: 30d

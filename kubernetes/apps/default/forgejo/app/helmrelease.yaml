@@ -1,0 +1,178 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app forgejo
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      forgejo:
+        replicas: 1
+
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+
+        # Provisioning (postgres backend): the 01-init-db init container
+        # (ghcr.io/home-operations/postgres-init — the same pattern as
+        # memini's / open-webui's / coder's / authentik's) runs as the
+        # forgejo-postgres cluster superuser (INIT_POSTGRES_SUPER_* in the
+        # `forgejo` secret, from the `postgres` 1Password item) and
+        # idempotently creates the `forgejo` role + database from the `forgejo`
+        # item's pg_user/pg_pass before the app container starts; the app
+        # itself then connects as that regular (non-superuser) user. No
+        # /initdb/*.sql script is needed (forgejo creates its own schema).
+        initContainers:
+          01-init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: '18.7.0'
+            envFrom:
+              - secretRef:
+                  name: *app
+        containers:
+          app:
+            nameOverride: *app
+            image:
+              repository: codeberg.org/forgejo/forgejo
+              tag: 17.0.2-rootless
+            env:
+              TZ: ${CONFIG_TZ}
+              UMASK: "002"
+              # database — FORGEJO__database__USER/PASSWORD come straight from
+              # the `forgejo` secret via envFrom below (no $(...) indirection).
+              FORGEJO__database__HOST: forgejo-postgres-rw.databases.svc.cluster.local:5432
+              FORGEJO__database__NAME: forgejo
+              # server
+              FORGEJO__server__ROOT_URL: https://${HOSTNAME}
+              FORGEJO__server__DOMAIN: ${HOSTNAME}
+              FORGEJO__server__SSH_DOMAIN: ${SSH_HOSTNAME}
+              FORGEJO__server__SSH_PORT: "22"
+              FORGEJO__server__SSH_LISTEN_PORT: "2222"
+              FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
+              # lfs
+              FORGEJO__lfs__PATH: /lfs
+              # OIDC / Authentik SSO: the single [[oauth]] provider. `name`
+              # MUST be "Authentik" — the login callback is
+              # {ROOT_URL}/user/oauth2/<name>/callback, which must equal the
+              # redirect URI authentik registered for this app
+              # (https://git.ctec.run/user/oauth2/Authentik/callback).
+              # key/secret come from the `forgejo` secret via envFrom below
+              # (1Password). autoDiscoverUrl is authentik's OIDC discovery doc
+              # for the `forgejo` application (slug = lowercase app name), the
+              # same shape as open-webui's authentik OIDC wiring.
+              FORGEJO__oauth__name: "Authentik"
+              FORGEJO__oauth__type: "openidConnect"
+              FORGEJO__oauth__autoDiscoverUrl: "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration"
+              FORGEJO__oauth__scopes: "openid profile email"
+              FORGEJO__oauth__iconUrl: "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
+              # misc
+              DISABLE_REGULAR_ORG_CREATION: "true"
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /api/healthz
+                    port: 3000
+                    scheme: HTTP
+              readiness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /api/healthz
+                    port: 3000
+                    scheme: HTTP
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 60
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                cpu: "1"
+                memory: 2Gi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: 3000
+      ssh:
+        controller: *app
+        type: LoadBalancer
+        annotations:
+          external-dns.kubernetes.io/hostname: ${SSH_HOSTNAME}
+          lbipam.cilium.io/ips: ${IP}
+        externalTrafficPolicy: Local
+        ports:
+          ssh:
+            port: 22
+            targetPort: 2222
+
+    route:
+      app:
+        hostnames:
+          - ${HOSTNAME}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          # explicit backendRef: auto-detection is impossible (app + ssh services)
+          - backendRefs:
+              - identifier: app
+                port: http
+
+    persistence:
+      data:
+        enabled: true
+        existingClaim: *app
+        advancedMounts:
+          forgejo:
+            app:
+              - path: /var/lib/gitea
+      conf:
+        enabled: true
+        size: 1Gi
+        accessMode: ReadWriteOnce
+        storageClass: ceph-block
+        suffix: conf
+        advancedMounts:
+          forgejo:
+            app:
+              - path: /etc/gitea
+      lfs:
+        type: nfs
+        server: ${CONFIG_TRUENAS_HOST}
+        path: /mnt/smoltank/apps/forgejo-lfs
+        globalMounts:
+          - path: /lfs
