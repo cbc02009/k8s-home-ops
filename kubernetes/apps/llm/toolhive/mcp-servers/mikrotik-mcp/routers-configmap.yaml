@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.home-operations.com/v1_configmap.json
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mikrotik-routers
+data:
+  routers.yaml: |
+    # MikroMCP router registry. Credentials come from env (ExternalSecret
+    # toolhive-mikrotik); envPrefix here must match the template keys there.
+    #
+    # Devices verified live on 2026-11-25:
+    #   REST https (401): backbone-switch 10.0.0.2  CRS317-1G-16S+
+    #   REST http  (401): office-switch   10.0.0.4  CRS305-1G-4S+
+    #                     media-switch    10.0.0.6  CRS305-1G-4S+
+    #                     cluster-switch  10.0.0.7  CRS310-8G+2S+
+    #   SwOS .b    (401): 1gb-switch      10.0.0.3  CSS326-24G-2S+ (full SwOS,
+    #                     MikroMCP-verified dialect)
+    #                     workbench-switch 10.0.0.5 CSS106-5G-1S (older RB260
+    #                     SwOS generation - reads best-effort, _raw keys;
+    #                     WRITES UNVERIFIED - review compatibility verdict)
+    routers:
+      backbone-switch:
+        host: "10.0.0.2"
+        port: 443
+        tls:
+          enabled: true
+          rejectUnauthorized: false
+        credentials:
+          source: "env"
+          envPrefix: "ROUTER_BACKBONE"
+        rosVersion: "7.16"
+        tags: ["switch", "routeros", "backbone"]
+
+      office-switch:
+        host: "10.0.0.4"
+        port: 80
+        tls:
+          enabled: false
+        credentials:
+          source: "env"
+          envPrefix: "ROUTER_OFFICE"
+        rosVersion: "7.16"
+        tags: ["switch", "routeros", "office"]
+
+      media-switch:
+        host: "10.0.0.6"
+        port: 80
+        tls:
+          enabled: false
+        credentials:
+          source: "env"
+          envPrefix: "ROUTER_MEDIA"
+        rosVersion: "7.16"
+        tags: ["switch", "routeros", "media"]
+
+      cluster-switch:
+        host: "10.0.0.7"
+        port: 80
+        tls:
+          enabled: false
+        credentials:
+          source: "env"
+          envPrefix: "ROUTER_CLUSTER"
+        rosVersion: "7.16"
+        tags: ["switch", "routeros", "cluster"]
+
+      1gb-switch:
+        host: "10.0.0.3"
+        port: 80
+        deviceType: "swos"
+        credentials:
+          source: "env"
+          envPrefix: "SWITCH_1GB"
+        tags: ["switch", "swos", "access"]
+
+      workbench-switch:
+        host: "10.0.0.5"
+        port: 80
+        deviceType: "swos"
+        credentials:
+          source: "env"
+          envPrefix: "SWITCH_WORKBENCH"
+        tags: ["switch", "swos", "workbench"]

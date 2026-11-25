@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: mikrotik
+spec:
+  image: ghcr.io/alikarami/mikromcp:1.18.0
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  args:
+    - --transport
+    - stdio
+  env:
+    - name: MIKROMCP_CONFIG_PATH
+      value: /etc/mikromcp/routers.yaml
+    - name: MIKROMCP_DATA_DIR
+      value: /tmp/mikromcp-data
+    - name: HOME
+      value: /tmp
+    - name: MIKROMCP_LOG_LEVEL
+      value: info
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          volumeMounts:
+            - name: mikromcp-config
+              mountPath: /etc/mikromcp
+              readOnly: true
+      volumes:
+        - name: mikromcp-config
+          configMap:
+            name: mikrotik-routers
+  # Per-device credential env vars; values come from 1Password via the
+  # ExternalSecret (toolhive-mikrotik). Names must match the envPrefix values
+  # in the routers.yaml ConfigMap.
+  secrets:
+    - name: toolhive-mikrotik
+      key: ROUTER_BACKBONE_USER
+      targetEnvName: ROUTER_BACKBONE_USER
+    - name: toolhive-mikrotik
+      key: ROUTER_BACKBONE_PASS
+      targetEnvName: ROUTER_BACKBONE_PASS
+    - name: toolhive-mikrotik
+      key: ROUTER_OFFICE_USER
+      targetEnvName: ROUTER_OFFICE_USER
+    - name: toolhive-mikrotik
+      key: ROUTER_OFFICE_PASS
+      targetEnvName: ROUTER_OFFICE_PASS
+    - name: toolhive-mikrotik
+      key: ROUTER_MEDIA_USER
+      targetEnvName: ROUTER_MEDIA_USER
+    - name: toolhive-mikrotik
+      key: ROUTER_MEDIA_PASS
+      targetEnvName: ROUTER_MEDIA_PASS
+    - name: toolhive-mikrotik
+      key: ROUTER_CLUSTER_USER
+      targetEnvName: ROUTER_CLUSTER_USER
+    - name: toolhive-mikrotik
+      key: ROUTER_CLUSTER_PASS
+      targetEnvName: ROUTER_CLUSTER_PASS
+    - name: toolhive-mikrotik
+      key: SWITCH_1GB_USER
+      targetEnvName: SWITCH_1GB_USER
+    - name: toolhive-mikrotik
+      key: SWITCH_1GB_PASS
+      targetEnvName: SWITCH_1GB_PASS
+    - name: toolhive-mikrotik
+      key: SWITCH_WORKBENCH_USER
+      targetEnvName: SWITCH_WORKBENCH_USER
+    - name: toolhive-mikrotik
+      key: SWITCH_WORKBENCH_PASS
+      targetEnvName: SWITCH_WORKBENCH_PASS
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools-ops
