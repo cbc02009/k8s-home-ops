@@ -25,8 +25,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CONFIG_TZ: America/New_York
-      CONFIG_TRUENAS_HOST: shana.ctec.internal
       HOSTNAME: git.ctec.run
       SSH_HOSTNAME: ssh.git.ctec.run
       IP: 10.6.0.24
