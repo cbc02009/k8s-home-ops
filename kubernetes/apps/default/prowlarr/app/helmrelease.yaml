@@ -22,7 +22,7 @@ spec:
           init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: '18.7.0'
+              tag: '19.0.0'
             envFrom: &envFrom
               - secretRef:
                   name: *app
