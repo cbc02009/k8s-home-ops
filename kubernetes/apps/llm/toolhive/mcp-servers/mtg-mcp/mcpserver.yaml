@@ -16,7 +16,7 @@ spec:
   #
   # To bump: update the release tag and the matching SHA256 below (the digest
   # is published in the release's mtg-mcp_<version>_checksums.txt).
-  image: docker.io/curlimages/curl:8.16.0@sha256:463eaf6072688fe96ac64fa623fe73e1dbe25d8ad6c34404a669ad3ce1f104b6
+  image: docker.io/curlimages/curl:8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
   # stdio transport: the server speaks MCP over stdin/stdout and is bridged to
   # streamable-http by the ToolHive proxy -- the same shape as arr-mcp.
   transport: stdio
