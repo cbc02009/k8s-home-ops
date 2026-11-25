@@ -19,7 +19,7 @@ spec:
   values:
     controllers:
       forgejo:
-        replicas: 0
+        replicas: 1
 
         pod:
           securityContext:
