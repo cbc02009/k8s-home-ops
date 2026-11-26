@@ -12,7 +12,7 @@ spec:
     topologyKey: kubernetes.io/hostname
     podAntiAffinityType: required
   enableSuperuserAccess: true
-  instances: 1
+  instances: 2
   plugins:
     - enabled: true
       isWALArchiver: true
