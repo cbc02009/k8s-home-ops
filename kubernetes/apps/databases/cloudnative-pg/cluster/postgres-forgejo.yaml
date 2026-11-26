@@ -8,13 +8,11 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: enabled
 spec:
   affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: forgejo-postgres
-          topologyKey: kubernetes.io/hostname
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
   enableSuperuserAccess: true
+  instances: 2
   plugins:
     - enabled: true
       isWALArchiver: true
@@ -30,7 +28,6 @@ spec:
       effective_cache_size: 16MB
       max_connections: "100"
       max_parallel_workers: "100"
-      max_parallel_workers_per_gather: "1.2"
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   resources:
@@ -42,7 +39,10 @@ spec:
   storage:
     size: 20Gi
     resizeInUseVolumes: true
-  storageClassName: rawfile-localpv
+    storageClass: rawfile-localpv
+  # Fresh bootstrap (plain initdb): B2 has no backup yet — the forgejo data
+  # arrives via pg_dump/restore from the old TrueNAS instance. The B2 barman
+  # plugin above takes over WAL archiving + ScheduledBackup once running.
   superuserSecret:
     name: cloudnative-pg
   managed:
@@ -70,16 +70,6 @@ spec:
               type: LoadBalancer
           updateStrategy: patch
       disabledDefaultServices: ["r", "ro"]
-  bootstrap:
-    recovery:
-      source: source
-  externalClusters:
-    - name: source
-      plugin:
-        enabled: true
-        isWALArchiver: true
-        name: barman-cloud.cloudnative-pg.io
-        parameters: *barmanParameters
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/postgresql.cnpg.io/scheduledbackup_v1.json
 apiVersion: postgresql.cnpg.io/v1
