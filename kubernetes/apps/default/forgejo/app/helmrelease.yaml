@@ -43,6 +43,75 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
+          # 02-register-oauth: Forgejo stores OAuth/OIDC login sources in the
+          # DATABASE, not app.ini — the FORGEJO__oauth__* env vars below only
+          # shape config-file defaults and never create a usable provider
+          # (forgejo issue #8770). This init container registers the Authentik
+          # source idempotently via the CLI once the app config exists:
+          # add-oauth on first boot, update-oauth when the source already
+          # exists (e.g. rotated client secret in 1Password). Needs the same
+          # image as the app so paths/binary match, and runs AFTER the env→ini
+          # applier has written app.ini (which happens inside the app container
+          # at startup — hence a pod-startup ordering: the init container
+          # simply waits for the config file to exist, then targets the
+          # DATABASE, so it does not race the app's migration).
+          02-register-oauth:
+            image:
+              repository: codeberg.org/forgejo/forgejo
+              tag: 17.0.2-rootless
+            command:
+              - /usr/local/bin/bash
+              - -ec
+              - |
+                CONF=/var/lib/gitea/custom/conf/app.ini
+                until test -s "$CONF"; do sleep 2; done
+                # ensure the schema is current before touching auth sources
+                /usr/local/bin/gitea migrate || true
+                id=$(/usr/local/bin/gitea admin auth list --vertical-bars | awk -F'|' '$2 ~ /^[[:space:]]*Authentik[[:space:]]*$/ {print $1 + 0}')
+                if [ -n "$id" ]; then
+                  /usr/local/bin/gitea admin auth update-oauth --id "$id" \
+                    --name Authentik \
+                    --provider openidConnect \
+                    --key "$OIDC_CLIENT_ID" \
+                    --secret "$OIDC_CLIENT_SECRET" \
+                    --auto-discover-url "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration" \
+                    --scopes "openid profile email" \
+                    --icon-url "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
+                else
+                  /usr/local/bin/gitea admin auth add-oauth \
+                    --name Authentik \
+                    --provider openidConnect \
+                    --key "$OIDC_CLIENT_ID" \
+                    --secret "$OIDC_CLIENT_SECRET" \
+                    --auto-discover-url "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration" \
+                    --scopes "openid profile email" \
+                    --icon-url "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
+                fi
+            securityContext:
+              runAsUser: 2000
+              runAsGroup: 2000
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            env:
+              OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo
+                    key: OIDC_CLIENT_ID
+              OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo
+                    key: OIDC_CLIENT_SECRET
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
         containers:
           app:
             nameOverride: *app
@@ -65,15 +134,14 @@ spec:
               FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
               # lfs
               FORGEJO__lfs__PATH: /lfs
-              # OIDC / Authentik SSO: the single [[oauth]] provider. `name`
-              # MUST be "Authentik" — the login callback is
-              # {ROOT_URL}/user/oauth2/<name>/callback, which must equal the
-              # redirect URI authentik registered for this app
-              # (https://git.ctec.run/user/oauth2/Authentik/callback).
-              # key/secret come from the `forgejo` secret via envFrom below
-              # (1Password). autoDiscoverUrl is authentik's OIDC discovery doc
-              # for the `forgejo` application (slug = lowercase app name), the
-              # same shape as open-webui's authentik OIDC wiring.
+              # OIDC / Authentik SSO: the FORGEJO__oauth__* vars here only set
+              # app.ini defaults — forgejo keeps OAuth login sources in the
+              # DATABASE, not the config file (forgejo issue #8770), so the
+              # 02-register-oauth init container is what actually registers
+              # the provider (see it below). `name` MUST stay "Authentik":
+              # the login callback is {ROOT_URL}/user/oauth2/<name>/callback,
+              # which must equal the redirect URI authentik registered for
+              # this app (https://git.ctec.run/user/oauth2/Authentik/callback).
               FORGEJO__oauth__name: "Authentik"
               FORGEJO__oauth__type: "openidConnect"
               FORGEJO__oauth__autoDiscoverUrl: "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration"
