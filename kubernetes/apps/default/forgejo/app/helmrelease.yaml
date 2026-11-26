@@ -65,20 +65,6 @@ spec:
               FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
               # lfs
               FORGEJO__lfs__PATH: /lfs
-              # OIDC / Authentik SSO: the single [[oauth]] provider. `name`
-              # MUST be "Authentik" — the login callback is
-              # {ROOT_URL}/user/oauth2/<name>/callback, which must equal the
-              # redirect URI authentik registered for this app
-              # (https://git.ctec.run/user/oauth2/Authentik/callback).
-              # key/secret come from the `forgejo` secret via envFrom below
-              # (1Password). autoDiscoverUrl is authentik's OIDC discovery doc
-              # for the `forgejo` application (slug = lowercase app name), the
-              # same shape as open-webui's authentik OIDC wiring.
-              FORGEJO__oauth__name: "Authentik"
-              FORGEJO__oauth__type: "openidConnect"
-              FORGEJO__oauth__autoDiscoverUrl: "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration"
-              FORGEJO__oauth__scopes: "openid profile email"
-              FORGEJO__oauth__iconUrl: "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
               # misc
               DISABLE_REGULAR_ORG_CREATION: "true"
             envFrom:
