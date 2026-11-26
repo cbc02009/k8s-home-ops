@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/infra.contrib.fluxcd.io/terraform_v1alpha2.json
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: authentik
+spec:
+  interval: 1h
+  path: ./terraform/authentik
+  # Plan-only for now: no approvePlan means every plan waits for manual approval
+  # (kubectl -n flux-system patch terraform authentik --type merge -p '{"spec":{"approvePlan":"<plan id>"}}').
+  # Once trusted, uncomment to auto-apply on push:
+  # approvePlan: auto
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  runnerPodTemplate:
+    spec:
+      envFrom:
+        - secretRef:
+            name: terraform-secret
