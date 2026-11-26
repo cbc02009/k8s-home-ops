@@ -1,33 +1,40 @@
 ---
 # One-time Phase B cutover: mirror the old TrueNAS forgejo data directory
-# (/mnt/smoltank/apps/forgejo/data — git repositories, SSH host keys, avatars,
-# attachments) into the new cluster's `forgejo` data PVC (mounted at
-# /var/lib/gitea by the app). Runs rsync in mirror mode so nothing from the
-# fresh install's first boot survives (--delete), then normalizes ownership to
-# 2000:2000 — the UID/GID both the old compose stack (user: 2000:2000) and the
-# new helmrelease (runAsUser/fsGroup 2000) use, so file ownership carries over.
+# (/mnt/smoltank/apps/forgejo/data — the compose stack's /var/lib/gitea bind,
+# containing git/repositories, ssh host keys, and the app-data subdir) into
+# the new cluster's `forgejo` data PVC (mounted at /var/lib/gitea by the app).
 #
-# Lives in the same standalone forgejo-restore Kustomization as the pg_restore
-# Job so the forgejo app can stay suspended / scaled to 0 during the cutover.
+# v2 corrects a path bug in the first run: /src is already /var/lib/gitea (the
+# dataset's `data` dir selected with subPath), so the rsync source must be
+# /src/ — NOT /src/data/, which is only Gitea's app-data subdir (sessions,
+# avatars, attachments) and caused the first run to copy zero git repos.
+#
+# rsync runs in mirror mode (--delete) so nothing from the fresh install's
+# first boot survives, then ownership is normalized to 2000:2000 — the UID/GID
+# both the old compose stack (user: 2000:2000) and the new helmrelease
+# (runAsUser/fsGroup 2000) use.
+#
+# Lives in the standalone forgejo-restore Kustomization so the forgejo app can
+# stay scaled to 0 during the cutover.
 #
 # Run order:
-#   1. forgejo stays suspended / scaled to 0 (same window as the pg_restore)
-#   2. merge the PR carrying this manifest; Flux applies the Job
-#   3. inspect logs: rsync stats show the file count + deletes (fresh-install
-#      residue); ownership lines must read 2000:2000
-#   4. only then scale forgejo back up — DB rows pointing at missing git dirs
-#      would render every repo broken
+#   1. forgejo scaled to 0 (MUST — RWO PVC is shared with the app)
+#   2. merge the PR carrying this Job; Flux prunes the v1 Job and applies v2
+#   3. inspect logs: source listing must show git/ + ssh/; verify must show all
+#      6 repo dirs and the ssh_host_ed25519_key
+#   4. only then scale forgejo back up
 #   5. post-cutover cleanup PR: delete this whole forgejo-restore app dir
 #
-# Idempotence: the run-once guard skips a re-run once git/repositories is
-# non-empty, so Flux re-creating the Job after ttlSecondsAfterFinished
-# eviction (or after any later Job-spec change, which requires deleting the
-# Job object first — spec.template is immutable) can never --delete against a
-# live forgejo.
+# Safety:
+#   - preflight FAILS the Job if /src/git/repositories is empty, rather than
+#     silently mirroring an empty tree (the v1 failure mode);
+#   - a completion marker written only after a successful mirror makes any
+#     re-run (after ttlSecondsAfterFinished eviction) skip, so --delete can
+#     never touch a live forgejo.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: forgejo-data-rsync
+  name: forgejo-data-rsync-v2
   namespace: default
 spec:
   backoffLimit: 1
@@ -46,31 +53,38 @@ spec:
           args:
             - |
               set -eu
-              echo "== source tree =="
-              du -sh /src/data || true
-              ls -la /src/data || true
-              # Run-once guard: the old stack's git repositories landing in
-              # /data/git/repositories is a real "already synced" marker — the
-              # fresh install's first boot left that directory empty. A re-run
-              # after the marker exists is skipped so --delete can never touch
-              # a live forgejo.
-              if [ -n "$(find /data/git/repositories -mindepth 1 -maxdepth 1 2>/dev/null | head -1)" ]; then
-                echo "== data already synced (git/repositories non-empty) — skipping =="
+              # Completion marker: only written after a successful mirror.
+              # Skips re-runs after ttl eviction so --delete can never fire
+              # against a live forgejo.
+              if [ -f /data/.forgejo-cutover-v2-complete ]; then
+                echo "== data already synced (completion marker present) — skipping =="
                 exit 0
               fi
-              echo "== rsync =="
+              echo "== source root (/src = old /var/lib/gitea) =="
+              ls -la /src
+              # Preflight: the first run mirrored /src/data/ (only app-data)
+              # and left every repo broken. Fail loudly if git/ is absent.
+              src_repos="$(find /src/git/repositories -mindepth 1 -maxdepth 1 2>/dev/null | wc -l)"
+              echo "source repositories=$src_repos"
+              if [ "$src_repos" -lt 1 ]; then
+                echo "ERROR: no repositories at /src/git/repositories — refusing to rsync" >&2
+                exit 1
+              fi
+              echo "== rsync full /var/lib/gitea tree =="
               apk add --no-cache rsync >/dev/null
-              rsync -a --delete --info=stats1 /src/data/ /data/
-              # Normalize ownership to the app's UID/GID (no-op when the source
-              # is already 2000:2000; catches stray root-owned files from the
-              # NAS side).
+              rsync -a --delete --info=stats1 /src/ /data/
+              # Normalize ownership to the app's UID/GID (no-op when the
+              # source is already 2000:2000; catches stray root-owned files).
               chown -R 2000:2000 /data
+              touch /data/.forgejo-cutover-v2-complete
+              chown 2000:2000 /data/.forgejo-cutover-v2-complete
               echo "== verify =="
               du -sh /data
               stat -c '%u:%g %n' /data /data/git /data/ssh 2>/dev/null || true
-              ls -la /data/ssh 2>/dev/null || true
+              echo "ssh host key:"
+              ls -la /data/ssh/ssh_host_ed25519_key 2>/dev/null || echo "MISSING ssh_host_ed25519_key"
               echo "== repositories =="
-              find /data/git/repositories -mindepth 1 -maxdepth 1 -type d 2>/dev/null | head -20 || true
+              find /data/git/repositories -mindepth 1 -maxdepth 1 -type d 2>/dev/null | head -20
               echo "== done =="
           volumeMounts:
             - name: source
@@ -83,8 +97,7 @@ spec:
               mountPath: /data
       volumes:
         # NFS export is the parent dataset /mnt/smoltank/apps/forgejo (holds
-        # data/, conf/, database/); subPath: above selects the old app's
-        # data dir as the rsync source.
+        # data/, conf/, database/); subPath: above selects /var/lib/gitea.
         - name: source
           nfs:
             server: shana.ctec.internal
