@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: cloudflare
+spec:
+  image: ghcr.io/cititec-pty-ltd/cloudflare-mcp:v1.1.0
+  transport: stdio
+  proxyMode: streamable-http
+  proxyPort: 8080
+  env:
+    - name: LOG_LEVEL
+      value: info
+  secrets:
+    - name: toolhive-cloudflare
+      key: token
+      targetEnvName: CLOUDFLARE_API_TOKEN
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  groupRef:
+    name: mcp-tools-ops
