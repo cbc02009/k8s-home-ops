@@ -65,8 +65,21 @@ spec:
               FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
               # lfs
               FORGEJO__lfs__PATH: /lfs
-              # misc
-              DISABLE_REGULAR_ORG_CREATION: "true"
+              # parity with the old docker/truenas/03-forgejo compose stack —
+              # these were set there and must match when the DB is restored in
+              # the Phase B cutover (repo units, issue indexer, org creation).
+              # (The old stack's REPO_INDXER_ENABLED had a typo in the key name,
+              # so it never took effect — actual old behavior = repo indexer
+              # off = forgejo default; not carried.)
+              FORGEJO__admin__DISABLE_REGULAR_ORG_CREATION: "true"
+              FORGEJO__indexer__ISSUE_INDEXER_TYPE: bleve
+              FORGEJO__repository__DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
+              FORGEJO__repository__DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+              # SECURITY__SECRET_KEY / SECURITY__INTERNAL_TOKEN come from the
+              # forgejo secret via envFrom below (1Password) — the restored DB
+              # is encrypted with the OLD stack's SECRET_KEY (2FA secrets,
+              # PATs), so the same values must be present at startup or the
+              # restored rows cannot be decrypted.
             envFrom:
               - secretRef:
                   name: *app
