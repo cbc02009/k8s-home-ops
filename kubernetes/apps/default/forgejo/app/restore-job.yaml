@@ -40,12 +40,15 @@ spec:
                   name: forgejo
                   key: FORGEJO__database__USER
             - name: PGUSER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo
+                  key: INIT_POSTGRES_SUPER_USER
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cloudnative-pg
-                  key: password
+                  name: forgejo
+                  key: INIT_POSTGRES_SUPER_PASS
           # Superuser credentials come from the CNPG cluster secret (cloudnative-pg)
           # mounted via env below; the forgejo role is not a superuser.
           command: ["/bin/sh", "-c"]
@@ -61,14 +64,18 @@ spec:
                 exit 0
               fi
               echo "== restore dump =="
+              set +e
               pg_restore --clean --if-exists \
                 -d "$PGDATABASE" /dump/forgejo-db.dump
+              rc=$?
+              set -e
               # Reassign all restored objects to the app's non-superuser role
               # so forgejo (which connects as FORGEJO__database__USER) can
               # actually read/write its own schema after cutover. Run as the
-              # CNPG superuser.
-              # The app role name is injected via APP_ROLE env var (from the forgejo secret).
-              psql -d "$PGDATABASE" -c "REASSIGN OWNED BY postgres TO \"$APP_ROLE\";"
+              # CNPG superuser. Run before exit $rc so a role-name mismatch
+              # can't leave postgres-owned objects behind a green guard pass.
+              psql -d "$PGDATABASE" -c "REASSIGN OWNED BY \"$PGUSER\" TO \"$APP_ROLE\";" || true
+              exit $rc
               echo "== verify tables =="
               psql -c "SELECT count(*) AS n FROM information_schema.tables WHERE table_schema='public';"
               echo "== done =="
