@@ -98,12 +98,17 @@ jobs:
               echo EOF
             } >> "$GITHUB_OUTPUT"
 
+            # Post from a file: inlining the diff into the action input makes
+            # the runner spawn node with a >128KB env var (E2BIG) on PRs that
+            # add whole new documents.
             {
               echo "## Flate ${{ matrix.resources }} diff"
               echo '```diff'
               cat diff.txt
               echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+            } > comment.md
+
+            cat comment.md >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Generate Token
@@ -120,10 +125,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resources }}
-          message: |
-            ```diff
-            ${{ steps.diff.outputs.diff }}
-            ```
+          path: comment.md
 
   flate-success:
     needs:
