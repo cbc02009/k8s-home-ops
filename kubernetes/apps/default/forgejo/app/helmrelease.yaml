@@ -65,22 +65,21 @@ spec:
               FORGEJO__server__SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
               # lfs
               FORGEJO__lfs__PATH: /lfs
-              # OIDC / Authentik SSO: the single [[oauth]] provider. `name`
-              # MUST be "Authentik" — the login callback is
-              # {ROOT_URL}/user/oauth2/<name>/callback, which must equal the
-              # redirect URI authentik registered for this app
-              # (https://git.ctec.run/user/oauth2/Authentik/callback).
-              # key/secret come from the `forgejo` secret via envFrom below
-              # (1Password). autoDiscoverUrl is authentik's OIDC discovery doc
-              # for the `forgejo` application (slug = lowercase app name), the
-              # same shape as open-webui's authentik OIDC wiring.
-              FORGEJO__oauth__name: "Authentik"
-              FORGEJO__oauth__type: "openidConnect"
-              FORGEJO__oauth__autoDiscoverUrl: "https://auth.ctec.run/application/o/forgejo/.well-known/openid-configuration"
-              FORGEJO__oauth__scopes: "openid profile email"
-              FORGEJO__oauth__iconUrl: "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/assets/favicon.svg"
-              # misc
-              DISABLE_REGULAR_ORG_CREATION: "true"
+              # parity with the old docker/truenas/03-forgejo compose stack —
+              # these were set there and must match when the DB is restored in
+              # the Phase B cutover (repo units, issue indexer, org creation).
+              # (The old stack's REPO_INDXER_ENABLED had a typo in the key name,
+              # so it never took effect — actual old behavior = repo indexer
+              # off = forgejo default; not carried.)
+              FORGEJO__admin__DISABLE_REGULAR_ORG_CREATION: "true"
+              FORGEJO__indexer__ISSUE_INDEXER_TYPE: bleve
+              FORGEJO__repository__DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
+              FORGEJO__repository__DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+              # SECURITY__SECRET_KEY / SECURITY__INTERNAL_TOKEN come from the
+              # forgejo secret via envFrom below (1Password) — the restored DB
+              # is encrypted with the OLD stack's SECRET_KEY (2FA secrets,
+              # PATs), so the same values must be present at startup or the
+              # restored rows cannot be decrypted.
             envFrom:
               - secretRef:
                   name: *app
