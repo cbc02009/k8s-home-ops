@@ -40,6 +40,12 @@ spec:
                 value: /space
               - name: PORT
                 value: "3000"
+              # node:22-alpine ships no tzdata package; node resolves TZ from
+              # its bundled ICU data, so this works without a zoneinfo mount.
+              # Keeps the server clock (logs, mtimes, generated timestamps) on
+              # the house timezone instead of UTC.
+              - name: TZ
+                value: ${CONFIG_TZ}
               # Only these two Host headers are served: the ingress hostname
               # for browsers and the in-cluster service hostname for agents
               # hitting the /mcp endpoint directly.
