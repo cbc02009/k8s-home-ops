@@ -1,6 +1,6 @@
 terraform {
-    backend "pg" {
-    conn_str = "postgres://10.6.0.20/terraform"
+  backend "pg" {
+    conn_str    = "postgres://10.6.0.20/terraform"
     schema_name = "cloudflare"
   }
 
