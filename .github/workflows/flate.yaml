@@ -91,39 +91,42 @@ jobs:
       - name: Generate Diff
         id: diff
         run: |
+          # Comment and summary are written from a file and truncated: PRs that
+          # install a new chart (CRDs included) diff over 1MB, past the 128KB
+          # single-arg limit (E2BIG), the 1024k step-summary cap and the 65,536
+          # character comment limit. The full diff stays in the job log.
           if [[ -s diff.txt ]]; then
-            {
-              echo 'diff<<EOF'
-              cat diff.txt
-              echo EOF
-            } >> "$GITHUB_OUTPUT"
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
 
+            size=$(wc -c < diff.txt)
             {
               echo "## Flate ${{ matrix.resources }} diff"
               echo '```diff'
-              cat diff.txt
+              head -c 60000 diff.txt
               echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+              if (( size > 60000 )); then
+                echo "> Diff truncated at 60KB ($size bytes total). Full output in the 'Run flate diff' step log."
+              fi
+            } > comment.md
+
+            cat comment.md >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Generate Token
         uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
-        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.diff.outputs.diff != '' }}
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.diff.outputs.has_diff == 'true' }}
         id: app-token
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
 
-      - if: ${{ steps.diff.outputs.diff != '' }}
+      - if: ${{ steps.diff.outputs.has_diff == 'true' }}
         name: Add Comment
         uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resources }}
-          message: |
-            ```diff
-            ${{ steps.diff.outputs.diff }}
-            ```
+          path: comment.md
 
   flate-success:
     needs:
