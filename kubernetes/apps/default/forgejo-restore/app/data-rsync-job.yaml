@@ -1,0 +1,94 @@
+---
+# One-time Phase B cutover: mirror the old TrueNAS forgejo data directory
+# (/mnt/smoltank/apps/forgejo/data — git repositories, SSH host keys, avatars,
+# attachments) into the new cluster's `forgejo` data PVC (mounted at
+# /var/lib/gitea by the app). Runs rsync in mirror mode so nothing from the
+# fresh install's first boot survives (--delete), then normalizes ownership to
+# 2000:2000 — the UID/GID both the old compose stack (user: 2000:2000) and the
+# new helmrelease (runAsUser/fsGroup 2000) use, so file ownership carries over.
+#
+# Lives in the same standalone forgejo-restore Kustomization as the pg_restore
+# Job so the forgejo app can stay suspended / scaled to 0 during the cutover.
+#
+# Run order:
+#   1. forgejo stays suspended / scaled to 0 (same window as the pg_restore)
+#   2. merge the PR carrying this manifest; Flux applies the Job
+#   3. inspect logs: rsync stats show the file count + deletes (fresh-install
+#      residue); ownership lines must read 2000:2000
+#   4. only then scale forgejo back up — DB rows pointing at missing git dirs
+#      would render every repo broken
+#   5. post-cutover cleanup PR: delete this whole forgejo-restore app dir
+#
+# Idempotence: the run-once guard skips a re-run once git/repositories is
+# non-empty, so Flux re-creating the Job after ttlSecondsAfterFinished
+# eviction (or after any later Job-spec change, which requires deleting the
+# Job object first — spec.template is immutable) can never --delete against a
+# live forgejo.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: forgejo-data-rsync
+  namespace: default
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 2000
+      containers:
+        - name: rsync
+          image: alpine:3.22
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              echo "== source tree =="
+              du -sh /src/data || true
+              ls -la /src/data || true
+              # Run-once guard: the old stack's git repositories landing in
+              # /data/git/repositories is a real "already synced" marker — the
+              # fresh install's first boot left that directory empty. A re-run
+              # after the marker exists is skipped so --delete can never touch
+              # a live forgejo.
+              if [ -n "$(find /data/git/repositories -mindepth 1 -maxdepth 1 2>/dev/null | head -1)" ]; then
+                echo "== data already synced (git/repositories non-empty) — skipping =="
+                exit 0
+              fi
+              echo "== rsync =="
+              apk add --no-cache rsync >/dev/null
+              rsync -a --delete --info=stats1 /src/data/ /data/
+              # Normalize ownership to the app's UID/GID (no-op when the source
+              # is already 2000:2000; catches stray root-owned files from the
+              # NAS side).
+              chown -R 2000:2000 /data
+              echo "== verify =="
+              du -sh /data
+              stat -c '%u:%g %n' /data /data/git /data/ssh 2>/dev/null || true
+              ls -la /data/ssh 2>/dev/null || true
+              echo "== repositories =="
+              find /data/git/repositories -mindepth 1 -maxdepth 1 -type d 2>/dev/null | head -20 || true
+              echo "== done =="
+          volumeMounts:
+            - name: source
+              mountPath: /src
+              readOnly: true
+              # The exported share is the whole forgejo dataset; the old
+              # compose stack's /var/lib/gitea bind was its `data` subdir.
+              subPath: data
+            - name: data
+              mountPath: /data
+      volumes:
+        # NFS export is the parent dataset /mnt/smoltank/apps/forgejo (holds
+        # data/, conf/, database/); subPath: above selects the old app's
+        # data dir as the rsync source.
+        - name: source
+          nfs:
+            server: shana.ctec.internal
+            path: /mnt/smoltank/apps/forgejo
+        - name: data
+          persistentVolumeClaim:
+            claimName: forgejo
