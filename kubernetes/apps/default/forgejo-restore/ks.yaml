@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app forgejo-restore
+  namespace: &namespace default
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  # Depends on the forgejo app so the `forgejo` secret (PG superuser + app role
+  # creds) is synced before the restore Job starts. Suspending or scaling down
+  # the forgejo Kustomization during the Phase B cutover does NOT affect this
+  # Kustomization — the restore Job stays independently syncable, which is the
+  # whole reason it lives in its own app directory.
+  dependsOn:
+    - name: forgejo
+      namespace: *namespace
+  interval: 30m
+  path: ./kubernetes/apps/default/forgejo-restore/app
+  postBuild:
+    substitute:
+      APP: *app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  wait: false

@@ -11,6 +11,7 @@ resources:
   - ./animarr/ks.yaml
   - ./atuin/ks.yaml
   - ./forgejo/ks.yaml
+  - ./forgejo-restore/ks.yaml
   - ./forgejo-runner/ks.yaml
   - ./grimmory/ks.yaml
   - ./immich/ks.yaml
