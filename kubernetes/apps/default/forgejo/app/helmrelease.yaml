@@ -75,6 +75,14 @@ spec:
               FORGEJO__indexer__ISSUE_INDEXER_TYPE: bleve
               FORGEJO__repository__DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
               FORGEJO__repository__DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+              # mailer — the old compose stack's restored custom/conf/app.ini
+              # (Phase B data-PVC rsync) carries SMTP_PORT=456, a typo for 465
+              # (smtps). Env beats app.ini, so pin the correct port + protocol
+              # here until the old app.ini is retired. SMTP_ADDR / USER /
+              # PASSWD still come from that app.ini — if sending fails, fix
+              # those in the admin UI (they are not in git).
+              FORGEJO__mailer__SMTP_PORT: "465"
+              FORGEJO__mailer__PROTOCOL: smtps
               # SECURITY__SECRET_KEY / SECURITY__INTERNAL_TOKEN come from the
               # forgejo secret via envFrom below (1Password) — the restored DB
               # is encrypted with the OLD stack's SECRET_KEY (2FA secrets,
