@@ -34,6 +34,11 @@ spec:
               value: "5432"
             - name: PGDATABASE
               value: forgejo
+            - name: APP_ROLE
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo
+                  key: FORGEJO__database__USER
             - name: PGUSER
               value: postgres
             - name: PGPASSWORD
@@ -47,9 +52,23 @@ spec:
           args:
             - |
               set -eu
+              # Run-once guard: if the restored schema already holds data (version
+              # table non-empty), the restore has already completed — do not
+              # re-run --clean against a live forgejo. Flux can re-create this
+              # Job after ttlSecondsAfterFinished evicts it; this keeps it a no-op.
+              if psql -At -c "SELECT count(*) FROM public.version;" 2>/dev/null | grep -qE '^[1-9][0-9]*$'; then
+                echo "== restore already applied (public.version non-empty) — skipping =="
+                exit 0
+              fi
               echo "== restore dump =="
-              pg_restore --clean --if-exists --no-owner --no-privileges \
+              pg_restore --clean --if-exists \
                 -d "$PGDATABASE" /dump/forgejo-db.dump
+              # Reassign all restored objects to the app's non-superuser role
+              # so forgejo (which connects as FORGEJO__database__USER) can
+              # actually read/write its own schema after cutover. Run as the
+              # CNPG superuser.
+              # The app role name is injected via APP_ROLE env var (from the forgejo secret).
+              psql -d "$PGDATABASE" -c "REASSIGN OWNED BY postgres TO \"$APP_ROLE\";"
               echo "== verify tables =="
               psql -c "SELECT count(*) AS n FROM information_schema.tables WHERE table_schema='public';"
               echo "== done =="
