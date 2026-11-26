@@ -4,11 +4,17 @@
 # existing LFS NFS share (smoltank/apps/forgejo-lfs), so the Job just mounts
 # that PVC and runs pg_restore with --clean --if-exists.
 #
+# This Job lives in its own forgejo-restore Kustomization (ks.yaml next to
+# this dir) so the forgejo app can be suspended / scaled to 0 for the cutover
+# without blocking this Job's sync from git.
+#
 # Run order:
-#   1. scale the new forgejo deployment to 0 (done below via forgejo helmrelease)
-#   2. apply this Job
+#   1. suspend the forgejo Kustomization (flux suspend ks forgejo) and scale
+#      the deployment to 0 (kubectl scale deploy/forgejo --replicas=0)
+#   2. merge the PR carrying this manifest; Flux applies the Job
 #   3. inspect logs: pg_restore should report CREATE/ALTER, no FATAL/ERROR
-#   4. scale forgejo back up, verify login + repos + 2FA decrypt
+#   4. scale forgejo back up / unsuspend, verify login + repos + 2FA decrypt
+#   5. post-cutover cleanup PR: delete this forgejo-restore app dir
 apiVersion: batch/v1
 kind: Job
 metadata:
