@@ -1,0 +1,64 @@
+---
+# One-time Phase B cutover: restore the pg_dump taken from the old TrueNAS
+# forgejo stack into the forgejo-postgres CNPG cluster. The dump lives on the
+# existing LFS NFS share (smoltank/apps/forgejo-lfs), so the Job just mounts
+# that PVC and runs pg_restore with --clean --if-exists.
+#
+# Run order:
+#   1. scale the new forgejo deployment to 0 (done below via forgejo helmrelease)
+#   2. apply this Job
+#   3. inspect logs: pg_restore should report CREATE/ALTER, no FATAL/ERROR
+#   4. scale forgejo back up, verify login + repos + 2FA decrypt
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: forgejo-pg-restore
+  namespace: default
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 2000
+      containers:
+        - name: pg-restore
+          image: postgres:17.12
+          env:
+            - name: PGHOST
+              value: forgejo-postgres-rw.databases.svc.cluster.local
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: forgejo
+            - name: PGUSER
+              value: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudnative-pg
+                  key: password
+          # Superuser credentials come from the CNPG cluster secret (cloudnative-pg)
+          # mounted via env below; the forgejo role is not a superuser.
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              echo "== restore dump =="
+              pg_restore --clean --if-exists --no-owner --no-privileges \
+                -d "$PGDATABASE" /dump/forgejo-db.dump
+              echo "== verify tables =="
+              psql -c "SELECT count(*) AS n FROM information_schema.tables WHERE table_schema='public';"
+              echo "== done =="
+          volumeMounts:
+            - name: dump
+              mountPath: /dump
+              readOnly: true
+      volumes:
+        - name: dump
+          nfs:
+            server: shana.ctec.internal
+            path: /mnt/smoltank/apps/forgejo-lfs
