@@ -76,16 +76,19 @@ spec:
             - name: source
               mountPath: /src
               readOnly: true
+              # The exported share is the whole forgejo dataset; the old
+              # compose stack's /var/lib/gitea bind was its `data` subdir.
+              subPath: data
             - name: data
               mountPath: /data
       volumes:
-        # The old compose stack binds /mnt/smoltank/apps/forgejo/data as
-        # /var/lib/gitea — mount the same directory read-only as the rsync
-        # source.
+        # NFS export is the parent dataset /mnt/smoltank/apps/forgejo (holds
+        # data/, conf/, database/); subPath: above selects the old app's
+        # data dir as the rsync source.
         - name: source
           nfs:
             server: shana.ctec.internal
-            path: /mnt/smoltank/apps/forgejo/data
+            path: /mnt/smoltank/apps/forgejo
         - name: data
           persistentVolumeClaim:
             claimName: forgejo
