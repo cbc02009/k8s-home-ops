@@ -55,8 +55,11 @@ spec:
                 secretKeyRef:
                   name: forgejo
                   key: INIT_POSTGRES_SUPER_PASS
-          # Superuser credentials come from the CNPG cluster secret (cloudnative-pg)
-          # mounted via env below; the forgejo role is not a superuser.
+          # Superuser credentials come from the `forgejo` secret's
+          # INIT_POSTGRES_SUPER_USER / INIT_POSTGRES_SUPER_PASS keys (the
+          # postgres 1P item projected into `default`); the app role comes from
+          # the same secret's FORGEJO__database__USER. The CNPG `cloudnative-pg`
+          # superuser secret only exists in `databases` and is unreachable here.
           command: ["/bin/sh", "-c"]
           args:
             - |
@@ -81,10 +84,10 @@ spec:
               # CNPG superuser. Run before exit $rc so a role-name mismatch
               # can't leave postgres-owned objects behind a green guard pass.
               psql -d "$PGDATABASE" -c "REASSIGN OWNED BY \"$PGUSER\" TO \"$APP_ROLE\";" || true
-              exit $rc
               echo "== verify tables =="
               psql -c "SELECT count(*) AS n FROM information_schema.tables WHERE table_schema='public';"
               echo "== done =="
+              exit $rc
           volumeMounts:
             - name: dump
               mountPath: /dump

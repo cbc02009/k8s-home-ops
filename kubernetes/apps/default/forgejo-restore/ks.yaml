@@ -9,14 +9,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # Depends on the forgejo app so the `forgejo` secret (PG superuser + app role
-  # creds) is synced before the restore Job starts. Suspending or scaling down
-  # the forgejo Kustomization during the Phase B cutover does NOT affect this
-  # Kustomization — the restore Job stays independently syncable, which is the
-  # whole reason it lives in its own app directory.
-  dependsOn:
-    - name: forgejo
-      namespace: *namespace
+  # No dependsOn: forgejo here. The forgejo secret (PG superuser + app role
+  # creds) is synced by its own ExternalSecret, which Flux reconciles
+  # independently of the forgejo Kustomization. Depending on forgejo would
+  # block this Job during the cutover — precisely when forgejo is suspended /
+  # scaled to 0 and the restore must still run. The Job's run-once guard makes
+  # ordering with the forgejo app harmless.
   interval: 30m
   path: ./kubernetes/apps/default/forgejo-restore/app
   postBuild:
