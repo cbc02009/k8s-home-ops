@@ -64,12 +64,18 @@ spec:
           args:
             - |
               set -eu
-              # Run-once guard: if the restored schema already holds data (version
-              # table non-empty), the restore has already completed — do not
-              # re-run --clean against a live forgejo. Flux can re-create this
-              # Job after ttlSecondsAfterFinished evicts it; this keeps it a no-op.
-              if psql -At -c "SELECT count(*) FROM public.version;" 2>/dev/null | grep -qE '^[1-9][0-9]*$'; then
-                echo "== restore already applied (public.version non-empty) — skipping =="
+              echo "== pre-restore state =="
+              psql -At -c "SELECT 'tables', count(*) FROM information_schema.tables WHERE table_schema='public';" || true
+              psql -At -c "SELECT 'repositories', count(*) FROM public.repository;" || true
+              psql -At -c "SELECT 'users', count(*) FROM public.\"user\";" || true
+              # Run-once guard: a successful restore leaves the old stack's
+              # repositories behind. A freshly bootstrapped forgejo DB carries
+              # the full self-migrated schema but ZERO repositories, so
+              # public.repository is a real restored marker — unlike
+              # public.version, which is non-empty on any bootstrapped forgejo
+              # and caused a false-positive skip in the first run.
+              if [ "$(psql -At -c 'SELECT count(*) FROM public.repository;' 2>/dev/null || echo 0)" -ge 1 ]; then
+                echo "== restore already applied (public.repository non-empty) — skipping =="
                 exit 0
               fi
               echo "== restore dump =="
