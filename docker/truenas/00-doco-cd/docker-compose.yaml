@@ -3,7 +3,7 @@
 services:
   doco-cd:
     # Pinned by tag and digest so an update is always a reviewed commit, never a moving tag.
-    image: ghcr.io/kimdre/doco-cd:0.137.0@sha256:0846e2d0af76aa1d73ff517ff9a570f3ced9350cf5be052f013a7fe084a517bd
+    image: ghcr.io/kimdre/doco-cd:0.138.0@sha256:9d8d10b795f7ef4372088475fd16277d7b79a0e85434fbfc34270e26fb90ddea
     restart: unless-stopped
     # Own address and MAC on the NAS Docker network (6584 webhook + health, behind https://doco-cd.f9.casa;
     # 9130 Prometheus metrics). Two containers cannot share a fixed address, which rules out the
