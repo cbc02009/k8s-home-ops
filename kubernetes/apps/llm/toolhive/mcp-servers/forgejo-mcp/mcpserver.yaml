@@ -13,7 +13,7 @@ spec:
     - --transport
     - stdio
     - --url
-    - https://git.cnas.dev
+    - https://git.ctec.run
   secrets:
     - name: toolhive-forgejo
       key: token
