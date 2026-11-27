@@ -12,6 +12,22 @@ spec:
   dependsOn:
     - name: kube-prometheus-stack
   values:
+    externalSecrets:
+      alert-triage:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: alert-triage
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              DISCORD_WEBHOOK_URL: "{{ .DISCORD_TRIAGE_WEBHOOK_URL }}"
+              WEBHOOK_TOKEN: "{{ .WEBHOOK_TOKEN }}"
+        dataFrom:
+          - extract:
+              key: alert-triage
     defaultPodOptions:
       # app-template defaults this off; triage needs the SA token to read pods,
       # events and Flux state from the in-cluster kube API.
@@ -43,6 +59,13 @@ spec:
               MODEL: qwen3.8-27b
               HISTORY_PATH: /data/history.jsonl
               LITELLM_URL: http://litellm.llm.svc.cluster.local:4000/v1
+              # The scoped LiteLLM virtual key must reach the pod or every
+              # narration call 401s and digests silently ship unnarrated.
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: litellm-key-alert-triage
+                    key: api-key
               METRICS_URL: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
               # VictoriaLogs lives in the same namespace; the app builds the
               # /select/logsql/query path itself (flavor victorialogs).
