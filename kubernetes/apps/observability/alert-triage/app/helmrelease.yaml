@@ -1,0 +1,145 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: alert-triage
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: alert-triage
+  interval: 15m
+  dependsOn:
+    - name: kube-prometheus-stack
+  values:
+    externalSecrets:
+      alert-triage:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: onepassword-connect
+        target:
+          name: alert-triage
+          creationPolicy: Owner
+          template:
+            engineVersion: v2
+            data:
+              DISCORD_WEBHOOK_URL: "{{ .DISCORD_TRIAGE_WEBHOOK_URL }}"
+              WEBHOOK_TOKEN: "{{ .WEBHOOK_TOKEN }}"
+        dataFrom:
+          - extract:
+              key: alert-triage
+    defaultPodOptions:
+      # app-template defaults this off; triage needs the SA token to read pods,
+      # events and Flux state from the in-cluster kube API.
+      automountServiceAccountToken: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      alert-triage:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
+        serviceAccount:
+          identifier: alert-triage
+        containers:
+          app:
+            image:
+              # renovate: datasource=docker depName=ghcr.io/misospace/alert-triage
+              repository: ghcr.io/misospace/alert-triage
+              tag: 0.3.0@sha256:fe3e6b6ae6a23aa9449f1d8d0f48330dcd387a85629c286bf0365d1b5b9c8822
+            env:
+              # Matches the Talos clusterName; alerts are partitioned by it.
+              CLUSTER: home-ops
+              # Always-on local 27B: no HPA gating, fast enough for the
+              # 120s narration budget.
+              MODEL: qwen3.8-27b
+              HISTORY_PATH: /data/history.jsonl
+              LITELLM_URL: http://litellm.llm.svc.cluster.local:4000/v1
+              METRICS_URL: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
+              # VictoriaLogs lives in the same namespace; the app builds the
+              # /select/logsql/query path itself (flavor victorialogs).
+              LOGS_URL: http://victoria-logs.observability.svc.cluster.local:9428
+              LOGS_FLAVOR: victorialogs
+              # The GitOps repo this cluster reconciles from; enrichment
+              # resolves Flux sources and matches reconciled commits against
+              # workload paths.
+              GITOPS_REPO: https://github.com/cbc02009/k8s-home-ops
+              GITOPS_PATH: kubernetes
+              GRAFANA_URL: ""
+              GRAFANA_METRICS_DS: ""
+              GRAFANA_LOGS_DS: ""
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}"
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+              readiness: *probe
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+    serviceAccount:
+      alert-triage: {}
+    rbac:
+      roles:
+        alert-triage:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["nodes", "pods", "events"]
+              verbs: ["get", "list"]
+            - apiGroups: [""]
+              resources: ["pods/log"]
+              verbs: ["get"]
+            - apiGroups: ["batch"]
+              resources: ["jobs"]
+              verbs: ["get", "list"]
+            - apiGroups: ["helm.toolkit.fluxcd.io"]
+              resources: ["helmreleases"]
+              verbs: ["get", "list"]
+            - apiGroups: ["helm.toolkit.fluxcd.io"]
+              resources: ["helmcharts"]
+              verbs: ["get"]
+            - apiGroups: ["kustomize.toolkit.fluxcd.io"]
+              resources: ["kustomizations"]
+              verbs: ["get", "list"]
+            - apiGroups: ["source.toolkit.fluxcd.io"]
+              resources: ["gitrepositories", "ocirepositories", "buckets", "helmcharts"]
+              verbs: ["get"]
+      bindings:
+        alert-triage:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: alert-triage
+          subjects:
+            - identifier: alert-triage
+              serviceAccount: alert-triage
+    service:
+      app:
+        controller: alert-triage
+        ports:
+          http:
+            port: 8080
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
