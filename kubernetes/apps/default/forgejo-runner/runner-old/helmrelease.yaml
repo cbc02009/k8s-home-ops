@@ -79,23 +79,26 @@ spec:
               - sh
               - -c
               - |
-                if [ -f /data/.runner ]; then
-                  echo "Runner already registered, skipping"
+                if [ -f /data/.runner ] && grep -qF "https://git.ctec.run" /data/.runner; then
+                  echo "Runner already registered for https://git.ctec.run, skipping"
                   exit 0
                 fi
                 echo "Registering runner...";
                 forgejo-runner register \
                   --labels "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest" \
                   --no-interactive \
-                  --instance https://git.cnas.dev \
-                  --token "$(RUNNER_TOKEN)" \
+                  --instance https://git.ctec.run \
+                  --token "$(REGISTRATION_TOKEN)" \
                   --name k8s-runner-rooted
             env:
-              - name: RUNNER_TOKEN
+              # forgejo-runner register takes the short-lived REGISTRATION token
+              # (Site Admin > Actions > Runners > Create new runner) — the
+              # pre-created runner token is deprecated since Forgejo 1.21.
+              - name: REGISTRATION_TOKEN
                 valueFrom:
                   secretKeyRef:
                     name: forgejo-runner-secret
-                    key: token
+                    key: registration_token
         containers:
           daemon:
             image:
