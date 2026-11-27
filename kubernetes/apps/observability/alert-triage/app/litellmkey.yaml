@@ -10,10 +10,11 @@ spec:
   keyAlias: Alert Triage
   secretName: litellm-key-alert-triage
   secretKey: api-key
-  # Narration only: the always-on local 27B. The PR-write arm is not enabled
-  # (no GITHUB_TOKEN), so no coding-pool models are needed here.
+  # Narration via the free OpenCode Go pool (no GPU dependency, no
+  # allowance burn). The PR-write arm is not enabled (no GITHUB_TOKEN),
+  # so no coding-pool models are needed here.
   models:
-    - qwen3.8-27b
+    - free-pool
 
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json

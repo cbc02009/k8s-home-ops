@@ -54,9 +54,10 @@ spec:
             env:
               # Matches the Talos clusterName; alerts are partitioned by it.
               CLUSTER: home-ops
-              # Always-on local 27B: no HPA gating, fast enough for the
-              # 120s narration budget.
-              MODEL: qwen3.8-27b
+              # Free OpenCode Go pool: zero allowance burn, always available
+              # regardless of the local GPU/27B's state. Narration budget 120s
+              # is comfortable for the free rungs' TTFT.
+              MODEL: free-pool
               HISTORY_PATH: /data/history.jsonl
               LITELLM_URL: http://litellm.llm.svc.cluster.local:4000/v1
               # The scoped LiteLLM virtual key must reach the pod or every
