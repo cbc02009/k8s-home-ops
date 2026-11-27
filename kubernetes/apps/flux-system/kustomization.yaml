@@ -8,3 +8,5 @@ components:
 resources:
   - ./flux-operator/ks.yaml
   - ./flux-instance/ks.yaml
+  - ./terraform/ks.yaml
+  - ./tofu-controller/ks.yaml
