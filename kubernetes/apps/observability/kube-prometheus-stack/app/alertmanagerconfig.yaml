@@ -71,7 +71,7 @@ spec:
           value: llm
           matchType: =
         - name: deployment
-          value: qwen3\.8-27b
+          value: qwen3.8-27b
           matchType: =
         - name: alertname
           value: KubeDeploymentReplicasMismatch|KubeDeploymentRolloutStuck
