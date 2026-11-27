@@ -32,7 +32,7 @@ spec:
         fsGroup: 2000
       containers:
         - name: pg-restore
-          image: postgres:17.12
+          image: postgres:19.0
           env:
             - name: PGHOST
               value: forgejo-postgres-rw.databases.svc.cluster.local
