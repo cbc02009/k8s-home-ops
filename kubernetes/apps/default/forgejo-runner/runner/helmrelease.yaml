@@ -14,7 +14,7 @@ spec:
   # https://git.erwanleboucher.dev/eleboucher/runner-k8s-plugin/src/branch/main/charts/forgejo-runner/values.yaml
   values:
     forgejo:
-      url: https://git.cnas.dev
+      url: https://git.ctec.run
       existingSecret: forgejo-runner-secret
     image:
       repository: data.forgejo.org/forgejo/runner
