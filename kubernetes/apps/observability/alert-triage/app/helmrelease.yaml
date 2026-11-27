@@ -23,8 +23,8 @@ spec:
           template:
             engineVersion: v2
             data:
-              DISCORD_WEBHOOK_URL: "{{ .DISCORD_TRIAGE_WEBHOOK_URL }}"
-              WEBHOOK_TOKEN: "{{ .WEBHOOK_TOKEN }}"
+              DISCORD_WEBHOOK_URL: "{{ .webhook_url }}"
+              WEBHOOK_TOKEN: "{{ .webhook_token }}"
         dataFrom:
           - extract:
               key: alert-triage
