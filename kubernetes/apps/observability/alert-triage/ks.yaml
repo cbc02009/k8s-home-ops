@@ -9,6 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/pvc
   dependsOn:
     - name: kube-prometheus-stack
       namespace: observability
@@ -18,6 +20,8 @@ spec:
   path: ./kubernetes/apps/observability/alert-triage/app
   postBuild:
     substitute:
+      APP: *app
+      PVC_CAPACITY: 1Gi
       CLUSTER: home-ops
   prune: true
   sourceRef:
