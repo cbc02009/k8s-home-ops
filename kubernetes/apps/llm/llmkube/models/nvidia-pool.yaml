@@ -36,3 +36,8 @@ spec:
   proxy:
     replicas: 1
     responseHeaderTimeout: 600s
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi

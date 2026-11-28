@@ -16,6 +16,11 @@ spec:
   interval: 1h
   # https://github.com/NVIDIA/k8s-device-plugin/blob/main/deployments/helm/nvidia-device-plugin/values.yaml
   values:
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi
     runtimeClassName: nvidia
     config:
       map:

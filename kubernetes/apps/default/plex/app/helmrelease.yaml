@@ -53,8 +53,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
+                memory: 896Mi
               limits:
-                memory: 16Gi
+                memory: 1Gi
         pod:
           securityContext:
             runAsUser: ${APP_UID}

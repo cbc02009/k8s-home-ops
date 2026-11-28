@@ -41,3 +41,9 @@ spec:
       # Bundled ClickHouse + Keeper (the supported topology: one server, no
       # distributed tables or cross-server failover).
       storageClassName: ceph-block
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 128Mi

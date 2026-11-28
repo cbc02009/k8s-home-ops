@@ -41,7 +41,7 @@ spec:
     resources:
       requests:
         cpu: 23m
-        memory: 64M
+        memory: 128Mi
       limits:
-        memory: 64M
+        memory: 128Mi
     hostNetwork: false

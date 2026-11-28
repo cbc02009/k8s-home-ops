@@ -32,6 +32,11 @@ spec:
     - name: mcp-grafana
       key: GRAFANA_SERVICE_ACCOUNT_TOKEN
       targetEnvName: GRAFANA_SERVICE_ACCOUNT_TOKEN
+  resources:
+    requests:
+      memory: 128Mi
+    limits:
+      memory: 256Mi
   groupRef:
     name: mcp-tools-ops
   toolConfigRef:

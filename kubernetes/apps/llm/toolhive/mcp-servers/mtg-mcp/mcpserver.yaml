@@ -34,10 +34,10 @@ spec:
   resources:
     requests:
       cpu: 10m
-      memory: 64Mi
+      memory: 128Mi
     limits:
       cpu: 500m
-      memory: 256Mi
+      memory: 128Mi
   podTemplateSpec:
     spec:
       # The server only talks to the public Scryfall and EDHREC APIs, so no

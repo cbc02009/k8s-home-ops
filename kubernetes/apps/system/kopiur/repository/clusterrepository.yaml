@@ -39,6 +39,11 @@ spec:
     auth:
       insecure:
         acknowledgeInsecure: true
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 256Mi
     service:
       port: 80
       type: ClusterIP
@@ -100,6 +105,11 @@ spec:
     auth:
       insecure:
         acknowledgeInsecure: true
+    resources:
+      requests:
+        memory: 384Mi
+      limits:
+        memory: 512Mi
     service:
       port: 80
       type: ClusterIP
@@ -146,6 +156,11 @@ spec:
     auth:
       insecure:
         acknowledgeInsecure: true
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi
     service:
       port: 80
       type: ClusterIP

@@ -39,8 +39,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 128Mi
               limits:
-                memory: 256Mi
+                memory: 128Mi
           relay:
             image:
               repository: ghcr.io/rustdesk/rustdesk-server
@@ -55,6 +56,11 @@ spec:
                 enabled: false
               readiness:
                 enabled: false
+            resources:
+              requests:
+                memory: 128Mi
+              limits:
+                memory: 128Mi
     service:
       *app :
         controller: *app

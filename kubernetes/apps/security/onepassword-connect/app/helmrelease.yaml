@@ -21,6 +21,11 @@ spec:
       credentialsName: onepassword-connect-credentials-secret
       sync:
         imageRepository: ghcr.io/1password/connect-sync
+        resources:
+          requests:
+            memory: 128Mi
+          limits:
+            memory: 128Mi
       serviceType: LoadBalancer
       serviceAnnotations:
         lbipam.cilium.io/ips: 10.6.0.25

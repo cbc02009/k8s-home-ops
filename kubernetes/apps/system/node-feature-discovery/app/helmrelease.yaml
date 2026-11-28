@@ -26,5 +26,22 @@ spec:
         - key: llm-workload
           operator: Exists
           effect: NoSchedule
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+    master:
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
+    gc:
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
     prometheus:
       enable: true

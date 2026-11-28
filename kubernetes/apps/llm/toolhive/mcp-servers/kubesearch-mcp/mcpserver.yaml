@@ -46,9 +46,9 @@ spec:
   resources:
     requests:
       cpu: 10m
-      memory: 64Mi
+      memory: 1280Mi
     limits:
       cpu: 500m
-      memory: 1Gi
+      memory: 1536Mi
   groupRef:
     name: mcp-tools-ops

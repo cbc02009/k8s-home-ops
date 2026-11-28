@@ -25,6 +25,11 @@ spec:
             image:
               repository: docker.io/library/alpine
               tag: "3.24"
+            resources:
+              requests:
+                memory: 768Mi
+              limits:
+                memory: 896Mi
             env:
               # envsubst expands ${LITELLM_API_KEY} in config.yaml (see below).
               - name: LITELLM_API_KEY
@@ -273,9 +278,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 2Gi
+                memory: 3Gi
               limits:
-                memory: 4Gi
+                memory: 8.5Gi
             ports:
               # The gateway's single HTTP listener. With webapp.enabled in
               # config.yaml it serves the Webapp on 9120 instead of the
@@ -300,8 +305,9 @@ spec:
             resources:
               requests:
                 cpu: 500m
+                memory: 512Mi
               limits:
-                memory: 1Gi
+                memory: 640Mi
             ports:
               - containerPort: &dashboard_port 9119
                 name: dashboard

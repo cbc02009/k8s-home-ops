@@ -24,6 +24,11 @@ spec:
       inferencePodMonitor:
         enabled: true
     controllerManager:
+      resources:
+        requests:
+          memory: 512Mi
+        limits:
+          memory: 640Mi
       tolerations:
         - key: llm-workload
           operator: Exists

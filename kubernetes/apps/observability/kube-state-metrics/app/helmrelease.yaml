@@ -377,3 +377,8 @@ spec:
                     webhook_path:
                       - status
                       - webhookPath
+    resources:
+      requests:
+        memory: 384Mi
+      limits:
+        memory: 640Mi

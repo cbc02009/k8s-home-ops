@@ -52,6 +52,11 @@ spec:
                       - -c
                       - |-
                         mariadb-admin ping --socket=/run/mysqld/mysqld.sock --user=root --password=$${MARIADB_ROOT_PASSWORD}
+            resources:
+              requests:
+                memory: 256Mi
+              limits:
+                memory: 256Mi
             restartPolicy: Always
             securityContext:
               allowPrivilegeEscalation: false
@@ -124,9 +129,9 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 1Gi
+                memory: 768Mi
               limits:
-                memory: 2Gi
+                memory: 1.25Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

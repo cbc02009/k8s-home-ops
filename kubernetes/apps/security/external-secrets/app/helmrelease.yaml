@@ -30,9 +30,19 @@ spec:
       enabled: true
       annotations:
         grafana_folder: Networking
+    resources:
+      requests:
+        memory: 256Mi
+      limits:
+        memory: 256Mi
     certController:
       image:
         repository: ghcr.io/external-secrets/external-secrets
+      resources:
+        requests:
+          memory: 256Mi
+        limits:
+          memory: 256Mi
       serviceMonitor:
         enabled: true
         interval: 1m
@@ -40,6 +50,11 @@ spec:
       image:
         repository: ghcr.io/external-secrets/external-secrets
       replicaCount: 2
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname

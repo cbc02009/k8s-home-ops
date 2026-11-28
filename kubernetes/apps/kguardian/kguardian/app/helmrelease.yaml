@@ -22,8 +22,10 @@ spec:
       secret: kguardian-secret
     broker:
       resources:
+        requests:
+          memory: 256Mi
         limits:
-          memory: 2Gi
+          memory: 256Mi
     controller:
       excludedNamespaces:
         - kguardian
@@ -31,6 +33,11 @@ spec:
         - key: llm-workload
           operator: Exists
           effect: NoSchedule
+      resources:
+        requests:
+          memory: 768Mi
+        limits:
+          memory: 896Mi
 
     database:
       persistence:
@@ -42,5 +49,22 @@ spec:
           memory: 1Gi
     llmBridge:
       replicaCount: 1
+      resources:
+        requests:
+          memory: 256Mi
+        limits:
+          memory: 256Mi
+    evaluator:
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
+    frontend:
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
     telemetry:
       enabled: false
