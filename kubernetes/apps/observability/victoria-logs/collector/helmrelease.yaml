@@ -33,3 +33,8 @@ spec:
         - kubernetes.pod_labels.app.kubernetes.io/name
     extraArgs:
       "kubernetesCollector.decolorizeFields": _msg
+    resources:
+      requests:
+        memory: 384Mi
+      limits:
+        memory: 512Mi

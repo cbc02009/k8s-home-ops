@@ -89,9 +89,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 256Mi
+                memory: 128Mi
               limits:
-                memory: 1Gi
+                memory: 256Mi
     service:
       http:
         ports:

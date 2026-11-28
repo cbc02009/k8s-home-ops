@@ -45,3 +45,8 @@ spec:
     podAnnotations:
       secret.reloader.stakater.com/reload: *secret
     logLevel: info
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi

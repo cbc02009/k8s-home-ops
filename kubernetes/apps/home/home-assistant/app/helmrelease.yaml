@@ -80,8 +80,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 768Mi
               limits:
-                memory: 2Gi
+                memory: 896Mi
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -107,9 +108,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 1Gi
+                memory: 256Mi
               limits:
-                memory: 2Gi
+                memory: 256Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true

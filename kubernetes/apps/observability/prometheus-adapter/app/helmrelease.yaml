@@ -23,3 +23,8 @@ spec:
           name:
             as: probe_success
           metricsQuery: max_over_time(<<.Series>>{<<.LabelMatchers>>}[1m])
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi

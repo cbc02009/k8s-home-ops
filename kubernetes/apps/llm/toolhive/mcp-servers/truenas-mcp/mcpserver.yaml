@@ -40,6 +40,6 @@ spec:
       memory: 128Mi
     limits:
       cpu: 200m
-      memory: 256Mi
+      memory: 128Mi
   groupRef:
     name: mcp-tools-ops

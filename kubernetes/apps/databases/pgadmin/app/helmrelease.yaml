@@ -32,9 +32,9 @@ spec:
             resources:
               requests:
                 cpu: 15m
-                memory: 200M
+                memory: 640Mi
               limits:
-                memory: 512M
+                memory: 768Mi
 
     service:
       app:

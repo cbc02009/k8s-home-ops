@@ -22,3 +22,19 @@ spec:
       replicaCount: 2
       podDisruptionBudget:
         enabled: true
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 128Mi
+    cainjector:
+      resources:
+        requests:
+          memory: 256Mi
+        limits:
+          memory: 256Mi
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi

@@ -49,6 +49,11 @@ spec:
         - name: CODER_PASSWORD_ENABLE
           value: "false"
       replicaCount: 1
+      resources:
+        requests:
+          memory: 768Mi
+        limits:
+          memory: 1Gi
       initContainers:
         - name: init-db
           image: ghcr.io/home-operations/postgres-init:19.0.0

@@ -56,6 +56,11 @@ spec:
               envFrom:
                 - secretRef:
                     name: grafana-secret
+              resources:
+                requests:
+                  memory: 1Gi
+                limits:
+                  memory: 1.25Gi
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true

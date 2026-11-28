@@ -44,10 +44,10 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 256Mi
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 256Mi
   podTemplateSpec:
     spec:
       # The operator hardens the container with readOnlyRootFilesystem and

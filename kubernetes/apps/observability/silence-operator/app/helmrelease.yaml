@@ -17,3 +17,8 @@ spec:
     alertmanagerAddress: http://alertmanager-operated.observability.svc.cluster.local:9093
     networkPolicy:
       enabled: false
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 128Mi

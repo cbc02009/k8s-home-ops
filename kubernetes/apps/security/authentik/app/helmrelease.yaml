@@ -27,9 +27,9 @@ spec:
       resources:
         requests:
           cpu: 50m
-          memory: 500Mi
+          memory: 1.5Gi
         limits:
-          memory: 1200Mi
+          memory: 1.5Gi
       metrics:
         enabled: true
         serviceMonitor:
@@ -48,9 +48,9 @@ spec:
       resources:
         requests:
           cpu: 50m
-          memory: 500Mi
+          memory: 640Mi
         limits:
-          memory: 1500Mi
+          memory: 768Mi
     prometheus:
       rules:
         enabled: true

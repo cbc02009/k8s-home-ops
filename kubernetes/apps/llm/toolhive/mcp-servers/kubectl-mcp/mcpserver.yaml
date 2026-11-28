@@ -13,10 +13,10 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 1.25Gi
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 1.5Gi
   serviceAccount: kubectl-mcp-readonly
   podTemplateSpec:
     spec:

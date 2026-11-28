@@ -41,12 +41,11 @@ spec:
               SMTP_FROM_EMAIL: noreply@ctec.run
               SMTP_AUTH_STRATEGY: NONE
             envFrom: *envFrom
-            # resources:
-            #   requests:
-            #     memory: 250Mi
-            #     cpu: 50m
-            #   limits:
-            #     memory: 500Mi
+            resources:
+              requests:
+                memory: 512Mi
+              limits:
+                memory: 640Mi
 
     service:
       app:

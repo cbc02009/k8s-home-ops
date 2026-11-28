@@ -57,9 +57,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 250Mi
+                memory: 896Mi
               limits:
-                memory: 2000Mi
+                memory: 1.25Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -109,9 +109,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 250Mi
+                memory: 1.5Gi
               limits:
-                memory: 2500Mi
+                memory: 1.75Gi
       machine-learning:
         strategy: RollingUpdate
         pod:
@@ -143,11 +143,11 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 250Mi
+                memory: 768Mi
               limits:
-                memory: 4000Mi
+                memory: 4Gi
             probes:
-              liveness: &probes
+              liveness: &mlprobes
                 enabled: true
                 custom: true
                 spec:
@@ -158,7 +158,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 5
-              readiness: *probes
+              readiness: *mlprobes
               startup:
                 enabled: false
     service:
