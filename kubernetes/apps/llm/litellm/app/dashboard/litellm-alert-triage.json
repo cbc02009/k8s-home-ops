@@ -9,7 +9,7 @@
   ],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "refresh": "30s",
   "time": {
     "from": "now-24h",
@@ -256,7 +256,7 @@
     },
     {
       "type": "stat",
-      "title": "Alert Triage Cache Hit Ratio (range)",
+      "title": "Alert Triage Share of Free-Rung Tokens (%)",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -273,13 +273,13 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum(increase(litellm_cache_hits_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) / clamp_min(sum(increase(litellm_cache_hits_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) + sum(increase(litellm_cache_misses_metric_total{api_key_alias=\"Alert Triage\"}[$__range])),1)",
+          "expr": "100 * sum(increase(litellm_total_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) / clamp_min(sum(increase(litellm_total_tokens_metric_total{model=~\"beam-free|hy4-flash-free|hy4|mimo-v2.6-flash|longcat-2.0\"}[$__range])), 1)",
           "refId": "A"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "percentunit"
+          "unit": "percent"
         },
         "overrides": []
       }
@@ -316,7 +316,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Free-pool Failure Rate by Model (5m)",
+      "title": "Go Free-Rung Failure Rate by Model (5m)",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -333,7 +333,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (model) (rate(litellm_deployment_failure_responses_total{model=~\"free-pool.*\"}[5m]))",
+          "expr": "sum by (litellm_model_name) (rate(litellm_deployment_failure_responses_total{litellm_model_name=~\"beam-free|hy4-flash-free|hy4|mimo-v2.6-flash|longcat-2.0\"}[5m]))",
           "refId": "A"
         }
       ],
@@ -344,7 +344,7 @@
     },
     {
       "type": "timeseries",
-      "title": "Free-pool TTFT p95 by Model (s)",
+      "title": "Go Free-Rung TTFT p95 by Model (s)",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -361,7 +361,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "histogram_quantile(0.95, sum by (le, model) (rate(litellm_llm_api_time_to_first_token_metric_bucket{model=~\"free-pool.*\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (le, model) (rate(litellm_llm_api_time_to_first_token_metric_bucket{model=~\"beam-free|hy4-flash-free|hy4|mimo-v2.6-flash|longcat-2.0\"}[$__rate_interval])))",
           "refId": "A"
         }
       ],
@@ -374,7 +374,7 @@
     },
     {
       "type": "bargauge",
-      "title": "Free-pool Tokens by Model (range)",
+      "title": "Go Free-Rung Tokens by Model (range)",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -391,7 +391,7 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "expr": "sum by (model) (increase(litellm_total_tokens_metric_total{model=~\"free-pool.*\"}[$__range]))",
+          "expr": "sum by (model) (increase(litellm_total_tokens_metric_total{model=~\"beam-free|hy4-flash-free|hy4|mimo-v2.6-flash|longcat-2.0\"}[$__range]))",
           "refId": "A"
         }
       ],
