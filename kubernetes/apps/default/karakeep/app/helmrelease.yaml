@@ -11,6 +11,10 @@ spec:
   interval: 30m
   values:
     defaultPodOptions:
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
       securityContext:
         fsGroup: ${APP_GID}
         fsGroupChangePolicy: "OnRootMismatch"

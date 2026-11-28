@@ -15,6 +15,10 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
+          tolerations:
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
           labels:
             egress.policy.home.arpa/internet: "true"
           securityContext:
