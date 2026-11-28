@@ -63,9 +63,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 10m
-                memory: 1000Mi
+                memory: 1Gi
               limits:
-                memory: 8000Mi
+                memory: 8Gi
             securityContext:
               privileged: true
             probes:

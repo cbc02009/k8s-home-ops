@@ -27,9 +27,9 @@ spec:
       resources:
         requests:
           cpu: 50m
-          memory: 1536Mi
+          memory: 1.5Gi
         limits:
-          memory: 1536Mi
+          memory: 1.5Gi
       metrics:
         enabled: true
         serviceMonitor:

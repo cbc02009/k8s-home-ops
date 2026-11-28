@@ -41,7 +41,7 @@ spec:
         requests:
           memory: 640Mi
         limits:
-          memory: 1280Mi
+          memory: 1.25Gi
       # tolerate the dGPU taint so the agent lands on mayne and its journal
       # (talos UDP 6050/6051) is captured remotely; must live in the chart
       # values, not a kustomize patch, or the next helm upgrade re-renders
