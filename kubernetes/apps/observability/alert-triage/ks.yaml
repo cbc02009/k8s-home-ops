@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app alert-triage
+  namespace: &namespace observability
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/pvc
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: observability
+    - name: external-secrets
+      namespace: security
+  interval: 30m
+  path: ./kubernetes/apps/observability/alert-triage/app
+  postBuild:
+    substitute:
+      APP: *app
+      PVC_CAPACITY: 1Gi
+      CLUSTER: home-ops
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  wait: false

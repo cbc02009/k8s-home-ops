@@ -30,6 +30,15 @@ spec:
           - name: alertname
             value: SwarmUIActive
             matchType: =
+      # Mirror every alert into the LLM triage pipeline; it buffers and
+      # correlates the burst itself. continue: true keeps the Discord path
+      # unchanged. (After triage is verified end-to-end, this can be narrowed
+      # by label or severity.)
+      - receiver: triage
+        continue: true
+        groupWait: 0s
+        groupInterval: 1m
+        repeatInterval: 12h
       - receiver: discord
       # - receiver: "null"
         matchers:
@@ -88,3 +97,12 @@ spec:
         - apiURL:
             key: DISCORD_WEBHOOK
             name: alertmanager
+    - name: triage
+      webhookConfigs:
+        - url: http://alert-triage.observability.svc.cluster.local:8080/webhook
+          sendResolved: false
+          httpConfig:
+            authorization:
+              credentials:
+                name: alert-triage
+                key: WEBHOOK_TOKEN

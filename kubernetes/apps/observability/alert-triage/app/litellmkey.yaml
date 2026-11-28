@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmvirtualkey_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMVirtualKey
+metadata:
+  name: alert-triage
+spec:
+  proxyRef: litellm
+  proxyNamespace: llm
+  keyAlias: Alert Triage
+  secretName: litellm-key-alert-triage
+  secretKey: api-key
+  # Narration via the free OpenCode Go pool (no GPU dependency, no
+  # allowance burn). The PR-write arm is not enabled (no GITHUB_TOKEN),
+  # so no coding-pool models are needed here.
+  models:
+    - free-pool
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/external-secrets.io/pushsecret_v1alpha1.json
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: alert-triage
+spec:
+  secretStoreRefs:
+    - name: onepassword-connect
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: litellm-key-alert-triage
+  data:
+    - match:
+        secretKey: api-key
+        remoteRef:
+          remoteKey: litellm
+          property: alert_triage_api_key

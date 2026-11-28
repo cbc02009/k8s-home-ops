@@ -7,6 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./namespace.yaml
+  - ./alert-triage/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./dcgm-exporter/ks.yaml
   - ./drm-exporter/ks.yaml
