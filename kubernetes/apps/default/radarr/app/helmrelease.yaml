@@ -80,6 +80,10 @@ spec:
                 memory: 640Mi
 
     defaultPodOptions:
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
       securityContext:
         runAsNonRoot: true
         runAsUser: 2000

@@ -22,6 +22,10 @@ spec:
         replicas: 1
 
         pod:
+          tolerations:
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
           securityContext:
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch

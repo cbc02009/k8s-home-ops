@@ -68,6 +68,10 @@ spec:
                   - ALL
 
     defaultPodOptions:
+      tolerations:
+        - key: llm-workload
+          operator: Exists
+          effect: NoSchedule
       annotations:
         k8s.v1.cni.cncf.io/networks: |-
           [{
