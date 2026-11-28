@@ -10,10 +10,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 5.3.0
-  url: oci://ghcr.io/bjw-s-labs/helm/app-template
-  verify:
-    provider: cosign
-    matchOIDCIdentity:
-      - issuer: https://token.actions.githubusercontent.com
-        subject: https://github.com/bjw-s-labs/helm.*
+    tag: 13.3.1
+  url: oci://git.erwanleboucher.dev/eleboucher/charts/forgejo-runner
+  # No cosign verify: upstream publishes the chart unsigned (no .sig/.att tags
+  # on the 13.3.1 manifest), so verification would block every sync.

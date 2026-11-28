@@ -15,7 +15,9 @@ spec:
   values:
     forgejo:
       url: https://git.ctec.run
-      existingSecret: forgejo-runner-secret
+      # This release's own secret (keys token/uuid), NOT the runner-old
+      # forgejo-runner-secret — see externalsecret.yaml in this directory.
+      existingSecret: forgejo-runner-k8s-secret
     image:
       repository: data.forgejo.org/forgejo/runner
       tag: "13.2.2@sha256:a8543a45fe62bebef0534d5c223cf485d3294e6dd2e42a82dbcbfd40c54a6a22"
@@ -25,6 +27,13 @@ spec:
         repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
         tag: 13.3.1
         digest: sha256:9ae8a21340cde415b828adc95bc4f1345bed67c21a0e3be26032d367a64b20db
+      # Chart default (128Mi limit) OOMKills the sidecar under capacity: 3.
+      resources:
+        requests:
+          cpu: 5m
+          memory: 64Mi
+        limits:
+          memory: 512Mi
     podLabels:
       app.kubernetes.io/component: forgejo-runner
     runnerConfig: |
