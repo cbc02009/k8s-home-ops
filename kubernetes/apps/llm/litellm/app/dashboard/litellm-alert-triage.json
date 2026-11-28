@@ -9,7 +9,7 @@
   ],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 2,
+  "version": 3,
   "refresh": "30s",
   "time": {
     "from": "now-24h",
@@ -398,6 +398,120 @@
       "fieldConfig": {
         "defaults": {},
         "overrides": []
+      }
+    },
+    {
+      "type": "row",
+      "title": "What if narration ran on a paid model? (counterfactual)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "title": "Cheap paid options \u2014 est. cost over range (USD)",
+      "description": "Counterfactual estimate: actual Alert Triage input/output token counters multiplied by the model's list price per token. No cache-read discount assumed (conservative). Not billed spend \u2014 actual narration runs on free Go rungs at $0.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "1.5e-07 * sum(increase(litellm_input_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) + 5e-07 * sum(increase(litellm_output_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range]))",
+          "legendFormat": "glm-5.3-flash ($0.15/$0.50 per 1M)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "1.4e-07 * sum(increase(litellm_input_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) + 2.8e-07 * sum(increase(litellm_output_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range]))",
+          "legendFormat": "mimo-v2.6-flash ($0.14/$0.28 per 1M)",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Pricier paid options \u2014 est. cost over range (USD)",
+      "description": "Counterfactual estimate: actual Alert Triage input/output token counters multiplied by the model's list price per token. No cache-read discount assumed (conservative). Not billed spend \u2014 actual narration runs on free Go rungs at $0.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "3e-07 * sum(increase(litellm_input_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) + 1.2e-06 * sum(increase(litellm_output_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range]))",
+          "legendFormat": "deepseek-v4.1-flash ($0.30/$1.20 per 1M)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "2e-06 * sum(increase(litellm_input_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range])) + 6e-06 * sum(increase(litellm_output_tokens_metric_total{api_key_alias=\"Alert Triage\"}[$__range]))",
+          "legendFormat": "qwen3.8-max ($2/$6 per 1M)",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 4
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
       }
     }
   ]
