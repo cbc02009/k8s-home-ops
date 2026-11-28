@@ -31,7 +31,8 @@ spec:
               insecure: false
               fetch_timeout: 5s
               fetch_interval: 2s
-              labels: []
+              labels:
+                - ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest
 
             cache:
               enabled: true
@@ -44,14 +45,23 @@ spec:
               enable_ipv6: false
               privileged: false
               options: -v /certs/client:/certs/client
-              workdir_parent: /workspace
-                - /certs/client
               docker_host: ""
 
             host:
-              # The parent directory of a job's working directory.
-              # If it's empty, $HOME/.cache/act/ will be used.
               workdir_parent:
+
+            server:
+              # Modern connection-declaration flow (Forgejo 15+): the runner
+              # authenticates with the pre-created runner UUID + token pair
+              # from the instance admin UI, replacing the deprecated
+              # `forgejo-runner register` legacy-token command.
+              # The template below is rendered by the `setup` init container,
+              # which substitutes __RUNNER_UUID__ from the secret.
+              connections:
+                gitctec:
+                  url: https://git.ctec.run
+                  uuid: __RUNNER_UUID__
+                  token_url: file:/data/runner-token
     controllers:
       forgejo-runner-old:
         type: statefulset
@@ -71,7 +81,7 @@ spec:
               size: 1Gi
 
         initContainers:
-          register:
+          setup:
             image:
               repository: code.forgejo.org/forgejo/runner
               tag: 12.13.2@sha256:eb6e7bc21973382d261e6eb883dbd27b8cb56939d33a3bfd79a1352b7f9a33a0
@@ -79,26 +89,27 @@ spec:
               - sh
               - -c
               - |
-                if [ -f /data/.runner ] && grep -qF "https://git.ctec.run" /data/.runner; then
-                  echo "Runner already registered for https://git.ctec.run, skipping"
-                  exit 0
-                fi
-                echo "Registering runner...";
-                forgejo-runner register \
-                  --labels "ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-latest" \
-                  --no-interactive \
-                  --instance https://git.ctec.run \
-                  --token "$(REGISTRATION_TOKEN)" \
-                  --name k8s-runner-rooted
+                set -e
+                # Stage the connection token (0600, on the data PVC) and render
+                # the UUID into the config template. Runs on EVERY start so a
+                # rotated secret (Stakater pod restart) is picked up.
+                printf '%s' "$RUNNER_TOKEN" > /data/runner-token
+                chmod 600 /data/runner-token
+                sed "s/__RUNNER_UUID__/$RUNNER_UUID/" /config/config.yaml > /data/config-rendered.yaml
+                echo "Runner connection staged for https://git.ctec.run"
             env:
-              # forgejo-runner register takes the short-lived REGISTRATION token
-              # (Site Admin > Actions > Runners > Create new runner) — the
-              # pre-created runner token is deprecated since Forgejo 1.21.
-              - name: REGISTRATION_TOKEN
+              # Connection-declaration credentials (Forgejo 15+): UUID + token
+              # pair from Site Admin > Actions > Runners > Create new runner.
+              - name: RUNNER_TOKEN
                 valueFrom:
                   secretKeyRef:
                     name: forgejo-runner-secret
                     key: registration_token
+              - name: RUNNER_UUID
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-runner-secret
+                    key: runner_uuid
         containers:
           daemon:
             image:
@@ -128,7 +139,7 @@ spec:
             command:
               - "sh"
               - "-c"
-              - "while ! nc -z localhost 2376 </dev/null; do echo 'waiting for docker daemon...'; sleep 5; done; forgejo-runner --config /config/config.yaml daemon"
+              - "while ! nc -z localhost 2376 </dev/null; do echo 'waiting for docker daemon...'; sleep 5; done; forgejo-runner --config /data/config-rendered.yaml daemon"
             env:
               - name: DOCKER_HOST
                 value: tcp://localhost:2376
