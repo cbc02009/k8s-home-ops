@@ -24,6 +24,9 @@ configMapGenerator:
   - name: litellm-auto-router
     files:
       - litellm-auto-router.json
+  - name: litellm-alert-triage
+    files:
+      - litellm-alert-triage.json
   - name: vllm
     files:
       - vllm.json
